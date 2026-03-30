@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generateLandingPage } from '@/lib/anthropic/generate'
+import { scrapeProduct, cleanProduct } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import type { ScrapedProduct } from '@/types'
 
@@ -7,8 +8,16 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}))
 
-    // Utilise le produit du body ou le mock si absent (mode dev/test)
-    const product: ScrapedProduct = body.product ?? MOCK_PRODUCT
+    let product: ScrapedProduct
+
+    if (body.url) {
+      // Mode scraping réel depuis une URL
+      const raw = await scrapeProduct(body.url)
+      product = cleanProduct(raw)
+    } else {
+      // Produit fourni directement ou mock
+      product = body.product ?? MOCK_PRODUCT
+    }
 
     if (!product.title) {
       return NextResponse.json(
@@ -24,7 +33,7 @@ export async function POST(req: NextRequest) {
       data: landingPage,
       meta: {
         model: 'claude-haiku-4-5',
-        product_source: body.product ? 'provided' : 'mock',
+        product_source: body.url ? 'scraped' : body.product ? 'provided' : 'mock',
       },
     })
   } catch (err) {

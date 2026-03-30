@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, FileText, Store, Plus, Zap, LogOut, BarChart2 } from 'lucide-react'
+import { LayoutDashboard, FileText, Store, Plus, Zap, LogOut, BarChart2, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
@@ -11,6 +11,7 @@ const NAV = [
   { href: '/dashboard/pages',  label: 'Mes pages',       icon: FileText },
   { href: '/dashboard/stores',    label: 'Mes stores',    icon: Store },
   { href: '/dashboard/analytics', label: 'Analytics',     icon: BarChart2 },
+  { href: '/dashboard/agency',    label: 'Mode Agence',   icon: Users },
 ]
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

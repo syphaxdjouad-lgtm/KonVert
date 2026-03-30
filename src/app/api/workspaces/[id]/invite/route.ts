@@ -1,0 +1,70 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+import { createClient as createAdmin } from '@supabase/supabase-js'
+
+const supabaseAdmin = createAdmin(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
+
+// POST /api/workspaces/[id]/invite
+// Body: { email, role }
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id: workspaceId } = await params
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+
+  // Vérifier que l'utilisateur est bien le owner
+  const { data: workspace } = await supabase
+    .from('workspaces')
+    .select('id, name, owner_id')
+    .eq('id', workspaceId)
+    .eq('owner_id', user.id)
+    .single()
+
+  if (!workspace) return NextResponse.json({ error: 'Workspace introuvable' }, { status: 404 })
+
+  const { email, role = 'viewer' } = await req.json()
+  if (!email) return NextResponse.json({ error: 'Email requis' }, { status: 400 })
+
+  // Ajouter le membre (statut pending)
+  const { data: member, error } = await supabaseAdmin
+    .from('workspace_members')
+    .upsert({ workspace_id: workspaceId, email, role, status: 'pending' }, { onConflict: 'workspace_id,email' })
+    .select()
+    .single()
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  // Envoyer l'email d'invitation via Supabase Auth
+  try {
+    await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?workspace=${workspaceId}`,
+      data: { workspace_name: workspace.name, role },
+    })
+  } catch (err) {
+    // L'invitation DB est créée même si l'email échoue
+    console.warn('[invite] Email send failed:', err)
+  }
+
+  return NextResponse.json({ data: member }, { status: 201 })
+}
+
+// GET /api/workspaces/[id]/invite — liste les membres
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id: workspaceId } = await params
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+
+  const { data } = await supabase
+    .from('workspace_members')
+    .select('*')
+    .eq('workspace_id', workspaceId)
+    .order('invited_at', { ascending: false })
+
+  return NextResponse.json({ data: data || [] })
+}

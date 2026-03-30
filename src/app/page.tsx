@@ -1,65 +1,53 @@
-import Image from "next/image";
+import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="flex min-h-screen flex-col items-center justify-center bg-white px-4">
+      <div className="text-center max-w-2xl">
+        <div className="inline-flex items-center gap-2 bg-purple-50 border border-purple-200 rounded-full px-4 py-1.5 text-sm font-semibold text-purple-700 mb-8">
+          <span className="w-2 h-2 bg-purple-600 rounded-full animate-pulse" />
+          En construction
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        <h1 className="text-5xl font-black tracking-tight text-gray-900 mb-4">
+          KON<span className="text-purple-600">VERT</span>
+        </h1>
+
+        <p className="text-xl text-gray-500 mb-10">
+          Génère des landing pages e-commerce haute conversion par IA.<br />
+          Colle une URL produit — ta page est prête en 30 secondes.
+        </p>
+
+        <div className="flex gap-4 justify-center">
+          <Link
+            href="/signup"
+            className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Commencer gratuitement
+          </Link>
+          <Link
+            href="/pricing"
+            className="border border-gray-200 hover:border-gray-300 text-gray-700 font-semibold px-8 py-3 rounded-lg transition-colors"
           >
-            Documentation
-          </a>
+            Voir les prix
+          </Link>
         </div>
-      </main>
-    </div>
-  );
+
+        <div className="mt-16 grid grid-cols-3 gap-8 border-t border-gray-100 pt-10">
+          <div className="text-center">
+            <div className="text-2xl font-black text-gray-900">30s</div>
+            <div className="text-sm text-gray-400 mt-1">Page générée</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-black text-gray-900">5</div>
+            <div className="text-sm text-gray-400 mt-1">Templates pro</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-black text-gray-900">1-clic</div>
+            <div className="text-sm text-gray-400 mt-1">Push Shopify</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  )
 }

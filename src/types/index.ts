@@ -87,6 +87,7 @@ export interface LandingPageData {
   urgency: string
   product_name: string
   price?: string
+  original_price?: string
   images?: string[]
 }
 

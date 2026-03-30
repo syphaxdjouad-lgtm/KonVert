@@ -1,0 +1,201 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import type { LandingPageData } from '@/types'
+
+interface Props {
+  html: string
+  onSave?: (html: string, json: object) => void
+}
+
+type Device = 'desktop' | 'tablet' | 'mobile'
+
+const DEVICE_WIDTHS: Record<Device, string> = {
+  desktop: '100%',
+  tablet:  '768px',
+  mobile:  '390px',
+}
+
+export default function GrapesEditor({ html, onSave }: Props) {
+  const editorRef  = useRef<HTMLDivElement>(null)
+  const gjsRef     = useRef<any>(null)
+  const [device, setDevice]   = useState<Device>('desktop')
+  const [saving, setSaving]   = useState(false)
+  const [saved, setSaved]     = useState(false)
+
+  useEffect(() => {
+    if (!editorRef.current || gjsRef.current) return
+
+    let editor: any
+
+    const init = async () => {
+      const gjs = await import('grapesjs')
+      const gjsPreset = await import('grapesjs-preset-webpage')
+
+      // Supprimer l'instance précédente si elle existe
+      if (gjsRef.current) {
+        gjsRef.current.destroy()
+        gjsRef.current = null
+      }
+
+      editor = gjs.default.init({
+        container: editorRef.current!,
+        fromElement: false,
+        components: html,
+        height: '100%',
+        width: 'auto',
+        storageManager: false,
+        undoManager: {} as any,
+        plugins: [gjsPreset.default],
+        pluginsOpts: {
+          [gjsPreset.default as any]: {
+            blocks: ['link-block', 'quote', 'text-basic'],
+          },
+        },
+        canvas: {
+          styles: [],
+          scripts: [],
+        },
+        deviceManager: {
+          devices: [
+            { name: 'Desktop', width: '' },
+            { name: 'Tablet',  width: '768px', widthMedia: '768px' },
+            { name: 'Mobile',  width: '390px', widthMedia: '480px' },
+          ],
+        },
+        panels: { defaults: [] }, // on gère les panels nous-mêmes
+        styleManager: {
+          sectors: [
+            {
+              name: 'Typographie',
+              open: false,
+              properties: ['font-family','font-size','font-weight','letter-spacing','color','text-align','line-height'],
+            },
+            {
+              name: 'Espacement',
+              open: false,
+              properties: ['margin','padding'],
+            },
+            {
+              name: 'Apparence',
+              open: false,
+              properties: ['background-color','border-radius','border','opacity'],
+            },
+          ],
+        },
+      })
+
+      gjsRef.current = editor
+    }
+
+    init()
+
+    return () => {
+      if (gjsRef.current) {
+        gjsRef.current.destroy()
+        gjsRef.current = null
+      }
+    }
+  }, [html])
+
+  // Changer de device
+  useEffect(() => {
+    if (!gjsRef.current) return
+    const dm = gjsRef.current.DeviceManager
+    if (device === 'desktop') dm.select('Desktop')
+    else if (device === 'tablet') dm.select('Tablet')
+    else dm.select('Mobile')
+  }, [device])
+
+  function handleSave() {
+    if (!gjsRef.current || !onSave) return
+    setSaving(true)
+    const exportHtml = gjsRef.current.getHtml()
+    const css        = gjsRef.current.getCss()
+    const json       = gjsRef.current.getComponents()
+    const fullHtml   = `<!DOCTYPE html><html><head><meta charset="UTF-8"/><style>${css}</style></head><body>${exportHtml}</body></html>`
+    onSave(fullHtml, json)
+    setSaving(false)
+    setSaved(true)
+    setTimeout(() => setSaved(false), 2000)
+  }
+
+  function handleExport() {
+    if (!gjsRef.current) return
+    const exportHtml = gjsRef.current.getHtml()
+    const css        = gjsRef.current.getCss()
+    const full = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<style>${css}</style>
+</head>
+<body>${exportHtml}</body>
+</html>`
+    const blob = new Blob([full], { type: 'text/html' })
+    const url  = URL.createObjectURL(blob)
+    const a    = document.createElement('a')
+    a.href = url; a.download = 'landing-page.html'; a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  return (
+    <div className="flex flex-col h-full bg-gray-100">
+
+      {/* ── Toolbar ── */}
+      <div className="flex items-center justify-between bg-white border-b border-gray-200 px-4 h-12 flex-shrink-0">
+
+        {/* Device switcher */}
+        <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+          {(['desktop','tablet','mobile'] as Device[]).map(d => (
+            <button
+              key={d}
+              onClick={() => setDevice(d)}
+              className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
+                device === d
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              {d === 'desktop' ? '🖥' : d === 'tablet' ? '📱' : '📲'} {d}
+            </button>
+          ))}
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-2">
+          <button
+            onClick={handleExport}
+            className="text-xs font-semibold text-gray-500 hover:text-gray-800 px-3 py-1.5 border border-gray-200 rounded-lg transition-colors"
+          >
+            Export HTML
+          </button>
+          {onSave && (
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className={`text-xs font-bold px-4 py-1.5 rounded-lg transition-all ${
+                saved
+                  ? 'bg-green-500 text-white'
+                  : 'bg-purple-600 hover:bg-purple-700 text-white'
+              }`}
+            >
+              {saved ? '✓ Sauvegardé' : saving ? '...' : 'Sauvegarder'}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* ── Canvas wrapper ── */}
+      <div className="flex-1 overflow-hidden relative">
+        <div
+          ref={editorRef}
+          className="absolute inset-0"
+          style={{ transition: 'width .3s' }}
+        />
+      </div>
+
+    </div>
+  )
+}

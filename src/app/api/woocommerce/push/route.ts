@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { WooCommerceClient, decryptCredentials } from '@/lib/woocommerce'
 import { createClient } from '@/lib/supabase/server'
+import { injectTracker } from '@/lib/analytics/tracker'
 
 // POST /api/woocommerce/push
 // Body: { store_id, page_id }
@@ -48,6 +49,10 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Injecter le script de tracking
+    const appUrl      = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const trackedHtml = injectTracker(page.html_content, page_id, appUrl)
+
     // Décrypter les credentials et pusher
     const { consumerKey, consumerSecret } = decryptCredentials(store.access_token)
     const client = new WooCommerceClient(store.store_url, consumerKey, consumerSecret)
@@ -63,10 +68,10 @@ export async function POST(req: NextRequest) {
         await client.updatePage(existingId, page.title, page.html_content)
         result = { id: existingId, url: page.published_url }
       } else {
-        result = await client.createPage(page.title, page.html_content)
+        result = await client.createPage(page.title, trackedHtml)
       }
     } else {
-      result = await client.createPage(page.title, page.html_content)
+      result = await client.createPage(page.title, trackedHtml)
     }
 
     // Mettre à jour la page en DB

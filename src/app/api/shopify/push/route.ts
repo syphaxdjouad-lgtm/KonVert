@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { ShopifyClient, decryptToken } from '@/lib/shopify'
 import { createClient } from '@/lib/supabase/server'
+import { injectTracker } from '@/lib/analytics/tracker'
 
 // POST /api/shopify/push
 // Body: { store_id, page_id } — publie une page KONVERT dans le store Shopify
@@ -45,6 +46,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Page sans contenu HTML — génère la landing page d\'abord' }, { status: 400 })
     }
 
+    // Injecter le script de tracking dans le HTML
+    const appUrl    = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const trackedHtml = injectTracker(page.html_content, page_id, appUrl)
+
     // Décrypter le token et pusher sur Shopify
     const accessToken = decryptToken(store.access_token)
     const shopDomain  = store.store_url.replace('https://', '')
@@ -59,10 +64,10 @@ export async function POST(req: NextRequest) {
         await client.updatePage(existingId, page.title, page.html_content)
         result = { id: existingId, url: page.published_url }
       } else {
-        result = await client.createPage(page.title, page.html_content)
+        result = await client.createPage(page.title, trackedHtml)
       }
     } else {
-      result = await client.createPage(page.title, page.html_content)
+      result = await client.createPage(page.title, trackedHtml)
     }
 
     // Sauvegarder l'URL publiée dans la DB

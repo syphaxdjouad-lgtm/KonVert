@@ -2,11 +2,44 @@ import { NextRequest, NextResponse } from 'next/server'
 import { generateLandingPage } from '@/lib/anthropic/generate'
 import { scrapeProduct, cleanProduct } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
-import type { ScrapedProduct } from '@/types'
+import { createClient } from '@/lib/supabase/server'
+import { PLAN_LIMITS } from '@/types'
+import type { ScrapedProduct, PlanType } from '@/types'
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}))
+
+    // Vérification quota si user authentifié (skip pour les routes de test sans auth)
+    const supabase    = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (user) {
+      const { data: profile } = await supabase
+        .from('users')
+        .select('plan, pages_used_this_month')
+        .eq('id', user.id)
+        .single()
+
+      if (profile) {
+        const plan   = (profile.plan || 'starter') as PlanType
+        const limit  = PLAN_LIMITS[plan].pages
+        const used   = profile.pages_used_this_month || 0
+
+        if (used >= limit) {
+          return NextResponse.json(
+            { error: `Quota mensuel atteint (${used}/${limit} pages). Upgrade ton plan pour continuer.` },
+            { status: 429 }
+          )
+        }
+
+        // Incrémenter le compteur
+        await supabase
+          .from('users')
+          .update({ pages_used_this_month: used + 1 })
+          .eq('id', user.id)
+      }
+    }
 
     let product: ScrapedProduct
 

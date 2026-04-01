@@ -256,6 +256,102 @@ const TESTIMONIALS = [
   },
 ]
 
+/* ─── WAITLIST SECTION FORM ─────────────────────────────────────────────── */
+function WaitlistSection() {
+  const [email, setEmail]     = useState('')
+  const [name, setName]       = useState('')
+  const [context, setContext] = useState('')
+  const [status, setStatus]   = useState<'idle' | 'loading' | 'success' | 'exists'>('idle')
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    setStatus('loading')
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name, context }),
+      })
+      const data = await res.json()
+      setStatus(data.message === 'already_registered' ? 'exists' : 'success')
+    } catch {
+      setStatus('idle')
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <div className="rounded-3xl p-8 text-center" style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.25)' }}>
+        <div className="text-5xl mb-4">🎉</div>
+        <h3 className="text-xl font-black text-white mb-2">Tu es sur la liste !</h3>
+        <p className="text-sm" style={{ color: 'rgba(167,139,250,0.6)' }}>On t&apos;enverra ton invitation dès qu&apos;une place se libère. Reste attentif à ta boîte mail.</p>
+      </div>
+    )
+  }
+
+  if (status === 'exists') {
+    return (
+      <div className="rounded-3xl p-6 text-center" style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)' }}>
+        <p className="font-bold text-white mb-1">✓ Tu es déjà inscrit !</p>
+        <p className="text-sm" style={{ color: 'rgba(167,139,250,0.5)' }}>On t&apos;a bien en liste. Ton invitation arrive bientôt.</p>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={submit} className="space-y-3 text-left">
+      <div className="grid grid-cols-2 gap-3">
+        <input
+          value={name}
+          onChange={e => setName(e.target.value)}
+          placeholder="Ton prénom"
+          required
+          className="rounded-xl px-4 py-3.5 text-sm outline-none"
+          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(139,92,246,0.2)', color: '#fff' }}
+          onFocus={e => (e.target.style.borderColor = '#7c3aed')}
+          onBlur={e => (e.target.style.borderColor = 'rgba(139,92,246,0.2)')}
+        />
+        <select
+          value={context}
+          onChange={e => setContext(e.target.value)}
+          className="rounded-xl px-4 py-3.5 text-sm outline-none"
+          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(139,92,246,0.2)', color: context ? '#fff' : 'rgba(167,139,250,0.5)' }}
+        >
+          <option value="" style={{ background: '#0d0d1a' }}>Mon profil...</option>
+          <option value="dropshippeur" style={{ background: '#0d0d1a' }}>Dropshippeur</option>
+          <option value="ecommerce" style={{ background: '#0d0d1a' }}>E-commerçant</option>
+          <option value="agence" style={{ background: '#0d0d1a' }}>Agence / Freelance</option>
+          <option value="autre" style={{ background: '#0d0d1a' }}>Autre</option>
+        </select>
+      </div>
+      <div className="flex gap-3">
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="ton@email.com"
+          required
+          className="flex-1 rounded-xl px-4 py-3.5 text-sm outline-none"
+          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(139,92,246,0.2)', color: '#fff' }}
+          onFocus={e => (e.target.style.borderColor = '#7c3aed')}
+          onBlur={e => (e.target.style.borderColor = 'rgba(139,92,246,0.2)')}
+        />
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="btn-shimmer flex-shrink-0 px-6 py-3.5 rounded-xl font-bold text-white text-sm flex items-center gap-2"
+          style={{ background: 'linear-gradient(135deg,#7c3aed,#6d28d9)', boxShadow: '0 4px 20px rgba(124,58,237,0.4)', whiteSpace: 'nowrap' }}
+        >
+          {status === 'loading' ? '...' : <><Sparkles className="w-4 h-4" /> Rejoindre</>}
+        </button>
+      </div>
+      <p className="text-center text-xs" style={{ color: 'rgba(167,139,250,0.4)' }}>
+        Pas de spam · Désabonnement en 1 clic
+      </p>
+    </form>
+  )
+}
+
 /* ─── PAGE PRINCIPALE ───────────────────────────────────────────────────── */
 export default function Home() {
   const [scrollY, setScrollY] = useState(0)
@@ -836,10 +932,10 @@ export default function Home() {
             </p>
           </div>
 
-          {/* CTA buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Link
-              href="/signup"
+          {/* CTA buttons — Bêta fermée */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+            <a
+              href="#waitlist"
               className="btn-shimmer inline-flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-2xl text-lg transition-all duration-300"
               style={{
                 background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
@@ -847,9 +943,9 @@ export default function Home() {
                 boxShadow: '0 8px 30px rgba(124,58,237,0.5)',
               }}
             >
-              Générer ma première page
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+              <Sparkles className="w-5 h-5" />
+              Rejoindre la bêta
+            </a>
             <a
               href="#how"
               className="inline-flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-2xl text-lg transition-all duration-300"
@@ -872,10 +968,8 @@ export default function Home() {
               Voir comment ça marche
             </a>
           </div>
-
-          {/* Reassurance sous les CTA */}
-          <p className="text-center text-sm mt-4 mb-8" style={{ color: 'rgba(167,139,250,0.55)' }}>
-            ✓ Aucune carte bancaire requise &nbsp;·&nbsp; ✓ 50 pages offertes &nbsp;·&nbsp; ✓ Résiliable à tout moment
+          <p className="text-center text-sm mb-10" style={{ color: 'rgba(167,139,250,0.5)' }}>
+            ✓ Bêta gratuite · ✓ 50 premiers utilisateurs · ✓ Accès prioritaire
           </p>
 
           {/* Stats */}
@@ -2477,53 +2571,188 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FOOTER ───────────────────────────────────────────────────────── */}
-      <footer
-        className="py-10 px-6"
-        style={{
-          borderTop: '1px solid rgba(139,92,246,0.1)',
-          background: 'rgba(13,13,26,1)',
-        }}
-      >
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="font-black text-lg" style={{ letterSpacing: '-0.02em' }}>
-            <span style={{ color: '#ffffff' }}>KON</span>
-            <span
+      {/* ── WAITLIST SECTION ─────────────────────────────────────────────── */}
+      <section id="waitlist" className="py-28 px-6" style={{ background: 'rgba(6,2,16,1)' }}>
+        <div className="max-w-xl mx-auto text-center">
+          <div className="reveal">
+            {/* Badge */}
+            <div
+              className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full"
+              style={{ background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(139,92,246,0.3)' }}
+            >
+              <div className="w-2 h-2 rounded-full bg-green-400" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
+              <span className="text-sm font-semibold text-purple-300">Bêta ouverte — Places limitées</span>
+            </div>
+
+            <h2
+              className="text-4xl md:text-5xl font-black mb-4"
               style={{
-                background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
+                background: 'linear-gradient(135deg, #ffffff 0%, #c4b5fd 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
+                letterSpacing: '-0.02em',
               }}
             >
-              VERT
-            </span>
-          </span>
-          <div className="flex gap-6 text-sm">
-            {[
-              { label: 'Tarifs', href: '/pricing' },
-              { label: 'Connexion', href: '/login' },
-              { label: 'Inscription', href: '/signup' },
-            ].map(({ label, href }) => (
-              <Link
-                key={href}
-                href={href}
-                className="transition-colors duration-200"
-                style={{ color: 'rgba(139,92,246,0.5)' }}
-                onMouseEnter={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = 'rgba(196,181,253,0.8)')
-                }
-                onMouseLeave={(e) =>
-                  ((e.currentTarget as HTMLElement).style.color = 'rgba(139,92,246,0.5)')
-                }
-              >
-                {label}
-              </Link>
-            ))}
+              Rejoins les premiers à tester KONVERT
+            </h2>
+            <p className="text-base mb-10" style={{ color: 'rgba(196,181,253,0.6)' }}>
+              50 places disponibles en bêta fermée. Inscris-toi maintenant pour recevoir ton invitation en priorité.
+            </p>
+
+            {/* Compteur places */}
+            <div className="flex items-center justify-center gap-6 mb-10">
+              {[
+                { val: '50', label: 'Places totales' },
+                { val: '23', label: 'Déjà prises' },
+                { val: '27', label: 'Restantes' },
+              ].map(({ val, label }) => (
+                <div key={label} className="text-center">
+                  <div className="text-2xl font-black text-white">{val}</div>
+                  <div className="text-[11px]" style={{ color: 'rgba(167,139,250,0.5)' }}>{label}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Barre de remplissage */}
+            <div className="h-2 rounded-full overflow-hidden mb-10 mx-auto max-w-xs" style={{ background: 'rgba(255,255,255,0.08)' }}>
+              <div
+                className="h-full rounded-full"
+                style={{ width: '46%', background: 'linear-gradient(90deg, #7c3aed, #a78bfa)' }}
+              />
+            </div>
+
+            {/* Formulaire waitlist */}
+            <WaitlistSection />
           </div>
-          <span className="text-sm" style={{ color: 'rgba(139,92,246,0.35)' }}>
-            © 2026 KONVERT
-          </span>
+        </div>
+      </section>
+
+      {/* ── FOOTER ──────────────────────────────────────────────────────────── */}
+      <footer style={{ background: 'rgba(4,1,10,1)', borderTop: '1px solid rgba(139,92,246,0.15)' }}>
+        {/* Top footer */}
+        <div className="max-w-6xl mx-auto px-6 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+
+            {/* Brand */}
+            <div className="md:col-span-1">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="font-black text-xl tracking-tight" style={{ letterSpacing: '-0.03em' }}>
+                  <span style={{ color: '#ffffff' }}>KON</span>
+                  <span style={{
+                    background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
+                    WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                  }}>VERT</span>
+                </span>
+              </div>
+              <p className="text-[13px] leading-relaxed mb-5" style={{ color: 'rgba(167,139,250,0.55)' }}>
+                Génère des landing pages e-commerce haute conversion en 30 secondes grâce à l&apos;IA.
+              </p>
+              {/* Réseaux sociaux */}
+              <div className="flex items-center gap-3">
+                {[
+                  { label: 'X', href: '#' },
+                  { label: 'in', href: '#' },
+                  { label: 'ig', href: '#' },
+                ].map(({ label, href }) => (
+                  <a key={label} href={href}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-black transition-all"
+                    style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(167,139,250,0.6)', border: '1px solid rgba(139,92,246,0.15)' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(124,58,237,0.2)'; (e.currentTarget as HTMLElement).style.color = '#a78bfa' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; (e.currentTarget as HTMLElement).style.color = 'rgba(167,139,250,0.6)' }}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Produit */}
+            <div>
+              <h4 className="text-[12px] font-bold tracking-widest uppercase mb-4" style={{ color: 'rgba(167,139,250,0.5)' }}>Produit</h4>
+              <ul className="space-y-2.5">
+                {[
+                  { label: 'Fonctionnalités', href: '#how' },
+                  { label: 'Tarifs', href: '#pricing' },
+                  { label: 'Templates', href: '/signup' },
+                  { label: 'Changelog', href: '#' },
+                  { label: 'Roadmap', href: '#' },
+                ].map(({ label, href }) => (
+                  <li key={label}>
+                    <a href={href} className="text-[13px] transition-colors" style={{ color: 'rgba(196,181,253,0.5)' }}
+                      onMouseEnter={e => ((e.target as HTMLElement).style.color = '#ffffff')}
+                      onMouseLeave={e => ((e.target as HTMLElement).style.color = 'rgba(196,181,253,0.5)')}>
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Ressources */}
+            <div>
+              <h4 className="text-[12px] font-bold tracking-widest uppercase mb-4" style={{ color: 'rgba(167,139,250,0.5)' }}>Ressources</h4>
+              <ul className="space-y-2.5">
+                {[
+                  { label: 'Documentation', href: '#' },
+                  { label: 'Guide démarrage', href: '#' },
+                  { label: 'Blog', href: '#' },
+                  { label: 'Support', href: 'mailto:support@konvert.app' },
+                  { label: 'Status', href: '#' },
+                ].map(({ label, href }) => (
+                  <li key={label}>
+                    <a href={href} className="text-[13px] transition-colors" style={{ color: 'rgba(196,181,253,0.5)' }}
+                      onMouseEnter={e => ((e.target as HTMLElement).style.color = '#ffffff')}
+                      onMouseLeave={e => ((e.target as HTMLElement).style.color = 'rgba(196,181,253,0.5)')}>
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Légal */}
+            <div>
+              <h4 className="text-[12px] font-bold tracking-widest uppercase mb-4" style={{ color: 'rgba(167,139,250,0.5)' }}>Légal</h4>
+              <ul className="space-y-2.5">
+                {[
+                  { label: 'Mentions légales', href: '/legal/mentions' },
+                  { label: 'CGU', href: '/legal/cgu' },
+                  { label: 'Politique de confidentialité', href: '/legal/privacy' },
+                  { label: 'Politique cookies', href: '/legal/cookies' },
+                  { label: 'RGPD', href: '/legal/rgpd' },
+                ].map(({ label, href }) => (
+                  <li key={label}>
+                    <a href={href} className="text-[13px] transition-colors" style={{ color: 'rgba(196,181,253,0.5)' }}
+                      onMouseEnter={e => ((e.target as HTMLElement).style.color = '#ffffff')}
+                      onMouseLeave={e => ((e.target as HTMLElement).style.color = 'rgba(196,181,253,0.5)')}>
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom footer */}
+        <div style={{ borderTop: '1px solid rgba(139,92,246,0.08)' }}>
+          <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-[12px]" style={{ color: 'rgba(167,139,250,0.35)' }}>
+              © 2026 KONVERT — Tous droits réservés
+            </p>
+            <div className="flex items-center gap-4">
+              {/* Badges tech */}
+              <div className="flex items-center gap-2 text-[11px] font-semibold" style={{ color: 'rgba(167,139,250,0.4)' }}>
+                <span>Propulsé par</span>
+                <span className="px-2 py-0.5 rounded-md" style={{ background: 'rgba(124,58,237,0.15)', color: '#a78bfa' }}>Claude · Anthropic</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-[11px]" style={{ color: 'rgba(167,139,250,0.35)' }}>
+                <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                Tous les services opérationnels
+              </div>
+            </div>
+          </div>
         </div>
       </footer>
       {/* CTA Sticky Mobile */}

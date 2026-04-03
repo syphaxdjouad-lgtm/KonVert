@@ -17,6 +17,8 @@ import {
   TrendingUp,
   Menu,
   X,
+  Sun,
+  Moon,
 } from 'lucide-react'
 
 /* ─── ÉTOILES STATIQUES (générées une seule fois) ───────────────────────── */
@@ -655,7 +657,7 @@ export default function Home() {
       <section
         className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-16 px-6 overflow-hidden"
         style={{
-          backgroundImage: "url('/images/hero-bg.jpg')",
+          backgroundImage: "url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&h=900&fit=crop&q=80')",
           backgroundSize: 'cover',
           backgroundPosition: `calc(center) calc(center + ${heroParallax}px)`,
         }}
@@ -1157,7 +1159,7 @@ export default function Home() {
                 }}
               >
                 <img
-                  src="/images/dashboard-preview.jpg"
+                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=560&fit=crop&q=80"
                   alt="Dashboard Konvert"
                   className="w-full h-full object-cover"
                   style={{ display: 'block', minHeight: '280px' }}
@@ -1350,7 +1352,7 @@ export default function Home() {
               </div>
               {/* Page preview simulée */}
               <div style={{ aspectRatio: '4/3', background: 'linear-gradient(135deg, #1a0533 0%, #0d0d1a 100%)', position: 'relative', overflow: 'hidden' }}>
-                <img src="/images/product-example.jpg" alt="Landing page produit" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />
+                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&h=600&fit=crop&q=80" alt="Landing page produit" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }} />
                 {/* Overlay avec éléments UI simulés */}
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px', background: 'linear-gradient(to top, rgba(10,3,22,0.95), transparent)' }}>
                   <div className="flex items-center justify-between">
@@ -1373,7 +1375,7 @@ export default function Home() {
                 <div className="flex-1 mx-3 py-1 px-3 rounded-md text-xs font-mono text-center" style={{ background: 'rgba(0,0,0,0.3)', color: 'rgba(167,139,250,0.7)' }}>mystore.com/products/wireless-earbuds</div>
               </div>
               <div style={{ aspectRatio: '4/3', background: 'linear-gradient(135deg, #0a1628 0%, #0d0d1a 100%)', position: 'relative', overflow: 'hidden' }}>
-                <img src="/images/dashboard-preview.jpg" alt="Dashboard analytics" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }} />
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&q=80" alt="Dashboard analytics" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }} />
                 <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px', background: 'linear-gradient(to top, rgba(10,3,22,0.95), transparent)' }}>
                   <div className="flex items-center justify-between">
                     <div>
@@ -1773,7 +1775,7 @@ export default function Home() {
                 }}
               >
                 <img
-                  src="/images/product-example.jpg"
+                  src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=960&h=720&fit=crop&q=80"
                   alt="Page produit e-commerce générée par Konvert"
                   style={{ display: 'block', width: '100%', maxWidth: '480px', height: 'auto' }}
                 />
@@ -1840,7 +1842,7 @@ export default function Home() {
                   />
                 </div>
                 <img
-                  src="/images/mobile-preview.jpg"
+                  src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=700&fit=crop&q=80"
                   alt="Page produit mobile Konvert"
                   style={{ display: 'block', width: '100%', height: 'auto' }}
                 />
@@ -2461,7 +2463,7 @@ export default function Home() {
       <section
         className="py-28 px-6 relative overflow-hidden"
         style={{
-          backgroundImage: "url('/images/agency-workspace.jpg')",
+          backgroundImage: "url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1600&h=900&fit=crop&q=80')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

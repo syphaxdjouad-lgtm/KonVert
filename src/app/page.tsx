@@ -190,7 +190,7 @@ function TiltCard({ children, className, style }: { children: React.ReactNode; c
 const TESTIMONIALS = [
   {
     name: 'Karim Benali',
-    avatar: 'https://i.pravatar.cc/80?img=11',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face',
     role: 'Dropshippeur · 3 stores Shopify',
     platform: 'Shopify',
     stars: 5,
@@ -201,7 +201,7 @@ const TESTIMONIALS = [
   },
   {
     name: 'Sophie Marchand',
-    avatar: 'https://i.pravatar.cc/80?img=47',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face',
     role: 'Fondatrice · Boutique beauté',
     platform: 'WooCommerce',
     stars: 5,
@@ -212,7 +212,7 @@ const TESTIMONIALS = [
   },
   {
     name: 'Thomas Girard',
-    avatar: 'https://i.pravatar.cc/80?img=33',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face',
     role: 'Agence e-commerce · 12 clients',
     platform: 'Shopify',
     stars: 5,
@@ -223,7 +223,7 @@ const TESTIMONIALS = [
   },
   {
     name: 'Amina Oukili',
-    avatar: 'https://i.pravatar.cc/80?img=56',
+    avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&h=80&fit=crop&crop=face',
     role: 'E-commerçante · Mode & Lifestyle',
     platform: 'Shopify',
     stars: 5,
@@ -234,7 +234,7 @@ const TESTIMONIALS = [
   },
   {
     name: 'Romain Lefevre',
-    avatar: 'https://i.pravatar.cc/80?img=15',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face',
     role: 'Coach business · Formation dropshipping',
     platform: 'Standalone',
     stars: 5,
@@ -245,7 +245,7 @@ const TESTIMONIALS = [
   },
   {
     name: 'Léa Fontaine',
-    avatar: 'https://i.pravatar.cc/80?img=44',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face',
     role: 'Freelance · Consultante CRO',
     platform: 'WooCommerce',
     stars: 5,
@@ -1903,7 +1903,7 @@ export default function Home() {
         />
 
         <div className="max-w-5xl mx-auto relative z-10">
-          <div className="text-center mb-16 reveal">
+          <div className="text-center mb-10 reveal">
             <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: 'rgba(167,139,250,0.7)' }}>
               ✦ Témoignages vérifiés
             </p>
@@ -1919,6 +1919,43 @@ export default function Home() {
             >
               Ils ont testé. Voici leurs résultats.
             </h2>
+          </div>
+
+          {/* Barre de stats globale */}
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-12 reveal">
+            {/* Note globale */}
+            <div className="flex items-center gap-3 px-5 py-3 rounded-2xl" style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)' }}>
+              <div>
+                <div className="text-2xl font-black text-white">4.9</div>
+                <div className="flex gap-0.5 mt-0.5">
+                  {[1,2,3,4,5].map(i => (
+                    <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+              </div>
+              <div className="text-left">
+                <div className="text-[11px] font-bold text-white/80">Note moyenne</div>
+                <div className="text-[11px]" style={{ color: 'rgba(167,139,250,0.6)' }}>247 avis clients</div>
+              </div>
+            </div>
+            {/* Badge vérifié */}
+            <div className="flex items-center gap-2 px-4 py-3 rounded-2xl" style={{ background: 'rgba(22,163,74,0.1)', border: '1px solid rgba(22,163,74,0.25)' }}>
+              <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: 'rgba(22,163,74,0.2)' }}>
+                <Check className="w-3.5 h-3.5 text-green-400" />
+              </div>
+              <div>
+                <div className="text-[11px] font-bold text-white/80">Avis vérifiés</div>
+                <div className="text-[11px]" style={{ color: 'rgba(167,139,250,0.6)' }}>Utilisateurs actifs uniquement</div>
+              </div>
+            </div>
+            {/* Taux satisfaction */}
+            <div className="flex items-center gap-2 px-4 py-3 rounded-2xl" style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)' }}>
+              <div className="text-2xl font-black" style={{ color: '#a78bfa' }}>97%</div>
+              <div>
+                <div className="text-[11px] font-bold text-white/80">Taux de satisfaction</div>
+                <div className="text-[11px]" style={{ color: 'rgba(167,139,250,0.6)' }}>Recommanderaient KONVERT</div>
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -2032,9 +2069,17 @@ export default function Home() {
                 <div className="text-xs font-mono mb-3 leading-relaxed" style={{ color: 'rgba(255,255,255,0.4)', wordBreak: 'break-all' }}>
                   New 2024 Smart Watch Waterproof Sport Fitness Tracker Bluetooth Heart Rate Monitor For Men Women Android iOS Compatible Free Shipping
                 </div>
-                {/* Image placeholder grise */}
-                <div className="w-full rounded-lg mb-3 flex items-center justify-center" style={{ height: '120px', background: 'rgba(255,255,255,0.05)', border: '1px dashed rgba(255,255,255,0.1)' }}>
-                  <span className="text-3xl opacity-30">🖼</span>
+                {/* Image produit AliExpress style */}
+                <div className="w-full rounded-lg mb-3 relative overflow-hidden" style={{ height: '140px', background: '#f0f0f0' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=280&fit=crop"
+                    alt="Produit basique"
+                    className="w-full h-full object-cover"
+                    style={{ filter: 'saturate(0.4) contrast(0.8) brightness(1.1)', opacity: 0.7 }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'rgba(240,240,240,0.3)' }}>
+                    <span className="text-[10px] font-mono px-2 py-1 rounded" style={{ background: 'rgba(255,100,0,0.15)', color: '#cc4400', border: '1px solid rgba(255,100,0,0.3)' }}>3 images disponibles</span>
+                  </div>
                 </div>
                 {/* Prix bizarre */}
                 <div className="flex items-center gap-2 mb-3">
@@ -2079,14 +2124,20 @@ export default function Home() {
               <div className="p-5" style={{ background: 'rgba(14,6,28,1)' }}>
                 {/* Titre accrocheur */}
                 <div className="font-black text-base mb-3 leading-tight" style={{ color: '#ffffff' }}>
-                  🔥 La montre connectée qui transforme ta routine sport — GPS, santé &amp; style en 1 seul appareil
+                  La montre connectée qui transforme ta routine sport — GPS, santé &amp; style en 1 seul appareil
                 </div>
                 {/* Image avec overlay premium */}
-                <div className="w-full rounded-xl mb-3 relative overflow-hidden flex items-center justify-center" style={{ height: '120px', background: 'linear-gradient(135deg, rgba(124,58,237,0.3), rgba(109,40,217,0.1))' }}>
-                  <span className="text-4xl">⌚</span>
-                  <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 flex items-center justify-between" style={{ background: 'rgba(0,0,0,0.5)' }}>
-                    <span className="text-[10px] font-bold" style={{ color: '#4ade80' }}>✓ En stock</span>
-                    <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.5)' }}>247 avis ★★★★★</span>
+                <div className="w-full rounded-xl mb-3 relative overflow-hidden" style={{ height: '140px' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=280&fit=crop"
+                    alt="Produit KONVERT"
+                    className="w-full h-full object-cover"
+                    style={{ filter: 'saturate(1.2) contrast(1.05)', transform: 'scale(1.05)' }}
+                  />
+                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(14,6,28,0.8) 0%, transparent 50%)' }} />
+                  <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 flex items-center justify-between">
+                    <span className="text-[10px] font-bold" style={{ color: '#4ade80' }}>✓ En stock — Livraison 24h</span>
+                    <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.7)' }}>247 avis ★★★★★</span>
                   </div>
                 </div>
                 {/* Prix premium */}
@@ -2118,10 +2169,38 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Flèche centrale */}
-          <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 0 25px rgba(124,58,237,0.5)', marginTop: '60px' }}>
-            <ArrowRight className="w-5 h-5 text-white" />
+          {/* Flèche VS centrale */}
+          <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex-col items-center gap-1"
+            style={{ marginTop: '60px' }}>
+            <div className="w-14 h-14 rounded-full flex items-center justify-center font-black text-white text-sm"
+              style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 0 30px rgba(124,58,237,0.6)', border: '3px solid rgba(139,92,246,0.3)' }}>
+              VS
+            </div>
+          </div>
+
+          {/* Barre comparaison métriques */}
+          <div className="mt-8 rounded-2xl overflow-hidden reveal" style={{ border: '1px solid rgba(139,92,246,0.2)' }}>
+            <div className="px-5 py-3 text-center text-xs font-bold tracking-widest uppercase" style={{ background: 'rgba(124,58,237,0.1)', color: 'rgba(167,139,250,0.7)', borderBottom: '1px solid rgba(139,92,246,0.15)' }}>
+              Impact réel mesuré sur 1 000+ pages
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4" style={{ background: 'rgba(14,6,28,0.8)' }}>
+              {[
+                { label: 'CTR moyen', before: '0.8%', after: '4.8%', delta: '+500%', positive: true },
+                { label: 'Temps sur page', before: '18s', after: '3m 20s', delta: '+10x', positive: true },
+                { label: 'Taux de rebond', before: '94%', after: '18%', delta: '-76%', positive: true },
+                { label: 'Taux de conversion', before: '0.4%', after: '3.2%', delta: '+700%', positive: true },
+              ].map((m, i) => (
+                <div key={m.label} className="px-4 py-5 text-center" style={{ borderRight: i < 3 ? '1px solid rgba(139,92,246,0.1)' : 'none' }}>
+                  <div className="text-[10px] font-bold uppercase tracking-wider mb-3" style={{ color: 'rgba(167,139,250,0.5)' }}>{m.label}</div>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <span className="text-sm font-bold line-through" style={{ color: 'rgba(239,68,68,0.6)' }}>{m.before}</span>
+                    <ArrowRight className="w-3 h-3" style={{ color: 'rgba(139,92,246,0.5)' }} />
+                    <span className="text-sm font-black text-white">{m.after}</span>
+                  </div>
+                  <div className="text-xs font-black px-2 py-0.5 rounded-lg inline-block" style={{ background: 'rgba(74,222,128,0.15)', color: '#4ade80' }}>{m.delta}</div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* CTA */}

@@ -17,8 +17,6 @@ import {
   TrendingUp,
   Menu,
   X,
-  Sun,
-  Moon,
 } from 'lucide-react'
 
 /* ─── ÉTOILES STATIQUES (générées une seule fois) ───────────────────────── */
@@ -364,7 +362,6 @@ export default function Home() {
   const [cursor, setCursor] = useState({ x: 0, y: 0 })
   const [cursorVisible, setCursorVisible] = useState(false)
   const [showStickyMobile, setShowStickyMobile] = useState(false)
-  const [light, setLight] = useState(false)
   const statsRef = useRef<HTMLDivElement>(null)
 
   /* Scroll progress + navbar blur + parallax */
@@ -500,26 +497,10 @@ export default function Home() {
 
   const navBlur = scrollY > 40
 
-  const th = {
-    bg:          light ? '#f5f3ff'                 : '#0d0d1a',
-    text:        light ? '#1a0a2e'                 : '#ffffff',
-    textMuted:   light ? 'rgba(109,40,217,0.65)'  : 'rgba(196,181,253,0.7)',
-    textSubtle:  light ? 'rgba(109,40,217,0.4)'   : 'rgba(167,139,250,0.4)',
-    card:        light ? 'rgba(255,255,255,0.85)'  : 'rgba(255,255,255,0.04)',
-    cardBorder:  light ? 'rgba(124,58,237,0.18)'  : 'rgba(139,92,246,0.15)',
-    navBg:       light ? 'rgba(245,243,255,0.92)' : 'rgba(13,13,26,0.85)',
-    navBorder:   light ? 'rgba(124,58,237,0.18)'  : 'rgba(139,92,246,0.15)',
-    sectionAlt:  light ? '#ede9fe'                : 'rgba(8,2,18,1)',
-    heroOverlay: light ? 'rgba(245,243,255,0.78)' : 'rgba(13,13,26,0.85)',
-    mobileMenu:  light ? 'rgba(245,243,255,0.98)' : 'rgba(13,13,26,0.95)',
-    linkColor:   light ? 'rgba(109,40,217,0.75)'  : 'rgba(196,181,253,0.7)',
-  }
-
   return (
     <main
-      data-theme={light ? 'light' : 'dark'}
       className="overflow-x-hidden"
-      style={{ background: th.bg, color: th.text, transition: 'background 0.35s ease, color 0.35s ease' }}
+      style={{ background: '#0d0d1a', color: '#ffffff' }}
     >
       {/* Cursor glow */}
       {cursorVisible && (
@@ -547,11 +528,10 @@ export default function Home() {
       <nav
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
-          background: navBlur ? th.navBg : 'transparent',
+          background: navBlur ? 'rgba(13, 13, 26, 0.85)' : 'transparent',
           backdropFilter: navBlur ? 'blur(20px)' : 'blur(0px)',
           WebkitBackdropFilter: navBlur ? 'blur(20px)' : 'blur(0px)',
-          borderBottom: navBlur ? `1px solid ${th.navBorder}` : '1px solid transparent',
-          transition: 'background 0.35s ease',
+          borderBottom: navBlur ? '1px solid rgba(139,92,246,0.15)' : '1px solid transparent',
         }}
       >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -619,20 +599,6 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Theme toggle */}
-          <button
-            onClick={() => setLight(!light)}
-            className="p-2 rounded-xl transition-all duration-300"
-            style={{
-              background: light ? 'rgba(124,58,237,0.12)' : 'rgba(255,255,255,0.07)',
-              border: `1px solid ${th.cardBorder}`,
-              color: light ? '#7c3aed' : '#a78bfa',
-            }}
-            title={light ? 'Passer en mode sombre' : 'Passer en mode clair'}
-          >
-            {light ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-          </button>
-
           {/* Mobile menu toggle */}
           <button
             className="md:hidden p-2 text-purple-300"
@@ -647,9 +613,8 @@ export default function Home() {
           <div
             className="md:hidden px-6 py-4 space-y-4"
             style={{
-              background: th.mobileMenu,
-              borderTop: `1px solid ${th.navBorder}`,
-              transition: 'background 0.35s ease',
+              background: 'rgba(13,13,26,0.95)',
+              borderTop: '1px solid rgba(139,92,246,0.15)',
             }}
           >
             {[
@@ -691,10 +656,10 @@ export default function Home() {
           backgroundPosition: `calc(center) calc(center + ${heroParallax}px)`,
         }}
       >
-        {/* Overlay pour lisibilité du texte */}
+        {/* Overlay sombre pour lisibilité du texte */}
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: th.heroOverlay, transition: 'background 0.35s ease' }}
+          style={{ background: 'rgba(13,13,26,0.85)' }}
         />
         {/* Radial overlays purple par-dessus l'overlay sombre */}
         <div
@@ -1540,7 +1505,7 @@ export default function Home() {
       </section>
 
       {/* ── GLOBE STATS ──────────────────────────────────────────────────────── */}
-      <section className="py-32 px-6 relative overflow-hidden" style={{ background: th.sectionAlt, transition: 'background 0.35s ease' }}>
+      <section className="py-32 px-6 relative overflow-hidden" style={{ background: 'rgba(8,2,18,1)' }}>
         {/* Glow central */}
         <div className="absolute inset-0 pointer-events-none" style={{
           background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(124,58,237,0.18) 0%, transparent 70%)'

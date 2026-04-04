@@ -1,12 +1,14 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Plus, ExternalLink, Pencil, Globe, Clock, FileText, Eye, MousePointerClick, Zap } from 'lucide-react'
+import { Plus, Pencil, Globe, Clock, FileText, Eye, Zap } from 'lucide-react'
 
-export default async function PagesPage() {
+export default async function PagesPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+
+  const { q } = await searchParams
 
   const { data: pages } = await supabase
     .from('pages')
@@ -14,10 +16,11 @@ export default async function PagesPage() {
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
-  const list = pages || []
-  const published = list.filter(p => p.status === 'published').length
-  const totalViews = list.reduce((s, p) => s + (p.views || 0), 0)
-  const totalClicks = list.reduce((s, p) => s + (p.cta_clicks || 0), 0)
+  const all  = pages || []
+  const list = q ? all.filter(p => (p.title || '').toLowerCase().includes(q.toLowerCase())) : all
+
+  const published  = all.filter(p => p.status === 'published').length
+  const totalViews = all.reduce((s, p) => s + (p.views || 0), 0)
 
   return (
     <div className="p-8 max-w-6xl mx-auto">
@@ -25,8 +28,12 @@ export default async function PagesPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-black" style={{ color: '#111' }}>Mes pages</h1>
-          <p className="text-sm mt-1" style={{ color: '#6b7280' }}>{list.length} page{list.length !== 1 ? 's' : ''} créée{list.length !== 1 ? 's' : ''}</p>
+          <h1 className="text-2xl font-black" style={{ color: '#111' }}>
+            {q ? `Résultats pour "${q}"` : 'Mes pages'}
+          </h1>
+          <p className="text-sm mt-1" style={{ color: '#6b7280' }}>
+            {q ? `${list.length} page${list.length !== 1 ? 's' : ''} trouvée${list.length !== 1 ? 's' : ''}` : `${all.length} page${all.length !== 1 ? 's' : ''} créée${all.length !== 1 ? 's' : ''}`}
+          </p>
         </div>
         <Link
           href="/dashboard/new"

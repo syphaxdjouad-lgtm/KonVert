@@ -186,6 +186,145 @@ function TiltCard({ children, className, style }: { children: React.ReactNode; c
   )
 }
 
+/* ─── ROI SECTION ───────────────────────────────────────────────────────── */
+function ROISection() {
+  const [pages, setPages] = useState(10)
+
+  const traditionalHours = pages * 3
+  const konvertMinutes   = pages * 0.5
+  const savedHours       = traditionalHours - konvertMinutes / 60
+  const savedMoney       = Math.round(savedHours * 50)
+
+  return (
+    <section className="py-28 px-6 relative overflow-hidden" style={{ background: 'rgba(6,2,14,1)' }}>
+      <div className="absolute inset-0 dot-pattern opacity-20 pointer-events-none" />
+
+      <div className="max-w-5xl mx-auto relative z-10">
+        {/* Header */}
+        <div className="text-center mb-16 reveal">
+          <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: 'rgba(167,139,250,0.7)' }}>
+            ✦ Calcule ton retour sur investissement
+          </p>
+          <h2 className="text-4xl md:text-5xl font-black" style={{
+            background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+            letterSpacing: '-0.02em',
+          }}>
+            Combien de temps tu perds<br />chaque mois ?
+          </h2>
+          <p className="mt-4 text-base max-w-lg mx-auto" style={{ color: 'rgba(196,181,253,0.6)' }}>
+            Une fiche produit manuelle = 2 à 4 heures. Avec KONVERT = 30 secondes.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 items-center reveal">
+
+          {/* Slider */}
+          <div className="rounded-3xl p-8" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(139,92,246,0.2)' }}>
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm font-bold" style={{ color: 'rgba(196,181,253,0.8)' }}>Pages produit par mois</span>
+                <span className="text-2xl font-black text-white">{pages}</span>
+              </div>
+              <input
+                type="range"
+                min={1}
+                max={100}
+                value={pages}
+                onChange={e => setPages(Number(e.target.value))}
+                className="w-full h-2 rounded-full outline-none cursor-pointer"
+                style={{
+                  appearance: 'none',
+                  background: `linear-gradient(to right, #7c3aed ${pages}%, rgba(139,92,246,0.2) ${pages}%)`,
+                }}
+              />
+              <div className="flex justify-between text-xs mt-2" style={{ color: 'rgba(167,139,250,0.4)' }}>
+                <span>1</span><span>50</span><span>100</span>
+              </div>
+            </div>
+
+            {/* Comparaison */}
+            <div className="space-y-4">
+              {/* Sans KONVERT */}
+              <div className="rounded-2xl p-4" style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)' }}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'rgba(239,68,68,0.7)' }}>Sans KONVERT</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(239,68,68,0.12)', color: '#ef4444' }}>Méthode classique</span>
+                </div>
+                <div className="text-3xl font-black" style={{ color: '#ef4444' }}>{traditionalHours}h</div>
+                <div className="text-xs mt-1" style={{ color: 'rgba(239,68,68,0.6)' }}>à 3h/page en moyenne (rédaction + design + mise en ligne)</div>
+              </div>
+
+              {/* Avec KONVERT */}
+              <div className="rounded-2xl p-4" style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(139,92,246,0.25)' }}>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'rgba(167,139,250,0.7)' }}>Avec KONVERT</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(74,222,128,0.12)', color: '#4ade80' }}>IA générative</span>
+                </div>
+                <div className="text-3xl font-black" style={{ color: '#a78bfa' }}>{konvertMinutes < 60 ? `${konvertMinutes}min` : `${(konvertMinutes/60).toFixed(1)}h`}</div>
+                <div className="text-xs mt-1" style={{ color: 'rgba(167,139,250,0.5)' }}>30 secondes par page, entièrement automatisé</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Résultats */}
+          <div className="space-y-5">
+            <div className="text-center md:text-left mb-2">
+              <p className="text-sm font-bold uppercase tracking-widest" style={{ color: 'rgba(167,139,250,0.5)' }}>Ton gain mensuel</p>
+            </div>
+
+            {[
+              {
+                value: `${Math.round(savedHours * 10) / 10}h`,
+                label: 'heures récupérées',
+                sub: 'À consacrer à ta croissance, pas à la rédaction',
+                color: '#4ade80',
+                bg: 'rgba(74,222,128,0.08)',
+                border: 'rgba(74,222,128,0.2)',
+              },
+              {
+                value: `${savedMoney.toLocaleString()}€`,
+                label: 'économisés (à 50€/h)',
+                sub: 'Si tu externalisais ça à un copywriter freelance',
+                color: '#a78bfa',
+                bg: 'rgba(124,58,237,0.08)',
+                border: 'rgba(139,92,246,0.2)',
+              },
+              {
+                value: `×${Math.round((traditionalHours * 60) / Math.max(konvertMinutes, 0.5))}`,
+                label: 'plus rapide',
+                sub: 'Le même résultat, en une fraction du temps',
+                color: '#fbbf24',
+                bg: 'rgba(251,191,36,0.06)',
+                border: 'rgba(251,191,36,0.2)',
+              },
+            ].map(s => (
+              <div key={s.label} className="flex items-center gap-5 rounded-2xl px-6 py-5" style={{ background: s.bg, border: `1px solid ${s.border}` }}>
+                <div className="text-4xl font-black flex-shrink-0" style={{ color: s.color }}>{s.value}</div>
+                <div>
+                  <div className="font-bold text-white">{s.label}</div>
+                  <div className="text-xs mt-0.5" style={{ color: 'rgba(167,139,250,0.5)' }}>{s.sub}</div>
+                </div>
+              </div>
+            ))}
+
+            <div className="mt-6 text-center md:text-left">
+              <Link
+                href="/signup"
+                className="btn-shimmer inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-white text-base"
+                style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 8px 30px rgba(124,58,237,0.4)' }}
+              >
+                Récupérer ces {Math.round(savedHours * 10) / 10}h →
+              </Link>
+              <p className="mt-2 text-xs" style={{ color: 'rgba(167,139,250,0.4)' }}>✓ Gratuit · ✓ Sans carte bancaire</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /* ─── TESTIMONIALS DATA ─────────────────────────────────────────────────── */
 const TESTIMONIALS = [
   {
@@ -2207,6 +2346,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── ROI CALCULATEUR ──────────────────────────────────────────────── */}
+      <ROISection />
 
       {/* ── PRICING ──────────────────────────────────────────────────────── */}
       <section

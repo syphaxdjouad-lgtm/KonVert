@@ -884,18 +884,42 @@ export default function Home() {
             {/* Logos plateformes */}
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs mr-1" style={{ color: 'rgba(167,139,250,0.4)' }}>Compatible :</span>
-              {[
-                { src: 'https://cdn.simpleicons.org/shopify/96BF48', label: 'Shopify', bg: 'rgba(150,191,72,0.1)' },
-                { src: 'https://cdn.simpleicons.org/woocommerce/7f54b3', label: 'WooCommerce', bg: 'rgba(127,84,179,0.1)' },
-                { src: 'https://cdn.simpleicons.org/aliexpress/FF4747', label: 'AliExpress', bg: 'rgba(255,71,71,0.1)' },
-                { src: 'https://logo.clearbit.com/amazon.com', label: 'Amazon', bg: 'rgba(255,153,0,0.1)' },
-                { src: 'https://logo.clearbit.com/youcan.shop', label: 'YouCan', bg: 'rgba(99,102,241,0.1)' },
-              ].map(({ src, label, bg }) => (
-                <div key={label} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: bg, border: '1px solid rgba(255,255,255,0.08)' }}>
-                  <img src={src} alt={label} width={16} height={16} className="object-contain" style={{ width: '16px', height: '16px' }} />
-                  <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>{label}</span>
+
+              {/* Shopify */}
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: 'rgba(150,191,72,0.1)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#96BF48"><path d="M15.337 23.979l7.216-1.561S19.674 7.148 19.655 7.008c-.019-.141-.14-.235-.262-.235-.122 0-2.247-.047-2.247-.047s-1.495-1.46-1.664-1.627c-.169-.169-.496-.117-.623-.079l-.898.277C13.682 4.43 12.954 3 11.246 3c-.047 0-.094.002-.14.005-.495-.651-1.11-.937-1.635-.937-4.043.001-5.977 5.054-6.58 7.624l-2.828.876C.44 10.764.426 10.778 0 11.14l2.47 16.505 12.867-3.666zM14.298 5.9l-1.428.44c0-.062.002-.123.002-.186 0-.926-.128-1.671-.335-2.265.82.097 1.377.99 1.761 2.011zm-2.858-1.74c.225.564.368 1.374.368 2.472 0 .053-.001.104-.002.154l-2.777.859c.535-2.064 1.546-3.064 2.411-3.485zm-1.136-.524c-.144 0-.289.049-.431.145.987-.465 1.66-1.81 1.66-1.81s-.505.204-1.009.204c-.39 0-.785-.141-1.06-.465.275.271.569.413.84.413.34 0 .64-.192.84-.471-.2.28-.5.471-.84.471-.271 0-.565-.142-.84-.413-.067-.072-.133-.15-.196-.232-.504.82-.814 2.13-.814 2.13S9.04 3.636 10.304 3.636zm7.394 3.032l-2.084.644c-.391-1.494-1.134-2.217-1.86-2.217-.049 0-.098.003-.147.008l-.057-.175 2.084-.644 2.064 2.384zm-5.46-1.19c.069-.008.139-.013.209-.013.527 0 1.045.379 1.416 1.044l-3.367 1.04c.403-1.344 1.096-2.071 1.742-2.071z"/></svg>
+                <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>Shopify</span>
+              </div>
+
+              {/* WooCommerce */}
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: 'rgba(127,84,179,0.1)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#7f54b3"><path d="M0 3.074A1.97 1.97 0 011.987 1.09h20.025A1.97 1.97 0 0124 3.074v11.46a1.97 1.97 0 01-1.988 1.984H13.65l1.2 2.392-4.128-2.392H1.988A1.97 1.97 0 010 14.534V3.074zm6.982 1.96a.66.66 0 00-.61.43c-.63 1.68-1.23 3.45-1.83 5.27a62.853 62.853 0 01-1.08-4.45c-.11-.56-.52-.83-.99-.8-.45.03-.77.44-.69.98.03.19.93 4.28 2.25 7.25.17.39.44.65.76.69.32.04.65-.11.87-.44l2.01-3.46 2.01 3.46c.22.33.55.48.87.44.32-.04.59-.3.76-.69 1.32-2.97 2.22-7.06 2.25-7.25.08-.54-.24-.95-.69-.98-.47-.03-.88.24-.99.8-.27 1.62-.65 3.12-1.08 4.45-.6-1.82-1.2-3.59-1.83-5.27a.66.66 0 00-.61-.43zm9.54 2.04c-.93 0-1.75.65-2.13 1.63-.21.54-.32 1.14-.32 1.76 0 .56.1 1.09.27 1.56.34.95 1.07 1.57 1.95 1.57 1.27 0 2.28-1.24 2.28-2.77 0-.77-.2-1.48-.54-2.01-.41-.65-1-.74-1.51-.74zm-.19 1.05c.52 0 .84.65.84 1.72 0 1.07-.39 1.72-.84 1.72-.46 0-.84-.65-.84-1.72 0-1.07.38-1.72.84-1.72z"/></svg>
+                <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>WooCommerce</span>
+              </div>
+
+              {/* AliExpress */}
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: 'rgba(255,71,71,0.1)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF4747"><path d="M0 12C0 5.373 5.373 0 12 0s12 5.373 12 12-5.373 12-12 12S0 18.627 0 12zm18.694-1.96c-.208 0-.37.04-.52.088l-1.74.644c.04-.224.064-.456.064-.696 0-2.152-1.744-3.896-3.9-3.896-2.152 0-3.896 1.744-3.896 3.896 0 2.152 1.744 3.9 3.896 3.9 1.4 0 2.624-.74 3.32-1.848l1.62.588c-.848 1.824-2.688 3.088-4.84 3.088-2.944 0-5.328-2.384-5.328-5.328C7.37 7.532 9.752 5.148 12.7 5.148c2.944 0 5.328 2.384 5.328 5.328 0 .192-.016.384-.04.568l.024-.008h.016c.672 0 1.216.544 1.216 1.216v.016c0 .672-.544 1.216-1.216 1.216H12.7v-1.44h6.016c-.016-.096-.024-.192-.024-.288v-.016c0-.328-.12-.624-.32-.856.048-.16.08-.328.08-.5 0-.832-.672-1.504-1.504-1.504h-.256zm-6.096 2.712c1.312 0 2.376-1.064 2.376-2.376S13.91 8 12.598 8c-1.312 0-2.376 1.064-2.376 2.376s1.064 2.376 2.376 2.376z"/></svg>
+                <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>AliExpress</span>
+              </div>
+
+              {/* Amazon */}
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: 'rgba(255,153,0,0.1)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <text x="2" y="13" fontFamily="Arial Black, sans-serif" fontSize="11" fontWeight="900" fill="white">a</text>
+                  <path d="M3 16 Q8.5 20 16 16.5" stroke="#FF9900" strokeWidth="2" fill="none" strokeLinecap="round"/>
+                  <path d="M14.5 14.5 L16.2 16.5 L14 17.8" fill="none" stroke="#FF9900" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>Amazon</span>
+              </div>
+
+              {/* YouCan */}
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: 'rgba(249,115,22,0.1)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ width: 16, height: 16, background: 'linear-gradient(135deg, #F97316, #EA580C)', borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontSize: '8px', fontWeight: 900, color: 'white', lineHeight: 1, letterSpacing: '-0.5px' }}>YC</span>
                 </div>
-              ))}
+                <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>YouCan</span>
+              </div>
             </div>
 
             {/* Stats mini */}

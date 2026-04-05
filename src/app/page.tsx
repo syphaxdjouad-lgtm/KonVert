@@ -888,8 +888,8 @@ export default function Home() {
                 { src: 'https://cdn.simpleicons.org/shopify/96BF48', label: 'Shopify', bg: 'rgba(150,191,72,0.1)' },
                 { src: 'https://cdn.simpleicons.org/woocommerce/7f54b3', label: 'WooCommerce', bg: 'rgba(127,84,179,0.1)' },
                 { src: 'https://cdn.simpleicons.org/aliexpress/FF4747', label: 'AliExpress', bg: 'rgba(255,71,71,0.1)' },
-                { src: 'https://cdn.simpleicons.org/amazon/FF9900', label: 'Amazon', bg: 'rgba(255,153,0,0.1)' },
-                { src: 'https://youcan.shop/favicon.ico', label: 'YouCan', bg: 'rgba(99,102,241,0.1)' },
+                { src: 'https://logo.clearbit.com/amazon.com', label: 'Amazon', bg: 'rgba(255,153,0,0.1)' },
+                { src: 'https://logo.clearbit.com/youcan.shop', label: 'YouCan', bg: 'rgba(99,102,241,0.1)' },
               ].map(({ src, label, bg }) => (
                 <div key={label} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: bg, border: '1px solid rgba(255,255,255,0.08)' }}>
                   <img src={src} alt={label} width={16} height={16} className="object-contain" style={{ width: '16px', height: '16px' }} />

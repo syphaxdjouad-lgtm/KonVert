@@ -147,7 +147,7 @@ function FloatingCard({
   return (
     <div
       className={`absolute glass-card rounded-2xl p-4 ${animClass} ${className ?? ''}`}
-      style={{ border: '1px solid rgba(139,92,246,0.2)' }}
+      style={{ background: 'rgba(10,8,25,0.72)', border: '1px solid rgba(139,92,246,0.35)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}
     >
       {children}
     </div>

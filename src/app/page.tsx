@@ -1643,88 +1643,265 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── GLOBE STATS ──────────────────────────────────────────────────────── */}
-      <section className="py-32 px-6 relative overflow-hidden" style={{ background: 'rgba(8,2,18,1)' }}>
-        {/* Glow central */}
+      {/* ── MOON STATS ───────────────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden" style={{ background: '#04020e', minHeight: '700px' }}>
+
+        {/* Ciel étoilé */}
+        {Array.from({ length: 80 }).map((_, i) => (
+          <div key={i} style={{
+            position: 'absolute',
+            width: i % 5 === 0 ? '2px' : '1px',
+            height: i % 5 === 0 ? '2px' : '1px',
+            borderRadius: '50%',
+            background: 'white',
+            top: `${Math.sin(i * 137.5) * 50 + 50}%`,
+            left: `${Math.cos(i * 97.3) * 50 + 50}%`,
+            opacity: 0.2 + (i % 7) * 0.1,
+            animation: `starTwinkle ${2 + (i % 4)}s ease-in-out infinite alternate`,
+            animationDelay: `${(i % 5) * 0.4}s`,
+          }} />
+        ))}
+
+        {/* Halo lunaire ambiant */}
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(124,58,237,0.18) 0%, transparent 70%)'
+          background: 'radial-gradient(ellipse 55% 55% at 50% 52%, rgba(200,185,255,0.07) 0%, transparent 70%)'
         }} />
 
-        <div className="max-w-5xl mx-auto relative z-10">
+        <div className="max-w-5xl mx-auto px-6 pt-20 pb-0 relative z-10">
+
           {/* Stats top */}
-          <div className="grid grid-cols-2 gap-8 mb-16 reveal">
+          <div className="grid grid-cols-2 gap-8 mb-0 reveal">
             <div>
               <p className="text-sm mb-2" style={{ color: 'rgba(167,139,250,0.6)' }}>Pages générées</p>
               <div className="text-6xl md:text-8xl font-black" style={{ color: 'white', letterSpacing: '-0.04em', lineHeight: 1 }}>
-                50K<span className="text-purple-400">+</span>
+                50K<span style={{ color: '#a78bfa' }}>+</span>
               </div>
             </div>
             <div className="text-right">
               <p className="text-sm mb-2" style={{ color: 'rgba(167,139,250,0.6)' }}>Taux de conversion moyen</p>
               <div className="text-6xl md:text-8xl font-black" style={{ color: 'white', letterSpacing: '-0.04em', lineHeight: 1 }}>
-                +<span className="text-purple-400">40</span><span style={{ fontSize: '0.5em', verticalAlign: 'top', marginTop: '0.3em', display: 'inline-block' }}>%</span>
+                +<span style={{ color: '#a78bfa' }}>40</span><span style={{ fontSize: '0.5em', verticalAlign: 'top', marginTop: '0.3em', display: 'inline-block' }}>%</span>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Globe CSS */}
-          <div className="flex justify-center items-center reveal" style={{ height: '400px', position: 'relative' }}>
-            {/* Globe principal */}
+        {/* Scène lune + mains — positionnée en absolu pour déborder en bas */}
+        <div style={{ position: 'relative', height: '520px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+          {/* ── LUNE ── */}
+          <div style={{
+            position: 'absolute',
+            top: '50%', left: '50%',
+            transform: 'translate(-50%, -56%)',
+            width: '280px', height: '280px',
+            zIndex: 10,
+            animation: 'moonFloat 5s ease-in-out infinite',
+          }}>
+            {/* Sphère principale */}
             <div style={{
-              width: '320px', height: '320px', borderRadius: '50%',
-              background: 'radial-gradient(circle at 35% 35%, rgba(167,139,250,0.3) 0%, rgba(124,58,237,0.6) 40%, rgba(60,20,120,0.8) 70%, rgba(5,2,15,1) 100%)',
-              boxShadow: '0 0 80px rgba(124,58,237,0.4), inset 0 0 60px rgba(0,0,0,0.5)',
+              width: '100%', height: '100%', borderRadius: '50%',
+              background: `radial-gradient(circle at 38% 32%,
+                rgba(255,255,252,1) 0%,
+                rgba(235,228,255,0.98) 18%,
+                rgba(200,190,240,0.95) 38%,
+                rgba(165,150,215,0.9) 58%,
+                rgba(110,90,170,0.85) 75%,
+                rgba(55,35,110,0.9) 90%,
+                rgba(15,8,40,1) 100%
+              )`,
+              boxShadow: `
+                0 0 40px rgba(200,185,255,0.25),
+                0 0 80px rgba(167,139,250,0.15),
+                0 0 160px rgba(124,58,237,0.08),
+                inset -50px -40px 70px rgba(0,0,0,0.45)
+              `,
               position: 'relative',
-              animation: 'globeRotate 20s linear infinite',
+              overflow: 'hidden',
             }}>
-              {/* Continents simulés via radial gradients */}
+              {/* Cratères */}
+              {[
+                { top: '22%', left: '28%', size: 52, opacity: 0.12 },
+                { top: '48%', left: '62%', size: 34, opacity: 0.1 },
+                { top: '35%', left: '58%', size: 44, opacity: 0.13 },
+                { top: '62%', left: '33%', size: 26, opacity: 0.09 },
+                { top: '28%', left: '48%', size: 18, opacity: 0.08 },
+                { top: '70%', left: '55%', size: 22, opacity: 0.07 },
+                { top: '15%', left: '65%', size: 16, opacity: 0.06 },
+              ].map((c, i) => (
+                <div key={i} style={{
+                  position: 'absolute',
+                  width: c.size, height: c.size,
+                  top: c.top, left: c.left,
+                  borderRadius: '50%',
+                  background: `radial-gradient(circle at 40% 40%, transparent 30%, rgba(0,0,0,${c.opacity}) 60%, transparent 100%)`,
+                  boxShadow: `inset 1px 1px 3px rgba(0,0,0,${c.opacity * 0.6}), inset -1px -1px 2px rgba(255,255,255,${c.opacity * 0.3})`,
+                }} />
+              ))}
+
+              {/* Texture de surface — variation lumineuse */}
               <div style={{
                 position: 'absolute', inset: 0, borderRadius: '50%',
                 background: `
-                  radial-gradient(ellipse 30% 20% at 35% 40%, rgba(167,139,250,0.5) 0%, transparent 100%),
-                  radial-gradient(ellipse 25% 30% at 65% 35%, rgba(139,92,246,0.4) 0%, transparent 100%),
-                  radial-gradient(ellipse 20% 15% at 50% 65%, rgba(167,139,250,0.3) 0%, transparent 100%)
+                  radial-gradient(ellipse 45% 30% at 40% 45%, rgba(255,255,255,0.06) 0%, transparent 100%),
+                  radial-gradient(ellipse 30% 40% at 65% 38%, rgba(200,185,255,0.04) 0%, transparent 100%),
+                  radial-gradient(ellipse 25% 20% at 30% 65%, rgba(180,165,235,0.03) 0%, transparent 100%)
                 `
               }} />
-            </div>
 
-            {/* Arc orbital 1 */}
+              {/* Reflet lumineux haut-gauche */}
+              <div style={{
+                position: 'absolute', top: '8%', left: '12%',
+                width: '60px', height: '40px', borderRadius: '50%',
+                background: 'radial-gradient(ellipse, rgba(255,255,255,0.18) 0%, transparent 100%)',
+                filter: 'blur(8px)',
+              }} />
+            </div>
+          </div>
+
+          {/* ── MAIN GAUCHE EN NUAGE ── */}
+          <div style={{ position: 'absolute', bottom: '0', left: '50%', transform: 'translateX(-320px)', width: '300px', height: '340px', zIndex: 5 }}>
+            {/* Bras / avant-bras */}
             <div style={{
-              position: 'absolute', width: '420px', height: '420px',
-              border: '1px solid rgba(167,139,250,0.15)',
-              borderRadius: '50%', transform: 'rotateX(70deg) rotateZ(20deg)',
-              animation: 'globeOrbit1 8s linear infinite',
+              position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%) rotate(-18deg)',
+              width: '90px', height: '200px', borderRadius: '60px',
+              background: 'rgba(230,220,255,0.13)',
+              filter: 'blur(22px)',
             }} />
-            {/* Arc orbital 2 */}
             <div style={{
-              position: 'absolute', width: '380px', height: '380px',
-              border: '1px solid rgba(139,92,246,0.1)',
-              borderRadius: '50%', transform: 'rotateX(60deg) rotateZ(-40deg)',
-              animation: 'globeOrbit2 12s linear infinite',
+              position: 'absolute', bottom: '20px', left: '45%', transform: 'translateX(-50%) rotate(-12deg)',
+              width: '70px', height: '170px', borderRadius: '50px',
+              background: 'rgba(245,240,255,0.09)',
+              filter: 'blur(18px)',
             }} />
-            {/* Points lumineux */}
+            {/* Paume */}
+            <div style={{
+              position: 'absolute', bottom: '38%', left: '25%',
+              width: '150px', height: '110px', borderRadius: '55% 60% 50% 60% / 50% 50% 60% 55%',
+              background: 'rgba(240,235,255,0.16)',
+              filter: 'blur(28px)',
+            }} />
+            <div style={{
+              position: 'absolute', bottom: '42%', left: '30%',
+              width: '110px', height: '80px', borderRadius: '50%',
+              background: 'rgba(255,252,255,0.12)',
+              filter: 'blur(20px)',
+            }} />
+            {/* Doigts */}
             {[
-              { top: '20%', left: '60%' }, { top: '45%', left: '30%' },
-              { top: '60%', left: '70%' }, { top: '35%', left: '55%' },
-              { top: '70%', left: '45%' }
+              { left: '5%',  height: 110, rotate: '-32deg', width: 40 },
+              { left: '22%', height: 140, rotate: '-18deg', width: 38 },
+              { left: '40%', height: 155, rotate: '-5deg',  width: 42 },
+              { left: '58%', height: 135, rotate: '10deg',  width: 36 },
+            ].map((f, i) => (
+              <div key={i} style={{
+                position: 'absolute', bottom: '48%', left: f.left,
+                width: f.width, height: f.height,
+                borderRadius: '30px 30px 20px 20px',
+                background: `rgba(245,240,255,${0.08 + i * 0.02})`,
+                filter: 'blur(16px)',
+                transform: `rotate(${f.rotate})`,
+                transformOrigin: 'bottom center',
+              }} />
+            ))}
+            {/* Nuage de bout de doigts */}
+            {[
+              { left: '2%',  top: '14%' },
+              { left: '18%', top: '6%'  },
+              { left: '36%', top: '2%'  },
+              { left: '54%', top: '8%'  },
             ].map((pos, i) => (
               <div key={i} style={{
-                position: 'absolute', width: '4px', height: '4px',
-                borderRadius: '50%', background: '#fbbf24',
-                top: pos.top, left: pos.left,
-                boxShadow: '0 0 6px #fbbf24',
-                animation: `starTwinkle ${1.5 + i * 0.4}s ease-in-out infinite alternate`
+                position: 'absolute', ...pos,
+                width: '55px', height: '40px', borderRadius: '50%',
+                background: 'rgba(250,248,255,0.1)',
+                filter: 'blur(14px)',
               }} />
             ))}
           </div>
 
-          {/* Stat bottom */}
-          <div className="text-center mt-8 reveal">
-            <p className="text-base" style={{ color: 'rgba(167,139,250,0.5)' }}>
-              Des e-commerçants dans <span style={{ color: 'white', fontWeight: 700 }}>12 pays</span> utilisent KONVERT pour scaler leurs stores
-            </p>
+          {/* ── MAIN DROITE EN NUAGE ── */}
+          <div style={{ position: 'absolute', bottom: '0', left: '50%', transform: 'translateX(20px)', width: '300px', height: '340px', zIndex: 5 }}>
+            {/* Bras / avant-bras */}
+            <div style={{
+              position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%) rotate(18deg)',
+              width: '90px', height: '200px', borderRadius: '60px',
+              background: 'rgba(230,220,255,0.13)',
+              filter: 'blur(22px)',
+            }} />
+            <div style={{
+              position: 'absolute', bottom: '20px', left: '55%', transform: 'translateX(-50%) rotate(12deg)',
+              width: '70px', height: '170px', borderRadius: '50px',
+              background: 'rgba(245,240,255,0.09)',
+              filter: 'blur(18px)',
+            }} />
+            {/* Paume */}
+            <div style={{
+              position: 'absolute', bottom: '38%', right: '25%',
+              width: '150px', height: '110px', borderRadius: '60% 55% 60% 50% / 50% 60% 50% 60%',
+              background: 'rgba(240,235,255,0.16)',
+              filter: 'blur(28px)',
+            }} />
+            <div style={{
+              position: 'absolute', bottom: '42%', right: '30%',
+              width: '110px', height: '80px', borderRadius: '50%',
+              background: 'rgba(255,252,255,0.12)',
+              filter: 'blur(20px)',
+            }} />
+            {/* Doigts */}
+            {[
+              { right: '5%',  height: 110, rotate: '32deg',  width: 40 },
+              { right: '22%', height: 140, rotate: '18deg',  width: 38 },
+              { right: '40%', height: 155, rotate: '5deg',   width: 42 },
+              { right: '58%', height: 135, rotate: '-10deg', width: 36 },
+            ].map((f, i) => (
+              <div key={i} style={{
+                position: 'absolute', bottom: '48%', right: f.right,
+                width: f.width, height: f.height,
+                borderRadius: '30px 30px 20px 20px',
+                background: `rgba(245,240,255,${0.08 + i * 0.02})`,
+                filter: 'blur(16px)',
+                transform: `rotate(${f.rotate})`,
+                transformOrigin: 'bottom center',
+              }} />
+            ))}
+            {/* Nuage de bout de doigts */}
+            {[
+              { right: '2%',  top: '14%' },
+              { right: '18%', top: '6%'  },
+              { right: '36%', top: '2%'  },
+              { right: '54%', top: '8%'  },
+            ].map((pos, i) => (
+              <div key={i} style={{
+                position: 'absolute', ...pos,
+                width: '55px', height: '40px', borderRadius: '50%',
+                background: 'rgba(250,248,255,0.1)',
+                filter: 'blur(14px)',
+              }} />
+            ))}
           </div>
+
+          {/* Brume au sol */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: '120px',
+            background: 'linear-gradient(to top, rgba(230,220,255,0.06) 0%, transparent 100%)',
+            filter: 'blur(20px)',
+          }} />
         </div>
+
+        {/* Stat bottom */}
+        <div className="text-center pb-16 relative z-10" style={{ marginTop: '-40px' }}>
+          <p className="text-base" style={{ color: 'rgba(167,139,250,0.5)' }}>
+            Des e-commerçants dans <span style={{ color: 'white', fontWeight: 700 }}>12 pays</span> utilisent KONVERT pour scaler leurs stores
+          </p>
+        </div>
+
+        <style>{`
+          @keyframes moonFloat {
+            0%, 100% { transform: translate(-50%, -56%); }
+            50%       { transform: translate(-50%, -60%); }
+          }
+        `}</style>
       </section>
 
       {/* ── SECTION IA INTERACTIVE ──────────────────────────────────────────── */}

@@ -1,0 +1,21 @@
+{
+  "name": "KONVERT",
+  "short_name": "KONVERT",
+  "description": "Génère des landing pages e-commerce haute conversion en 30 secondes grâce à l'IA",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d1a",
+  "theme_color": "#7c3aed",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

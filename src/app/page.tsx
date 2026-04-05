@@ -786,349 +786,217 @@ export default function Home() {
         )}
       </nav>
 
-      {/* ── HERO ────────────────────────────────────────────────────────── */}
+      {/* ── HERO — Layout Dlora ─────────────────────────────────────────── */}
       <section
-        className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-16 px-6 overflow-hidden"
+        className="relative min-h-screen flex items-center overflow-hidden"
         style={{
           backgroundImage: "url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&h=900&fit=crop&q=80')",
           backgroundSize: 'cover',
-          backgroundPosition: `calc(center) calc(center + ${heroParallax}px)`,
+          backgroundPosition: `center calc(center + ${heroParallax}px)`,
         }}
       >
-        {/* Overlay sombre pour lisibilité du texte */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'rgba(13,13,26,0.85)' }}
-        />
-        {/* Radial overlays purple par-dessus l'overlay sombre */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124,58,237,0.35) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 80%, rgba(109,40,217,0.2) 0%, transparent 50%)',
-          }}
-        />
-        {/* Dot grid */}
-        <div className="absolute inset-0 dot-pattern opacity-40" />
+        {/* Overlays */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(105deg, rgba(13,13,26,0.97) 0%, rgba(13,13,26,0.88) 45%, rgba(13,13,26,0.55) 75%, rgba(13,13,26,0.25) 100%)' }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 60% at 60% 50%, rgba(124,58,237,0.12) 0%, transparent 70%)' }} />
+        <div className="absolute inset-0 dot-pattern opacity-30" />
 
-        {/* Étoiles */}
-        {STARS.map((s) => (
-          <div
-            key={s.id}
-            className="star"
-            style={{
-              top: s.top,
-              left: s.left,
-              width: `${s.size}px`,
-              height: `${s.size}px`,
-              ['--duration' as string]: s.duration,
-              ['--delay' as string]: s.delay,
-            }}
-          />
+        {/* Étoiles (moins denses) */}
+        {STARS.filter((_,i) => i % 2 === 0).map((s) => (
+          <div key={s.id} className="star" style={{ top: s.top, left: s.left, width: `${s.size}px`, height: `${s.size}px`, ['--duration' as string]: s.duration, ['--delay' as string]: s.delay }} />
         ))}
 
-        {/* Orbe 3D rotatif */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" style={{ width: '500px', height: '500px' }}>
-          {/* Sphère principale */}
-          <div style={{
-            width: '100%', height: '100%', borderRadius: '50%',
-            background: 'radial-gradient(circle at 35% 30%, rgba(196,181,253,0.25) 0%, rgba(124,58,237,0.15) 40%, transparent 70%)',
-            boxShadow: '0 0 120px rgba(124,58,237,0.2), inset 0 0 80px rgba(124,58,237,0.08)',
-            animation: 'orbePulse 4s ease-in-out infinite',
-          }} />
-          {/* Anneau orbital 1 */}
-          <div style={{
-            position: 'absolute', inset: '-60px',
-            border: '1px solid rgba(139,92,246,0.15)',
-            borderRadius: '50%',
-            transform: 'rotateX(75deg)',
-            animation: 'orbeRing1 12s linear infinite',
-          }} />
-          {/* Anneau orbital 2 */}
-          <div style={{
-            position: 'absolute', inset: '-30px',
-            border: '1px solid rgba(139,92,246,0.1)',
-            borderRadius: '50%',
-            transform: 'rotateX(60deg) rotateZ(45deg)',
-            animation: 'orbeRing2 18s linear infinite reverse',
-          }} />
-          {/* Anneau orbital 3 */}
-          <div style={{
-            position: 'absolute', inset: '-90px',
-            border: '0.5px solid rgba(167,139,250,0.08)',
-            borderRadius: '50%',
-            transform: 'rotateX(80deg) rotateY(20deg)',
-            animation: 'orbeRing1 25s linear infinite',
-          }} />
-          {/* Points lumineux sur les anneaux */}
-          {[0,60,120,180,240,300].map((deg, i) => (
-            <div key={i} style={{
-              position: 'absolute',
-              width: '4px', height: '4px',
-              borderRadius: '50%',
-              background: i % 2 === 0 ? '#a78bfa' : '#7c3aed',
-              boxShadow: `0 0 8px ${i % 2 === 0 ? '#a78bfa' : '#7c3aed'}`,
-              top: `${50 + 48 * Math.sin(deg * Math.PI / 180)}%`,
-              left: `${50 + 48 * Math.cos(deg * Math.PI / 180)}%`,
-              transform: 'translate(-50%, -50%)',
-              animation: `starTwinkle ${1.5 + i * 0.3}s ease-in-out infinite alternate`,
-            }} />
-          ))}
-        </div>
+        {/* Orbe fond droit */}
+        <div className="absolute pointer-events-none" style={{ top: '50%', left: '58%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle at 38% 35%, rgba(167,139,250,0.15) 0%, rgba(124,58,237,0.08) 45%, transparent 70%)', filter: 'blur(50px)', animation: 'orbePulse 5s ease-in-out infinite' }} />
 
-        {/* Floating cards */}
-        <div className="absolute inset-0 pointer-events-none hidden lg:block">
-          <FloatingCard
-            animClass="animate-float"
-            className="top-32 left-8 xl:left-24 w-56"
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <div
-                className="w-6 h-6 rounded-lg flex items-center justify-center"
-                style={{ background: 'rgba(124,58,237,0.3)' }}
-              >
-                <Zap className="w-3 h-3 text-purple-300" />
+        {/* GRID 2 colonnes */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 pt-24 pb-12 grid lg:grid-cols-[1fr_420px] gap-8 items-center min-h-screen">
+
+          {/* ── COLONNE GAUCHE ── */}
+          <div className="flex flex-col gap-6">
+
+            {/* Badge live */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full w-fit animate-glow"
+              style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(139,92,246,0.4)' }}>
+              <div className="relative flex-shrink-0">
+                <div className="w-2 h-2 rounded-full" style={{ background: '#a78bfa' }} />
+                <div className="pulse-ring" />
               </div>
-              <span className="text-xs font-bold text-white">IA génère en live</span>
+              <Sparkles className="w-3.5 h-3.5 text-purple-300" />
+              <span className="text-sm font-semibold text-purple-200">Bêta ouverte — 50 pages offertes</span>
             </div>
-            <div className="space-y-1">
-              {['Titre accrocheur', '5 bénéfices clés', 'CTA optimisé'].map((item) => (
-                <div key={item} className="flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full" />
-                  <span className="text-xs text-green-300/80 font-mono">{item}</span>
+
+            {/* Titre 3 lignes style éditorial */}
+            <h1 className="font-black leading-[0.95] tracking-tight" style={{ fontSize: 'clamp(2.8rem, 5.5vw, 4.75rem)', letterSpacing: '-0.04em' }}>
+              <span className="block text-white">COLLE UNE URL.</span>
+              <span className="block text-white">TA PAGE VEND</span>
+              <span className="block animate-glow-text" style={{ background: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #c4b5fd 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                EN 30 SECONDES.
+              </span>
+            </h1>
+
+            {/* Sous-titre */}
+            <p className="text-base md:text-lg leading-relaxed max-w-xl" style={{ color: 'rgba(196,181,253,0.65)' }}>
+              L&apos;IA rédige le copy, choisit le design, et publie directement sur ton{' '}
+              <span className="text-purple-300 font-semibold">Shopify</span> ou <span className="text-purple-300 font-semibold">WooCommerce</span>.
+              Zéro code. Résultat pro.
+            </p>
+
+            {/* Input URL */}
+            <div className="max-w-xl">
+              <div className="flex items-center gap-0 rounded-2xl overflow-hidden p-1" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139,92,246,0.4)', boxShadow: '0 0 30px rgba(124,58,237,0.15)' }}>
+                <div className="flex items-center gap-2 px-4 py-3 flex-1">
+                  <div className="w-2 h-2 rounded-full bg-green-400 flex-shrink-0" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
+                  <input type="text" placeholder="aliexpress.com/item/... ou amazon.fr/dp/..." className="flex-1 bg-transparent outline-none text-sm font-mono" style={{ color: '#e9d5ff', caretColor: '#a78bfa' }} readOnly />
+                </div>
+                <Link href="/signup" className="btn-shimmer flex-shrink-0 px-5 py-3 rounded-xl text-sm font-bold text-white" style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 4px 15px rgba(124,58,237,0.4)' }}>
+                  Générer →
+                </Link>
+              </div>
+              <p className="text-xs mt-2" style={{ color: 'rgba(167,139,250,0.45)' }}>
+                ✓ Aucune CB · ✓ 50 pages offertes · ✓ Setup 2 min
+              </p>
+            </div>
+
+            {/* CTA secondaire */}
+            <div className="flex items-center gap-4">
+              <a href="#waitlist" className="btn-shimmer inline-flex items-center gap-2 font-bold px-6 py-3.5 rounded-xl text-sm transition-all" style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', color: '#fff', boxShadow: '0 6px 24px rgba(124,58,237,0.45)' }}>
+                <Sparkles className="w-4 h-4" /> Rejoindre la bêta
+              </a>
+              <a href="#how" className="text-sm font-semibold flex items-center gap-1.5 transition-colors" style={{ color: 'rgba(196,181,253,0.65)' }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(196,181,253,0.65)')}>
+                Voir comment ça marche <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
+
+            {/* Trustpilot */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="flex gap-0.5">
+                  {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 fill-[#00B67A] text-[#00B67A]" />)}
+                </div>
+                <span className="text-sm font-bold text-white">4.9</span>
+                <span className="text-xs font-semibold" style={{ color: '#00B67A' }}>Trustpilot</span>
+                <span className="text-xs" style={{ color: 'rgba(167,139,250,0.4)' }}>247 avis</span>
+              </div>
+            </div>
+
+            {/* Logos plateformes */}
+            <div className="flex items-center gap-1 flex-wrap">
+              <span className="text-xs mr-2" style={{ color: 'rgba(167,139,250,0.4)' }}>Compatible :</span>
+              {[
+                { label: 'Shopify', color: '#96BF48', bg: 'rgba(150,191,72,0.12)' },
+                { label: 'WooCommerce', color: '#7f54b3', bg: 'rgba(127,84,179,0.12)' },
+                { label: 'AliExpress', color: '#ff4747', bg: 'rgba(255,71,71,0.12)' },
+                { label: 'Amazon', color: '#FF9900', bg: 'rgba(255,153,0,0.12)' },
+                { label: 'Claude AI', color: '#d4a574', bg: 'rgba(212,165,116,0.12)' },
+              ].map(({ label, color, bg }) => (
+                <span key={label} className="text-xs font-semibold px-2.5 py-1 rounded-lg" style={{ background: bg, color, border: `1px solid ${color}22` }}>
+                  {label}
+                </span>
+              ))}
+            </div>
+
+            {/* Stats mini */}
+            <div ref={statsRef} className="flex gap-6 flex-wrap pt-2" style={{ borderTop: '1px solid rgba(139,92,246,0.12)' }}>
+              {[
+                { value: '30s', label: 'Pour générer' },
+                { value: '50K+', label: 'Pages créées' },
+                { value: '+40%', label: 'Conversion' },
+                { value: '5★', label: 'Templates' },
+              ].map(({ value, label }) => (
+                <div key={label}>
+                  <div className="text-lg font-black" style={{ color: '#fff', letterSpacing: '-0.02em' }}>{value}</div>
+                  <div className="text-xs" style={{ color: 'rgba(167,139,250,0.5)' }}>{label}</div>
                 </div>
               ))}
             </div>
-            <div className="mt-2 text-center">
-              <span
-                className="text-2xl font-black"
-                style={{
-                  background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                ⚡ 28s
-              </span>
-            </div>
-          </FloatingCard>
-
-          <FloatingCard
-            animClass="animate-float-reverse"
-            className="top-36 right-8 xl:right-24 w-52"
-          >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-white">Conversions</span>
-              <TrendingUp className="w-3 h-3 text-green-400" />
-            </div>
-            <div className="text-3xl font-black text-green-400 mb-1">+40%</div>
-            <div className="text-xs text-purple-200/60">Semaine vs N-1</div>
-            <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
-              <div
-                className="h-full rounded-full"
-                style={{ width: '72%', background: 'linear-gradient(90deg, #7c3aed, #a78bfa)' }}
-              />
-            </div>
-          </FloatingCard>
-
-          <FloatingCard
-            animClass="animate-float-delay-1"
-            className="bottom-48 left-8 xl:left-32 w-48"
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <Store className="w-4 h-4 text-purple-400" />
-              <span className="text-xs font-bold text-white">Publié sur Shopify</span>
-            </div>
-            <div className="flex items-center gap-1 mt-1">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-              ))}
-            </div>
-            <div className="text-xs text-purple-200/60 mt-1">4.9/5 — 200+ avis</div>
-          </FloatingCard>
-
-          <FloatingCard
-            animClass="animate-float-delay-2"
-            className="bottom-44 right-8 xl:right-28 w-52"
-          >
-            <div className="text-xs text-purple-300/60 mb-1 font-mono uppercase tracking-wider">
-              URL produit
-            </div>
-            <div
-              className="text-xs text-green-400 font-mono p-2 rounded-lg mb-2"
-              style={{ background: 'rgba(0,0,0,0.3)' }}
-            >
-              aliexpress.com/item/123...
-            </div>
-            <div
-              className="text-center py-1.5 rounded-lg text-xs font-bold text-white"
-              style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)' }}
-            >
-              Générer
-            </div>
-          </FloatingCard>
-        </div>
-
-        {/* Contenu héro */}
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full animate-glow"
-            style={{
-              background: 'rgba(124,58,237,0.15)',
-              border: '1px solid rgba(139,92,246,0.4)',
-            }}
-          >
-            <div className="relative">
-              <div
-                className="w-2 h-2 rounded-full"
-                style={{ background: '#a78bfa' }}
-              />
-              <div className="pulse-ring" />
-            </div>
-            <Sparkles className="w-3.5 h-3.5 text-purple-300" />
-            <span className="text-sm font-semibold text-purple-200">
-              Bêta ouverte — 50 pages offertes
-            </span>
           </div>
 
-          {/* H1 */}
-          <h1
-            className="font-black tracking-tight leading-none mb-6"
-            style={{ fontSize: 'clamp(2.5rem, 7vw, 5.5rem)', letterSpacing: '-0.03em' }}
-          >
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 60%, #c4b5fd 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              Colle une URL.
-            </span>
-            <br />
-            <span
-              className="animate-glow-text"
-              style={{
-                background: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #6d28d9 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              Ta page est prête.
-            </span>
-          </h1>
+          {/* ── COLONNE DROITE — Cards flottantes ── */}
+          <div className="relative hidden lg:block" style={{ height: '560px' }}>
 
-          {/* Sous-titre */}
-          <p
-            className="text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
-            style={{ color: 'rgba(196,181,253,0.7)' }}
-          >
-            KONVERT génère des landing pages e-commerce haute conversion en{' '}
-            <span className="text-purple-300 font-semibold">30 secondes</span>.
-            L'IA rédige le copy, choisit le design, et publie directement sur ton Shopify ou WooCommerce.
-          </p>
-
-          {/* Input URL Hero */}
-          <div className="max-w-2xl mx-auto mb-8 reveal">
-            <div
-              className="flex items-center gap-0 rounded-2xl overflow-hidden p-1"
-              style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(139,92,246,0.4)',
-                boxShadow: '0 0 30px rgba(124,58,237,0.15)',
-              }}
-            >
-              <div className="flex items-center gap-2 px-4 py-3 flex-1">
-                <div className="w-2 h-2 rounded-full bg-green-400 flex-shrink-0" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
-                <input
-                  type="text"
-                  placeholder="aliexpress.com/item/... ou amazon.fr/dp/..."
-                  className="flex-1 bg-transparent outline-none text-sm font-mono"
-                  style={{ color: '#e9d5ff', caretColor: '#a78bfa' }}
-                  readOnly
-                />
+            {/* Card IA génère */}
+            <FloatingCard animClass="animate-float" className="absolute top-8 left-0 w-56">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: 'rgba(124,58,237,0.3)' }}>
+                  <Zap className="w-3 h-3 text-purple-300" />
+                </div>
+                <span className="text-xs font-bold text-white">IA génère en live</span>
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-green-400" style={{ animation: 'pulse 1.5s ease-in-out infinite' }} />
               </div>
-              <a
-                href="/signup"
-                className="btn-shimmer flex-shrink-0 px-6 py-3 rounded-xl text-sm font-bold text-white"
-                style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 4px 15px rgba(124,58,237,0.4)' }}
-              >
-                Générer →
-              </a>
-            </div>
-            <p className="text-center text-xs mt-2" style={{ color: 'rgba(167,139,250,0.5)' }}>
-              ✓ Aucune carte bancaire · ✓ 50 pages offertes · ✓ Setup en 2 minutes
-            </p>
-          </div>
-
-          {/* CTA buttons — Bêta fermée */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
-            <a
-              href="#waitlist"
-              className="btn-shimmer inline-flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-2xl text-lg transition-all duration-300"
-              style={{
-                background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
-                color: '#ffffff',
-                boxShadow: '0 8px 30px rgba(124,58,237,0.5)',
-              }}
-            >
-              <Sparkles className="w-5 h-5" />
-              Rejoindre la bêta
-            </a>
-            <a
-              href="#how"
-              className="inline-flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-2xl text-lg transition-all duration-300"
-              style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(139,92,246,0.3)',
-                color: '#e9d5ff',
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLElement
-                el.style.background = 'rgba(124,58,237,0.1)'
-                el.style.borderColor = 'rgba(139,92,246,0.6)'
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLElement
-                el.style.background = 'rgba(255,255,255,0.05)'
-                el.style.borderColor = 'rgba(139,92,246,0.3)'
-              }}
-            >
-              Voir comment ça marche
-            </a>
-          </div>
-          <p className="text-center text-sm mb-10" style={{ color: 'rgba(167,139,250,0.5)' }}>
-            ✓ Bêta gratuite · ✓ 50 premiers utilisateurs · ✓ Accès prioritaire
-          </p>
-
-          {/* Stats */}
-          <div ref={statsRef} className="flex flex-wrap justify-center gap-10">
-            <StatCounter value={30} suffix="s" label="Pour générer une page" triggered={statsTriggered} />
-            <StatCounter value={5} suffix="" label="Templates premium" triggered={statsTriggered} />
-            <StatCounter value={2} suffix="x" label="Plus de conversions" triggered={statsTriggered} />
-            <div className="text-center">
-              <div
-                className="text-4xl md:text-5xl font-black"
-                style={{
-                  background: 'linear-gradient(135deg, #ffffff 0%, #c4b5fd 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                1-clic
+              <div className="space-y-1.5">
+                {['Titre accrocheur', '5 bénéfices clés', 'CTA optimisé', 'FAQ automatique'].map((item) => (
+                  <div key={item} className="flex items-center gap-1.5">
+                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full flex-shrink-0" />
+                    <span className="text-xs font-mono" style={{ color: 'rgba(134,239,172,0.8)' }}>{item}</span>
+                  </div>
+                ))}
               </div>
-              <div className="text-sm text-purple-300/70 mt-1 font-medium">Push sur Shopify</div>
-            </div>
+              <div className="mt-3 text-center">
+                <span className="text-2xl font-black" style={{ background: 'linear-gradient(135deg, #a78bfa, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>⚡ 28s</span>
+              </div>
+            </FloatingCard>
+
+            {/* Card Conversions */}
+            <FloatingCard animClass="animate-float-reverse" className="absolute top-4 right-0 w-52">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-white">Conversions</span>
+                <TrendingUp className="w-3 h-3 text-green-400" />
+              </div>
+              <div className="text-3xl font-black text-green-400 mb-1">+40%</div>
+              <div className="text-xs mb-2" style={{ color: 'rgba(196,181,253,0.5)' }}>Semaine vs N-1</div>
+              <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
+                <div className="h-full rounded-full" style={{ width: '72%', background: 'linear-gradient(90deg, #7c3aed, #a78bfa)' }} />
+              </div>
+              <div className="mt-2 flex gap-2">
+                {[30,45,38,60,52,70,65,80].map((h,i) => (
+                  <div key={i} className="flex-1 rounded-sm" style={{ height: `${h*0.4}px`, background: 'linear-gradient(to top, #7c3aed55, #a78bfa88)', alignSelf: 'flex-end' }} />
+                ))}
+              </div>
+            </FloatingCard>
+
+            {/* Card Shopify */}
+            <FloatingCard animClass="animate-float-delay-1" className="absolute top-[50%] -translate-y-1/2 left-4 w-48">
+              <div className="flex items-center gap-2 mb-2">
+                <Store className="w-4 h-4 text-purple-400" />
+                <span className="text-xs font-bold text-white">Publié sur Shopify</span>
+              </div>
+              <div className="flex items-center gap-1 mt-1">
+                {[1,2,3,4,5].map((i) => <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)}
+              </div>
+              <div className="text-xs mt-1" style={{ color: 'rgba(196,181,253,0.5)' }}>4.9/5 — 247 avis</div>
+              <div className="mt-2 text-xs font-semibold px-2 py-1 rounded-lg text-center" style={{ background: 'rgba(150,191,72,0.12)', color: '#96BF48', border: '1px solid rgba(150,191,72,0.25)' }}>
+                ✓ Connecté
+              </div>
+            </FloatingCard>
+
+            {/* Card URL → Génération */}
+            <FloatingCard animClass="animate-float-delay-2" className="absolute bottom-4 right-4 w-56">
+              <div className="text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'rgba(167,139,250,0.5)' }}>URL produit</div>
+              <div className="text-xs font-mono p-2 rounded-lg mb-2" style={{ background: 'rgba(0,0,0,0.35)', color: '#4ade80' }}>
+                aliexpress.com/item/123...
+              </div>
+              <div className="text-xs font-mono p-2 rounded-lg mb-2" style={{ background: 'rgba(0,0,0,0.35)', color: 'rgba(167,139,250,0.6)' }}>
+                → Scraping · Génération IA...
+              </div>
+              <div className="text-center py-1.5 rounded-lg text-xs font-bold text-white" style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)' }}>
+                ✓ Page prête en 28s
+              </div>
+            </FloatingCard>
+
+            {/* Card CTR */}
+            <FloatingCard animClass="animate-float" className="absolute bottom-20 left-0 w-44">
+              <div className="text-xs font-semibold mb-1" style={{ color: 'rgba(167,139,250,0.5)' }}>CTR moyen</div>
+              <div className="text-2xl font-black" style={{ color: '#4ade80' }}>+300%</div>
+              <div className="text-xs mt-1" style={{ color: 'rgba(196,181,253,0.4)' }}>vs fiche classique</div>
+            </FloatingCard>
           </div>
         </div>
 
         {/* Flèche scroll */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <ChevronDown className="w-6 h-6 text-purple-400/50" />
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce">
+          <ChevronDown className="w-5 h-5 text-purple-400/40" />
         </div>
       </section>
 

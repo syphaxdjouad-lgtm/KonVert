@@ -882,18 +882,19 @@ export default function Home() {
             </div>
 
             {/* Logos plateformes */}
-            <div className="flex items-center gap-1 flex-wrap">
-              <span className="text-xs mr-2" style={{ color: 'rgba(167,139,250,0.4)' }}>Compatible :</span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs mr-1" style={{ color: 'rgba(167,139,250,0.4)' }}>Compatible :</span>
               {[
-                { label: 'Shopify', color: '#96BF48', bg: 'rgba(150,191,72,0.12)' },
-                { label: 'WooCommerce', color: '#7f54b3', bg: 'rgba(127,84,179,0.12)' },
-                { label: 'AliExpress', color: '#ff4747', bg: 'rgba(255,71,71,0.12)' },
-                { label: 'Amazon', color: '#FF9900', bg: 'rgba(255,153,0,0.12)' },
-                { label: 'Claude AI', color: '#d4a574', bg: 'rgba(212,165,116,0.12)' },
-              ].map(({ label, color, bg }) => (
-                <span key={label} className="text-xs font-semibold px-2.5 py-1 rounded-lg" style={{ background: bg, color, border: `1px solid ${color}22` }}>
-                  {label}
-                </span>
+                { src: 'https://cdn.simpleicons.org/shopify/96BF48', label: 'Shopify', bg: 'rgba(150,191,72,0.1)' },
+                { src: 'https://cdn.simpleicons.org/woocommerce/7f54b3', label: 'WooCommerce', bg: 'rgba(127,84,179,0.1)' },
+                { src: 'https://cdn.simpleicons.org/aliexpress/FF4747', label: 'AliExpress', bg: 'rgba(255,71,71,0.1)' },
+                { src: 'https://cdn.simpleicons.org/amazon/FF9900', label: 'Amazon', bg: 'rgba(255,153,0,0.1)' },
+                { src: 'https://youcan.shop/favicon.ico', label: 'YouCan', bg: 'rgba(99,102,241,0.1)' },
+              ].map(({ src, label, bg }) => (
+                <div key={label} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: bg, border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <img src={src} alt={label} width={16} height={16} className="object-contain" style={{ width: '16px', height: '16px' }} />
+                  <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>{label}</span>
+                </div>
               ))}
             </div>
 

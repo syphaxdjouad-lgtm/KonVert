@@ -59,7 +59,10 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const landingPage = await generateLandingPage(product)
+    const landingPage = await generateLandingPage(product, {
+      language: body.language,
+      tone: body.tone,
+    })
 
     return NextResponse.json({
       success: true,

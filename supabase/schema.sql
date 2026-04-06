@@ -216,6 +216,106 @@ begin
 end;
 $$;
 
+-- ─── WAITLIST ─────────────────────────────────────────────────────
+
+create table public.waitlist (
+  id         uuid primary key default uuid_generate_v4(),
+  email      text not null unique,
+  name       text,
+  context    text,  -- profil renseigné à l'inscription (dropshippeur, agence...)
+  status     text not null default 'pending' check (status in ('pending','invited','registered')),
+  invited_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+create index idx_waitlist_email  on public.waitlist(email);
+create index idx_waitlist_status on public.waitlist(status);
+
+-- Pas de RLS user : table gérée uniquement via service_role (admin)
+alter table public.waitlist enable row level security;
+
+-- ─── INVITATIONS ──────────────────────────────────────────────────
+
+create table public.invitations (
+  id           uuid primary key default uuid_generate_v4(),
+  email        text not null,
+  token        uuid not null default uuid_generate_v4() unique,
+  waitlist_id  uuid references public.waitlist(id) on delete set null,
+  used         boolean not null default false,
+  expires_at   timestamptz not null default (now() + interval '7 days'),
+  created_at   timestamptz not null default now()
+);
+
+create index idx_invitations_token on public.invitations(token);
+create index idx_invitations_email on public.invitations(email);
+
+-- Pas de RLS user : table gérée uniquement via service_role (admin)
+alter table public.invitations enable row level security;
+
+-- ─── WORKSPACES ───────────────────────────────────────────────────
+
+create table public.workspaces (
+  id            uuid primary key default uuid_generate_v4(),
+  owner_id      uuid references public.users(id) on delete cascade not null,
+  name          text not null,
+  client_name   text,
+  client_email  text,
+  brand_name    text,
+  brand_color   text default '#7c3aed',
+  created_at    timestamptz not null default now(),
+  updated_at    timestamptz not null default now()
+);
+
+create index idx_workspaces_owner_id on public.workspaces(owner_id);
+
+alter table public.workspaces enable row level security;
+create policy "Owners can CRUD own workspaces" on public.workspaces
+  for all using (auth.uid() = owner_id);
+
+create trigger workspaces_updated_at
+  before update on public.workspaces
+  for each row execute procedure public.set_updated_at();
+
+-- ─── WORKSPACE MEMBERS ────────────────────────────────────────────
+
+create table public.workspace_members (
+  id            uuid primary key default uuid_generate_v4(),
+  workspace_id  uuid references public.workspaces(id) on delete cascade not null,
+  email         text not null,
+  role          text not null default 'viewer' check (role in ('viewer','editor','admin')),
+  status        text not null default 'pending' check (status in ('pending','active')),
+  invited_at    timestamptz not null default now(),
+  joined_at     timestamptz,
+  unique (workspace_id, email)
+);
+
+create index idx_workspace_members_workspace_id on public.workspace_members(workspace_id);
+create index idx_workspace_members_email        on public.workspace_members(email);
+
+alter table public.workspace_members enable row level security;
+-- Le owner du workspace peut lire/gérer les membres
+create policy "Workspace owners can manage members" on public.workspace_members
+  for all using (
+    exists (
+      select 1 from public.workspaces
+      where workspaces.id = workspace_members.workspace_id
+      and workspaces.owner_id = auth.uid()
+    )
+  );
+-- Un membre peut lire son propre enregistrement
+create policy "Members can view own membership" on public.workspace_members
+  for select using (
+    email = (select email from public.users where id = auth.uid())
+  );
+
+-- ─── COLONNE workspace_id sur PAGES ───────────────────────────────
+-- Permet d'associer une page à un workspace (mode Agence)
+
+alter table public.pages
+  add column if not exists workspace_id uuid references public.workspaces(id) on delete set null;
+
+create index if not exists idx_pages_workspace_id on public.pages(workspace_id);
+
 -- ═══════════════════════════════════════════════════════════════════
 -- FIN DU SCHEMA
 -- Coller ce SQL dans : Supabase Dashboard > SQL Editor > New query

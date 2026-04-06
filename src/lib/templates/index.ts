@@ -371,18 +371,264 @@ export function templateMobileFirst(data: LandingPageData): string {
 </html>`
 }
 
+// ─── TEMPLATE 6 — SHEIN PRO ───────────────────────────────────────────────────
+
+export function templateSheinPro(data: LandingPageData): string {
+  const imgs    = data.images || []
+  const mainImg = imgs[0] || 'https://via.placeholder.com/800x800?text=Product'
+  const thumbs  = imgs.slice(0, 5)
+
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>${data.product_name}</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;background:#fff;color:#1a1a2e;line-height:1.6;}
+
+  /* NAV */
+  .nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #f0f0f5;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;}
+  .nav-brand{font-weight:900;font-size:18px;color:#1a1a2e;letter-spacing:-.02em;}
+  .nav-cart{background:#7c3aed;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;}
+
+  /* HERO */
+  .hero-image{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#f8f8fc;}
+  .thumbs{display:flex;gap:8px;padding:12px 16px;overflow-x:auto;scrollbar-width:none;}
+  .thumbs::-webkit-scrollbar{display:none;}
+  .thumb{width:64px;height:64px;border-radius:8px;object-fit:cover;border:2px solid transparent;cursor:pointer;flex-shrink:0;transition:.2s;}
+  .thumb.active,.thumb:hover{border-color:#7c3aed;}
+
+  /* INFOS */
+  .product-info{padding:20px 16px;}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+  .badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:#f3f0ff;color:#7c3aed;}
+  .badge.new{background:#fef3c7;color:#d97706;}
+  .product-name{font-size:22px;font-weight:900;line-height:1.2;margin-bottom:8px;letter-spacing:-.02em;}
+  .product-sub{font-size:14px;color:#5c5c7a;margin-bottom:16px;line-height:1.5;}
+
+  /* PRIX */
+  .price-block{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .price-main{font-size:28px;font-weight:900;color:#16a34a;}
+  .price-old{font-size:16px;color:#9ca3af;text-decoration:line-through;}
+  .price-badge{background:#fee2e2;color:#ef4444;font-size:12px;font-weight:800;padding:3px 8px;border-radius:6px;}
+
+  /* REVIEWS */
+  .reviews{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #f0f0f5;}
+  .stars{color:#fbbf24;font-size:14px;letter-spacing:1px;}
+  .review-count{font-size:13px;color:#5c5c7a;}
+
+  /* TRUST */
+  .trust{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;}
+  .trust-item{text-align:center;padding:12px 6px;border-radius:12px;background:#f8f8fc;}
+  .trust-icon{font-size:20px;margin-bottom:4px;}
+  .trust-label{font-size:10px;font-weight:700;color:#5c5c7a;line-height:1.3;}
+
+  /* OPTIONS */
+  .section-label{font-size:12px;font-weight:700;color:#8b8b9e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+  .qty-picker{display:flex;align-items:center;gap:0;border:1px solid #e3e3e8;border-radius:10px;overflow:hidden;width:fit-content;margin-bottom:20px;}
+  .qty-btn{width:40px;height:40px;border:none;background:#f8f8fc;font-size:18px;cursor:pointer;font-weight:700;color:#1a1a2e;}
+  .qty-val{width:48px;height:40px;text-align:center;border:none;border-left:1px solid #e3e3e8;border-right:1px solid #e3e3e8;font-weight:700;font-size:15px;background:#fff;}
+
+  /* CTA STICKY */
+  .cta-sticky{position:sticky;bottom:0;background:#fff;padding:12px 16px;border-top:1px solid #f0f0f5;box-shadow:0 -4px 20px rgba(0,0,0,.08);z-index:100;}
+  .cta-btn{display:block;width:100%;padding:16px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:900;letter-spacing:.01em;cursor:pointer;text-align:center;transition:.2s;}
+  .cta-btn:hover{opacity:.93;}
+  .cta-sub{text-align:center;font-size:11px;color:#9ca3af;margin-top:6px;}
+
+  /* SECTIONS */
+  .section{padding:28px 16px;border-top:8px solid #f6f6f7;}
+  .section h2{font-size:18px;font-weight:900;margin-bottom:16px;letter-spacing:-.01em;}
+
+  /* BENEFICES */
+  .benefits-list{list-style:none;}
+  .benefits-list li{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f5;}
+  .benefits-list li:last-child{border-bottom:none;}
+  .benefit-icon{width:24px;height:24px;border-radius:6px;background:#f3f0ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;}
+  .benefit-text{font-size:14px;color:#1a1a2e;line-height:1.4;}
+
+  /* REVIEWS DETAIL */
+  .review-card{background:#f8f8fc;border-radius:14px;padding:16px;margin-bottom:10px;}
+  .review-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .reviewer{font-weight:700;font-size:13px;}
+  .review-date{font-size:11px;color:#9ca3af;}
+  .review-text{font-size:13px;color:#5c5c7a;line-height:1.5;}
+
+  /* FAQ */
+  .faq-item{border-bottom:1px solid #f0f0f5;}
+  .faq-q{width:100%;text-align:left;background:none;border:none;padding:16px 0;font-size:14px;font-weight:700;color:#1a1a2e;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+  .faq-icon{font-size:20px;color:#7c3aed;transition:.3s;flex-shrink:0;}
+  .faq-a{font-size:13px;color:#5c5c7a;line-height:1.6;max-height:0;overflow:hidden;transition:max-height .3s ease;}
+  .faq-a.open{max-height:300px;padding-bottom:16px;}
+
+  /* FOOTER */
+  .footer{padding:20px 16px;border-top:1px solid #f0f0f5;text-align:center;}
+  .payment-icons{display:flex;justify-content:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .payment-icon{background:#f8f8fc;border:1px solid #e3e3e8;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;color:#5c5c7a;}
+  .footer-text{font-size:11px;color:#9ca3af;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <span class="nav-brand">Shop</span>
+  <button class="nav-cart" onclick="document.querySelector('.cta-btn').scrollIntoView({behavior:'smooth'})">Panier (0)</button>
+</nav>
+
+<!-- IMAGE HERO -->
+<div style="position:relative;">
+  <img id="mainImg" src="${mainImg}" alt="${data.product_name}" class="hero-image" />
+</div>
+
+<!-- THUMBNAILS -->
+${thumbs.length > 1 ? `<div class="thumbs">
+  ${thumbs.map((img, i) => `<img src="${img}" class="thumb${i === 0 ? ' active' : ''}" onclick="switchImg(this,'${img}')" />`).join('')}
+</div>` : ''}
+
+<!-- INFOS PRODUIT -->
+<div class="product-info">
+  <div class="badges">
+    <span class="badge new">Tendance</span>
+    <span class="badge">En stock</span>
+    ${data.urgency ? `<span class="badge" style="background:#fee2e2;color:#ef4444;">${data.urgency}</span>` : ''}
+  </div>
+
+  <h1 class="product-name">${data.product_name}</h1>
+  <p class="product-sub">${data.subtitle || data.headline || ''}</p>
+
+  <div class="price-block">
+    <span class="price-main">${data.price ? data.price + '\u20ac' : ''}</span>
+    ${data.original_price ? `<span class="price-old">${data.original_price}\u20ac</span><span class="price-badge">-${Math.round((1 - parseFloat(data.price || '0') / parseFloat(data.original_price)) * 100)}%</span>` : ''}
+  </div>
+
+  <div class="reviews">
+    <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+    <span class="review-count">4.9 &middot; 247 avis v&eacute;rifi&eacute;s</span>
+  </div>
+
+  <div class="trust">
+    <div class="trust-item"><div class="trust-icon">&#128640;</div><div class="trust-label">Livraison express 24/48h</div></div>
+    <div class="trust-item"><div class="trust-icon">&#128737;</div><div class="trust-label">Satisfait ou rembours&eacute;</div></div>
+    <div class="trust-item"><div class="trust-icon">&#128274;</div><div class="trust-label">Paiement 100% s&eacute;curis&eacute;</div></div>
+  </div>
+
+  <div class="section-label">Quantit&eacute;</div>
+  <div class="qty-picker">
+    <button class="qty-btn" onclick="changeQty(-1)">&minus;</button>
+    <input type="number" class="qty-val" id="qty" value="1" min="1" readonly />
+    <button class="qty-btn" onclick="changeQty(1)">+</button>
+  </div>
+</div>
+
+<!-- CTA STICKY -->
+<div class="cta-sticky">
+  <button class="cta-btn" onclick="alert('Redirection vers le paiement...')">${data.cta || 'Commander maintenant'} &rarr;</button>
+  <p class="cta-sub">&#10003; Livraison gratuite &middot; &#10003; Retour 30j &middot; &#10003; Support 7j/7</p>
+</div>
+
+<!-- BENEFICES -->
+<div class="section">
+  <h2>Pourquoi choisir ce produit ?</h2>
+  <ul class="benefits-list">
+    ${data.benefits.map((b, i) => `
+    <li>
+      <div class="benefit-icon">${['&#10024;','&#9889;','&#127919;','&#128142;','&#128640;','&#9989;','&#128293;','&#128170;'][i % 8]}</div>
+      <span class="benefit-text">${b}</span>
+    </li>`).join('')}
+  </ul>
+</div>
+
+<!-- AVIS CLIENTS -->
+<div class="section">
+  <h2>Ce que disent nos clients</h2>
+  <div class="review-card">
+    <div class="review-header">
+      <span class="reviewer">Marie D. &#10003; Achat v&eacute;rifi&eacute;</span>
+      <span class="review-date">Il y a 3 jours</span>
+    </div>
+    <div style="color:#fbbf24;font-size:13px;margin-bottom:6px;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+    <p class="review-text">Vraiment impressionnant ! La qualit&eacute; d&eacute;passe mes attentes. Livraison rapide et emballage soign&eacute;. Je recommande &agrave; 100% !</p>
+  </div>
+  <div class="review-card">
+    <div class="review-header">
+      <span class="reviewer">Thomas R. &#10003; Achat v&eacute;rifi&eacute;</span>
+      <span class="review-date">Il y a 1 semaine</span>
+    </div>
+    <div style="color:#fbbf24;font-size:13px;margin-bottom:6px;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+    <p class="review-text">Top produit, exactement comme d&eacute;crit. Service client r&eacute;actif. N&apos;h&eacute;sitez pas !</p>
+  </div>
+</div>
+
+<!-- FAQ -->
+${data.faq && data.faq.length > 0 ? `
+<div class="section">
+  <h2>Questions fr&eacute;quentes</h2>
+  ${data.faq.map((item, i) => `
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(${i})">
+      <span>${item.question}</span>
+      <span class="faq-icon" id="faq-icon-${i}">+</span>
+    </button>
+    <div class="faq-a" id="faq-a-${i}">${item.answer}</div>
+  </div>`).join('')}
+</div>` : ''}
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="payment-icons">
+    <span class="payment-icon">Visa</span>
+    <span class="payment-icon">Mastercard</span>
+    <span class="payment-icon">PayPal</span>
+    <span class="payment-icon">Apple Pay</span>
+  </div>
+  <p class="footer-text">&copy; 2026 &middot; Tous droits r&eacute;serv&eacute;s &middot; Paiement 100% s&eacute;curis&eacute; SSL</p>
+</div>
+
+<script>
+function switchImg(el, src) {
+  document.getElementById('mainImg').src = src;
+  document.querySelectorAll('.thumb').forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+}
+function changeQty(delta) {
+  var input = document.getElementById('qty');
+  var v = parseInt(input.value) + delta;
+  if (v >= 1) input.value = v;
+}
+function toggleFaq(i) {
+  var a    = document.getElementById('faq-a-' + i);
+  var icon = document.getElementById('faq-icon-' + i);
+  a.classList.toggle('open');
+  icon.textContent = a.classList.contains('open') ? '\u2212' : '+';
+}
+</script>
+</body>
+</html>`
+}
+
 // ─── EXPORT REGISTRY ──────────────────────────────────────────────────────────
 
 export const TEMPLATES = [
-  { id: 'minimal-dark',  name: 'Minimal Dark',  category: 'dark'   as const, fn: templateMinimalDark  },
-  { id: 'clean-white',   name: 'Clean White',   category: 'light'  as const, fn: templateCleanWhite   },
-  { id: 'bold-sales',    name: 'Bold Sales',    category: 'bold'   as const, fn: templateBoldSales    },
-  { id: 'luxury',        name: 'Luxury',        category: 'luxury' as const, fn: templateLuxury       },
-  { id: 'mobile-first',  name: 'Mobile First',  category: 'mobile' as const, fn: templateMobileFirst  },
+  { id: 'shein-pro',    name: 'Shein Pro',    category: 'ecommerce' as const, fn: templateSheinPro    },
+  { id: 'minimal-dark', name: 'Minimal Dark', category: 'dark'      as const, fn: templateMinimalDark },
+  { id: 'clean-white',  name: 'Clean White',  category: 'light'     as const, fn: templateCleanWhite  },
+  { id: 'bold-sales',   name: 'Bold Sales',   category: 'bold'      as const, fn: templateBoldSales   },
+  { id: 'luxury',       name: 'Luxury',       category: 'luxury'    as const, fn: templateLuxury      },
+  { id: 'mobile-first', name: 'Mobile First', category: 'mobile'    as const, fn: templateMobileFirst },
 ]
 
 export function renderTemplate(templateId: string, data: LandingPageData): string {
-  const tpl = TEMPLATES.find(t => t.id === templateId)
-  if (!tpl) return templateCleanWhite(data)
-  return tpl.fn(data)
+  switch (templateId) {
+    case 'shein-pro':    return templateSheinPro(data)
+    case 'premium-glass': return templateSheinPro(data)
+    case 'minimal-dark': return templateMinimalDark(data)
+    case 'clean-white':  return templateCleanWhite(data)
+    case 'bold-sales':   return templateBoldSales(data)
+    case 'bold-orange':  return templateBoldSales(data)
+    case 'luxury':       return templateLuxury(data)
+    case 'mobile-first': return templateMobileFirst(data)
+    default:             return templateCleanWhite(data)
+  }
 }

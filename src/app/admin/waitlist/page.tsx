@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Check, Mail, RefreshCw, Copy } from 'lucide-react'
+import { Check, Mail, RefreshCw, Copy, Lock } from 'lucide-react'
 
 type WaitlistEntry = {
   id: string
@@ -22,20 +22,40 @@ type Invitation = {
   created_at: string
 }
 
-const ADMIN_SECRET = 'konvert-admin-2026'
-
 export default function AdminWaitlist() {
+  const [secret, setSecret]           = useState('')
+  const [authenticated, setAuthenticated] = useState(false)
+  const [authError, setAuthError]     = useState(false)
   const [waitlist, setWaitlist]       = useState<WaitlistEntry[]>([])
   const [invitations, setInvitations] = useState<Invitation[]>([])
-  const [loading, setLoading]         = useState(true)
+  const [loading, setLoading]         = useState(false)
   const [inviting, setInviting]       = useState<string | null>(null)
   const [copied, setCopied]           = useState<string | null>(null)
   const [tab, setTab]                 = useState<'waitlist' | 'invitations'>('waitlist')
 
+  async function login(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setAuthError(false)
+    const res = await fetch('/api/admin/waitlist', {
+      headers: { 'x-admin-secret': secret },
+    })
+    if (res.status === 401) {
+      setAuthError(true)
+      setLoading(false)
+      return
+    }
+    const data = await res.json()
+    setWaitlist(data.waitlist || [])
+    setInvitations(data.invitations || [])
+    setAuthenticated(true)
+    setLoading(false)
+  }
+
   async function load() {
     setLoading(true)
     const res = await fetch('/api/admin/waitlist', {
-      headers: { 'x-admin-secret': ADMIN_SECRET },
+      headers: { 'x-admin-secret': secret },
     })
     const data = await res.json()
     setWaitlist(data.waitlist || [])
@@ -43,13 +63,13 @@ export default function AdminWaitlist() {
     setLoading(false)
   }
 
-  useEffect(() => { load() }, [])
+  useEffect(() => { /* chargement déclenché après login */ }, [])
 
   async function invite(entry: WaitlistEntry) {
     setInviting(entry.id)
     const res = await fetch('/api/admin/waitlist', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-admin-secret': ADMIN_SECRET },
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret },
       body: JSON.stringify({ email: entry.email, waitlist_id: entry.id }),
     })
     const data = await res.json()
@@ -72,6 +92,44 @@ export default function AdminWaitlist() {
   const pending    = waitlist.filter(w => w.status === 'pending')
   const invited    = waitlist.filter(w => w.status === 'invited')
   const registered = waitlist.filter(w => w.status === 'registered')
+
+  if (!authenticated) {
+    return (
+      <div style={{ background: '#F6F6F7', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+        <form onSubmit={login} className="bg-white rounded-2xl p-8 w-full max-w-sm" style={{ border: '1px solid #E3E3E8' }}>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#7c3aed,#6d28d9)' }}>
+              <Lock className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <div className="text-[15px] font-black" style={{ color: '#1a1a2e' }}>Admin · KonVert</div>
+              <div className="text-[12px]" style={{ color: '#8b8b9e' }}>Accès restreint</div>
+            </div>
+          </div>
+          <input
+            type="password"
+            placeholder="Mot de passe admin"
+            value={secret}
+            onChange={e => setSecret(e.target.value)}
+            autoFocus
+            className="w-full px-4 py-3 rounded-xl text-[14px] mb-3 outline-none"
+            style={{ border: `1px solid ${authError ? '#e11d48' : '#E3E3E8'}`, color: '#1a1a2e' }}
+          />
+          {authError && (
+            <p className="text-[12px] mb-3" style={{ color: '#e11d48' }}>Mot de passe incorrect.</p>
+          )}
+          <button
+            type="submit"
+            disabled={loading || !secret}
+            className="w-full py-3 rounded-xl text-[14px] font-bold text-white"
+            style={{ background: 'linear-gradient(135deg,#7c3aed,#6d28d9)', opacity: loading || !secret ? 0.6 : 1 }}
+          >
+            {loading ? 'Vérification...' : 'Accéder'}
+          </button>
+        </form>
+      </div>
+    )
+  }
 
   return (
     <div style={{ background: '#F6F6F7', minHeight: '100vh', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>

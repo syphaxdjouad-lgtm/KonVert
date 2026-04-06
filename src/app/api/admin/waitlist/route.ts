@@ -9,7 +9,7 @@ const supabase = createClient(
 // Protection admin basique par secret header
 function isAdmin(req: NextRequest) {
   const secret = req.headers.get('x-admin-secret')
-  return secret === (process.env.ADMIN_SECRET || 'konvert-admin-2026')
+  return !!process.env.ADMIN_SECRET && secret === process.env.ADMIN_SECRET
 }
 
 export async function GET(req: NextRequest) {

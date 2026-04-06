@@ -1,19 +1,45 @@
 import { anthropic } from '@/lib/anthropic'
 import type { ScrapedProduct, LandingPageData } from '@/types'
 
-const SYSTEM_PROMPT = `Tu es un copywriter e-commerce expert en conversion, spécialisé dans la création de landing pages haute performance pour le dropshipping et l'e-commerce.
+const LANGUAGE_NAMES: Record<string, string> = {
+  fr: 'français',
+  en: 'English',
+  es: 'español',
+  de: 'Deutsch',
+  it: 'italiano',
+  pt: 'português',
+  nl: 'Nederlands',
+  ar: 'العربية',
+}
+
+const TONE_INSTRUCTIONS: Record<string, string> = {
+  persuasif: 'Ton persuasif : crée de l\'émotion, joue sur les désirs et la peur de manquer, pousse à l\'action immédiate.',
+  premium: 'Ton premium et luxueux : langage élégant, valorise l\'exclusivité et la qualité supérieure, prix justifié par l\'excellence.',
+  fun: 'Ton fun et décalé : léger, plein d\'énergie, utilise des formules originales, rend le produit désirable et cool.',
+  informatif: 'Ton informatif et rassurant : pédagogue, faits concrets, chiffres précis, répond aux objections avec des preuves.',
+}
+
+const buildSystemPrompt = (language: string): string => {
+  const langName = LANGUAGE_NAMES[language] || 'français'
+  return `Tu es un copywriter e-commerce expert en conversion, spécialisé dans la création de landing pages haute performance pour le dropshipping et l'e-commerce.
 
 Ton style :
 - Titres percutants qui parlent au désir profond du client, pas aux features
 - Bénéfices orientés résultat (ce que ça change dans la vie du client)
 - Urgence authentique, jamais artificielle ou mensongère
 - Ton direct, humain, sans jargon corporate
-- Adapté au marché francophone (France, Belgique, Suisse)
+
+IMPORTANT : Tu dois générer TOUT le contenu textuel en ${langName}. Chaque mot du JSON doit être en ${langName}.
 
 Tu réponds UNIQUEMENT avec un JSON valide, sans markdown, sans explication.`
+}
 
-const buildUserPrompt = (product: ScrapedProduct): string => `
+const buildUserPrompt = (product: ScrapedProduct, tone: string): string => {
+  const toneInstruction = TONE_INSTRUCTIONS[tone] || TONE_INSTRUCTIONS['persuasif']
+  return `
 Génère une landing page de vente complète pour ce produit e-commerce.
+
+TON DE RÉDACTION : ${toneInstruction}
 
 DONNÉES PRODUIT :
 - Nom : ${product.title}
@@ -55,16 +81,23 @@ Réponds avec ce JSON exact (sans markdown) :
   "original_price": "${product.original_price || ''}"
 }
 `
+}
 
-export async function generateLandingPage(product: ScrapedProduct): Promise<LandingPageData> {
+export async function generateLandingPage(
+  product: ScrapedProduct,
+  options: { language?: string; tone?: string } = {}
+): Promise<LandingPageData> {
+  const language = options.language || 'fr'
+  const tone = options.tone || 'persuasif'
+
   const message = await anthropic.messages.create({
     model: 'claude-haiku-4-5-20251001',
     max_tokens: 1500,
-    system: SYSTEM_PROMPT,
+    system: buildSystemPrompt(language),
     messages: [
       {
         role: 'user',
-        content: buildUserPrompt(product),
+        content: buildUserPrompt(product, tone),
       },
     ],
   })

@@ -117,14 +117,282 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* ─── TOKENS KONVERT — PALETTE LEADPAGES ─────────────────────────────────── */
+:root {
+  /* Palette principale */
+  --kv-hero-bg: #111827;
+  --kv-hero-bg-end: #1e1b4b;
+  --kv-accent: #16a34a;
+  --kv-accent-hover: #15803d;
+  --kv-accent-light: #dcfce7;
+  --kv-purple: #7c3aed;
+  --kv-purple-light: #ede9fe;
+
+  /* Surfaces */
+  --kv-white: #ffffff;
+  --kv-gray-50: #f9fafb;
+  --kv-gray-100: #f3f4f6;
+  --kv-gray-200: #e5e7eb;
+  --kv-gray-400: #9ca3af;
+  --kv-gray-500: #6b7280;
+  --kv-gray-600: #4b5563;
+  --kv-gray-700: #374151;
+  --kv-gray-900: #111827;
+
+  /* Texte */
+  --kv-text-dark: #111827;
+  --kv-text-body: #374151;
+  --kv-text-muted: #6b7280;
+
+  /* Ombres */
+  --kv-shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --kv-shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.05);
+  --kv-shadow-lg: 0 10px 30px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.05);
+  --kv-shadow-xl: 0 20px 60px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.06);
+
+  /* Rayon */
+  --kv-radius: 8px;
+  --kv-radius-lg: 12px;
+  --kv-radius-xl: 16px;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-gray-900;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
   html {
-    @apply font-sans;
+    scroll-behavior: smooth;
   }
+}
+
+/* ─── KEYFRAMES ──────────────────────────────────────────────────────────── */
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes progressFill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+@keyframes pulseGreen {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ─── UTILITAIRES ANIMATIONS ─────────────────────────────────────────────── */
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Shimmer pour boutons CTA */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: shimmer 2.5s ease-in-out infinite;
+}
+
+/* ─── SCROLL REVEAL ──────────────────────────────────────────────────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ─── SCROLL PROGRESS BAR ────────────────────────────────────────────────── */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: #16a34a;
+  z-index: 100;
+  transition: width 0.1s linear;
+}
+
+/* ─── FAQ ACCORDION ──────────────────────────────────────────────────────── */
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
+  opacity: 0;
+}
+
+.faq-answer.open {
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* ─── TEXTE GRADIENT HERO ────────────────────────────────────────────────── */
+
+.gradient-text-hero {
+  background: linear-gradient(135deg, #ffffff 0%, #c7d2fe 60%, #a5b4fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-green {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── CARTES FONCTIONNALITÉS ─────────────────────────────────────────────── */
+
+.feature-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--kv-radius-xl);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.feature-card:hover {
+  box-shadow: var(--kv-shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* ─── PRICING CARD PRO GLOW ──────────────────────────────────────────────── */
+
+.pricing-pro-glow {
+  box-shadow:
+    0 0 0 2px #16a34a,
+    0 8px 32px rgba(22, 163, 74, 0.18),
+    0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ─── BADGE HERO ─────────────────────────────────────────────────────────── */
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(22, 163, 74, 0.1);
+  border: 1px solid rgba(22, 163, 74, 0.3);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #15803d;
+}
+
+.hero-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #16a34a;
+  animation: pulseGreen 2s ease-in-out infinite;
+}
+
+/* ─── INPUT HERO ─────────────────────────────────────────────────────────── */
+
+.hero-input-wrap {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.hero-input-wrap:focus-within {
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* ─── TRUST LOGOS ────────────────────────────────────────────────────────── */
+
+.trust-logo {
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+  filter: grayscale(100%);
+}
+
+.trust-logo:hover {
+  opacity: 0.75;
+  filter: grayscale(0%);
+}
+
+/* ─── STEP NUMBER ────────────────────────────────────────────────────────── */
+
+.step-number {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #111827;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── PARTICULES CANVAS (section IA) ─────────────────────────────────────── */
+
+#particles-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }

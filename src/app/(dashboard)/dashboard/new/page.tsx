@@ -22,11 +22,96 @@ type Mode = 'wizard' | 'generating' | 'editor'
 type InputMode = 'url' | 'manual'
 
 const STYLES = [
-  { id: 'shein-pro',     name: 'Shein Pro',      desc: 'Mode e-commerce premium, grande image hero, look fashion', emoji: '✨' },
-  { id: 'minimal-dark',  name: 'Minimal Dark',   desc: 'Fond sombre, typographie bold, accents rouges',           emoji: '🖤' },
-  { id: 'clean-white',   name: 'Clean White',    desc: 'Fond blanc, épuré, conversion optimisée',                  emoji: '🤍' },
-  { id: 'bold-sales',    name: 'Bold Orange',    desc: 'Fort contraste, urgence, dropshipping style',              emoji: '🔥' },
-  { id: 'premium-glass', name: 'Premium Glass',  desc: 'Glassmorphism violet, effet luxe tech',                    emoji: '💎' },
+  {
+    id: 'shein-pro',
+    name: 'Shein Pro',
+    desc: 'Mode e-commerce premium, grande image hero, look fashion',
+    badge: 'Populaire',
+    convRate: 18.2,
+    colors: ['#7c3aed', '#16a34a', '#f8f8fc'] as [string, string, string],
+    category: 'E-commerce',
+  },
+  {
+    id: 'minimal-dark',
+    name: 'Minimal Dark',
+    desc: 'Fond sombre, typographie bold, accents rouges pour le lifestyle',
+    badge: 'Trending',
+    convRate: 14.7,
+    colors: ['#0f0f0f', '#ef4444', '#1a1a1a'] as [string, string, string],
+    category: 'Lead Gen',
+  },
+  {
+    id: 'clean-white',
+    name: 'Clean White',
+    desc: 'Fond blanc épuré, violet, standard SaaS et produits numériques',
+    badge: null,
+    convRate: 11.3,
+    colors: ['#ffffff', '#7c3aed', '#f8fafc'] as [string, string, string],
+    category: 'SaaS',
+  },
+  {
+    id: 'bold-sales',
+    name: 'Bold Sales',
+    desc: 'Orange brûlant, urgence maximale, roi du dropshipping',
+    badge: 'Populaire',
+    convRate: 22.1,
+    colors: ['#ea580c', '#fbbf24', '#fff7ed'] as [string, string, string],
+    category: 'Promotions',
+  },
+  {
+    id: 'saas-hero',
+    name: 'SaaS Hero',
+    desc: 'Slate-950, indigo, mesh background animé, mockup dashboard',
+    badge: 'Nouveau',
+    convRate: 13.2,
+    colors: ['#0f172a', '#6366f1', '#1e293b'] as [string, string, string],
+    category: 'SaaS',
+  },
+  {
+    id: 'flash-sale',
+    name: 'Flash Sale',
+    desc: 'Countdown JS 72h, barre de stock, fond noir, taux record',
+    badge: 'Chaud',
+    convRate: 24.6,
+    colors: ['#000000', '#ef4444', '#1a0000'] as [string, string, string],
+    category: 'Promotions',
+  },
+  {
+    id: 'lead-magnet',
+    name: 'Lead Magnet',
+    desc: 'Formulaire email central, mockup PDF, capture de leads',
+    badge: 'Populaire',
+    convRate: 21.7,
+    colors: ['#10b981', '#d1fae5', '#f8fafc'] as [string, string, string],
+    category: 'Lead Gen',
+  },
+  {
+    id: 'app-download',
+    name: 'App Download',
+    desc: 'Mockup smartphone CSS, store badges iOS + Android, cyan/violet',
+    badge: 'Top',
+    convRate: 25.1,
+    colors: ['#1a1a2e', '#00d4ff', '#7b2ff7'] as [string, string, string],
+    category: 'App',
+  },
+  {
+    id: 'luxury',
+    name: 'Luxury Premium',
+    desc: 'Typographie serif, accent or, positionnement haut de gamme',
+    badge: null,
+    convRate: 9.8,
+    colors: ['#faf9f7', '#c9993a', '#1a1714'] as [string, string, string],
+    category: 'Services',
+  },
+  {
+    id: 'mobile-first',
+    name: 'Mobile First',
+    desc: 'Max 480px, bleu, optimisé trafic Facebook et TikTok mobile',
+    badge: null,
+    convRate: 16.4,
+    colors: ['#2563eb', '#eff6ff', '#ffffff'] as [string, string, string],
+    category: 'E-commerce',
+  },
 ]
 
 const TONES = [
@@ -688,38 +773,117 @@ export default function NewPage() {
         {step === 5 && (
           <div>
             <h1 className="text-2xl font-black mb-1" style={{ color: '#1a1a2e' }}>Style & Ton de ta page</h1>
-            <p className="text-[14px] mb-6" style={{ color: '#8b8b9e' }}>Choisis le style visuel et le ton du copy IA.</p>
+            <p className="text-[14px] mb-6" style={{ color: '#8b8b9e' }}>Choisis le design et le ton du copy IA. Survole pour voir l'aperçu.</p>
 
             <label className="block text-[13px] font-bold mb-3" style={{ color: '#1a1a2e' }}>Style visuel</label>
-            <div className="space-y-2 mb-6">
-              {STYLES.map(s => (
-                <button
-                  key={s.id}
-                  onClick={() => setSelectedStyle(s.id)}
-                  className="w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all"
-                  style={selectedStyle === s.id
-                    ? { borderColor: '#7c3aed', background: '#faf9ff' }
-                    : { borderColor: '#E3E3E8', background: '#fff' }
-                  }
-                >
-                  <span className="text-2xl">{s.emoji}</span>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
-                      {s.id === 'shein-pro' && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#fef3c7', color: '#d97706' }}>POPULAIRE</span>
-                      )}
+
+            {/* Templates grid */}
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              {STYLES.map(s => {
+                const isSelected = selectedStyle === s.id
+                const [c1, c2, c3] = s.colors
+
+                const badgeColors: Record<string, { bg: string; color: string }> = {
+                  'Populaire': { bg: '#7c3aed', color: '#fff' },
+                  'Trending':  { bg: '#06b6d4', color: '#fff' },
+                  'Nouveau':   { bg: '#10b981', color: '#fff' },
+                  'Chaud':     { bg: '#ef4444', color: '#fff' },
+                  'Top':       { bg: '#f59e0b', color: '#fff' },
+                }
+                const bc = s.badge ? badgeColors[s.badge] : null
+
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setSelectedStyle(s.id)}
+                    className="relative text-left rounded-2xl overflow-hidden transition-all duration-200"
+                    style={{
+                      border: isSelected ? '2px solid #7c3aed' : '2px solid #E3E3E8',
+                      background: '#fff',
+                      boxShadow: isSelected ? '0 4px 16px rgba(124,58,237,0.18)' : '0 1px 4px rgba(0,0,0,0.04)',
+                      transform: isSelected ? 'translateY(-2px)' : 'translateY(0)',
+                    }}
+                  >
+                    {/* Mini browser mockup */}
+                    <div style={{ background: c3, padding: '8px 8px 0' }}>
+                      {/* Browser chrome */}
+                      <div
+                        className="rounded-t-lg flex items-center gap-1 px-2"
+                        style={{ background: 'rgba(0,0,0,0.1)', height: '20px' }}
+                      >
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#ef4444', opacity: 0.7 }} />
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#fbbf24', opacity: 0.7 }} />
+                        <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#22c55e', opacity: 0.7 }} />
+                        <div className="flex-1 h-2.5 rounded-sm ml-1" style={{ background: 'rgba(255,255,255,0.2)' }} />
+                      </div>
+                      {/* Page preview */}
+                      <div className="space-y-1.5 p-2" style={{ background: c3, minHeight: '80px' }}>
+                        <div className="rounded-md p-2" style={{ background: c1 }}>
+                          <div className="h-1.5 w-3/4 rounded-full mb-1" style={{ background: 'rgba(255,255,255,0.7)' }} />
+                          <div className="h-1 w-1/2 rounded-full mb-1.5" style={{ background: 'rgba(255,255,255,0.4)' }} />
+                          <div className="h-4 w-16 rounded" style={{ background: c2 }} />
+                        </div>
+                        <div className="grid grid-cols-3 gap-1">
+                          {[0,1,2].map(i => (
+                            <div key={i} className="h-6 rounded" style={{ background: `${c1}20`, border: `1px solid ${c1}25` }} />
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-[12px]" style={{ color: '#8b8b9e' }}>{s.desc}</p>
-                  </div>
-                  {selectedStyle === s.id && (
-                    <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: '#7c3aed' }}>
-                      <Check className="w-3 h-3 text-white" />
+
+                    {/* Info */}
+                    <div className="px-3 py-2.5">
+                      <div className="flex items-center justify-between gap-1 mb-0.5">
+                        <span className="text-[12px] font-black" style={{ color: '#1a1a2e' }}>{s.name}</span>
+                        {s.badge && bc && (
+                          <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full flex-shrink-0" style={{ background: bc.bg, color: bc.color }}>
+                            {s.badge}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px]" style={{ color: '#8b8b9e' }}>{s.category}</span>
+                        <span className="text-[10px] font-bold" style={{ color: '#16a34a' }}>{s.convRate}%</span>
+                      </div>
                     </div>
-                  )}
-                </button>
-              ))}
+
+                    {/* Selected checkmark */}
+                    {isSelected && (
+                      <div
+                        className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center"
+                        style={{ background: '#7c3aed', boxShadow: '0 2px 8px rgba(124,58,237,0.4)' }}
+                      >
+                        <Check className="w-3 h-3 text-white" />
+                      </div>
+                    )}
+                  </button>
+                )
+              })}
             </div>
+
+            {/* Selected template info */}
+            {(() => {
+              const sel = STYLES.find(s => s.id === selectedStyle)
+              if (!sel) return null
+              return (
+                <div
+                  className="flex items-start gap-3 p-3 rounded-xl mb-6"
+                  style={{ background: '#faf9ff', border: '1px solid #ddd6fe' }}
+                >
+                  <div
+                    className="w-8 h-8 rounded-lg flex-shrink-0"
+                    style={{ background: `linear-gradient(135deg, ${sel.colors[0]}, ${sel.colors[1]})` }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[13px] font-bold" style={{ color: '#5b21b6' }}>{sel.name}</div>
+                    <div className="text-[12px]" style={{ color: '#7c3aed' }}>{sel.desc}</div>
+                  </div>
+                  <div className="text-[11px] font-black flex-shrink-0" style={{ color: '#16a34a' }}>
+                    Conv. {sel.convRate}%
+                  </div>
+                </div>
+              )
+            })()}
 
             <label className="block text-[13px] font-bold mb-3" style={{ color: '#1a1a2e' }}>Ton du copywriting IA</label>
             <div className="grid grid-cols-2 gap-2">

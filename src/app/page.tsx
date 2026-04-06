@@ -696,6 +696,7 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-8 text-sm font-medium">
             {[
               { label: 'Comment ça marche', href: '#how' },
+              { label: 'Templates', href: '/templates' },
               { label: 'Tarifs', href: '#pricing' },
               { label: 'FAQ', href: '#faq' },
             ].map(({ label, href }) => (
@@ -758,6 +759,7 @@ export default function Home() {
           >
             {[
               { label: 'Comment ça marche', href: '#how' },
+              { label: 'Templates', href: '/templates' },
               { label: 'Tarifs', href: '#pricing' },
               { label: 'FAQ', href: '#faq' },
             ].map(({ label, href }) => (
@@ -2771,7 +2773,7 @@ export default function Home() {
                 {[
                   { label: 'Fonctionnalités', href: '#how' },
                   { label: 'Tarifs', href: '#pricing' },
-                  { label: 'Templates', href: '/signup' },
+                  { label: 'Templates', href: '/templates' },
                   { label: 'Changelog', href: '#' },
                   { label: 'Roadmap', href: '#' },
                 ].map(({ label, href }) => (

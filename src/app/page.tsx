@@ -1,2885 +1,1791 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
-  Check,
-  ArrowRight,
-  Zap,
-  MousePointerClick,
-  BarChart2,
-  Store,
-  Users,
-  Star,
+  Bot,
+  Palette,
+  BarChart3,
+  Link2,
+  FlaskConical,
+  Globe,
   ChevronDown,
-  Sparkles,
-  Layers,
-  TrendingUp,
+  ChevronUp,
   Menu,
   X,
+  ArrowRight,
+  Check,
+  Star,
+  Zap,
+  TrendingUp,
+  ShoppingBag,
+  Building2,
+  UserCircle,
+  Play,
+  Sparkles,
+  Shield,
+  Clock,
 } from 'lucide-react'
 
-/* ─── ÉTOILES STATIQUES (générées une seule fois) ───────────────────────── */
-const STARS = Array.from({ length: 80 }, (_, i) => ({
-  id: i,
-  top: `${(i * 17 + 5) % 100}%`,
-  left: `${(i * 23 + 3) % 100}%`,
-  size: (i % 3) + 1,
-  duration: `${2 + (i % 4)}s`,
-  delay: `${(i % 30) * 0.1}s`,
-}))
+/* ════════════════════════════════════════════════════════════════════════════
+   STYLES GLOBAUX — keyframes non-expressibles en Tailwind
+════════════════════════════════════════════════════════════════════════════ */
+const GLOBAL_CSS = `
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33%       { transform: translateY(-8px) rotate(0.5deg); }
+    66%       { transform: translateY(-4px) rotate(-0.5deg); }
+  }
+  @keyframes pulse-ring {
+    0%   { transform: scale(1);   opacity: 0.6; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to   { background-position:  200% 0; }
+  }
 
-/* ─── HOOK : SCROLL REVEAL ──────────────────────────────────────────────── */
+  /* Marquee */
+  .marquee-wrap  { display: flex; overflow: hidden; user-select: none; }
+  .marquee-track { display: flex; flex-shrink: 0; animation: marquee 32s linear infinite; }
+  .marquee-track:hover { animation-play-state: paused; }
+
+  /* Float */
+  .float-anim { animation: float 5s ease-in-out infinite; }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s cubic-bezier(.16,1,.3,1),
+                transform 0.65s cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .delay-100 { transition-delay: 0.10s; }
+  .delay-200 { transition-delay: 0.20s; }
+  .delay-300 { transition-delay: 0.30s; }
+  .delay-400 { transition-delay: 0.40s; }
+  .delay-500 { transition-delay: 0.50s; }
+
+  /* Shimmer bouton */
+  .btn-shimmer {
+    background: linear-gradient(
+      90deg,
+      #5B47F5 0%, #7c6af7 40%, #5B47F5 60%, #4a38e0 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2.4s linear infinite;
+  }
+  .btn-shimmer:hover { animation-play-state: paused; background-position: 0 0; }
+
+  /* Pulse ring pour le bouton hero */
+  .pulse-ring::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    border: 2px solid #5B47F5;
+    animation: pulse-ring 1.8s ease-out infinite;
+  }
+`
+
+/* ════════════════════════════════════════════════════════════════════════════
+   HOOKS
+════════════════════════════════════════════════════════════════════════════ */
 function useReveal() {
   useEffect(() => {
-    const elements = document.querySelectorAll('.reveal')
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
-        })
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>('.reveal'))
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible') }),
+      { threshold: 0.08, rootMargin: '0px 0px -48px 0px' }
     )
-    elements.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
+    nodes.forEach((n) => io.observe(n))
+    return () => io.disconnect()
   }, [])
 }
 
-/* ─── HOOK : COMPTEUR DE STATS ──────────────────────────────────────────── */
-function useCounter(target: number, duration = 1500, trigger: boolean) {
-  const [count, setCount] = useState(0)
+function useCounter(target: number, durationMs: number, triggered: boolean): number {
+  const [val, setVal] = useState(0)
   useEffect(() => {
-    if (!trigger) return
-    let start = 0
-    const step = Math.ceil(target / (duration / 16))
-    const timer = setInterval(() => {
-      start += step
-      if (start >= target) {
-        setCount(target)
-        clearInterval(timer)
-      } else {
-        setCount(start)
-      }
-    }, 16)
-    return () => clearInterval(timer)
-  }, [target, duration, trigger])
-  return count
-}
-
-/* ─── COMPOSANT STATS AVEC COMPTEUR ────────────────────────────────────── */
-function StatCounter({
-  value,
-  label,
-  suffix = '',
-  triggered,
-}: {
-  value: number
-  label: string
-  suffix?: string
-  triggered: boolean
-}) {
-  const count = useCounter(value, 1200, triggered)
-  return (
-    <div className="text-center">
-      <div
-        className="text-4xl md:text-5xl font-black"
-        style={{
-          background: 'linear-gradient(135deg, #ffffff 0%, #c4b5fd 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-        }}
-      >
-        {count}{suffix}
-      </div>
-      <div className="text-sm text-purple-300/70 mt-1 font-medium">{label}</div>
-    </div>
-  )
-}
-
-/* ─── COMPOSANT FAQ ITEM ────────────────────────────────────────────────── */
-function FaqItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false)
-  return (
-    <div
-      className="glass-card rounded-2xl overflow-hidden cursor-pointer"
-      style={{ border: '1px solid rgba(139,92,246,0.15)', transition: 'border-color 0.3s ease' }}
-      onMouseEnter={(e) =>
-        ((e.currentTarget as HTMLElement).style.borderColor = 'rgba(139,92,246,0.4)')
-      }
-      onMouseLeave={(e) =>
-        ((e.currentTarget as HTMLElement).style.borderColor = 'rgba(139,92,246,0.15)')
-      }
-    >
-      <button
-        className="w-full px-6 py-5 flex items-center justify-between text-left"
-        onClick={() => setOpen(!open)}
-      >
-        <span className="font-semibold text-white text-sm pr-4">{q}</span>
-        <ChevronDown
-          className="w-4 h-4 text-purple-400 flex-shrink-0 transition-transform duration-300"
-          style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
-        />
-      </button>
-      <div
-        className="faq-answer px-6"
-        style={open ? { maxHeight: '500px', opacity: 1, paddingBottom: '20px' } : {}}
-      >
-        <p className="text-purple-200/70 text-sm leading-relaxed">{a}</p>
-      </div>
-    </div>
-  )
-}
-
-/* ─── COMPOSANT FLOATING CARD ───────────────────────────────────────────── */
-function FloatingCard({
-  className,
-  children,
-  animClass,
-}: {
-  className?: string
-  children: React.ReactNode
-  animClass: string
-}) {
-  return (
-    <div
-      className={`absolute glass-card rounded-2xl p-4 ${animClass} ${className ?? ''}`}
-      style={{ background: 'rgba(10,8,25,0.72)', border: '1px solid rgba(139,92,246,0.35)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)' }}
-    >
-      {children}
-    </div>
-  )
-}
-
-/* ─── COMPOSANT TILT CARD ───────────────────────────────────────────────── */
-function TiltCard({ children, className, style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
-  const ref = useRef<HTMLDivElement>(null)
-
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const el = ref.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -20
-    el.style.transform = `perspective(800px) rotateX(${y}deg) rotateY(${x}deg) translateZ(10px)`
-  }
-
-  function handleMouseLeave() {
-    if (ref.current) {
-      ref.current.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0px)'
+    if (!triggered) return
+    const startTime = performance.now()
+    const tick = (now: number) => {
+      const elapsed = Math.min((now - startTime) / durationMs, 1)
+      const eased = 1 - Math.pow(1 - elapsed, 3) // ease-out-cubic
+      setVal(Math.round(eased * target))
+      if (elapsed < 1) requestAnimationFrame(tick)
     }
-  }
-
-  return (
-    <div
-      ref={ref}
-      className={className}
-      style={{ ...style, transition: 'transform 0.15s ease', transformStyle: 'preserve-3d', willChange: 'transform' }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-    >
-      {children}
-    </div>
-  )
+    requestAnimationFrame(tick)
+  }, [target, durationMs, triggered])
+  return val
 }
 
-/* ─── ROI SECTION ───────────────────────────────────────────────────────── */
-function ROISection() {
-  const [pages, setPages] = useState(10)
+/* ════════════════════════════════════════════════════════════════════════════
+   DONNÉES STATIQUES
+════════════════════════════════════════════════════════════════════════════ */
 
-  const traditionalHours = pages * 3
-  const konvertMinutes   = pages * 0.5
-  const savedHours       = traditionalHours - konvertMinutes / 60
-  const savedMoney       = Math.round(savedHours * 50)
+const NAV_LINKS = [
+  { label: 'Fonctionnalités', href: '#features' },
+  { label: 'Templates',       href: '#templates' },
+  { label: 'Intégrations',    href: '#integrations' },
+  { label: 'Tarifs',          href: '#pricing' },
+  { label: 'Ressources',      href: '#faq' },
+]
 
-  return (
-    <section className="py-28 px-6 relative overflow-hidden" style={{ background: 'rgba(6,2,14,1)' }}>
-      <div className="absolute inset-0 dot-pattern opacity-20 pointer-events-none" />
+const MARQUEE_BRANDS = [
+  'Shopify', 'WooCommerce', 'AliExpress', 'Amazon', 'Alibaba',
+  'Claude AI', 'Stripe', 'Klaviyo', 'Zapier', 'Meta Ads',
+]
 
-      <div className="max-w-5xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="text-center mb-16 reveal">
-          <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: 'rgba(167,139,250,0.7)' }}>
-            ✦ Calcule ton retour sur investissement
-          </p>
-          <h2 className="text-4xl md:text-5xl font-black" style={{
-            background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-            letterSpacing: '-0.02em',
-          }}>
-            Combien de temps tu perds<br />chaque mois ?
-          </h2>
-          <p className="mt-4 text-base max-w-lg mx-auto" style={{ color: 'rgba(196,181,253,0.6)' }}>
-            Une fiche produit manuelle = 2 à 4 heures. Avec KONVERT = 30 secondes.
-          </p>
-        </div>
+const STATS = [
+  { target: 50000, suffix: '+',  label: 'pages générées',            color: 'text-[#5B47F5]' },
+  { target: 40,    suffix: '%',  label: 'de conversion en plus',     color: 'text-emerald-400' },
+  { target: 2800,  suffix: '+',  label: 'boutiques connectées',      color: 'text-white' },
+]
 
-        <div className="grid md:grid-cols-2 gap-8 items-center reveal">
-
-          {/* Slider */}
-          <div className="rounded-3xl p-8" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(139,92,246,0.2)' }}>
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-bold" style={{ color: 'rgba(196,181,253,0.8)' }}>Pages produit par mois</span>
-                <span className="text-2xl font-black text-white">{pages}</span>
-              </div>
-              <input
-                type="range"
-                min={1}
-                max={100}
-                value={pages}
-                onChange={e => setPages(Number(e.target.value))}
-                className="w-full h-2 rounded-full outline-none cursor-pointer"
-                style={{
-                  appearance: 'none',
-                  background: `linear-gradient(to right, #7c3aed ${pages}%, rgba(139,92,246,0.2) ${pages}%)`,
-                }}
-              />
-              <div className="flex justify-between text-xs mt-2" style={{ color: 'rgba(167,139,250,0.4)' }}>
-                <span>1</span><span>50</span><span>100</span>
-              </div>
-            </div>
-
-            {/* Comparaison */}
-            <div className="space-y-4">
-              {/* Sans KONVERT */}
-              <div className="rounded-2xl p-4" style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)' }}>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'rgba(239,68,68,0.7)' }}>Sans KONVERT</span>
-                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(239,68,68,0.12)', color: '#ef4444' }}>Méthode classique</span>
-                </div>
-                <div className="text-3xl font-black" style={{ color: '#ef4444' }}>{traditionalHours}h</div>
-                <div className="text-xs mt-1" style={{ color: 'rgba(239,68,68,0.6)' }}>à 3h/page en moyenne (rédaction + design + mise en ligne)</div>
-              </div>
-
-              {/* Avec KONVERT */}
-              <div className="rounded-2xl p-4" style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(139,92,246,0.25)' }}>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold uppercase tracking-wide" style={{ color: 'rgba(167,139,250,0.7)' }}>Avec KONVERT</span>
-                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(74,222,128,0.12)', color: '#4ade80' }}>IA générative</span>
-                </div>
-                <div className="text-3xl font-black" style={{ color: '#a78bfa' }}>{konvertMinutes < 60 ? `${konvertMinutes}min` : `${(konvertMinutes/60).toFixed(1)}h`}</div>
-                <div className="text-xs mt-1" style={{ color: 'rgba(167,139,250,0.5)' }}>30 secondes par page, entièrement automatisé</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Résultats */}
-          <div className="space-y-5">
-            <div className="text-center md:text-left mb-2">
-              <p className="text-sm font-bold uppercase tracking-widest" style={{ color: 'rgba(167,139,250,0.5)' }}>Ton gain mensuel</p>
-            </div>
-
-            {[
-              {
-                value: `${Math.round(savedHours * 10) / 10}h`,
-                label: 'heures récupérées',
-                sub: 'À consacrer à ta croissance, pas à la rédaction',
-                color: '#4ade80',
-                bg: 'rgba(74,222,128,0.08)',
-                border: 'rgba(74,222,128,0.2)',
-              },
-              {
-                value: `${savedMoney.toLocaleString()}€`,
-                label: 'économisés (à 50€/h)',
-                sub: 'Si tu externalisais ça à un copywriter freelance',
-                color: '#a78bfa',
-                bg: 'rgba(124,58,237,0.08)',
-                border: 'rgba(139,92,246,0.2)',
-              },
-              {
-                value: `×${Math.round((traditionalHours * 60) / Math.max(konvertMinutes, 0.5))}`,
-                label: 'plus rapide',
-                sub: 'Le même résultat, en une fraction du temps',
-                color: '#fbbf24',
-                bg: 'rgba(251,191,36,0.06)',
-                border: 'rgba(251,191,36,0.2)',
-              },
-            ].map(s => (
-              <div key={s.label} className="flex items-center gap-5 rounded-2xl px-6 py-5" style={{ background: s.bg, border: `1px solid ${s.border}` }}>
-                <div className="text-4xl font-black flex-shrink-0" style={{ color: s.color }}>{s.value}</div>
-                <div>
-                  <div className="font-bold text-white">{s.label}</div>
-                  <div className="text-xs mt-0.5" style={{ color: 'rgba(167,139,250,0.5)' }}>{s.sub}</div>
-                </div>
-              </div>
-            ))}
-
-            <div className="mt-6 text-center md:text-left">
-              <Link
-                href="/signup"
-                className="btn-shimmer inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-white text-base"
-                style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 8px 30px rgba(124,58,237,0.4)' }}
-              >
-                Récupérer ces {Math.round(savedHours * 10) / 10}h →
-              </Link>
-              <p className="mt-2 text-xs" style={{ color: 'rgba(167,139,250,0.4)' }}>✓ Gratuit · ✓ Sans carte bancaire</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ─── TESTIMONIALS DATA ─────────────────────────────────────────────────── */
-const TESTIMONIALS = [
+const FEATURES = [
   {
-    name: 'Karim Benali',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face',
-    role: 'Dropshippeur · 3 stores Shopify',
-    platform: 'Shopify',
-    stars: 5,
-    quote: 'Mon CTR est passé de 1.2% à 4.8% sur ma première page générée. En 30 secondes j\'avais un résultat meilleur que ce que je faisais en 4 heures. Incroyable.',
-    metric: '+300% CTR',
-    date: 'Il y a 3 jours',
-    verified: true,
+    Icon: Bot,
+    title: 'Génération IA',
+    desc:  'Le copy de vos pages est rédigé automatiquement par Claude AI. Accroche, bénéfices, FAQ, CTA — tout en 30 secondes.',
+    accent: '#5B47F5',
+    bg:     'bg-[#5B47F5]/10',
+    label:  'text-[#5B47F5]',
   },
   {
-    name: 'Sophie Marchand',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face',
-    role: 'Fondatrice · Boutique beauté',
-    platform: 'WooCommerce',
-    stars: 5,
-    quote: 'J\'ai testé sur ma crème anti-âge bestseller. La page KONVERT a généré 2x plus de ventes que mon ancienne fiche produit. Le copy IA est vraiment au niveau d\'un pro.',
-    metric: '+2x ventes',
-    date: 'Il y a 1 semaine',
-    verified: true,
+    Icon: Palette,
+    title: '5 Templates Premium',
+    desc:  'Shein Pro, Minimal Dark, Clean White, Bold Orange, Premium Glass. Chaque template optimisé pour convertir.',
+    accent: '#ec4899',
+    bg:     'bg-pink-50',
+    label:  'text-pink-500',
   },
   {
-    name: 'Thomas Girard',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face',
-    role: 'Agence e-commerce · 12 clients',
-    platform: 'Shopify',
-    stars: 5,
-    quote: 'Je génère maintenant 12 pages produit en moins de 10 minutes pour mes clients. Ce que je facturais 300€/page, KONVERT le fait en 30s. C\'est un game changer pour mon agence.',
-    metric: '12 pages en 10 min',
-    date: 'Il y a 2 semaines',
-    verified: true,
+    Icon: BarChart3,
+    title: 'Analytics Intégrés',
+    desc:  'Suivez les vues, clics CTA, scroll depth et conversions en temps réel. Prenez des décisions basées sur les données.',
+    accent: '#10b981',
+    bg:     'bg-emerald-50',
+    label:  'text-emerald-500',
   },
   {
-    name: 'Amina Oukili',
-    avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&h=80&fit=crop&crop=face',
-    role: 'E-commerçante · Mode & Lifestyle',
-    platform: 'Shopify',
-    stars: 5,
-    quote: 'Le template Shein Pro est exactement ce que je cherchais. Mes pages ressemblent à du Zara.com maintenant. Les clientes passent plus de temps dessus et commandent plus.',
-    metric: '+65% temps sur page',
-    date: 'Il y a 4 jours',
-    verified: true,
+    Icon: Link2,
+    title: 'Intégration Shopify & Woo',
+    desc:  'Publiez votre page directement sur votre boutique en un clic. OAuth sécurisé, synchronisation automatique.',
+    accent: '#f97316',
+    bg:     'bg-orange-50',
+    label:  'text-orange-500',
   },
   {
-    name: 'Romain Lefevre',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face',
-    role: 'Coach business · Formation dropshipping',
-    platform: 'Standalone',
-    stars: 5,
-    quote: 'Je recommande KONVERT à tous mes élèves maintenant. Résultat immédiat visible dès la première page. Le wizard 8 étapes est ultra intuitif, même les débutants s\'y retrouvent.',
-    metric: '100% recommandé',
-    date: 'Il y a 5 jours',
-    verified: true,
+    Icon: FlaskConical,
+    title: 'A/B Testing',
+    desc:  'Testez plusieurs versions de votre page simultanément. Gardez ce qui performe. Supprimez ce qui ne convertit pas.',
+    accent: '#3b82f6',
+    bg:     'bg-blue-50',
+    label:  'text-blue-500',
   },
   {
-    name: 'Léa Fontaine',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face',
-    role: 'Freelance · Consultante CRO',
-    platform: 'WooCommerce',
-    stars: 5,
-    quote: 'En tant que consultante CRO, je suis critique sur le copy de vente. KONVERT m\'a bluffée — le ton persuasif est au niveau d\'un expert. J\'intègre ça dans tous mes audits maintenant.',
-    metric: 'Expert level copy',
-    date: 'Il y a 1 semaine',
-    verified: true,
+    Icon: Globe,
+    title: '8 Langues',
+    desc:  'Générez vos pages en FR, EN, ES, DE, IT, PT, AR, ZH. Touchez des marchés internationaux sans effort.',
+    accent: '#14b8a6',
+    bg:     'bg-teal-50',
+    label:  'text-teal-500',
   },
 ]
 
-/* ─── WAITLIST SECTION FORM ─────────────────────────────────────────────── */
-function WaitlistSection() {
-  const [email, setEmail]     = useState('')
-  const [name, setName]       = useState('')
-  const [context, setContext] = useState('')
-  const [status, setStatus]   = useState<'idle' | 'loading' | 'success' | 'exists'>('idle')
+const SOLUTIONS = [
+  {
+    Icon:  ShoppingBag,
+    title: 'Dropshippers',
+    desc:  'Testez des dizaines de produits par semaine sans dépenser des heures à créer des pages. Importez, générez, publiez.',
+    color: 'text-[#5B47F5]',
+    bg:    'bg-[#5B47F5]/10',
+  },
+  {
+    Icon:  Building2,
+    title: 'Agences SMMA',
+    desc:  'Gérez plusieurs clients depuis un seul dashboard. White-label, rapports PDF, workspace multi-clients inclus.',
+    color: 'text-pink-500',
+    bg:    'bg-pink-50',
+  },
+  {
+    Icon:  TrendingUp,
+    title: 'Marques E-commerce',
+    desc:  "Créez des pages produit premium qui reflètent votre identité de marque. Personnalisation totale avec le builder.",
+    color: 'text-emerald-500',
+    bg:    'bg-emerald-50',
+  },
+  {
+    Icon:  UserCircle,
+    title: 'Entrepreneurs Solo',
+    desc:  "Lancez votre boutique rapidement sans compétences techniques. Tout est automatisé, de l'import à la publication.",
+    color: 'text-orange-500',
+    bg:    'bg-orange-50',
+  },
+]
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault()
-    setStatus('loading')
-    try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name, context }),
-      })
-      const data = await res.json()
-      setStatus(data.message === 'already_registered' ? 'exists' : 'success')
-    } catch {
-      setStatus('idle')
-    }
-  }
+const STEPS = [
+  {
+    num:   '01',
+    title: 'Collez une URL',
+    desc:  "Entrez l'URL d'un produit AliExpress, Amazon ou Alibaba. KONVERT scrape automatiquement les données produit : titre, images, prix, description.",
+    icon:  Link2,
+  },
+  {
+    num:   '02',
+    title: 'Personnalisez',
+    desc:  "Choisissez votre template, la langue, ajoutez vos visuels UGC et photos avant/après. Claude AI génère le copy optimisé en temps réel.",
+    icon:  Sparkles,
+  },
+  {
+    num:   '03',
+    title: 'Publiez & Convertissez',
+    desc:  'Publiez sur Shopify ou WooCommerce en 1 clic. Suivez vos conversions, lancez vos A/B tests et optimisez en continu.',
+    icon:  TrendingUp,
+  },
+]
 
-  if (status === 'success') {
-    return (
-      <div className="rounded-3xl p-8 text-center" style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.25)' }}>
-        <div className="text-5xl mb-4">🎉</div>
-        <h3 className="text-xl font-black text-white mb-2">Tu es sur la liste !</h3>
-        <p className="text-sm" style={{ color: 'rgba(167,139,250,0.6)' }}>On t&apos;enverra ton invitation dès qu&apos;une place se libère. Reste attentif à ta boîte mail.</p>
-      </div>
-    )
-  }
+const TEMPLATES = [
+  {
+    name: 'Shein Pro',
+    tag:  'Premium',
+    desc: 'Inspiré des meilleurs codes de la mode fast. Conversion maximale.',
+    bg:   'from-[#5B47F5] to-[#8b77ff]',
+    tagStyle: 'bg-white/20 text-white',
+    text: 'text-white',
+  },
+  {
+    name: 'Minimal Dark',
+    tag:  'Épuré',
+    desc: 'Élégance sombre pour les produits premium et tech.',
+    bg:   'from-gray-900 to-gray-800',
+    tagStyle: 'bg-white/10 text-gray-300',
+    text: 'text-white',
+  },
+  {
+    name: 'Clean White',
+    tag:  'Classique',
+    desc: 'Fond blanc, typographie forte. Universel et rassurant.',
+    bg:   'from-gray-100 to-white',
+    tagStyle: 'bg-gray-200 text-gray-600',
+    text: 'text-gray-900',
+    border: 'border border-gray-200',
+  },
+  {
+    name: 'Bold Orange',
+    tag:  'Impact',
+    desc: 'Energie, urgence et CTA agressifs pour le direct response.',
+    bg:   'from-orange-500 to-orange-400',
+    tagStyle: 'bg-white/20 text-white',
+    text: 'text-white',
+  },
+  {
+    name: 'Premium Glass',
+    tag:  'Glassmorphism',
+    desc: 'Effet verre sur gradient bleu-indigo. Luxe et modernité.',
+    bg:   'from-blue-600 to-indigo-700',
+    tagStyle: 'bg-white/20 text-white',
+    text: 'text-white',
+  },
+]
 
-  if (status === 'exists') {
-    return (
-      <div className="rounded-3xl p-6 text-center" style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)' }}>
-        <p className="font-bold text-white mb-1">✓ Tu es déjà inscrit !</p>
-        <p className="text-sm" style={{ color: 'rgba(167,139,250,0.5)' }}>On t&apos;a bien en liste. Ton invitation arrive bientôt.</p>
-      </div>
-    )
-  }
+const INTEGRATIONS = [
+  { name: 'Shopify',      desc: 'Publiez en 1 clic',      icon: '🛍️', color: 'text-emerald-600', bg: 'bg-emerald-50',    border: 'border-emerald-100' },
+  { name: 'WooCommerce',  desc: 'Sync automatique',       icon: '🛒', color: 'text-purple-600',  bg: 'bg-purple-50',     border: 'border-purple-100' },
+  { name: 'AliExpress',   desc: 'Import produit',         icon: '📦', color: 'text-orange-500',  bg: 'bg-orange-50',     border: 'border-orange-100' },
+  { name: 'Amazon',       desc: 'Scraping automatique',   icon: '📬', color: 'text-yellow-600',  bg: 'bg-yellow-50',     border: 'border-yellow-100' },
+  { name: 'Alibaba',      desc: 'B2B & grossiste',        icon: '🏭', color: 'text-red-500',     bg: 'bg-red-50',        border: 'border-red-100' },
+  { name: 'Claude AI',    desc: 'Copy IA natif',          icon: '🤖', color: 'text-[#5B47F5]',   bg: 'bg-[#5B47F5]/8',  border: 'border-[#5B47F5]/20' },
+  { name: 'Stripe',       desc: 'Paiements sécurisés',    icon: '💳', color: 'text-blue-600',    bg: 'bg-blue-50',       border: 'border-blue-100' },
+  { name: 'Klaviyo',      desc: 'Email marketing',        icon: '📧', color: 'text-green-600',   bg: 'bg-green-50',      border: 'border-green-100' },
+  { name: 'Zapier',       desc: '5 000+ automatisations', icon: '⚡', color: 'text-orange-600',  bg: 'bg-orange-50',     border: 'border-orange-100' },
+  { name: 'Meta Ads',     desc: 'Tracking pixel',         icon: '🎯', color: 'text-blue-700',    bg: 'bg-blue-50',       border: 'border-blue-100' },
+]
 
+const TESTIMONIALS = [
+  {
+    name:     'Thomas M.',
+    role:     'Dropshipper • Paris',
+    avatar:   'TM',
+    avatarBg: 'bg-[#5B47F5]',
+    stars:    5,
+    tag:      '1,4% → 5,2% CVR',
+    tagColor: 'bg-emerald-100 text-emerald-700',
+    verified: true,
+    since:    'Utilisateur depuis 6 mois',
+    quote:    "J'ai testé 12 produits en une semaine grâce à KONVERT. Mon taux de conversion est passé de 1,4% à 5,2%. C'est hallucinant — jamais vu une telle différence avec d'autres outils.",
+  },
+  {
+    name:     'Sarah K.',
+    role:     'Directrice Agence SMMA • Lyon',
+    avatar:   'SK',
+    avatarBg: 'bg-emerald-500',
+    stars:    5,
+    tag:      '23 clients en 1 dashboard',
+    tagColor: 'bg-blue-100 text-blue-700',
+    verified: true,
+    since:    'Plan Agency depuis 8 mois',
+    quote:    "On gère 23 clients depuis un seul dashboard. Le gain de temps est énorme. KONVERT a complètement changé notre façon de livrer des résultats à nos clients e-commerce.",
+  },
+  {
+    name:     'Julien R.',
+    role:     'E-commerçant Shopify • Bordeaux',
+    avatar:   'JR',
+    avatarBg: 'bg-orange-500',
+    stars:    5,
+    tag:      'ROAS 0.9x → 3.4x',
+    tagColor: 'bg-orange-100 text-orange-700',
+    verified: true,
+    since:    'Plan Pro depuis 4 mois',
+    quote:    "Ma page Shein Pro a fait x3 sur mon ROAS en 2 semaines. La génération IA est bluffante de précision. Le copy généré est meilleur que ce que je faisais en 3 heures de travail.",
+  },
+]
+
+const FAQS = [
+  {
+    q: 'Comment fonctionne la génération IA ?',
+    a: "KONVERT scrape automatiquement les données du produit depuis l'URL que vous fournissez (titre, images, description, prix, variantes). Ensuite, Claude AI rédige le copy complet de votre landing page : accroche percutante, proposition de valeur unique, liste de bénéfices, FAQ personnalisée et CTA optimisés pour la conversion. Le tout en moins de 30 secondes.",
+  },
+  {
+    q: 'KONVERT est-il compatible avec mon thème Shopify ?',
+    a: "Oui. KONVERT génère des pages autonomes publiées sur votre Shopify via l'API native. Elles fonctionnent indépendamment de votre thème actif et peuvent être utilisées comme pages produit, pages de collection ou landing pages dédiées à vos campagnes publicitaires. Aucune modification de thème requise.",
+  },
+  {
+    q: 'Puis-je modifier les pages générées ?',
+    a: "Absolument. Après la génération automatique, vous avez accès au builder drag & drop (plan Pro et plus) pour modifier chaque section : changer les couleurs, remplacer les images, éditer le texte, réorganiser les blocs et ajouter vos éléments personnalisés. La page générée est un point de départ solide, pas une contrainte.",
+  },
+  {
+    q: "Y a-t-il une limite de pages par mois ?",
+    a: "Le plan Starter est limité à 10 pages générées par mois. Le plan Pro et le plan Agence proposent des pages illimitées. Les pages déjà publiées ne comptent pas dans la limite mensuelle — seule la génération de nouvelles pages est comptabilisée.",
+  },
+  {
+    q: "Proposez-vous une période d'essai gratuite ?",
+    a: "Oui. Tous les plans bénéficient d'un essai gratuit de 14 jours, sans carte de crédit requise. Vous avez accès à toutes les fonctionnalités du plan Pro pendant cette période. Aucune facturation automatique à la fin de l'essai — vous choisissez librement de continuer ou d'annuler.",
+  },
+]
+
+const PRICING = [
+  {
+    name:      'Starter',
+    monthly:   29,
+    annual:    23,
+    desc:      'Pour démarrer et valider vos premiers produits.',
+    badge:     null,
+    highlight: false,
+    features:  [
+      '10 pages générées / mois',
+      '2 boutiques connectées',
+      '3 templates inclus',
+      'Analytics de base',
+      'Support email 48h',
+      'Export page HTML',
+    ],
+    cta:      'Commencer gratuitement',
+    ctaCls:   'border-2 border-gray-200 text-gray-800 hover:border-[#5B47F5] hover:text-[#5B47F5]',
+  },
+  {
+    name:      'Pro',
+    monthly:   79,
+    annual:    63,
+    desc:      'La solution complète pour scaler vos ventes.',
+    badge:     'Le plus populaire',
+    highlight: true,
+    features:  [
+      'Pages illimitées',
+      '10 boutiques connectées',
+      '5 templates premium',
+      'Analytics avancés',
+      'A/B testing intégré',
+      '8 langues supportées',
+      'Builder drag & drop',
+      'Support prioritaire 24h',
+    ],
+    cta:    'Essai gratuit 14 jours',
+    ctaCls: '',
+  },
+  {
+    name:      'Agence',
+    monthly:   199,
+    annual:    159,
+    desc:      'Pour les agences et équipes multi-clients.',
+    badge:     null,
+    highlight: false,
+    features:  [
+      'Tout du plan Pro inclus',
+      'Workspaces clients illimités',
+      'White-label complet',
+      'Rapports PDF automatisés',
+      'API privée KONVERT',
+      'Onboarding personnalisé',
+      'Support dédié & SLA',
+      'Facturation groupée clients',
+    ],
+    cta:    'Contacter les ventes',
+    ctaCls: 'border-2 border-gray-200 text-gray-800 hover:border-[#5B47F5] hover:text-[#5B47F5]',
+  },
+]
+
+const FOOTER_COLS = [
+  {
+    title: 'Produit',
+    links: ['Fonctionnalités', 'Templates', 'Intégrations', 'Tarifs', 'Changelog', 'Roadmap'],
+  },
+  {
+    title: 'Ressources',
+    links: ['Documentation', 'Blog', 'Tutoriels vidéo', 'Cas clients', 'Support', 'Statut'],
+  },
+  {
+    title: 'Entreprise',
+    links: ['À propos', 'Carrières', 'Partenaires', 'Programme affiliés', 'Presse', 'Contact'],
+  },
+  {
+    title: 'Légal',
+    links: ['Confidentialité', 'CGU', 'Cookies', 'RGPD', 'Sécurité'],
+  },
+]
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SOUS-COMPOSANTS
+════════════════════════════════════════════════════════════════════════════ */
+
+/* --- Compteur animé dans la section stats --- */
+function AnimStat({
+  target, suffix, label, color, triggered,
+}: { target: number; suffix: string; label: string; color: string; triggered: boolean }) {
+  const val = useCounter(target, 1800, triggered)
   return (
-    <form onSubmit={submit} className="space-y-3 text-left">
-      <div className="grid grid-cols-2 gap-3">
-        <input
-          value={name}
-          onChange={e => setName(e.target.value)}
-          placeholder="Ton prénom"
-          required
-          className="rounded-xl px-4 py-3.5 text-sm outline-none"
-          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(139,92,246,0.2)', color: '#fff' }}
-          onFocus={e => (e.target.style.borderColor = '#7c3aed')}
-          onBlur={e => (e.target.style.borderColor = 'rgba(139,92,246,0.2)')}
-        />
-        <select
-          value={context}
-          onChange={e => setContext(e.target.value)}
-          className="rounded-xl px-4 py-3.5 text-sm outline-none"
-          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(139,92,246,0.2)', color: context ? '#fff' : 'rgba(167,139,250,0.5)' }}
-        >
-          <option value="" style={{ background: '#0d0d1a' }}>Mon profil...</option>
-          <option value="dropshippeur" style={{ background: '#0d0d1a' }}>Dropshippeur</option>
-          <option value="ecommerce" style={{ background: '#0d0d1a' }}>E-commerçant</option>
-          <option value="agence" style={{ background: '#0d0d1a' }}>Agence / Freelance</option>
-          <option value="autre" style={{ background: '#0d0d1a' }}>Autre</option>
-        </select>
-      </div>
-      <div className="flex gap-3">
-        <input
-          type="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          placeholder="ton@email.com"
-          required
-          className="flex-1 rounded-xl px-4 py-3.5 text-sm outline-none"
-          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(139,92,246,0.2)', color: '#fff' }}
-          onFocus={e => (e.target.style.borderColor = '#7c3aed')}
-          onBlur={e => (e.target.style.borderColor = 'rgba(139,92,246,0.2)')}
-        />
-        <button
-          type="submit"
-          disabled={status === 'loading'}
-          className="btn-shimmer flex-shrink-0 px-6 py-3.5 rounded-xl font-bold text-white text-sm flex items-center gap-2"
-          style={{ background: 'linear-gradient(135deg,#7c3aed,#6d28d9)', boxShadow: '0 4px 20px rgba(124,58,237,0.4)', whiteSpace: 'nowrap' }}
-        >
-          {status === 'loading' ? '...' : <><Sparkles className="w-4 h-4" /> Rejoindre</>}
-        </button>
-      </div>
-      <p className="text-center text-xs" style={{ color: 'rgba(167,139,250,0.4)' }}>
-        Pas de spam · Désabonnement en 1 clic
-      </p>
-    </form>
+    <div className="flex flex-col items-center text-center px-4">
+      <span className={`text-5xl sm:text-6xl font-black tabular-nums leading-none ${color}`}>
+        {val >= 1000 ? val.toLocaleString('fr-FR') : val}
+        {suffix}
+      </span>
+      <span className="mt-4 text-sm text-gray-400 max-w-[160px] leading-snug">{label}</span>
+    </div>
   )
 }
 
-/* ─── PAGE PRINCIPALE ───────────────────────────────────────────────────── */
+/* --- FAQ item avec accordion --- */
+function FaqItem({ q, a, open, onToggle }: { q: string; a: string; open: boolean; onToggle: () => void }) {
+  return (
+    <div
+      className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
+        open ? 'border-[#5B47F5]/40 shadow-md shadow-[#5B47F5]/5' : 'border-gray-100 bg-white hover:border-gray-200'
+      } bg-white`}
+    >
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between px-6 py-5 text-left gap-4 group"
+        aria-expanded={open}
+      >
+        <span className={`font-semibold text-sm sm:text-base leading-snug transition-colors ${open ? 'text-[#5B47F5]' : 'text-gray-900 group-hover:text-[#5B47F5]'}`}>
+          {q}
+        </span>
+        <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-all ${open ? 'bg-[#5B47F5] rotate-0' : 'bg-gray-100'}`}>
+          {open
+            ? <ChevronUp className="w-4 h-4 text-white" />
+            : <ChevronDown className="w-4 h-4 text-gray-500" />}
+        </span>
+      </button>
+      {open && (
+        <div className="px-6 pb-6">
+          <p className="text-sm text-gray-500 leading-relaxed">{a}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   PAGE PRINCIPALE
+════════════════════════════════════════════════════════════════════════════ */
 export default function Home() {
-  const [scrollY, setScrollY] = useState(0)
-  const [scrollProgress, setScrollProgress] = useState(0)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [statsTriggered, setStatsTriggered] = useState(false)
-  const [heroParallax, setHeroParallax] = useState(0)
-  const [cursor, setCursor] = useState({ x: 0, y: 0 })
-  const [cursorVisible, setCursorVisible] = useState(false)
-  const [showStickyMobile, setShowStickyMobile] = useState(false)
-  const statsRef = useRef<HTMLDivElement>(null)
-
-  /* Scroll progress + navbar blur + parallax */
-  useEffect(() => {
-    const handleScroll = () => {
-      const y = window.scrollY
-      setScrollY(y)
-      const docHeight =
-        document.documentElement.scrollHeight - document.documentElement.clientHeight
-      setScrollProgress(docHeight > 0 ? (y / docHeight) * 100 : 0)
-      setHeroParallax(y * 0.3)
-      const docH = document.documentElement.scrollHeight
-      setShowStickyMobile(y > 400 && y < docH - 1200)
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  /* Cursor glow */
-  useEffect(() => {
-    const move = (e: MouseEvent) => {
-      setCursor({ x: e.clientX, y: e.clientY })
-      setCursorVisible(true)
-    }
-    const hide = () => setCursorVisible(false)
-    window.addEventListener('mousemove', move)
-    window.addEventListener('mouseleave', hide)
-    return () => {
-      window.removeEventListener('mousemove', move)
-      window.removeEventListener('mouseleave', hide)
-    }
-  }, [])
-
-  /* Particules canvas IA */
-  useEffect(() => {
-    const canvas = document.getElementById('particles-canvas') as HTMLCanvasElement
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    let animId: number
-    const mouse = { x: -1000, y: -1000 }
-
-    function resize() {
-      canvas.width = canvas.offsetWidth
-      canvas.height = canvas.offsetHeight
-    }
-    resize()
-    window.addEventListener('resize', resize)
-
-    const particles = Array.from({ length: 80 }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      r: Math.random() * 2 + 0.5,
-      alpha: Math.random() * 0.5 + 0.1,
-    }))
-
-    canvas.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect()
-      mouse.x = e.clientX - rect.left
-      mouse.y = e.clientY - rect.top
-    })
-
-    function draw() {
-      ctx!.clearRect(0, 0, canvas.width, canvas.height)
-      particles.forEach(p => {
-        const dx = p.x - mouse.x
-        const dy = p.y - mouse.y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-        if (dist < 120) {
-          const force = (120 - dist) / 120
-          p.vx += (dx / dist) * force * 0.5
-          p.vy += (dy / dist) * force * 0.5
-        }
-        p.vx *= 0.98
-        p.vy *= 0.98
-        p.x += p.vx
-        p.y += p.vy
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1
-
-        ctx!.beginPath()
-        ctx!.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx!.fillStyle = `rgba(167,139,250,${p.alpha})`
-        ctx!.fill()
-      })
-
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x
-          const dy = particles[i].y - particles[j].y
-          const d = Math.sqrt(dx * dx + dy * dy)
-          if (d < 100) {
-            ctx!.beginPath()
-            ctx!.moveTo(particles[i].x, particles[i].y)
-            ctx!.lineTo(particles[j].x, particles[j].y)
-            ctx!.strokeStyle = `rgba(124,58,237,${0.15 * (1 - d / 100)})`
-            ctx!.lineWidth = 0.5
-            ctx!.stroke()
-          }
-        }
-      }
-      animId = requestAnimationFrame(draw)
-    }
-    draw()
-
-    return () => {
-      cancelAnimationFrame(animId)
-      window.removeEventListener('resize', resize)
-    }
-  }, [])
-
-  /* Stats trigger */
-  useEffect(() => {
-    if (!statsRef.current) return
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setStatsTriggered(true)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.4 }
-    )
-    observer.observe(statsRef.current)
-    return () => observer.disconnect()
-  }, [])
-
-  /* Scroll reveal */
   useReveal()
 
-  const navBlur = scrollY > 40
+  /* State */
+  const [menuOpen,     setMenuOpen]     = useState(false)
+  const [scrolled,     setScrolled]     = useState(false)
+  const [urlInput,     setUrlInput]     = useState('')
+  const [billing,      setBilling]      = useState<'monthly' | 'annual'>('monthly')
+  const [openFaq,      setOpenFaq]      = useState<number | null>(null)
+  const [statsVisible, setStatsVisible] = useState(false)
+
+  /* Refs */
+  const statsRef = useRef<HTMLElement>(null)
+
+  /* Nav au scroll */
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  /* Observer stats */
+  useEffect(() => {
+    const el = statsRef.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setStatsVisible(true) },
+      { threshold: 0.25 }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  /* Handler URL submit */
+  const handleGenerate = () => {
+    if (!urlInput.trim()) return
+    window.location.href = `/generate?url=${encodeURIComponent(urlInput)}`
+  }
 
   return (
-    <main
-      className="overflow-x-hidden"
-      style={{ background: '#0d0d1a', color: '#ffffff' }}
-    >
-      {/* Cursor glow */}
-      {cursorVisible && (
-        <div
-          className="fixed pointer-events-none z-[9999]"
-          style={{
-            left: cursor.x - 200,
-            top: cursor.y - 200,
-            width: '400px',
-            height: '400px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%)',
-            transition: 'left 0.1s ease, top 0.1s ease',
-          }}
-        />
-      )}
+    <>
+      {/* ── Injection CSS global ─────────────────────────────────────────── */}
+      <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }} />
 
-      {/* ── SCROLL PROGRESS BAR ─────────────────────────────────────────── */}
-      <div
-        className="scroll-progress"
-        style={{ width: `${scrollProgress}%` }}
-      />
-
-      {/* ── NAVBAR ──────────────────────────────────────────────────────── */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-        style={{
-          background: navBlur ? 'rgba(13, 13, 26, 0.85)' : 'transparent',
-          backdropFilter: navBlur ? 'blur(20px)' : 'blur(0px)',
-          WebkitBackdropFilter: navBlur ? 'blur(20px)' : 'blur(0px)',
-          borderBottom: navBlur ? '1px solid rgba(139,92,246,0.15)' : '1px solid transparent',
-        }}
+      {/* ════════════════════════════════════════════════════════════════════
+          1. NAV
+      ════════════════════════════════════════════════════════════════════ */}
+      <header
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100'
+            : 'bg-white'
+        }`}
       >
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          {/* Logo */}
-          <span
-            className="font-black text-xl tracking-tight cursor-pointer select-none"
-            style={{ letterSpacing: '-0.03em' }}
-          >
-            <span style={{ color: '#ffffff' }}>KON</span>
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              VERT
-            </span>
-          </span>
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between gap-6">
 
-          {/* Nav links desktop */}
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-            {[
-              { label: 'Comment ça marche', href: '#how' },
-              { label: 'Templates', href: '/templates' },
-              { label: 'Tarifs', href: '#pricing' },
-              { label: 'FAQ', href: '#faq' },
-            ].map(({ label, href }) => (
-              <a
-                key={href}
-                href={href}
-                className="transition-colors duration-200"
-                style={{ color: 'rgba(196,181,253,0.7)' }}
-                onMouseEnter={(e) =>
-                  ((e.target as HTMLElement).style.color = '#ffffff')
-                }
-                onMouseLeave={(e) =>
-                  ((e.target as HTMLElement).style.color = 'rgba(196,181,253,0.7)')
-                }
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-[#5B47F5] flex items-center justify-center shadow-md shadow-[#5B47F5]/30">
+              <Zap className="w-4 h-4 text-white" strokeWidth={2.5} />
+            </div>
+            <span className="text-xl font-black text-gray-900 tracking-tight">
+              Kon<span className="text-[#5B47F5]">vert</span>
+            </span>
+          </Link>
+
+          {/* Navigation desktop */}
+          <nav className="hidden lg:flex items-center gap-7">
+            {NAV_LINKS.map((l) => (
+              <Link
+                key={l.label}
+                href={l.href}
+                className="text-sm font-medium text-gray-600 hover:text-[#5B47F5] transition-colors duration-150"
               >
-                {label}
-              </a>
+                {l.label}
+              </Link>
             ))}
-          </div>
+          </nav>
 
           {/* CTA desktop */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3">
             <Link
               href="/login"
-              className="text-sm font-semibold transition-colors duration-200"
-              style={{ color: 'rgba(196,181,253,0.7)' }}
+              className="text-sm font-semibold text-gray-600 hover:text-[#5B47F5] transition-colors px-3 py-2"
             >
-              Connexion
+              Se connecter
             </Link>
             <Link
               href="/signup"
-              className="btn-shimmer relative text-sm font-bold px-5 py-2.5 rounded-xl transition-all duration-200"
-              style={{
-                background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-                color: '#ffffff',
-                boxShadow: '0 4px 15px rgba(124,58,237,0.4)',
-              }}
+              className="btn-shimmer text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-md shadow-[#5B47F5]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
               Essai gratuit
             </Link>
           </div>
 
-          {/* Mobile menu toggle */}
+          {/* Hamburger mobile */}
           <button
-            className="md:hidden p-2 text-purple-300"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {menuOpen ? <X className="w-5 h-5 text-gray-700" /> : <Menu className="w-5 h-5 text-gray-700" />}
           </button>
         </div>
 
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div
-            className="md:hidden px-6 py-4 space-y-4"
-            style={{
-              background: 'rgba(13,13,26,0.95)',
-              borderTop: '1px solid rgba(139,92,246,0.15)',
-            }}
-          >
-            {[
-              { label: 'Comment ça marche', href: '#how' },
-              { label: 'Templates', href: '/templates' },
-              { label: 'Tarifs', href: '#pricing' },
-              { label: 'FAQ', href: '#faq' },
-            ].map(({ label, href }) => (
-              <a
-                key={href}
-                href={href}
-                className="block text-purple-200 text-sm font-medium"
-                onClick={() => setMobileMenuOpen(false)}
+        {/* Mobile menu drawer */}
+        {menuOpen && (
+          <div className="lg:hidden bg-white border-t border-gray-100 px-5 pt-3 pb-5 shadow-lg">
+            {NAV_LINKS.map((l) => (
+              <Link
+                key={l.label}
+                href={l.href}
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center py-3.5 text-base font-semibold text-gray-700 hover:text-[#5B47F5] border-b border-gray-50 last:border-0 transition-colors"
               >
-                {label}
-              </a>
+                {l.label}
+              </Link>
             ))}
-            <div className="pt-2 flex gap-3">
-              <Link href="/login" className="text-sm text-purple-300 font-semibold">
-                Connexion
+            <div className="flex flex-col gap-3 pt-4">
+              <Link href="/login" className="text-center text-sm font-semibold text-gray-600 py-2.5 rounded-xl hover:bg-gray-50 transition-colors">
+                Se connecter
               </Link>
               <Link
                 href="/signup"
-                className="text-sm font-bold px-4 py-2 rounded-xl text-white"
-                style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)' }}
+                className="btn-shimmer text-white text-sm font-bold py-3.5 rounded-full text-center shadow-md shadow-[#5B47F5]/25"
               >
-                Essai gratuit
+                Essai gratuit 14 jours
               </Link>
             </div>
           </div>
         )}
-      </nav>
+      </header>
 
-      {/* ── HERO — Layout Dlora ─────────────────────────────────────────── */}
-      <section
-        className="relative min-h-screen flex items-center overflow-hidden"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&h=900&fit=crop&q=80')",
-          backgroundSize: 'cover',
-          backgroundPosition: `center calc(center + ${heroParallax}px)`,
-        }}
-      >
-        {/* Overlays */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(105deg, rgba(13,13,26,0.97) 0%, rgba(13,13,26,0.88) 45%, rgba(13,13,26,0.55) 75%, rgba(13,13,26,0.25) 100%)' }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 60% at 60% 50%, rgba(124,58,237,0.12) 0%, transparent 70%)' }} />
-        <div className="absolute inset-0 dot-pattern opacity-30" />
+      <main className="overflow-hidden">
 
-        {/* Étoiles (moins denses) */}
-        {STARS.filter((_,i) => i % 2 === 0).map((s) => (
-          <div key={s.id} className="star" style={{ top: s.top, left: s.left, width: `${s.size}px`, height: `${s.size}px`, ['--duration' as string]: s.duration, ['--delay' as string]: s.delay }} />
-        ))}
+        {/* ════════════════════════════════════════════════════════════════
+            2. HERO
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="pt-28 sm:pt-32 pb-20 bg-white relative">
 
-        {/* Orbe fond droit */}
-        <div className="absolute pointer-events-none" style={{ top: '50%', left: '58%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle at 38% 35%, rgba(167,139,250,0.15) 0%, rgba(124,58,237,0.08) 45%, transparent 70%)', filter: 'blur(50px)', animation: 'orbePulse 5s ease-in-out infinite' }} />
-
-        {/* GRID 2 colonnes */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 pt-24 pb-12 grid lg:grid-cols-[1fr_420px] gap-8 items-center min-h-screen">
-
-          {/* ── COLONNE GAUCHE ── */}
-          <div className="flex flex-col gap-6">
-
-            {/* Badge live */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full w-fit animate-glow"
-              style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(139,92,246,0.4)' }}>
-              <div className="relative flex-shrink-0">
-                <div className="w-2 h-2 rounded-full" style={{ background: '#a78bfa' }} />
-                <div className="pulse-ring" />
-              </div>
-              <Sparkles className="w-3.5 h-3.5 text-purple-300" />
-              <span className="text-sm font-semibold text-purple-200">Bêta ouverte — 50 pages offertes</span>
-            </div>
-
-            {/* Titre 3 lignes style éditorial */}
-            <h1 className="font-black leading-[0.95] tracking-tight" style={{ fontSize: 'clamp(2.8rem, 5.5vw, 4.75rem)', letterSpacing: '-0.04em' }}>
-              <span className="block text-white">COLLE UNE URL.</span>
-              <span className="block text-white">TA PAGE VEND</span>
-              <span className="block animate-glow-text" style={{ background: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 50%, #c4b5fd 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                EN 30 SECONDES.
-              </span>
-            </h1>
-
-            {/* Sous-titre */}
-            <p className="text-base md:text-lg leading-relaxed max-w-xl" style={{ color: 'rgba(196,181,253,0.65)' }}>
-              L&apos;IA rédige le copy, choisit le design, et publie directement sur ton{' '}
-              <span className="text-purple-300 font-semibold">Shopify</span> ou <span className="text-purple-300 font-semibold">WooCommerce</span>.
-              Zéro code. Résultat pro.
-            </p>
-
-            {/* Input URL */}
-            <div className="max-w-xl">
-              <div className="flex items-center gap-0 rounded-2xl overflow-hidden p-1" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139,92,246,0.4)', boxShadow: '0 0 30px rgba(124,58,237,0.15)' }}>
-                <div className="flex items-center gap-2 px-4 py-3 flex-1">
-                  <div className="w-2 h-2 rounded-full bg-green-400 flex-shrink-0" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
-                  <input type="text" placeholder="aliexpress.com/item/... ou amazon.fr/dp/..." className="flex-1 bg-transparent outline-none text-sm font-mono" style={{ color: '#e9d5ff', caretColor: '#a78bfa' }} readOnly />
-                </div>
-                <Link href="/signup" className="btn-shimmer flex-shrink-0 px-5 py-3 rounded-xl text-sm font-bold text-white" style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 4px 15px rgba(124,58,237,0.4)' }}>
-                  Générer →
-                </Link>
-              </div>
-              <p className="text-xs mt-2" style={{ color: 'rgba(167,139,250,0.45)' }}>
-                ✓ Aucune CB · ✓ 50 pages offertes · ✓ Setup 2 min
-              </p>
-            </div>
-
-            {/* CTA secondaire */}
-            <div className="flex items-center gap-4">
-              <a href="#waitlist" className="btn-shimmer inline-flex items-center gap-2 font-bold px-6 py-3.5 rounded-xl text-sm transition-all" style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', color: '#fff', boxShadow: '0 6px 24px rgba(124,58,237,0.45)' }}>
-                <Sparkles className="w-4 h-4" /> Rejoindre la bêta
-              </a>
-              <a href="#how" className="text-sm font-semibold flex items-center gap-1.5 transition-colors" style={{ color: 'rgba(196,181,253,0.65)' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'rgba(196,181,253,0.65)')}>
-                Voir comment ça marche <ArrowRight className="w-3.5 h-3.5" />
-              </a>
-            </div>
-
-            {/* Trustpilot */}
-            <div className="flex items-center gap-3 flex-wrap">
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <div className="flex gap-0.5">
-                  {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 fill-[#00B67A] text-[#00B67A]" />)}
-                </div>
-                <span className="text-sm font-bold text-white">4.9</span>
-                <span className="text-xs font-semibold" style={{ color: '#00B67A' }}>Trustpilot</span>
-                <span className="text-xs" style={{ color: 'rgba(167,139,250,0.4)' }}>247 avis</span>
-              </div>
-            </div>
-
-            {/* Logos plateformes */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs mr-1" style={{ color: 'rgba(167,139,250,0.4)' }}>Compatible :</span>
-
-              {/* Shopify */}
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: 'rgba(150,191,72,0.1)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#96BF48"><path d="M15.337 23.979l7.216-1.561S19.674 7.148 19.655 7.008c-.019-.141-.14-.235-.262-.235-.122 0-2.247-.047-2.247-.047s-1.495-1.46-1.664-1.627c-.169-.169-.496-.117-.623-.079l-.898.277C13.682 4.43 12.954 3 11.246 3c-.047 0-.094.002-.14.005-.495-.651-1.11-.937-1.635-.937-4.043.001-5.977 5.054-6.58 7.624l-2.828.876C.44 10.764.426 10.778 0 11.14l2.47 16.505 12.867-3.666zM14.298 5.9l-1.428.44c0-.062.002-.123.002-.186 0-.926-.128-1.671-.335-2.265.82.097 1.377.99 1.761 2.011zm-2.858-1.74c.225.564.368 1.374.368 2.472 0 .053-.001.104-.002.154l-2.777.859c.535-2.064 1.546-3.064 2.411-3.485zm-1.136-.524c-.144 0-.289.049-.431.145.987-.465 1.66-1.81 1.66-1.81s-.505.204-1.009.204c-.39 0-.785-.141-1.06-.465.275.271.569.413.84.413.34 0 .64-.192.84-.471-.2.28-.5.471-.84.471-.271 0-.565-.142-.84-.413-.067-.072-.133-.15-.196-.232-.504.82-.814 2.13-.814 2.13S9.04 3.636 10.304 3.636zm7.394 3.032l-2.084.644c-.391-1.494-1.134-2.217-1.86-2.217-.049 0-.098.003-.147.008l-.057-.175 2.084-.644 2.064 2.384zm-5.46-1.19c.069-.008.139-.013.209-.013.527 0 1.045.379 1.416 1.044l-3.367 1.04c.403-1.344 1.096-2.071 1.742-2.071z"/></svg>
-                <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>Shopify</span>
-              </div>
-
-              {/* WooCommerce */}
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: 'rgba(127,84,179,0.1)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#7f54b3"><path d="M0 3.074A1.97 1.97 0 011.987 1.09h20.025A1.97 1.97 0 0124 3.074v11.46a1.97 1.97 0 01-1.988 1.984H13.65l1.2 2.392-4.128-2.392H1.988A1.97 1.97 0 010 14.534V3.074zm6.982 1.96a.66.66 0 00-.61.43c-.63 1.68-1.23 3.45-1.83 5.27a62.853 62.853 0 01-1.08-4.45c-.11-.56-.52-.83-.99-.8-.45.03-.77.44-.69.98.03.19.93 4.28 2.25 7.25.17.39.44.65.76.69.32.04.65-.11.87-.44l2.01-3.46 2.01 3.46c.22.33.55.48.87.44.32-.04.59-.3.76-.69 1.32-2.97 2.22-7.06 2.25-7.25.08-.54-.24-.95-.69-.98-.47-.03-.88.24-.99.8-.27 1.62-.65 3.12-1.08 4.45-.6-1.82-1.2-3.59-1.83-5.27a.66.66 0 00-.61-.43zm9.54 2.04c-.93 0-1.75.65-2.13 1.63-.21.54-.32 1.14-.32 1.76 0 .56.1 1.09.27 1.56.34.95 1.07 1.57 1.95 1.57 1.27 0 2.28-1.24 2.28-2.77 0-.77-.2-1.48-.54-2.01-.41-.65-1-.74-1.51-.74zm-.19 1.05c.52 0 .84.65.84 1.72 0 1.07-.39 1.72-.84 1.72-.46 0-.84-.65-.84-1.72 0-1.07.38-1.72.84-1.72z"/></svg>
-                <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>WooCommerce</span>
-              </div>
-
-              {/* AliExpress */}
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: 'rgba(255,71,71,0.1)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF4747"><path d="M0 12C0 5.373 5.373 0 12 0s12 5.373 12 12-5.373 12-12 12S0 18.627 0 12zm18.694-1.96c-.208 0-.37.04-.52.088l-1.74.644c.04-.224.064-.456.064-.696 0-2.152-1.744-3.896-3.9-3.896-2.152 0-3.896 1.744-3.896 3.896 0 2.152 1.744 3.9 3.896 3.9 1.4 0 2.624-.74 3.32-1.848l1.62.588c-.848 1.824-2.688 3.088-4.84 3.088-2.944 0-5.328-2.384-5.328-5.328C7.37 7.532 9.752 5.148 12.7 5.148c2.944 0 5.328 2.384 5.328 5.328 0 .192-.016.384-.04.568l.024-.008h.016c.672 0 1.216.544 1.216 1.216v.016c0 .672-.544 1.216-1.216 1.216H12.7v-1.44h6.016c-.016-.096-.024-.192-.024-.288v-.016c0-.328-.12-.624-.32-.856.048-.16.08-.328.08-.5 0-.832-.672-1.504-1.504-1.504h-.256zm-6.096 2.712c1.312 0 2.376-1.064 2.376-2.376S13.91 8 12.598 8c-1.312 0-2.376 1.064-2.376 2.376s1.064 2.376 2.376 2.376z"/></svg>
-                <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>AliExpress</span>
-              </div>
-
-              {/* Amazon */}
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: 'rgba(255,153,0,0.1)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <text x="2" y="13" fontFamily="Arial Black, sans-serif" fontSize="11" fontWeight="900" fill="white">a</text>
-                  <path d="M3 16 Q8.5 20 16 16.5" stroke="#FF9900" strokeWidth="2" fill="none" strokeLinecap="round"/>
-                  <path d="M14.5 14.5 L16.2 16.5 L14 17.8" fill="none" stroke="#FF9900" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>Amazon</span>
-              </div>
-
-              {/* YouCan */}
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg" style={{ background: 'rgba(249,115,22,0.1)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <div style={{ width: 16, height: 16, background: 'linear-gradient(135deg, #F97316, #EA580C)', borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ fontSize: '8px', fontWeight: 900, color: 'white', lineHeight: 1, letterSpacing: '-0.5px' }}>YC</span>
-                </div>
-                <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>YouCan</span>
-              </div>
-            </div>
-
-            {/* Stats mini */}
-            <div ref={statsRef} className="flex gap-6 flex-wrap pt-2" style={{ borderTop: '1px solid rgba(139,92,246,0.12)' }}>
-              {[
-                { value: '30s', label: 'Pour générer' },
-                { value: '50K+', label: 'Pages créées' },
-                { value: '+40%', label: 'Conversion' },
-                { value: '5★', label: 'Templates' },
-              ].map(({ value, label }) => (
-                <div key={label}>
-                  <div className="text-lg font-black" style={{ color: '#fff', letterSpacing: '-0.02em' }}>{value}</div>
-                  <div className="text-xs" style={{ color: 'rgba(167,139,250,0.5)' }}>{label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* ── COLONNE DROITE — Cards flottantes ── */}
-          <div className="relative hidden lg:block" style={{ height: '560px' }}>
-
-            {/* Card IA génère */}
-            <FloatingCard animClass="animate-float" className="absolute top-8 left-0 w-56">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: 'rgba(124,58,237,0.3)' }}>
-                  <Zap className="w-3 h-3 text-purple-300" />
-                </div>
-                <span className="text-xs font-bold text-white">IA génère en live</span>
-                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-green-400" style={{ animation: 'pulse 1.5s ease-in-out infinite' }} />
-              </div>
-              <div className="space-y-1.5">
-                {['Titre accrocheur', '5 bénéfices clés', 'CTA optimisé', 'FAQ automatique'].map((item) => (
-                  <div key={item} className="flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full flex-shrink-0" />
-                    <span className="text-xs font-mono" style={{ color: 'rgba(134,239,172,0.8)' }}>{item}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-3 text-center">
-                <span className="text-2xl font-black" style={{ background: 'linear-gradient(135deg, #a78bfa, #7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>⚡ 28s</span>
-              </div>
-            </FloatingCard>
-
-            {/* Card Conversions */}
-            <FloatingCard animClass="animate-float-reverse" className="absolute top-4 right-0 w-52">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-white">Conversions</span>
-                <TrendingUp className="w-3 h-3 text-green-400" />
-              </div>
-              <div className="text-3xl font-black text-green-400 mb-1">+40%</div>
-              <div className="text-xs mb-2" style={{ color: 'rgba(196,181,253,0.5)' }}>Semaine vs N-1</div>
-              <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
-                <div className="h-full rounded-full" style={{ width: '72%', background: 'linear-gradient(90deg, #7c3aed, #a78bfa)' }} />
-              </div>
-              <div className="mt-2 flex gap-2">
-                {[30,45,38,60,52,70,65,80].map((h,i) => (
-                  <div key={i} className="flex-1 rounded-sm" style={{ height: `${h*0.4}px`, background: 'linear-gradient(to top, #7c3aed55, #a78bfa88)', alignSelf: 'flex-end' }} />
-                ))}
-              </div>
-            </FloatingCard>
-
-            {/* Card Shopify */}
-            <FloatingCard animClass="animate-float-delay-1" className="absolute top-[50%] -translate-y-1/2 left-4 w-48">
-              <div className="flex items-center gap-2 mb-2">
-                <Store className="w-4 h-4 text-purple-400" />
-                <span className="text-xs font-bold text-white">Publié sur Shopify</span>
-              </div>
-              <div className="flex items-center gap-1 mt-1">
-                {[1,2,3,4,5].map((i) => <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)}
-              </div>
-              <div className="text-xs mt-1" style={{ color: 'rgba(196,181,253,0.5)' }}>4.9/5 — 247 avis</div>
-              <div className="mt-2 text-xs font-semibold px-2 py-1 rounded-lg text-center" style={{ background: 'rgba(150,191,72,0.12)', color: '#96BF48', border: '1px solid rgba(150,191,72,0.25)' }}>
-                ✓ Connecté
-              </div>
-            </FloatingCard>
-
-            {/* Card URL → Génération */}
-            <FloatingCard animClass="animate-float-delay-2" className="absolute bottom-4 right-4 w-56">
-              <div className="text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'rgba(167,139,250,0.5)' }}>URL produit</div>
-              <div className="text-xs font-mono p-2 rounded-lg mb-2" style={{ background: 'rgba(0,0,0,0.35)', color: '#4ade80' }}>
-                aliexpress.com/item/123...
-              </div>
-              <div className="text-xs font-mono p-2 rounded-lg mb-2" style={{ background: 'rgba(0,0,0,0.35)', color: 'rgba(167,139,250,0.6)' }}>
-                → Scraping · Génération IA...
-              </div>
-              <div className="text-center py-1.5 rounded-lg text-xs font-bold text-white" style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)' }}>
-                ✓ Page prête en 28s
-              </div>
-            </FloatingCard>
-
-            {/* Card CTR */}
-            <FloatingCard animClass="animate-float" className="absolute bottom-20 left-0 w-44">
-              <div className="text-xs font-semibold mb-1" style={{ color: 'rgba(167,139,250,0.5)' }}>CTR moyen</div>
-              <div className="text-2xl font-black" style={{ color: '#4ade80' }}>+300%</div>
-              <div className="text-xs mt-1" style={{ color: 'rgba(196,181,253,0.4)' }}>vs fiche classique</div>
-            </FloatingCard>
-          </div>
-        </div>
-
-        {/* Flèche scroll */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce">
-          <ChevronDown className="w-5 h-5 text-purple-400/40" />
-        </div>
-      </section>
-
-      {/* ── WAVE SEPARATOR ──────────────────────────────────────────────── */}
-      <div className="wave-separator" style={{ background: '#0d0d1a', marginBottom: '-2px' }}>
-        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style={{ height: '60px' }}>
-          <path
-            d="M0,0 C360,60 1080,60 1440,0 L1440,60 L0,60 Z"
-            fill="rgba(18,8,38,1)"
-          />
-        </svg>
-      </div>
-
-      {/* ── TRUST BAR ─── */}
-      <section className="py-10 px-6" style={{ background: 'rgba(18,8,38,1)', borderTop: '1px solid rgba(139,92,246,0.1)', borderBottom: '1px solid rgba(139,92,246,0.1)' }}>
-        <div className="max-w-5xl mx-auto">
-          <p className="text-center text-xs font-semibold tracking-widest uppercase mb-6" style={{ color: 'rgba(139,92,246,0.5)' }}>
-            Compatible avec
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
-            {/* Shopify */}
-            <div className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-300">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="#96BF48"><path d="M15.337 23.979l7.216-1.561S19.686 7.329 19.67 7.207c-.017-.12-.12-.2-.222-.2-.1 0-1.857-.037-1.857-.037s-1.482-1.432-1.63-1.58v18.589zM14.067 4.168s-.97-.29-2.56-.29c-4.003 0-5.94 2.5-5.94 4.97 0 2.736 1.9 4.03 3.615 4.892 1.61.81 2.16 1.39 2.16 2.21 0 .87-.697 1.38-1.84 1.38-1.64 0-3.143-.85-3.143-.85L5.5 18.67s1.548.96 3.82.96c3.617 0 5.94-1.79 5.94-5.027 0-2.72-1.857-4.01-3.632-4.897-1.47-.73-2.143-1.266-2.143-2.13 0-.72.582-1.432 1.857-1.432 1.148 0 2.22.47 2.22.47l.505-2.446z"/></svg>
-              <span className="text-sm font-bold" style={{ color: 'rgba(255,255,255,0.7)' }}>Shopify</span>
-            </div>
-            {/* WooCommerce */}
-            <div className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-300">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="#7f54b3"><path d="M2.047 4.005A2.47 2.47 0 00.02 6.41l1.565 10.943a2.47 2.47 0 002.693 2.123l14.13-1.565a2.47 2.47 0 002.123-2.693L18.967 4.275a2.47 2.47 0 00-2.693-2.123L2.144 3.717l-.097.288zm3.29 3.574c.287-.032.56.097.656.384l1.145 3.86 1.24-2.37c.128-.256.384-.384.64-.352.257.032.48.224.545.48l.704 2.788 1.017-4.756c.064-.32.352-.544.672-.512.32.032.544.32.512.64l-1.505 7.033c-.064.288-.32.48-.608.48-.257 0-.48-.16-.577-.384l-.833-3.284-1.392 2.658c-.128.24-.384.384-.64.352a.66.66 0 01-.545-.48L4.16 8.219c-.064-.32.128-.64.448-.672l.73.032z"/></svg>
-              <span className="text-sm font-bold" style={{ color: 'rgba(255,255,255,0.7)' }}>WooCommerce</span>
-            </div>
-            {/* AliExpress */}
-            <div className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-300">
-              <div className="w-6 h-6 rounded flex items-center justify-center text-xs font-black" style={{ background: '#ff4747', color: 'white' }}>AE</div>
-              <span className="text-sm font-bold" style={{ color: 'rgba(255,255,255,0.7)' }}>AliExpress</span>
-            </div>
-            {/* Amazon */}
-            <div className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-300">
-              <div className="w-6 h-6 rounded flex items-center justify-center text-xs font-black" style={{ background: '#FF9900', color: '#0F1111' }}>a</div>
-              <span className="text-sm font-bold" style={{ color: 'rgba(255,255,255,0.7)' }}>Amazon</span>
-            </div>
-            {/* Claude / Anthropic */}
-            <div className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-300">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-black" style={{ background: 'linear-gradient(135deg, #d4a574, #c48a4a)', color: 'white' }}>C</div>
-              <span className="text-sm font-bold" style={{ color: 'rgba(255,255,255,0.7)' }}>Claude · Anthropic</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── DEMO VISUELLE ────────────────────────────────────────────────── */}
-      <section
-        className="px-6 py-24"
-        style={{ background: 'rgba(18,8,38,1)' }}
-      >
-        <div className="max-w-5xl mx-auto reveal">
+          {/* Gradient de fond très subtil */}
           <div
-            className="rounded-3xl overflow-hidden shadow-2xl"
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
             style={{
-              border: '1px solid rgba(139,92,246,0.25)',
-              boxShadow: '0 0 60px rgba(124,58,237,0.2), 0 40px 80px rgba(0,0,0,0.6)',
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(91,71,245,0.06) 0%, transparent 70%)',
             }}
-          >
-            {/* Barre de navigateur */}
-            <div
-              className="px-4 py-3 flex items-center gap-3"
-              style={{ background: 'rgba(24,14,44,1)' }}
-            >
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 bg-red-500/80 rounded-full" />
-                <div className="w-3 h-3 bg-yellow-500/80 rounded-full" />
-                <div className="w-3 h-3 bg-green-500/80 rounded-full" />
-              </div>
-              <div
-                className="flex-1 rounded-lg px-3 py-1 text-xs text-center max-w-xs mx-auto font-mono"
-                style={{ background: 'rgba(0,0,0,0.4)', color: 'rgba(167,139,250,0.8)' }}
-              >
-                konvert.app/dashboard/new
-              </div>
-            </div>
-
-            {/* Contenu démo */}
-            <div
-              className="p-8 grid grid-cols-1 md:grid-cols-2 gap-6"
-              style={{ background: 'rgba(14,6,28,1)' }}
-            >
-              <div className="space-y-4">
-                <div className="text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(139,92,246,0.7)' }}>
-                  URL du produit
-                </div>
-                <div
-                  className="rounded-xl p-3 text-sm font-mono"
-                  style={{ background: 'rgba(0,0,0,0.5)', color: '#4ade80' }}
-                >
-                  aliexpress.com/item/123456789
-                </div>
-                <div className="text-xs font-bold uppercase tracking-widest mt-4" style={{ color: 'rgba(139,92,246,0.7)' }}>
-                  Template
-                </div>
-                <div className="grid grid-cols-3 gap-2">
-                  {['Dark', 'White', 'Bold'].map((t, i) => (
-                    <div
-                      key={t}
-                      className="rounded-lg p-2 text-xs font-bold text-center"
-                      style={
-                        i === 0
-                          ? {
-                              background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-                              color: '#ffffff',
-                            }
-                          : {
-                              background: 'rgba(255,255,255,0.05)',
-                              color: 'rgba(167,139,250,0.5)',
-                              border: '1px solid rgba(139,92,246,0.1)',
-                            }
-                      }
-                    >
-                      {t}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Progress bar génération */}
-                <div className="mb-4">
-                  <div className="flex justify-between text-xs mb-1" style={{ color: 'rgba(167,139,250,0.6)' }}>
-                    <span>Génération en cours</span>
-                    <span style={{ color: '#4ade80' }}>100%</span>
-                  </div>
-                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
-                    <div className="h-full rounded-full" style={{
-                      width: '100%',
-                      background: 'linear-gradient(90deg, #7c3aed, #4ade80)',
-                      animation: 'progressFill 2s ease-out forwards',
-                    }} />
-                  </div>
-                </div>
-
-                <button
-                  className="btn-shimmer w-full rounded-xl py-3 text-sm font-bold text-white mt-2 flex items-center justify-center gap-2"
-                  style={{
-                    background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-                    boxShadow: '0 4px 20px rgba(124,58,237,0.4)',
-                  }}
-                >
-                  <span
-                    className="w-2 h-2 bg-white rounded-full"
-                    style={{ animation: 'pulse 1.5s ease-in-out infinite' }}
-                  />
-                  Génération en cours...
-                </button>
-              </div>
-
-              {/* Dashboard preview — image réelle */}
-              <div
-                className="rounded-xl overflow-hidden relative"
-                style={{
-                  border: '1px solid rgba(139,92,246,0.3)',
-                  minHeight: '280px',
-                }}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=560&fit=crop&q=80"
-                  alt="Dashboard Konvert"
-                  className="w-full h-full object-cover"
-                  style={{ display: 'block', minHeight: '280px' }}
-                />
-                {/* Badge overlay en bas */}
-                <div
-                  className="absolute bottom-3 left-3 right-3 flex items-center justify-between px-3 py-2 rounded-lg"
-                  style={{ background: 'rgba(13,13,26,0.8)', backdropFilter: 'blur(8px)', border: '1px solid rgba(139,92,246,0.2)' }}
-                >
-                  <div className="flex items-center gap-1.5 text-xs text-purple-300 font-bold">
-                    <Zap className="w-3 h-3" />
-                    Page générée
-                  </div>
-                  <div
-                    className="text-sm font-black"
-                    style={{
-                      background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                    }}
-                  >
-                    ⚡ 28s
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── WAVE UP ──────────────────────────────────────────────────────── */}
-      <div className="wave-separator" style={{ background: 'rgba(18,8,38,1)', marginBottom: '-2px' }}>
-        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style={{ height: '60px' }}>
-          <path
-            d="M0,60 C360,0 1080,0 1440,60 L1440,0 L0,0 Z"
-            fill="rgba(12,4,26,1)"
           />
-        </svg>
-      </div>
 
-      {/* ── COMMENT ÇA MARCHE ────────────────────────────────────────────── */}
-      <section
-        id="how"
-        className="py-28 px-6 relative overflow-hidden"
-        style={{ background: 'rgba(12,4,26,1)' }}
-      >
-        {/* Grid pattern */}
-        <div className="absolute inset-0 grid-pattern opacity-60" />
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="grid lg:grid-cols-2 gap-14 items-center">
 
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="text-center mb-20 reveal">
-            <span
-              className="text-xs font-bold tracking-widest uppercase"
-              style={{ color: 'rgba(167,139,250,0.8)' }}
-            >
-              Simple comme bonjour
-            </span>
-            <h2
-              className="text-4xl md:text-5xl font-black mt-3"
-              style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              3 étapes. C'est tout.
-            </h2>
-          </div>
+              {/* ── Colonne gauche ── */}
+              <div className="relative z-10">
 
-          {/* Timeline */}
-          <div className="relative">
-            {/* Ligne verticale centrale (desktop uniquement) */}
-            <div
-              className="hidden md:block absolute left-1/2 top-16 bottom-16 w-px"
-              style={{
-                background: 'linear-gradient(to bottom, rgba(124,58,237,0.7), rgba(124,58,237,0.1))',
-                transform: 'translateX(-50%)',
-              }}
-            />
-
-            <div className="space-y-12 md:space-y-0 md:grid md:grid-cols-3 md:gap-8">
-              {[
-                {
-                  step: '01',
-                  icon: <MousePointerClick className="w-6 h-6 text-purple-300" />,
-                  title: 'Colle une URL produit',
-                  desc: "AliExpress, Amazon, Alibaba ou n'importe quelle boutique. KONVERT extrait automatiquement le titre, les images et le prix.",
-                  delay: '',
-                },
-                {
-                  step: '02',
-                  icon: <Zap className="w-6 h-6 text-purple-300" />,
-                  title: "L'IA génère le contenu",
-                  desc: "Claude rédige un copy de vente optimisé : titre accrocheur, bénéfices, FAQ, urgence, CTA. Le tout en français parfait.",
-                  delay: 'reveal-delay-2',
-                },
-                {
-                  step: '03',
-                  icon: <Store className="w-6 h-6 text-purple-300" />,
-                  title: 'Publie en 1 clic',
-                  desc: "Édite visuellement avec le builder drag & drop, puis publie directement sur ton Shopify ou WooCommerce.",
-                  delay: 'reveal-delay-4',
-                },
-              ].map(({ step, icon, title, desc, delay }) => (
-                <TiltCard
-                  key={step}
-                  className={`reveal ${delay} glass-card rounded-3xl p-8 relative`}
-                  style={{ border: '1px solid rgba(139,92,246,0.15)' }}
-                >
-                  {/* Numéro flottant */}
-                  <div
-                    className="absolute top-5 right-6 text-6xl font-black select-none leading-none"
-                    style={{ color: 'rgba(124,58,237,0.12)', letterSpacing: '-0.05em' }}
-                  >
-                    {step}
-                  </div>
-
-                  {/* Icône cercle gradient */}
-                  <div
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 relative"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(124,58,237,0.3), rgba(109,40,217,0.1))',
-                      border: '1px solid rgba(139,92,246,0.3)',
-                    }}
-                  >
-                    {icon}
-                  </div>
-
-                  <h3 className="font-bold text-lg text-white mb-3" style={{ letterSpacing: '-0.01em' }}>
-                    {title}
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: 'rgba(196,181,253,0.6)' }}>
-                    {desc}
-                  </p>
-                </TiltCard>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA intermédiaire après "Comment ça marche" */}
-      <div className="text-center py-10 px-6" style={{ background: 'rgba(12,4,26,1)' }}>
-        <p className="text-purple-300/60 text-sm mb-4">Tu vois ? C'est aussi simple que ça.</p>
-        <a href="/signup" className="btn-shimmer inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-white text-base"
-          style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 8px 30px rgba(124,58,237,0.4)' }}>
-          Tester gratuitement — c'est sans engagement
-          <ArrowRight className="w-4 h-4" />
-        </a>
-      </div>
-
-      {/* ── WAVE ─────────────────────────────────────────────────────────── */}
-      <div className="wave-separator" style={{ background: 'rgba(12,4,26,1)', marginBottom: '-2px' }}>
-        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{ height: '80px' }}>
-          <path
-            d="M0,0 C480,80 960,80 1440,0 L1440,80 L0,80 Z"
-            fill="rgba(10,3,22,1)"
-          />
-        </svg>
-      </div>
-
-      {/* ── SHOWCASE PAGES GÉNÉRÉES ──────────────────────────────────────── */}
-      <section className="py-28 px-6" style={{ background: 'rgba(12,4,26,1)' }}>
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="mb-16 reveal">
-            <p className="text-sm font-bold tracking-widest uppercase mb-3" style={{ color: '#a78bfa' }}>
-              ✦ Nos pages générées
-            </p>
-            <h2 className="text-4xl md:text-5xl font-black" style={{
-              background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              letterSpacing: '-0.02em', maxWidth: '600px'
-            }}>
-              Des landing pages qui convertissent vraiment
-            </h2>
-          </div>
-
-          {/* 2 mockups côte à côte */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 reveal">
-            {/* Mockup 1 */}
-            <div className="rounded-3xl overflow-hidden shadow-2xl" style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' }}>
-              {/* Browser bar */}
-              <div className="px-4 py-2.5 flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                <div className="flex gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-400/60"/><div className="w-2.5 h-2.5 rounded-full bg-yellow-400/60"/><div className="w-2.5 h-2.5 rounded-full bg-green-400/60"/></div>
-                <div className="flex-1 mx-3 py-1 px-3 rounded-md text-xs font-mono text-center" style={{ background: 'rgba(0,0,0,0.3)', color: 'rgba(167,139,250,0.7)' }}>store.myshopify.com/products/smartwatch-pro</div>
-              </div>
-              {/* Page preview simulée */}
-              <div style={{ aspectRatio: '4/3', background: 'linear-gradient(135deg, #1a0533 0%, #0d0d1a 100%)', position: 'relative', overflow: 'hidden' }}>
-                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&h=600&fit=crop&q=80" alt="Landing page produit" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }} />
-                {/* Overlay avec éléments UI simulés */}
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px', background: 'linear-gradient(to top, rgba(10,3,22,0.95), transparent)' }}>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div style={{ color: 'rgba(167,139,250,0.8)', fontSize: '10px', fontFamily: 'monospace' }}>SmartWatch Pro X</div>
-                      <div style={{ color: 'white', fontSize: '20px', fontWeight: 900 }}>129,99€ <span style={{ fontSize: '13px', color: '#4ade80' }}>↑ 3.8% CTR</span></div>
-                    </div>
-                    <div style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', borderRadius: '10px', padding: '8px 16px', fontSize: '11px', fontWeight: 700, color: 'white' }}>
-                      Publié sur Shopify ✓
-                    </div>
-                  </div>
+                {/* Badge overline */}
+                <div className="inline-flex items-center gap-2 bg-[#5B47F5]/8 border border-[#5B47F5]/20 text-[#5B47F5] text-xs font-bold px-4 py-2 rounded-full mb-7 tracking-wide">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Powered by Claude AI
                 </div>
-              </div>
-            </div>
 
-            {/* Mockup 2 */}
-            <div className="rounded-3xl overflow-hidden shadow-2xl" style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' }}>
-              <div className="px-4 py-2.5 flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                <div className="flex gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-red-400/60"/><div className="w-2.5 h-2.5 rounded-full bg-yellow-400/60"/><div className="w-2.5 h-2.5 rounded-full bg-green-400/60"/></div>
-                <div className="flex-1 mx-3 py-1 px-3 rounded-md text-xs font-mono text-center" style={{ background: 'rgba(0,0,0,0.3)', color: 'rgba(167,139,250,0.7)' }}>mystore.com/products/wireless-earbuds</div>
-              </div>
-              <div style={{ aspectRatio: '4/3', background: 'linear-gradient(135deg, #0a1628 0%, #0d0d1a 100%)', position: 'relative', overflow: 'hidden' }}>
-                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&q=80" alt="Dashboard analytics" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9 }} />
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '16px', background: 'linear-gradient(to top, rgba(10,3,22,0.95), transparent)' }}>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div style={{ color: 'rgba(167,139,250,0.8)', fontSize: '10px', fontFamily: 'monospace' }}>Wireless Earbuds X3</div>
-                      <div style={{ color: 'white', fontSize: '20px', fontWeight: 900 }}>89,99€ <span style={{ fontSize: '13px', color: '#4ade80' }}>↑ +42% conv.</span></div>
-                    </div>
-                    <div style={{ background: 'linear-gradient(135deg, #059669, #047857)', borderRadius: '10px', padding: '8px 16px', fontSize: '11px', fontWeight: 700, color: 'white' }}>
-                      WooCommerce ✓
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Logos bar */}
-          <div className="reveal">
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '40px' }}>
-              <p className="text-center text-xs font-semibold tracking-widest uppercase mb-8" style={{ color: 'rgba(139,92,246,0.4)' }}>
-                Trusted by teams at
-              </p>
-              <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16">
-                {[
-                  { name: 'Meta', style: { color: 'rgba(255,255,255,0.5)', fontSize: '18px', fontWeight: 700, fontFamily: 'system-ui' } },
-                  { name: 'Shopify', style: { color: 'rgba(255,255,255,0.5)', fontSize: '18px', fontWeight: 700 } },
-                  { name: 'Amazon', style: { color: 'rgba(255,255,255,0.5)', fontSize: '18px', fontWeight: 700 } },
-                  { name: 'TikTok', style: { color: 'rgba(255,255,255,0.5)', fontSize: '18px', fontWeight: 700 } },
-                  { name: 'Google', style: { color: 'rgba(255,255,255,0.5)', fontSize: '18px', fontWeight: 700 } },
-                ].map(({ name, style }) => (
-                  <span key={name} className="opacity-50 hover:opacity-80 transition-opacity duration-300 cursor-default select-none" style={style}>{name}</span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FEATURES ─────────────────────────────────────────────────────── */}
-      <section
-        className="py-28 px-6 relative overflow-hidden"
-        style={{ background: 'rgba(10,3,22,1)' }}
-      >
-        {/* Orbe décoratif */}
-        <div
-          className="absolute top-1/2 right-0 -translate-y-1/2 pointer-events-none"
-          style={{
-            width: '500px',
-            height: '500px',
-            background: 'radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)',
-            filter: 'blur(40px)',
-          }}
-        />
-
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="text-center mb-20 reveal">
-            <h2
-              className="text-4xl md:text-5xl font-black"
-              style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              Tout ce dont tu as besoin
-            </h2>
-            <p className="mt-4 text-base" style={{ color: 'rgba(196,181,253,0.6)' }}>
-              Une suite complète pour le e-commerce haute performance
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[
-              {
-                icon: <Zap className="w-5 h-5 text-purple-300" />,
-                title: 'Génération IA en 30s',
-                desc: 'Copy de vente professionnel généré par Claude (Anthropic)',
-                delay: '',
-              },
-              {
-                icon: <MousePointerClick className="w-5 h-5 text-purple-300" />,
-                title: 'Builder drag & drop',
-                desc: 'Édite chaque élément visuellement sans toucher au code',
-                delay: 'reveal-delay-1',
-              },
-              {
-                icon: <Store className="w-5 h-5 text-purple-300" />,
-                title: 'Shopify & WooCommerce',
-                desc: "Publie en 1 clic sur ta boutique, la page est live instantanément",
-                delay: 'reveal-delay-2',
-              },
-              {
-                icon: <BarChart2 className="w-5 h-5 text-purple-300" />,
-                title: 'Analytics intégrés',
-                desc: "Vues, clics CTA, scroll depth — tout ce qu'il faut pour optimiser",
-                delay: 'reveal-delay-3',
-              },
-              {
-                icon: <Users className="w-5 h-5 text-purple-300" />,
-                title: 'Mode Agence',
-                desc: 'Workspaces clients, white-label et rapports PDF pour tes clients',
-                delay: 'reveal-delay-4',
-              },
-              {
-                icon: <Layers className="w-5 h-5 text-purple-300" />,
-                title: '5 templates premium',
-                desc: 'Minimal Dark, Clean White, Bold Sales, Luxury, Mobile First',
-                delay: 'reveal-delay-5',
-              },
-            ].map(({ icon, title, desc, delay }) => (
-              <TiltCard
-                key={title}
-                className={`reveal ${delay} glass-card rounded-2xl p-6`}
-                style={{ border: '1px solid rgba(139,92,246,0.1)' }}
-              >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                  style={{
-                    background: 'linear-gradient(135deg, rgba(124,58,237,0.3), rgba(109,40,217,0.1))',
-                    border: '1px solid rgba(139,92,246,0.3)',
-                  }}
-                >
-                  {icon}
-                </div>
-                <div className="font-bold text-white mb-1.5" style={{ letterSpacing: '-0.01em' }}>
-                  {title}
-                </div>
-                <div className="text-sm leading-relaxed" style={{ color: 'rgba(196,181,253,0.55)' }}>
-                  {desc}
-                </div>
-              </TiltCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── GLOBE STATS ──────────────────────────────────────────────────────── */}
-      <section className="py-32 px-6 relative overflow-hidden" style={{ background: 'rgba(8,2,18,1)' }}>
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(124,58,237,0.18) 0%, transparent 70%)'
-        }} />
-
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="grid grid-cols-2 gap-8 mb-16 reveal">
-            <div>
-              <p className="text-sm mb-2" style={{ color: 'rgba(167,139,250,0.6)' }}>Pages générées</p>
-              <div className="text-6xl md:text-8xl font-black" style={{ color: 'white', letterSpacing: '-0.04em', lineHeight: 1 }}>
-                50K<span className="text-purple-400">+</span>
-              </div>
-            </div>
-            <div className="text-right">
-              <p className="text-sm mb-2" style={{ color: 'rgba(167,139,250,0.6)' }}>Taux de conversion moyen</p>
-              <div className="text-6xl md:text-8xl font-black" style={{ color: 'white', letterSpacing: '-0.04em', lineHeight: 1 }}>
-                +<span className="text-purple-400">40</span><span style={{ fontSize: '0.5em', verticalAlign: 'top', marginTop: '0.3em', display: 'inline-block' }}>%</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-center items-center reveal" style={{ height: '400px', position: 'relative' }}>
-            <div style={{
-              width: '320px', height: '320px', borderRadius: '50%',
-              background: 'radial-gradient(circle at 35% 35%, rgba(167,139,250,0.3) 0%, rgba(124,58,237,0.6) 40%, rgba(60,20,120,0.8) 70%, rgba(5,2,15,1) 100%)',
-              boxShadow: '0 0 80px rgba(124,58,237,0.4), inset 0 0 60px rgba(0,0,0,0.5)',
-              position: 'relative',
-              animation: 'globeRotate 20s linear infinite',
-            }}>
-              <div style={{
-                position: 'absolute', inset: 0, borderRadius: '50%',
-                background: `
-                  radial-gradient(ellipse 30% 20% at 35% 40%, rgba(167,139,250,0.5) 0%, transparent 100%),
-                  radial-gradient(ellipse 25% 30% at 65% 35%, rgba(139,92,246,0.4) 0%, transparent 100%),
-                  radial-gradient(ellipse 20% 15% at 50% 65%, rgba(167,139,250,0.3) 0%, transparent 100%)
-                `
-              }} />
-            </div>
-            <div style={{
-              position: 'absolute', width: '420px', height: '420px',
-              border: '1px solid rgba(167,139,250,0.15)',
-              borderRadius: '50%', transform: 'rotateX(70deg) rotateZ(20deg)',
-              animation: 'globeOrbit1 8s linear infinite',
-            }} />
-            <div style={{
-              position: 'absolute', width: '380px', height: '380px',
-              border: '1px solid rgba(139,92,246,0.1)',
-              borderRadius: '50%', transform: 'rotateX(60deg) rotateZ(-40deg)',
-              animation: 'globeOrbit2 12s linear infinite',
-            }} />
-            {[
-              { top: '20%', left: '60%' }, { top: '45%', left: '30%' },
-              { top: '60%', left: '70%' }, { top: '35%', left: '55%' },
-              { top: '70%', left: '45%' }
-            ].map((pos, i) => (
-              <div key={i} style={{
-                position: 'absolute', width: '4px', height: '4px',
-                borderRadius: '50%', background: '#fbbf24',
-                top: pos.top, left: pos.left,
-                boxShadow: '0 0 6px #fbbf24',
-                animation: `starTwinkle ${1.5 + i * 0.4}s ease-in-out infinite alternate`
-              }} />
-            ))}
-          </div>
-
-          <div className="text-center mt-8 reveal">
-            <p className="text-base" style={{ color: 'rgba(167,139,250,0.5)' }}>
-              Des e-commerçants dans <span style={{ color: 'white', fontWeight: 700 }}>12 pays</span> utilisent KONVERT pour scaler leurs stores
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── SECTION IA INTERACTIVE ──────────────────────────────────────────── */}
-      <section className="py-28 px-6 relative overflow-hidden" style={{ background: 'rgba(6,2,16,1)' }}>
-        <canvas
-          id="particles-canvas"
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          style={{ opacity: 0.6 }}
-        />
-
-        <div className="max-w-4xl mx-auto relative z-10 text-center">
-          <div className="reveal">
-            <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full"
-              style={{ background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(139,92,246,0.3)' }}>
-              <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-              <span className="text-sm font-semibold text-purple-300">Powered by Claude · Anthropic</span>
-            </div>
-
-            <h2 className="text-4xl md:text-6xl font-black mb-6" style={{
-              background: 'linear-gradient(135deg, #ffffff 0%, #c4b5fd 50%, #a78bfa 100%)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              letterSpacing: '-0.03em', lineHeight: 1.1,
-            }}>
-              Propulsé par l&apos;IA<br />
-              <span style={{
-                background: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>la plus avancée</span>
-            </h2>
-
-            <p className="text-lg mb-12 max-w-xl mx-auto" style={{ color: 'rgba(196,181,253,0.7)' }}>
-              Claude d&apos;Anthropic rédige un copy de vente natif, persuasif et culturellement adapté — dans 8 langues.
-            </p>
-
-            {/* Comparaison IA */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-              {[
-                {
-                  label: 'Copy natif',
-                  desc: "Pas de traduction automatique. L'IA pense directement dans la langue cible.",
-                  icon: '🌍',
-                  highlight: false,
-                },
-                {
-                  label: '8 langues',
-                  desc: 'FR, EN, ES, DE, IT, PT, AR, ZH — chaque marché avec son propre angle marketing.',
-                  icon: '🗣',
-                  highlight: true,
-                },
-                {
-                  label: 'Ton adapté',
-                  desc: 'Persuasif, premium, fun ou informatif — le copy s\'adapte à ton positionnement.',
-                  icon: '🎯',
-                  highlight: false,
-                },
-              ].map(({ label, desc, icon, highlight }) => (
-                <div key={label}
-                  className="glass-card rounded-2xl p-6 text-left"
-                  style={{
-                    border: highlight ? '1px solid rgba(139,92,246,0.5)' : '1px solid rgba(139,92,246,0.15)',
-                    background: highlight ? 'rgba(124,58,237,0.12)' : 'rgba(255,255,255,0.03)',
-                    boxShadow: highlight ? '0 0 30px rgba(124,58,237,0.2)' : 'none',
-                  }}>
-                  <div className="text-3xl mb-3">{icon}</div>
-                  <div className="font-bold text-white mb-2">{label}</div>
-                  <div className="text-sm" style={{ color: 'rgba(196,181,253,0.6)' }}>{desc}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Démo copy live */}
-            <div className="rounded-2xl p-6 text-left max-w-2xl mx-auto"
-              style={{ background: 'rgba(0,0,0,0.4)', border: '1px solid rgba(139,92,246,0.2)' }}>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-2 h-2 rounded-full bg-green-400" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
-                <span className="text-xs font-mono text-purple-400">Claude génère votre copy...</span>
-              </div>
-              <div className="space-y-2">
-                {[
-                  { label: 'Titre', value: '🔥 La montre qui va changer ta routine sport', color: '#ffffff' },
-                  { label: 'Accroche', value: 'Suivi GPS précis, 7j d\'autonomie, waterproof 50m. Enfin une montre à la hauteur.', color: 'rgba(196,181,253,0.8)' },
-                  { label: 'CTA', value: '⚡ Commander maintenant — Livraison 48h', color: '#4ade80' },
-                ].map(({ label, value, color }, i) => (
-                  <div key={label} className="flex items-start gap-3" style={{ animation: `fadeInUp 0.5s ease forwards ${i * 0.2}s`, opacity: 0 }}>
-                    <span className="text-xs font-mono px-2 py-0.5 rounded flex-shrink-0 mt-0.5"
-                      style={{ background: 'rgba(124,58,237,0.3)', color: '#a78bfa' }}>{label}</span>
-                    <span className="text-sm font-medium" style={{ color }}>{value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── PRODUCT SHOWCASE ─────────────────────────────────────────────── */}
-      <section
-        className="py-28 px-6 relative overflow-hidden"
-        style={{ background: 'rgba(6,2,16,1)' }}
-      >
-        {/* Orbe décoratif gauche */}
-        <div
-          className="absolute top-1/2 left-0 -translate-y-1/2 pointer-events-none"
-          style={{
-            width: '500px',
-            height: '500px',
-            background: 'radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%)',
-            filter: 'blur(50px)',
-          }}
-        />
-
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            {/* Colonne gauche — texte */}
-            <div className="reveal">
-              <span
-                className="text-xs font-bold tracking-widest uppercase mb-4 block"
-                style={{ color: 'rgba(167,139,250,0.8)' }}
-              >
-                Pages produits
-              </span>
-              <h2
-                className="font-black mb-6 leading-tight"
-                style={{
-                  fontSize: 'clamp(2rem, 4vw, 3rem)',
-                  letterSpacing: '-0.02em',
-                  background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                Tes pages produits,<br />à un autre niveau
-              </h2>
-              <p className="text-base mb-8 leading-relaxed" style={{ color: 'rgba(196,181,253,0.65)' }}>
-                Stop aux fiches produits basiques qui ne convertissent pas. KONVERT génère des pages
-                haute performance en 30 secondes, avec le copy parfait pour ton audience.
-              </p>
-              <ul className="space-y-4">
-                {[
-                  { label: 'Conversion optimisée', desc: 'Structure de page testée sur des milliers de produits e-commerce' },
-                  { label: 'Copy IA haute performance', desc: 'Claude rédige un argumentaire qui déclenche l\'achat' },
-                  { label: 'Push 1-clic sur Shopify', desc: 'Ta page est live en quelques secondes, directement dans ton store' },
-                ].map(({ label, desc }) => (
-                  <li key={label} className="flex items-start gap-3">
-                    <div
-                      className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                      style={{ background: 'rgba(139,92,246,0.25)', border: '1px solid rgba(139,92,246,0.4)' }}
+                {/* H1 */}
+                <h1 className="text-[2.6rem] sm:text-5xl lg:text-[3.4rem] font-black text-gray-900 leading-[1.08] tracking-tight mb-6">
+                  Des pages produit<br />
+                  qui{' '}
+                  <span className="text-[#5B47F5]">convertissent.</span>
+                  <br />
+                  <span className="relative inline-block">
+                    En 30 secondes.
+                    <svg
+                      aria-hidden
+                      className="absolute -bottom-1.5 left-0 w-full"
+                      viewBox="0 0 300 8"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
-                      <Check className="w-3 h-3 text-purple-300" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-white text-sm">{label}</div>
-                      <div className="text-xs mt-0.5" style={{ color: 'rgba(196,181,253,0.55)' }}>{desc}</div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Colonne droite — image produit avec cadre glow */}
-            <div className="reveal reveal-delay-2 flex items-center justify-center">
-              <div
-                className="product-showcase-img relative"
-                style={{
-                  transform: 'rotate(-2deg)',
-                  transition: 'transform 0.4s ease',
-                  borderRadius: '16px',
-                  border: '2px solid rgba(139,92,246,0.4)',
-                  boxShadow: '0 0 40px rgba(124,58,237,0.3), 0 0 80px rgba(124,58,237,0.1), 0 30px 60px rgba(0,0,0,0.6)',
-                  overflow: 'hidden',
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = 'rotate(0deg)'
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = 'rotate(-2deg)'
-                }}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=960&h=720&fit=crop&q=80"
-                  alt="Page produit e-commerce générée par Konvert"
-                  style={{ display: 'block', width: '100%', maxWidth: '480px', height: 'auto' }}
-                />
-                {/* Badge "Généré par Konvert" */}
-                <div
-                  className="absolute top-3 right-3 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5"
-                  style={{
-                    background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-                    color: '#ffffff',
-                    boxShadow: '0 4px 15px rgba(124,58,237,0.5)',
-                  }}
-                >
-                  <Zap className="w-3 h-3" />
-                  Généré en 28s
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── MOBILE PREVIEW ───────────────────────────────────────────────── */}
-      <section
-        className="py-24 px-6 relative overflow-hidden"
-        style={{ background: 'rgba(10,3,22,1)' }}
-      >
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-          style={{
-            width: '600px',
-            height: '400px',
-            background: 'radial-gradient(ellipse, rgba(124,58,237,0.1) 0%, transparent 60%)',
-            filter: 'blur(60px)',
-          }}
-        />
-
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Colonne gauche — mockup phone */}
-            <div className="reveal flex items-center justify-center">
-              <div
-                style={{
-                  borderRadius: '36px',
-                  border: '8px solid rgba(139,92,246,0.3)',
-                  boxShadow: '0 0 50px rgba(124,58,237,0.35), 0 0 100px rgba(124,58,237,0.12), 0 40px 80px rgba(0,0,0,0.7)',
-                  overflow: 'hidden',
-                  maxWidth: '260px',
-                  width: '100%',
-                  background: '#0d0d1a',
-                }}
-              >
-                {/* Notch simulé */}
-                <div
-                  className="flex items-center justify-center py-2"
-                  style={{ background: '#0a0418' }}
-                >
-                  <div
-                    style={{
-                      width: '80px',
-                      height: '6px',
-                      background: 'rgba(139,92,246,0.3)',
-                      borderRadius: '3px',
-                    }}
-                  />
-                </div>
-                <img
-                  src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=700&fit=crop&q=80"
-                  alt="Page produit mobile Konvert"
-                  style={{ display: 'block', width: '100%', height: 'auto' }}
-                />
-              </div>
-            </div>
-
-            {/* Colonne droite — texte */}
-            <div className="reveal reveal-delay-2">
-              <span
-                className="text-xs font-bold tracking-widest uppercase mb-4 block"
-                style={{ color: 'rgba(167,139,250,0.8)' }}
-              >
-                100% Mobile First
-              </span>
-              <h2
-                className="font-black mb-6 leading-tight"
-                style={{
-                  fontSize: 'clamp(2rem, 4vw, 3rem)',
-                  letterSpacing: '-0.02em',
-                  background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                Parfait sur mobile.<br />Dès la génération.
-              </h2>
-              <p className="text-base leading-relaxed mb-6" style={{ color: 'rgba(196,181,253,0.65)' }}>
-                Plus de 70% des achats e-commerce se font sur mobile. Toutes les pages KONVERT sont
-                optimisées mobile-first automatiquement — vitesse, lisibilité, CTA accessibles.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {['Responsive auto', 'CTA sticky mobile', 'Images optimisées', 'Chargement rapide'].map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs font-semibold px-3 py-1.5 rounded-full"
-                    style={{
-                      background: 'rgba(124,58,237,0.15)',
-                      border: '1px solid rgba(139,92,246,0.25)',
-                      color: '#c4b5fd',
-                    }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
-      <section
-        className="py-28 px-6 relative overflow-hidden"
-        style={{ background: 'rgba(6,2,16,1)' }}
-      >
-        <div
-          className="absolute inset-0 dot-pattern"
-          style={{ opacity: 0.3 }}
-        />
-
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="text-center mb-10 reveal">
-            <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: 'rgba(167,139,250,0.7)' }}>
-              ✦ Témoignages vérifiés
-            </p>
-            <h2
-              className="text-4xl md:text-5xl font-black"
-              style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              Ils ont testé. Voici leurs résultats.
-            </h2>
-          </div>
-
-          {/* Barre de stats globale */}
-          <div className="flex flex-wrap items-center justify-center gap-6 mb-12 reveal">
-            {/* Note globale */}
-            <div className="flex items-center gap-3 px-5 py-3 rounded-2xl" style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)' }}>
-              <div>
-                <div className="text-2xl font-black text-white">4.9</div>
-                <div className="flex gap-0.5 mt-0.5">
-                  {[1,2,3,4,5].map(i => (
-                    <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-              </div>
-              <div className="text-left">
-                <div className="text-[11px] font-bold text-white/80">Note moyenne</div>
-                <div className="text-[11px]" style={{ color: 'rgba(167,139,250,0.6)' }}>247 avis clients</div>
-              </div>
-            </div>
-            {/* Badge vérifié */}
-            <div className="flex items-center gap-2 px-4 py-3 rounded-2xl" style={{ background: 'rgba(22,163,74,0.1)', border: '1px solid rgba(22,163,74,0.25)' }}>
-              <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: 'rgba(22,163,74,0.2)' }}>
-                <Check className="w-3.5 h-3.5 text-green-400" />
-              </div>
-              <div>
-                <div className="text-[11px] font-bold text-white/80">Avis vérifiés</div>
-                <div className="text-[11px]" style={{ color: 'rgba(167,139,250,0.6)' }}>Utilisateurs actifs uniquement</div>
-              </div>
-            </div>
-            {/* Taux satisfaction */}
-            <div className="flex items-center gap-2 px-4 py-3 rounded-2xl" style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)' }}>
-              <div className="text-2xl font-black" style={{ color: '#a78bfa' }}>97%</div>
-              <div>
-                <div className="text-[11px] font-bold text-white/80">Taux de satisfaction</div>
-                <div className="text-[11px]" style={{ color: 'rgba(167,139,250,0.6)' }}>Recommanderaient KONVERT</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {TESTIMONIALS.map((t) => (
-              <div
-                key={t.name}
-                className="glass-card rounded-2xl p-6 flex flex-col gap-4"
-                style={{ border: '1px solid rgba(139,92,246,0.15)' }}
-              >
-                {/* Header */}
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="relative flex-shrink-0">
-                      <img
-                        src={t.avatar}
-                        alt={t.name}
-                        className="w-11 h-11 rounded-full object-cover"
-                        style={{ border: '2px solid rgba(139,92,246,0.3)' }}
+                      <path
+                        d="M2 6 Q75 1 150 5 Q225 9 298 4"
+                        stroke="#5B47F5"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        fill="none"
+                        opacity="0.7"
                       />
-                      {t.verified && (
-                        <div
-                          className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center"
-                          style={{ background: '#16a34a', border: '2px solid rgba(13,13,26,1)' }}
-                        >
-                          <Check className="w-2 h-2 text-white" />
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      <div className="font-bold text-white text-[13px]">{t.name}</div>
-                      <div className="text-[11px]" style={{ color: 'rgba(167,139,250,0.6)' }}>{t.role}</div>
-                    </div>
-                  </div>
-                  <span
-                    className="text-[10px] font-bold px-2 py-1 rounded-lg flex-shrink-0"
-                    style={{
-                      background: t.platform === 'Shopify' ? 'rgba(150,191,72,0.15)' : t.platform === 'WooCommerce' ? 'rgba(124,58,237,0.15)' : 'rgba(255,255,255,0.08)',
-                      color: t.platform === 'Shopify' ? '#96BF48' : t.platform === 'WooCommerce' ? '#a78bfa' : '#9ca3af',
-                    }}
-                  >
-                    {t.platform}
+                    </svg>
                   </span>
-                </div>
+                </h1>
 
-                {/* Étoiles */}
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: t.stars }).map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-
-                {/* Citation */}
-                <p className="text-[13px] leading-relaxed flex-1" style={{ color: 'rgba(196,181,253,0.8)' }}>
-                  &ldquo;{t.quote}&rdquo;
+                {/* Sous-titre */}
+                <p className="text-lg text-gray-500 leading-relaxed mb-9 max-w-xl">
+                  Collez l'URL d'un produit AliExpress, Amazon ou Alibaba.
+                  KONVERT génère une landing page haute conversion prête à publier
+                  sur Shopify ou WooCommerce — en moins d'une minute.
                 </p>
 
-                {/* Footer */}
-                <div className="flex items-center justify-between pt-3" style={{ borderTop: '1px solid rgba(139,92,246,0.1)' }}>
-                  <span
-                    className="text-[12px] font-black px-3 py-1 rounded-lg"
-                    style={{ background: 'rgba(124,58,237,0.2)', color: '#a78bfa' }}
+                {/* Input + CTA */}
+                <div className="flex flex-col sm:flex-row gap-3 mb-5">
+                  <input
+                    type="url"
+                    value={urlInput}
+                    onChange={(e) => setUrlInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
+                    placeholder="https://aliexpress.com/item/..."
+                    className="flex-1 min-w-0 border border-gray-200 rounded-full px-5 py-4 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5B47F5]/25 focus:border-[#5B47F5] transition-all shadow-sm"
+                  />
+                  <button
+                    onClick={handleGenerate}
+                    className="relative pulse-ring btn-shimmer text-white font-bold px-7 py-4 rounded-full flex items-center justify-center gap-2 whitespace-nowrap shadow-xl shadow-[#5B47F5]/30 transition-transform hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    {t.metric}
-                  </span>
-                  <span className="text-[11px]" style={{ color: 'rgba(167,139,250,0.4)' }}>{t.date}</span>
+                    Générer ma page
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <p className="text-xs text-gray-400 mb-10">
+                  Essai gratuit 14 jours — Aucune CB requise — Annulation en 1 clic
+                </p>
+
+                {/* Trust chips */}
+                <div className="flex flex-wrap gap-3">
+                  {[
+                    { icon: Check, text: 'Setup en 2 minutes' },
+                    { icon: Shield, text: 'OAuth sécurisé' },
+                    { icon: Clock, text: '30 secondes / page' },
+                  ].map(({ icon: Icon, text }) => (
+                    <span
+                      key={text}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 bg-gray-50 border border-gray-100 px-3.5 py-2 rounded-full"
+                    >
+                      <Icon className="w-3.5 h-3.5 text-emerald-500" />
+                      {text}
+                    </span>
+                  ))}
                 </div>
               </div>
-            ))}
+
+              {/* ── Colonne droite — Mockup browser ── */}
+              <div className="relative float-anim hidden lg:block">
+
+                {/* Halo background */}
+                <div
+                  aria-hidden
+                  className="absolute -inset-6 rounded-3xl"
+                  style={{ background: 'radial-gradient(ellipse at center, rgba(91,71,245,0.12) 0%, transparent 70%)' }}
+                />
+
+                {/* Fenêtre browser */}
+                <div className="relative bg-white rounded-2xl shadow-[0_32px_80px_-12px_rgba(91,71,245,0.2)] border border-gray-100 overflow-hidden">
+
+                  {/* Barre browser */}
+                  <div className="bg-[#f5f5f7] border-b border-gray-100 px-4 py-3 flex items-center gap-3">
+                    <div className="flex gap-1.5">
+                      <span className="w-3 h-3 rounded-full bg-red-400" />
+                      <span className="w-3 h-3 rounded-full bg-yellow-400" />
+                      <span className="w-3 h-3 rounded-full bg-green-400" />
+                    </div>
+                    <div className="flex-1 bg-white rounded-lg border border-gray-200 px-3 py-1.5 flex items-center gap-2">
+                      <Shield className="w-3 h-3 text-emerald-500 flex-shrink-0" />
+                      <span className="text-xs text-gray-400 font-mono truncate">konvert.app/preview/shein-pro-demo</span>
+                    </div>
+                    <div className="w-7 h-5 rounded bg-[#5B47F5]/10 flex items-center justify-center">
+                      <Zap className="w-3 h-3 text-[#5B47F5]" />
+                    </div>
+                  </div>
+
+                  {/* Screenshot produit */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
+                    alt="Aperçu d'une page générée par KONVERT"
+                    className="w-full h-[360px] object-cover"
+                    loading="eager"
+                  />
+
+                  {/* Overlay toast succès */}
+                  <div className="absolute bottom-5 left-5 right-5 bg-white/92 backdrop-blur-md rounded-xl px-4 py-3 flex items-center gap-3 border border-white shadow-xl shadow-gray-200/60">
+                    <div className="w-9 h-9 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                      <Check className="w-4 h-4 text-emerald-600" strokeWidth={2.5} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-gray-900 truncate">Page générée avec succès</p>
+                      <p className="text-xs text-gray-400">Prête à publier sur Shopify</p>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <span className="text-xs font-black text-emerald-600 bg-emerald-50 border border-emerald-100 px-2.5 py-1 rounded-full">
+                        +5.2% CVR
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Badge flottant latéral */}
+                <div className="absolute -right-6 top-1/3 bg-white rounded-2xl shadow-lg border border-gray-100 px-4 py-3 text-center">
+                  <p className="text-2xl font-black text-[#5B47F5]">30s</p>
+                  <p className="text-xs text-gray-400 font-medium">génération</p>
+                </div>
+              </div>
+
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── AVANT / APRÈS ─────────────────────────────────────────────────── */}
-      <section className="py-28 px-6 relative overflow-hidden" style={{ background: 'rgba(8,4,20,1)' }}>
-        <div className="absolute inset-0 grid-pattern opacity-30 pointer-events-none" />
+        {/* ════════════════════════════════════════════════════════════════
+            3. TRUST BAR — MARQUEE
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="py-10 bg-[#f8fafc] border-y border-gray-100">
+          <p className="text-center text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 px-4">
+            Connecté aux plateformes que vous utilisez déjà
+          </p>
+          <div className="marquee-wrap">
+            <div className="marquee-track">
+              {[...MARQUEE_BRANDS, ...MARQUEE_BRANDS].map((brand, i) => (
+                <span
+                  key={i}
+                  className="flex-shrink-0 px-10 text-sm font-bold text-gray-400 hover:text-[#5B47F5] transition-colors cursor-default"
+                >
+                  {brand}
+                  <span className="ml-10 text-gray-200">|</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
 
-        <div className="max-w-5xl mx-auto relative z-10">
-          {/* Header */}
-          <div className="text-center mb-16 reveal">
-            <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: 'rgba(167,139,250,0.7)' }}>
-              ✦ La différence en un coup d&apos;œil
+        {/* ════════════════════════════════════════════════════════════════
+            4. STATS
+        ════════════════════════════════════════════════════════════════ */}
+        <section ref={statsRef} className="py-24 bg-[#0f0f1a] relative overflow-hidden">
+
+          {/* Grille déco */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{
+              backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)',
+              backgroundSize: '48px 48px',
+            }}
+          />
+
+          <div className="relative max-w-7xl mx-auto px-5 sm:px-8 text-center">
+            <p className="text-[#5B47F5] font-bold text-xs uppercase tracking-[0.2em] mb-5 reveal">
+              Preuve par les chiffres
             </p>
-            <h2 className="text-4xl md:text-5xl font-black" style={{
-              background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              letterSpacing: '-0.02em',
-            }}>
-              Avant KONVERT. Après KONVERT.
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-5 reveal delay-100">
+              Les résultats parlent<br className="hidden sm:block" /> d'eux-mêmes
             </h2>
-            <p className="mt-4 text-base max-w-xl mx-auto" style={{ color: 'rgba(196,181,253,0.6)' }}>
-              Stop aux fiches produits qui ne convertissent pas. Voici ce que KONVERT change vraiment.
+            <p className="text-gray-400 max-w-2xl mx-auto text-base mb-16 reveal delay-200">
+              KONVERT propulse les e-commerçants vers des taux de conversion records.
+              Des milliers de pages générées. Des résultats prouvés.
             </p>
-          </div>
 
-          {/* Comparaison */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 reveal">
-
-            {/* AVANT */}
-            <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(239,68,68,0.3)' }}>
-              {/* Label */}
-              <div className="px-5 py-3 flex items-center gap-2" style={{ background: 'rgba(239,68,68,0.1)', borderBottom: '1px solid rgba(239,68,68,0.2)' }}>
-                <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#ef4444' }}>
-                  <X className="w-3 h-3 text-white" />
-                </div>
-                <span className="text-sm font-bold" style={{ color: '#ef4444' }}>Fiche produit basique</span>
-              </div>
-
-              {/* Contenu simulé "fiche AliExpress" */}
-              <div className="p-5" style={{ background: 'rgba(20,8,30,1)' }}>
-                {/* Titre moche */}
-                <div className="text-xs font-mono mb-3 leading-relaxed" style={{ color: 'rgba(255,255,255,0.4)', wordBreak: 'break-all' }}>
-                  New 2024 Smart Watch Waterproof Sport Fitness Tracker Bluetooth Heart Rate Monitor For Men Women Android iOS Compatible Free Shipping
-                </div>
-                {/* Image produit AliExpress style */}
-                <div className="w-full rounded-lg mb-3 relative overflow-hidden" style={{ height: '140px', background: '#f0f0f0' }}>
-                  <img
-                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=280&fit=crop"
-                    alt="Produit basique"
-                    className="w-full h-full object-cover"
-                    style={{ filter: 'saturate(0.4) contrast(0.8) brightness(1.1)', opacity: 0.7 }}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 sm:gap-4 sm:divide-x sm:divide-white/10">
+              {STATS.map((s, i) => (
+                <div key={s.label} className={`reveal delay-${(i + 1) * 100}`}>
+                  <AnimStat
+                    target={s.target}
+                    suffix={s.suffix}
+                    label={s.label}
+                    color={s.color}
+                    triggered={statsVisible}
                   />
-                  <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'rgba(240,240,240,0.3)' }}>
-                    <span className="text-[10px] font-mono px-2 py-1 rounded" style={{ background: 'rgba(255,100,0,0.15)', color: '#cc4400', border: '1px solid rgba(255,100,0,0.3)' }}>3 images disponibles</span>
-                  </div>
-                </div>
-                {/* Prix bizarre */}
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-lg font-bold" style={{ color: '#ef4444' }}>$12.47</span>
-                  <span className="text-xs line-through" style={{ color: 'rgba(255,255,255,0.2)' }}>$24.99</span>
-                  <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(239,68,68,0.2)', color: '#ef4444' }}>-50%</span>
-                </div>
-                {/* Texte copié/collé */}
-                <div className="space-y-1 mb-4">
-                  {['Feature 1: Waterproof IP67', 'Feature 2: 7 days battery life', 'Feature 3: Heart rate monitor', 'Color: Black/Silver/Gold'].map(f => (
-                    <div key={f} className="text-[11px] font-mono" style={{ color: 'rgba(255,255,255,0.25)' }}>• {f}</div>
-                  ))}
-                </div>
-                {/* Bouton cheap */}
-                <div className="w-full py-2.5 rounded text-center text-xs font-bold" style={{ background: '#e67e22', color: '#fff' }}>
-                  Add to Cart
-                </div>
-                {/* Stats catastrophiques */}
-                <div className="mt-4 pt-3 grid grid-cols-3 gap-2 text-center" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                  {[['0.8%', 'CTR'], ['12s', 'Temps'], ['94%', 'Bounce']].map(([val, lbl]) => (
-                    <div key={lbl}>
-                      <div className="text-sm font-bold" style={{ color: '#ef4444' }}>{val}</div>
-                      <div className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>{lbl}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* APRÈS */}
-            <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(124,58,237,0.4)', boxShadow: '0 0 30px rgba(124,58,237,0.15)' }}>
-              {/* Label */}
-              <div className="px-5 py-3 flex items-center gap-2" style={{ background: 'rgba(124,58,237,0.15)', borderBottom: '1px solid rgba(124,58,237,0.2)' }}>
-                <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#7c3aed' }}>
-                  <Check className="w-3 h-3 text-white" />
-                </div>
-                <span className="text-sm font-bold" style={{ color: '#a78bfa' }}>Page générée par KONVERT</span>
-                <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(74,222,128,0.15)', color: '#4ade80' }}>⚡ 28s</span>
-              </div>
-
-              {/* Contenu simulé "page KONVERT" */}
-              <div className="p-5" style={{ background: 'rgba(14,6,28,1)' }}>
-                {/* Titre accrocheur */}
-                <div className="font-black text-base mb-3 leading-tight" style={{ color: '#ffffff' }}>
-                  La montre connectée qui transforme ta routine sport — GPS, santé &amp; style en 1 seul appareil
-                </div>
-                {/* Image avec overlay premium */}
-                <div className="w-full rounded-xl mb-3 relative overflow-hidden" style={{ height: '140px' }}>
-                  <img
-                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=280&fit=crop"
-                    alt="Produit KONVERT"
-                    className="w-full h-full object-cover"
-                    style={{ filter: 'saturate(1.2) contrast(1.05)', transform: 'scale(1.05)' }}
-                  />
-                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(14,6,28,0.8) 0%, transparent 50%)' }} />
-                  <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 flex items-center justify-between">
-                    <span className="text-[10px] font-bold" style={{ color: '#4ade80' }}>✓ En stock — Livraison 24h</span>
-                    <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.7)' }}>247 avis ★★★★★</span>
-                  </div>
-                </div>
-                {/* Prix premium */}
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xl font-black" style={{ color: '#4ade80' }}>49,99€</span>
-                  <span className="text-sm line-through" style={{ color: 'rgba(255,255,255,0.3)' }}>89,99€</span>
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-lg" style={{ background: 'rgba(239,68,68,0.2)', color: '#fca5a5' }}>-44%</span>
-                </div>
-                {/* Bénéfices IA */}
-                <div className="space-y-1 mb-4">
-                  {['⚡ Suivi GPS ultra-précis pour tes sessions', '🔋 7 jours d\'autonomie — recharge oubliée', '❤️ Santé 24/7 : cardio, SpO2, sommeil', '💧 Waterproof 50m — piscine inclus'].map(b => (
-                    <div key={b} className="text-[12px]" style={{ color: 'rgba(196,181,253,0.8)' }}>{b}</div>
-                  ))}
-                </div>
-                {/* CTA premium */}
-                <div className="w-full py-3 rounded-xl text-center text-sm font-bold" style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', color: '#fff', boxShadow: '0 4px 15px rgba(124,58,237,0.4)' }}>
-                  Commander maintenant →
-                </div>
-                {/* Stats top */}
-                <div className="mt-4 pt-3 grid grid-cols-3 gap-2 text-center" style={{ borderTop: '1px solid rgba(139,92,246,0.1)' }}>
-                  {[['4.8%', 'CTR'], ['3m 20s', 'Temps'], ['18%', 'Bounce']].map(([val, lbl]) => (
-                    <div key={lbl}>
-                      <div className="text-sm font-bold" style={{ color: '#4ade80' }}>{val}</div>
-                      <div className="text-[10px]" style={{ color: 'rgba(167,139,250,0.5)' }}>{lbl}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Flèche VS centrale */}
-          <div className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex-col items-center gap-1"
-            style={{ marginTop: '60px' }}>
-            <div className="w-14 h-14 rounded-full flex items-center justify-center font-black text-white text-sm"
-              style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 0 30px rgba(124,58,237,0.6)', border: '3px solid rgba(139,92,246,0.3)' }}>
-              VS
-            </div>
-          </div>
-
-          {/* Barre comparaison métriques */}
-          <div className="mt-8 rounded-2xl overflow-hidden reveal" style={{ border: '1px solid rgba(139,92,246,0.2)' }}>
-            <div className="px-5 py-3 text-center text-xs font-bold tracking-widest uppercase" style={{ background: 'rgba(124,58,237,0.1)', color: 'rgba(167,139,250,0.7)', borderBottom: '1px solid rgba(139,92,246,0.15)' }}>
-              Impact réel mesuré sur 1 000+ pages
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4" style={{ background: 'rgba(14,6,28,0.8)' }}>
-              {[
-                { label: 'CTR moyen', before: '0.8%', after: '4.8%', delta: '+500%', positive: true },
-                { label: 'Temps sur page', before: '18s', after: '3m 20s', delta: '+10x', positive: true },
-                { label: 'Taux de rebond', before: '94%', after: '18%', delta: '-76%', positive: true },
-                { label: 'Taux de conversion', before: '0.4%', after: '3.2%', delta: '+700%', positive: true },
-              ].map((m, i) => (
-                <div key={m.label} className="px-4 py-5 text-center" style={{ borderRight: i < 3 ? '1px solid rgba(139,92,246,0.1)' : 'none' }}>
-                  <div className="text-[10px] font-bold uppercase tracking-wider mb-3" style={{ color: 'rgba(167,139,250,0.5)' }}>{m.label}</div>
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <span className="text-sm font-bold line-through" style={{ color: 'rgba(239,68,68,0.6)' }}>{m.before}</span>
-                    <ArrowRight className="w-3 h-3" style={{ color: 'rgba(139,92,246,0.5)' }} />
-                    <span className="text-sm font-black text-white">{m.after}</span>
-                  </div>
-                  <div className="text-xs font-black px-2 py-0.5 rounded-lg inline-block" style={{ background: 'rgba(74,222,128,0.15)', color: '#4ade80' }}>{m.delta}</div>
                 </div>
               ))}
             </div>
           </div>
+        </section>
 
-          {/* CTA */}
-          <div className="text-center mt-12 reveal">
-            <Link href="/signup"
-              className="btn-shimmer inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-white text-base"
-              style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 8px 30px rgba(124,58,237,0.4)' }}>
-              Créer ma première page →
-            </Link>
-            <p className="mt-3 text-xs" style={{ color: 'rgba(167,139,250,0.45)' }}>✓ Gratuit · ✓ Sans carte bancaire · ✓ Résultat en 30 secondes</p>
-          </div>
-        </div>
-      </section>
+        {/* ════════════════════════════════════════════════════════════════
+            5. FEATURES
+        ════════════════════════════════════════════════════════════════ */}
+        <section id="features" className="py-24 bg-white">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
 
-      {/* ── ROI CALCULATEUR ──────────────────────────────────────────────── */}
-      <ROISection />
-
-      {/* ── PRICING ──────────────────────────────────────────────────────── */}
-      <section
-        id="pricing"
-        className="py-28 px-6 relative overflow-hidden"
-        style={{ background: 'rgba(10,3,22,1)' }}
-      >
-        {/* Orbe central */}
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-          style={{
-            width: '800px',
-            height: '400px',
-            background: 'radial-gradient(ellipse, rgba(124,58,237,0.12) 0%, transparent 60%)',
-            filter: 'blur(60px)',
-          }}
-        />
-
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="text-center mb-20 reveal">
-            <h2
-              className="text-4xl md:text-5xl font-black"
-              style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              Tarifs simples. Aucune surprise.
-            </h2>
-            <p className="mt-4 text-base" style={{ color: 'rgba(196,181,253,0.6)' }}>
-              Annule à tout moment. Sans engagement.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 items-center">
-            {[
-              {
-                name: 'Starter',
-                price: 29,
-                popular: false,
-                features: [
-                  '50 pages / mois',
-                  '2 stores connectés',
-                  '5 templates',
-                  'Export HTML',
-                  'Support email',
-                ],
-              },
-              {
-                name: 'Pro',
-                price: 49,
-                popular: true,
-                features: [
-                  '200 pages / mois',
-                  '5 stores connectés',
-                  'Tous les templates',
-                  'Analytics avancés',
-                  'Support prioritaire',
-                ],
-              },
-              {
-                name: 'Agency',
-                price: 119,
-                popular: false,
-                features: [
-                  '500 pages / mois',
-                  '15 stores connectés',
-                  'Mode Agence complet',
-                  'White-label',
-                  'Rapports PDF clients',
-                  'Support dédié',
-                ],
-              },
-            ].map(({ name, price, popular, features }, i) => (
-              <div
-                key={name}
-                className={`reveal ${i === 1 ? '' : i === 0 ? 'reveal-delay-1' : 'reveal-delay-3'} relative rounded-3xl p-7 transition-all duration-300`}
-                style={
-                  popular
-                    ? {
-                        background: 'linear-gradient(135deg, rgba(124,58,237,0.25) 0%, rgba(109,40,217,0.15) 100%)',
-                        border: '1px solid rgba(139,92,246,0.5)',
-                        transform: 'scale(1.05)',
-                        boxShadow:
-                          '0 0 0 1px rgba(139,92,246,0.4), 0 0 40px rgba(124,58,237,0.25), 0 30px 60px rgba(0,0,0,0.5)',
-                      }
-                    : {
-                        background: 'rgba(255,255,255,0.03)',
-                        border: '1px solid rgba(139,92,246,0.1)',
-                      }
-                }
-              >
-                {popular && (
-                  <div
-                    className="absolute -top-3.5 left-1/2 -translate-x-1/2 text-xs font-black px-4 py-1.5 rounded-full whitespace-nowrap"
-                    style={{
-                      background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-                      color: '#ffffff',
-                      boxShadow: '0 4px 15px rgba(124,58,237,0.5)',
-                    }}
-                  >
-                    Le plus populaire
-                  </div>
-                )}
-
-                <div
-                  className="font-black text-lg mb-1"
-                  style={{ color: popular ? '#e9d5ff' : 'rgba(196,181,253,0.8)' }}
-                >
-                  {name}
-                </div>
-
-                <div className="flex items-end gap-1 mb-7">
-                  <span
-                    className="text-5xl font-black"
-                    style={{
-                      background: popular
-                        ? 'linear-gradient(135deg, #ffffff, #c4b5fd)'
-                        : 'linear-gradient(135deg, #ffffff, #e9d5ff)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                    }}
-                  >
-                    {price}€
-                  </span>
-                  <span
-                    className="text-sm mb-1.5"
-                    style={{ color: popular ? 'rgba(196,181,253,0.7)' : 'rgba(139,92,246,0.5)' }}
-                  >
-                    /mois
-                  </span>
-                </div>
-
-                <ul className="space-y-3 mb-7">
-                  {features.map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-sm">
-                      <div
-                        className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{
-                          background: popular
-                            ? 'rgba(139,92,246,0.3)'
-                            : 'rgba(139,92,246,0.15)',
-                        }}
-                      >
-                        <Check className="w-2.5 h-2.5 text-purple-300" />
-                      </div>
-                      <span style={{ color: popular ? 'rgba(233,213,255,0.85)' : 'rgba(196,181,253,0.6)' }}>
-                        {f}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Link
-                  href="/signup"
-                  className="btn-shimmer block w-full text-center font-bold py-3.5 rounded-xl text-sm transition-all duration-200"
-                  style={
-                    popular
-                      ? {
-                          background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-                          color: '#ffffff',
-                          boxShadow: '0 4px 20px rgba(124,58,237,0.4)',
-                        }
-                      : {
-                          background: 'rgba(139,92,246,0.1)',
-                          color: '#c4b5fd',
-                          border: '1px solid rgba(139,92,246,0.2)',
-                        }
-                  }
-                >
-                  Commencer
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── WAVE ─────────────────────────────────────────────────────────── */}
-      <div className="wave-separator" style={{ background: 'rgba(10,3,22,1)', marginBottom: '-2px' }}>
-        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style={{ height: '60px' }}>
-          <path
-            d="M0,60 C480,0 960,0 1440,60 L1440,0 L0,0 Z"
-            fill="rgba(6,2,16,1)"
-          />
-        </svg>
-      </div>
-
-      {/* ── FAQ ───────────────────────────────────────────────────────────── */}
-      <section
-        id="faq"
-        className="py-28 px-6 relative"
-        style={{ background: 'rgba(6,2,16,1)' }}
-      >
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-16 reveal">
-            <h2
-              className="text-4xl md:text-5xl font-black"
-              style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              Questions fréquentes
-            </h2>
-          </div>
-
-          <div className="space-y-3 reveal">
-            {[
-              {
-                q: 'Ça fonctionne avec quel type de produits ?',
-                a: "KONVERT fonctionne avec tous les produits e-commerce : mode, électronique, beauté, sport, maison... Tant que tu as une URL produit ou une description, l'IA peut générer une page.",
-              },
-              {
-                q: 'Est-ce que le copy est en français ?',
-                a: "Oui, KONVERT génère du contenu 100% en français. Le modèle est spécialisé pour le copywriting e-commerce francophone.",
-              },
-              {
-                q: 'Puis-je modifier le contenu généré ?',
-                a: "Absolument. Après génération, tu accèdes à un éditeur drag & drop complet pour modifier textes, couleurs, images et mise en page.",
-              },
-              {
-                q: 'Comment fonctionne la connexion Shopify ?',
-                a: "Via OAuth officiel Shopify. Tu cliques sur \"Connecter Shopify\", tu autorises l'accès, et KONVERT peut créer des pages dans ton store en 1 clic.",
-              },
-              {
-                q: 'Puis-je annuler à tout moment ?',
-                a: "Oui, sans engagement ni frais. Tu annules depuis ton dashboard en quelques clics. Tu gardes accès jusqu'à la fin de ta période facturée.",
-              },
-            ].map(({ q, a }) => (
-              <FaqItem key={q} q={q} a={a} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── AGENCE SECTION ───────────────────────────────────────────────── */}
-      <section
-        className="py-28 px-6 relative overflow-hidden"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1600&h=900&fit=crop&q=80')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        {/* Overlay sombre */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'rgba(13,13,26,0.88)' }}
-        />
-        {/* Nuance purple par-dessus */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse 70% 60% at 30% 50%, rgba(124,58,237,0.2) 0%, transparent 60%)',
-          }}
-        />
-
-        <div className="max-w-5xl mx-auto relative z-10">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Texte */}
-            <div className="reveal">
-              <span
-                className="text-xs font-bold tracking-widest uppercase mb-4 block"
-                style={{ color: 'rgba(167,139,250,0.8)' }}
-              >
-                Pour les agences
-              </span>
-              <h2
-                className="font-black mb-6 leading-tight"
-                style={{
-                  fontSize: 'clamp(2rem, 4vw, 3rem)',
-                  letterSpacing: '-0.02em',
-                  background: 'linear-gradient(135deg, #ffffff 0%, #e9d5ff 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                Gère tous tes clients<br />depuis un seul endroit
-              </h2>
-              <p className="text-base leading-relaxed mb-8" style={{ color: 'rgba(196,181,253,0.65)' }}>
-                Le mode Agence de KONVERT est conçu pour scaler. Workspaces séparés par client,
-                rapports PDF white-label, et jusqu'à 15 stores connectés sur un seul compte.
+            <div className="text-center mb-16">
+              <p className="text-[#5B47F5] font-bold text-xs uppercase tracking-[0.2em] mb-5 reveal">
+                Fonctionnalités
               </p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'Workspaces clients isolés',
-                  'Rapports PDF white-label',
-                  'Facturation client intégrée',
-                  'Support dédié 7j/7',
-                ].map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <div
-                      className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ background: 'rgba(139,92,246,0.25)', border: '1px solid rgba(139,92,246,0.4)' }}
-                    >
-                      <Check className="w-3 h-3 text-purple-300" />
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-5 reveal delay-100">
+                Des fonctionnalités intelligentes<br className="hidden md:block" /> pour un impact maximal
+              </h2>
+              <p className="text-gray-500 max-w-2xl mx-auto text-base reveal delay-200">
+                Boostez vos ventes avec des outils d'optimisation IA et des templates
+                conçus pour convertir, quel que soit votre marché.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {FEATURES.map((feat, i) => (
+                <div
+                  key={feat.title}
+                  className={`reveal delay-${((i % 3) + 1) * 100} group relative bg-white border border-gray-100 rounded-2xl p-7 hover:shadow-xl hover:-translate-y-1.5 hover:border-transparent transition-all duration-300 cursor-default`}
+                  style={{ '--accent': feat.accent } as React.CSSProperties}
+                >
+                  {/* Hover glow */}
+                  <div
+                    className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                    style={{ boxShadow: `0 20px 60px -10px ${feat.accent}25` }}
+                  />
+
+                  <div className={`w-12 h-12 rounded-xl ${feat.bg} flex items-center justify-center mb-5`}>
+                    <feat.Icon className={`w-5 h-5 ${feat.label}`} strokeWidth={2} />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{feat.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{feat.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            6. SOLUTIONS
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="py-24 bg-[#f8fafc]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+
+            <div className="text-center mb-16">
+              <p className="text-[#5B47F5] font-bold text-xs uppercase tracking-[0.2em] mb-5 reveal">
+                Solutions
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-5 reveal delay-100">
+                Une solution adaptée<br className="hidden sm:block" /> à chaque profil
+              </h2>
+              <p className="text-gray-500 max-w-xl mx-auto text-base reveal delay-200">
+                Que vous soyez dropshipper, agence, marque ou entrepreneur solo,
+                KONVERT s'adapte précisément à vos besoins.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {SOLUTIONS.map((sol, i) => (
+                <div
+                  key={sol.title}
+                  className={`reveal delay-${(i + 1) * 100} group bg-white border border-gray-100 rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300`}
+                >
+                  <div className={`w-11 h-11 rounded-xl ${sol.bg} flex items-center justify-center mb-5`}>
+                    <sol.Icon className={`w-5 h-5 ${sol.color}`} strokeWidth={2} />
+                  </div>
+                  <h3 className="text-base font-bold text-gray-900 mb-2">{sol.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-5">{sol.desc}</p>
+                  <Link
+                    href="/signup"
+                    className={`inline-flex items-center gap-1.5 text-sm font-bold ${sol.color} group-hover:gap-2.5 transition-all duration-200`}
+                  >
+                    En savoir plus
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            7. COMMENT CA MARCHE — 3 ETAPES
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="py-24 bg-white">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+
+            <div className="text-center mb-16">
+              <p className="text-[#5B47F5] font-bold text-xs uppercase tracking-[0.2em] mb-5 reveal">
+                Comment ça marche
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 reveal delay-100">
+                De l'URL à la page publiée<br className="hidden sm:block" /> en 3 étapes
+              </h2>
+            </div>
+
+            <div className="grid sm:grid-cols-3 gap-8 relative">
+
+              {/* Ligne de connexion desktop */}
+              <div
+                aria-hidden
+                className="hidden sm:block absolute top-12 left-[22%] right-[22%] h-px z-0"
+                style={{
+                  background: 'linear-gradient(90deg, rgba(91,71,245,0.2) 0%, #5B47F5 50%, rgba(91,71,245,0.2) 100%)',
+                }}
+              />
+
+              {STEPS.map((step, i) => (
+                <div key={step.num} className={`reveal delay-${(i + 1) * 100} relative z-10 text-center`}>
+                  {/* Numéro */}
+                  <div className="w-24 h-24 rounded-2xl bg-[#5B47F5] mx-auto mb-7 flex flex-col items-center justify-center shadow-lg shadow-[#5B47F5]/30 relative">
+                    <span className="text-3xl font-black text-white leading-none">{step.num}</span>
+                    <div className="absolute -bottom-3 -right-3 w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-md flex items-center justify-center">
+                      <step.icon className="w-5 h-5 text-[#5B47F5]" strokeWidth={2} />
                     </div>
-                    <span className="text-sm font-medium text-white">{item}</span>
-                  </li>
-                ))}
-              </ul>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">{step.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA inline */}
+            <div className="text-center mt-14 reveal delay-300">
               <Link
                 href="/signup"
-                className="btn-shimmer inline-flex items-center gap-2 font-bold px-6 py-3.5 rounded-xl text-sm transition-all duration-300"
-                style={{
-                  background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
-                  color: '#ffffff',
-                  boxShadow: '0 6px 25px rgba(124,58,237,0.45)',
-                }}
+                className="inline-flex items-center gap-2.5 btn-shimmer text-white font-bold px-8 py-4 rounded-full shadow-lg shadow-[#5B47F5]/30 transition-transform hover:scale-[1.02]"
               >
-                Voir le plan Agency
+                Commencer gratuitement
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <p className="text-xs text-gray-400 mt-3">Aucune CB — 14 jours d'essai gratuit</p>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            8. TEMPLATES
+        ════════════════════════════════════════════════════════════════ */}
+        <section id="templates" className="py-24 bg-[#0f0f1a] relative overflow-hidden">
+
+          {/* Points déco */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
+              backgroundSize: '32px 32px',
+            }}
+          />
+
+          <div className="relative max-w-7xl mx-auto px-5 sm:px-8">
+
+            <div className="text-center mb-14">
+              <p className="text-[#5B47F5] font-bold text-xs uppercase tracking-[0.2em] mb-5 reveal">
+                Templates
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-5 reveal delay-100">
+                Plus de 5 templates conçus<br className="hidden sm:block" /> pour convertir
+              </h2>
+              <p className="text-gray-400 max-w-xl mx-auto text-base reveal delay-200">
+                Chaque template est A/B testé, optimisé pour la conversion et
+                entièrement personnalisable avec le builder.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-12">
+              {TEMPLATES.map((tpl, i) => (
+                <div
+                  key={tpl.name}
+                  className={`reveal delay-${(i + 1) * 100} group cursor-pointer rounded-2xl bg-gradient-to-br ${tpl.bg} ${tpl.border ?? ''} p-5 h-52 flex flex-col justify-between hover:scale-[1.04] hover:shadow-2xl transition-all duration-300 relative overflow-hidden`}
+                >
+                  {/* Reflet hover */}
+                  <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors rounded-2xl" />
+
+                  <span className={`self-start text-[10px] font-bold px-2.5 py-1 rounded-full ${tpl.tagStyle} uppercase tracking-wide`}>
+                    {tpl.tag}
+                  </span>
+                  <div>
+                    <p className={`text-sm font-black ${tpl.text} leading-tight`}>{tpl.name}</p>
+                    <p className={`text-xs mt-1 ${tpl.text} opacity-60 leading-snug`}>{tpl.desc}</p>
+                    <Link
+                      href="/templates"
+                      className={`mt-3 inline-flex items-center gap-1 text-xs font-bold ${tpl.text} opacity-70 hover:opacity-100 transition-opacity`}
+                    >
+                      Aperçu <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center reveal delay-300">
+              <Link
+                href="/templates"
+                className="inline-flex items-center gap-2 border border-white/20 hover:border-[#5B47F5] text-white hover:text-[#5B47F5] font-semibold px-7 py-3.5 rounded-full transition-all duration-300"
+              >
+                Voir tous les templates
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
+          </div>
+        </section>
 
-            {/* Stats agence */}
-            <div className="reveal reveal-delay-2 grid grid-cols-2 gap-4">
-              {[
-                { value: '15', label: 'Stores connectés', sub: 'sur le plan Agency' },
-                { value: '500', label: 'Pages / mois', sub: 'sans limite de clients' },
-                { value: 'PDF', label: 'Rapports white-label', sub: 'à ton branding' },
-                { value: '7j/7', label: 'Support dédié', sub: 'réponse en moins de 2h' },
-              ].map(({ value, label, sub }) => (
+        {/* ════════════════════════════════════════════════════════════════
+            9. INTEGRATIONS
+        ════════════════════════════════════════════════════════════════ */}
+        <section id="integrations" className="py-24 bg-white">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+
+            <div className="text-center mb-16">
+              <p className="text-[#5B47F5] font-bold text-xs uppercase tracking-[0.2em] mb-5 reveal">
+                Intégrations
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-5 reveal delay-100">
+                Intégrez KONVERT<br className="hidden sm:block" /> à votre stack existant
+              </h2>
+              <p className="text-gray-500 max-w-xl mx-auto text-base reveal delay-200">
+                KONVERT se connecte nativement aux plateformes que vous utilisez pour
+                vendre, automatiser et analyser vos performances.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-12">
+              {INTEGRATIONS.map((intg, i) => (
                 <div
-                  key={label}
-                  className="rounded-2xl p-5"
-                  style={{
-                    background: 'rgba(14,6,28,0.8)',
-                    border: '1px solid rgba(139,92,246,0.2)',
-                    backdropFilter: 'blur(10px)',
-                  }}
+                  key={intg.name}
+                  className={`reveal delay-${((i % 5) + 1) * 100} group border ${intg.border} rounded-2xl p-5 text-center hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 bg-white`}
                 >
-                  <div
-                    className="text-3xl font-black mb-1"
-                    style={{
-                      background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                    }}
-                  >
-                    {value}
+                  <div className={`w-12 h-12 ${intg.bg} rounded-xl mx-auto mb-3 flex items-center justify-center text-2xl`}>
+                    {intg.icon}
                   </div>
-                  <div className="text-sm font-bold text-white">{label}</div>
-                  <div className="text-xs mt-0.5" style={{ color: 'rgba(167,139,250,0.5)' }}>{sub}</div>
+                  <p className={`text-sm font-bold ${intg.color}`}>{intg.name}</p>
+                  <p className="text-xs text-gray-400 mt-1 leading-snug">{intg.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center reveal delay-300">
+              <Link
+                href="/integrations"
+                className="inline-flex items-center gap-2 border-2 border-gray-200 hover:border-[#5B47F5] text-gray-700 hover:text-[#5B47F5] font-semibold px-7 py-3.5 rounded-full transition-all duration-300"
+              >
+                Voir toutes les intégrations
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            10. TÉMOIGNAGES
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="py-24 bg-[#f8fafc]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+
+            <div className="text-center mb-16">
+              <p className="text-[#5B47F5] font-bold text-xs uppercase tracking-[0.2em] mb-5 reveal">
+                Témoignages
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 reveal delay-100">
+                Conçu pour les équipes qui veulent<br className="hidden lg:block" /> des résultats, pas de la complexité
+              </h2>
+            </div>
+
+            <div className="grid sm:grid-cols-3 gap-6">
+              {TESTIMONIALS.map((t, i) => (
+                <div
+                  key={t.name}
+                  className={`reveal delay-${(i + 1) * 100} group bg-white border border-gray-100 rounded-2xl p-7 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300`}
+                >
+                  {/* Stars + tag */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="flex gap-0.5">
+                      {Array.from({ length: t.stars }).map((_, j) => (
+                        <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                    <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${t.tagColor}`}>
+                      {t.tag}
+                    </span>
+                  </div>
+
+                  {/* Citation */}
+                  <p className="text-gray-700 text-sm leading-relaxed mb-7 italic">
+                    "{t.quote}"
+                  </p>
+
+                  {/* Auteur */}
+                  <div className="flex items-center gap-3 pt-5 border-t border-gray-50">
+                    <div className={`w-10 h-10 rounded-full ${t.avatarBg} flex items-center justify-center flex-shrink-0`}>
+                      <span className="text-xs font-black text-white">{t.avatar}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-bold text-gray-900">{t.name}</p>
+                        {t.verified && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-600">
+                            <Check className="w-2.5 h-2.5" />
+                            Vérifié
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-400">{t.role}</p>
+                      {t.since && <p className="text-[10px] text-gray-300 mt-0.5">{t.since}</p>}
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── CTA FINAL ────────────────────────────────────────────────────── */}
-      <section
-        className="py-32 px-6 relative overflow-hidden"
-        style={{
-          background:
-            'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(124,58,237,0.25) 0%, transparent 60%), rgba(10,3,22,1)',
-        }}
-      >
-        {/* Étoiles */}
-        {STARS.slice(0, 40).map((s) => (
+        {/* ════════════════════════════════════════════════════════════════
+            11. AVANT / APRÈS
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="py-24 bg-[#0f0f1a] relative overflow-hidden">
+          {/* BG glow */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(91,71,245,0.08) 0%, transparent 70%)' }} />
+
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 relative">
+            <div className="text-center mb-16">
+              <p className="text-[#5B47F5] font-bold text-xs uppercase tracking-[0.2em] mb-5 reveal">
+                Transformation
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white reveal delay-100" style={{ letterSpacing: '-0.02em' }}>
+                La différence est{' '}
+                <span style={{ background: 'linear-gradient(135deg,#5B47F5,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  immédiate
+                </span>
+              </h2>
+              <p className="text-gray-400 max-w-xl mx-auto text-base mt-4 reveal delay-200">
+                Même produit. Même prix. Résultats incomparables.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 lg:gap-10 reveal delay-200">
+
+              {/* AVANT — fiche AliExpress */}
+              <div className="relative">
+                <div className="absolute -top-3 left-4 z-10 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-black"
+                  style={{ background: '#ef4444', color: '#fff', boxShadow: '0 4px 12px rgba(239,68,68,0.4)' }}>
+                  ✕ Avant — Fiche produit classique
+                </div>
+                <div className="rounded-2xl overflow-hidden border border-white/10" style={{ background: '#ffffff' }}>
+                  {/* Browser bar */}
+                  <div className="h-9 flex items-center gap-1.5 px-3 border-b" style={{ background: '#f3f4f6', borderColor: '#e5e7eb' }}>
+                    <div className="w-3 h-3 rounded-full bg-red-400" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                    <div className="w-3 h-3 rounded-full bg-green-400" />
+                    <div className="flex-1 mx-3 h-5 rounded flex items-center px-2" style={{ background: '#e9eaec' }}>
+                      <span className="text-[10px] text-gray-500">aliexpress.com/item/100234567...</span>
+                    </div>
+                  </div>
+                  {/* Page content */}
+                  <div className="p-4" style={{ minHeight: '340px' }}>
+                    {/* Top nav */}
+                    <div className="h-6 w-full mb-3 rounded flex items-center gap-2" style={{ background: '#f5a623' }}>
+                      <div className="w-16 h-3 rounded ml-2" style={{ background: 'rgba(255,255,255,0.5)' }} />
+                      <div className="flex-1 mx-2 h-3.5 rounded" style={{ background: 'rgba(255,255,255,0.2)' }} />
+                      <div className="w-10 h-3 rounded mr-2" style={{ background: 'rgba(255,255,255,0.3)' }} />
+                    </div>
+                    {/* Breadcrumb */}
+                    <div className="flex gap-2 mb-3">
+                      {['Home', '>', 'Electronics', '>', 'Item 234567'].map((b, i) => (
+                        <span key={i} className="text-[9px]" style={{ color: i === 4 ? '#999' : '#f5a623' }}>{b}</span>
+                      ))}
+                    </div>
+                    {/* Main content */}
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* Images */}
+                      <div className="space-y-1.5">
+                        <div className="rounded border" style={{ height: '120px', background: '#f0f0f0', borderColor: '#ddd' }}>
+                          <div className="w-full h-full flex items-center justify-center text-gray-300 text-3xl">📦</div>
+                        </div>
+                        <div className="grid grid-cols-4 gap-1">
+                          {[0,1,2,3].map(i => (
+                            <div key={i} className="rounded border" style={{ height: '24px', background: '#f5f5f5', borderColor: i === 0 ? '#f5a623' : '#e0e0e0' }} />
+                          ))}
+                        </div>
+                      </div>
+                      {/* Info */}
+                      <div className="space-y-2">
+                        <div className="text-[9px] font-medium leading-tight" style={{ color: '#333' }}>
+                          Wireless Bluetooth Earbuds 5.3 TWS Headphones Sport Gaming Earphone With MIC Bass Stereo Headset
+                        </div>
+                        <div className="flex items-center gap-1">
+                          {'★★★★☆'.split('').map((s, i) => (
+                            <span key={i} className="text-[10px]" style={{ color: '#f5a623' }}>{s}</span>
+                          ))}
+                          <span className="text-[8px]" style={{ color: '#999' }}>(1,247)</span>
+                        </div>
+                        <div className="text-xs font-bold" style={{ color: '#e50000' }}>US $8.99 <span className="text-[9px] line-through text-gray-400">$24.99</span></div>
+                        <div className="text-[8px] space-y-0.5" style={{ color: '#666' }}>
+                          <div>Color: ■ ■ ■ ■ □ □</div>
+                          <div>Ships to: France (+$2.50)</div>
+                        </div>
+                        <div className="rounded text-[9px] text-center py-1 font-bold" style={{ background: '#f5a623', color: '#fff' }}>
+                          Add to Cart
+                        </div>
+                        <div className="rounded text-[9px] text-center py-1 font-medium border" style={{ color: '#f5a623', borderColor: '#f5a623' }}>
+                          Buy Now
+                        </div>
+                      </div>
+                    </div>
+                    {/* Description chaos */}
+                    <div className="mt-3 pt-3 border-t space-y-1" style={{ borderColor: '#eee' }}>
+                      <div className="text-[8px] font-bold mb-1" style={{ color: '#333' }}>Product Description</div>
+                      {[100, 85, 95, 70, 88, 60].map((w, i) => (
+                        <div key={i} className="h-1.5 rounded" style={{ width: `${w}%`, background: '#e5e5e5' }} />
+                      ))}
+                    </div>
+                  </div>
+                  {/* Metrics bas */}
+                  <div className="px-4 pb-4">
+                    <div className="rounded-lg p-3 flex justify-around" style={{ background: '#fff3f0', border: '1px solid #ffd0c8' }}>
+                      <div className="text-center">
+                        <div className="text-sm font-black" style={{ color: '#ef4444' }}>1.1%</div>
+                        <div className="text-[9px]" style={{ color: '#999' }}>Taux conv.</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-black" style={{ color: '#ef4444' }}>62%</div>
+                        <div className="text-[9px]" style={{ color: '#999' }}>Taux rebond</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-black" style={{ color: '#ef4444' }}>0.9x</div>
+                        <div className="text-[9px]" style={{ color: '#999' }}>ROAS</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* APRÈS — page KONVERT */}
+              <div className="relative">
+                <div className="absolute -top-3 left-4 z-10 flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-black"
+                  style={{ background: '#10b981', color: '#fff', boxShadow: '0 4px 12px rgba(16,185,129,0.4)' }}>
+                  ✓ Après — Page KONVERT générée en 30s
+                </div>
+                <div className="rounded-2xl overflow-hidden" style={{ border: '1.5px solid rgba(91,71,245,0.4)', boxShadow: '0 0 40px rgba(91,71,245,0.15)' }}>
+                  {/* Browser bar */}
+                  <div className="h-9 flex items-center gap-1.5 px-3" style={{ background: '#1a1a2e', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                    <div className="w-3 h-3 rounded-full bg-red-400" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                    <div className="w-3 h-3 rounded-full bg-green-400" />
+                    <div className="flex-1 mx-3 h-5 rounded flex items-center gap-1.5 px-2" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                      <div className="w-2 h-2 rounded-full bg-green-400" />
+                      <span className="text-[10px] text-gray-400">shop.monsite.fr/ecouteurs-pro</span>
+                    </div>
+                  </div>
+                  {/* Hero product */}
+                  <div style={{ background: 'linear-gradient(160deg, #0f0f1a 0%, #1a0a2e 100%)', minHeight: '340px' }}>
+                    {/* Nav */}
+                    <div className="flex items-center justify-between px-4 py-2.5 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+                      <span className="text-[10px] font-black text-white">AudioPro<span className="text-[#5B47F5]">.</span></span>
+                      <div className="flex gap-2">
+                        {['Collection', 'Avis', 'Aide'].map(l => (
+                          <span key={l} className="text-[9px]" style={{ color: 'rgba(255,255,255,0.5)' }}>{l}</span>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Hero split */}
+                    <div className="grid grid-cols-2 gap-3 p-4">
+                      {/* Product visual */}
+                      <div className="rounded-xl flex items-center justify-center relative overflow-hidden" style={{ height: '140px', background: 'linear-gradient(135deg,#1e1b4b,#312e81)' }}>
+                        <div className="text-5xl">🎧</div>
+                        <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-full text-[8px] font-bold" style={{ background: '#ef4444', color: '#fff' }}>-64%</div>
+                      </div>
+                      {/* Copy */}
+                      <div className="space-y-2 py-1">
+                        <div className="flex">
+                          {'★★★★★'.split('').map((s, i) => (
+                            <span key={i} className="text-yellow-400 text-[10px]">{s}</span>
+                          ))}
+                          <span className="text-[9px] ml-1" style={{ color: 'rgba(255,255,255,0.4)' }}>4.9 (2k+)</span>
+                        </div>
+                        <div className="text-[11px] font-black leading-tight text-white">
+                          Son Studio.<br />Qualité Pro.
+                        </div>
+                        <div className="text-[9px]" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                          Bluetooth 5.3 • 40h batterie • ANC actif
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-base font-black text-white">8,99€</span>
+                          <span className="text-[9px] line-through" style={{ color: 'rgba(255,255,255,0.3)' }}>24,99€</span>
+                        </div>
+                        <div className="rounded-full py-1.5 text-[10px] text-center font-black" style={{ background: 'linear-gradient(90deg,#5B47F5,#7c6af7)', color: '#fff' }}>
+                          Commander →
+                        </div>
+                      </div>
+                    </div>
+                    {/* Social proof */}
+                    <div className="mx-4 mb-3 rounded-xl p-3 flex items-center gap-3" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                      <div className="flex -space-x-1.5">
+                        {['#5B47F5','#10b981','#f59e0b'].map((c, i) => (
+                          <div key={i} className="w-5 h-5 rounded-full border-2 border-[#0f0f1a] flex items-center justify-center text-[7px] text-white font-bold" style={{ background: c }}>
+                            {['T','S','J'][i]}
+                          </div>
+                        ))}
+                      </div>
+                      <span className="text-[9px]" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                        <strong className="text-white">2 347 personnes</strong> ont commandé ce mois
+                      </span>
+                    </div>
+                    {/* Features */}
+                    <div className="grid grid-cols-3 gap-2 px-4 pb-3">
+                      {[['🔋','40h batterie'],['🛡️','2 ans garantie'],['🚀','Livraison J+1']].map(([icon,label]) => (
+                        <div key={label} className="rounded-lg p-2 text-center" style={{ background: 'rgba(91,71,245,0.1)', border: '1px solid rgba(91,71,245,0.15)' }}>
+                          <div className="text-base">{icon}</div>
+                          <div className="text-[8px] text-white font-medium mt-0.5">{label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  {/* Metrics bas */}
+                  <div className="px-4 pb-4" style={{ background: '#0f0f1a' }}>
+                    <div className="rounded-xl p-3 flex justify-around" style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)' }}>
+                      <div className="text-center">
+                        <div className="text-sm font-black text-emerald-400">5.8%</div>
+                        <div className="text-[9px] text-gray-500">Taux conv.</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-black text-emerald-400">28%</div>
+                        <div className="text-[9px] text-gray-500">Taux rebond</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-black text-emerald-400">3.4x</div>
+                        <div className="text-[9px] text-gray-500">ROAS</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Résultat global */}
+            <div className="mt-10 text-center reveal delay-300">
+              <div className="inline-flex items-center gap-6 px-8 py-5 rounded-2xl" style={{ background: 'rgba(91,71,245,0.1)', border: '1px solid rgba(91,71,245,0.2)' }}>
+                <div className="text-center">
+                  <div className="text-2xl font-black text-white">+427%</div>
+                  <div className="text-xs text-gray-400">Taux de conversion</div>
+                </div>
+                <div className="w-px h-10" style={{ background: 'rgba(255,255,255,0.1)' }} />
+                <div className="text-center">
+                  <div className="text-2xl font-black text-white">-55%</div>
+                  <div className="text-xs text-gray-400">Taux de rebond</div>
+                </div>
+                <div className="w-px h-10" style={{ background: 'rgba(255,255,255,0.1)' }} />
+                <div className="text-center">
+                  <div className="text-2xl font-black text-white">x3.8</div>
+                  <div className="text-xs text-gray-400">Retour sur dépenses pub</div>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500 mt-3">Résultats moyens constatés sur les 30 premiers jours d'utilisation</p>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            12. PRICING
+        ════════════════════════════════════════════════════════════════ */}
+        <section id="pricing" className="py-24 bg-white">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+
+            <div className="text-center mb-10">
+              <p className="text-[#5B47F5] font-bold text-xs uppercase tracking-[0.2em] mb-5 reveal">
+                Tarifs
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-5 reveal delay-100">
+                Des tarifs transparents<br className="hidden sm:block" /> qui évoluent avec vous
+              </h2>
+              <p className="text-gray-500 max-w-xl mx-auto text-base mb-8 reveal delay-200">
+                Commencez gratuitement, évoluez quand vous êtes prêt.
+                Aucun engagement. Annulation en 1 clic.
+              </p>
+
+              {/* Toggle mensuel / annuel */}
+              <div className="inline-flex items-center bg-gray-100 p-1 rounded-full reveal delay-300">
+                {(['monthly', 'annual'] as const).map((b) => (
+                  <button
+                    key={b}
+                    onClick={() => setBilling(b)}
+                    className={`relative text-sm font-bold px-6 py-2.5 rounded-full transition-all duration-200 ${
+                      billing === b
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    {b === 'monthly' ? 'Mensuel' : (
+                      <span className="flex items-center gap-2">
+                        Annuel
+                        <span className="text-[10px] font-black bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full">
+                          -20%
+                        </span>
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Plans */}
+            <div className="grid sm:grid-cols-3 gap-5 items-start mt-10">
+              {PRICING.map((plan, i) => (
+                <div
+                  key={plan.name}
+                  className={`reveal delay-${(i + 1) * 100} relative flex flex-col rounded-2xl p-8 transition-all duration-300 ${
+                    plan.highlight
+                      ? 'bg-[#5B47F5] shadow-[0_24px_80px_-12px_rgba(91,71,245,0.45)] scale-[1.03] z-10'
+                      : 'bg-white border border-gray-100 hover:shadow-lg'
+                  }`}
+                >
+                  {/* Badge populaire */}
+                  {plan.badge && (
+                    <div className="absolute -top-4 inset-x-0 flex justify-center">
+                      <span className="bg-white text-[#5B47F5] text-xs font-black px-4 py-1.5 rounded-full shadow-md border border-[#5B47F5]/10">
+                        {plan.badge}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* En-tête */}
+                  <div className="mb-5">
+                    <h3 className={`text-lg font-black mb-1 ${plan.highlight ? 'text-white' : 'text-gray-900'}`}>
+                      {plan.name}
+                    </h3>
+                    <p className={`text-sm ${plan.highlight ? 'text-white/65' : 'text-gray-500'}`}>
+                      {plan.desc}
+                    </p>
+                  </div>
+
+                  {/* Prix */}
+                  <div className="flex items-end gap-1 mb-8">
+                    <span className={`text-5xl font-black tabular-nums leading-none ${plan.highlight ? 'text-white' : 'text-gray-900'}`}>
+                      {billing === 'annual' ? plan.annual : plan.monthly}€
+                    </span>
+                    <span className={`text-sm pb-1.5 ${plan.highlight ? 'text-white/55' : 'text-gray-400'}`}>
+                      /mois
+                    </span>
+                  </div>
+
+                  {/* Features */}
+                  <ul className="space-y-3.5 mb-9 flex-1">
+                    {plan.features.map((feat) => (
+                      <li key={feat} className="flex items-start gap-2.5 text-sm">
+                        <div className={`flex-shrink-0 mt-0.5 w-4 h-4 rounded-full flex items-center justify-center ${plan.highlight ? 'bg-white/20' : 'bg-emerald-50'}`}>
+                          <Check className={`w-2.5 h-2.5 ${plan.highlight ? 'text-white' : 'text-emerald-600'}`} strokeWidth={3} />
+                        </div>
+                        <span className={plan.highlight ? 'text-white/85' : 'text-gray-600'}>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* CTA */}
+                  <Link
+                    href={plan.highlight ? '/signup' : plan.name === 'Agence' ? '/contact' : '/signup'}
+                    className={`block text-center font-bold py-3.5 rounded-full transition-all duration-200 ${
+                      plan.highlight
+                        ? 'bg-white text-[#5B47F5] hover:bg-gray-50 shadow-md'
+                        : plan.ctaCls
+                    }`}
+                  >
+                    {plan.cta}
+                  </Link>
+
+                  {plan.highlight && (
+                    <p className="text-center text-white/50 text-xs mt-3">
+                      14 jours gratuits — aucune CB
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Garantie */}
+            <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-8 reveal delay-400">
+              {[
+                { icon: Shield,  text: 'Paiement 100% sécurisé' },
+                { icon: Clock,   text: 'Annulation en 1 clic, sans pénalité' },
+                { icon: Check,   text: 'Satisfait ou remboursé 30 jours' },
+              ].map(({ icon: Icon, text }) => (
+                <div key={text} className="flex items-center gap-2.5 text-sm text-gray-500">
+                  <Icon className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                  {text}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            12. FAQ
+        ════════════════════════════════════════════════════════════════ */}
+        <section id="faq" className="py-24 bg-[#f8fafc]">
+          <div className="max-w-3xl mx-auto px-5 sm:px-8">
+
+            <div className="text-center mb-12">
+              <p className="text-[#5B47F5] font-bold text-xs uppercase tracking-[0.2em] mb-5 reveal">
+                FAQ
+              </p>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 reveal delay-100">
+                Questions fréquentes
+              </h2>
+            </div>
+
+            <div className="space-y-3">
+              {FAQS.map((faq, i) => (
+                <div key={i} className={`reveal delay-${((i % 3) + 1) * 100}`}>
+                  <FaqItem
+                    q={faq.q}
+                    a={faq.a}
+                    open={openFaq === i}
+                    onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-10 text-center reveal delay-300">
+              <p className="text-sm text-gray-500 mb-3">Vous n'avez pas trouvé votre réponse ?</p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 text-[#5B47F5] font-bold text-sm hover:underline underline-offset-4"
+              >
+                Contacter le support
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════════════════════
+            13. FINAL CTA
+        ════════════════════════════════════════════════════════════════ */}
+        <section className="py-32 bg-[#0f0f1a] relative overflow-hidden">
+
+          {/* Halo central */}
           <div
-            key={s.id}
-            className="star"
+            aria-hidden
+            className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(91,71,245,0.18) 0%, transparent 70%)' }}
+          />
+
+          {/* Grille déco */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-[0.04]"
             style={{
-              top: s.top,
-              left: s.left,
-              width: `${s.size}px`,
-              height: `${s.size}px`,
-              ['--duration' as string]: s.duration,
-              ['--delay' as string]: s.delay,
-              opacity: 0.3,
+              backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
             }}
           />
-        ))}
 
-        <div className="max-w-3xl mx-auto text-center relative z-10 reveal">
-          <h2
-            className="font-black tracking-tight mb-6"
-            style={{
-              fontSize: 'clamp(2.5rem, 6vw, 4rem)',
-              letterSpacing: '-0.03em',
-              color: '#ffffff',
-            }}
-          >
-            Ta prochaine page qui convertit
-            <br />
-            <span
-              style={{
-                background: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              est à 30 secondes.
-            </span>
-          </h2>
-
-          <p
-            className="text-lg mb-12 leading-relaxed"
-            style={{ color: 'rgba(196,181,253,0.65)' }}
-          >
-            Rejoins les e-commerçants qui génèrent des pages haute conversion
-            sans designer ni copywriter.
-          </p>
-
-          <Link
-            href="/signup"
-            className="btn-shimmer inline-flex items-center gap-3 font-black px-12 py-5 rounded-2xl text-lg transition-all duration-300"
-            style={{
-              background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)',
-              color: '#ffffff',
-              boxShadow: '0 10px 40px rgba(124,58,237,0.5), 0 0 80px rgba(124,58,237,0.15)',
-            }}
-          >
-            Commencer gratuitement
-            <ArrowRight className="w-5 h-5" />
-          </Link>
-
-          <p className="text-sm mt-4" style={{ color: 'rgba(167,139,250,0.45)' }}>
-            50 pages offertes · Aucune carte bancaire requise
-          </p>
-        </div>
-      </section>
-
-      {/* ── WAITLIST SECTION ─────────────────────────────────────────────── */}
-      <section id="waitlist" className="py-28 px-6" style={{ background: 'rgba(6,2,16,1)' }}>
-        <div className="max-w-xl mx-auto text-center">
-          <div className="reveal">
-            {/* Badge */}
-            <div
-              className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full"
-              style={{ background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(139,92,246,0.3)' }}
-            >
-              <div className="w-2 h-2 rounded-full bg-green-400" style={{ animation: 'pulse 2s ease-in-out infinite' }} />
-              <span className="text-sm font-semibold text-purple-300">Bêta ouverte — Places limitées</span>
-            </div>
-
-            <h2
-              className="text-4xl md:text-5xl font-black mb-4"
-              style={{
-                background: 'linear-gradient(135deg, #ffffff 0%, #c4b5fd 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              Rejoins les premiers à tester KONVERT
+          <div className="relative max-w-4xl mx-auto px-5 sm:px-8 text-center">
+            <p className="text-[#5B47F5] font-bold text-xs uppercase tracking-[0.2em] mb-6 reveal">
+              Prêt à convertir ?
+            </p>
+            <h2 className="text-4xl sm:text-5xl lg:text-[3.75rem] font-black text-white leading-[1.08] mb-7 reveal delay-100">
+              Plus de leads.<br />
+              Plus de conversions.<br />
+              <span className="text-[#5B47F5]">Commencez gratuitement.</span>
             </h2>
-            <p className="text-base mb-10" style={{ color: 'rgba(196,181,253,0.6)' }}>
-              50 places disponibles en bêta fermée. Inscris-toi maintenant pour recevoir ton invitation en priorité.
+            <p className="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto mb-12 leading-relaxed reveal delay-200">
+              Rejoignez 2 800+ boutiques qui utilisent KONVERT pour générer des pages qui vendent.
+              Essai gratuit 14 jours. Aucune CB requise.
             </p>
 
-            {/* Compteur places */}
-            <div className="flex items-center justify-center gap-6 mb-10">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10 reveal delay-300">
+              <Link
+                href="/signup"
+                className="btn-shimmer text-white font-black px-9 py-4.5 py-[1.125rem] rounded-full text-base flex items-center justify-center gap-2.5 shadow-2xl shadow-[#5B47F5]/40 transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Essai gratuit 14 jours
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                href="/demo"
+                className="border border-white/20 hover:border-white/50 text-white hover:bg-white/5 font-bold px-9 py-[1.125rem] rounded-full text-base flex items-center justify-center gap-2.5 transition-all duration-200"
+              >
+                <Play className="w-4 h-4" />
+                Voir une démo
+              </Link>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-500 reveal delay-400">
               {[
-                { val: '50', label: 'Places totales' },
-                { val: '23', label: 'Déjà prises' },
-                { val: '27', label: 'Restantes' },
-              ].map(({ val, label }) => (
-                <div key={label} className="text-center">
-                  <div className="text-2xl font-black text-white">{val}</div>
-                  <div className="text-[11px]" style={{ color: 'rgba(167,139,250,0.5)' }}>{label}</div>
-                </div>
+                { icon: Check,  text: 'Setup en 2 minutes' },
+                { icon: Shield, text: 'Aucune CB requise' },
+                { icon: Zap,    text: 'Annulation en 1 clic' },
+              ].map(({ icon: Icon, text }) => (
+                <span key={text} className="flex items-center gap-1.5">
+                  <Icon className="w-4 h-4 text-emerald-500" />
+                  {text}
+                </span>
               ))}
             </div>
-
-            {/* Barre de remplissage */}
-            <div className="h-2 rounded-full overflow-hidden mb-10 mx-auto max-w-xs" style={{ background: 'rgba(255,255,255,0.08)' }}>
-              <div
-                className="h-full rounded-full"
-                style={{ width: '46%', background: 'linear-gradient(90deg, #7c3aed, #a78bfa)' }}
-              />
-            </div>
-
-            {/* Formulaire waitlist */}
-            <WaitlistSection />
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── FOOTER ──────────────────────────────────────────────────────────── */}
-      <footer style={{ background: 'rgba(4,1,10,1)', borderTop: '1px solid rgba(139,92,246,0.15)' }}>
-        {/* Top footer */}
-        <div className="max-w-6xl mx-auto px-6 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+      </main>
 
-            {/* Brand */}
-            <div className="md:col-span-1">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="font-black text-xl tracking-tight" style={{ letterSpacing: '-0.03em' }}>
-                  <span style={{ color: '#ffffff' }}>KON</span>
-                  <span style={{
-                    background: 'linear-gradient(135deg, #a78bfa, #7c3aed)',
-                    WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                  }}>VERT</span>
+      {/* ════════════════════════════════════════════════════════════════════
+          14. FOOTER
+      ════════════════════════════════════════════════════════════════════ */}
+      <footer className="bg-[#0c0c18] border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-16 pb-10">
+
+          {/* Top row */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-10 mb-14">
+
+            {/* Brand — 2 cols */}
+            <div className="col-span-2 sm:col-span-3 lg:col-span-2">
+              <Link href="/" className="flex items-center gap-2.5 mb-5 w-fit">
+                <div className="w-9 h-9 rounded-xl bg-[#5B47F5] flex items-center justify-center shadow-lg shadow-[#5B47F5]/30">
+                  <Zap className="w-4 h-4 text-white" strokeWidth={2.5} />
+                </div>
+                <span className="text-xl font-black text-white tracking-tight">
+                  Kon<span className="text-[#5B47F5]">vert</span>
                 </span>
-              </div>
-              <p className="text-[13px] leading-relaxed mb-5" style={{ color: 'rgba(167,139,250,0.55)' }}>
-                Génère des landing pages e-commerce haute conversion en 30 secondes grâce à l&apos;IA.
+              </Link>
+              <p className="text-sm text-gray-500 leading-relaxed max-w-[220px] mb-6">
+                Générez des pages qui convertissent. Propulsé par Claude AI.
               </p>
               {/* Réseaux sociaux */}
-              <div className="flex items-center gap-3">
+              <div className="flex gap-2">
                 {[
-                  { label: 'X', href: '#' },
-                  { label: 'in', href: '#' },
-                  { label: 'ig', href: '#' },
-                ].map(({ label, href }) => (
-                  <a key={label} href={href}
-                    className="w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-black transition-all"
-                    style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(167,139,250,0.6)', border: '1px solid rgba(139,92,246,0.15)' }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(124,58,237,0.2)'; (e.currentTarget as HTMLElement).style.color = '#a78bfa' }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'; (e.currentTarget as HTMLElement).style.color = 'rgba(167,139,250,0.6)' }}
+                  { label: 'X / Twitter', abbr: 'X' },
+                  { label: 'LinkedIn',    abbr: 'Li' },
+                  { label: 'Instagram',   abbr: 'Ig' },
+                  { label: 'YouTube',     abbr: 'Yt' },
+                ].map((sn) => (
+                  <Link
+                    key={sn.abbr}
+                    href="#"
+                    aria-label={sn.label}
+                    className="w-9 h-9 rounded-xl bg-white/5 hover:bg-[#5B47F5]/20 hover:border-[#5B47F5]/30 border border-white/5 flex items-center justify-center text-xs font-bold text-gray-500 hover:text-[#5B47F5] transition-all duration-200"
                   >
-                    {label}
-                  </a>
+                    {sn.abbr}
+                  </Link>
                 ))}
               </div>
             </div>
 
-            {/* Produit */}
-            <div>
-              <h4 className="text-[12px] font-bold tracking-widest uppercase mb-4" style={{ color: 'rgba(167,139,250,0.5)' }}>Produit</h4>
-              <ul className="space-y-2.5">
-                {[
-                  { label: 'Fonctionnalités', href: '#how' },
-                  { label: 'Tarifs', href: '#pricing' },
-                  { label: 'Templates', href: '/templates' },
-                  { label: 'Changelog', href: '#' },
-                  { label: 'Roadmap', href: '#' },
-                ].map(({ label, href }) => (
-                  <li key={label}>
-                    <a href={href} className="text-[13px] transition-colors" style={{ color: 'rgba(196,181,253,0.5)' }}
-                      onMouseEnter={e => ((e.target as HTMLElement).style.color = '#ffffff')}
-                      onMouseLeave={e => ((e.target as HTMLElement).style.color = 'rgba(196,181,253,0.5)')}>
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* 4 colonnes navigation */}
+            {FOOTER_COLS.map((col) => (
+              <div key={col.title}>
+                <h4 className="text-xs font-black text-white uppercase tracking-widest mb-5">
+                  {col.title}
+                </h4>
+                <ul className="space-y-3">
+                  {col.links.map((link) => (
+                    <li key={link}>
+                      <Link
+                        href="#"
+                        className="text-sm text-gray-500 hover:text-gray-300 transition-colors duration-150"
+                      >
+                        {link}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
 
-            {/* Ressources */}
-            <div>
-              <h4 className="text-[12px] font-bold tracking-widest uppercase mb-4" style={{ color: 'rgba(167,139,250,0.5)' }}>Ressources</h4>
-              <ul className="space-y-2.5">
-                {[
-                  { label: 'Documentation', href: '#' },
-                  { label: 'Guide démarrage', href: '#' },
-                  { label: 'Blog', href: '#' },
-                  { label: 'Support', href: 'mailto:support@konvert.app' },
-                  { label: 'Status', href: '#' },
-                ].map(({ label, href }) => (
-                  <li key={label}>
-                    <a href={href} className="text-[13px] transition-colors" style={{ color: 'rgba(196,181,253,0.5)' }}
-                      onMouseEnter={e => ((e.target as HTMLElement).style.color = '#ffffff')}
-                      onMouseLeave={e => ((e.target as HTMLElement).style.color = 'rgba(196,181,253,0.5)')}>
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Légal */}
-            <div>
-              <h4 className="text-[12px] font-bold tracking-widest uppercase mb-4" style={{ color: 'rgba(167,139,250,0.5)' }}>Légal</h4>
-              <ul className="space-y-2.5">
-                {[
-                  { label: 'Mentions légales', href: '/legal/mentions' },
-                  { label: 'CGU', href: '/legal/cgu' },
-                  { label: 'Politique de confidentialité', href: '/legal/privacy' },
-                  { label: 'Politique cookies', href: '/legal/cookies' },
-                  { label: 'RGPD', href: '/legal/rgpd' },
-                ].map(({ label, href }) => (
-                  <li key={label}>
-                    <a href={href} className="text-[13px] transition-colors" style={{ color: 'rgba(196,181,253,0.5)' }}
-                      onMouseEnter={e => ((e.target as HTMLElement).style.color = '#ffffff')}
-                      onMouseLeave={e => ((e.target as HTMLElement).style.color = 'rgba(196,181,253,0.5)')}>
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+          {/* Badge "Made with Claude AI" */}
+          <div className="flex justify-center mb-10">
+            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-5 py-2.5">
+              <Bot className="w-4 h-4 text-[#5B47F5]" />
+              <span className="text-xs font-semibold text-gray-400">
+                Copy IA généré par <span className="text-[#5B47F5] font-bold">Claude AI</span> — Anthropic
+              </span>
             </div>
           </div>
-        </div>
 
-        {/* Bottom footer */}
-        <div style={{ borderTop: '1px solid rgba(139,92,246,0.08)' }}>
-          <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-[12px]" style={{ color: 'rgba(167,139,250,0.35)' }}>
-              © 2026 KONVERT — Tous droits réservés
+          {/* Bottom bar */}
+          <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-gray-600">
+              © 2026 KONVERT by NEXARA. Tous droits réservés.
             </p>
-            <div className="flex items-center gap-4">
-              {/* Badges tech */}
-              <div className="flex items-center gap-2 text-[11px] font-semibold" style={{ color: 'rgba(167,139,250,0.4)' }}>
-                <span>Propulsé par</span>
-                <span className="px-2 py-0.5 rounded-md" style={{ background: 'rgba(124,58,237,0.15)', color: '#a78bfa' }}>Claude · Anthropic</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-[11px]" style={{ color: 'rgba(167,139,250,0.35)' }}>
-                <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-                Tous les services opérationnels
-              </div>
+            <div className="flex items-center gap-6">
+              {['Confidentialité', 'CGU', 'Cookies', 'RGPD'].map((l) => (
+                <Link
+                  key={l}
+                  href="#"
+                  className="text-xs text-gray-600 hover:text-gray-400 transition-colors"
+                >
+                  {l}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
       </footer>
-      {/* CTA Sticky Mobile */}
-      <div
-        className="md:hidden fixed bottom-0 left-0 right-0 z-50 p-4 transition-transform duration-300"
-        style={{
-          background: 'rgba(13,13,26,0.95)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(139,92,246,0.2)',
-          transform: showStickyMobile ? 'translateY(0)' : 'translateY(100%)',
-        }}
-      >
-        <Link
-          href="/signup"
-          className="btn-shimmer flex items-center justify-center gap-2 w-full py-4 rounded-2xl font-bold text-white text-base"
-          style={{
-            background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
-            boxShadow: '0 4px 20px rgba(124,58,237,0.5)',
-          }}
-        >
-          <Sparkles className="w-4 h-4" />
-          Générer ma page — Gratuit
-        </Link>
-        <p className="text-center text-[11px] mt-2" style={{ color: 'rgba(167,139,250,0.4)' }}>
-          ✓ Sans carte bancaire · ✓ 50 pages offertes
-        </p>
+
+      {/* ════════════════════════════════════════════════════════════════════
+          CTA STICKY MOBILE
+      ════════════════════════════════════════════════════════════════════ */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden px-4 pb-safe" style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}>
+        <div className="rounded-2xl overflow-hidden shadow-2xl" style={{ boxShadow: '0 -4px 32px rgba(91,71,245,0.3)' }}>
+          <Link
+            href="/signup"
+            className="flex items-center justify-center gap-2.5 w-full py-4 font-black text-[15px] btn-shimmer text-white"
+          >
+            <Zap className="w-4.5 h-4.5" strokeWidth={2.5} />
+            Essai gratuit — 14 jours
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
-    </main>
+    </>
   )
 }

@@ -1,12 +1,14 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Plus, ExternalLink, Pencil, Globe, Clock, FileText } from 'lucide-react'
+import { Plus, Pencil, Globe, Clock, FileText, Eye, Zap } from 'lucide-react'
 
-export default async function PagesPage() {
+export default async function PagesPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+
+  const { q } = await searchParams
 
   const { data: pages } = await supabase
     .from('pages')
@@ -14,31 +16,71 @@ export default async function PagesPage() {
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
-  const list = pages || []
+  const all  = pages || []
+  const list = q ? all.filter(p => (p.title || '').toLowerCase().includes(q.toLowerCase())) : all
+
+  const published  = all.filter(p => p.status === 'published').length
+  const totalViews = all.reduce((s, p) => s + (p.views || 0), 0)
 
   return (
-    <div className="p-8 max-w-5xl mx-auto">
+    <div className="p-8 max-w-6xl mx-auto">
 
+      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-black text-gray-900">Mes pages</h1>
-          <p className="text-gray-500 mt-1">{list.length} page{list.length !== 1 ? 's' : ''} créée{list.length !== 1 ? 's' : ''}</p>
+          <h1 className="text-2xl font-black" style={{ color: '#111' }}>
+            {q ? `Résultats pour "${q}"` : 'Mes pages'}
+          </h1>
+          <p className="text-sm mt-1" style={{ color: '#6b7280' }}>
+            {q ? `${list.length} page${list.length !== 1 ? 's' : ''} trouvée${list.length !== 1 ? 's' : ''}` : `${all.length} page${all.length !== 1 ? 's' : ''} créée${all.length !== 1 ? 's' : ''}`}
+          </p>
         </div>
         <Link
           href="/dashboard/new"
-          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm py-2.5 px-4 rounded-xl transition-colors"
+          className="flex items-center gap-2 text-white font-bold text-sm py-2.5 px-4 rounded-xl transition-all hover:opacity-90 hover:scale-105"
+          style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 4px 14px rgba(124,58,237,0.35)' }}
         >
           <Plus className="w-4 h-4" />
           Nouvelle page
         </Link>
       </div>
 
+      {/* Stats bar */}
+      {list.length > 0 && (
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          {[
+            { icon: <FileText className="w-4 h-4" />, label: 'Total', value: list.length, color: '#7c3aed', bg: 'rgba(124,58,237,0.08)' },
+            { icon: <Globe className="w-4 h-4" />, label: 'Publiées', value: published, color: '#16a34a', bg: 'rgba(22,163,74,0.08)' },
+            { icon: <Eye className="w-4 h-4" />, label: 'Vues totales', value: totalViews.toLocaleString(), color: '#2563eb', bg: 'rgba(37,99,235,0.08)' },
+          ].map(s => (
+            <div key={s.label} className="rounded-2xl p-5 flex items-center gap-4" style={{ background: '#fff', border: '1px solid #e5e7eb' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: s.bg, color: s.color }}>
+                {s.icon}
+              </div>
+              <div>
+                <div className="text-2xl font-black" style={{ color: '#111' }}>{s.value}</div>
+                <div className="text-xs font-semibold" style={{ color: '#9ca3af' }}>{s.label}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Liste */}
       {list.length === 0 ? (
         <EmptyState />
       ) : (
-        <div className="space-y-3">
-          {list.map((page) => (
-            <PageRow key={page.id} page={page} />
+        <div className="rounded-2xl overflow-hidden" style={{ border: '1px solid #e5e7eb', background: '#fff' }}>
+          {/* Thead */}
+          <div className="grid px-5 py-3 text-xs font-bold uppercase tracking-wide" style={{ color: '#9ca3af', borderBottom: '1px solid #f3f4f6', gridTemplateColumns: '1fr 100px 80px 80px 120px' }}>
+            <span>Page</span>
+            <span className="text-center">Statut</span>
+            <span className="text-right">Vues</span>
+            <span className="text-right">Clics</span>
+            <span className="text-right">Actions</span>
+          </div>
+          {list.map((page, i) => (
+            <PageRow key={page.id} page={page} last={i === list.length - 1} />
           ))}
         </div>
       )}
@@ -46,55 +88,77 @@ export default async function PagesPage() {
   )
 }
 
-function PageRow({ page }: { page: any }) {
-  const statusConfig: Record<string, { label: string; color: string }> = {
-    draft:     { label: 'Brouillon', color: 'bg-gray-100 text-gray-600' },
-    published: { label: 'Publié',    color: 'bg-green-100 text-green-700' },
-    archived:  { label: 'Archivé',   color: 'bg-yellow-100 text-yellow-700' },
+function PageRow({ page, last }: { page: any; last: boolean }) {
+  const statusConfig: Record<string, { label: string; color: string; bg: string }> = {
+    draft:     { label: 'Brouillon', color: '#92400e', bg: 'rgba(251,191,36,0.12)' },
+    published: { label: 'Publié',    color: '#166534', bg: 'rgba(22,163,74,0.1)' },
+    archived:  { label: 'Archivé',   color: '#374151', bg: 'rgba(107,114,128,0.1)' },
   }
   const st = statusConfig[page.status] || statusConfig.draft
+  const ctr = (page.views || 0) > 0
+    ? (((page.cta_clicks || 0) / page.views) * 100).toFixed(1)
+    : null
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 hover:border-gray-300 p-5 flex items-center justify-between transition-colors">
-      <div className="flex items-center gap-4 min-w-0">
-        <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center flex-shrink-0">
-          <FileText className="w-5 h-5 text-purple-600" />
+    <div
+      className="grid px-5 py-4 items-center hover:bg-gray-50 transition-colors"
+      style={{
+        gridTemplateColumns: '1fr 100px 80px 80px 120px',
+        borderBottom: last ? 'none' : '1px solid #f3f4f6',
+      }}
+    >
+      {/* Titre */}
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(124,58,237,0.08)' }}>
+          <FileText className="w-4 h-4" style={{ color: '#7c3aed' }} />
         </div>
         <div className="min-w-0">
-          <div className="font-bold text-gray-900 text-sm truncate">{page.title || 'Sans titre'}</div>
-          {page.product_url && (
-            <div className="text-xs text-gray-400 truncate mt-0.5">{page.product_url}</div>
-          )}
-          <div className="flex items-center gap-2 mt-1.5">
-            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${st.color}`}>
-              {st.label}
-            </span>
-            <span className="text-xs text-gray-400 flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              {new Date(page.created_at).toLocaleDateString('fr-FR')}
-            </span>
-            {(page.views || 0) > 0 && (
-              <span className="text-xs text-gray-400">{page.views} vues</span>
-            )}
+          <div className="font-bold text-sm truncate" style={{ color: '#111' }}>{page.title || 'Sans titre'}</div>
+          <div className="text-xs truncate mt-0.5 flex items-center gap-1" style={{ color: '#9ca3af' }}>
+            <Clock className="w-3 h-3" />
+            {new Date(page.created_at).toLocaleDateString('fr-FR')}
           </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-2 flex-shrink-0 ml-4">
+      {/* Statut */}
+      <div className="flex justify-center">
+        <span className="text-[11px] font-bold px-2.5 py-1 rounded-full" style={{ background: st.bg, color: st.color }}>
+          {st.label}
+        </span>
+      </div>
+
+      {/* Vues */}
+      <div className="text-right font-bold text-sm" style={{ color: '#374151' }}>
+        {(page.views || 0).toLocaleString()}
+      </div>
+
+      {/* Clics + CTR */}
+      <div className="text-right">
+        <div className="font-bold text-sm" style={{ color: '#7c3aed' }}>{(page.cta_clicks || 0).toLocaleString()}</div>
+        {ctr && <div className="text-[10px] font-semibold" style={{ color: '#9ca3af' }}>CTR {ctr}%</div>}
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center justify-end gap-1">
         {page.published_url && (
           <a
             href={page.published_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 rounded-lg transition-colors"
+            style={{ color: '#9ca3af' }}
             title="Voir la page"
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#374151'; (e.currentTarget as HTMLElement).style.background = '#f3f4f6' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#9ca3af'; (e.currentTarget as HTMLElement).style.background = 'transparent' }}
           >
             <Globe className="w-4 h-4" />
           </a>
         )}
         <Link
           href={`/dashboard/new?page_id=${page.id}`}
-          className="p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+          className="p-2 rounded-lg transition-colors"
+          style={{ color: '#9ca3af' }}
           title="Modifier"
         >
           <Pencil className="w-4 h-4" />
@@ -106,15 +170,18 @@ function PageRow({ page }: { page: any }) {
 
 function EmptyState() {
   return (
-    <div className="text-center py-20">
-      <div className="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-        <FileText className="w-8 h-8 text-purple-400" />
+    <div className="text-center py-24 rounded-2xl" style={{ border: '2px dashed #e5e7eb', background: '#fff' }}>
+      <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(124,58,237,0.08)' }}>
+        <Zap className="w-8 h-8" style={{ color: '#7c3aed' }} />
       </div>
-      <h3 className="font-bold text-gray-900 mb-2">Aucune page encore</h3>
-      <p className="text-gray-500 text-sm mb-6">Crée ta première landing page en collant une URL produit</p>
+      <h3 className="font-black text-lg mb-2" style={{ color: '#111' }}>Aucune page encore</h3>
+      <p className="text-sm mb-8 max-w-xs mx-auto" style={{ color: '#6b7280' }}>
+        Colle une URL produit AliExpress, Amazon ou Alibaba et génère ta landing en 30 secondes.
+      </p>
       <Link
         href="/dashboard/new"
-        className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm py-2.5 px-5 rounded-xl transition-colors"
+        className="inline-flex items-center gap-2 text-white font-bold text-sm py-3 px-6 rounded-xl transition-all hover:opacity-90"
+        style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 4px 14px rgba(124,58,237,0.35)' }}
       >
         <Plus className="w-4 h-4" />
         Créer ma première page

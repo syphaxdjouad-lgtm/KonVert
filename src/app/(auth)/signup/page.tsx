@@ -205,7 +205,8 @@ function SignupContent() {
           <p className="text-center text-xs" style={{ color: 'rgba(167,139,250,0.4)' }}>
             En créant un compte tu acceptes nos <Link href="/legal/cgu" className="underline">CGU</Link>
           </p>
-        </form>
+        </div>
+      </div>
 
         <p className="text-center text-sm mt-4" style={{ color: 'rgba(167,139,250,0.5)' }}>
           Déjà un compte ?{' '}

@@ -590,12 +590,6 @@ export default function Home() {
             >
               Se connecter
             </Link>
-            <Link
-              href="/signup"
-              className="btn-shimmer text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-md shadow-[#5B47F5]/25 transition-transform hover:scale-[1.02] active:scale-[0.98]"
-            >
-              Essai gratuit
-            </Link>
           </div>
 
           {/* Hamburger mobile */}

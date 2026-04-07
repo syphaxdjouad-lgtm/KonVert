@@ -1,7 +1,8 @@
 'use client'
 
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, FileText, Store, Plus, Zap, LogOut,
   BarChart2, Users, ChevronRight, Sparkles, Bell, Search,
@@ -20,49 +21,6 @@ const NAV = [
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router   = useRouter()
-
-  const [notifOpen, setNotifOpen]   = useState(false)
-  const [readIds, setReadIds]       = useState<number[]>([])
-  const [searchQuery, setSearchQuery] = useState('')
-  const [userInitial, setUserInitial] = useState('K')
-  const notifRef = useRef<HTMLDivElement>(null)
-
-  const unreadCount = NOTIFICATIONS.filter(n => n.unread && !readIds.includes(n.id)).length
-
-  // Fetch user initial
-  useEffect(() => {
-    const supabase = createClient()
-    supabase.auth.getUser().then(({ data }) => {
-      const name  = data.user?.user_metadata?.name as string | undefined
-      const email = data.user?.email
-      const initial = name?.[0]?.toUpperCase() || email?.[0]?.toUpperCase() || 'K'
-      setUserInitial(initial)
-    })
-  }, [])
-
-  // Ferme le dropdown notif au clic extérieur
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
-        setNotifOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
-
-  function openNotif() {
-    setNotifOpen(o => !o)
-    // Marque tout comme lu quand on ouvre
-    setReadIds(NOTIFICATIONS.map(n => n.id))
-  }
-
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault()
-    if (!searchQuery.trim()) return
-    router.push(`/dashboard/pages?q=${encodeURIComponent(searchQuery.trim())}`)
-    setSearchQuery('')
-  }
 
   async function handleLogout() {
     const supabase = createClient()

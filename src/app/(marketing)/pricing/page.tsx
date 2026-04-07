@@ -9,58 +9,84 @@ import Link from 'next/link'
 /* ─── PLANS DATA ────────────────────────────────────────────────────────── */
 const PLANS = [
   {
-    id:       'starter',
-    name:     'Starter',
-    priceMonthly: 29,
-    priceAnnual:  22,
-    badge:    null,
-    popular:  false,
-    desc:     'Pour démarrer et tester rapidement.',
+    id:           'starter',
+    name:         'Starter',
+    priceMonthly: 39,
+    priceAnnual:  31,
+    badge:        null,
+    popular:      false,
+    enterprise:   false,
+    desc:         'Pour démarrer et tester rapidement.',
     features: [
-      '50 pages / mois',
+      '75 pages / mois',
       '2 stores connectés',
-      '5 templates premium',
+      '17 templates inclus',
+      'Génération copy AI',
       'Export HTML',
-      'Support email',
+      'Support email 48h',
     ],
     cta: 'Démarrer avec Starter',
   },
   {
-    id:       'pro',
-    name:     'Pro',
-    priceMonthly: 49,
-    priceAnnual:  37,
-    badge:    'Populaire',
-    popular:  true,
-    desc:     'Pour les e-commerçants qui veulent scaler.',
+    id:           'pro',
+    name:         'Pro',
+    priceMonthly: 79,
+    priceAnnual:  63,
+    badge:        'Populaire',
+    popular:      true,
+    enterprise:   false,
+    desc:         'Pour les e-commerçants qui veulent scaler.',
     features: [
-      '200 pages / mois',
-      '5 stores connectés',
+      '300 pages / mois',
+      '7 stores connectés',
       'Tous les templates',
-      'Export HTML',
+      'Copy AI ton de marque',
       'Analytics de conversion',
-      'Support prioritaire',
+      'Support prioritaire 24h',
+      'Export HTML',
     ],
     cta: 'Démarrer avec Pro',
   },
   {
-    id:       'agency',
-    name:     'Agency',
-    priceMonthly: 119,
-    priceAnnual:  89,
-    badge:    'White-label',
-    popular:  false,
-    desc:     'Pour les agences et freelances avec plusieurs clients.',
+    id:           'agency',
+    name:         'Agency',
+    priceMonthly: 199,
+    priceAnnual:  159,
+    badge:        'White-label',
+    popular:      false,
+    enterprise:   false,
+    desc:         'Pour les agences avec plusieurs clients.',
     features: [
-      '500 pages / mois',
-      '15 stores connectés',
+      'Pages illimitées',
+      'Stores illimités',
       'Tous les templates',
-      'White-label (ton logo)',
-      'Analytics avancés',
+      'White-label complet',
+      'Dashboard multi-clients',
+      'Rapports PDF brandés',
       'Accès API',
-      'Support dédié',
+      'Support dédié + onboarding',
     ],
     cta: 'Démarrer avec Agency',
+  },
+  {
+    id:           'enterprise',
+    name:         'Enterprise',
+    priceMonthly: 0,
+    priceAnnual:  0,
+    badge:        'Sur mesure',
+    popular:      false,
+    enterprise:   true,
+    desc:         'Pour les grandes structures avec des besoins spécifiques.',
+    features: [
+      'Tout ce qu\'inclut Agency',
+      'Intégrations sur mesure',
+      'SLA 99.9% garanti',
+      'Account manager dédié',
+      'Formation équipe incluse',
+      '5+ sièges utilisateur',
+      'Facturation personnalisée',
+    ],
+    cta: 'Nous contacter',
   },
 ]
 
@@ -206,8 +232,8 @@ function PricingContent() {
 
       {/* ── CARTES PLANS ─────────────────────────────────────────────────── */}
       <div className="py-16 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 items-center">
             {PLANS.map(plan => {
               const price = annual ? plan.priceAnnual : plan.priceMonthly
               return (
@@ -221,13 +247,20 @@ function PricingContent() {
                           border: '2px solid #16a34a',
                           transform: 'scale(1.04)',
                           boxShadow: '0 0 0 2px #16a34a, 0 8px 32px rgba(22,163,74,0.14), 0 24px 48px rgba(0,0,0,0.06)',
-                          padding: '32px 28px',
+                          padding: '32px 24px',
+                        }
+                      : plan.enterprise
+                      ? {
+                          background: '#111827',
+                          border: '1px solid #374151',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                          padding: '28px 24px',
                         }
                       : {
                           background: '#ffffff',
                           border: '1px solid #e5e7eb',
                           boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                          padding: '28px',
+                          padding: '28px 24px',
                         }
                   }
                 >
@@ -238,6 +271,8 @@ function PricingContent() {
                       style={
                         plan.popular
                           ? { background: '#16a34a', color: '#ffffff' }
+                          : plan.enterprise
+                          ? { background: '#6366f1', color: '#ffffff' }
                           : { background: '#f59e0b', color: '#ffffff' }
                       }
                     >
@@ -247,27 +282,48 @@ function PricingContent() {
 
                   {/* Nom + description */}
                   <div className="mb-5">
-                    <div className="font-black text-gray-900 text-lg mb-1">{plan.name}</div>
-                    <div className="text-sm text-gray-400">{plan.desc}</div>
+                    <div
+                      className="font-black text-lg mb-1"
+                      style={{ color: plan.enterprise ? '#ffffff' : '#111827' }}
+                    >
+                      {plan.name}
+                    </div>
+                    <div
+                      className="text-sm"
+                      style={{ color: plan.enterprise ? 'rgba(255,255,255,0.5)' : '#9ca3af' }}
+                    >
+                      {plan.desc}
+                    </div>
                   </div>
 
                   {/* Prix */}
-                  <div className="flex items-end gap-1 mb-6">
-                    <span
-                      className="font-black text-gray-900"
-                      style={{ fontSize: '3rem', lineHeight: 1, letterSpacing: '-0.03em' }}
-                    >
-                      {price}€
-                    </span>
-                    <div className="mb-1.5 ml-1">
-                      <div className="text-sm text-gray-400">/mois</div>
-                      {annual && (
-                        <div className="text-[11px] text-green-600 font-semibold">
-                          soit {price * 12}€/an
-                        </div>
-                      )}
+                  {plan.enterprise ? (
+                    <div className="mb-6">
+                      <div className="font-black text-white" style={{ fontSize: '1.6rem', lineHeight: 1.2, letterSpacing: '-0.02em' }}>
+                        Sur devis
+                      </div>
+                      <div className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                        Tarif personnalisé selon vos besoins
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="flex items-end gap-1 mb-6">
+                      <span
+                        className="font-black text-gray-900"
+                        style={{ fontSize: '2.8rem', lineHeight: 1, letterSpacing: '-0.03em' }}
+                      >
+                        {price}€
+                      </span>
+                      <div className="mb-1.5 ml-1">
+                        <div className="text-sm text-gray-400">/mois</div>
+                        {annual && (
+                          <div className="text-[11px] text-green-600 font-semibold">
+                            soit {price * 12}€/an
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Features */}
                   <ul className="space-y-3 flex-1 mb-7">
@@ -275,34 +331,47 @@ function PricingContent() {
                       <li key={f} className="flex items-start gap-2.5 text-sm">
                         <div
                           className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                          style={{ background: '#dcfce7' }}
+                          style={{ background: plan.enterprise ? 'rgba(99,102,241,0.3)' : '#dcfce7' }}
                         >
-                          <Check className="w-2.5 h-2.5 text-green-600" />
+                          <Check
+                            className="w-2.5 h-2.5"
+                            style={{ color: plan.enterprise ? '#a5b4fc' : '#16a34a' }}
+                          />
                         </div>
-                        <span className="text-gray-600">{f}</span>
+                        <span style={{ color: plan.enterprise ? 'rgba(255,255,255,0.7)' : '#4b5563' }}>{f}</span>
                       </li>
                     ))}
                   </ul>
 
                   {/* CTA */}
-                  <button
-                    onClick={() => handleCheckout(plan.id)}
-                    disabled={loading === plan.id}
-                    className="w-full font-bold py-3.5 rounded-lg text-sm transition-all duration-200 disabled:opacity-50"
-                    style={
-                      plan.popular
-                        ? { background: '#16a34a', color: '#ffffff', boxShadow: '0 4px 12px rgba(22,163,74,0.3)' }
-                        : { background: '#f9fafb', color: '#374151', border: '1px solid #e5e7eb' }
-                    }
-                    onMouseEnter={(e) => {
-                      if (!plan.popular) (e.currentTarget as HTMLElement).style.background = '#f3f4f6'
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!plan.popular) (e.currentTarget as HTMLElement).style.background = '#f9fafb'
-                    }}
-                  >
-                    {loading === plan.id ? 'Redirection...' : plan.cta}
-                  </button>
+                  {plan.enterprise ? (
+                    <Link
+                      href="/contact"
+                      className="w-full font-bold py-3.5 rounded-lg text-sm text-center transition-all duration-200 block"
+                      style={{ background: '#6366f1', color: '#ffffff', boxShadow: '0 4px 12px rgba(99,102,241,0.3)' }}
+                    >
+                      {plan.cta}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => handleCheckout(plan.id)}
+                      disabled={loading === plan.id}
+                      className="w-full font-bold py-3.5 rounded-lg text-sm transition-all duration-200 disabled:opacity-50"
+                      style={
+                        plan.popular
+                          ? { background: '#16a34a', color: '#ffffff', boxShadow: '0 4px 12px rgba(22,163,74,0.3)' }
+                          : { background: '#f9fafb', color: '#374151', border: '1px solid #e5e7eb' }
+                      }
+                      onMouseEnter={(e) => {
+                        if (!plan.popular) (e.currentTarget as HTMLElement).style.background = '#f3f4f6'
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!plan.popular) (e.currentTarget as HTMLElement).style.background = '#f9fafb'
+                      }}
+                    >
+                      {loading === plan.id ? 'Redirection...' : plan.cta}
+                    </button>
+                  )}
                 </div>
               )
             })}
@@ -335,20 +404,27 @@ function PricingContent() {
 
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden" style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
             {/* Header */}
-            <div className="grid grid-cols-4 border-b border-gray-100">
+            <div className="grid grid-cols-5 border-b border-gray-100">
               <div className="p-4 col-span-1" />
-              {['Starter', 'Pro', 'Agency'].map((n, i) => (
+              {[
+                { label: 'Starter', highlight: false, dark: false },
+                { label: 'Pro', highlight: true, dark: false },
+                { label: 'Agency', highlight: false, dark: false },
+                { label: 'Enterprise', highlight: false, dark: true },
+              ].map(({ label, highlight, dark }) => (
                 <div
-                  key={n}
+                  key={label}
                   className="p-4 text-center font-black text-sm"
                   style={
-                    i === 1
+                    highlight
                       ? { background: '#f0fdf4', color: '#16a34a' }
+                      : dark
+                      ? { background: '#111827', color: '#ffffff' }
                       : { color: '#374151' }
                   }
                 >
-                  {n}
-                  {i === 1 && (
+                  {label}
+                  {highlight && (
                     <div className="text-[10px] font-semibold text-green-500 mt-0.5">Recommandé</div>
                   )}
                 </div>
@@ -357,26 +433,37 @@ function PricingContent() {
 
             {/* Rows */}
             {[
-              { feature: 'Pages / mois', values: ['50', '200', '500'] },
-              { feature: 'Stores connectés', values: ['2', '5', '15'] },
-              { feature: 'Templates', values: ['5', 'Tous', 'Tous'] },
-              { feature: 'Export HTML', values: [true, true, true] },
-              { feature: 'Analytics', values: [false, true, true] },
-              { feature: 'White-label', values: [false, false, true] },
-              { feature: 'Accès API', values: [false, false, true] },
-              { feature: 'Support', values: ['Email', 'Prioritaire', 'Dédié'] },
+              { feature: 'Pages / mois',     values: ['75', '300', 'Illimitées', 'Illimitées'] },
+              { feature: 'Stores connectés', values: ['2', '7', 'Illimités', 'Illimités'] },
+              { feature: 'Templates',        values: ['17', 'Tous', 'Tous', 'Tous'] },
+              { feature: 'Copy AI',          values: [true, true, true, true] },
+              { feature: 'Export HTML',      values: [true, true, true, true] },
+              { feature: 'Analytics',        values: [false, true, true, true] },
+              { feature: 'White-label',      values: [false, false, true, true] },
+              { feature: 'Accès API',        values: [false, false, true, true] },
+              { feature: 'Multi-clients',    values: [false, false, true, true] },
+              { feature: 'Rapports PDF',     values: [false, false, true, true] },
+              { feature: 'SLA garanti',      values: [false, false, false, true] },
+              { feature: 'Account manager', values: [false, false, false, true] },
+              { feature: 'Support',          values: ['Email 48h', 'Prioritaire 24h', 'Dédié', 'Dédié + SLA'] },
             ].map(({ feature, values }, rowIdx) => (
               <div
                 key={feature}
-                className="grid grid-cols-4 border-b border-gray-50 hover:bg-gray-50 transition-colors"
-                style={{ borderBottomColor: rowIdx === 7 ? 'transparent' : undefined }}
+                className="grid grid-cols-5 border-b border-gray-50 hover:bg-gray-50 transition-colors"
+                style={{ borderBottomColor: rowIdx === 12 ? 'transparent' : undefined }}
               >
-                <div className="p-4 text-sm text-gray-600 font-medium">{feature}</div>
+                <div className="p-3.5 text-sm text-gray-600 font-medium">{feature}</div>
                 {values.map((val, i) => (
                   <div
                     key={i}
-                    className="p-4 text-center"
-                    style={i === 1 ? { background: 'rgba(240,253,244,0.4)' } : {}}
+                    className="p-3.5 text-center"
+                    style={
+                      i === 1
+                        ? { background: 'rgba(240,253,244,0.4)' }
+                        : i === 3
+                        ? { background: 'rgba(17,24,39,0.04)' }
+                        : {}
+                    }
                   >
                     {typeof val === 'boolean' ? (
                       val

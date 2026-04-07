@@ -1,6 +1,53 @@
 'use client'
 
 import { useState } from 'react'
+import {
+  templateMinimalDark,
+  templateCleanWhite,
+  templateBoldSales,
+  templateLuxury,
+  templateMobileFirst,
+  templateSheinPro,
+} from '@/lib/templates'
+import type { LandingPageData } from '@/types'
+
+// ---------------------------------------------------------------------------
+// Sample data pour les previews
+// ---------------------------------------------------------------------------
+
+const SAMPLE_DATA: LandingPageData = {
+  product_name: 'ProRunner X5',
+  headline: 'Les chaussures qui transforment ta course',
+  subtitle: 'Technologie carbone légère. 47% plus rapide. Approuvé par 12 000 athlètes.',
+  cta: 'Commander maintenant — Livraison offerte',
+  urgency: '⚡ Stock limité — Il reste 23 paires',
+  benefits: [
+    'Semelle carbone ultra-légère (-40% vs standard)',
+    'Amorti réactif pour chaque foulée',
+    'Respirant mesh technique 360°',
+    'Semelle antidérapante tout terrain',
+  ],
+  faq: [
+    { question: 'Quelle taille choisir ?', answer: 'Prenez votre taille habituelle. En cas de doute entre deux tailles, choisissez la plus grande.' },
+    { question: 'Délai de livraison ?', answer: 'Livraison en 2-4 jours ouvrés. Suivi inclus.' },
+  ],
+  price: '79',
+  original_price: '129',
+  images: [],
+}
+
+// ---------------------------------------------------------------------------
+// Mapping template id → fonction HTML
+// ---------------------------------------------------------------------------
+
+const TEMPLATE_FN_MAP: Record<string, (data: LandingPageData) => string> = {
+  'minimal-dark': templateMinimalDark,
+  'clean-white':  templateCleanWhite,
+  'bold-orange':  templateBoldSales,
+  'luxe-noir':    templateLuxury,
+  'mobile-first': templateMobileFirst,
+  'shein-pro':    templateSheinPro,
+}
 
 // ---------------------------------------------------------------------------
 // Types
@@ -271,10 +318,10 @@ const FILTER_TABS: string[] = [
 ]
 
 // ---------------------------------------------------------------------------
-// Mockup component — simule une page produit miniature sans image externe
+// Mockup fallback — gradient CSS (pour les templates sans implémentation HTML)
 // ---------------------------------------------------------------------------
 
-function TemplateMockup({ gradient, textColor, border }: { gradient: string; textColor: string; border?: string }) {
+function TemplateMockupFallback({ gradient, textColor, border }: { gradient: string; textColor: string; border?: string }) {
   const isLight = textColor === 'text-gray-900'
   const barColor = isLight ? 'bg-gray-300' : 'bg-white/30'
   const blockColor = isLight ? 'bg-gray-200' : 'bg-white/20'
@@ -314,6 +361,41 @@ function TemplateMockup({ gradient, textColor, border }: { gradient: string; tex
 }
 
 // ---------------------------------------------------------------------------
+// Preview iframe — rendu HTML réel du template
+// ---------------------------------------------------------------------------
+
+function TemplatePreview({ id, gradient, textColor, border }: { id: string; gradient: string; textColor: string; border?: string }) {
+  const templateFn = TEMPLATE_FN_MAP[id]
+
+  if (!templateFn) {
+    return <TemplateMockupFallback gradient={gradient} textColor={textColor} border={border} />
+  }
+
+  const html = templateFn(SAMPLE_DATA)
+
+  return (
+    <div className="relative overflow-hidden h-52" style={{ background: '#f9fafb' }}>
+      <iframe
+        srcDoc={html}
+        title="Template preview"
+        style={{
+          width: '900px',
+          height: '600px',
+          transform: 'scale(0.42)',
+          transformOrigin: 'top left',
+          border: 'none',
+          pointerEvents: 'none',
+          display: 'block',
+        }}
+        sandbox="allow-same-origin"
+      />
+      {/* Overlay pour empêcher les clics sur l'iframe */}
+      <div className="absolute inset-0" />
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Template card
 // ---------------------------------------------------------------------------
 
@@ -322,7 +404,7 @@ function TemplateCard({ t }: { t: Template }) {
     <div className="group cursor-pointer rounded-2xl overflow-hidden border border-gray-100 hover:shadow-2xl hover:shadow-[#5B47F5]/10 transition-all duration-300 hover:-translate-y-1">
       {/* Aperçu visuel */}
       <div className="relative">
-        <TemplateMockup gradient={t.gradient} textColor={t.textColor} border={t.border} />
+        <TemplatePreview id={t.id} gradient={t.gradient} textColor={t.textColor} border={t.border} />
 
         {/* Tag — haut droite */}
         <span

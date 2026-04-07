@@ -373,13 +373,74 @@ function Slide1() {
 }
 
 // Slide 2 — Templates
+const TEMPLATE_CARDS = [
+  {
+    name: 'Mode & Fashion',
+    accent: '#7c6af7',
+    bg: 'linear-gradient(160deg,#1a1040 0%,#2d1f6e 100%)',
+    heroColor: 'linear-gradient(135deg,#5B47F5,#7c6af7)',
+    price: '49,90€',
+    oldPrice: '89€',
+    label: 'Nouvelle collection',
+    cta: 'Acheter maintenant',
+    badge: { color: '#7c6af7', text: '+38% CVR', icon: '↑' },
+    delay: '0s',
+    shapes: [
+      { w: 48, h: 64, top: '10%', left: '10%', r: 8, bg: 'rgba(255,255,255,0.08)' },
+      { w: 32, h: 32, top: '10%', right: '12%', r: 999, bg: 'rgba(124,106,247,0.35)' },
+    ],
+  },
+  {
+    name: 'Tech & Gadgets',
+    accent: '#38bdf8',
+    bg: 'linear-gradient(160deg,#0a0f1a 0%,#0f1f35 100%)',
+    heroColor: 'linear-gradient(135deg,#0ea5e9,#38bdf8)',
+    price: '129€',
+    oldPrice: '199€',
+    label: 'Meilleure vente',
+    cta: 'Commander',
+    badge: { color: '#0ea5e9', text: 'ROAS ×4.2', icon: '⚡' },
+    delay: '0.15s',
+    shapes: [
+      { w: 52, h: 40, top: '8%', left: '50%', r: 6, bg: 'rgba(14,165,233,0.15)' },
+      { w: 20, h: 20, top: '30%', left: '12%', r: 999, bg: 'rgba(56,189,248,0.3)' },
+    ],
+  },
+  {
+    name: 'Beauté & Bien-être',
+    accent: '#fb923c',
+    bg: 'linear-gradient(160deg,#1f0d00 0%,#3d1f05 100%)',
+    heroColor: 'linear-gradient(135deg,#f97316,#fb923c)',
+    price: '34,90€',
+    oldPrice: '59€',
+    label: '-41% ce week-end',
+    cta: 'J\'en profite',
+    badge: { color: '#f97316', text: '+52% Add to cart', icon: '🛒' },
+    delay: '0.3s',
+    shapes: [
+      { w: 36, h: 56, top: '5%', right: '10%', r: 999, bg: 'rgba(249,115,22,0.2)' },
+      { w: 22, h: 22, top: '35%', left: '15%', r: 999, bg: 'rgba(251,146,60,0.3)' },
+    ],
+  },
+  {
+    name: 'Sport & Outdoor',
+    accent: '#2dd4bf',
+    bg: 'linear-gradient(160deg,#001a18 0%,#04312d 100%)',
+    heroColor: 'linear-gradient(135deg,#0d9488,#2dd4bf)',
+    price: '79,90€',
+    oldPrice: '119€',
+    label: 'Top performance',
+    cta: 'Découvrir',
+    badge: { color: '#0d9488', text: '×3.8 ROAS', icon: '🏆' },
+    delay: '0.45s',
+    shapes: [
+      { w: 44, h: 44, top: '8%', left: '20%', r: 8, bg: 'rgba(45,212,191,0.12)' },
+      { w: 18, h: 18, top: '20%', right: '15%', r: 999, bg: 'rgba(13,148,136,0.4)' },
+    ],
+  },
+]
+
 function Slide2() {
-  const templates = [
-    { name: 'Mode & Fashion', gradient: 'linear-gradient(135deg,#5B47F5,#7c6af7)' },
-    { name: 'Tech & Gadgets', gradient: 'linear-gradient(135deg,#111827,#374151)' },
-    { name: 'Beauté & Bien-être', gradient: 'linear-gradient(135deg,#f97316,#fb923c)' },
-    { name: 'Sport & Outdoor', gradient: 'linear-gradient(135deg,#0d9488,#2dd4bf)' },
-  ]
   return (
     <div className="slide-item flex items-center justify-center px-5 sm:px-8">
       <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-24 pt-36">
@@ -407,20 +468,101 @@ function Slide2() {
             Explorer les templates <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="hidden lg:grid grid-cols-2 gap-4">
-          {templates.map((t) => (
+
+        {/* Grille 2×2 de mini mockups */}
+        <div className="hidden lg:grid grid-cols-2 gap-3">
+          {TEMPLATE_CARDS.map((t) => (
             <div
               key={t.name}
-              className="float-anim rounded-2xl p-6 flex flex-col justify-end h-36"
-              style={{ background: t.gradient, boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}
+              className="float-anim relative rounded-2xl overflow-hidden"
+              style={{
+                background: t.bg,
+                boxShadow: `0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)`,
+                animationDelay: t.delay,
+                height: '188px',
+              }}
             >
-              <span className="text-white font-bold text-sm">{t.name}</span>
-              <span
-                className="mt-1 inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full w-fit"
-                style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}
+              {/* Formes décoratives en fond */}
+              {t.shapes.map((s, i) => (
+                <div
+                  key={i}
+                  className="absolute pointer-events-none"
+                  style={{
+                    width: s.w, height: s.h,
+                    top: s.top,
+                    left: 'left' in s ? s.left : undefined,
+                    right: 'right' in s ? s.right : undefined,
+                    borderRadius: s.r,
+                    background: s.bg,
+                  }}
+                />
+              ))}
+
+              {/* Zone hero produit simulée */}
+              <div
+                className="mx-3 mt-3 rounded-xl flex items-center justify-center relative overflow-hidden"
+                style={{ height: '72px', background: t.heroColor }}
               >
-                <Check className="w-3 h-3" /> Optimisé CVR
-              </span>
+                {/* Lignes de shimmer simulant une image produit */}
+                <div className="absolute inset-0 flex flex-col gap-1.5 p-2 justify-end">
+                  <div className="h-1.5 rounded-full w-1/2" style={{ background: 'rgba(255,255,255,0.25)' }} />
+                  <div className="h-1 rounded-full w-1/3" style={{ background: 'rgba(255,255,255,0.15)' }} />
+                </div>
+                {/* Badge label */}
+                <div
+                  className="absolute top-2 left-2 text-[9px] font-black px-2 py-0.5 rounded-full"
+                  style={{ background: 'rgba(0,0,0,0.45)', color: '#fff', backdropFilter: 'blur(4px)' }}
+                >
+                  {t.label}
+                </div>
+                {/* Icone produit simulé */}
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
+                  style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)' }}
+                >
+                  {t.name === 'Mode & Fashion' ? '👗' : t.name === 'Tech & Gadgets' ? '🎧' : t.name === 'Beauté & Bien-être' ? '💆' : '🏋️'}
+                </div>
+              </div>
+
+              {/* Corps de la landing page simulée */}
+              <div className="px-3 pt-2.5 pb-2">
+                {/* Prix */}
+                <div className="flex items-baseline gap-1.5 mb-2">
+                  <span className="text-white font-black text-sm">{t.price}</span>
+                  <span className="text-white/40 text-[10px] line-through">{t.oldPrice}</span>
+                </div>
+                {/* Lignes de texte simulées */}
+                <div className="flex flex-col gap-1 mb-2.5">
+                  <div className="h-1.5 rounded-full w-4/5" style={{ background: 'rgba(255,255,255,0.12)' }} />
+                  <div className="h-1.5 rounded-full w-3/5" style={{ background: 'rgba(255,255,255,0.07)' }} />
+                </div>
+                {/* CTA button */}
+                <div
+                  className="w-full py-1.5 rounded-lg text-center text-[10px] font-black text-white"
+                  style={{ background: t.heroColor, boxShadow: `0 2px 8px ${t.accent}55` }}
+                >
+                  {t.cta}
+                </div>
+              </div>
+
+              {/* Badge métrique flottant */}
+              <div
+                className="absolute bottom-2.5 right-2.5 flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] font-black text-white shadow-lg"
+                style={{
+                  background: t.badge.color,
+                  boxShadow: `0 4px 14px ${t.badge.color}66`,
+                  animation: `float-card ${3 + Math.random()}s ease-in-out infinite`,
+                  animationDelay: t.delay,
+                }}
+              >
+                <span>{t.badge.icon}</span>
+                <span>{t.badge.text}</span>
+              </div>
+
+              {/* Nom de la niche en bas à gauche */}
+              <div className="absolute bottom-2.5 left-3 text-[9px] font-bold text-white/40">
+                {t.name}
+              </div>
             </div>
           ))}
         </div>

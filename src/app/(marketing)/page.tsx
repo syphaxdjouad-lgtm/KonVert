@@ -31,6 +31,11 @@ const GLOBAL_CSS = `
     0%, 100% { transform: translateY(0px); }
     50%       { transform: translateY(-10px); }
   }
+  @keyframes float-card {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33%       { transform: translateY(-8px) rotate(0.5deg); }
+    66%       { transform: translateY(-4px) rotate(-0.3deg); }
+  }
   @keyframes orb-pulse {
     0%, 100% { opacity: 0.3; transform: scale(1); }
     50%       { opacity: 0.5; transform: scale(1.1); }
@@ -43,10 +48,16 @@ const GLOBAL_CSS = `
     from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+  @keyframes wave-move {
+    0%   { transform: scaleY(1); }
+    50%  { transform: scaleY(1.15); }
+    100% { transform: scaleY(1); }
+  }
 
-  .marquee-track { display: flex; flex-shrink: 0; animation: marquee 32s linear infinite; }
+  .marquee-track { display: flex; flex-shrink: 0; animation: marquee 40s linear infinite; }
   .marquee-wrap  { display: flex; overflow: hidden; }
   .float-anim    { animation: float 4s ease-in-out infinite; }
+  .float-card    { animation: float-card 5s ease-in-out infinite; }
   .orb-anim      { animation: orb-pulse 3s ease-in-out infinite; }
   .btn-shimmer   {
     background: linear-gradient(90deg, #5B47F5 0%, #7c6af7 40%, #5B47F5 60%, #4a38e0 100%);
@@ -105,7 +116,6 @@ function useCounter(target: number, duration: number, triggered: boolean): numbe
     const step = (ts: number) => {
       if (!start) start = ts
       const progress = Math.min((ts - start) / duration, 1)
-      // ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3)
       setValue(Math.floor(eased * target))
       if (progress < 1) requestAnimationFrame(step)
@@ -160,7 +170,7 @@ function Slide1() {
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            Powered by Claude AI
+            by NEXARA
           </div>
           <h1
             className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6"
@@ -199,17 +209,14 @@ function Slide1() {
 
         {/* Visuel droite */}
         <div className="hidden lg:flex items-center justify-center relative">
-          {/* Orbe violet */}
           <div
             className="orb-anim absolute w-80 h-80 rounded-full pointer-events-none"
             style={{ background: 'radial-gradient(circle, rgba(91,71,245,0.35) 0%, transparent 70%)', zIndex: 0 }}
           />
-          {/* Browser mockup */}
           <div
             className="float-anim relative z-10 w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl"
             style={{ border: '1px solid rgba(255,255,255,0.1)', background: '#1a1a2e' }}
           >
-            {/* Barre browser */}
             <div className="flex items-center gap-2 px-4 py-3" style={{ background: '#111127', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
               <div className="flex gap-1.5">
                 <div className="w-3 h-3 rounded-full" style={{ background: '#ef4444' }} />
@@ -223,7 +230,6 @@ function Slide1() {
                 konvert.app/p/running-shoes-pro
               </div>
             </div>
-            {/* Image produit */}
             <div className="relative">
               <img
                 src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
@@ -232,7 +238,6 @@ function Slide1() {
               />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #1a1a2e 0%, transparent 60%)' }} />
             </div>
-            {/* Contenu bas */}
             <div className="p-4">
               <div className="h-3 rounded-full mb-2 w-3/4" style={{ background: 'rgba(255,255,255,0.1)' }} />
               <div className="h-2.5 rounded-full mb-1 w-full" style={{ background: 'rgba(255,255,255,0.06)' }} />
@@ -244,7 +249,6 @@ function Slide1() {
                 Acheter maintenant
               </div>
             </div>
-            {/* Toast CVR */}
             <div
               className="absolute bottom-20 right-4 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold shadow-xl"
               style={{ background: '#10b981', color: '#fff' }}
@@ -253,7 +257,6 @@ function Slide1() {
               +5.2% CVR
             </div>
           </div>
-          {/* Particules */}
           {[
             { top: '10%', left: '8%',  size: 8,  delay: '0s',   color: '#7c6af7' },
             { top: '20%', right: '5%', size: 6,  delay: '.8s',  color: '#a78bfa' },
@@ -368,7 +371,7 @@ function Slide3() {
             href="/dashboard/analytics"
             className="btn-shimmer inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg"
           >
-            Voir l'analytics <ArrowRight className="w-4 h-4" />
+            Voir l&apos;analytics <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
         <div className="hidden lg:flex flex-col gap-4">
@@ -392,7 +395,6 @@ function Slide3() {
               </span>
             </div>
           ))}
-          {/* Mini graphe barres SVG */}
           <div
             className="rounded-2xl p-4"
             style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
@@ -566,12 +568,28 @@ function HeroSlider() {
   return (
     <section
       className="relative overflow-hidden"
-      style={{ background: '#0a0a1a', minHeight: '100vh' }}
+      style={{ background: 'linear-gradient(160deg, #08091a 0%, #0d0b20 50%, #0a0a1a 100%)', minHeight: '100vh' }}
       onMouseEnter={pause}
       onMouseLeave={resume}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      {/* Gradient radial violet en bas */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse 70% 50% at 50% 110%, rgba(91,71,245,0.18) 0%, transparent 70%)',
+        }}
+      />
+      {/* Grain overlay très subtil */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-30"
+        style={{
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.08\'/%3E%3C/svg%3E")',
+          backgroundSize: '256px 256px',
+        }}
+      />
+
       {/* Track des slides */}
       <div
         className="slide-track"
@@ -586,7 +604,7 @@ function HeroSlider() {
       <button
         onClick={() => goTo(slide - 1)}
         className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full transition-all hover:scale-110 z-20"
-        style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}
+        style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)' }}
         aria-label="Slide précédent"
       >
         <ChevronLeft className="w-5 h-5 text-white" />
@@ -596,14 +614,14 @@ function HeroSlider() {
       <button
         onClick={() => goTo(slide + 1)}
         className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full transition-all hover:scale-110 z-20"
-        style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)' }}
+        style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)' }}
         aria-label="Slide suivant"
       >
         <ChevronRight className="w-5 h-5 text-white" />
       </button>
 
-      {/* Dots */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-20">
+      {/* Dots — style pill */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20 p-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(8px)' }}>
         {SLIDES.map((_, i) => (
           <button
             key={i}
@@ -611,9 +629,11 @@ function HeroSlider() {
             aria-label={`Slide ${i + 1}`}
             className="transition-all duration-300 rounded-full"
             style={{
-              width: i === slide ? 24 : 8,
+              width: i === slide ? 28 : 8,
               height: 8,
-              background: i === slide ? '#7c6af7' : 'rgba(255,255,255,0.35)',
+              background: i === slide
+                ? 'linear-gradient(90deg,#7c6af7,#a78bfa)'
+                : 'rgba(255,255,255,0.25)',
             }}
           />
         ))}
@@ -623,33 +643,41 @@ function HeroSlider() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   TRUST BAR
+   TRUST BAR — Logo marquee style
 ═══════════════════════════════════════════════════════════════════════════ */
-const TRUST_ITEMS = [
-  'Shopify', 'WooCommerce', 'AliExpress', 'Amazon', 'Alibaba',
-  'Claude AI', 'Stripe', 'Klaviyo', 'Zapier', 'Meta Ads',
+const TRUST_BRANDS = [
+  { name: 'SoundCloud',               style: { fontWeight: 700, fontSize: '17px', letterSpacing: '-0.3px' } },
+  { name: 'Harvard Business Review',  style: { fontWeight: 800, fontSize: '13px', lineHeight: '1.2', maxWidth: '90px', textAlign: 'center' as const } },
+  { name: 'CHOMPS',                   style: { fontWeight: 900, fontSize: '26px', letterSpacing: '1.5px' } },
+  { name: 'ebay',                     style: { fontWeight: 800, fontSize: '26px', letterSpacing: '-1px', color: '#4b5563' } },
+  { name: 'vimeo',                    style: { fontWeight: 700, fontSize: '22px', fontStyle: 'italic' } },
+  { name: '_zapier',                  style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'Shopify',                  style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'Stripe',                   style: { fontWeight: 700, fontSize: '20px', letterSpacing: '-0.5px' } },
+  { name: 'Klaviyo',                  style: { fontWeight: 700, fontSize: '18px' } },
 ]
 
 function TrustBar() {
-  const doubled = [...TRUST_ITEMS, ...TRUST_ITEMS]
+  const doubled = [...TRUST_BRANDS, ...TRUST_BRANDS]
   return (
-    <section style={{ background: '#ffffff', borderTop: '1px solid #f1f5f9', borderBottom: '1px solid #f1f5f9' }}>
-      <div className="py-5 marquee-wrap">
-        <div className="marquee-track gap-0">
-          {doubled.map((item, i) => (
-            <span key={i} className="flex items-center gap-4 px-6 text-sm font-semibold flex-shrink-0" style={{ color: '#94a3b8' }}>
-              {item}
-              <span style={{ color: '#cbd5e1' }}>•</span>
-            </span>
-          ))}
-        </div>
-        <div className="marquee-track gap-0" aria-hidden="true">
-          {doubled.map((item, i) => (
-            <span key={i} className="flex items-center gap-4 px-6 text-sm font-semibold flex-shrink-0" style={{ color: '#94a3b8' }}>
-              {item}
-              <span style={{ color: '#cbd5e1' }}>•</span>
-            </span>
-          ))}
+    <section style={{ background: '#f0eeff', borderTop: '1px solid #e4daff', borderBottom: '1px solid #e4daff' }}>
+      <div className="py-3">
+        <p className="text-center text-xs font-semibold uppercase tracking-widest mb-5" style={{ color: '#b8aee8' }}>
+          Utilisé par des marques qui convertissent
+        </p>
+        <div className="marquee-wrap">
+          <div className="marquee-track">
+            {doubled.map((brand, i) => (
+              <span
+                key={i}
+                className="flex items-center gap-12 px-10 flex-shrink-0"
+                style={{ color: '#374151', ...brand.style }}
+              >
+                {brand.name}
+                <span style={{ color: '#d1c7f5', fontSize: '20px', fontWeight: 300 }}>|</span>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -678,7 +706,7 @@ function StatsSection() {
   const stores = useCounter(2800,  1600, triggered)
 
   return (
-    <section ref={ref} style={{ background: '#0f0f1a' }}>
+    <section ref={ref} style={{ background: '#0e0d1e' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-20">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           {[
@@ -712,7 +740,7 @@ const FEATURES = [
     color: '#5B47F5',
     bg: 'rgba(91,71,245,0.08)',
     title: 'Génération IA en 30s',
-    desc: 'Claude AI analyse votre produit et rédige un copy haute conversion adapté à votre audience cible.',
+    desc: 'Notre IA analyse votre produit et rédige un copy haute conversion adapté à votre audience cible.',
   },
   {
     Icon: Palette,
@@ -753,7 +781,7 @@ const FEATURES = [
 
 function FeaturesSection() {
   return (
-    <section style={{ background: '#ffffff' }}>
+    <section style={{ background: '#faf8ff' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
         <div className="text-center mb-16">
           <div
@@ -778,8 +806,8 @@ function FeaturesSection() {
               className="reveal p-6 rounded-2xl transition-all hover:-translate-y-1 hover:shadow-lg"
               style={{
                 background: '#ffffff',
-                border: '1.5px solid #f1f5f9',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+                border: '1.5px solid #ede8ff',
+                boxShadow: '0 2px 12px rgba(91,71,245,0.05)',
                 transitionDelay: `${i * 0.07}s`,
               }}
             >
@@ -800,6 +828,172 @@ function FeaturesSection() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   A/B TESTING SECTION
+═══════════════════════════════════════════════════════════════════════════ */
+function ABTestingSection() {
+  return (
+    <section style={{ background: '#ffffff' }}>
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+          {/* Left */}
+          <div>
+            <h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-6 leading-tight">
+              A/B Testing pour l&apos;optimisation
+            </h2>
+            <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed mb-10">
+              Créez plusieurs variantes de landing pages pour mieux comprendre ce qui déclenche l&apos;action chez votre audience.
+              Testez les titres, images, CTAs et plus pour optimiser continuellement votre page.
+            </p>
+            <Link href="/features" className="reveal delay-2 inline-flex items-center gap-4 group">
+              <span className="font-bold text-gray-900 text-sm">Optimiser les performances</span>
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
+                style={{ background: '#b5f23d' }}
+              >
+                <ArrowRight className="w-5 h-5 text-gray-900" />
+              </div>
+            </Link>
+          </div>
+
+          {/* Right — mockup A/B */}
+          <div className="hidden lg:flex items-center justify-center relative" style={{ minHeight: '480px' }}>
+
+            {/* Page variant B (arrière) */}
+            <div
+              className="absolute rounded-2xl overflow-hidden shadow-xl"
+              style={{
+                width: '300px',
+                top: '10px',
+                right: '10px',
+                background: '#1a2535',
+                border: '1px solid rgba(255,255,255,0.08)',
+                transform: 'rotate(3deg)',
+                zIndex: 1,
+              }}
+            >
+              <div className="flex items-center gap-2 px-3 py-2" style={{ background: '#111827', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                  <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                </div>
+                <div className="flex-1 rounded px-2 py-0.5 text-xs text-white/30 font-mono" style={{ background: 'rgba(255,255,255,0.05)' }}>konvert.app/p/variant-b</div>
+              </div>
+              <div className="p-4" style={{ background: '#1a2535' }}>
+                <div className="h-20 rounded-lg mb-3" style={{ background: 'linear-gradient(135deg,#0d9488,#2dd4bf)' }} />
+                <div className="h-2 rounded w-3/4 mb-2" style={{ background: 'rgba(255,255,255,0.12)' }} />
+                <div className="h-2 rounded w-full mb-1" style={{ background: 'rgba(255,255,255,0.06)' }} />
+                <div className="h-2 rounded w-5/6" style={{ background: 'rgba(255,255,255,0.06)' }} />
+              </div>
+            </div>
+
+            {/* Page variant A (avant) */}
+            <div
+              className="float-anim absolute rounded-2xl overflow-hidden shadow-2xl"
+              style={{
+                width: '320px',
+                top: '20px',
+                left: '0px',
+                background: '#fff',
+                border: '1.5px solid #e5e7eb',
+                zIndex: 2,
+              }}
+            >
+              <div className="flex items-center justify-between px-3 py-2" style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 rounded-full bg-red-400" />
+                  <div className="w-2 h-2 rounded-full bg-yellow-400" />
+                  <div className="w-2 h-2 rounded-full bg-green-400" />
+                </div>
+                <div className="flex-1 mx-2 rounded px-2 py-0.5 text-xs text-gray-400 font-mono bg-white border border-gray-200">NexGen Tech</div>
+                <span className="text-xs font-bold text-white px-2 py-0.5 rounded" style={{ background: '#10b981', whiteSpace: 'nowrap' }}>Get the Guide ›</span>
+              </div>
+              <div style={{ background: 'linear-gradient(135deg,#0d9488 0%, #1e3a5f 100%)' }}>
+                <div className="p-4">
+                  <p className="text-green-300 text-xs font-bold mb-1">Download Our Free Guide:</p>
+                  <p className="text-white font-black text-sm leading-tight">Maximizing Efficiency with Innovative Software Solutions</p>
+                  <p className="text-white/60 text-xs mt-2">Discover how our state-of-the-art software can revolutionize your business.</p>
+                </div>
+              </div>
+              <div className="p-4 bg-white">
+                <p className="text-gray-700 text-xs font-bold mb-3">Fill out the form to get your free guide today!</p>
+                {['First Name', 'Last Name', 'Work Email Address', 'Company'].map((f) => (
+                  <div key={f} className="h-7 rounded border border-gray-200 mb-2 px-2 flex items-center">
+                    <span className="text-xs text-gray-400">{f}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="px-4 pb-4 text-center">
+                <div
+                  className="h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white"
+                  style={{ background: '#10b981' }}
+                >
+                  Unlock Your Business Potential →
+                </div>
+              </div>
+            </div>
+
+            {/* Barre "Add Variant" */}
+            <div
+              className="absolute flex items-center justify-center gap-2 text-sm font-bold text-white rounded-xl px-6 py-3 z-10"
+              style={{
+                bottom: '30px',
+                left: '0',
+                right: '80px',
+                background: '#1f2937',
+              }}
+            >
+              <span className="text-lg">+</span> Add Variant
+            </div>
+
+            {/* Floating stats card — le carré qui bouge */}
+            <div
+              className="float-card absolute rounded-2xl p-4 shadow-2xl z-20"
+              style={{
+                bottom: '80px',
+                right: '-10px',
+                background: 'rgba(20,22,38,0.95)',
+                backdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                width: '155px',
+              }}
+            >
+              <p className="text-white/50 text-xs font-bold tracking-widest mb-1">A/B TEST</p>
+              <p className="text-white font-black text-4xl mb-3">+45%</p>
+              <svg viewBox="0 0 120 44" className="w-full">
+                <defs>
+                  <linearGradient id="abGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#7c6af7" />
+                    <stop offset="100%" stopColor="#22d3ee" />
+                  </linearGradient>
+                  <linearGradient id="abFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#7c6af7" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.05" />
+                  </linearGradient>
+                </defs>
+                <polygon
+                  points="0,44 0,38 15,32 30,34 45,22 60,24 75,14 90,16 105,7 120,4 120,44"
+                  fill="url(#abFill)"
+                />
+                <polyline
+                  points="0,38 15,32 30,34 45,22 60,24 75,14 90,16 105,7 120,4"
+                  fill="none"
+                  stroke="url(#abGrad)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    HOW IT WORKS
 ═══════════════════════════════════════════════════════════════════════════ */
 const STEPS = [
@@ -813,7 +1007,7 @@ const STEPS = [
     num: '02',
     Icon: Sparkles,
     title: 'L\'IA génère le copy',
-    desc: 'Claude AI analyse le produit et crée le titre, accroche, bénéfices, FAQ et CTA en 30 secondes.',
+    desc: 'Notre IA analyse le produit et crée le titre, accroche, bénéfices, FAQ et CTA en 30 secondes.',
   },
   {
     num: '03',
@@ -825,7 +1019,7 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section style={{ background: '#0a0a1a' }}>
+    <section style={{ background: '#0b0b1c' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
         <div className="text-center mb-16">
           <div
@@ -839,12 +1033,11 @@ function HowItWorks() {
             3 étapes, 30 secondes.
           </h2>
           <p className="reveal delay-2 text-lg text-white/60 max-w-xl mx-auto">
-            De l'URL produit à la landing page publiée, tout se passe en moins d'une minute.
+            De l&apos;URL produit à la landing page publiée, tout se passe en moins d&apos;une minute.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
-          {/* Ligne de connexion desktop */}
           <div
             className="hidden lg:block absolute top-14 left-1/6 right-1/6 h-px"
             style={{ background: 'linear-gradient(90deg, transparent, rgba(91,71,245,0.4), transparent)' }}
@@ -882,6 +1075,93 @@ function HowItWorks() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   INTEGRATIONS SECTION — dark marketing stack
+═══════════════════════════════════════════════════════════════════════════ */
+const INTEGRATION_APPS = [
+  { name: 'Shopify',      emoji: '🛍️', color: '#96BF48' },
+  { name: 'Zapier',       emoji: '⚡', color: '#FF4A00' },
+  { name: 'HubSpot',      emoji: '🎯', color: '#FF7A59' },
+  { name: 'Klaviyo',      emoji: '📧', color: '#006BFF' },
+  { name: 'Stripe',       emoji: '💳', color: '#635BFF' },
+  { name: 'Meta Ads',     emoji: '📣', color: '#1877F2' },
+  { name: 'WooCommerce',  emoji: '🛒', color: '#7F54B3' },
+  { name: 'Mailchimp',    emoji: '✉️', color: '#FFE01B' },
+]
+
+function IntegrationsSection() {
+  return (
+    <section style={{ background: '#12131f', position: 'relative', overflow: 'hidden' }}>
+      {/* Glow violet haut-droite */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          right: '-5%',
+          top: '-10%',
+          width: '45%',
+          height: '80%',
+          background: 'radial-gradient(ellipse, rgba(91,71,245,0.28) 0%, transparent 65%)',
+        }}
+      />
+      {/* Glow subtil bas-gauche */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          left: '-5%',
+          bottom: '0',
+          width: '30%',
+          height: '50%',
+          background: 'radial-gradient(ellipse, rgba(139,92,246,0.12) 0%, transparent 70%)',
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-24 pb-0 text-center relative z-10">
+        <h2 className="reveal text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-6 leading-[1.1]">
+          Intégrez votre stack<br />marketing complet
+        </h2>
+        <p className="reveal delay-1 text-lg text-white/55 max-w-2xl mx-auto mb-10">
+          Des outils email aux plateformes CMS, en passant par les analytics et l&apos;automatisation,
+          KONVERT s&apos;intègre parfaitement avec toutes vos apps favorites.
+        </p>
+        <Link href="/integrations" className="reveal delay-2 inline-flex items-center gap-4 mb-20 group">
+          <span className="text-white font-bold text-sm">Intégrations</span>
+          <div
+            className="w-12 h-12 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
+            style={{ background: '#b5f23d' }}
+          >
+            <ArrowRight className="w-5 h-5 text-gray-900" />
+          </div>
+        </Link>
+
+        {/* App icons — grille isométrique */}
+        <div className="flex justify-center pb-0">
+          <div className="grid grid-cols-4 sm:grid-cols-8 gap-4 sm:gap-5">
+            {INTEGRATION_APPS.map((app, i) => (
+              <div
+                key={app.name}
+                className="float-anim flex flex-col items-center gap-2"
+                style={{ animationDelay: `${i * 0.25}s` }}
+              >
+                <div
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center shadow-2xl"
+                  style={{
+                    background: `linear-gradient(145deg, ${app.color}28 0%, #1e2035 100%)`,
+                    border: `1px solid ${app.color}33`,
+                    boxShadow: `0 8px 32px ${app.color}18, inset 0 1px 0 rgba(255,255,255,0.06)`,
+                  }}
+                >
+                  <span className="text-2xl sm:text-3xl">{app.emoji}</span>
+                </div>
+                <span className="text-white/40 text-xs font-semibold hidden sm:block">{app.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    TEMPLATES PREVIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 const TEMPLATE_GRID = [
@@ -897,7 +1177,7 @@ const TEMPLATE_GRID = [
 
 function TemplatesPreview() {
   return (
-    <section style={{ background: '#ffffff' }}>
+    <section style={{ background: '#faf8ff' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
         <div className="text-center mb-14">
           <div
@@ -933,7 +1213,7 @@ function TemplatesPreview() {
                   {t.tag}
                 </span>
               </div>
-              <div className="p-3 bg-white border border-gray-100 border-t-0 rounded-b-2xl">
+              <div className="p-3 bg-white border border-purple-50 border-t-0 rounded-b-2xl">
                 <span className="text-gray-800 text-sm font-semibold">{t.name}</span>
               </div>
             </div>
@@ -989,7 +1269,7 @@ const TESTIMONIALS = [
 
 function Testimonials() {
   return (
-    <section style={{ background: '#0f0f1a' }}>
+    <section style={{ background: '#0e0d1e' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
         <div className="text-center mb-14">
           <div
@@ -1013,21 +1293,18 @@ function Testimonials() {
               key={t.name}
               className="reveal p-6 rounded-2xl flex flex-col gap-4"
               style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.1)',
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
                 backdropFilter: 'blur(12px)',
                 transitionDelay: `${i * 0.1}s`,
               }}
             >
-              {/* Stars */}
               <div className="flex gap-1">
                 {Array.from({ length: t.stars }).map((_, s) => (
                   <Star key={s} className="w-4 h-4 fill-current" style={{ color: '#f59e0b' }} />
                 ))}
               </div>
-              {/* Quote */}
-              <p className="text-white/75 leading-relaxed text-sm flex-1">"{t.quote}"</p>
-              {/* Footer */}
+              <p className="text-white/75 leading-relaxed text-sm flex-1">&ldquo;{t.quote}&rdquo;</p>
               <div className="flex items-center justify-between pt-2" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
                 <div className="flex items-center gap-3">
                   <div
@@ -1090,7 +1367,7 @@ function PricingTeaser() {
   const [annual, setAnnual] = useState(false)
 
   return (
-    <section style={{ background: '#ffffff' }}>
+    <section style={{ background: '#faf8ff' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
         <div className="text-center mb-14">
           <div
@@ -1106,15 +1383,14 @@ function PricingTeaser() {
           <p className="reveal delay-2 text-lg text-gray-500 max-w-xl mx-auto mb-8">
             Commencez gratuitement pendant 14 jours. Sans carte bancaire.
           </p>
-          {/* Toggle mensuel/annuel */}
-          <div className="reveal delay-3 inline-flex items-center gap-3 p-1 rounded-full" style={{ background: '#f1f5f9' }}>
+          <div className="reveal delay-3 inline-flex items-center gap-3 p-1 rounded-full" style={{ background: '#ede8ff' }}>
             <button
               onClick={() => setAnnual(false)}
               className="px-5 py-2 rounded-full text-sm font-semibold transition-all"
               style={{
                 background: !annual ? '#ffffff' : 'transparent',
                 color: !annual ? '#111827' : '#6b7280',
-                boxShadow: !annual ? '0 1px 6px rgba(0,0,0,0.08)' : 'none',
+                boxShadow: !annual ? '0 1px 6px rgba(91,71,245,0.12)' : 'none',
               }}
             >
               Mensuel
@@ -1125,7 +1401,7 @@ function PricingTeaser() {
               style={{
                 background: annual ? '#ffffff' : 'transparent',
                 color: annual ? '#111827' : '#6b7280',
-                boxShadow: annual ? '0 1px 6px rgba(0,0,0,0.08)' : 'none',
+                boxShadow: annual ? '0 1px 6px rgba(91,71,245,0.12)' : 'none',
               }}
             >
               Annuel
@@ -1148,8 +1424,8 @@ function PricingTeaser() {
                 className="reveal rounded-2xl p-6 flex flex-col gap-5 relative"
                 style={{
                   background: plan.highlighted ? 'linear-gradient(135deg,#5B47F5,#7c6af7)' : '#ffffff',
-                  border: plan.highlighted ? 'none' : '1.5px solid #f1f5f9',
-                  boxShadow: plan.highlighted ? '0 16px 48px rgba(91,71,245,0.35)' : '0 2px 12px rgba(0,0,0,0.04)',
+                  border: plan.highlighted ? 'none' : '1.5px solid #ede8ff',
+                  boxShadow: plan.highlighted ? '0 16px 48px rgba(91,71,245,0.35)' : '0 2px 12px rgba(91,71,245,0.05)',
                   transitionDelay: `${i * 0.1}s`,
                 }}
               >
@@ -1248,8 +1524,7 @@ function FinalCTA() {
   const [urlInput, setUrlInput] = useState('')
 
   return (
-    <section style={{ background: '#0a0a1a', position: 'relative', overflow: 'hidden' }}>
-      {/* Gradient violet background */}
+    <section style={{ background: '#08091a', position: 'relative', overflow: 'hidden' }}>
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -1287,7 +1562,6 @@ function FinalCTA() {
           Collez une URL produit et voyez KONVERT générer votre landing page en temps réel.
         </p>
 
-        {/* Input URL + CTA */}
         <div
           className="reveal delay-3 flex flex-col sm:flex-row gap-3 max-w-xl mx-auto mb-5"
         >
@@ -1336,7 +1610,9 @@ export default function HomePage() {
         <TrustBar />
         <StatsSection />
         <FeaturesSection />
+        <ABTestingSection />
         <HowItWorks />
+        <IntegrationsSection />
         <TemplatesPreview />
         <Testimonials />
         <PricingTeaser />

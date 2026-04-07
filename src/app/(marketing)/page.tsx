@@ -1509,6 +1509,301 @@ function BuilderSection() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   ANALYTICS SECTION — dashboard mockup, image à gauche
+═══════════════════════════════════════════════════════════════════════════ */
+const ANALYTICS_BARS = [55, 72, 48, 88, 64, 95, 79]
+const ANALYTICS_METRICS = [
+  { label: 'Taux de conversion', value: '4.8%', delta: '+1.4pts', color: '#10b981' },
+  { label: 'ROAS moyen',         value: 'x4.2',  delta: '+0.9',   color: '#7c6af7' },
+  { label: 'Vues ce mois',       value: '28K',   delta: '+31%',   color: '#f59e0b' },
+]
+
+function AnalyticsShowcase() {
+  return (
+    <section style={{ background: '#faf8ff' }}>
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+
+          {/* Left — dashboard mockup */}
+          <div className="hidden lg:block relative">
+            <div
+              className="reveal rounded-3xl overflow-hidden shadow-2xl"
+              style={{ background: '#12131f', border: '1.5px solid rgba(255,255,255,0.07)' }}
+            >
+              {/* Header */}
+              <div
+                className="flex items-center justify-between px-5 py-4"
+                style={{ background: '#0e0f1c', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full" style={{ background: '#10b981' }} />
+                  <span className="text-white/60 text-sm font-semibold">Analytics · Boutique Alpha</span>
+                </div>
+                <span
+                  className="text-xs font-bold px-3 py-1 rounded-full"
+                  style={{ background: 'rgba(91,71,245,0.2)', color: '#a78bfa' }}
+                >
+                  Temps réel
+                </span>
+              </div>
+
+              {/* Métriques */}
+              <div className="grid grid-cols-3 gap-px p-0" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                {ANALYTICS_METRICS.map((m) => (
+                  <div
+                    key={m.label}
+                    className="flex flex-col gap-1 px-5 py-5"
+                    style={{ background: '#12131f' }}
+                  >
+                    <span className="text-white/40 text-xs font-medium">{m.label}</span>
+                    <span className="text-white font-black text-2xl">{m.value}</span>
+                    <span
+                      className="text-xs font-bold w-fit px-2 py-0.5 rounded-full"
+                      style={{ background: `${m.color}18`, color: m.color }}
+                    >
+                      {m.delta}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Graphe barres */}
+              <div className="px-5 pb-6 pt-4">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-white/50 text-xs font-semibold">Conversions — 7 derniers jours</span>
+                  <span className="text-white/30 text-xs">vs semaine préc.</span>
+                </div>
+                <div className="flex items-end gap-2 h-24">
+                  {ANALYTICS_BARS.map((h, i) => (
+                    <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                      <div
+                        className="w-full rounded-lg"
+                        style={{
+                          height: `${h}%`,
+                          background: i === ANALYTICS_BARS.length - 1
+                            ? 'linear-gradient(to top,#5B47F5,#7c6af7)'
+                            : 'rgba(91,71,245,0.3)',
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-between mt-2">
+                  {['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'].map(d => (
+                    <span key={d} className="flex-1 text-center text-white/25 text-xs">{d}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Ligne heatmap */}
+              <div
+                className="mx-5 mb-5 rounded-2xl px-4 py-3 flex items-center justify-between"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
+              >
+                <span className="text-white/50 text-xs">Scroll depth moyen</span>
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-0.5">
+                    {[100, 85, 70, 52, 38, 24].map((w, i) => (
+                      <div
+                        key={i}
+                        className="h-3 rounded-sm"
+                        style={{
+                          width: `${Math.max(w * 0.3, 6)}px`,
+                          background: `rgba(124,106,247,${0.2 + i * 0.12})`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-white font-bold text-sm">72%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating card CVR */}
+            <div
+              className="float-card absolute -bottom-4 -right-6 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl"
+              style={{
+                background: 'rgba(16,185,129,0.92)',
+                backdropFilter: 'blur(12px)',
+              }}
+            >
+              <TrendingUp className="w-5 h-5 text-white" />
+              <div>
+                <p className="text-white font-black text-lg leading-none">+5.2%</p>
+                <p className="text-white/70 text-xs">CVR vs mois dernier</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right — texte */}
+          <div>
+            <h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-6 leading-tight">
+              Analytics qui vous disent quoi faire, pas juste ce qui s&apos;est passé
+            </h2>
+            <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed mb-10">
+              Scroll depth, heatmaps, conversions en temps réel, ROAS par page.
+              Identifiez exactement ce qui bloque vos visiteurs et optimisez en continu
+              sans sortir de KONVERT.
+            </p>
+            <Link href="/features" className="reveal delay-2 inline-flex items-center gap-4 group">
+              <span className="font-bold text-gray-900 text-sm">Voir les analytics</span>
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
+                style={{ background: '#b5f23d' }}
+              >
+                <ArrowRight className="w-5 h-5 text-gray-900" />
+              </div>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PUBLISH SECTION — multi-plateforme, image à droite
+═══════════════════════════════════════════════════════════════════════════ */
+const PUBLISH_PLATFORMS = [
+  { name: 'Shopify',     color: '#96BF48', emoji: '🛍️', status: 'Publié',   time: 'Il y a 2 min' },
+  { name: 'WooCommerce', color: '#7F54B3', emoji: '🛒', status: 'En ligne',  time: 'Il y a 1h' },
+  { name: 'Export HTML', color: '#0ea5e9', emoji: '📄', status: 'Prêt',      time: 'À télécharger' },
+]
+
+function PublishSection() {
+  return (
+    <section style={{ background: '#ffffff' }}>
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+
+          {/* Left — texte */}
+          <div>
+            <h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-6 leading-tight">
+              Publiez en 1 clic sur votre boutique, partout
+            </h2>
+            <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed mb-10">
+              Shopify, WooCommerce ou export HTML brut — choisissez votre destination et KONVERT
+              publie votre landing page en quelques secondes. Zéro copier-coller, zéro développeur.
+            </p>
+            <Link href="/integrations" className="reveal delay-2 inline-flex items-center gap-4 group">
+              <span className="font-bold text-gray-900 text-sm">Voir les intégrations</span>
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
+                style={{ background: '#b5f23d' }}
+              >
+                <ArrowRight className="w-5 h-5 text-gray-900" />
+              </div>
+            </Link>
+          </div>
+
+          {/* Right — mockup publish */}
+          <div className="hidden lg:flex items-center justify-center relative">
+            <div
+              className="reveal w-full max-w-md rounded-3xl overflow-hidden shadow-2xl"
+              style={{ background: '#12131f', border: '1.5px solid rgba(255,255,255,0.07)' }}
+            >
+              {/* Header */}
+              <div
+                className="flex items-center justify-between px-5 py-4"
+                style={{ background: '#0e0f1c', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+              >
+                <span className="text-white/60 text-sm font-semibold">Publier la page</span>
+                <div
+                  className="px-3 py-1 rounded-full text-xs font-bold text-white"
+                  style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)' }}
+                >
+                  1 clic
+                </div>
+              </div>
+
+              {/* Aperçu page */}
+              <div className="mx-5 mt-5 rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.07)' }}>
+                <div
+                  className="h-28 flex flex-col justify-end p-3"
+                  style={{ background: 'linear-gradient(135deg,#5B47F5 0%,#7c6af7 100%)' }}
+                >
+                  <div className="h-3 rounded-full w-2/3 mb-1.5" style={{ background: 'rgba(255,255,255,0.5)' }} />
+                  <div className="h-2 rounded-full w-1/2" style={{ background: 'rgba(255,255,255,0.25)' }} />
+                </div>
+                <div className="px-3 py-2 flex items-center justify-between" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                  <span className="text-white/50 text-xs font-mono">konvert.app/p/running-pro</span>
+                  <span
+                    className="text-xs font-bold px-2 py-0.5 rounded-full"
+                    style={{ background: 'rgba(16,185,129,0.2)', color: '#10b981' }}
+                  >
+                    Live
+                  </span>
+                </div>
+              </div>
+
+              {/* Plateformes */}
+              <div className="px-5 py-5 flex flex-col gap-3">
+                {PUBLISH_PLATFORMS.map((p) => (
+                  <div
+                    key={p.name}
+                    className="flex items-center gap-4 px-4 py-3.5 rounded-2xl"
+                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
+                  >
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
+                      style={{ background: `${p.color}18`, border: `1px solid ${p.color}33` }}
+                    >
+                      {p.emoji}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-white text-sm font-semibold">{p.name}</div>
+                      <div className="text-white/35 text-xs">{p.time}</div>
+                    </div>
+                    <div
+                      className="flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0"
+                      style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981' }}
+                    >
+                      <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#10b981' }} />
+                      {p.status}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Bouton publish */}
+              <div className="px-5 pb-5">
+                <div
+                  className="w-full py-3.5 rounded-2xl text-center text-white font-bold text-sm"
+                  style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)', boxShadow: '0 4px 20px rgba(91,71,245,0.4)' }}
+                >
+                  Publier sur toutes les plateformes
+                </div>
+              </div>
+            </div>
+
+            {/* Floating success toast */}
+            <div
+              className="float-anim absolute -top-4 -left-6 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl"
+              style={{
+                background: 'rgba(15,17,30,0.95)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(16,185,129,0.3)',
+              }}
+            >
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ background: 'rgba(16,185,129,0.2)' }}
+              >
+                <Check className="w-4 h-4" style={{ color: '#10b981' }} />
+              </div>
+              <div>
+                <p className="text-white font-bold text-sm leading-none mb-0.5">Publiée sur Shopify</p>
+                <p className="text-white/40 text-xs">À l&apos;instant</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    TEMPLATES PREVIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 const TEMPLATE_GRID = [
@@ -1962,6 +2257,8 @@ export default function HomePage() {
         <IntegrationsSection />
         <DarkFeatureCards />
         <BuilderSection />
+        <AnalyticsShowcase />
+        <PublishSection />
         <TemplatesPreview />
         <Testimonials />
         <PricingTeaser />

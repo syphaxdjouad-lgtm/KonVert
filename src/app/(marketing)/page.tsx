@@ -1247,6 +1247,268 @@ function IntegrationsSection() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   DARK FEATURE CARDS — 2 rangées de 3 cartes
+═══════════════════════════════════════════════════════════════════════════ */
+const DARK_CARDS = [
+  {
+    icon: (
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </svg>
+    ),
+    title: 'Toolkit de conversion',
+    desc: 'Optimisez vos landing pages, promouvez vos offres et analysez vos résultats — tout depuis un seul outil.',
+  },
+  {
+    icon: (
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="3"/>
+        <path d="M2 10h20"/>
+        <path d="M7 15h2M12 15h5"/>
+        <path d="M7 15v1.5M9 15v1.5"/>
+      </svg>
+    ),
+    title: 'Transactions sur la page',
+    desc: 'Générez des revenus en bas du funnel en vendant produits et services directement sur vos landing pages.',
+  },
+  {
+    icon: (
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="2"/>
+        <circle cx="12" cy="17" r="1" fill="currentColor"/>
+      </svg>
+    ),
+    title: 'Optimisation mobile',
+    desc: 'Créez une expérience unique pour les utilisateurs mobiles qui convertit et met votre meilleur pied en avant.',
+  },
+  {
+    icon: (
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 20h9"/>
+        <path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635l-4 1 1-4 12.008-12.013z"/>
+        <path d="m14.5 6.5 3 3"/>
+        <circle cx="4.5" cy="4.5" r="1.5" fill="currentColor" stroke="none"/>
+        <path d="M3 3l2 2"/>
+      </svg>
+    ),
+    title: 'Génération IA de contenu',
+    desc: "Générez du copy et créez l'image parfaite en quelques secondes grâce à la puissance de l'IA.",
+  },
+  {
+    icon: (
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <path d="M8 11h6M11 8v6" strokeDasharray="3 1"/>
+      </svg>
+    ),
+    title: 'SEO & Performance',
+    desc: "Générez plus de trafic organique avec des templates optimisés, des vitesses de chargement ultra-rapides et des outils SEO natifs.",
+  },
+  {
+    icon: (
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="3"/>
+        <circle cx="8.5" cy="10" r="2"/>
+        <path d="M13 9h5M13 13h5M8.5 16h8"/>
+      </svg>
+    ),
+    title: 'Gestion des leads',
+    desc: 'Suivez, gérez et sauvegardez vos leads dans KONVERT, ou intégrez-les directement à votre CRM.',
+  },
+]
+
+function DarkFeatureCards() {
+  return (
+    <section style={{ background: '#0b0b1c', paddingTop: '0', paddingBottom: '96px' }}>
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {DARK_CARDS.map((card, i) => (
+            <div
+              key={card.title}
+              className="reveal flex flex-col items-center text-center px-8 py-12 rounded-3xl transition-all hover:-translate-y-1"
+              style={{
+                background: 'rgba(255,255,255,0.035)',
+                border: '1px solid rgba(255,255,255,0.07)',
+                transitionDelay: `${i * 0.08}s`,
+              }}
+            >
+              <div className="mb-7 text-white" style={{ opacity: 0.75 }}>
+                {card.icon}
+              </div>
+              <h3 className="text-white font-semibold text-xl mb-4 leading-snug">
+                {card.title}
+              </h3>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '15px', lineHeight: '1.7' }}>
+                {card.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BUILDER SECTION — laptop mockup + swatches flottants
+═══════════════════════════════════════════════════════════════════════════ */
+const SWATCHES = ['#d1d5db', '#ef4444', '#f97316', '#eab308', '#22c55e', '#a78bfa', '#5B47F5']
+
+function BuilderSection() {
+  return (
+    <section style={{ background: '#ffffff' }}>
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+
+          {/* Left */}
+          <div>
+            <h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-6 leading-tight">
+              Builder intuitif pour des landing pages optimisées pour la conversion
+            </h2>
+            <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed mb-10">
+              Créez des landing pages haute conversion sans écrire une seule ligne de code.
+              Construisez plusieurs variations, faites des A/B tests sur différents éléments de la page
+              et optimisez continuellement vos résultats grâce aux vraies données de conversion.
+            </p>
+            <Link href="/demo" className="reveal delay-2 inline-flex items-center gap-4 group">
+              <span className="font-bold text-gray-900 text-sm">Créer des pages optimisées</span>
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
+                style={{ background: '#b5f23d' }}
+              >
+                <ArrowRight className="w-5 h-5 text-gray-900" />
+              </div>
+            </Link>
+          </div>
+
+          {/* Right — Laptop mockup */}
+          <div className="hidden lg:flex items-start justify-center relative pt-8">
+
+            {/* Swatches flottants au dessus */}
+            <div
+              className="float-card absolute flex items-center gap-2.5 px-4 py-3 rounded-full shadow-xl z-20"
+              style={{
+                top: '-8px',
+                right: '20px',
+                background: 'rgba(255,255,255,0.97)',
+                border: '1px solid rgba(0,0,0,0.07)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+              }}
+            >
+              {SWATCHES.map((color) => (
+                <div
+                  key={color}
+                  className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
+                  style={{ background: color, boxShadow: '0 2px 6px rgba(0,0,0,0.15)' }}
+                />
+              ))}
+            </div>
+
+            {/* Écran laptop */}
+            <div className="w-full max-w-lg">
+              <div
+                className="rounded-2xl overflow-hidden shadow-2xl"
+                style={{
+                  background: '#1a1b2e',
+                  border: '1.5px solid rgba(255,255,255,0.08)',
+                  aspectRatio: '16/10',
+                  position: 'relative',
+                  display: 'flex',
+                }}
+              >
+                {/* Sidebar builder */}
+                <div
+                  className="flex flex-col gap-1.5 py-3 px-1.5 flex-shrink-0"
+                  style={{ width: '52px', background: '#111120', borderRight: '1px solid rgba(255,255,255,0.05)' }}
+                >
+                  {['📄', '✏️', '🖼️', '⚡', '📊', '⚙️'].map((icon, idx) => (
+                    <div
+                      key={idx}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-xs"
+                      style={{ background: idx === 0 ? 'rgba(91,71,245,0.35)' : 'transparent' }}
+                    >
+                      {icon}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Canvas */}
+                <div className="flex-1 flex flex-col">
+                  {/* Topbar */}
+                  <div
+                    className="flex items-center justify-between px-3 py-2 flex-shrink-0"
+                    style={{ background: '#16172a', borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-white/50 text-xs font-semibold">Leadmeter</span>
+                      <span
+                        className="text-xs font-bold px-2 py-0.5 rounded-full"
+                        style={{ background: 'rgba(16,185,129,0.2)', color: '#10b981' }}
+                      >
+                        Excellent
+                      </span>
+                    </div>
+                    <div className="flex gap-1.5">
+                      {['#ef4444','#f59e0b','#10b981'].map(c => (
+                        <div key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c }} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Page preview */}
+                  <div
+                    className="flex-1 relative overflow-hidden"
+                    style={{ background: 'linear-gradient(135deg,#ede9ff 0%,#f5f0ff 50%,#fce7f3 100%)' }}
+                  >
+                    <div className="p-5">
+                      <div className="flex items-center gap-1.5 mb-3">
+                        <div className="w-4 h-4 rounded-full" style={{ background: '#a78bfa' }} />
+                        <span className="text-xs font-bold" style={{ color: '#5B47F5' }}>Spark.ai</span>
+                      </div>
+                      <h4 className="font-black text-sm text-gray-800 leading-snug mb-1.5">
+                        The ultimate study buddy<br />for tech-savvy students
+                      </h4>
+                      <p className="text-gray-500 text-xs leading-relaxed mb-4">
+                        Ready to ace your exams? Transform your learning experience with brain-boosters.
+                      </p>
+                      <div
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white"
+                        style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)' }}
+                      >
+                        Start Free Trial →
+                      </div>
+                    </div>
+
+                    {/* Add Variant floating pill */}
+                    <div
+                      className="float-anim absolute bottom-5 right-4 flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold text-white shadow-2xl"
+                      style={{
+                        background: 'rgba(15,17,32,0.92)',
+                        backdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(255,255,255,0.12)',
+                      }}
+                    >
+                      <span className="text-base">+</span> Add Variant
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Socle laptop */}
+              <div className="flex flex-col items-center">
+                <div style={{ height: '14px', width: '70%', background: 'linear-gradient(to bottom,#252537,#1a1a2e)', borderRadius: '0 0 8px 8px' }} />
+                <div style={{ height: '6px', width: '88%', background: '#0f0f1e', borderRadius: '0 0 10px 10px' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    TEMPLATES PREVIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 const TEMPLATE_GRID = [
@@ -1698,6 +1960,8 @@ export default function HomePage() {
         <ABTestingSection />
         <HowItWorks />
         <IntegrationsSection />
+        <DarkFeatureCards />
+        <BuilderSection />
         <TemplatesPreview />
         <Testimonials />
         <PricingTeaser />

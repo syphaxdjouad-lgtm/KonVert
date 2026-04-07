@@ -8,6 +8,17 @@ import {
   templateLuxury,
   templateMobileFirst,
   templateSheinPro,
+  templateSportifEnergie,
+  templateNaturalOrganic,
+  templateTechGadget,
+  templateBeautyStudio,
+  templateHomeDeco,
+  templateKidsColorful,
+  templateFoodieGourmet,
+  templateTravelNomad,
+  templateAutomotivePro,
+  templateGamingZone,
+  templatePetLove,
 } from '@/lib/templates'
 import type { LandingPageData } from '@/types'
 
@@ -41,12 +52,23 @@ const SAMPLE_DATA: LandingPageData = {
 // ---------------------------------------------------------------------------
 
 const TEMPLATE_FN_MAP: Record<string, (data: LandingPageData) => string> = {
-  'minimal-dark': templateMinimalDark,
-  'clean-white':  templateCleanWhite,
-  'bold-orange':  templateBoldSales,
-  'luxe-noir':    templateLuxury,
-  'mobile-first': templateMobileFirst,
-  'shein-pro':    templateSheinPro,
+  'minimal-dark':    templateMinimalDark,
+  'clean-white':     templateCleanWhite,
+  'bold-orange':     templateBoldSales,
+  'luxe-noir':       templateLuxury,
+  'mobile-first':    templateMobileFirst,
+  'shein-pro':       templateSheinPro,
+  'sportif-energie': templateSportifEnergie,
+  'natural-organic': templateNaturalOrganic,
+  'tech-gadget':     templateTechGadget,
+  'beauty-studio':   templateBeautyStudio,
+  'home-deco':       templateHomeDeco,
+  'kids-colorful':   templateKidsColorful,
+  'foodie-gourmet':  templateFoodieGourmet,
+  'travel-nomad':    templateTravelNomad,
+  'automotive-pro':  templateAutomotivePro,
+  'gaming-zone':     templateGamingZone,
+  'pet-love':        templatePetLove,
 }
 
 // ---------------------------------------------------------------------------

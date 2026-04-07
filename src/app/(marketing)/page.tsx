@@ -317,8 +317,8 @@ function Slide1() {
             </div>
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
-                alt="Product landing page preview"
+                src="/images/hero-product-mockup.jpg"
+                alt="Page produit générée par KONVERT"
                 className="w-full h-44 object-cover"
               />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #1a1a2e 0%, transparent 60%)' }} />
@@ -379,6 +379,7 @@ const TEMPLATE_CARDS = [
     accent: '#7c6af7',
     bg: 'linear-gradient(160deg,#1a1040 0%,#2d1f6e 100%)',
     heroColor: 'linear-gradient(135deg,#5B47F5,#7c6af7)',
+    img: '/images/template-fashion.jpg',
     price: '49,90€',
     oldPrice: '89€',
     label: 'Nouvelle collection',
@@ -395,6 +396,7 @@ const TEMPLATE_CARDS = [
     accent: '#38bdf8',
     bg: 'linear-gradient(160deg,#0a0f1a 0%,#0f1f35 100%)',
     heroColor: 'linear-gradient(135deg,#0ea5e9,#38bdf8)',
+    img: '/images/template-tech.jpg',
     price: '129€',
     oldPrice: '199€',
     label: 'Meilleure vente',
@@ -411,6 +413,7 @@ const TEMPLATE_CARDS = [
     accent: '#fb923c',
     bg: 'linear-gradient(160deg,#1f0d00 0%,#3d1f05 100%)',
     heroColor: 'linear-gradient(135deg,#f97316,#fb923c)',
+    img: '/images/template-beauty.jpg',
     price: '34,90€',
     oldPrice: '59€',
     label: '-41% ce week-end',
@@ -427,6 +430,7 @@ const TEMPLATE_CARDS = [
     accent: '#2dd4bf',
     bg: 'linear-gradient(160deg,#001a18 0%,#04312d 100%)',
     heroColor: 'linear-gradient(135deg,#0d9488,#2dd4bf)',
+    img: null as string | null,
     price: '79,90€',
     oldPrice: '119€',
     label: 'Top performance',
@@ -503,11 +507,15 @@ function Slide2() {
                 className="mx-3 mt-3 rounded-xl flex items-center justify-center relative overflow-hidden"
                 style={{ height: '72px', background: t.heroColor }}
               >
-                {/* Lignes de shimmer simulant une image produit */}
-                <div className="absolute inset-0 flex flex-col gap-1.5 p-2 justify-end">
-                  <div className="h-1.5 rounded-full w-1/2" style={{ background: 'rgba(255,255,255,0.25)' }} />
-                  <div className="h-1 rounded-full w-1/3" style={{ background: 'rgba(255,255,255,0.15)' }} />
-                </div>
+                {/* Image produit si disponible */}
+                {t.img && (
+                  <img
+                    src={t.img}
+                    alt={t.name}
+                    className="absolute inset-0 w-full h-full object-cover opacity-50"
+                  />
+                )}
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%)' }} />
                 {/* Badge label */}
                 <div
                   className="absolute top-2 left-2 text-[9px] font-black px-2 py-0.5 rounded-full"
@@ -516,12 +524,14 @@ function Slide2() {
                   {t.label}
                 </div>
                 {/* Icone produit simulé */}
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
-                  style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)' }}
-                >
-                  {t.name === 'Mode & Fashion' ? '👗' : t.name === 'Tech & Gadgets' ? '🎧' : t.name === 'Beauté & Bien-être' ? '💆' : '🏋️'}
-                </div>
+                {!t.img && (
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
+                    style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)' }}
+                  >
+                    {t.name === 'Mode & Fashion' ? '👗' : t.name === 'Tech & Gadgets' ? '🎧' : t.name === 'Beauté & Bien-être' ? '💆' : '🏋️'}
+                  </div>
+                )}
               </div>
 
               {/* Corps de la landing page simulée */}
@@ -601,45 +611,42 @@ function Slide3() {
             Voir l&apos;analytics <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="hidden lg:flex flex-col gap-4">
-          {[
-            { label: 'Views', value: '12 847', delta: '+23%', color: '#5B47F5' },
-            { label: 'CVR',   value: '4.8%',   delta: '+1.2pts', color: '#10b981' },
-            { label: 'ROAS',  value: 'x4.2',   delta: '+0.8', color: '#f59e0b' },
-          ].map((s) => (
-            <div
-              key={s.label}
-              className="flex items-center justify-between px-5 py-4 rounded-2xl"
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
-            >
-              <span className="text-white/60 text-sm font-medium">{s.label}</span>
-              <span className="text-white font-black text-xl">{s.value}</span>
-              <span
-                className="text-xs font-bold px-2.5 py-1 rounded-full"
-                style={{ background: `${s.color}22`, color: s.color }}
-              >
-                {s.delta}
-              </span>
-            </div>
-          ))}
-          <div
-            className="rounded-2xl p-4"
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
-          >
-            <p className="text-white/40 text-xs mb-3">Conversions — 7 derniers jours</p>
-            <svg viewBox="0 0 140 48" className="w-full h-12">
-              {bars.map((h, i) => (
-                <rect
-                  key={i}
-                  x={i * 20 + 2}
-                  y={48 - h * 0.44}
-                  width={14}
-                  height={h * 0.44}
-                  rx="3"
-                  fill={i === bars.length - 1 ? '#7c6af7' : 'rgba(91,71,245,0.4)'}
-                />
+        <div className="hidden lg:flex flex-col relative">
+          {/* Dashboard image */}
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+            <img
+              src="/images/dashboard-analytics.jpg"
+              alt="Dashboard analytics KONVERT"
+              className="w-full object-cover"
+              style={{ height: '340px' }}
+            />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(8,9,26,0.9) 0%, rgba(8,9,26,0.2) 60%, transparent 100%)' }} />
+            {/* Metric overlays */}
+            <div className="absolute bottom-4 left-4 right-4 grid grid-cols-3 gap-2">
+              {[
+                { label: 'CVR', value: '4.8%', delta: '+1.2pts', color: '#10b981' },
+                { label: 'ROAS', value: 'x4.2', delta: '+0.8', color: '#7c6af7' },
+                { label: 'Views', value: '12 847', delta: '+23%', color: '#f59e0b' },
+              ].map((s) => (
+                <div
+                  key={s.label}
+                  className="flex flex-col gap-0.5 px-3 py-2.5 rounded-xl"
+                  style={{ background: 'rgba(12,13,28,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)' }}
+                >
+                  <span className="text-white/50 text-[10px] font-medium">{s.label}</span>
+                  <span className="text-white font-black text-base leading-none">{s.value}</span>
+                  <span className="text-[10px] font-bold" style={{ color: s.color }}>{s.delta}</span>
+                </div>
               ))}
-            </svg>
+            </div>
+            {/* Floating badge */}
+            <div
+              className="float-anim absolute top-4 right-4 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-white"
+              style={{ background: 'rgba(16,185,129,0.9)', backdropFilter: 'blur(8px)' }}
+            >
+              <TrendingUp className="w-3.5 h-3.5" />
+              Live
+            </div>
           </div>
         </div>
       </div>
@@ -806,6 +813,16 @@ function HeroSlider() {
         className="absolute inset-0 pointer-events-none"
         style={{
           background: 'radial-gradient(ellipse 70% 50% at 50% 110%, rgba(91,71,245,0.18) 0%, transparent 70%)',
+        }}
+      />
+      {/* Background glow image subtile */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'url("/images/hero-bg-glow.jpg")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.07,
         }}
       />
       {/* Grain overlay très subtil */}
@@ -1942,14 +1959,14 @@ function PublishSection() {
    TEMPLATES PREVIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 const TEMPLATE_GRID = [
-  { name: 'Impulse Dark',    gradient: 'linear-gradient(135deg,#5B47F5,#7c6af7)',  tag: 'Mode' },
-  { name: 'Glacier Clean',   gradient: 'linear-gradient(135deg,#0f172a,#1e293b)',  tag: 'Tech' },
-  { name: 'Ember Warm',      gradient: 'linear-gradient(135deg,#f97316,#fb923c)',  tag: 'Beauté' },
-  { name: 'Teal Minimal',    gradient: 'linear-gradient(135deg,#0d9488,#2dd4bf)',  tag: 'Sport' },
-  { name: 'Neon Gaming',     gradient: 'linear-gradient(135deg,#7c3aed,#4f46e5)',  tag: 'Gaming' },
-  { name: 'Rose Luxury',     gradient: 'linear-gradient(135deg,#be185d,#db2777)',  tag: 'Luxe' },
-  { name: 'Ocean Bold',      gradient: 'linear-gradient(135deg,#0369a1,#0ea5e9)',  tag: 'Lifestyle' },
-  { name: 'Forest Organic',  gradient: 'linear-gradient(135deg,#166534,#16a34a)',  tag: 'Bio' },
+  { name: 'Impulse Dark',    gradient: 'linear-gradient(135deg,#5B47F5,#7c6af7)',  tag: 'Mode',      img: '/images/template-fashion.jpg' },
+  { name: 'Glacier Clean',   gradient: 'linear-gradient(135deg,#0f172a,#1e293b)',  tag: 'Tech',      img: '/images/template-tech.jpg' },
+  { name: 'Ember Warm',      gradient: 'linear-gradient(135deg,#f97316,#fb923c)',  tag: 'Beauté',    img: '/images/template-beauty.jpg' },
+  { name: 'Teal Minimal',    gradient: 'linear-gradient(135deg,#0d9488,#2dd4bf)',  tag: 'Sport',     img: null },
+  { name: 'Neon Gaming',     gradient: 'linear-gradient(135deg,#7c3aed,#4f46e5)',  tag: 'Gaming',    img: null },
+  { name: 'Rose Luxury',     gradient: 'linear-gradient(135deg,#be185d,#db2777)',  tag: 'Luxe',      img: null },
+  { name: 'Ocean Bold',      gradient: 'linear-gradient(135deg,#0369a1,#0ea5e9)',  tag: 'Lifestyle', img: null },
+  { name: 'Forest Organic',  gradient: 'linear-gradient(135deg,#166534,#16a34a)',  tag: 'Bio',       img: null },
 ]
 
 function TemplatesPreview() {
@@ -1980,12 +1997,20 @@ function TemplatesPreview() {
               style={{ transitionDelay: `${i * 0.06}s` }}
             >
               <div
-                className="h-28 flex items-end p-3"
+                className="h-36 flex items-end p-3 relative overflow-hidden"
                 style={{ background: t.gradient }}
               >
+                {t.img && (
+                  <img
+                    src={t.img}
+                    alt={t.name}
+                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                  />
+                )}
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%)' }} />
                 <span
-                  className="text-xs font-bold px-2 py-0.5 rounded-full"
-                  style={{ background: 'rgba(255,255,255,0.25)', color: '#fff' }}
+                  className="relative z-10 text-xs font-bold px-2 py-0.5 rounded-full"
+                  style={{ background: 'rgba(255,255,255,0.25)', color: '#fff', backdropFilter: 'blur(4px)' }}
                 >
                   {t.tag}
                 </span>

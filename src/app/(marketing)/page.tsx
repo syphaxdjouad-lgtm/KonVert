@@ -170,39 +170,39 @@ function Slide1() {
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            by NEXARA
+            Pages produit · Landing pages · SEO
           </div>
           <h1
             className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6"
             style={{ animation: 'slideUp .7s cubic-bezier(.16,1,.3,1) both' }}
           >
-            Des pages produit qui convertissent.{' '}
+            Tes produits méritent des pages{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              En 30 secondes.
+              qui vendent vraiment.
             </span>
           </h1>
           <p
             className="text-lg text-white/70 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0"
             style={{ animation: 'slideUp .7s .1s cubic-bezier(.16,1,.3,1) both' }}
           >
-            Collez une URL AliExpress, Amazon ou Alibaba. KONVERT génère une landing page haute conversion prête à publier.
+            Tu perds de l'argent à chaque visiteur qui repart sans acheter. KONVERT génère ta page produit optimisée en 30 secondes — prête à coller sur ta boutique.
           </p>
           <div
             className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
             style={{ animation: 'slideUp .7s .2s cubic-bezier(.16,1,.3,1) both' }}
           >
             <Link
-              href="/dashboard"
+              href="/signup"
               className="btn-shimmer inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg"
             >
-              Générer ma page <ArrowRight className="w-4 h-4" />
+              Créer ma page gratuitement <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/demo"
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm text-white transition-all hover:bg-white/10"
               style={{ border: '1.5px solid rgba(255,255,255,0.25)' }}
             >
-              Voir la démo
+              Voir un exemple
             </Link>
           </div>
 
@@ -453,13 +453,13 @@ function Slide2() {
             17 templates premium
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6">
-            Le bon design pour{' '}
+            Tes visiteurs jugent ta page{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              chaque produit.
+              en 3 secondes.
             </span>
           </h1>
           <p className="text-lg text-white/70 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
-            17 templates optimisés pour la conversion. Mode, Tech, Beauté, Sport, Gaming et plus.
+            17 templates premium — chaque design suit les tendances mondiales et est calibré pour déclencher l&apos;achat. Mode, Tech, Beauté, Sport, Gaming et plus.
           </p>
           <Link
             href="/templates"
@@ -586,13 +586,13 @@ function Slide3() {
             Analytics temps réel
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6">
-            Vos données.{' '}
+            Sais-tu pourquoi tes clients{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Vos décisions.
+              n&apos;achètent pas ?
             </span>
           </h1>
           <p className="text-lg text-white/70 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
-            Scroll depth, taux de clics, conversions, ROAS. Optimisez en temps réel.
+            CVR, ROAS, scroll depth en temps réel. Arrête de deviner — commence à optimiser avec des données qui parlent d&apos;elles-mêmes.
           </p>
           <Link
             href="/dashboard/analytics"
@@ -669,13 +669,13 @@ function Slide4() {
             Connecté à votre stack
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6">
-            Shopify, Woo,{' '}
+            Prêt à coller sur ta boutique.{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Klaviyo & plus.
+              En 1 clic.
             </span>
           </h1>
           <p className="text-lg text-white/70 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
-            Publiez en 1 clic. Intégrations natives avec les outils que vous utilisez déjà.
+            Shopify, WooCommerce, Klaviyo — KONVERT s&apos;intègre avec les outils que tu utilises déjà. Zéro développeur, zéro galère.
           </p>
           <Link
             href="/integrations"
@@ -725,13 +725,13 @@ function Slide5() {
             Pour les agences SMMA
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6">
-            Gérez tous vos clients depuis{' '}
+            Livre 10x plus de pages.{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              un seul endroit.
+              Sans recruter.
             </span>
           </h1>
           <p className="text-lg text-white/70 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
-            Dashboard multi-clients, white-label, rapports PDF. Livrez plus, en moins de temps.
+            Dashboard agence, white-label, rapports PDF automatiques. Scale ta livraison client sans ajouter une seule personne à ton équipe.
           </p>
           <Link
             href="/agence"
@@ -966,43 +966,43 @@ const FEATURES = [
     Icon: Bot,
     color: '#5B47F5',
     bg: 'rgba(91,71,245,0.08)',
-    title: 'Génération IA en 30s',
-    desc: 'Notre IA analyse votre produit et rédige un copy haute conversion adapté à votre audience cible.',
+    title: 'Page générée en 30 secondes',
+    desc: 'Colle l\'URL du produit. L\'IA analyse, rédige le titre, les bénéfices, la FAQ et le CTA. Ta page est prête avant ton café.',
   },
   {
     Icon: Palette,
     color: '#f97316',
     bg: 'rgba(249,115,22,0.08)',
-    title: '17 templates premium',
-    desc: 'Un template pour chaque niche. Mode, tech, beauté, sport, gaming — chaque design est optimisé.',
+    title: '17 templates qui convertissent',
+    desc: 'Chaque template suit les tendances mondiales. Mode, tech, beauté, sport, gaming — le bon design pour chaque niche.',
   },
   {
     Icon: BarChart3,
     color: '#10b981',
     bg: 'rgba(16,185,129,0.08)',
-    title: 'Analytics temps réel',
-    desc: 'Scroll depth, heatmaps, conversions, ROAS. Visualisez ce qui convertit et optimisez immédiatement.',
+    title: 'Sais-tu ce qui bloque tes ventes ?',
+    desc: 'Scroll depth, CVR, ROAS en temps réel. Tu vois exactement où tes clients décrochent — et tu corriges.',
   },
   {
     Icon: Link2,
     color: '#0d9488',
     bg: 'rgba(13,148,136,0.08)',
-    title: 'Publish sur Shopify',
-    desc: 'Publiez en 1 clic sur Shopify, WooCommerce ou exportez le HTML. Zero friction, zero dev.',
+    title: 'Publish Shopify en 1 clic',
+    desc: 'Pas de copier-coller de code. Connecte ta boutique une fois, publie en un clic. Zéro développeur requis.',
   },
   {
     Icon: FlaskConical,
     color: '#8b5cf6',
     bg: 'rgba(139,92,246,0.08)',
-    title: 'A/B Testing intégré',
-    desc: 'Testez 2 variantes de votre page, laissez l\'algorithme sélectionner le gagnant automatiquement.',
+    title: 'A/B Testing automatique',
+    desc: 'Lance 2 variantes de ta page. L\'algorithme identifie la gagnante et bascule le trafic dessus. Tu te concentres sur le reste.',
   },
   {
     Icon: Globe,
     color: '#f59e0b',
     bg: 'rgba(245,158,11,0.08)',
-    title: '8 langues supportées',
-    desc: 'Français, anglais, espagnol, allemand, portugais et plus. Atteignez tous vos marchés.',
+    title: 'Vends dans 8 langues',
+    desc: 'Français, anglais, espagnol, allemand, portugais et plus. Chaque marché, une page optimisée dans sa langue.',
   },
 ]
 
@@ -1019,10 +1019,10 @@ function FeaturesSection() {
             Fonctionnalités
           </div>
           <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-4">
-            Tout ce dont vous avez besoin<br />pour convertir.
+            Arrête de perdre de l&apos;argent<br />sur tes pages.
           </h2>
           <p className="reveal delay-2 text-lg text-gray-500 max-w-xl mx-auto">
-            Un outil pensé pour les e-commerçants et agences qui veulent des résultats, pas des configurations.
+            KONVERT donne à chaque e-commerçant les outils pro qui coûtaient 5 000€/mois à une agence. Résultats immédiats, sans intermédiaire.
           </p>
         </div>
 
@@ -1066,11 +1066,10 @@ function ABTestingSection() {
           {/* Left */}
           <div>
             <h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-6 leading-tight">
-              A/B Testing pour l&apos;optimisation
+              Ta meilleure page, trouvée par les données.
             </h2>
             <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed mb-10">
-              Créez plusieurs variantes de landing pages pour mieux comprendre ce qui déclenche l&apos;action chez votre audience.
-              Testez les titres, images, CTAs et plus pour optimiser continuellement votre page.
+              Lance deux versions de ta page. KONVERT mesure les clics, les scrolls, les conversions — et te dit laquelle gagne. Plus de suppositions, que des résultats.
             </p>
             <Link href="/features" className="reveal delay-2 inline-flex items-center gap-4 group">
               <span className="font-bold text-gray-900 text-sm">Optimiser les performances</span>
@@ -1257,10 +1256,10 @@ function HowItWorks() {
             Comment ça marche
           </div>
           <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-4">
-            3 étapes, 30 secondes.
+            Simple comme un copier-coller.
           </h2>
           <p className="reveal delay-2 text-lg text-white/60 max-w-xl mx-auto">
-            De l&apos;URL produit à la landing page publiée, tout se passe en moins d&apos;une minute.
+            Colle l&apos;URL de ton produit, choisis un template, publie. Ta page est prête à vendre en moins d&apos;une minute.
           </p>
         </div>
 
@@ -1343,11 +1342,10 @@ function IntegrationsSection() {
 
       <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-24 pb-0 text-center relative z-10">
         <h2 className="reveal text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-6 leading-[1.1]">
-          Intégrez votre stack<br />marketing complet
+          Connecte KONVERT à ce que<br />tu utilises déjà
         </h2>
         <p className="reveal delay-1 text-lg text-white/55 max-w-2xl mx-auto mb-10">
-          Des outils email aux plateformes CMS, en passant par les analytics et l&apos;automatisation,
-          KONVERT s&apos;intègre parfaitement avec toutes vos apps favorites.
+          Shopify, Klaviyo, Meta Ads, Stripe — tes outils restent en place. KONVERT s&apos;y branche en quelques secondes et commence à travailler pour toi.
         </p>
         <Link href="/integrations" className="reveal delay-2 inline-flex items-center gap-4 mb-20 group">
           <span className="text-white font-bold text-sm">Intégrations</span>
@@ -1399,7 +1397,7 @@ const DARK_CARDS = [
       </svg>
     ),
     title: 'Toolkit de conversion',
-    desc: 'Optimisez vos landing pages, promouvez vos offres et analysez vos résultats — tout depuis un seul outil.',
+    desc: 'Chaque visiteur qui part sans acheter, c\'est de l\'argent perdu. KONVERT centralise tout ce qu\'il faut pour inverser la tendance.',
   },
   {
     icon: (
@@ -1410,8 +1408,8 @@ const DARK_CARDS = [
         <path d="M7 15v1.5M9 15v1.5"/>
       </svg>
     ),
-    title: 'Transactions sur la page',
-    desc: 'Générez des revenus en bas du funnel en vendant produits et services directement sur vos landing pages.',
+    title: 'Vente directe sur la page',
+    desc: 'Transforme chaque visiteur en acheteur sans qu\'il quitte ta landing page. Le funnel le plus court = le plus rentable.',
   },
   {
     icon: (
@@ -1420,8 +1418,8 @@ const DARK_CARDS = [
         <circle cx="12" cy="17" r="1" fill="currentColor"/>
       </svg>
     ),
-    title: 'Optimisation mobile',
-    desc: 'Créez une expérience unique pour les utilisateurs mobiles qui convertit et met votre meilleur pied en avant.',
+    title: 'Mobile-first par défaut',
+    desc: '73% des achats e-commerce se font sur mobile. Tes pages KONVERT sont pensées mobile dès le départ — pas adaptées après.',
   },
   {
     icon: (
@@ -1433,8 +1431,8 @@ const DARK_CARDS = [
         <path d="M3 3l2 2"/>
       </svg>
     ),
-    title: 'Génération IA de contenu',
-    desc: "Générez du copy et créez l'image parfaite en quelques secondes grâce à la puissance de l'IA.",
+    title: 'Copy IA qui vend vraiment',
+    desc: 'Titre accrocheur, bénéfices, FAQ, CTA — l\'IA rédige un copy haute conversion en 30s, adapté à ton produit et à ton audience.',
   },
   {
     icon: (
@@ -1444,8 +1442,8 @@ const DARK_CARDS = [
         <path d="M8 11h6M11 8v6" strokeDasharray="3 1"/>
       </svg>
     ),
-    title: 'SEO & Performance',
-    desc: "Générez plus de trafic organique avec des templates optimisés, des vitesses de chargement ultra-rapides et des outils SEO natifs.",
+    title: 'SEO intégré, trafic gratuit',
+    desc: 'Tes pages sont optimisées SEO dès la génération — balises, vitesse, structure. Chaque page travaille pour toi même quand tu dors.',
   },
   {
     icon: (
@@ -1455,8 +1453,8 @@ const DARK_CARDS = [
         <path d="M13 9h5M13 13h5M8.5 16h8"/>
       </svg>
     ),
-    title: 'Gestion des leads',
-    desc: 'Suivez, gérez et sauvegardez vos leads dans KONVERT, ou intégrez-les directement à votre CRM.',
+    title: 'Leads capturés, argent gardé',
+    desc: 'Capture les leads qui ne convertissent pas tout de suite. Relance-les avec Klaviyo ou ton CRM. Rien ne se perd.',
   },
 ]
 
@@ -1506,12 +1504,10 @@ function BuilderSection() {
           {/* Left */}
           <div>
             <h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-6 leading-tight">
-              Builder intuitif pour des landing pages optimisées pour la conversion
+              Ta page produit en 30 secondes. Pas en 3 jours.
             </h2>
             <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed mb-10">
-              Créez des landing pages haute conversion sans écrire une seule ligne de code.
-              Construisez plusieurs variations, faites des A/B tests sur différents éléments de la page
-              et optimisez continuellement vos résultats grâce aux vraies données de conversion.
+              Pas besoin de dev, de designer ou d&apos;agence. Tu colles l&apos;URL du produit, tu choisis un template, tu personnalises en quelques clics. La page est prête à convertir — aujourd&apos;hui, pas la semaine prochaine.
             </p>
             <Link href="/demo" className="reveal delay-2 inline-flex items-center gap-4 group">
               <span className="font-bold text-gray-900 text-sm">Créer des pages optimisées</span>
@@ -1780,12 +1776,10 @@ function AnalyticsShowcase() {
           {/* Right — texte */}
           <div>
             <h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-6 leading-tight">
-              Analytics qui vous disent quoi faire, pas juste ce qui s&apos;est passé
+              Tu sais exactement où tu perds de l&apos;argent.
             </h2>
             <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed mb-10">
-              Scroll depth, heatmaps, conversions en temps réel, ROAS par page.
-              Identifiez exactement ce qui bloque vos visiteurs et optimisez en continu
-              sans sortir de KONVERT.
+              Scroll depth, CVR, ROAS par page — tout en temps réel. Tu vois où tes visiteurs décrochent, tu corriges en quelques secondes. Fini de dépenser en aveugle.
             </p>
             <Link href="/features" className="reveal delay-2 inline-flex items-center gap-4 group">
               <span className="font-bold text-gray-900 text-sm">Voir les analytics</span>
@@ -1821,11 +1815,10 @@ function PublishSection() {
           {/* Left — texte */}
           <div>
             <h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-6 leading-tight">
-              Publiez en 1 clic sur votre boutique, partout
+              Ta page générée. Sur ta boutique. En 60 secondes.
             </h2>
             <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed mb-10">
-              Shopify, WooCommerce ou export HTML brut — choisissez votre destination et KONVERT
-              publie votre landing page en quelques secondes. Zéro copier-coller, zéro développeur.
+              Shopify, WooCommerce ou export HTML — un clic et c&apos;est en ligne. Pas de copier-coller, pas de développeur, pas d&apos;attente. Tu publies, tes clients achètent.
             </p>
             <Link href="/integrations" className="reveal delay-2 inline-flex items-center gap-4 group">
               <span className="font-bold text-gray-900 text-sm">Voir les intégrations</span>
@@ -1972,10 +1965,10 @@ function TemplatesPreview() {
             Templates
           </div>
           <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-4">
-            17 templates qui vendent.
+            Chaque niche a son template.
           </h2>
           <p className="reveal delay-2 text-lg text-gray-500 max-w-xl mx-auto">
-            Conçus par des experts e-commerce, optimisés pour chaque niche de produit.
+            17 designs calibrés pour convertir — Mode, Tech, Beauté, Sport, Gaming, Bio et plus. Le bon design pour le bon produit, immédiatement.
           </p>
         </div>
 
@@ -2162,10 +2155,10 @@ function PricingTeaser() {
             Tarifs
           </div>
           <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-4">
-            Simple, transparent, scalable.
+            Moins cher qu&apos;un freelance. Disponible maintenant.
           </h2>
           <p className="reveal delay-2 text-lg text-gray-500 max-w-xl mx-auto mb-8">
-            Commencez gratuitement pendant 14 jours. Sans carte bancaire.
+            14 jours gratuits, sans carte bancaire. Vois le résultat avant de payer.
           </p>
           <div className="reveal delay-3 inline-flex items-center gap-3 p-1 rounded-full" style={{ background: '#ede8ff' }}>
             <button
@@ -2337,13 +2330,13 @@ function FinalCTA() {
         <h2
           className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-5"
         >
-          Prêt à booster vos conversions ?
+          Ton prochain visiteur mérite une page qui vend.
         </h2>
 
         <p
           className="reveal delay-2 text-lg text-white/60 mb-10 max-w-xl mx-auto"
         >
-          Collez une URL produit et voyez KONVERT générer votre landing page en temps réel.
+          Colle l&apos;URL de ton produit et vois KONVERT générer ta landing page en 30 secondes. Gratuit, sans carte bancaire.
         </p>
 
         <div

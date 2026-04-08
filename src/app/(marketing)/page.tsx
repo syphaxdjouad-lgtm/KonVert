@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
 import {
   Robot,
   Palette,
@@ -2517,6 +2518,7 @@ export default function HomePage() {
         <TrustBar />
         <ProofSection />
         <FeaturesSection />
+        <LeadEnrichmentDemo />
         <HowItWorks />
         <BuilderSection />
         <ABTestingSection />

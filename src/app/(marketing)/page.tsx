@@ -929,9 +929,9 @@ function TrustBar() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   STATS
+   PROOF SECTION — Leadpages-style, fond lavande clair
 ═══════════════════════════════════════════════════════════════════════════ */
-function StatsSection() {
+function ProofSection() {
   const [triggered, setTriggered] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -939,36 +939,65 @@ function StatsSection() {
     if (!ref.current) return
     const io = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setTriggered(true); io.disconnect() } },
-      { threshold: 0.4 }
+      { threshold: 0.3 }
     )
     io.observe(ref.current)
     return () => io.disconnect()
   }, [])
 
   const pages  = useCounter(50000, 1800, triggered)
-  const cvr    = useCounter(40,    1400, triggered)
+  const cvr    = useCounter(48,    1400, triggered)
   const stores = useCounter(2800,  1600, triggered)
 
+  const stats = [
+    { value: pages,  suffix: '+',  label: 'pages générées en production' },
+    { value: cvr,    suffix: '%',  label: 'taux de conversion moyen' },
+    { value: stores, suffix: '+',  label: 'boutiques actives et en croissance' },
+  ]
+
   return (
-    <section ref={ref} style={{ background: '#0e0d1e' }}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-20">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-          {[
-            { value: pages,  suffix: '+',  label: 'pages générées',     note: 'En production' },
-            { value: cvr,    suffix: '%',  label: 'taux de conversion', note: 'En moyenne' },
-            { value: stores, suffix: '+',  label: 'boutiques actives',  note: 'Et en croissance' },
-          ].map((s, i) => (
-            <div key={i} className="reveal" style={{ transitionDelay: `${i * 0.1}s` }}>
+    <section
+      ref={ref}
+      style={{ background: 'linear-gradient(135deg, #f5f3ff 0%, #fdfbff 55%, #ede8ff 100%)' }}
+    >
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+          {/* Gauche — titre + description */}
+          <div>
+            <h2 className="reveal text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.08] tracking-tight text-gray-900 mb-6">
+              La preuve est dans les{' '}
+              <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                résultats.
+              </span>
+            </h2>
+            <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed max-w-lg">
+              KONVERT propulse les e-commerçants vers plus de conversions, avec des données actionnables et des résultats prouvés. Des milliers de pages actives — les chiffres parlent d&apos;eux-mêmes.
+            </p>
+          </div>
+
+          {/* Droite — 3 stats empilées */}
+          <div className="flex flex-col">
+            {stats.map((s, i) => (
               <div
-                className="text-5xl lg:text-6xl font-black mb-2"
-                style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                key={i}
+                className="reveal py-8"
+                style={{
+                  transitionDelay: `${i * 0.15}s`,
+                  borderTop: i > 0 ? '1px solid rgba(91,71,245,0.12)' : 'none',
+                }}
               >
-                {s.value.toLocaleString('fr-FR')}{s.suffix}
+                <div
+                  className="text-6xl lg:text-7xl font-black leading-none mb-2"
+                  style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
+                >
+                  {s.value.toLocaleString('fr-FR')}{s.suffix}
+                </div>
+                <div className="text-gray-500 text-base font-medium">{s.label}</div>
               </div>
-              <div className="text-white font-semibold text-lg mb-1">{s.label}</div>
-              <div className="text-white/40 text-sm">{s.note}</div>
-            </div>
-          ))}
+            ))}
+          </div>
+
         </div>
       </div>
     </section>
@@ -1262,7 +1291,7 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section style={{ background: '#0b0b1c' }}>
+    <section style={{ background: 'radial-gradient(ellipse 90% 50% at 50% -5%, rgba(91,71,245,0.28) 0%, transparent 60%), radial-gradient(ellipse 55% 40% at 85% 110%, rgba(124,106,247,0.15) 0%, transparent 60%), #0b0b1c' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
         <div className="text-center mb-16">
           <div
@@ -1334,26 +1363,38 @@ const INTEGRATION_APPS = [
 function IntegrationsSection() {
   return (
     <section style={{ background: '#12131f', position: 'relative', overflow: 'hidden' }}>
-      {/* Glow violet haut-droite */}
+      {/* Glow violet haut-droite — renforcé */}
       <div
         className="absolute pointer-events-none"
         style={{
           right: '-5%',
           top: '-10%',
-          width: '45%',
-          height: '80%',
-          background: 'radial-gradient(ellipse, rgba(91,71,245,0.28) 0%, transparent 65%)',
+          width: '55%',
+          height: '90%',
+          background: 'radial-gradient(ellipse, rgba(91,71,245,0.38) 0%, transparent 65%)',
         }}
       />
-      {/* Glow subtil bas-gauche */}
+      {/* Glow centre */}
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%,-50%)',
+          width: '70%',
+          height: '60%',
+          background: 'radial-gradient(ellipse, rgba(124,106,247,0.1) 0%, transparent 70%)',
+        }}
+      />
+      {/* Glow bas-gauche */}
       <div
         className="absolute pointer-events-none"
         style={{
           left: '-5%',
           bottom: '0',
-          width: '30%',
-          height: '50%',
-          background: 'radial-gradient(ellipse, rgba(139,92,246,0.12) 0%, transparent 70%)',
+          width: '40%',
+          height: '60%',
+          background: 'radial-gradient(ellipse, rgba(139,92,246,0.18) 0%, transparent 70%)',
         }}
       />
 
@@ -1477,7 +1518,7 @@ const DARK_CARDS = [
 
 function DarkFeatureCards() {
   return (
-    <section style={{ background: '#0b0b1c', paddingTop: '0', paddingBottom: '96px' }}>
+    <section style={{ background: 'radial-gradient(ellipse 70% 60% at 10% 50%, rgba(91,71,245,0.2) 0%, transparent 55%), radial-gradient(ellipse 60% 50% at 90% 50%, rgba(124,106,247,0.14) 0%, transparent 55%), #0b0b1c', paddingTop: '0', paddingBottom: '96px' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {DARK_CARDS.map((card, i) => (
@@ -2071,7 +2112,7 @@ const TESTIMONIALS = [
 
 function Testimonials() {
   return (
-    <section style={{ background: '#0e0d1e' }}>
+    <section style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(91,71,245,0.22) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 5% 100%, rgba(167,139,250,0.12) 0%, transparent 55%), #0e0d1e' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
         <div className="text-center mb-14">
           <div
@@ -2410,14 +2451,14 @@ export default function HomePage() {
       <main>
         <HeroSlider />
         <TrustBar />
-        <StatsSection />
+        <ProofSection />
         <FeaturesSection />
-        <ABTestingSection />
         <HowItWorks />
+        <BuilderSection />
+        <ABTestingSection />
+        <AnalyticsShowcase />
         <IntegrationsSection />
         <DarkFeatureCards />
-        <BuilderSection />
-        <AnalyticsShowcase />
         <PublishSection />
         <TemplatesPreview />
         <Testimonials />

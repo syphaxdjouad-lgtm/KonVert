@@ -3,21 +3,21 @@
 import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import {
-  Bot,
+  Robot,
   Palette,
-  BarChart3,
-  Link2,
-  FlaskConical,
+  ChartBar,
+  LinkSimple,
+  Flask,
   Globe,
-  ChevronLeft,
-  ChevronRight,
+  CaretLeft,
+  CaretRight,
   ArrowRight,
   Check,
   Star,
-  Zap,
-  TrendingUp,
-  Sparkles,
-} from 'lucide-react'
+  Lightning,
+  TrendUp,
+  Sparkle,
+} from '@phosphor-icons/react'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    STYLES GLOBAUX
@@ -169,7 +169,7 @@ function Slide1() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkle className="w-3.5 h-3.5" />
             Pages produit · Landing pages · SEO
           </div>
           <h1
@@ -338,7 +338,7 @@ function Slide1() {
               className="absolute bottom-20 right-4 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold shadow-xl"
               style={{ background: '#10b981', color: '#fff' }}
             >
-              <TrendingUp className="w-3 h-3" />
+              <TrendUp className="w-3 h-3" />
               +5.2% CVR
             </div>
           </div>
@@ -592,7 +592,7 @@ function Slide3() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
-            <BarChart3 className="w-3.5 h-3.5" />
+            <ChartBar className="w-3.5 h-3.5" />
             Analytics temps réel
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6">
@@ -644,7 +644,7 @@ function Slide3() {
               className="float-anim absolute top-4 right-4 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-white"
               style={{ background: 'rgba(16,185,129,0.9)', backdropFilter: 'blur(8px)' }}
             >
-              <TrendingUp className="w-3.5 h-3.5" />
+              <TrendUp className="w-3.5 h-3.5" />
               Live
             </div>
           </div>
@@ -672,7 +672,7 @@ function Slide4() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
-            <Link2 className="w-3.5 h-3.5" />
+            <LinkSimple className="w-3.5 h-3.5" />
             Connecté à votre stack
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6">
@@ -728,7 +728,7 @@ function Slide5() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
-            <Zap className="w-3.5 h-3.5" />
+            <Lightning className="w-3.5 h-3.5" />
             Pour les agences SMMA
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6">
@@ -851,7 +851,7 @@ function HeroSlider() {
         style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)' }}
         aria-label="Slide précédent"
       >
-        <ChevronLeft className="w-5 h-5 text-white" />
+        <CaretLeft className="w-5 h-5 text-white" />
       </button>
 
       {/* Flèche droite */}
@@ -861,7 +861,7 @@ function HeroSlider() {
         style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)' }}
         aria-label="Slide suivant"
       >
-        <ChevronRight className="w-5 h-5 text-white" />
+        <CaretRight className="w-5 h-5 text-white" />
       </button>
 
       {/* Dots — style pill */}
@@ -1009,7 +1009,7 @@ function ProofSection() {
 ═══════════════════════════════════════════════════════════════════════════ */
 const FEATURES = [
   {
-    Icon: Bot,
+    Icon: Robot,
     color: '#5B47F5',
     bg: 'rgba(91,71,245,0.08)',
     title: 'Page générée en 30 secondes',
@@ -1023,21 +1023,21 @@ const FEATURES = [
     desc: 'Chaque template suit les tendances mondiales. Mode, tech, beauté, sport, gaming — le bon design pour chaque niche.',
   },
   {
-    Icon: BarChart3,
+    Icon: ChartBar,
     color: '#10b981',
     bg: 'rgba(16,185,129,0.08)',
     title: 'Sais-tu ce qui bloque tes ventes ?',
     desc: 'Scroll depth, CVR, ROAS en temps réel. Tu vois exactement où tes clients décrochent — et tu corriges.',
   },
   {
-    Icon: Link2,
+    Icon: LinkSimple,
     color: '#0d9488',
     bg: 'rgba(13,148,136,0.08)',
     title: 'Publish Shopify en 1 clic',
     desc: 'Pas de copier-coller de code. Connecte ta boutique une fois, publie en un clic. Zéro développeur requis.',
   },
   {
-    Icon: FlaskConical,
+    Icon: Flask,
     color: '#8b5cf6',
     bg: 'rgba(139,92,246,0.08)',
     title: 'A/B Testing automatique',
@@ -1061,7 +1061,7 @@ function FeaturesSection() {
             className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
             style={{ background: 'rgba(91,71,245,0.08)', color: '#5B47F5', border: '1px solid rgba(91,71,245,0.15)' }}
           >
-            <Zap className="w-3.5 h-3.5" />
+            <Lightning className="w-3.5 h-3.5" />
             Fonctionnalités
           </div>
           <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-4">
@@ -1271,19 +1271,19 @@ function ABTestingSection() {
 const STEPS = [
   {
     num: '01',
-    Icon: Link2,
+    Icon: LinkSimple,
     title: 'Collez une URL',
     desc: 'AliExpress, Amazon, Alibaba — n\'importe quel produit. Collez l\'URL dans KONVERT.',
   },
   {
     num: '02',
-    Icon: Sparkles,
+    Icon: Sparkle,
     title: 'L\'IA génère le copy',
     desc: 'Notre IA analyse le produit et crée le titre, accroche, bénéfices, FAQ et CTA en 30 secondes.',
   },
   {
     num: '03',
-    Icon: TrendingUp,
+    Icon: TrendUp,
     title: 'Publiez & convertissez',
     desc: 'Choisissez un template, personnalisez les couleurs, publiez sur votre boutique. C\'est tout.',
   },
@@ -1298,7 +1298,7 @@ function HowItWorks() {
             className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
-            <Zap className="w-3.5 h-3.5" />
+            <Lightning className="w-3.5 h-3.5" />
             Comment ça marche
           </div>
           <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-4">
@@ -1724,35 +1724,39 @@ function AnalyticsShowcase() {
           <div className="hidden lg:block relative">
             <div
               className="reveal rounded-3xl overflow-hidden shadow-2xl"
-              style={{ background: '#12131f', border: '1.5px solid rgba(255,255,255,0.07)' }}
+              style={{ background: '#ffffff', border: '1.5px solid #e8e2ff' }}
             >
-              {/* Header */}
+              {/* Header — chrome sombre style navigateur */}
               <div
-                className="flex items-center justify-between px-5 py-4"
-                style={{ background: '#0e0f1c', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+                className="flex items-center justify-between px-5 py-3.5"
+                style={{ background: '#1a1b2e', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full" style={{ background: '#10b981' }} />
-                  <span className="text-white/60 text-sm font-semibold">Analytics · Boutique Alpha</span>
+                  <div className="flex gap-1.5">
+                    {['#ef4444','#f59e0b','#10b981'].map(c => (
+                      <div key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c }} />
+                    ))}
+                  </div>
+                  <span className="text-white/50 text-xs font-semibold">Analytics · Boutique Alpha</span>
                 </div>
                 <span
                   className="text-xs font-bold px-3 py-1 rounded-full"
-                  style={{ background: 'rgba(91,71,245,0.2)', color: '#a78bfa' }}
+                  style={{ background: 'rgba(91,71,245,0.25)', color: '#a78bfa' }}
                 >
                   Temps réel
                 </span>
               </div>
 
-              {/* Métriques */}
-              <div className="grid grid-cols-3 gap-px p-0" style={{ background: 'rgba(255,255,255,0.05)' }}>
+              {/* Métriques — fond lavande clair */}
+              <div className="grid grid-cols-3 gap-px" style={{ background: '#e8e2ff' }}>
                 {ANALYTICS_METRICS.map((m) => (
                   <div
                     key={m.label}
                     className="flex flex-col gap-1 px-5 py-5"
-                    style={{ background: '#12131f' }}
+                    style={{ background: 'linear-gradient(135deg,#f8f6ff,#fdf9ff)' }}
                   >
-                    <span className="text-white/40 text-xs font-medium">{m.label}</span>
-                    <span className="text-white font-black text-2xl">{m.value}</span>
+                    <span className="text-gray-400 text-xs font-medium">{m.label}</span>
+                    <span className="text-gray-900 font-black text-2xl">{m.value}</span>
                     <span
                       className="text-xs font-bold w-fit px-2 py-0.5 rounded-full"
                       style={{ background: `${m.color}18`, color: m.color }}
@@ -1763,11 +1767,11 @@ function AnalyticsShowcase() {
                 ))}
               </div>
 
-              {/* Graphe barres */}
-              <div className="px-5 pb-6 pt-4">
+              {/* Graphe barres — fond blanc */}
+              <div className="px-5 pb-6 pt-4 bg-white">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-white/50 text-xs font-semibold">Conversions — 7 derniers jours</span>
-                  <span className="text-white/30 text-xs">vs semaine préc.</span>
+                  <span className="text-gray-400 text-xs font-semibold">Conversions — 7 derniers jours</span>
+                  <span className="text-gray-300 text-xs">vs semaine préc.</span>
                 </div>
                 <div className="flex items-end gap-2 h-24">
                   {ANALYTICS_BARS.map((h, i) => (
@@ -1777,8 +1781,8 @@ function AnalyticsShowcase() {
                         style={{
                           height: `${h}%`,
                           background: i === ANALYTICS_BARS.length - 1
-                            ? 'linear-gradient(to top,#5B47F5,#7c6af7)'
-                            : 'rgba(91,71,245,0.3)',
+                            ? 'linear-gradient(to top,#5B47F5,#a78bfa)'
+                            : 'rgba(91,71,245,0.15)',
                         }}
                       />
                     </div>
@@ -1786,17 +1790,17 @@ function AnalyticsShowcase() {
                 </div>
                 <div className="flex justify-between mt-2">
                   {['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'].map(d => (
-                    <span key={d} className="flex-1 text-center text-white/25 text-xs">{d}</span>
+                    <span key={d} className="flex-1 text-center text-gray-300 text-xs">{d}</span>
                   ))}
                 </div>
               </div>
 
-              {/* Ligne heatmap */}
+              {/* Ligne heatmap — fond lavande très clair */}
               <div
                 className="mx-5 mb-5 rounded-2xl px-4 py-3 flex items-center justify-between"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
+                style={{ background: '#f5f3ff', border: '1px solid #e8e2ff' }}
               >
-                <span className="text-white/50 text-xs">Scroll depth moyen</span>
+                <span className="text-gray-400 text-xs">Scroll depth moyen</span>
                 <div className="flex items-center gap-2">
                   <div className="flex gap-0.5">
                     {[100, 85, 70, 52, 38, 24].map((w, i) => (
@@ -1805,12 +1809,12 @@ function AnalyticsShowcase() {
                         className="h-3 rounded-sm"
                         style={{
                           width: `${Math.max(w * 0.3, 6)}px`,
-                          background: `rgba(124,106,247,${0.2 + i * 0.12})`,
+                          background: `rgba(91,71,245,${0.15 + i * 0.12})`,
                         }}
                       />
                     ))}
                   </div>
-                  <span className="text-white font-bold text-sm">72%</span>
+                  <span className="text-gray-700 font-bold text-sm">72%</span>
                 </div>
               </div>
             </div>
@@ -1823,7 +1827,7 @@ function AnalyticsShowcase() {
                 backdropFilter: 'blur(12px)',
               }}
             >
-              <TrendingUp className="w-5 h-5 text-white" />
+              <TrendUp className="w-5 h-5 text-white" />
               <div>
                 <p className="text-white font-black text-lg leading-none">+5.2%</p>
                 <p className="text-white/70 text-xs">CVR vs mois dernier</p>
@@ -1893,14 +1897,21 @@ function PublishSection() {
           <div className="hidden lg:flex items-center justify-center relative">
             <div
               className="reveal w-full max-w-md rounded-3xl overflow-hidden shadow-2xl"
-              style={{ background: '#12131f', border: '1.5px solid rgba(255,255,255,0.07)' }}
+              style={{ background: '#ffffff', border: '1.5px solid #e8e2ff' }}
             >
-              {/* Header */}
+              {/* Header — chrome sombre */}
               <div
-                className="flex items-center justify-between px-5 py-4"
-                style={{ background: '#0e0f1c', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+                className="flex items-center justify-between px-5 py-3.5"
+                style={{ background: '#1a1b2e', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
               >
-                <span className="text-white/60 text-sm font-semibold">Publier la page</span>
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-1.5">
+                    {['#ef4444','#f59e0b','#10b981'].map(c => (
+                      <div key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c }} />
+                    ))}
+                  </div>
+                  <span className="text-white/50 text-xs font-semibold">Publier la page</span>
+                </div>
                 <div
                   className="px-3 py-1 rounded-full text-xs font-bold text-white"
                   style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)' }}
@@ -1909,47 +1920,47 @@ function PublishSection() {
                 </div>
               </div>
 
-              {/* Aperçu page */}
-              <div className="mx-5 mt-5 rounded-2xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.07)' }}>
+              {/* Aperçu page — fond lavande */}
+              <div className="mx-5 mt-5 rounded-2xl overflow-hidden" style={{ border: '1px solid #e8e2ff' }}>
                 <div
                   className="h-28 flex flex-col justify-end p-3"
-                  style={{ background: 'linear-gradient(135deg,#5B47F5 0%,#7c6af7 100%)' }}
+                  style={{ background: 'linear-gradient(135deg,#5B47F5 0%,#a78bfa 100%)' }}
                 >
                   <div className="h-3 rounded-full w-2/3 mb-1.5" style={{ background: 'rgba(255,255,255,0.5)' }} />
                   <div className="h-2 rounded-full w-1/2" style={{ background: 'rgba(255,255,255,0.25)' }} />
                 </div>
-                <div className="px-3 py-2 flex items-center justify-between" style={{ background: 'rgba(255,255,255,0.04)' }}>
-                  <span className="text-white/50 text-xs font-mono">konvert.app/p/running-pro</span>
+                <div className="px-3 py-2 flex items-center justify-between" style={{ background: '#f8f6ff' }}>
+                  <span className="text-gray-400 text-xs font-mono">konvert.app/p/running-pro</span>
                   <span
                     className="text-xs font-bold px-2 py-0.5 rounded-full"
-                    style={{ background: 'rgba(16,185,129,0.2)', color: '#10b981' }}
+                    style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981' }}
                   >
                     Live
                   </span>
                 </div>
               </div>
 
-              {/* Plateformes */}
+              {/* Plateformes — fond clair */}
               <div className="px-5 py-5 flex flex-col gap-3">
                 {PUBLISH_PLATFORMS.map((p) => (
                   <div
                     key={p.name}
                     className="flex items-center gap-4 px-4 py-3.5 rounded-2xl"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
+                    style={{ background: '#f8f6ff', border: '1px solid #ede8ff' }}
                   >
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
-                      style={{ background: `${p.color}18`, border: `1px solid ${p.color}33` }}
+                      style={{ background: `${p.color}15`, border: `1px solid ${p.color}28` }}
                     >
                       {p.emoji}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-white text-sm font-semibold">{p.name}</div>
-                      <div className="text-white/35 text-xs">{p.time}</div>
+                      <div className="text-gray-800 text-sm font-semibold">{p.name}</div>
+                      <div className="text-gray-400 text-xs">{p.time}</div>
                     </div>
                     <div
                       className="flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0"
-                      style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981' }}
+                      style={{ background: 'rgba(16,185,129,0.1)', color: '#10b981' }}
                     >
                       <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#10b981' }} />
                       {p.status}
@@ -1962,7 +1973,7 @@ function PublishSection() {
               <div className="px-5 pb-5">
                 <div
                   className="w-full py-3.5 rounded-2xl text-center text-white font-bold text-sm"
-                  style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)', boxShadow: '0 4px 20px rgba(91,71,245,0.4)' }}
+                  style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)', boxShadow: '0 4px 20px rgba(91,71,245,0.35)' }}
                 >
                   Publier sur toutes les plateformes
                 </div>
@@ -2217,7 +2228,7 @@ function PricingTeaser() {
             className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
             style={{ background: 'rgba(91,71,245,0.08)', color: '#5B47F5', border: '1px solid rgba(91,71,245,0.15)' }}
           >
-            <Zap className="w-3.5 h-3.5" />
+            <Lightning className="w-3.5 h-3.5" />
             Tarifs
           </div>
           <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-4">
@@ -2389,7 +2400,7 @@ function FinalCTA() {
           className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
           style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
         >
-          <Sparkles className="w-3.5 h-3.5" />
+          <Sparkle className="w-3.5 h-3.5" />
           Essai gratuit 14 jours
         </div>
 

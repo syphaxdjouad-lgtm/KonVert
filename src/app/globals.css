@@ -171,6 +171,11 @@
 
 /* ─── KEYFRAMES ──────────────────────────────────────────────────────────── */
 
+@keyframes logo-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
 @keyframes shimmer {
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
@@ -356,6 +361,29 @@
 
 .hero-input-wrap:focus-within {
   border-color: rgba(255,255,255,0.4);
+}
+
+/* ─── LOGO MARQUEE ───────────────────────────────────────────────────────── */
+
+.logo-marquee-wrap {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+.logo-marquee-track {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: max-content;
+  animation: logo-marquee 30s linear infinite;
+}
+
+.logo-marquee-item {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0 3rem;
 }
 
 /* ─── TRUST LOGOS ────────────────────────────────────────────────────────── */

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
+import LogoMarquee from '@/components/marketing/LogoMarquee'
 import {
   Robot,
   Palette,
@@ -2515,6 +2516,7 @@ export default function HomePage() {
       <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }} />
       <main>
         <HeroSlider />
+        <LogoMarquee />
         <TrustBar />
         <ProofSection />
         <FeaturesSection />

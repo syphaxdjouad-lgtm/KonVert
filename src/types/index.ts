@@ -91,6 +91,39 @@ export interface LandingPageData {
   images?: string[]
 }
 
+// ─── A/B TESTING ─────────────────────────────────────────────────────────────
+
+export type ABTestStatus = 'running' | 'paused' | 'completed'
+export type ABVariantLetter = 'A' | 'B'
+export type ABEventType = 'view' | 'click' | 'conversion'
+
+export interface ABTest {
+  id: string
+  page_id: string
+  status: ABTestStatus
+  winner: ABVariantLetter | null
+  created_at: string
+}
+
+export interface ABVariantRow {
+  id: string
+  ab_test_id: string
+  variant: ABVariantLetter
+  page_content: object | null
+  vues: number
+  clics: number
+  conversions: number
+  created_at: string
+}
+
+export interface ABEvent {
+  id: string
+  variant_id: string
+  visitor_id: string
+  event_type: ABEventType
+  created_at: string
+}
+
 // ─── SCRAPER ─────────────────────────────────────────────────────────────────
 
 export interface ScrapedProduct {

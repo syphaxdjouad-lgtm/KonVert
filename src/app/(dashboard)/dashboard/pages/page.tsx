@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Plus, Pencil, Globe, Clock, FileText, Eye, Zap } from 'lucide-react'
+import { Plus, Pencil, Globe, Clock, FileText, Eye, Zap, FlaskConical } from 'lucide-react'
 
 export default async function PagesPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const supabase = await createClient()
@@ -155,6 +155,16 @@ function PageRow({ page, last }: { page: any; last: boolean }) {
             <Globe className="w-4 h-4" />
           </a>
         )}
+        <Link
+          href={`/dashboard/pages/${page.id}/ab-test`}
+          className="p-2 rounded-lg transition-colors"
+          style={{ color: '#9ca3af' }}
+          title="A/B Test"
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#7c3aed'; (e.currentTarget as HTMLElement).style.background = 'rgba(124,58,237,0.06)' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#9ca3af'; (e.currentTarget as HTMLElement).style.background = 'transparent' }}
+        >
+          <FlaskConical className="w-4 h-4" />
+        </Link>
         <Link
           href={`/dashboard/new?page_id=${page.id}`}
           className="p-2 rounded-lg transition-colors"

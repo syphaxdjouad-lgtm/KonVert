@@ -320,3 +320,83 @@ create index if not exists idx_pages_workspace_id on public.pages(workspace_id);
 -- FIN DU SCHEMA
 -- Coller ce SQL dans : Supabase Dashboard > SQL Editor > New query
 -- ═══════════════════════════════════════════════════════════════════
+
+-- ─── A/B TESTING ─────────────────────────────────────────────────
+
+create table public.ab_tests (
+  id         uuid primary key default uuid_generate_v4(),
+  page_id    uuid references public.pages(id) on delete cascade not null,
+  status     text not null default 'running' check (status in ('running','paused','completed')),
+  winner     text check (winner in ('A','B')),
+  created_at timestamptz not null default now()
+);
+
+create index idx_ab_tests_page_id on public.ab_tests(page_id);
+
+alter table public.ab_tests enable row level security;
+create policy "ab_tests: owner access" on public.ab_tests
+  using (
+    exists (
+      select 1 from public.pages p
+      where p.id = page_id and p.user_id = auth.uid()
+    )
+  );
+
+-- ─────────────────────────────────────────────────────────────────
+
+create table public.ab_variants (
+  id           uuid primary key default uuid_generate_v4(),
+  ab_test_id   uuid references public.ab_tests(id) on delete cascade not null,
+  variant      text not null check (variant in ('A','B')),
+  page_content jsonb,
+  vues         integer not null default 0,
+  clics        integer not null default 0,
+  conversions  integer not null default 0,
+  created_at   timestamptz not null default now(),
+  unique(ab_test_id, variant)
+);
+
+create index idx_ab_variants_test_id on public.ab_variants(ab_test_id);
+
+alter table public.ab_variants enable row level security;
+create policy "ab_variants: owner access" on public.ab_variants
+  using (
+    exists (
+      select 1 from public.ab_tests t
+      join public.pages p on p.id = t.page_id
+      where t.id = ab_test_id and p.user_id = auth.uid()
+    )
+  );
+
+-- ─────────────────────────────────────────────────────────────────
+
+create table public.ab_events (
+  id         uuid primary key default uuid_generate_v4(),
+  variant_id uuid references public.ab_variants(id) on delete cascade not null,
+  visitor_id text not null,
+  event_type text not null check (event_type in ('view','click','conversion')),
+  created_at timestamptz not null default now()
+);
+
+create index idx_ab_events_variant_id on public.ab_events(variant_id);
+create index idx_ab_events_visitor    on public.ab_events(visitor_id, variant_id, event_type);
+
+-- ab_events est public (tracking visiteur) — pas de RLS
+-- (Service role key utilisée côté API)
+
+-- ─── FONCTIONS ATOMIQUES A/B ──────────────────────────────────────
+
+create or replace function increment_ab_vues(p_variant_id uuid)
+returns void language sql security definer as $$
+  update public.ab_variants set vues = vues + 1 where id = p_variant_id;
+$$;
+
+create or replace function increment_ab_clics(p_variant_id uuid)
+returns void language sql security definer as $$
+  update public.ab_variants set clics = clics + 1 where id = p_variant_id;
+$$;
+
+create or replace function increment_ab_conversions(p_variant_id uuid)
+returns void language sql security definer as $$
+  update public.ab_variants set conversions = conversions + 1 where id = p_variant_id;
+$$;

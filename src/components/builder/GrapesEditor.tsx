@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import type { LandingPageData } from '@/types'
+import Leadmeter from '@/components/dashboard/Leadmeter'
 
 interface Props {
   html: string
@@ -10,29 +10,26 @@ interface Props {
 
 type Device = 'desktop' | 'tablet' | 'mobile'
 
-const DEVICE_WIDTHS: Record<Device, string> = {
-  desktop: '100%',
-  tablet:  '768px',
-  mobile:  '390px',
-}
-
 export default function GrapesEditor({ html, onSave }: Props) {
-  const editorRef  = useRef<HTMLDivElement>(null)
-  const gjsRef     = useRef<any>(null)
-  const [device, setDevice]   = useState<Device>('desktop')
-  const [saving, setSaving]   = useState(false)
-  const [saved, setSaved]     = useState(false)
+  const editorRef    = useRef<HTMLDivElement>(null)
+  const gjsRef       = useRef<any>(null)
+  const debounceRef  = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  const [device,      setDevice]      = useState<Device>('desktop')
+  const [saving,      setSaving]      = useState(false)
+  const [saved,       setSaved]       = useState(false)
+  const [liveHtml,    setLiveHtml]    = useState(html)
+
+  /* ─── Init GrapesJS ─── */
   useEffect(() => {
     if (!editorRef.current || gjsRef.current) return
 
     let editor: any
 
     const init = async () => {
-      const gjs = await import('grapesjs')
+      const gjs       = await import('grapesjs')
       const gjsPreset = await import('grapesjs-preset-webpage')
 
-      // Supprimer l'instance précédente si elle existe
       if (gjsRef.current) {
         gjsRef.current.destroy()
         gjsRef.current = null
@@ -52,10 +49,7 @@ export default function GrapesEditor({ html, onSave }: Props) {
             blocks: ['link-block', 'quote', 'text-basic'],
           },
         },
-        canvas: {
-          styles: [],
-          scripts: [],
-        },
+        canvas: { styles: [], scripts: [] },
         deviceManager: {
           devices: [
             { name: 'Desktop', width: '' },
@@ -63,7 +57,7 @@ export default function GrapesEditor({ html, onSave }: Props) {
             { name: 'Mobile',  width: '390px', widthMedia: '480px' },
           ],
         },
-        panels: { defaults: [] }, // on gère les panels nous-mêmes
+        panels: { defaults: [] },
         styleManager: {
           sectors: [
             {
@@ -86,11 +80,32 @@ export default function GrapesEditor({ html, onSave }: Props) {
       })
 
       gjsRef.current = editor
+
+      /* ─── Leadmeter : écoute des events GrapesJS ─── */
+      const scheduleUpdate = () => {
+        if (debounceRef.current) clearTimeout(debounceRef.current)
+        debounceRef.current = setTimeout(() => {
+          if (!gjsRef.current) return
+          const exportHtml = gjsRef.current.getHtml()
+          const css        = gjsRef.current.getCss()
+          const full = `<!DOCTYPE html><html><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><style>${css}</style></head><body>${exportHtml}</body></html>`
+          setLiveHtml(full)
+        }, 500)
+      }
+
+      editor.on('component:update',  scheduleUpdate)
+      editor.on('component:add',     scheduleUpdate)
+      editor.on('component:remove',  scheduleUpdate)
+      editor.on('style:change',      scheduleUpdate)
+
+      // Score initial
+      scheduleUpdate()
     }
 
     init()
 
     return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
       if (gjsRef.current) {
         gjsRef.current.destroy()
         gjsRef.current = null
@@ -98,7 +113,7 @@ export default function GrapesEditor({ html, onSave }: Props) {
     }
   }, [html])
 
-  // Changer de device
+  /* ─── Device switcher ─── */
   useEffect(() => {
     if (!gjsRef.current) return
     const dm = gjsRef.current.DeviceManager
@@ -107,6 +122,7 @@ export default function GrapesEditor({ html, onSave }: Props) {
     else dm.select('Mobile')
   }, [device])
 
+  /* ─── Sauvegarder ─── */
   function handleSave() {
     if (!gjsRef.current || !onSave) return
     setSaving(true)
@@ -120,6 +136,7 @@ export default function GrapesEditor({ html, onSave }: Props) {
     setTimeout(() => setSaved(false), 2000)
   }
 
+  /* ─── Export HTML ─── */
   function handleExport() {
     if (!gjsRef.current) return
     const exportHtml = gjsRef.current.getHtml()
@@ -140,6 +157,7 @@ export default function GrapesEditor({ html, onSave }: Props) {
     URL.revokeObjectURL(url)
   }
 
+  /* ─── RENDER ─── */
   return (
     <div className="flex flex-col h-full bg-gray-100">
 
@@ -187,15 +205,22 @@ export default function GrapesEditor({ html, onSave }: Props) {
         </div>
       </div>
 
-      {/* ── Canvas wrapper ── */}
-      <div className="flex-1 overflow-hidden relative">
-        <div
-          ref={editorRef}
-          className="absolute inset-0"
-          style={{ transition: 'width .3s' }}
-        />
-      </div>
+      {/* ── Body : canvas + panel Leadmeter ── */}
+      <div className="flex flex-1 overflow-hidden">
 
+        {/* Canvas GrapesJS */}
+        <div className="flex-1 overflow-hidden relative">
+          <div
+            ref={editorRef}
+            className="absolute inset-0"
+            style={{ transition: 'width .3s' }}
+          />
+        </div>
+
+        {/* Panel Leadmeter */}
+        <Leadmeter html={liveHtml} />
+
+      </div>
     </div>
   )
 }

@@ -299,7 +299,7 @@ function Slide1() {
         </div>
 
         {/* Visuel droite */}
-        <div className="hidden lg:flex items-center justify-center relative">
+        <div className="flex items-center justify-center relative mt-6 lg:mt-0">
           <div
             className="orb-anim absolute w-80 h-80 rounded-full pointer-events-none"
             style={{ background: 'radial-gradient(circle, rgba(91,71,245,0.35) 0%, transparent 70%)', zIndex: 0 }}
@@ -797,19 +797,19 @@ function Slide5() {
       <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-8 lg:gap-16 items-center pt-24 pb-20 sm:py-24 sm:pt-36">
         <div className="text-center lg:text-left">
           <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-5"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
             <Lightning className="w-3.5 h-3.5" />
             Pour les agences SMMA
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
             Livre 10x plus de pages.{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Sans recruter.
             </span>
           </h1>
-          <p className="text-lg text-white/70 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+          <p className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0">
             Dashboard agence, white-label, rapports PDF automatiques. Scale ta livraison client sans ajouter une seule personne à ton équipe.
           </p>
           <Link
@@ -986,7 +986,7 @@ function TrustBar() {
             {doubled.map((brand, i) => (
               <span
                 key={i}
-                className="flex items-center gap-12 px-10 flex-shrink-0"
+                className="flex items-center gap-8 sm:gap-12 px-6 sm:px-10 flex-shrink-0"
                 style={{ color: '#374151', ...brand.style }}
               >
                 {brand.name}
@@ -1032,8 +1032,8 @@ function ProofSection() {
       ref={ref}
       style={{ background: 'linear-gradient(135deg, #f5f3ff 0%, #fdfbff 55%, #ede8ff 100%)' }}
     >
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-24 items-center">
 
           {/* Gauche — titre + description */}
           <div>
@@ -1060,7 +1060,7 @@ function ProofSection() {
                 }}
               >
                 <div
-                  className="text-6xl lg:text-7xl font-black leading-none mb-2"
+                  className="text-4xl sm:text-6xl lg:text-7xl font-black leading-none mb-2"
                   style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
                 >
                   {s.value.toLocaleString('fr-FR')}{s.suffix}
@@ -1127,8 +1127,8 @@ const FEATURES = [
 function FeaturesSection() {
   return (
     <section style={{ background: '#faf8ff' }}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
-        <div className="text-center mb-16">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
+        <div className="text-center mb-10 sm:mb-16">
           <div
             className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
             style={{ background: 'rgba(91,71,245,0.08)', color: '#5B47F5', border: '1px solid rgba(91,71,245,0.15)' }}
@@ -1178,8 +1178,8 @@ function FeaturesSection() {
 function ABTestingSection() {
   return (
     <section style={{ background: '#ffffff' }}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-24 items-center">
 
           {/* Left */}
           <div>
@@ -1201,7 +1201,7 @@ function ABTestingSection() {
           </div>
 
           {/* Right — mockup A/B */}
-          <div className="hidden lg:flex items-center justify-center relative" style={{ minHeight: '480px' }}>
+          <div className="hidden lg:flex items-center justify-center relative" style={{ minHeight: '360px' }}>
 
             {/* Page variant B (arrière) */}
             <div
@@ -1364,8 +1364,8 @@ const STEPS = [
 function HowItWorks() {
   return (
     <section style={{ background: 'radial-gradient(ellipse 90% 50% at 50% -5%, rgba(91,71,245,0.28) 0%, transparent 60%), radial-gradient(ellipse 55% 40% at 85% 110%, rgba(124,106,247,0.15) 0%, transparent 60%), #0b0b1c' }}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
-        <div className="text-center mb-16">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
+        <div className="text-center mb-10 sm:mb-16">
           <div
             className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
@@ -1402,7 +1402,7 @@ function HowItWorks() {
                   </div>
                 </div>
                 <div
-                  className="text-6xl font-black"
+                  className="text-4xl sm:text-6xl font-black"
                   style={{ color: 'rgba(91,71,245,0.2)', lineHeight: 1 }}
                 >
                   {s.num}
@@ -1519,8 +1519,8 @@ function IntegrationsSection() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-24 pb-0 text-center relative z-10">
-        <h2 className="reveal text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-6 leading-[1.1]">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 pt-14 sm:pt-24 pb-0 text-center relative z-10">
+        <h2 className="reveal text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-6 leading-[1.1]">
           Connecte KONVERT à ce que<br />tu utilises déjà
         </h2>
         <p className="reveal delay-1 text-lg text-white/55 max-w-2xl mx-auto mb-10">
@@ -1538,7 +1538,7 @@ function IntegrationsSection() {
 
         {/* App icons — grille isométrique */}
         <div className="flex justify-center pb-0">
-          <div className="grid grid-cols-4 sm:grid-cols-8 gap-4 sm:gap-5">
+          <div className="grid grid-cols-4 sm:grid-cols-8 gap-3 sm:gap-5">
             {INTEGRATION_APPS.map((app, i) => (
               <div
                 key={app.name}
@@ -1557,7 +1557,7 @@ function IntegrationsSection() {
                     <BrandLogo name={app.name} color={app.color} />
                   </div>
                 </div>
-                <span className="text-white/40 text-xs font-semibold hidden sm:block">{app.name}</span>
+                <span className="text-white/40 text-[10px] sm:text-xs font-semibold">{app.name}</span>
               </div>
             ))}
           </div>
@@ -1702,7 +1702,7 @@ function BuilderSection() {
           </div>
 
           {/* Right — Laptop mockup */}
-          <div className="hidden lg:flex items-start justify-center relative pt-8">
+          <div className="flex items-start justify-center relative pt-6 lg:pt-8">
 
             {/* Swatches flottants au dessus */}
             <div
@@ -1840,11 +1840,11 @@ const ANALYTICS_METRICS = [
 function AnalyticsShowcase() {
   return (
     <section style={{ background: '#faf8ff' }}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
 
           {/* Left — dashboard mockup */}
-          <div className="hidden lg:block relative">
+          <div className="relative">
             <div
               className="reveal rounded-3xl overflow-hidden shadow-2xl"
               style={{ background: '#ffffff', border: '1.5px solid #e8e2ff' }}
@@ -2017,7 +2017,7 @@ function PublishSection() {
           </div>
 
           {/* Right — mockup publish */}
-          <div className="hidden lg:flex items-center justify-center relative">
+          <div className="flex items-center justify-center relative mt-6 lg:mt-0">
             <div
               className="reveal w-full max-w-md rounded-3xl overflow-hidden shadow-2xl"
               style={{ background: '#ffffff', border: '1.5px solid #e8e2ff' }}
@@ -2147,8 +2147,8 @@ const TEMPLATE_GRID = [
 function TemplatesPreview() {
   return (
     <section style={{ background: '#faf8ff' }}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
-        <div className="text-center mb-14">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
+        <div className="text-center mb-10 sm:mb-14">
           <div
             className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
             style={{ background: 'rgba(91,71,245,0.08)', color: '#5B47F5', border: '1px solid rgba(91,71,245,0.15)' }}
@@ -2247,8 +2247,8 @@ const TESTIMONIALS = [
 function Testimonials() {
   return (
     <section style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(91,71,245,0.22) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 5% 100%, rgba(167,139,250,0.12) 0%, transparent 55%), #0e0d1e' }}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
-        <div className="text-center mb-14">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
+        <div className="text-center mb-10 sm:mb-14">
           <div
             className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
@@ -2345,8 +2345,8 @@ function PricingTeaser() {
 
   return (
     <section style={{ background: '#faf8ff' }}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24">
-        <div className="text-center mb-14">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
+        <div className="text-center mb-10 sm:mb-14">
           <div
             className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
             style={{ background: 'rgba(91,71,245,0.08)', color: '#5B47F5', border: '1px solid rgba(91,71,245,0.15)' }}
@@ -2509,7 +2509,7 @@ function FinalCTA() {
         }}
       />
       <div
-        className="orb-anim absolute w-96 h-96 rounded-full pointer-events-none"
+        className="orb-anim absolute w-48 h-48 sm:w-96 sm:h-96 rounded-full pointer-events-none"
         style={{
           background: 'radial-gradient(circle, rgba(91,71,245,0.2) 0%, transparent 70%)',
           top: '50%',
@@ -2518,7 +2518,7 @@ function FinalCTA() {
         }}
       />
 
-      <div className="relative max-w-3xl mx-auto px-5 sm:px-8 py-28 text-center">
+      <div className="relative max-w-3xl mx-auto px-5 sm:px-8 py-16 sm:py-28 text-center">
         <div
           className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
           style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}

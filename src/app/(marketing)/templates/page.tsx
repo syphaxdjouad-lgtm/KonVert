@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   templateMinimalDark,
   templateCleanWhite,
@@ -21,6 +21,18 @@ import {
   templatePetLove,
 } from '@/lib/templates'
 import type { LandingPageData } from '@/types'
+
+const GLOBAL_CSS = `
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .delay-1 { transition-delay: .1s }
+  .delay-2 { transition-delay: .2s }
+  .delay-3 { transition-delay: .3s }
+  .delay-4 { transition-delay: .4s }
+  @keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+  .btn-shimmer { background: linear-gradient(90deg, #5B47F5 0%, #7c6af7 40%, #5B47F5 60%, #4a38e0 100%); background-size: 200% 100%; animation: shimmer 2.4s linear infinite; }
+  .btn-shimmer:hover { animation-play-state: paused; }
+`
 
 // ---------------------------------------------------------------------------
 // Sample data pour les previews
@@ -88,6 +100,8 @@ interface Template {
   bestFor: string
   features: string[]
   border?: string
+  badge?: 'Nouveau' | 'Populaire' | 'Top conversion'
+  type: string
 }
 
 // ---------------------------------------------------------------------------
@@ -107,6 +121,8 @@ const TEMPLATES: Template[] = [
     conversionRate: '5.2%',
     bestFor: 'Vêtements, Accessoires, Mode',
     features: ['Compte à rebours', 'Social proof live', 'Gallery produit', 'FAQ accordéon'],
+    badge: 'Populaire',
+    type: 'upsell',
   },
   {
     id: 'minimal-dark',
@@ -120,6 +136,7 @@ const TEMPLATES: Template[] = [
     conversionRate: '4.8%',
     bestFor: 'Électronique, Montres, Gadgets',
     features: ['Dark mode natif', 'Animations smooth', 'Specs techniques', 'Trust badges'],
+    type: 'fiche-produit',
   },
   {
     id: 'clean-white',
@@ -134,6 +151,7 @@ const TEMPLATES: Template[] = [
     bestFor: 'Tous produits, Débutants',
     features: ['Ultra-lisible', 'SEO optimisé', 'Chargement rapide', 'Mobile-first'],
     border: 'border border-gray-200',
+    type: 'fiche-produit',
   },
   {
     id: 'bold-orange',
@@ -147,6 +165,8 @@ const TEMPLATES: Template[] = [
     conversionRate: '6.1%',
     bestFor: 'Dropshipping, Offres limitées',
     features: ['Urgence timer', 'CTA géant', 'Garantie prominente', 'Promo prix barré'],
+    badge: 'Top conversion',
+    type: 'bundle',
   },
   {
     id: 'premium-glass',
@@ -160,6 +180,7 @@ const TEMPLATES: Template[] = [
     conversionRate: '4.9%',
     bestFor: 'Parfums, Bijoux, Cosmétiques',
     features: ['Glassmorphism', 'Animations 3D', 'Galerie immersive', 'Avis clients'],
+    type: 'landing-page',
   },
   {
     id: 'luxe-noir',
@@ -173,6 +194,7 @@ const TEMPLATES: Template[] = [
     conversionRate: '4.5%',
     bestFor: 'Maroquinerie, Montres luxe, Éditions limitées',
     features: ['Accents dorés', 'Serif premium', 'Video produit', 'Certificat auth'],
+    type: 'landing-page',
   },
   {
     id: 'sportif-energie',
@@ -186,6 +208,8 @@ const TEMPLATES: Template[] = [
     conversionRate: '5.5%',
     bestFor: 'Sport, Fitness, Suppléments',
     features: ['Avant/Après', 'Résultats prouvés', 'Comparateur', 'Pack builder'],
+    badge: 'Populaire',
+    type: 'bundle',
   },
   {
     id: 'natural-organic',
@@ -199,6 +223,7 @@ const TEMPLATES: Template[] = [
     conversionRate: '4.3%',
     bestFor: 'Bio, Cosmétiques naturels, Alimentation',
     features: ['Certifications', 'Ingrédients liste', 'Valeurs marque', 'Impact eco'],
+    type: 'landing-page',
   },
   {
     id: 'tech-gadget',
@@ -212,6 +237,7 @@ const TEMPLATES: Template[] = [
     conversionRate: '4.7%',
     bestFor: 'Gadgets, Domotique, Électronique',
     features: ['Specs tableau', 'Comparateur modèles', 'Vidéo démo', 'Q&A produit'],
+    type: 'fiche-produit',
   },
   {
     id: 'beauty-studio',
@@ -225,6 +251,8 @@ const TEMPLATES: Template[] = [
     conversionRate: '5.8%',
     bestFor: 'Makeup, Skincare, Beauté',
     features: ['Galerie UGC', 'Before/After', 'Shades selector', 'Influenceur quotes'],
+    badge: 'Top conversion',
+    type: 'upsell',
   },
   {
     id: 'home-deco',
@@ -238,6 +266,7 @@ const TEMPLATES: Template[] = [
     conversionRate: '4.2%',
     bestFor: 'Déco, Cuisine, Maison',
     features: ['Photos ambiance', 'Dimensions produit', 'Matières info', 'Similaires'],
+    type: 'landing-page',
   },
   {
     id: 'kids-colorful',
@@ -251,6 +280,7 @@ const TEMPLATES: Template[] = [
     conversionRate: '4.6%',
     bestFor: 'Jouets, Puériculture, Enfants',
     features: ['Certif sécurité', "Tranches d'âge", 'Couleurs selector', 'Cadeau idéal'],
+    type: 'landing-page',
   },
   {
     id: 'foodie-gourmet',
@@ -264,6 +294,7 @@ const TEMPLATES: Template[] = [
     conversionRate: '5.0%',
     bestFor: 'Food, Épicerie fine, Boissons',
     features: ['Infos nutri', 'Recettes liées', 'Origine traçée', 'Avis gustatifs'],
+    type: 'landing-page',
   },
   {
     id: 'travel-nomad',
@@ -277,6 +308,7 @@ const TEMPLATES: Template[] = [
     conversionRate: '4.4%',
     bestFor: 'Bagages, Accessoires voyage, Outdoor',
     features: ["Cas d'usage voyage", 'Résistance specs', 'Poids & taille', 'Pack multi'],
+    type: 'landing-page',
   },
   {
     id: 'automotive-pro',
@@ -290,6 +322,7 @@ const TEMPLATES: Template[] = [
     conversionRate: '4.0%',
     bestFor: 'Accessoires auto, Pièces, Moto',
     features: ['Compatibilité checker', 'Specs techniques', 'Installation guide', 'Garantie'],
+    type: 'fiche-produit',
   },
   {
     id: 'gaming-zone',
@@ -303,6 +336,8 @@ const TEMPLATES: Template[] = [
     conversionRate: '5.3%',
     bestFor: 'Périphériques, Gaming gear, LED',
     features: ['RGB preview', 'Specs perf', 'Comparateur', 'Streamer-ready'],
+    badge: 'Nouveau',
+    type: 'landing-page',
   },
   {
     id: 'pet-love',
@@ -316,6 +351,8 @@ const TEMPLATES: Template[] = [
     conversionRate: '5.6%',
     bestFor: 'Accessoires animaux, Nourriture, Hygène',
     features: ['Avis véto', 'Tailles guide', 'Compatible races', 'Pack multi-animaux'],
+    badge: 'Nouveau',
+    type: 'landing-page',
   },
 ]
 
@@ -339,8 +376,27 @@ const FILTER_TABS: string[] = [
   'Luxe',
 ]
 
+const TYPE_TABS: { value: string; label: string }[] = [
+  { value: 'tous', label: 'Tous les types' },
+  { value: 'landing-page', label: 'Landing page' },
+  { value: 'fiche-produit', label: 'Fiche produit' },
+  { value: 'bundle', label: 'Bundle' },
+  { value: 'upsell', label: 'Upsell' },
+]
+
 // ---------------------------------------------------------------------------
-// Mockup fallback — gradient CSS (pour les templates sans implémentation HTML)
+// Badge helpers
+// ---------------------------------------------------------------------------
+
+function getBadgeStyle(badge: Template['badge']): string {
+  if (badge === 'Top conversion') return 'bg-emerald-500 text-white'
+  if (badge === 'Populaire') return 'bg-orange-500 text-white'
+  if (badge === 'Nouveau') return 'bg-[#5B47F5] text-white'
+  return ''
+}
+
+// ---------------------------------------------------------------------------
+// Mockup fallback — gradient CSS
 // ---------------------------------------------------------------------------
 
 function TemplateMockupFallback({ gradient, textColor, border }: { gradient: string; textColor: string; border?: string }) {
@@ -352,27 +408,14 @@ function TemplateMockupFallback({ gradient, textColor, border }: { gradient: str
 
   return (
     <div className={`h-52 bg-gradient-to-br ${gradient} ${border ?? ''} relative overflow-hidden`}>
-      {/* Simulated nav bar */}
       <div className={`absolute top-4 left-4 right-4 h-2 rounded-full ${barColor}`} />
-
-      {/* Simulated product image placeholder */}
       <div className={`absolute top-9 right-5 w-16 h-20 rounded-lg ${blockColor}`} />
-
-      {/* Simulated title block */}
       <div className={`absolute top-9 left-5 w-20 h-2.5 rounded-full ${barColor}`} />
       <div className={`absolute top-14 left-5 w-14 h-2 rounded-full ${blockColorAlt}`} />
-
-      {/* Simulated price */}
       <div className={`absolute top-20 left-5 w-10 h-3 rounded-full ${barColor}`} />
-
-      {/* Simulated description lines */}
       <div className={`absolute top-28 left-5 w-24 h-1.5 rounded-full ${blockColorAlt}`} />
-      <div className={`absolute top-31 left-5 w-20 h-1.5 rounded-full ${blockColorAlt}`} style={{ top: '7.5rem' }} />
-
-      {/* Simulated CTA button */}
+      <div className={`absolute left-5 w-20 h-1.5 rounded-full ${blockColorAlt}`} style={{ top: '7.5rem' }} />
       <div className={`absolute bottom-5 left-5 w-24 h-6 rounded-lg ${ctaColor}`} />
-
-      {/* Simulated social proof dot row */}
       <div className="absolute bottom-5 right-5 flex gap-1">
         {[...Array(4)].map((_, i) => (
           <div key={i} className={`w-4 h-4 rounded-full ${blockColor}`} />
@@ -383,7 +426,7 @@ function TemplateMockupFallback({ gradient, textColor, border }: { gradient: str
 }
 
 // ---------------------------------------------------------------------------
-// Preview iframe — rendu HTML réel du template
+// Preview iframe
 // ---------------------------------------------------------------------------
 
 function TemplatePreview({ id, gradient, textColor, border }: { id: string; gradient: string; textColor: string; border?: string }) {
@@ -411,8 +454,79 @@ function TemplatePreview({ id, gradient, textColor, border }: { id: string; grad
         }}
         sandbox="allow-same-origin"
       />
-      {/* Overlay pour empêcher les clics sur l'iframe */}
       <div className="absolute inset-0" />
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Modal plein écran
+// ---------------------------------------------------------------------------
+
+function TemplateModal({ template, onClose }: { template: Template; onClose: () => void }) {
+  const templateFn = TEMPLATE_FN_MAP[template.id]
+  const html = templateFn ? templateFn(SAMPLE_DATA) : null
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', handleKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', handleKey)
+      document.body.style.overflow = ''
+    }
+  }, [onClose])
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex flex-col"
+      style={{ background: 'rgba(8,8,15,0.92)' }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+    >
+      {/* Header modal */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 flex-shrink-0">
+        <div>
+          <h2 className="text-white font-black text-lg">{template.name}</h2>
+          <p className="text-white/50 text-sm">{template.desc}</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <a
+            href="/signup"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-sm font-bold transition-opacity hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)' }}
+          >
+            Utiliser ce template →
+          </a>
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-full flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all text-lg"
+            aria-label="Fermer"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      {/* Iframe fullscreen */}
+      <div className="flex-1 overflow-hidden bg-gray-100">
+        {html ? (
+          <iframe
+            srcDoc={html}
+            title={`Preview ${template.name}`}
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              display: 'block',
+            }}
+            sandbox="allow-same-origin"
+          />
+        ) : (
+          <div className={`h-full bg-gradient-to-br ${template.gradient} flex items-center justify-center`}>
+            <p className="text-white/60 text-sm">Aperçu non disponible</p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -421,12 +535,22 @@ function TemplatePreview({ id, gradient, textColor, border }: { id: string; grad
 // Template card
 // ---------------------------------------------------------------------------
 
-function TemplateCard({ t }: { t: Template }) {
+function TemplateCard({ t, onOpen }: { t: Template; onOpen: (t: Template) => void }) {
   return (
-    <div className="group cursor-pointer rounded-2xl overflow-hidden border border-gray-100 hover:shadow-2xl hover:shadow-[#5B47F5]/10 transition-all duration-300 hover:-translate-y-1">
+    <div
+      className="reveal group cursor-pointer rounded-2xl overflow-hidden border border-gray-100 hover:shadow-2xl hover:shadow-[#5B47F5]/10 transition-all duration-300 hover:-translate-y-1"
+      onClick={() => onOpen(t)}
+    >
       {/* Aperçu visuel */}
       <div className="relative">
         <TemplatePreview id={t.id} gradient={t.gradient} textColor={t.textColor} border={t.border} />
+
+        {/* Badge haut-gauche */}
+        {t.badge && (
+          <span className={`absolute top-3 left-3 text-[11px] font-bold px-2.5 py-1 rounded-full ${getBadgeStyle(t.badge)}`}>
+            {t.badge}
+          </span>
+        )}
 
         {/* Tag — haut droite */}
         <span
@@ -464,7 +588,10 @@ function TemplateCard({ t }: { t: Template }) {
         </div>
 
         {/* CTA */}
-        <button className="w-full py-2.5 rounded-xl text-sm font-bold text-[#5B47F5] border-2 border-[#5B47F5]/20 hover:bg-[#5B47F5] hover:text-white hover:border-[#5B47F5] transition-all duration-200">
+        <button
+          className="w-full py-2.5 rounded-xl text-sm font-bold text-[#5B47F5] border-2 border-[#5B47F5]/20 hover:bg-[#5B47F5] hover:text-white hover:border-[#5B47F5] transition-all duration-200"
+          onClick={(e) => { e.stopPropagation(); onOpen(t) }}
+        >
           Utiliser ce template
         </button>
       </div>
@@ -478,12 +605,37 @@ function TemplateCard({ t }: { t: Template }) {
 
 export default function TemplatesPage() {
   const [activeFilter, setActiveFilter] = useState<string>('Tous')
+  const [activeType, setActiveType] = useState<string>('tous')
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null)
 
-  const filtered =
-    activeFilter === 'Tous' ? TEMPLATES : TEMPLATES.filter((t) => t.category === activeFilter)
+  useEffect(() => {
+    const style = document.createElement('style')
+    style.textContent = GLOBAL_CSS
+    document.head.appendChild(style)
+    return () => { document.head.removeChild(style) }
+  }, [])
+
+  useEffect(() => {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
+    }, { threshold: 0.1 })
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el))
+    return () => obs.disconnect()
+  }, [activeFilter, activeType])
+
+  const filtered = TEMPLATES.filter((t) => {
+    const categoryMatch = activeFilter === 'Tous' || t.category === activeFilter
+    const typeMatch = activeType === 'tous' || t.type === activeType
+    return categoryMatch && typeMatch
+  })
 
   return (
     <main>
+      {/* Modal */}
+      {selectedTemplate && (
+        <TemplateModal template={selectedTemplate} onClose={() => setSelectedTemplate(null)} />
+      )}
+
       {/* ------------------------------------------------------------------ */}
       {/* HERO — fond dark                                                    */}
       {/* ------------------------------------------------------------------ */}
@@ -518,10 +670,8 @@ export default function TemplatesPage() {
             <span className="text-white/70 font-medium">CVR moyen +4.8%</span>
           </div>
 
-          {/* ---------------------------------------------------------------- */}
-          {/* FILTRE                                                           */}
-          {/* ---------------------------------------------------------------- */}
-          <div className="flex gap-2 flex-wrap justify-center">
+          {/* Filtre catégorie */}
+          <div className="flex gap-2 flex-wrap justify-center mb-4">
             {FILTER_TABS.map((tab) => {
               const isActive = activeFilter === tab
               return (
@@ -539,6 +689,26 @@ export default function TemplatesPage() {
               )
             })}
           </div>
+
+          {/* Filtre type de page */}
+          <div className="flex gap-2 flex-wrap justify-center">
+            {TYPE_TABS.map((tab) => {
+              const isActive = activeType === tab.value
+              return (
+                <button
+                  key={tab.value}
+                  onClick={() => setActiveType(tab.value)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 whitespace-nowrap ${
+                    isActive
+                      ? 'bg-white/20 text-white border-white/30'
+                      : 'bg-white/5 text-white/40 border-white/10 hover:bg-white/10 hover:text-white/70'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              )
+            })}
+          </div>
         </div>
       </section>
 
@@ -549,25 +719,17 @@ export default function TemplatesPage() {
         <div className="max-w-7xl mx-auto">
           {/* Compteur de résultats */}
           <p className="text-sm text-gray-400 mb-8">
-            {filtered.length} template{filtered.length > 1 ? 's' : ''}{' '}
-            {activeFilter !== 'Tous' ? (
-              <>
-                dans{' '}
-                <span className="text-gray-700 font-medium">{activeFilter}</span>
-              </>
-            ) : (
-              'disponibles'
-            )}
+            17 templates disponibles — mis à jour chaque semaine
           </p>
 
           {/* Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((t) => (
-              <TemplateCard key={t.id} t={t} />
+              <TemplateCard key={t.id} t={t} onOpen={setSelectedTemplate} />
             ))}
           </div>
 
-          {/* État vide (ne devrait pas arriver avec les filtres définis) */}
+          {/* État vide */}
           {filtered.length === 0 && (
             <div className="py-24 text-center text-gray-400 text-sm">
               Aucun template dans cette catégorie pour l&apos;instant.
@@ -584,22 +746,24 @@ export default function TemplatesPage() {
         style={{ background: '#0f0f1a' }}
       >
         <div className="max-w-xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 leading-tight">
+          <h2 className="reveal text-3xl sm:text-4xl font-extrabold text-white mb-4 leading-tight">
             Tous les templates sont inclus dans le plan{' '}
             <span style={{ color: '#5B47F5' }}>Pro.</span>
           </h2>
-          <p className="text-white/50 text-base mb-8">
+          <p className="reveal delay-1 text-white/50 text-base mb-8">
             Accédez aux 17 templates, aux mises à jour futures et aux nouvelles niches dès la sortie.
           </p>
 
-          <a
-            href="/signup"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
-            style={{ background: '#5B47F5' }}
-          >
-            Commencer l&apos;essai gratuit
-            <span aria-hidden="true">&#8594;</span>
-          </a>
+          <div className="reveal delay-2">
+            <a
+              href="/signup"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
+              style={{ background: '#5B47F5' }}
+            >
+              Commencer l&apos;essai gratuit
+              <span aria-hidden="true">&#8594;</span>
+            </a>
+          </div>
 
           <p className="mt-4 text-sm text-white/30">
             14 jours gratuits &nbsp;·&nbsp; Aucune CB &nbsp;·&nbsp; Annulez quand vous voulez

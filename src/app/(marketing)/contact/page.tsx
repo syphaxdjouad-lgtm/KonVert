@@ -1,8 +1,21 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Mail, MessageSquare, Phone, MapPin, ArrowRight, Check, Clock, Zap, Building2 } from 'lucide-react'
+
+const GLOBAL_CSS = `
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .delay-1 { transition-delay: .1s }
+  .delay-2 { transition-delay: .2s }
+  .delay-3 { transition-delay: .3s }
+  .delay-4 { transition-delay: .4s }
+  @keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+  .btn-shimmer { background: linear-gradient(90deg, #5B47F5 0%, #7c6af7 40%, #5B47F5 60%, #4a38e0 100%); background-size: 200% 100%; animation: shimmer 2.4s linear infinite; }
+  .btn-shimmer:hover { animation-play-state: paused; }
+  @keyframes count-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+`
 
 const SUBJECTS = [
   'Support technique',
@@ -46,15 +59,50 @@ const CONTACT_CARDS = [
   },
 ]
 
+const FAQ_ITEMS = [
+  {
+    question: 'Combien de temps pour une réponse ?',
+    answer: 'Sous 24h en semaine, parfois le week-end pour les urgences.',
+  },
+  {
+    question: "Proposez-vous de l'aide à l'onboarding ?",
+    answer: 'Oui, un appel de 30 min offert pour tous les nouveaux comptes.',
+  },
+  {
+    question: 'Comment annuler mon abonnement ?',
+    answer: 'En 1 clic depuis votre dashboard. Aucune période d\'engagement.',
+  },
+  {
+    question: 'KONVERT est-il compatible avec tous les thèmes Shopify ?',
+    answer: 'Oui. Les pages générées s\'intègrent nativement dans n\'importe quel thème Shopify ou WooCommerce.',
+  },
+]
+
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
+
+  useEffect(() => {
+    const style = document.createElement('style')
+    style.textContent = GLOBAL_CSS
+    document.head.appendChild(style)
+    return () => { document.head.removeChild(style) }
+  }, [])
+
+  useEffect(() => {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
+    }, { threshold: 0.15 })
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el))
+    return () => obs.disconnect()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 1200)) // simulation
+    await new Promise((r) => setTimeout(r, 1200))
     setLoading(false)
     setSent(true)
   }
@@ -65,16 +113,16 @@ export default function ContactPage() {
       <section className="pt-32 pb-16" style={{ background: 'linear-gradient(135deg, #08080f, #0f0f2e)' }}>
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
 
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-7 border"
+          <div className="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-7 border"
                style={{ background: 'rgba(91,71,245,0.15)', borderColor: 'rgba(91,71,245,0.3)', color: '#a78bfa' }}>
             <Mail className="w-3.5 h-3.5" />
             Contact
           </div>
 
-          <h1 className="text-4xl sm:text-5xl font-black text-white mb-4">
+          <h1 className="reveal delay-1 text-4xl sm:text-5xl font-black text-white mb-4">
             On est là pour vous aider.
           </h1>
-          <p className="text-lg leading-relaxed" style={{ color: '#8b8baa' }}>
+          <p className="reveal delay-2 text-lg leading-relaxed" style={{ color: '#8b8baa' }}>
             Une question, une suggestion, un besoin spécifique ? Notre équipe vous répond rapidement.
           </p>
         </div>
@@ -84,11 +132,11 @@ export default function ContactPage() {
       <section className="py-12 bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
           <div className="grid sm:grid-cols-3 gap-6">
-            {CONTACT_CARDS.map(({ icon: Icon, title, desc, detail, action, href, color, bg }) => (
+            {CONTACT_CARDS.map(({ icon: Icon, title, desc, detail, action, href, color, bg }, idx) => (
               <a
                 key={title}
                 href={href}
-                className="group p-6 rounded-2xl border border-gray-100 hover:shadow-lg hover:shadow-[#5B47F5]/8 transition-all hover:-translate-y-0.5"
+                className={`reveal delay-${idx + 1} group p-6 rounded-2xl border border-gray-100 hover:shadow-lg hover:shadow-[#5B47F5]/8 transition-all hover:-translate-y-0.5`}
               >
                 <div className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center mb-4`}>
                   <Icon className={`w-5 h-5 ${color}`} />
@@ -111,7 +159,7 @@ export default function ContactPage() {
         <div className="max-w-5xl mx-auto px-5 sm:px-8 grid lg:grid-cols-2 gap-14">
 
           {/* Gauche — infos */}
-          <div>
+          <div className="reveal">
             <p className="text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-4">Formulaire de contact</p>
             <h2 className="text-3xl font-black text-gray-900 mb-5">
               Écrivez-nous directement.
@@ -146,7 +194,7 @@ export default function ContactPage() {
           </div>
 
           {/* Droite — formulaire */}
-          <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
+          <div className="reveal delay-2 bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
             {sent ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-12">
                 <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mb-5">
@@ -232,6 +280,49 @@ export default function ContactPage() {
                 </p>
               </form>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+      <section className="py-20 bg-white">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8">
+          <div className="text-center mb-12">
+            <p className="reveal text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">FAQ</p>
+            <h2 className="reveal delay-1 text-3xl font-black text-gray-900">Questions fréquentes</h2>
+          </div>
+
+          <div className="space-y-3">
+            {FAQ_ITEMS.map((item, idx) => (
+              <div
+                key={item.question}
+                className={`reveal delay-${Math.min(idx + 1, 4)} rounded-2xl border transition-all overflow-hidden ${
+                  openFaq === idx ? 'border-[#5B47F5]/30' : 'border-gray-100'
+                }`}
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                  className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition-colors"
+                >
+                  <span className="font-semibold text-gray-900 text-sm pr-4">{item.question}</span>
+                  <span
+                    className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all text-sm font-bold"
+                    style={{
+                      background: openFaq === idx ? '#5B47F5' : '#f3f4f6',
+                      color: openFaq === idx ? '#fff' : '#6b7280',
+                      transform: openFaq === idx ? 'rotate(45deg)' : 'rotate(0deg)',
+                    }}
+                  >
+                    +
+                  </span>
+                </button>
+                {openFaq === idx && (
+                  <div className="px-6 pb-5">
+                    <p className="text-sm text-gray-600 leading-relaxed">{item.answer}</p>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </section>

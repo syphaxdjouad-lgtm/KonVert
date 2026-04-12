@@ -1,7 +1,21 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Target, Heart, Zap, Globe, Users, TrendingUp } from 'lucide-react'
+
+const GLOBAL_CSS = `
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .delay-1 { transition-delay: .1s }
+  .delay-2 { transition-delay: .2s }
+  .delay-3 { transition-delay: .3s }
+  .delay-4 { transition-delay: .4s }
+  @keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+  .btn-shimmer { background: linear-gradient(90deg, #5B47F5 0%, #7c6af7 40%, #5B47F5 60%, #4a38e0 100%); background-size: 200% 100%; animation: shimmer 2.4s linear infinite; }
+  .btn-shimmer:hover { animation-play-state: paused; }
+  @keyframes count-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+`
 
 const VALUES = [
   {
@@ -13,8 +27,8 @@ const VALUES = [
   },
   {
     icon: Zap,
-    title: 'Vitesse d\'exécution',
-    desc: '30 secondes, pas 3 heures. On croit que le temps de votre équipe est votre ressource la plus précieuse. On l\'automatise.',
+    title: "Vitesse d'exécution",
+    desc: "30 secondes, pas 3 heures. On croit que le temps de votre équipe est votre ressource la plus précieuse. On l'automatise.",
     color: 'text-amber-500',
     bg: 'bg-amber-50',
   },
@@ -34,67 +48,153 @@ const VALUES = [
   },
 ]
 
-const TEAM = [
+const TEAM_NEW = [
   {
-    name: 'Équipe Produit',
-    role: 'Design & Développement',
     avatar: '👨‍💻',
-    desc: "Passionnés d'e-commerce, ils construisent les fonctionnalités qui font la différence.",
+    name: 'Syphax D.',
+    role: 'Fondateur & CEO',
+    desc: "Ex-dropshippeur, dev autodidacte, obsédé par les conversions. A créé KONVERT après avoir perdu trop d'heures sur des pages médiocres.",
   },
   {
-    name: 'Équipe Growth',
-    role: 'Marketing & Data',
-    avatar: '📈',
-    desc: "Ils analysent les 50 000+ pages générées pour identifier ce qui convertit vraiment.",
+    avatar: '🤖',
+    name: 'Équipe IA',
+    role: 'Design, Dev, Contenu',
+    desc: "Une équipe d'agents IA s'occupe de tout : génération de copy, tests, optimisations, rapports. Disponible 24h/24, jamais en vacances.",
   },
   {
-    name: 'Équipe Support',
-    role: 'Customer Success',
-    avatar: '🎯',
-    desc: "Disponibles 7j/7, ils s'assurent que chaque utilisateur atteint ses objectifs.",
+    avatar: '✉️',
+    name: 'On recrute',
+    role: 'Rejoindre l\'aventure',
+    desc: "Tu veux construire le futur de l'e-commerce ? On cherche des profils passionnés. Écris-nous directement.",
+    link: '/contact',
   },
 ]
 
-const STATS = [
-  { num: '50 000+', label: 'pages générées' },
-  { num: '2 800+', label: 'boutiques connectées' },
-  { num: '+40%', label: 'de conversion en moyenne' },
-  { num: '8', label: 'langues supportées' },
+const STATS_DATA = [
+  { raw: 50000, display: '50 000+', label: 'pages générées', suffix: '+' },
+  { raw: 2800, display: '2 800+', label: 'boutiques connectées', suffix: '+' },
+  { raw: 40, display: '+40%', label: 'de conversion en moyenne', prefix: '+', suffix: '%' },
+  { raw: 8, display: '8', label: 'langues supportées', suffix: '' },
 ]
+
+const VISION_CARDS = [
+  {
+    icon: '💰',
+    title: '1M€ ARR',
+    desc: "L'objectif : devenir le standard du copywriting e-commerce en Europe. 1 million d'euros de revenu annuel récurrent d'ici 2027.",
+    color: '#5B47F5',
+  },
+  {
+    icon: '🌍',
+    title: '10 langues',
+    desc: "Expansion vers le marché anglophone, hispanophone et arabe. Chaque e-commerçant dans le monde mérite d'avoir KONVERT dans sa langue.",
+    color: '#10b981',
+  },
+  {
+    icon: '🏪',
+    title: '10 000 boutiques',
+    desc: "De 2 800 à 10 000 boutiques actives. Un réseau d'e-commerçants qui partagent les mêmes templates, les mêmes insights, le même avantage.",
+    color: '#f97316',
+  },
+]
+
+// Animated counter hook
+function useCounter(target: number, started: boolean, duration = 1500) {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    if (!started) return
+    let start = 0
+    const step = target / (duration / 16)
+    const timer = setInterval(() => {
+      start += step
+      if (start >= target) {
+        setCount(target)
+        clearInterval(timer)
+      } else {
+        setCount(Math.floor(start))
+      }
+    }, 16)
+    return () => clearInterval(timer)
+  }, [started, target, duration])
+
+  return count
+}
+
+function StatCard({ raw, display, label, prefix, suffix }: { raw: number; display: string; label: string; prefix?: string; suffix?: string }) {
+  const [started, setStarted] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const count = useCounter(raw, started)
+
+  useEffect(() => {
+    if (!ref.current) return
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setStarted(true); obs.disconnect() }
+    }, { threshold: 0.5 })
+    obs.observe(ref.current)
+    return () => obs.disconnect()
+  }, [])
+
+  const formatNum = (n: number) => {
+    if (raw >= 1000) return n.toLocaleString('fr-FR')
+    return n.toString()
+  }
+
+  return (
+    <div ref={ref} className="text-center">
+      <p className="text-3xl font-black text-[#5B47F5] mb-1" style={{ animation: started ? 'count-up .4s ease forwards' : 'none' }}>
+        {started ? `${prefix ?? ''}${formatNum(count)}${suffix ?? ''}` : display}
+      </p>
+      <p className="text-sm text-gray-500">{label}</p>
+    </div>
+  )
+}
 
 export default function AboutPage() {
+  useEffect(() => {
+    const style = document.createElement('style')
+    style.textContent = GLOBAL_CSS
+    document.head.appendChild(style)
+    return () => { document.head.removeChild(style) }
+  }, [])
+
+  useEffect(() => {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
+    }, { threshold: 0.15 })
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el))
+    return () => obs.disconnect()
+  }, [])
+
   return (
     <>
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="pt-32 pb-20" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
         <div className="max-w-4xl mx-auto px-5 sm:px-8 text-center">
 
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-8 border"
+          <div className="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-8 border"
                style={{ background: 'rgba(91,71,245,0.15)', borderColor: 'rgba(91,71,245,0.3)', color: '#a78bfa' }}>
             <Users className="w-3.5 h-3.5" />
             À propos de nous
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
+          <h1 className="reveal delay-1 text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
             On a construit l'outil<br />
             <span style={{ color: '#8b77ff' }}>qu'on voulait utiliser.</span>
           </h1>
-          <p className="text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#8b8baa' }}>
+          <p className="reveal delay-2 text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#8b8baa' }}>
             KONVERT est né d'une frustration : créer une bonne page produit prenait des heures, nécessitait un designer,
             un copywriter et un développeur. On a automatisé tout ça en 30 secondes.
           </p>
         </div>
       </section>
 
-      {/* ── STATS ────────────────────────────────────────────────────────── */}
+      {/* ── STATS ANIMÉES ────────────────────────────────────────────────── */}
       <section className="py-14 bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
-            {STATS.map(({ num, label }) => (
-              <div key={label}>
-                <p className="text-3xl font-black text-[#5B47F5] mb-1">{num}</p>
-                <p className="text-sm text-gray-500">{label}</p>
-              </div>
+            {STATS_DATA.map((s) => (
+              <StatCard key={s.label} {...s} />
             ))}
           </div>
         </div>
@@ -105,7 +205,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto px-5 sm:px-8">
 
           <div className="grid lg:grid-cols-2 gap-14 items-center">
-            <div>
+            <div className="reveal">
               <p className="text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-4">Notre histoire</p>
               <h2 className="text-3xl font-black text-gray-900 mb-5">
                 De dropshippers frustrés à une équipe d'une centaine d'utilisateurs.
@@ -132,7 +232,7 @@ export default function AboutPage() {
             </div>
 
             {/* Timeline visuelle */}
-            <div className="space-y-6">
+            <div className="reveal delay-2 space-y-6">
               {[
                 { year: '2024 T1', event: "Création de KONVERT en interne pour nos propres boutiques.", col: '#5B47F5' },
                 { year: '2024 T2', event: 'Premiers bêta-testeurs. 100 pages générées en 2 semaines.', col: '#10b981' },
@@ -159,13 +259,13 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
 
           <div className="text-center mb-12">
-            <p className="text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">Nos valeurs</p>
-            <h2 className="text-3xl font-black text-gray-900">Ce qui guide chaque décision.</h2>
+            <p className="reveal text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">Nos valeurs</p>
+            <h2 className="reveal delay-1 text-3xl font-black text-gray-900">Ce qui guide chaque décision.</h2>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {VALUES.map(({ icon: Icon, title, desc, color, bg }) => (
-              <div key={title} className="bg-white rounded-2xl p-6 border border-gray-100">
+            {VALUES.map(({ icon: Icon, title, desc, color, bg }, idx) => (
+              <div key={title} className={`reveal delay-${Math.min(idx + 1, 4)} bg-white rounded-2xl p-6 border border-gray-100`}>
                 <div className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center mb-4`}>
                   <Icon className={`w-5 h-5 ${color}`} />
                 </div>
@@ -177,22 +277,53 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── VISION 2027 ──────────────────────────────────────────────────── */}
+      <section className="py-20" style={{ background: '#faf8ff' }}>
+        <div className="max-w-5xl mx-auto px-5 sm:px-8">
+
+          <div className="text-center mb-12">
+            <p className="reveal text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">Vision</p>
+            <h2 className="reveal delay-1 text-3xl font-black text-gray-900">Notre vision 2027</h2>
+            <p className="reveal delay-2 text-sm text-gray-500 mt-3 max-w-xl mx-auto">On ne construit pas juste un outil. On construit l'infrastructure copywriting de l'e-commerce mondial.</p>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-6">
+            {VISION_CARDS.map((card, idx) => (
+              <div
+                key={card.title}
+                className={`reveal delay-${idx + 1} rounded-3xl p-8 border-2 transition-all hover:-translate-y-1`}
+                style={{ background: '#fff', borderColor: `${card.color}30` }}
+              >
+                <div className="text-4xl mb-4">{card.icon}</div>
+                <h3 className="text-2xl font-black mb-3" style={{ color: card.color }}>{card.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{card.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── ÉQUIPE ───────────────────────────────────────────────────────── */}
       <section className="py-20 bg-white">
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
 
           <div className="text-center mb-12">
-            <p className="text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">L'équipe</p>
-            <h2 className="text-3xl font-black text-gray-900">Des e-commerçants qui ont construit pour d'autres e-commerçants.</h2>
+            <p className="reveal text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">L'équipe</p>
+            <h2 className="reveal delay-1 text-3xl font-black text-gray-900">Solo-founder, équipe IA, ambition mondiale.</h2>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-8">
-            {TEAM.map(({ name, role, avatar, desc }) => (
-              <div key={name} className="text-center p-8 rounded-3xl border border-gray-100 hover:shadow-lg hover:shadow-[#5B47F5]/8 transition-all">
+            {TEAM_NEW.map(({ name, role, avatar, desc, link }, idx) => (
+              <div key={name} className={`reveal delay-${idx + 1} text-center p-8 rounded-3xl border border-gray-100 hover:shadow-lg hover:shadow-[#5B47F5]/8 transition-all`}>
                 <div className="text-5xl mb-4">{avatar}</div>
                 <h3 className="font-bold text-gray-900 mb-1">{name}</h3>
                 <p className="text-xs font-semibold text-[#5B47F5] mb-3">{role}</p>
-                <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
+                <p className="text-sm text-gray-500 leading-relaxed mb-4">{desc}</p>
+                {link && (
+                  <Link href={link} className="text-xs font-bold text-[#5B47F5] hover:underline">
+                    Nous contacter →
+                  </Link>
+                )}
               </div>
             ))}
           </div>
@@ -202,13 +333,13 @@ export default function AboutPage() {
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section className="py-20" style={{ background: 'linear-gradient(135deg, #08080f, #0f0f2e)' }}>
         <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">
-          <h2 className="text-3xl font-black text-white mb-4">
+          <h2 className="reveal text-3xl font-black text-white mb-4">
             Rejoignez les 2 800+ boutiques<br />qui convertissent avec KONVERT.
           </h2>
-          <p className="text-sm mb-8" style={{ color: '#8b8baa' }}>
+          <p className="reveal delay-1 text-sm mb-8" style={{ color: '#8b8baa' }}>
             14 jours d'essai gratuit. Aucune carte de crédit. Annulation en 1 clic.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="reveal delay-2 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/signup"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold"

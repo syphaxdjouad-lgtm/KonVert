@@ -50,6 +50,10 @@ const GLOBAL_CSS = `
     from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+  @keyframes popOut {
+    from { opacity: 0; transform: scale(0.7) translateY(8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
   @keyframes wave-move {
     0%   { transform: scaleY(1); }
     50%  { transform: scaleY(1.15); }
@@ -164,18 +168,18 @@ function useSlider(count: number, autoPlayMs: number) {
 function Slide1() {
   return (
     <div className="slide-item flex items-center justify-center px-5 sm:px-8">
-      <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-24 pt-36">
+      <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-8 lg:gap-16 items-center pt-24 pb-20 sm:py-24 sm:pt-36">
         {/* Texte gauche */}
         <div className="text-center lg:text-left">
           <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-5"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
             <Sparkle className="w-3.5 h-3.5" />
             Pages produit · Landing pages · SEO
           </div>
           <h1
-            className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6"
+            className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5"
             style={{ animation: 'slideUp .7s cubic-bezier(.16,1,.3,1) both' }}
           >
             Tes produits méritent des pages{' '}
@@ -184,7 +188,7 @@ function Slide1() {
             </span>
           </h1>
           <p
-            className="text-lg text-white/70 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0"
+            className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0"
             style={{ animation: 'slideUp .7s .1s cubic-bezier(.16,1,.3,1) both' }}
           >
             Tu perds de l'argent à chaque visiteur qui repart sans acheter. KONVERT génère ta page produit optimisée en 30 secondes — prête à coller sur ta boutique.
@@ -210,7 +214,7 @@ function Slide1() {
 
           {/* ── TRUSTPILOT + TRUST BADGES ──────────────────────────── */}
           <div
-            className="mt-8 flex flex-col items-center lg:items-start gap-4"
+            className="mt-6 flex flex-col items-center lg:items-start gap-3"
             style={{ animation: 'slideUp .7s .35s cubic-bezier(.16,1,.3,1) both' }}
           >
             {/* Trustpilot widget */}
@@ -301,47 +305,111 @@ function Slide1() {
             style={{ background: 'radial-gradient(circle, rgba(91,71,245,0.35) 0%, transparent 70%)', zIndex: 0 }}
           />
           <div
-            className="float-anim relative z-10 w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl"
-            style={{ border: '1px solid rgba(255,255,255,0.1)', background: '#1a1a2e' }}
+            className="float-anim relative z-10 w-full max-w-sm rounded-2xl shadow-2xl"
+            style={{ border: '1px solid #e2e8f0', background: '#ffffff', boxShadow: '0 24px 60px rgba(0,0,0,0.13), 0 0 0 1px #e2e8f0', overflow: 'visible' }}
           >
-            <div className="flex items-center gap-2 px-4 py-3" style={{ background: '#111127', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+            {/* Chrome blanc */}
+            <div className="flex items-center gap-2 px-4 py-3 rounded-t-2xl" style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
               <div className="flex gap-1.5">
                 <div className="w-3 h-3 rounded-full" style={{ background: '#ef4444' }} />
                 <div className="w-3 h-3 rounded-full" style={{ background: '#f59e0b' }} />
                 <div className="w-3 h-3 rounded-full" style={{ background: '#10b981' }} />
               </div>
               <div
-                className="flex-1 rounded-md px-3 py-1 text-xs text-white/40 font-mono"
-                style={{ background: 'rgba(255,255,255,0.06)' }}
+                className="flex-1 rounded-md px-3 py-1 text-xs text-gray-400 font-mono"
+                style={{ background: '#ffffff', border: '1px solid #e2e8f0' }}
               >
                 konvert.app/p/running-shoes-pro
               </div>
             </div>
-            <div className="relative">
+
+            {/* Image */}
+            <div className="relative" style={{ overflow: 'hidden' }}>
               <img
                 src="/images/hero-product-mockup.jpg"
                 alt="Page produit générée par KONVERT"
                 className="w-full h-44 object-cover"
               />
-              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #1a1a2e 0%, transparent 60%)' }} />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(255,255,255,0.5) 0%, transparent 55%)' }} />
             </div>
-            <div className="p-4">
-              <div className="h-3 rounded-full mb-2 w-3/4" style={{ background: 'rgba(255,255,255,0.1)' }} />
-              <div className="h-2.5 rounded-full mb-1 w-full" style={{ background: 'rgba(255,255,255,0.06)' }} />
-              <div className="h-2.5 rounded-full w-5/6" style={{ background: 'rgba(255,255,255,0.06)' }} />
+
+            {/* Contenu */}
+            <div className="p-4 rounded-b-2xl" style={{ background: '#ffffff' }}>
+              <div className="h-3 rounded-full mb-2 w-3/4" style={{ background: '#e2e8f0' }} />
+              <div className="h-2 rounded-full mb-1.5 w-full" style={{ background: '#f1f5f9' }} />
+              <div className="h-2 rounded-full mb-4 w-5/6" style={{ background: '#f1f5f9' }} />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-5 w-16 rounded-md" style={{ background: '#ede9fe' }} />
+                <div className="h-4 w-10 rounded-md" style={{ background: '#fee2e2' }} />
+              </div>
               <div
-                className="mt-4 w-full py-2.5 rounded-xl text-center text-sm font-bold text-white"
+                className="w-full py-2.5 rounded-xl text-center text-sm font-bold text-white"
                 style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)' }}
               >
                 Acheter maintenant
               </div>
             </div>
+
+            {/* Stat 1 — CVR droite */}
             <div
-              className="absolute bottom-20 right-4 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold shadow-xl"
-              style={{ background: '#10b981', color: '#fff' }}
+              className="absolute"
+              style={{
+                bottom: 52, right: -20,
+                display: 'flex', alignItems: 'center', gap: 7,
+                padding: '8px 14px', borderRadius: 14,
+                background: '#10b981', color: '#fff',
+                fontSize: 13, fontWeight: 800,
+                boxShadow: '0 8px 24px rgba(16,185,129,0.4)',
+                animation: 'popOut 0.55s 0.5s cubic-bezier(.16,1,.3,1) both',
+                whiteSpace: 'nowrap', zIndex: 20,
+              }}
             >
-              <TrendUp className="w-3 h-3" />
+              <TrendUp className="w-3.5 h-3.5" />
               +5.2% CVR
+            </div>
+
+            {/* Stat 2 — Ventes gauche haut */}
+            <div
+              className="absolute"
+              style={{
+                top: 72, left: -28,
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '7px 12px', borderRadius: 12,
+                background: '#ffffff', border: '1.5px solid #ede9fe',
+                boxShadow: '0 6px 20px rgba(91,71,245,0.18)',
+                animation: 'popOut 0.55s 0.8s cubic-bezier(.16,1,.3,1) both',
+                whiteSpace: 'nowrap', zIndex: 20,
+              }}
+            >
+              <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(91,71,245,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Lightning className="w-3.5 h-3.5" style={{ color: '#5B47F5' }} />
+              </div>
+              <div>
+                <div style={{ fontSize: 10, color: '#94a3b8', lineHeight: 1.3 }}>Ventes aujourd&apos;hui</div>
+                <div style={{ fontSize: 13, fontWeight: 800, color: '#0f172a', lineHeight: 1.3 }}>+38 commandes</div>
+              </div>
+            </div>
+
+            {/* Stat 3 — Score gauche bas */}
+            <div
+              className="absolute"
+              style={{
+                bottom: 14, left: -24,
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '7px 12px', borderRadius: 12,
+                background: '#ffffff', border: '1.5px solid #dcfce7',
+                boxShadow: '0 6px 20px rgba(16,185,129,0.15)',
+                animation: 'popOut 0.55s 1.05s cubic-bezier(.16,1,.3,1) both',
+                whiteSpace: 'nowrap', zIndex: 20,
+              }}
+            >
+              <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(16,185,129,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Sparkle className="w-3.5 h-3.5" style={{ color: '#10b981' }} />
+              </div>
+              <div>
+                <div style={{ fontSize: 10, color: '#94a3b8', lineHeight: 1.3 }}>Score KONVERT</div>
+                <div style={{ fontSize: 13, fontWeight: 800, color: '#0f172a', lineHeight: 1.3 }}>94 / 100</div>
+              </div>
             </div>
           </div>
           {[
@@ -449,22 +517,22 @@ const TEMPLATE_CARDS = [
 function Slide2() {
   return (
     <div className="slide-item flex items-center justify-center px-5 sm:px-8">
-      <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-24 pt-36">
+      <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-8 lg:gap-16 items-center pt-24 pb-20 sm:py-24 sm:pt-36">
         <div className="text-center lg:text-left">
           <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-5"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
             <Palette className="w-3.5 h-3.5" />
             17 templates premium
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
             Tes visiteurs jugent ta page{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               en 3 secondes.
             </span>
           </h1>
-          <p className="text-lg text-white/70 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+          <p className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0">
             17 templates premium — chaque design suit les tendances mondiales et est calibré pour déclencher l&apos;achat. Mode, Tech, Beauté, Sport, Gaming et plus.
           </p>
           <Link
@@ -476,7 +544,7 @@ function Slide2() {
         </div>
 
         {/* Grille 2×2 de mini mockups */}
-        <div className="hidden lg:grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 mt-4 lg:mt-0">
           {TEMPLATE_CARDS.map((t) => (
             <div
               key={t.name}
@@ -485,7 +553,7 @@ function Slide2() {
                 background: t.bg,
                 boxShadow: `0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)`,
                 animationDelay: t.delay,
-                height: '188px',
+                height: 'clamp(140px, 22vw, 188px)',
               }}
             >
               {/* Formes décoratives en fond */}
@@ -588,22 +656,22 @@ function Slide3() {
   const bars = [40, 65, 50, 80, 60, 90, 75]
   return (
     <div className="slide-item flex items-center justify-center px-5 sm:px-8">
-      <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-24 pt-36">
+      <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-8 lg:gap-16 items-center pt-24 pb-20 sm:py-24 sm:pt-36">
         <div className="text-center lg:text-left">
           <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-5"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
             <ChartBar className="w-3.5 h-3.5" />
             Analytics temps réel
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
             Sais-tu pourquoi tes clients{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               n&apos;achètent pas ?
             </span>
           </h1>
-          <p className="text-lg text-white/70 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+          <p className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0">
             CVR, ROAS, scroll depth en temps réel. Arrête de deviner — commence à optimiser avec des données qui parlent d&apos;elles-mêmes.
           </p>
           <Link
@@ -613,14 +681,14 @@ function Slide3() {
             Voir l&apos;analytics <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="hidden lg:flex flex-col relative">
+        <div className="flex flex-col relative mt-4 lg:mt-0">
           {/* Dashboard image */}
           <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
             <img
               src="/images/dashboard-analytics.jpg"
               alt="Dashboard analytics KONVERT"
               className="w-full object-cover"
-              style={{ height: '340px' }}
+              style={{ height: 'clamp(180px, 40vw, 340px)' }}
             />
             <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(8,9,26,0.9) 0%, rgba(8,9,26,0.2) 60%, transparent 100%)' }} />
             {/* Metric overlays */}
@@ -668,22 +736,22 @@ function Slide4() {
   ]
   return (
     <div className="slide-item flex items-center justify-center px-5 sm:px-8">
-      <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-24 pt-36">
+      <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-8 lg:gap-16 items-center pt-24 pb-20 sm:py-24 sm:pt-36">
         <div className="text-center lg:text-left">
           <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-5"
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
             <LinkSimple className="w-3.5 h-3.5" />
             Connecté à votre stack
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-6">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
             Prêt à coller sur ta boutique.{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               En 1 clic.
             </span>
           </h1>
-          <p className="text-lg text-white/70 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+          <p className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0">
             Shopify, WooCommerce, Klaviyo — KONVERT s&apos;intègre avec les outils que tu utilises déjà. Zéro développeur, zéro galère.
           </p>
           <Link
@@ -693,7 +761,7 @@ function Slide4() {
             Voir les intégrations <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="hidden lg:grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-3 mt-4 lg:mt-0">
           {integrations.map((item) => (
             <div
               key={item.name}
@@ -726,7 +794,7 @@ const FAKE_CLIENTS = [
 function Slide5() {
   return (
     <div className="slide-item flex items-center justify-center px-5 sm:px-8">
-      <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-24 pt-36">
+      <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-2 gap-8 lg:gap-16 items-center pt-24 pb-20 sm:py-24 sm:pt-36">
         <div className="text-center lg:text-left">
           <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-6"
@@ -751,7 +819,7 @@ function Slide5() {
             Découvrir le plan Agence <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="hidden lg:flex flex-col gap-3">
+        <div className="flex flex-col gap-3 mt-4 lg:mt-0">
           {FAKE_CLIENTS.map((c) => (
             <div
               key={c.name}

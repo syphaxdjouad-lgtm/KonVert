@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, Bot, Palette, BarChart3, Link2, FlaskConical, Globe, Zap, Shield, Clock, Check, Sparkles, TrendingUp } from 'lucide-react'
+import Tooltip from '@/components/ui/Tooltip'
 
 const FEATURES_MAIN = [
   {
@@ -125,19 +126,19 @@ const FEATURES_MAIN = [
 ]
 
 const OTHER_FEATURES = [
-  { icon: Zap,        title: 'Builder drag & drop',       desc: 'Éditez chaque section visuellement après la génération.' },
-  { icon: Shield,     title: 'Sécurité enterprise',        desc: 'OAuth, chiffrement AES-256, conformité RGPD.' },
-  { icon: Clock,      title: 'Génération en 30 secondes',  desc: "Le record absolu vs n'importe quel outil concurrent." },
-  { icon: TrendingUp, title: 'Optimisé Core Web Vitals',   desc: 'LCP < 2s, CLS = 0, INP optimal. Score SEO maximal.' },
-  { icon: Sparkles,   title: 'Scraper multi-sources',      desc: 'AliExpress, Amazon, Alibaba, Temu, Shein et plus.' },
-  { icon: BarChart3,  title: 'Rapports PDF auto',          desc: 'Générés et envoyés automatiquement à vos clients.' },
+  { icon: Zap,        title: 'Builder drag & drop',       desc: 'Éditez chaque section visuellement après la génération.',  tooltip: 'Glissez-déposez chaque bloc sans coder' },
+  { icon: Shield,     title: 'Sécurité enterprise',        desc: 'OAuth, chiffrement AES-256, conformité RGPD.',             tooltip: 'Données chiffrées AES-256, conformité RGPD' },
+  { icon: Clock,      title: 'Génération en 30 secondes',  desc: "Le record absolu vs n'importe quel outil concurrent.",     tooltip: 'De l\'URL au copy complet en 30 secondes' },
+  { icon: TrendingUp, title: 'Optimisé Core Web Vitals',   desc: 'LCP < 2s, CLS = 0, INP optimal. Score SEO maximal.',      tooltip: 'LCP < 2s · CLS 0 · Score SEO optimal' },
+  { icon: Sparkles,   title: 'Scraper multi-sources',      desc: 'AliExpress, Amazon, Alibaba, Temu, Shein et plus.',        tooltip: 'Scrape AliExpress, Amazon, Alibaba et plus' },
+  { icon: BarChart3,  title: 'Rapports PDF auto',          desc: 'Générés et envoyés automatiquement à vos clients.',        tooltip: 'PDF brandés envoyés automatiquement aux clients' },
 ]
 
 export default function FeaturesPage() {
   return (
     <>
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="pt-32 pb-16" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
+      <section id="features" className="pt-32 pb-16" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
         <div className="max-w-4xl mx-auto px-5 sm:px-8 text-center">
 
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-7 border"
@@ -155,7 +156,7 @@ export default function FeaturesPage() {
           </p>
           <Link
             href="/demo"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-bold text-sm"
+            className="btn-shimmer inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-bold text-sm"
             style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
           >
             Voir la démo live
@@ -194,10 +195,12 @@ export default function FeaturesPage() {
                 {/* Visual */}
                 <div className={`${f.reversed ? 'lg:col-start-1 lg:row-start-1' : ''} rounded-3xl p-10 min-h-[280px] flex items-center justify-center relative overflow-hidden`}
                      style={{ background: `linear-gradient(135deg, ${f.accent}15 0%, ${f.accent}06 100%)` }}>
-                  <div className={`w-20 h-20 rounded-3xl ${f.accentBg} flex items-center justify-center`}
-                       style={{ boxShadow: `0 20px 60px ${f.accent}25` }}>
-                    <Icon className={`w-10 h-10 ${f.accentText}`} />
-                  </div>
+                  <Tooltip content={f.subtitle} position="top">
+                    <div className={`w-20 h-20 rounded-3xl ${f.accentBg} flex items-center justify-center cursor-default transition-transform duration-200 hover:scale-110`}
+                         style={{ boxShadow: `0 20px 60px ${f.accent}25` }}>
+                      <Icon className={`w-10 h-10 ${f.accentText}`} />
+                    </div>
+                  </Tooltip>
                   {/* Décoration */}
                   <div className="absolute top-5 right-5 text-4xl opacity-20 select-none">{f.badge.split(' ')[0]}</div>
                 </div>
@@ -215,11 +218,13 @@ export default function FeaturesPage() {
             <h2 className="text-3xl font-black text-gray-900">Chaque détail compte.</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {OTHER_FEATURES.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-white p-6 rounded-2xl border border-gray-100">
-                <div className="w-9 h-9 rounded-xl bg-[#5B47F5]/10 flex items-center justify-center mb-4">
-                  <Icon className="w-4.5 h-4.5 text-[#5B47F5]" />
-                </div>
+            {OTHER_FEATURES.map(({ icon: Icon, title, desc, tooltip }) => (
+              <div key={title} className="card-hover-violet bg-white p-6 rounded-2xl border border-gray-100">
+                <Tooltip content={tooltip} position="top">
+                  <div className="w-9 h-9 rounded-xl bg-[#5B47F5]/10 flex items-center justify-center mb-4 cursor-default">
+                    <Icon className="w-4.5 h-4.5 text-[#5B47F5]" />
+                  </div>
+                </Tooltip>
                 <h3 className="font-bold text-gray-900 mb-1.5 text-sm">{title}</h3>
                 <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
               </div>
@@ -240,7 +245,7 @@ export default function FeaturesPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold"
+              className="btn-shimmer inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold"
               style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
             >
               Commencer gratuitement

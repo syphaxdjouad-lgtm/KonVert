@@ -424,3 +424,87 @@
   height: 100%;
   pointer-events: none;
 }
+
+/* ─── HOVER CARDS VIOLET ─────────────────────────────────────────────────── */
+
+.card-hover-violet {
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out !important;
+}
+
+.card-hover-violet:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: 0 12px 40px rgba(91, 71, 245, 0.18), 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+}
+
+.card-hover-violet:hover .icon-hover-violet {
+  color: #5B47F5 !important;
+}
+
+/* ─── CUSTOM CURSOR (desktop uniquement) ─────────────────────────────────── */
+
+@media (pointer: fine) {
+  .dark-section {
+    cursor: none;
+  }
+
+  .custom-cursor {
+    position: fixed;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.12s ease, opacity 0.2s ease;
+    z-index: 9999;
+  }
+
+  .custom-cursor-dot {
+    position: fixed;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    transition: transform 0.08s ease, opacity 0.2s ease;
+  }
+
+  .custom-cursor-dot.pressed {
+    transform: translate(-50%, -50%) scale(0.45);
+  }
+}
+
+/* ─── RIPPLE EFFECT ─────────────────────────────────────────────────────── */
+
+@keyframes ripple {
+  from { transform: scale(0); opacity: 0.45; }
+  to   { transform: scale(2.5); opacity: 0; }
+}
+
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-wave {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  animation: ripple 0.55s ease-out forwards;
+  pointer-events: none;
+  transform: scale(0);
+}
+
+/* ─── FOCUS STATES ACCESSIBLES ───────────────────────────────────────────── */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #5B47F5 !important;
+  outline-offset: 2px !important;
+}

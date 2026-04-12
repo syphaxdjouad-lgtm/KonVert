@@ -4,6 +4,8 @@ import Link from 'next/link'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
 import LogoMarquee from '@/components/marketing/LogoMarquee'
+import CustomCursor from '@/components/marketing/CustomCursor'
+import Tooltip from '@/components/ui/Tooltip'
 import {
   Robot,
   Palette,
@@ -87,6 +89,22 @@ const GLOBAL_CSS = `
     flex-shrink: 0;
   }
 `
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UTILITAIRE — addRipple
+═══════════════════════════════════════════════════════════════════════════ */
+function addRipple(e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) {
+  const el = e.currentTarget
+  const rect = el.getBoundingClientRect()
+  const size = Math.max(rect.width, rect.height) * 2
+  const x = e.clientX - rect.left - size / 2
+  const y = e.clientY - rect.top - size / 2
+  const wave = document.createElement('span')
+  wave.className = 'ripple-wave'
+  Object.assign(wave.style, { width: `${size}px`, height: `${size}px`, left: `${x}px`, top: `${y}px` })
+  el.appendChild(wave)
+  setTimeout(() => wave.remove(), 600)
+}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    HOOK — useReveal
@@ -199,14 +217,16 @@ function Slide1() {
           >
             <Link
               href="/signup"
-              className="btn-shimmer inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg"
+              className="btn-shimmer btn-ripple inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg"
+              onClick={addRipple}
             >
               Créer ma page gratuitement <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/demo"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm text-white transition-all hover:bg-white/10"
+              className="btn-ripple inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm text-white transition-all hover:bg-white/10"
               style={{ border: '1.5px solid rgba(255,255,255,0.25)' }}
+              onClick={addRipple}
             >
               Voir un exemple
             </Link>
@@ -873,13 +893,14 @@ function HeroSlider() {
 
   return (
     <section
-      className="relative overflow-hidden"
+      className="relative overflow-hidden dark-section"
       style={{ background: 'linear-gradient(160deg, #08091a 0%, #0d0b20 50%, #0a0a1a 100%)', minHeight: '100vh' }}
       onMouseEnter={pause}
       onMouseLeave={resume}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      <CustomCursor />
       {/* Gradient radial violet en bas */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -1086,6 +1107,7 @@ const FEATURES = [
     bg: 'rgba(91,71,245,0.08)',
     title: 'Page générée en 30 secondes',
     desc: 'Colle l\'URL du produit. L\'IA analyse, rédige le titre, les bénéfices, la FAQ et le CTA. Ta page est prête avant ton café.',
+    tooltip: 'IA Claude génère titre, bénéfices, FAQ et CTA',
   },
   {
     Icon: Palette,
@@ -1093,6 +1115,7 @@ const FEATURES = [
     bg: 'rgba(249,115,22,0.08)',
     title: '17 templates qui convertissent',
     desc: 'Chaque template suit les tendances mondiales. Mode, tech, beauté, sport, gaming — le bon design pour chaque niche.',
+    tooltip: '17 designs optimisés par niche e-commerce',
   },
   {
     Icon: ChartBar,
@@ -1100,6 +1123,7 @@ const FEATURES = [
     bg: 'rgba(16,185,129,0.08)',
     title: 'Sais-tu ce qui bloque tes ventes ?',
     desc: 'Scroll depth, CVR, ROAS en temps réel. Tu vois exactement où tes clients décrochent — et tu corriges.',
+    tooltip: 'Scroll depth, CVR et ROAS en temps réel',
   },
   {
     Icon: LinkSimple,
@@ -1107,6 +1131,7 @@ const FEATURES = [
     bg: 'rgba(13,148,136,0.08)',
     title: 'Publish Shopify en 1 clic',
     desc: 'Pas de copier-coller de code. Connecte ta boutique une fois, publie en un clic. Zéro développeur requis.',
+    tooltip: 'Connexion OAuth Shopify & WooCommerce directe',
   },
   {
     Icon: Flask,
@@ -1114,6 +1139,7 @@ const FEATURES = [
     bg: 'rgba(139,92,246,0.08)',
     title: 'A/B Testing automatique',
     desc: 'Lance 2 variantes de ta page. L\'algorithme identifie la gagnante et bascule le trafic dessus. Tu te concentres sur le reste.',
+    tooltip: 'Gagnant détecté automatiquement à 95% de signif.',
   },
   {
     Icon: Globe,
@@ -1121,12 +1147,13 @@ const FEATURES = [
     bg: 'rgba(245,158,11,0.08)',
     title: 'Vends dans 8 langues',
     desc: 'Français, anglais, espagnol, allemand, portugais et plus. Chaque marché, une page optimisée dans sa langue.',
+    tooltip: 'FR, EN, ES, DE, IT, PT, AR, ZH — copy natif',
   },
 ]
 
 function FeaturesSection() {
   return (
-    <section style={{ background: '#faf8ff' }}>
+    <section id="features" style={{ background: '#faf8ff' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
         <div className="text-center mb-10 sm:mb-16">
           <div
@@ -1148,7 +1175,7 @@ function FeaturesSection() {
           {FEATURES.map((f, i) => (
             <div
               key={f.title}
-              className="reveal p-6 rounded-2xl transition-all hover:-translate-y-1 hover:shadow-lg"
+              className="reveal card-hover-violet p-6 rounded-2xl"
               style={{
                 background: '#ffffff',
                 border: '1.5px solid #ede8ff',
@@ -1156,12 +1183,14 @@ function FeaturesSection() {
                 transitionDelay: `${i * 0.07}s`,
               }}
             >
-              <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                style={{ background: f.bg }}
-              >
-                <f.Icon className="w-5 h-5" style={{ color: f.color }} />
-              </div>
+              <Tooltip content={f.tooltip} position="top">
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 cursor-default"
+                  style={{ background: f.bg }}
+                >
+                  <f.Icon className="w-5 h-5" style={{ color: f.color }} />
+                </div>
+              </Tooltip>
               <h3 className="text-gray-900 font-bold text-base mb-2">{f.title}</h3>
               <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
             </div>
@@ -1363,7 +1392,7 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section style={{ background: 'radial-gradient(ellipse 90% 50% at 50% -5%, rgba(91,71,245,0.28) 0%, transparent 60%), radial-gradient(ellipse 55% 40% at 85% 110%, rgba(124,106,247,0.15) 0%, transparent 60%), #0b0b1c' }}>
+    <section id="how-it-works" style={{ background: 'radial-gradient(ellipse 90% 50% at 50% -5%, rgba(91,71,245,0.28) 0%, transparent 60%), radial-gradient(ellipse 55% 40% at 85% 110%, rgba(124,106,247,0.15) 0%, transparent 60%), #0b0b1c' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
         <div className="text-center mb-10 sm:mb-16">
           <div
@@ -1647,11 +1676,24 @@ function DarkFeatureCards() {
           {DARK_CARDS.map((card, i) => (
             <div
               key={card.title}
-              className="reveal flex flex-col items-center text-center px-8 py-12 rounded-3xl transition-all hover:-translate-y-1"
+              className="reveal flex flex-col items-center text-center px-8 py-12 rounded-3xl"
               style={{
                 background: 'rgba(255,255,255,0.035)',
                 border: '1px solid rgba(255,255,255,0.07)',
+                transition: 'transform 0.2s ease-out, box-shadow 0.2s ease-out, background 0.2s ease-out',
                 transitionDelay: `${i * 0.08}s`,
+              }}
+              onMouseEnter={e => {
+                const el = e.currentTarget
+                el.style.transform = 'translateY(-4px) scale(1.015)'
+                el.style.background = 'rgba(255,255,255,0.06)'
+                el.style.boxShadow = '0 12px 40px rgba(91,71,245,0.22)'
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget
+                el.style.transform = ''
+                el.style.background = 'rgba(255,255,255,0.035)'
+                el.style.boxShadow = ''
               }}
             >
               <div className="mb-7 text-white" style={{ opacity: 0.75 }}>
@@ -2146,7 +2188,7 @@ const TEMPLATE_GRID = [
 
 function TemplatesPreview() {
   return (
-    <section style={{ background: '#faf8ff' }}>
+    <section id="templates" style={{ background: '#faf8ff' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
         <div className="text-center mb-10 sm:mb-14">
           <div
@@ -2168,7 +2210,7 @@ function TemplatesPreview() {
           {TEMPLATE_GRID.map((t, i) => (
             <div
               key={t.name}
-              className="reveal group cursor-pointer rounded-2xl overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl"
+              className="reveal group cursor-pointer rounded-2xl overflow-hidden card-hover-violet"
               style={{ transitionDelay: `${i * 0.06}s` }}
             >
               <div
@@ -2200,8 +2242,9 @@ function TemplatesPreview() {
         <div className="text-center">
           <Link
             href="/templates"
-            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm text-white transition-all hover:scale-[1.02]"
+            className="btn-shimmer btn-ripple inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm text-white transition-all hover:scale-[1.02]"
             style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)', boxShadow: '0 4px 18px rgba(91,71,245,0.35)' }}
+            onClick={addRipple}
           >
             Voir tous les templates <ArrowRight className="w-4 h-4" />
           </Link>
@@ -2344,7 +2387,7 @@ function PricingTeaser() {
   const [annual, setAnnual] = useState(false)
 
   return (
-    <section style={{ background: '#faf8ff' }}>
+    <section id="pricing" style={{ background: '#faf8ff' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
         <div className="text-center mb-10 sm:mb-14">
           <div

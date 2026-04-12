@@ -1,10 +1,23 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Check, Zap, ChevronDown, ArrowRight } from 'lucide-react'
 import { Suspense } from 'react'
 import Link from 'next/link'
+
+function addRipple(e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) {
+  const el = e.currentTarget
+  const rect = el.getBoundingClientRect()
+  const size = Math.max(rect.width, rect.height) * 2
+  const x = e.clientX - rect.left - size / 2
+  const y = e.clientY - rect.top - size / 2
+  const wave = document.createElement('span')
+  wave.className = 'ripple-wave'
+  Object.assign(wave.style, { width: `${size}px`, height: `${size}px`, left: `${x}px`, top: `${y}px` })
+  el.appendChild(wave)
+  setTimeout(() => wave.remove(), 600)
+}
 
 /* ─── PLANS DATA ────────────────────────────────────────────────────────── */
 const PLANS = [
@@ -239,7 +252,7 @@ function PricingContent() {
               return (
                 <div
                   key={plan.id}
-                  className="relative flex flex-col rounded-xl transition-all duration-200"
+                  className={`relative flex flex-col rounded-xl transition-all duration-200 ${!plan.popular && !plan.enterprise ? 'card-hover-violet' : ''}`}
                   style={
                     plan.popular
                       ? {
@@ -347,19 +360,20 @@ function PricingContent() {
                   {plan.enterprise ? (
                     <Link
                       href="/contact"
-                      className="w-full font-bold py-3.5 rounded-lg text-sm text-center transition-all duration-200 block"
+                      className="btn-ripple w-full font-bold py-3.5 rounded-lg text-sm text-center transition-all duration-200 block"
                       style={{ background: '#6366f1', color: '#ffffff', boxShadow: '0 4px 12px rgba(99,102,241,0.3)' }}
+                      onClick={addRipple}
                     >
                       {plan.cta}
                     </Link>
                   ) : (
                     <button
-                      onClick={() => handleCheckout(plan.id)}
+                      onClick={(e) => { addRipple(e); handleCheckout(plan.id) }}
                       disabled={loading === plan.id}
-                      className="w-full font-bold py-3.5 rounded-lg text-sm transition-all duration-200 disabled:opacity-50"
+                      className={`btn-ripple w-full font-bold py-3.5 rounded-lg text-sm transition-all duration-200 disabled:opacity-50 ${plan.popular ? 'btn-shimmer' : ''}`}
                       style={
                         plan.popular
-                          ? { background: '#16a34a', color: '#ffffff', boxShadow: '0 4px 12px rgba(22,163,74,0.3)' }
+                          ? { background: 'linear-gradient(135deg, #16a34a, #15803d)', color: '#ffffff', boxShadow: '0 4px 12px rgba(22,163,74,0.3)' }
                           : { background: '#f9fafb', color: '#374151', border: '1px solid #e5e7eb' }
                       }
                       onMouseEnter={(e) => {
@@ -369,7 +383,15 @@ function PricingContent() {
                         if (!plan.popular) (e.currentTarget as HTMLElement).style.background = '#f9fafb'
                       }}
                     >
-                      {loading === plan.id ? 'Redirection...' : plan.cta}
+                      {loading === plan.id ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <svg className="animate-spin w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          </svg>
+                          Redirection...
+                        </span>
+                      ) : plan.cta}
                     </button>
                   )}
                 </div>

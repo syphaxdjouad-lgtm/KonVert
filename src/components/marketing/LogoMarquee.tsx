@@ -52,7 +52,7 @@ export default function LogoMarquee() {
       style={{ background: '#f8f8ff', borderTop: '1px solid #ede8ff', borderBottom: '1px solid #ede8ff' }}
     >
       <p className="text-center text-xs font-semibold uppercase tracking-widest mb-7" style={{ color: '#b8aee8' }}>
-        Ils font confiance à KONVERT
+        Intégrations natives
       </p>
 
       <div className="logo-marquee-wrap">

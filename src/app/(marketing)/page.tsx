@@ -4,7 +4,6 @@ import Link from 'next/link'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
 import LogoMarquee from '@/components/marketing/LogoMarquee'
-import CustomCursor from '@/components/marketing/CustomCursor'
 import Tooltip from '@/components/ui/Tooltip'
 import {
   Robot,
@@ -893,14 +892,13 @@ function HeroSlider() {
 
   return (
     <section
-      className="relative overflow-hidden dark-section"
+      className="relative overflow-hidden"
       style={{ background: 'linear-gradient(160deg, #08091a 0%, #0d0b20 50%, #0a0a1a 100%)', minHeight: '100vh' }}
       onMouseEnter={pause}
       onMouseLeave={resume}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      <CustomCursor />
       {/* Gradient radial violet en bas */}
       <div
         className="absolute inset-0 pointer-events-none"

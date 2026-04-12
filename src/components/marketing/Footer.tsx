@@ -1,7 +1,8 @@
 'use client'
 
+import React from 'react'
 import Link from 'next/link'
-import { Sparkles, AtSign, ExternalLink, Globe, MessageCircle } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 
 const COLS = [
   {
@@ -46,12 +47,7 @@ const COLS = [
   },
 ]
 
-const SOCIALS = [
-  { icon: AtSign,         href: '#', label: 'Twitter / X' },
-  { icon: ExternalLink,   href: '#', label: 'LinkedIn' },
-  { icon: Globe,          href: '#', label: 'Instagram' },
-  { icon: MessageCircle,  href: '#', label: 'YouTube' },
-]
+const SOCIALS: { icon: React.ElementType; href: string; label: string }[] = []
 
 export default function Footer() {
   return (

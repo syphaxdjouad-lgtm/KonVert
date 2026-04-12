@@ -20,7 +20,7 @@ const CONTACT_CARDS = [
     desc: 'Réponse en moins de 2 minutes.',
     detail: 'Lun–Ven, 9h–19h',
     action: 'Ouvrir le chat',
-    href: '#chat',
+    href: 'mailto:hello@konvert.app',
     color: 'text-[#5B47F5]',
     bg: 'bg-[#5B47F5]/10',
   },

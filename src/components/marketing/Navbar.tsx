@@ -77,7 +77,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop nav */}
-        <div ref={ddRef} className="hidden lg:flex items-center gap-1 flex-1">
+        <div ref={ddRef} className="hidden lg:flex items-center gap-0.5 flex-1 min-w-0">
           {NAV.map((item) => {
             const active = pathname === item.href || pathname.startsWith(item.href + '/')
             if (item.dropdown) {
@@ -126,10 +126,10 @@ export default function Navbar() {
         </div>
 
         {/* CTA droite */}
-        <div className="hidden lg:flex items-center gap-3 ml-auto">
+        <div className="hidden lg:flex items-center gap-2 ml-auto flex-shrink-0">
           <Link
             href="/login"
-            className={`text-sm font-semibold px-4 py-2 rounded-lg transition-all ${
+            className={`text-sm font-semibold px-4 py-2 rounded-lg transition-all whitespace-nowrap ${
               isTransparent ? 'text-white/80 hover:text-white hover:bg-white/10' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
             }`}
           >
@@ -137,18 +137,18 @@ export default function Navbar() {
           </Link>
           <Link
             href="/demo"
-            className="text-sm font-bold px-5 py-2.5 rounded-full transition-all hover:bg-[#5B47F5] hover:text-white"
-            style={{ border: '1.5px solid #5B47F5', color: isTransparent ? '#a78bfa' : '#5B47F5', borderColor: isTransparent ? '#a78bfa' : '#5B47F5' }}
+            className="text-sm font-bold px-4 py-2 rounded-full transition-all whitespace-nowrap hover:opacity-90"
+            style={{ border: '1.5px solid', color: isTransparent ? '#a78bfa' : '#5B47F5', borderColor: isTransparent ? '#a78bfa' : '#5B47F5' }}
           >
             Voir la démo
           </Link>
           <Link
             href="/signup"
-            className="flex items-center gap-1.5 text-sm font-bold px-5 py-2.5 rounded-full text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
-            style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 4px 14px rgba(91,71,245,0.35)' }}
+            className="flex items-center gap-1.5 text-sm font-bold px-4 py-2 rounded-full text-white transition-all whitespace-nowrap hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 4px 14px rgba(91,71,245,0.3)' }}
           >
             Essai gratuit
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 flex-shrink-0" />
           </Link>
         </div>
 

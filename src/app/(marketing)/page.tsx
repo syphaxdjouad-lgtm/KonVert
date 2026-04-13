@@ -86,8 +86,10 @@ const GLOBAL_CSS = `
   .slide-track {
     display: flex;
     transition: transform 0.6s cubic-bezier(.16,1,.3,1);
+    will-change: transform;
   }
   .slide-item {
+    width: 100%;
     min-width: 100%;
     flex-shrink: 0;
   }
@@ -2237,7 +2239,7 @@ function PublishSection() {
 
             {/* Floating success toast */}
             <div
-              className="float-anim absolute -top-4 -left-6 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl"
+              className="float-anim absolute -top-4 -left-6 hidden lg:flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl"
               style={{
                 background: 'rgba(15,17,30,0.95)',
                 backdropFilter: 'blur(12px)',

@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { Sparkles } from 'lucide-react'
+import TrustBadges from './TrustBadges'
 
 const COLS = [
   {
@@ -117,8 +118,13 @@ export default function Footer() {
           ))}
         </div>
 
+        {/* Trust badges */}
+        <div className="mt-10 pt-8" style={{ borderTop: '1px solid #ffffff0a' }}>
+          <TrustBadges dark />
+        </div>
+
         {/* Divider */}
-        <div className="mt-12 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: '#ffffff0a' }}>
+        <div className="mt-6 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: '#ffffff0a' }}>
           <p className="text-xs" style={{ color: '#4a4a66' }}>
             © 2025 Konvert SAS. Tous droits réservés.
           </p>

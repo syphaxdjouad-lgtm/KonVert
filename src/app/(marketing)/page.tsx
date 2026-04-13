@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
 import LogoMarquee from '@/components/marketing/LogoMarquee'
+import StatsCounter from '@/components/marketing/StatsCounter'
 import Tooltip from '@/components/ui/Tooltip'
 import {
   Robot,
@@ -2283,6 +2284,15 @@ const TESTIMONIALS = [
     stars: 5,
     stat: 'ROAS x4.2',
   },
+  {
+    name: 'Camille L.',
+    role: 'Mode Femme · Shopify',
+    avatar: 'C',
+    color: '#ec4899',
+    quote: 'En mode, l\'image c\'est tout. KONVERT m\'a permis de créer des pages produit qui respirent le luxe sans passer des heures sur Figma. Mes bounces ont chuté de 62%.',
+    stars: 5,
+    stat: '-62% bounce',
+  },
 ]
 
 function Testimonials() {
@@ -2345,6 +2355,16 @@ function Testimonials() {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="reveal text-center mt-10">
+          <Link
+            href="/testimonials"
+            className="inline-flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-70"
+            style={{ color: '#a78bfa' }}
+          >
+            Voir tous les avis <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </section>
@@ -2628,6 +2648,7 @@ export default function HomePage() {
         <LogoMarquee />
         <TrustBar />
         <ProofSection />
+        <StatsCounter />
         <FeaturesSection />
         <LeadEnrichmentDemo />
         <HowItWorks />

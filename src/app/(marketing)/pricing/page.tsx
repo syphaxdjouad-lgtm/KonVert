@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Check, Zap, ChevronDown, ArrowRight } from 'lucide-react'
 import { Suspense } from 'react'
 import Link from 'next/link'
+import TrustBadges from '@/components/marketing/TrustBadges'
 
 function addRipple(e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) {
   const el = e.currentTarget
@@ -399,19 +400,15 @@ function PricingContent() {
             })}
           </div>
 
-          {/* Footer confiance */}
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400">
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded-md flex items-center justify-center" style={{ background: '#635BFF' }}>
-                <Zap className="w-3 h-3 text-white" />
-              </div>
-              <span>Stripe — paiement sécurisé</span>
-            </div>
-            <div className="w-1 h-1 rounded-full bg-gray-300 hidden md:block" />
+          {/* Trust badges */}
+          <div className="mt-12">
+            <TrustBadges />
+          </div>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400">
             <span>Annulation à tout moment</span>
-            <div className="w-1 h-1 rounded-full bg-gray-300 hidden md:block" />
+            <span className="hidden sm:block">·</span>
             <span>Sans engagement</span>
-            <div className="w-1 h-1 rounded-full bg-gray-300 hidden md:block" />
+            <span className="hidden sm:block">·</span>
             <span>Support inclus dès le premier jour</span>
           </div>
         </div>

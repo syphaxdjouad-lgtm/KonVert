@@ -330,6 +330,103 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── CASE STUDIES ─────────────────────────────────────────────────── */}
+      <section className="py-20 bg-white" style={{ borderTop: '1px solid #f0ebff' }}>
+        <div className="max-w-5xl mx-auto px-5 sm:px-8">
+
+          <div className="text-center mb-12">
+            <p className="reveal text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">Cas clients</p>
+            <h2 className="reveal delay-1 text-3xl font-black text-gray-900">
+              Des résultats mesurables, pas des promesses.
+            </h2>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-8">
+
+            {/* Case study 1 — Décoration */}
+            <div className="reveal delay-1 rounded-3xl overflow-hidden border border-[#ede8ff]" style={{ boxShadow: '0 4px 20px rgba(91,71,245,0.07)' }}>
+              <div
+                className="h-40 flex items-center justify-center text-6xl"
+                style={{ background: 'linear-gradient(135deg, #faf5ff, #ede8ff)' }}
+              >
+                🏡
+              </div>
+              <div className="p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#78716c15', color: '#78716c' }}>Déco & Maison</span>
+                  <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#10b98115', color: '#10b981' }}>WooCommerce</span>
+                </div>
+                <h3 className="text-lg font-black text-gray-900 mb-4">Boutique Décoration : CVR x3 en 7 jours</h3>
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#ef4444' }}>!</div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Problème</p>
+                      <p className="text-sm text-gray-700">Pages produit génériques, 78% de taux de rebond, taux de conversion bloqué à 1.2% depuis 8 mois.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#5B47F5' }}>K</div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Solution KONVERT</p>
+                      <p className="text-sm text-gray-700">Génération de landing pages émotionnelles avec storytelling ambiance, photos lifestyle optimisées et FAQ conversationnelle.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#10b981' }}>✓</div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Résultat</p>
+                      <p className="text-sm font-semibold text-gray-900">Taux de conversion <span style={{ color: '#10b981' }}>1.2% → 3.8%</span> en 7 jours. CA mensuel +€4 200. Taux de rebond -41%.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Case study 2 — Agence SMMA */}
+            <div className="reveal delay-2 rounded-3xl overflow-hidden border border-[#ede8ff]" style={{ boxShadow: '0 4px 20px rgba(91,71,245,0.07)' }}>
+              <div
+                className="h-40 flex items-center justify-center text-6xl"
+                style={{ background: 'linear-gradient(135deg, #f0fdf4, #dcfce7)' }}
+              >
+                📈
+              </div>
+              <div className="p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#10b98115', color: '#10b981' }}>Agence SMMA</span>
+                  <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#5B47F515', color: '#5B47F5' }}>White-label</span>
+                </div>
+                <h3 className="text-lg font-black text-gray-900 mb-4">Agence 23 clients : livrables x4, marge x2</h3>
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#ef4444' }}>!</div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Problème</p>
+                      <p className="text-sm text-gray-700">2 jours/page, 8 clients maximum, impossible de scaler sans embaucher. Marge brute à 42%.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#5B47F5' }}>K</div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Solution KONVERT</p>
+                      <p className="text-sm text-gray-700">Dashboard multi-workspace white-label, génération en 30 sec/page, rapport mensuel automatisé pour chaque client.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#10b981' }}>✓</div>
+                    <div>
+                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Résultat</p>
+                      <p className="text-sm font-semibold text-gray-900">8 → <span style={{ color: '#10b981' }}>23 clients</span> en 3 mois. Marge 42% → 78%. Service KONVERT revendu <span style={{ color: '#10b981' }}>500€/mois/client</span>.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section className="py-20" style={{ background: 'linear-gradient(135deg, #08080f, #0f0f2e)' }}>
         <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">

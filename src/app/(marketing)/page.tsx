@@ -6,6 +6,7 @@ import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
 import BeforeAfter from '@/components/marketing/BeforeAfter'
 import LogoMarquee from '@/components/marketing/LogoMarquee'
 import StatsCounter from '@/components/marketing/StatsCounter'
+import FAQ from '@/components/marketing/FAQ'
 import Tooltip from '@/components/ui/Tooltip'
 import {
   Robot,
@@ -2735,6 +2736,7 @@ export default function HomePage() {
         <TemplatesPreview />
         <Testimonials />
         <PricingTeaser />
+        <FAQ />
         <FinalCTA />
       </main>
     </>

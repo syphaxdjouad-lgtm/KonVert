@@ -1,17 +1,33 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
+
 export const metadata: Metadata = {
   title: {
     template: '%s | KONVERT',
-    default: 'KONVERT — Pages produit haute conversion en 30 secondes',
+    default: 'KONVERT — Tes produits méritent des pages qui vendent',
   },
-  description: "Générez des landing pages haute conversion depuis n'importe quelle URL AliExpress, Amazon ou Alibaba. Publiez directement sur Shopify ou WooCommerce en 1 clic.",
-  keywords: ['landing page', 'dropshipping', 'shopify', 'woocommerce', 'conversion', 'IA', 'aliexpress', 'amazon'],
+  description:
+    'Génère ta fiche produit et landing page optimisées en 30 secondes. SEO, mobile, conversion — prêt à copier-coller sur ta boutique Shopify.',
+  keywords: ['landing page', 'dropshipping', 'shopify', 'woocommerce', 'conversion', 'IA', 'aliexpress', 'amazon', 'fiche produit'],
   openGraph: {
-    title: 'KONVERT — Pages produit haute conversion en 30 secondes',
-    description: "Générez des landing pages haute conversion depuis n'importe quelle URL produit.",
+    title: 'KONVERT — Tes produits méritent des pages qui vendent',
+    description:
+      'Génère ta fiche produit et landing page optimisées en 30 secondes. SEO, mobile, conversion — prêt à copier-coller sur ta boutique Shopify.',
     type: 'website',
+    siteName: 'KONVERT',
+    images: [{ url: `${APP_URL}/opengraph-image`, width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'KONVERT — Tes produits méritent des pages qui vendent',
+    description:
+      'Génère ta fiche produit et landing page optimisées en 30 secondes. SEO, mobile, conversion — prêt à copier-coller sur ta boutique Shopify.',
+    images: [`${APP_URL}/opengraph-image`],
+  },
+  alternates: {
+    canonical: APP_URL,
   },
 };
 

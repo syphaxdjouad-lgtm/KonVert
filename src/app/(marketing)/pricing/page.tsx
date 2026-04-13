@@ -395,6 +395,10 @@ function PricingContent() {
                       ) : plan.cta}
                     </button>
                   )}
+                  {/* Mini trust sous le CTA */}
+                  <p className="text-center mt-2" style={{ fontSize: '10px', color: plan.enterprise ? 'rgba(255,255,255,0.3)' : '#9ca3af' }}>
+                    🔒 SSL · 💳 Stripe · ✅ Sans engagement
+                  </p>
                 </div>
               )
             })}
@@ -404,6 +408,21 @@ function PricingContent() {
           <div className="mt-12">
             <TrustBadges />
           </div>
+
+          {/* Satisfait ou remboursé */}
+          <div className="mt-6 flex justify-center">
+            <div
+              className="inline-flex items-center gap-3 px-6 py-3.5 rounded-2xl"
+              style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}
+            >
+              <span className="text-xl" aria-hidden="true">✅</span>
+              <p className="text-sm font-semibold text-green-800">
+                Satisfait ou remboursé 30 jours —{' '}
+                <span className="font-normal text-green-700">Sans question</span>
+              </p>
+            </div>
+          </div>
+
           <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-gray-400">
             <span>Annulation à tout moment</span>
             <span className="hidden sm:block">·</span>
@@ -559,6 +578,9 @@ function PricingContent() {
         </Link>
         <p className="mt-3 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
           Stripe · Annulation à tout moment · Sans engagement
+        </p>
+        <p className="mt-2 text-sm font-semibold" style={{ color: 'rgba(134,239,172,0.8)' }}>
+          ✅ Satisfait ou remboursé 30 jours — Sans question
         </p>
       </div>
 

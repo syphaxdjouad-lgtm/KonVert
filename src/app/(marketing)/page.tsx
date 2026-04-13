@@ -2703,8 +2703,55 @@ function FinalCTA() {
         <p className="reveal delay-4 text-white/35 text-sm">
           14 jours gratuit · Aucune CB requise · Résiliation en 1 clic
         </p>
+        <p className="mt-2 text-sm font-semibold" style={{ color: 'rgba(134,239,172,0.7)' }}>
+          ✅ Satisfait ou remboursé 30 jours — Sans question
+        </p>
       </div>
     </section>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LAZY SECTION — rendu différé via IntersectionObserver
+═══════════════════════════════════════════════════════════════════════════ */
+function LazySection({ children, fallback, minHeight = 400 }: {
+  children: React.ReactNode
+  fallback?: React.ReactNode
+  minHeight?: number
+}) {
+  const [visible, setVisible] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+          io.disconnect()
+        }
+      },
+      { rootMargin: '300px' }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref} style={!visible ? { minHeight } : undefined}>
+      {visible ? children : (fallback ?? <SectionSkeleton height={minHeight} />)}
+    </div>
+  )
+}
+
+function SectionSkeleton({ height = 400 }: { height?: number }) {
+  return (
+    <div
+      className="w-full animate-pulse"
+      style={{ height, background: 'linear-gradient(90deg, #f3f4f6 25%, #e9eaec 50%, #f3f4f6 75%)', backgroundSize: '400% 100%', animation: 'shimmer 1.8s linear infinite' }}
+      aria-hidden="true"
+    />
   )
 }
 
@@ -2727,10 +2774,10 @@ export default function HomePage() {
         <LeadEnrichmentDemo />
         <HowItWorks />
         <BeforeAfter />
-        <BuilderSection />
-        <ABTestingSection />
-        <AnalyticsShowcase />
-        <IntegrationsSection />
+        <LazySection minHeight={600}><BuilderSection /></LazySection>
+        <LazySection minHeight={500}><ABTestingSection /></LazySection>
+        <LazySection minHeight={500}><AnalyticsShowcase /></LazySection>
+        <LazySection minHeight={500}><IntegrationsSection /></LazySection>
         <DarkFeatureCards />
         <PublishSection />
         <TemplatesPreview />

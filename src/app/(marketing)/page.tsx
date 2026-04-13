@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
+import KonvertEasterEgg from '@/components/marketing/KonvertEasterEgg'
 import BeforeAfter from '@/components/marketing/BeforeAfter'
 import LogoMarquee from '@/components/marketing/LogoMarquee'
 import StatsCounter from '@/components/marketing/StatsCounter'
@@ -2711,49 +2712,6 @@ function FinalCTA() {
   )
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   LAZY SECTION — rendu différé via IntersectionObserver
-═══════════════════════════════════════════════════════════════════════════ */
-function LazySection({ children, fallback, minHeight = 400 }: {
-  children: React.ReactNode
-  fallback?: React.ReactNode
-  minHeight?: number
-}) {
-  const [visible, setVisible] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true)
-          io.disconnect()
-        }
-      },
-      { rootMargin: '300px' }
-    )
-    io.observe(el)
-    return () => io.disconnect()
-  }, [])
-
-  return (
-    <div ref={ref} style={!visible ? { minHeight } : undefined}>
-      {visible ? children : (fallback ?? <SectionSkeleton height={minHeight} />)}
-    </div>
-  )
-}
-
-function SectionSkeleton({ height = 400 }: { height?: number }) {
-  return (
-    <div
-      className="w-full animate-pulse"
-      style={{ height, background: 'linear-gradient(90deg, #f3f4f6 25%, #e9eaec 50%, #f3f4f6 75%)', backgroundSize: '400% 100%', animation: 'shimmer 1.8s linear infinite' }}
-      aria-hidden="true"
-    />
-  )
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    PAGE PRINCIPALE
@@ -2774,10 +2732,10 @@ export default function HomePage() {
         <LeadEnrichmentDemo />
         <HowItWorks />
         <BeforeAfter />
-        <LazySection minHeight={600}><BuilderSection /></LazySection>
-        <LazySection minHeight={500}><ABTestingSection /></LazySection>
-        <LazySection minHeight={500}><AnalyticsShowcase /></LazySection>
-        <LazySection minHeight={500}><IntegrationsSection /></LazySection>
+        <BuilderSection />
+        <ABTestingSection />
+        <AnalyticsShowcase />
+        <IntegrationsSection />
         <DarkFeatureCards />
         <PublishSection />
         <TemplatesPreview />
@@ -2786,6 +2744,7 @@ export default function HomePage() {
         <FAQ />
         <FinalCTA />
       </main>
+      <KonvertEasterEgg />
     </>
   )
 }

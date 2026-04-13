@@ -607,6 +607,7 @@ export default function TemplatesPage() {
   const [activeFilter, setActiveFilter] = useState<string>('Tous')
   const [activeType, setActiveType] = useState<string>('tous')
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null)
+  const [visibleCount, setVisibleCount] = useState<number>(6)
 
   useEffect(() => {
     const style = document.createElement('style')
@@ -628,6 +629,17 @@ export default function TemplatesPage() {
     const typeMatch = activeType === 'tous' || t.type === activeType
     return categoryMatch && typeMatch
   })
+  const visible = filtered.slice(0, visibleCount)
+  const hasMore = visibleCount < filtered.length
+
+  function handleFilterChange(filter: string) {
+    setActiveFilter(filter)
+    setVisibleCount(6)
+  }
+  function handleTypeChange(type: string) {
+    setActiveType(type)
+    setVisibleCount(6)
+  }
 
   return (
     <main>
@@ -677,7 +689,7 @@ export default function TemplatesPage() {
               return (
                 <button
                   key={tab}
-                  onClick={() => setActiveFilter(tab)}
+                  onClick={() => handleFilterChange(tab)}
                   className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 whitespace-nowrap ${
                     isActive
                       ? 'bg-[#5B47F5] text-white border-[#5B47F5]'
@@ -697,7 +709,7 @@ export default function TemplatesPage() {
               return (
                 <button
                   key={tab.value}
-                  onClick={() => setActiveType(tab.value)}
+                  onClick={() => handleTypeChange(tab.value)}
                   className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 whitespace-nowrap ${
                     isActive
                       ? 'bg-white/20 text-white border-white/30'
@@ -724,10 +736,23 @@ export default function TemplatesPage() {
 
           {/* Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((t) => (
+            {visible.map((t) => (
               <TemplateCard key={t.id} t={t} onOpen={setSelectedTemplate} />
             ))}
           </div>
+
+          {/* Voir plus */}
+          {hasMore && (
+            <div className="mt-12 text-center">
+              <button
+                onClick={() => setVisibleCount((c) => c + 6)}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm border transition-all hover:border-[#5B47F5] hover:text-[#5B47F5]"
+                style={{ borderColor: '#e5e7eb', color: '#374151' }}
+              >
+                Voir plus de templates ({filtered.length - visibleCount} restants)
+              </button>
+            </div>
+          )}
 
           {/* État vide */}
           {filtered.length === 0 && (

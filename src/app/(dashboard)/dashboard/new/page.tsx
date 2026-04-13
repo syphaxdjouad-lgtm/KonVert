@@ -411,18 +411,42 @@ function NewPageInner() {
     ? (inputMode === 'url' ? url.trim().length > 5 : manual.product_name.trim().length > 0)
     : true
 
+  const progressPct = ((step - 1) / 7) * 100
+  const nextLabel   = step < 8 ? STEP_LABELS[step] : null
+
   return (
     <div className="min-h-full" style={{ background: '#F6F6F7' }}>
       {/* Header */}
       <div className="bg-white border-b px-6 py-4" style={{ borderColor: '#E3E3E8' }}>
         <div className="max-w-2xl mx-auto">
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center gap-3 mb-4">
             <Link href="/dashboard" className="flex items-center gap-1.5 text-[13px] font-medium" style={{ color: '#8b8b9e' }}>
               <ArrowLeft className="w-3.5 h-3.5" /> Dashboard
             </Link>
             <ChevronRight className="w-3.5 h-3.5" style={{ color: '#c4c4d0' }} />
             <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>Nouvelle page</span>
           </div>
+
+          {/* Progress bar */}
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>
+                Étape {step}/8 — {STEP_LABELS[step - 1]}
+              </span>
+              {nextLabel && (
+                <span className="text-[12px]" style={{ color: '#8b8b9e' }}>
+                  Suivant : {nextLabel}
+                </span>
+              )}
+            </div>
+            <div className="h-2 rounded-full overflow-hidden" style={{ background: '#e8e8f0' }}>
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{ width: `${progressPct}%`, background: '#5B47F5' }}
+              />
+            </div>
+          </div>
+
           <StepIndicator current={step} total={8} labels={STEP_LABELS} />
         </div>
       </div>

@@ -136,6 +136,13 @@ export default function Navbar() {
             Se connecter
           </Link>
           <Link
+            href="/demo"
+            className="text-sm font-bold px-5 py-2.5 rounded-full transition-all hover:bg-[#5B47F5] hover:text-white"
+            style={{ border: '1.5px solid #5B47F5', color: isTransparent ? '#a78bfa' : '#5B47F5', borderColor: isTransparent ? '#a78bfa' : '#5B47F5' }}
+          >
+            Voir la démo
+          </Link>
+          <Link
             href="/signup"
             className="flex items-center gap-1.5 text-sm font-bold px-5 py-2.5 rounded-full text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
             style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 4px 14px rgba(91,71,245,0.35)' }}
@@ -187,6 +194,14 @@ export default function Navbar() {
             <div className="flex flex-col gap-3 pt-4">
               <Link href="/login" className="text-center text-sm font-semibold text-gray-600 py-2.5 rounded-xl hover:bg-gray-50">
                 Se connecter
+              </Link>
+              <Link
+                href="/demo"
+                onClick={() => setMenuOpen(false)}
+                className="text-center text-sm font-bold py-3 rounded-full transition-all"
+                style={{ border: '1.5px solid #5B47F5', color: '#5B47F5' }}
+              >
+                Démo
               </Link>
               <Link
                 href="/signup"

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
+import BeforeAfter from '@/components/marketing/BeforeAfter'
 import LogoMarquee from '@/components/marketing/LogoMarquee'
 import StatsCounter from '@/components/marketing/StatsCounter'
 import Tooltip from '@/components/ui/Tooltip'
@@ -216,19 +217,19 @@ function Slide1() {
             style={{ animation: 'slideUp .7s .2s cubic-bezier(.16,1,.3,1) both' }}
           >
             <Link
-              href="/signup"
+              href="/demo"
               className="btn-shimmer btn-ripple inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg"
               onClick={addRipple}
             >
-              Créer ma page gratuitement <ArrowRight className="w-4 h-4" />
+              Tester gratuitement — sans compte <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              href="/demo"
+              href="/signup"
               className="btn-ripple inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm text-white transition-all hover:bg-white/10"
               style={{ border: '1.5px solid rgba(255,255,255,0.25)' }}
               onClick={addRipple}
             >
-              Voir un exemple
+              Créer un compte
             </Link>
           </div>
 
@@ -1390,59 +1391,131 @@ const STEPS = [
 ]
 
 function HowItWorks() {
-  return (
-    <section id="how-it-works" style={{ background: 'radial-gradient(ellipse 90% 50% at 50% -5%, rgba(91,71,245,0.28) 0%, transparent 60%), radial-gradient(ellipse 55% 40% at 85% 110%, rgba(124,106,247,0.15) 0%, transparent 60%), #0b0b1c' }}>
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
-        <div className="text-center mb-10 sm:mb-16">
-          <div
-            className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
-            style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
-          >
-            <Lightning className="w-3.5 h-3.5" />
-            Comment ça marche
-          </div>
-          <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-4">
-            Simple comme un copier-coller.
-          </h2>
-          <p className="reveal delay-2 text-lg text-white/60 max-w-xl mx-auto">
-            Colle l&apos;URL de ton produit, choisis un template, publie. Ta page est prête à vendre en moins d&apos;une minute.
-          </p>
-        </div>
+  const [videoOpen, setVideoOpen] = React.useState(false)
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
-          <div
-            className="hidden lg:block absolute top-14 left-1/6 right-1/6 h-px"
-            style={{ background: 'linear-gradient(90deg, transparent, rgba(91,71,245,0.4), transparent)' }}
-          />
-          {STEPS.map((s, i) => (
+  return (
+    <>
+      <section id="how-it-works" style={{ background: 'radial-gradient(ellipse 90% 50% at 50% -5%, rgba(91,71,245,0.28) 0%, transparent 60%), radial-gradient(ellipse 55% 40% at 85% 110%, rgba(124,106,247,0.15) 0%, transparent 60%), #0b0b1c' }}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
+          <div className="text-center mb-10 sm:mb-16">
             <div
-              key={s.num}
-              className="reveal text-center lg:text-left"
-              style={{ transitionDelay: `${i * 0.12}s` }}
+              className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
+              style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
             >
-              <div className="flex flex-col lg:flex-row items-center lg:items-start gap-5 mb-5">
-                <div className="flex-shrink-0">
+              <Lightning className="w-3.5 h-3.5" />
+              Comment ça marche
+            </div>
+            <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-4">
+              Simple comme un copier-coller.
+            </h2>
+            <p className="reveal delay-2 text-lg text-white/60 max-w-xl mx-auto">
+              Colle l&apos;URL de ton produit, choisis un template, publie. Ta page est prête à vendre en moins d&apos;une minute.
+            </p>
+          </div>
+
+          {/* ── Bloc vidéo ─────────────────────────────────────────────── */}
+          <div className="reveal mb-14 sm:mb-20 max-w-3xl mx-auto">
+            <button
+              onClick={() => setVideoOpen(true)}
+              className="group relative w-full rounded-2xl overflow-hidden focus:outline-none"
+              style={{ aspectRatio: '16/9', background: 'linear-gradient(135deg, #3b2fa8, #5B47F5, #7c6af7)' }}
+            >
+              {/* Grille décorative */}
+              <div className="absolute inset-0 opacity-20"
+                   style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+              {/* Glow central */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute w-64 h-64 rounded-full opacity-30 blur-3xl" style={{ background: '#7c6af7' }} />
+              </div>
+              {/* Icône play */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-5">
+                <div
+                  className="w-20 h-20 rounded-full flex items-center justify-center transition-transform group-hover:scale-110"
+                  style={{ background: 'rgba(255,255,255,0.95)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 ml-1" style={{ color: '#5B47F5' }}>
+                    <path d="M5 3l14 9-14 9V3z" fill="currentColor" />
+                  </svg>
+                </div>
+                <p className="text-white font-bold text-base sm:text-lg text-center px-4"
+                   style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
+                  Voir KONVERT en action — 45 sec
+                </p>
+              </div>
+              {/* Badge */}
+              <div className="absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full"
+                   style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+                Démo live
+              </div>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
+            <div
+              className="hidden lg:block absolute top-14 left-1/6 right-1/6 h-px"
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(91,71,245,0.4), transparent)' }}
+            />
+            {STEPS.map((s, i) => (
+              <div
+                key={s.num}
+                className="reveal text-center lg:text-left"
+                style={{ transitionDelay: `${i * 0.12}s` }}
+              >
+                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-5 mb-5">
+                  <div className="flex-shrink-0">
+                    <div
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                      style={{ background: 'rgba(91,71,245,0.15)', border: '1px solid rgba(91,71,245,0.3)' }}
+                    >
+                      <s.Icon className="w-6 h-6" style={{ color: '#7c6af7' }} />
+                    </div>
+                  </div>
                   <div
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                    style={{ background: 'rgba(91,71,245,0.15)', border: '1px solid rgba(91,71,245,0.3)' }}
+                    className="text-4xl sm:text-6xl font-black"
+                    style={{ color: 'rgba(91,71,245,0.2)', lineHeight: 1 }}
                   >
-                    <s.Icon className="w-6 h-6" style={{ color: '#7c6af7' }} />
+                    {s.num}
                   </div>
                 </div>
-                <div
-                  className="text-4xl sm:text-6xl font-black"
-                  style={{ color: 'rgba(91,71,245,0.2)', lineHeight: 1 }}
-                >
-                  {s.num}
-                </div>
+                <h3 className="text-white font-bold text-xl mb-3">{s.title}</h3>
+                <p className="text-white/55 leading-relaxed">{s.desc}</p>
               </div>
-              <h3 className="text-white font-bold text-xl mb-3">{s.title}</h3>
-              <p className="text-white/55 leading-relaxed">{s.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* ── Modal vidéo ──────────────────────────────────────────────────── */}
+      {videoOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(6px)' }}
+          onClick={() => setVideoOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl"
+            style={{ aspectRatio: '16/9' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <iframe
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+              title="KONVERT en action"
+              allow="autoplay; fullscreen"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+              style={{ border: 'none' }}
+            />
+            <button
+              onClick={() => setVideoOpen(false)}
+              className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center text-white"
+              style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 
@@ -2652,6 +2725,7 @@ export default function HomePage() {
         <FeaturesSection />
         <LeadEnrichmentDemo />
         <HowItWorks />
+        <BeforeAfter />
         <BuilderSection />
         <ABTestingSection />
         <AnalyticsShowcase />

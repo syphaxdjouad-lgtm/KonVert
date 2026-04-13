@@ -119,8 +119,15 @@ export default function DemoPage() {
 
   return (
     <>
+      {/* ── BANDEAU SANS INSCRIPTION ─────────────────────────────────────── */}
+      <div className="fixed top-16 left-0 right-0 z-40 flex items-center justify-center gap-2 py-2 text-xs font-bold"
+           style={{ background: 'linear-gradient(90deg, #5B47F5, #7c6af7)', color: '#fff' }}>
+        <span className="w-2 h-2 rounded-full bg-white/60 animate-pulse" />
+        Aucune inscription requise — teste KONVERT maintenant
+      </div>
+
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="pt-28 pb-10" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
+      <section className="pt-36 pb-10" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
 
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-6 border"
@@ -169,6 +176,11 @@ export default function DemoPage() {
             </div>
           </div>
 
+          {/* Label URL */}
+          <p className="text-sm font-bold text-gray-800 mb-2">
+            Colle l&apos;URL de ton produit &rarr;
+          </p>
+
           {/* Input URL */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <input
@@ -176,7 +188,7 @@ export default function DemoPage() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
-              placeholder="https://fr.aliexpress.com/item/..."
+              placeholder="https://mon-exemple.myshopify.com/products/mon-produit"
               disabled={step === 'loading'}
               className="flex-1 min-w-0 px-5 py-4 rounded-full border text-sm outline-none transition-all"
               style={{ borderColor: '#e5e7eb', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}

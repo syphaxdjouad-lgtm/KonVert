@@ -114,21 +114,37 @@ function addRipple(e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) {
 ═══════════════════════════════════════════════════════════════════════════ */
 function useReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll<HTMLElement>('.reveal')
-    if (!els.length) return
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible')
-            io.unobserve(e.target)
-          }
-        })
-      },
-      { threshold: 0.12 }
-    )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
+    function observe() {
+      const els = document.querySelectorAll<HTMLElement>('.reveal:not(.visible)')
+      if (!els.length) return
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible')
+              io.unobserve(e.target)
+            }
+          })
+        },
+        { threshold: 0.05, rootMargin: '0px 0px -40px 0px' }
+      )
+      els.forEach((el) => io.observe(el))
+      return io
+    }
+
+    const io = observe()
+
+    // Fallback : force visible après 1.5s pour les éléments jamais déclenchés
+    const fallback = setTimeout(() => {
+      document.querySelectorAll<HTMLElement>('.reveal:not(.visible)').forEach((el) => {
+        el.classList.add('visible')
+      })
+    }, 1500)
+
+    return () => {
+      io?.disconnect()
+      clearTimeout(fallback)
+    }
   }, [])
 }
 
@@ -375,7 +391,7 @@ function Slide1() {
 
             {/* Stat 1 — CVR droite */}
             <div
-              className="absolute"
+              className="absolute hidden lg:flex"
               style={{
                 bottom: 52, right: -20,
                 display: 'flex', alignItems: 'center', gap: 7,
@@ -393,7 +409,7 @@ function Slide1() {
 
             {/* Stat 2 — Ventes gauche haut */}
             <div
-              className="absolute"
+              className="absolute hidden lg:flex"
               style={{
                 top: 72, left: -28,
                 display: 'flex', alignItems: 'center', gap: 8,
@@ -415,7 +431,7 @@ function Slide1() {
 
             {/* Stat 3 — Score gauche bas */}
             <div
-              className="absolute"
+              className="absolute hidden lg:flex"
               style={{
                 bottom: 14, left: -24,
                 display: 'flex', alignItems: 'center', gap: 8,
@@ -1822,7 +1838,7 @@ function BuilderSection() {
 
             {/* Swatches flottants au dessus */}
             <div
-              className="float-card absolute flex items-center gap-2.5 px-4 py-3 rounded-full shadow-xl z-20"
+              className="float-card absolute hidden lg:flex items-center gap-2.5 px-4 py-3 rounded-full shadow-xl z-20"
               style={{
                 top: '-8px',
                 right: '20px',
@@ -2060,7 +2076,7 @@ function AnalyticsShowcase() {
 
             {/* Floating card CVR */}
             <div
-              className="float-card absolute -bottom-4 -right-6 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl"
+              className="float-card absolute -bottom-4 -right-6 hidden lg:flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl"
               style={{
                 background: 'rgba(16,185,129,0.92)',
                 backdropFilter: 'blur(12px)',

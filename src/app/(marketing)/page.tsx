@@ -1369,7 +1369,7 @@ function ABTestingSection() {
               </div>
             </div>
 
-            {/* Page variant A (avant) */}
+            {/* Page variant A (avant) — page produit KONVERT */}
             <div
               className="float-anim absolute rounded-2xl overflow-hidden shadow-2xl"
               style={{
@@ -1381,36 +1381,47 @@ function ABTestingSection() {
                 zIndex: 2,
               }}
             >
-              <div className="flex items-center justify-between px-3 py-2" style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
+              {/* Chrome navigateur */}
+              <div className="flex items-center gap-2 px-3 py-2" style={{ background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
                 <div className="flex gap-1">
                   <div className="w-2 h-2 rounded-full bg-red-400" />
                   <div className="w-2 h-2 rounded-full bg-yellow-400" />
                   <div className="w-2 h-2 rounded-full bg-green-400" />
                 </div>
-                <div className="flex-1 mx-2 rounded px-2 py-0.5 text-xs text-gray-400 font-mono bg-white border border-gray-200">NexGen Tech</div>
-                <span className="text-xs font-bold text-white px-2 py-0.5 rounded" style={{ background: '#10b981', whiteSpace: 'nowrap' }}>Get the Guide ›</span>
+                <div className="flex-1 rounded px-2 py-0.5 text-xs text-gray-400 font-mono bg-white border border-gray-200">konvert.app/p/air-max-pro</div>
               </div>
-              <div style={{ background: 'linear-gradient(135deg,#0d9488 0%, #1e3a5f 100%)' }}>
-                <div className="p-4">
-                  <p className="text-green-300 text-xs font-bold mb-1">Download Our Free Guide:</p>
-                  <p className="text-white font-black text-sm leading-tight">Maximizing Efficiency with Innovative Software Solutions</p>
-                  <p className="text-white/60 text-xs mt-2">Discover how our state-of-the-art software can revolutionize your business.</p>
+              {/* Hero produit */}
+              <div style={{ background: 'linear-gradient(135deg,#5B47F5 0%,#7c6af7 100%)', padding: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                  <span style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: 9, fontWeight: 800, padding: '2px 8px', borderRadius: 99 }}>NOUVEAUTÉ</span>
+                  <div style={{ display: 'flex', gap: 2 }}>
+                    {[1,2,3,4,5].map(i => <svg key={i} width="9" height="9" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="#fbbf24"/></svg>)}
+                  </div>
+                </div>
+                {/* Forme produit stylisée */}
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8 }}>
+                  <div style={{ width: 72, height: 44, background: 'rgba(255,255,255,0.15)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke="white" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                  </div>
                 </div>
               </div>
+              {/* Info produit */}
               <div className="p-4 bg-white">
-                <p className="text-gray-700 text-xs font-bold mb-3">Fill out the form to get your free guide today!</p>
-                {['First Name', 'Last Name', 'Work Email Address', 'Company'].map((f) => (
-                  <div key={f} className="h-7 rounded border border-gray-200 mb-2 px-2 flex items-center">
-                    <span className="text-xs text-gray-400">{f}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="px-4 pb-4 text-center">
-                <div
-                  className="h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white"
-                  style={{ background: '#10b981' }}
-                >
-                  Unlock Your Business Potential →
+                <p className="font-black text-gray-900 text-sm mb-1">Air Max Pro — Édition limitée</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                  <span style={{ fontWeight: 900, fontSize: 16, color: '#5B47F5' }}>89€</span>
+                  <span style={{ fontSize: 12, textDecoration: 'line-through', color: '#94a3b8' }}>139€</span>
+                  <span style={{ fontSize: 10, fontWeight: 700, padding: '1px 6px', borderRadius: 4, background: '#fee2e2', color: '#ef4444' }}>-36%</span>
+                </div>
+                <div style={{ height: 6, borderRadius: 4, background: '#f1f5f9', marginBottom: 6, width: '100%' }} />
+                <div style={{ height: 6, borderRadius: 4, background: '#f1f5f9', marginBottom: 12, width: '75%' }} />
+                <div style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)', borderRadius: 10, padding: '8px 0', textAlign: 'center', fontSize: 12, fontWeight: 800, color: '#fff' }}>
+                  Ajouter au panier →
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 8 }}>
+                  {['🔒 Paiement sécurisé', '🚚 Livraison offerte'].map(t => (
+                    <span key={t} style={{ fontSize: 9, color: '#94a3b8', fontWeight: 600 }}>{t}</span>
+                  ))}
                 </div>
               </div>
             </div>
@@ -1997,27 +2008,35 @@ function BuilderSection() {
                     </div>
                   </div>
 
-                  {/* Page preview */}
+                  {/* Page preview — produit KONVERT */}
                   <div
                     className="flex-1 relative overflow-hidden"
-                    style={{ background: 'linear-gradient(135deg,#ede9ff 0%,#f5f0ff 50%,#fce7f3 100%)' }}
+                    style={{ background: '#ffffff' }}
                   >
-                    <div className="p-5">
-                      <div className="flex items-center gap-1.5 mb-3">
-                        <div className="w-4 h-4 rounded-full" style={{ background: '#a78bfa' }} />
-                        <span className="text-xs font-bold" style={{ color: '#5B47F5' }}>Spark.ai</span>
+                    {/* Hero bannière produit */}
+                    <div style={{ background: 'linear-gradient(135deg,#1a0a4e 0%,#5B47F5 100%)', padding: '12px 14px 14px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                        <span style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 8, fontWeight: 800, padding: '2px 7px', borderRadius: 99 }}>-42% CE WEEK-END</span>
+                        <div style={{ display: 'flex', gap: 2 }}>{[1,2,3,4,5].map(i=><svg key={i} width="8" height="8" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="#fbbf24"/></svg>)}</div>
                       </div>
-                      <h4 className="font-black text-sm text-gray-800 leading-snug mb-1.5">
-                        The ultimate study buddy<br />for tech-savvy students
-                      </h4>
-                      <p className="text-gray-500 text-xs leading-relaxed mb-4">
-                        Ready to ace your exams? Transform your learning experience with brain-boosters.
-                      </p>
-                      <div
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white"
-                        style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)' }}
-                      >
-                        Start Free Trial →
+                      <div style={{ fontWeight: 900, fontSize: 12, color: '#fff', lineHeight: 1.3, marginBottom: 3 }}>Casque Pro Studio X</div>
+                      <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.65)' }}>Son cristallin · Réduction de bruit active</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8 }}>
+                        <span style={{ fontWeight: 900, fontSize: 15, color: '#fff' }}>79€</span>
+                        <span style={{ fontSize: 10, textDecoration: 'line-through', color: 'rgba(255,255,255,0.45)' }}>139€</span>
+                      </div>
+                    </div>
+                    {/* CTA et avis */}
+                    <div style={{ padding: '10px 14px' }}>
+                      <div style={{ height: 5, borderRadius: 3, background: '#f1f5f9', marginBottom: 4, width: '90%' }} />
+                      <div style={{ height: 5, borderRadius: 3, background: '#f1f5f9', marginBottom: 10, width: '65%' }} />
+                      <div style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)', borderRadius: 8, padding: '7px 0', textAlign: 'center', fontSize: 10, fontWeight: 800, color: '#fff', marginBottom: 8 }}>
+                        Acheter maintenant →
+                      </div>
+                      <div style={{ display: 'flex', gap: 6 }}>
+                        {['✓ Retour 30j', '✓ Garanti 2 ans', '🚚 48h'].map(t => (
+                          <span key={t} style={{ fontSize: 8, color: '#94a3b8', fontWeight: 600 }}>{t}</span>
+                        ))}
                       </div>
                     </div>
 

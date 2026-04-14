@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, FileText, Store, Plus, Zap, LogOut,
-  BarChart2, Users, Sparkles, Bell, Settings,
+  BarChart2, Users, Bell, Settings,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -62,12 +62,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           className="flex items-center justify-center border-b"
           style={{ height: '68px', borderColor: '#E4E2EE' }}
         >
-          <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #7c3aed, #5b21b6)' }}
-          >
-            <Sparkles className="w-4 h-4 text-white" />
-          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 52 52" fill="none" aria-label="KONVERT">
+            <rect width="52" height="52" rx="12" fill="#7c3aed"/>
+            <rect x="14" y="12" width="6" height="28" rx="2" fill="white"/>
+            <path d="M20 26 L35 13" stroke="white" strokeWidth="5.5" strokeLinecap="round"/>
+            <path d="M20 26 L33 39" stroke="#b5f23d" strokeWidth="5.5" strokeLinecap="round"/>
+            <polygon points="33,39 24,37 31,30" fill="#b5f23d"/>
+          </svg>
         </div>
 
         {/* Nav principale */}

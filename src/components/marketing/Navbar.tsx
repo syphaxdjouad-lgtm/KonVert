@@ -63,16 +63,17 @@ export default function Navbar() {
       <nav className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center gap-6">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 flex-shrink-0 mr-4">
-          <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-               style={{ background: 'linear-gradient(135deg, #5B47F5, #8b77ff)' }}>
-            <Sparkles className="w-4 h-4 text-white" />
-          </div>
-          <span className={`font-black text-lg tracking-tight ${logoCls}`}>
-            Konvert
-          </span>
-          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${subCls} ${isTransparent ? 'bg-white/15' : 'bg-[#5B47F5]/10'}`}>
-            beta
+        <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 mr-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 52 52" fill="none" aria-hidden="true">
+            <rect width="52" height="52" rx="12" fill="#7c3aed"/>
+            <rect x="14" y="12" width="6" height="28" rx="2" fill="white"/>
+            <path d="M20 26 L35 13" stroke="white" strokeWidth="5.5" strokeLinecap="round"/>
+            <path d="M20 26 L33 39" stroke="#b5f23d" strokeWidth="5.5" strokeLinecap="round"/>
+            <polygon points="33,39 24,37 31,30" fill="#b5f23d"/>
+          </svg>
+          <span className="font-black text-[17px] tracking-tight leading-none" style={{ letterSpacing: '-0.02em', fontFamily: 'Space Grotesk, sans-serif' }}>
+            <span style={{ color: '#b5f23d' }}>K</span>
+            <span className={logoCls}>ONVERT</span>
           </span>
         </Link>
 

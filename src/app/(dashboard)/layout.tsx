@@ -209,14 +209,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="relative">
               <NotificationBell />
             </div>
-            <button
+            <Link
+              href="/dashboard/settings"
+              title="Paramètres"
               className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
               style={{ color: '#6b6b84' }}
               onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#F5F4FA')}
               onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
             >
               <Settings className="w-4 h-4" />
-            </button>
+            </Link>
             <div
               className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-black"
               style={{ background: 'linear-gradient(135deg, #7c3aed, #5b21b6)' }}

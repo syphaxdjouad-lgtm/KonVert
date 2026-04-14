@@ -62,6 +62,7 @@ export interface Page {
   status: PageStatus
   views: number
   cta_clicks: number
+  published_url: string | null
   created_at: string
   updated_at: string
 }

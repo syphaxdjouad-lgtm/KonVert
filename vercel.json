@@ -5,5 +5,11 @@
   "regions": ["cdg1"],
   "env": {
     "NEXT_PUBLIC_APP_URL": "https://konvert.app"
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/trial-emails",
+      "schedule": "0 8 * * *"
+    }
+  ]
 }

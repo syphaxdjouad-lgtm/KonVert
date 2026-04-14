@@ -61,6 +61,13 @@ function SignupContent() {
       })
     }
 
+    // Email de bienvenue J+0 (fire & forget — ne bloque pas la navigation)
+    fetch('/api/email/welcome', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name }),
+    }).catch(() => {})
+
     router.push('/dashboard')
   }
 

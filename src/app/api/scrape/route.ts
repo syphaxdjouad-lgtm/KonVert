@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { scrapeProduct, cleanProduct } from '@/lib/scraper'
 
+// Vercel Pro permet jusqu'à 60s — on garde 55s pour les scrapes lourds
+export const maxDuration = 55
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
@@ -23,7 +26,13 @@ export async function POST(req: NextRequest) {
     }
 
     const start = Date.now()
-    const raw = await scrapeProduct(url)
+
+    // Timeout hard à 45s — évite que Vercel tue la fonction sans réponse propre
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('Scraping timeout — le site met trop de temps à répondre')), 45000)
+    )
+
+    const raw = await Promise.race([scrapeProduct(url), timeout])
     const product = cleanProduct(raw)
     const duration = Date.now() - start
 

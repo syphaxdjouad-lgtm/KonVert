@@ -16,22 +16,27 @@ export function detectPlatform(url: string): SupportedPlatform {
 export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
   const platform = detectPlatform(url)
 
-  try {
-    switch (platform) {
-      case 'aliexpress':
-        return await scrapeAliExpress(url)
-      case 'amazon':
-        return await scrapeAmazon(url)
-      case 'alibaba':
-        return await scrapeAlibaba(url)
-      default:
-        return await scrapeGeneric(url)
+  // Tente le scraper natif 2 fois avant de tomber sur Apify
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      switch (platform) {
+        case 'aliexpress': return await scrapeAliExpress(url)
+        case 'amazon':     return await scrapeAmazon(url)
+        case 'alibaba':    return await scrapeAlibaba(url)
+        default:           return await scrapeGeneric(url)
+      }
+    } catch (err) {
+      console.warn(`[scraper] Tentative ${attempt}/2 échouée sur ${platform}:`, (err as Error).message)
+      if (attempt < 2) {
+        // Pause 2s entre les tentatives
+        await new Promise(r => setTimeout(r, 2000))
+      }
     }
-  } catch (err) {
-    // Fallback Apify si le scraper natif échoue
-    console.warn(`[scraper] Erreur sur ${platform}, tentative Apify...`, err)
-    return await scrapeViaApify(url)
   }
+
+  // Fallback Apify si les 2 tentatives natives échouent
+  console.warn(`[scraper] Fallback Apify pour ${platform}`)
+  return await scrapeViaApify(url)
 }
 
 // ─── Helpers Puppeteer ───────────────────────────────────────────────────────

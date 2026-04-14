@@ -22,7 +22,7 @@ export default function CookieBanner() {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6"
+      className="fixed bottom-0 left-0 right-0 z-[100] p-4 sm:p-6 pb-[88px] md:pb-6"
       role="dialog"
       aria-label="Consentement cookies"
     >

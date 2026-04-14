@@ -4,9 +4,10 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, FileText, Store, Plus, Zap, LogOut,
-  BarChart2, Users, Bell, Settings,
+  BarChart2, Users, Settings,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import NotificationBell from '@/components/dashboard/NotificationBell'
 
 const NAV_ITEMS = [
   { href: '/dashboard',           icon: LayoutDashboard, label: 'Vue d\'ensemble' },
@@ -205,14 +206,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           {/* Actions droite */}
           <div className="flex items-center gap-2">
-            <button
-              className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-              style={{ color: '#6b6b84' }}
-              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#F5F4FA')}
-              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
-            >
-              <Bell className="w-4 h-4" />
-            </button>
+            <div className="relative">
+              <NotificationBell />
+            </div>
             <button
               className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
               style={{ color: '#6b6b84' }}

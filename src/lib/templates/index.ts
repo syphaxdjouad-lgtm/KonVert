@@ -1947,6 +1947,293 @@ export function templatePetLove(data: LandingPageData): string {
 </html>`
 }
 
+// ─── TEMPLATE 18 — PREMIUM GLASS ──────────────────────────────────────────────
+
+export function templatePremiumGlass(data: LandingPageData): string {
+  const benefitCards = data.benefits
+    .map((b, i) => {
+      const icons = ['✦', '◈', '⬡', '✧', '◉', '⬟']
+      return `
+      <div class="glass-card benefit-card reveal delay-${(i % 4) + 1}">
+        <span class="benefit-icon">${icons[i % icons.length]}</span>
+        <p>${b}</p>
+      </div>`
+    })
+    .join('')
+
+  const testimonials = [
+    { name: 'Amélie R.', stars: '★★★★★', text: `Incroyable qualité. Le ${data.product_name} a dépassé toutes mes attentes — je ne m'en sépare plus.` },
+    { name: 'Thomas M.', stars: '★★★★★', text: 'Service impeccable, livraison rapide et un produit vraiment premium. Je recommande à 100%.' },
+  ]
+
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>${data.product_name}</title>
+<style>
+  :root{
+    --bg:#0f0f2e;
+    --bg2:#0c0c26;
+    --accent:#7c3aed;
+    --accent-light:#a78bfa;
+    --gold:#c9993a;
+    --gold-light:#f0c060;
+    --text:#f1f0ff;
+    --muted:rgba(241,240,255,0.55);
+    --glass-bg:rgba(255,255,255,0.07);
+    --glass-border:rgba(255,255,255,0.12);
+    --sep:rgba(255,255,255,0.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:linear-gradient(135deg,#1e1b4b 0%,#0f0f2e 40%,#0c0c26 100%);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    line-height:1.6;
+    min-height:100vh;
+  }
+  .wrap{max-width:800px;margin:0 auto;padding:0 24px;}
+
+  /* Glass card */
+  .glass-card{
+    background:var(--glass-bg);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border:1px solid var(--glass-border);
+    border-radius:20px;
+    padding:28px;
+  }
+
+  /* Separators */
+  .sep{border:none;border-top:1px solid var(--sep);margin:0;}
+  section{padding:64px 0;}
+
+  /* Hero */
+  .hero{padding:80px 0 64px;}
+  .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+  @media(max-width:640px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-image-col{order:-1;}
+  }
+  .product-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);
+    color:var(--accent-light);border-radius:999px;
+    padding:6px 16px;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    margin-bottom:20px;
+  }
+  h1{font-size:clamp(1.8rem,4.5vw,2.8rem);font-weight:900;line-height:1.1;letter-spacing:-.02em;margin-bottom:16px;}
+  .subtitle{font-size:1rem;color:var(--muted);margin-bottom:28px;line-height:1.7;}
+
+  /* Price */
+  .price-block{margin:20px 0 24px;}
+  .price-original{text-decoration:line-through;color:var(--muted);font-size:1rem;margin-right:10px;}
+  .price-current{font-size:2.4rem;font-weight:900;color:var(--gold-light);}
+  .price-badge{
+    display:inline-block;
+    background:linear-gradient(135deg,var(--gold),#a0722a);
+    color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    padding:4px 12px;border-radius:999px;margin-left:10px;vertical-align:middle;
+  }
+
+  /* CTA shimmer */
+  @keyframes shimmer{from{background-position:-200% 0;}to{background-position:200% 0;}}
+  .btn-shimmer{
+    display:inline-block;width:100%;
+    background:linear-gradient(90deg,var(--accent) 0%,var(--accent-light) 40%,var(--accent) 60%,#5b21b6 100%);
+    background-size:200% 100%;
+    animation:shimmer 2.6s linear infinite;
+    color:#fff;font-weight:800;font-size:1rem;
+    padding:16px 36px;border-radius:14px;
+    text-decoration:none;cursor:pointer;border:none;
+    text-align:center;
+  }
+  .btn-shimmer:hover{animation-play-state:paused;filter:brightness(1.1);}
+  .urgency{margin-top:12px;font-size:.82rem;color:var(--muted);text-align:center;}
+
+  /* Hero image glow */
+  .hero-image-wrap{position:relative;text-align:center;}
+  .hero-image-wrap::after{
+    content:'';
+    position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);
+    width:70%;height:40px;
+    background:radial-gradient(ellipse at center,rgba(124,58,237,.6) 0%,transparent 70%);
+    filter:blur(12px);
+    z-index:0;
+  }
+  .hero-image-wrap img{position:relative;z-index:1;max-width:100%;border-radius:16px;box-shadow:0 20px 60px rgba(124,58,237,.3);}
+  .hero-image-placeholder{
+    width:100%;height:280px;
+    background:var(--glass-bg);border:1px solid var(--glass-border);
+    border-radius:16px;display:flex;align-items:center;justify-content:center;
+    font-size:4rem;
+  }
+
+  /* Benefits */
+  .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+  .benefit-card{display:flex;flex-direction:column;gap:10px;}
+  .benefit-icon{font-size:1.4rem;color:var(--accent-light);}
+  .benefit-card p{font-size:.88rem;color:var(--muted);line-height:1.5;}
+
+  /* Testimonials */
+  .reviews-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:540px){.reviews-grid{grid-template-columns:1fr;}}
+  .review-card{display:flex;flex-direction:column;gap:8px;}
+  .stars{color:var(--gold-light);font-size:1rem;letter-spacing:2px;}
+  .review-name{font-weight:700;font-size:.9rem;}
+  .review-text{font-size:.85rem;color:var(--muted);line-height:1.6;font-style:italic;}
+
+  /* FAQ accordion */
+  .faq-item{border-bottom:1px solid var(--sep);}
+  .faq-item:last-child{border-bottom:none;}
+  .faq-q{
+    width:100%;background:transparent;border:none;color:var(--text);
+    font-size:.95rem;font-weight:700;padding:18px 0;text-align:left;
+    cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  }
+  .faq-q .arrow{transition:transform .3s;font-size:.8rem;color:var(--accent-light);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .faq-a.open{max-height:200px;}
+  .faq-a p{padding:0 0 16px;font-size:.88rem;color:var(--muted);line-height:1.65;}
+
+  /* Animate on scroll */
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1);}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+  .delay-1{transition-delay:.1s}.delay-2{transition-delay:.2s}.delay-3{transition-delay:.3s}.delay-4{transition-delay:.4s}
+
+  /* Section labels */
+  .section-label{font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-light);margin-bottom:12px;}
+  .section-title{font-size:clamp(1.4rem,3vw,2rem);font-weight:900;margin-bottom:28px;}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="product-badge">✦ ${data.product_name}</span>
+        <h1>${data.headline}</h1>
+        <p class="subtitle">${data.subtitle}</p>
+
+        ${data.price ? `<div class="price-block">
+          ${data.original_price ? `<span class="price-original">${data.original_price}€</span>` : ''}
+          <span class="price-current">${data.price}€</span>
+          <span class="price-badge">Édition limitée</span>
+        </div>` : ''}
+
+        <button class="btn-shimmer">${data.cta}</button>
+        <p class="urgency">${data.urgency}</p>
+      </div>
+      <div class="hero-image-col">
+        <div class="hero-image-wrap">
+          ${data.images?.[0]
+            ? `<img src="${data.images[0]}" alt="${data.product_name}"/>`
+            : `<div class="hero-image-placeholder">✦</div>`}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep"/>
+
+<!-- BÉNÉFICES -->
+<section>
+  <div class="wrap">
+    <p class="section-label reveal">Ce que vous gagnez</p>
+    <h2 class="section-title reveal delay-1">Conçu pour l'excellence</h2>
+    <div class="benefits-grid">
+      ${benefitCards}
+    </div>
+  </div>
+</section>
+
+<hr class="sep"/>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="wrap">
+    <p class="section-label reveal">Ils l'ont adopté</p>
+    <h2 class="section-title reveal delay-1">Ce qu'en disent nos clients</h2>
+    <div class="reviews-grid">
+      ${testimonials.map((r, i) => `
+      <div class="glass-card review-card reveal delay-${i + 1}">
+        <div class="stars">${r.stars}</div>
+        <p class="review-name">${r.name}</p>
+        <p class="review-text">${r.text}</p>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>
+
+<hr class="sep"/>
+
+<!-- FAQ -->
+<section>
+  <div class="wrap">
+    <p class="section-label reveal">Vos questions</p>
+    <h2 class="section-title reveal delay-1">Questions fréquentes</h2>
+    <div class="glass-card reveal delay-2">
+      ${data.faq.map((item, i) => `
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(${i})" aria-expanded="false" id="faq-btn-${i}">
+          ${item.question}
+          <span class="arrow" id="faq-arrow-${i}">▼</span>
+        </button>
+        <div class="faq-a" id="faq-a-${i}">
+          <p>${item.answer}</p>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>
+
+<hr class="sep"/>
+
+<!-- CTA FINAL -->
+<section style="text-align:center;padding:80px 0;">
+  <div class="wrap">
+    <div class="glass-card reveal" style="padding:56px 40px;">
+      <p class="section-label" style="justify-content:center;display:block;">Dernière chance</p>
+      <h2 style="font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:900;margin-bottom:12px;">${data.headline}</h2>
+      <p style="color:var(--muted);margin-bottom:24px;">${data.urgency}</p>
+      ${data.price ? `<div class="price-block" style="margin-bottom:28px;">
+        ${data.original_price ? `<span class="price-original">${data.original_price}€</span>` : ''}
+        <span class="price-current">${data.price}€</span>
+        <span class="price-badge">Édition limitée</span>
+      </div>` : ''}
+      <button class="btn-shimmer" style="max-width:320px;margin:0 auto;">${data.cta}</button>
+    </div>
+  </div>
+</section>
+
+<script>
+function toggleFaq(i){
+  var a=document.getElementById('faq-a-'+i);
+  var arr=document.getElementById('faq-arrow-'+i);
+  var btn=document.getElementById('faq-btn-'+i);
+  var open=a.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(function(el){el.classList.remove('open');});
+  document.querySelectorAll('.faq-q .arrow').forEach(function(el){el.style.transform='';});
+  if(!open){
+    a.classList.add('open');
+    arr.style.transform='rotate(180deg)';
+    btn.setAttribute('aria-expanded','true');
+  }
+}
+(function(){
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+})();
+</script>
+</body>
+</html>`
+}
+
 // ─── EXPORT REGISTRY ──────────────────────────────────────────────────────────
 
 export const TEMPLATES = [
@@ -1967,12 +2254,13 @@ export const TEMPLATES = [
   { id: 'automotive-pro',   name: 'Automotive Pro',   category: 'auto'      as const, fn: templateAutomotivePro   },
   { id: 'gaming-zone',      name: 'Gaming Zone',      category: 'gaming'    as const, fn: templateGamingZone      },
   { id: 'pet-love',         name: 'Pet Love',         category: 'pets'      as const, fn: templatePetLove         },
+  { id: 'premium-glass',   name: 'Premium Glass',   category: 'luxury'    as const, fn: templatePremiumGlass   },
 ]
 
 export function renderTemplate(templateId: string, data: LandingPageData): string {
   switch (templateId) {
     case 'shein-pro':       return templateSheinPro(data)
-    case 'premium-glass':   return templateSheinPro(data)
+    case 'premium-glass':   return templatePremiumGlass(data)
     case 'minimal-dark':    return templateMinimalDark(data)
     case 'clean-white':     return templateCleanWhite(data)
     case 'bold-sales':      return templateBoldSales(data)

@@ -19,6 +19,7 @@ import {
   templateAutomotivePro,
   templateGamingZone,
   templatePetLove,
+  templatePremiumGlass,
 } from '@/lib/templates'
 import type { LandingPageData } from '@/types'
 
@@ -81,6 +82,7 @@ const TEMPLATE_FN_MAP: Record<string, (data: LandingPageData) => string> = {
   'automotive-pro':  templateAutomotivePro,
   'gaming-zone':     templateGamingZone,
   'pet-love':        templatePetLove,
+  'premium-glass':   templatePremiumGlass,
 }
 
 // ---------------------------------------------------------------------------

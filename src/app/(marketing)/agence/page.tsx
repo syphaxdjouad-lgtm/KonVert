@@ -102,12 +102,11 @@ export default function AgencePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link
-                  href="/contact?subject=Plan+Agence"
+                  href="/signup"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold"
                   style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
                 >
-                  Réserver un appel démo
-                  <ArrowRight className="w-4 h-4" />
+                  Commencer gratuitement →
                 </Link>
                 <Link
                   href="/pricing"
@@ -252,15 +251,14 @@ export default function AgencePage() {
             Prêt à scaler votre agence ?
           </h2>
           <p className="text-gray-500 text-sm mb-8">
-            Réservez un appel de 30 minutes avec notre équipe. On vous montre comment KONVERT s'intègre dans votre process.
+            Prêt à scaler votre agence ? Commencez gratuitement — 14 jours d&apos;essai, sans engagement, sans carte bancaire.
           </p>
           <Link
-            href="/contact?subject=Démo+Agence"
+            href="/signup"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-bold"
             style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
           >
-            Réserver ma démo gratuite
-            <ArrowRight className="w-4 h-4" />
+            Démarrer l&apos;essai gratuit →
           </Link>
         </div>
       </section>

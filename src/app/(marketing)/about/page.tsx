@@ -50,10 +50,10 @@ const VALUES = [
 
 const TEAM_NEW = [
   {
-    avatar: '👨‍💻',
-    name: 'Syphax D.',
-    role: 'Fondateur & CEO',
-    desc: "Ex-dropshippeur, dev autodidacte, obsédé par les conversions. A créé KONVERT après avoir perdu trop d'heures sur des pages médiocres.",
+    avatar: '🏢',
+    name: 'KONVERT',
+    role: 'Fondé en 2024',
+    desc: "Né de la frustration de perdre des heures sur des pages médiocres. KONVERT est construit par une équipe passionnée par l'e-commerce et obsédée par les conversions.",
   },
   {
     avatar: '🤖',
@@ -309,7 +309,7 @@ export default function AboutPage() {
 
           <div className="text-center mb-12">
             <p className="reveal text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">L'équipe</p>
-            <h2 className="reveal delay-1 text-3xl font-black text-gray-900">Solo-founder, équipe IA, ambition mondiale.</h2>
+            <h2 className="reveal delay-1 text-3xl font-black text-gray-900">Une équipe, une obsession : vos conversions.</h2>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-8">

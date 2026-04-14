@@ -360,34 +360,59 @@ function Slide1() {
                 className="flex-1 rounded-md px-3 py-1 text-xs text-gray-400 font-mono"
                 style={{ background: '#ffffff', border: '1px solid #e2e8f0' }}
               >
-                konvert.app/p/running-shoes-pro
+                konvert.app/p/air-jordan-pro
               </div>
             </div>
 
-            {/* Image */}
-            <div className="relative" style={{ overflow: 'hidden' }}>
-              <img
-                src="/images/hero-product-mockup.jpg"
-                alt="Page produit générée par KONVERT"
-                className="w-full h-44 object-cover"
-              />
-              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(255,255,255,0.5) 0%, transparent 55%)' }} />
+            {/* Hero produit — bannière violet/indigo */}
+            <div
+              className="relative flex flex-col justify-end"
+              style={{
+                height: '120px',
+                background: 'linear-gradient(135deg, #4c1d95 0%, #5B47F5 50%, #7c6af7 100%)',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Cercles décoratifs */}
+              <div style={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} />
+              <div style={{ position: 'absolute', top: 10, right: 30, width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
+              {/* Icône produit stylisée */}
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 52, height: 52, borderRadius: 14, background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <line x1="3" y1="6" x2="21" y2="6" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M16 10a4 4 0 01-8 0" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              {/* Badge promo */}
+              <div style={{ position: 'absolute', top: 8, left: 10, background: 'rgba(16,185,129,0.9)', color: '#fff', fontSize: 9, fontWeight: 800, padding: '2px 7px', borderRadius: 6 }}>
+                PROMO -36%
+              </div>
+              {/* Étoiles */}
+              <div style={{ position: 'absolute', bottom: 8, left: 10, display: 'flex', gap: 2 }}>
+                {[1,2,3,4,5].map(i => (
+                  <svg key={i} width="10" height="10" viewBox="0 0 24 24">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="#fbbf24"/>
+                  </svg>
+                ))}
+              </div>
             </div>
 
-            {/* Contenu */}
+            {/* Contenu produit */}
             <div className="p-4 rounded-b-2xl" style={{ background: '#ffffff' }}>
-              <div className="h-3 rounded-full mb-2 w-3/4" style={{ background: '#e2e8f0' }} />
-              <div className="h-2 rounded-full mb-1.5 w-full" style={{ background: '#f1f5f9' }} />
-              <div className="h-2 rounded-full mb-4 w-5/6" style={{ background: '#f1f5f9' }} />
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-5 w-16 rounded-md" style={{ background: '#ede9fe' }} />
-                <div className="h-4 w-10 rounded-md" style={{ background: '#fee2e2' }} />
+              <h4 className="font-black text-gray-900 text-sm mb-1 leading-snug">Air Jordan Pro</h4>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-base font-black" style={{ color: '#5B47F5' }}>89€</span>
+                <span className="text-sm line-through" style={{ color: '#94a3b8' }}>139€</span>
+                <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: '#fee2e2', color: '#ef4444' }}>-36%</span>
               </div>
+              <div className="h-1.5 rounded-full mb-1 w-full" style={{ background: '#f1f5f9' }} />
+              <div className="h-1.5 rounded-full mb-4 w-4/5" style={{ background: '#f1f5f9' }} />
               <div
                 className="w-full py-2.5 rounded-xl text-center text-sm font-bold text-white"
-                style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)' }}
+                style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)', boxShadow: '0 4px 14px rgba(91,71,245,0.35)' }}
               >
-                Acheter maintenant
+                Ajouter au panier
               </div>
             </div>
 
@@ -613,36 +638,48 @@ function Slide2() {
                 />
               ))}
 
+              {/* Header KONVERT dans chaque card */}
+              <div
+                className="mx-3 mt-3 flex items-center justify-between px-2 py-1.5 rounded-lg"
+                style={{ background: 'rgba(0,0,0,0.3)' }}
+              >
+                <div className="flex items-center gap-1.5">
+                  <div
+                    className="w-4 h-4 rounded flex items-center justify-center text-[8px] font-black text-white flex-shrink-0"
+                    style={{ background: '#5B47F5' }}
+                  >
+                    K
+                  </div>
+                  <span className="text-[9px] font-black text-white/80" style={{ letterSpacing: '0.03em' }}>KONVERT</span>
+                </div>
+                <span
+                  className="text-[8px] font-bold px-1.5 py-0.5 rounded"
+                  style={{ background: 'rgba(16,185,129,0.3)', color: '#4ade80' }}
+                >
+                  Live
+                </span>
+              </div>
+
               {/* Zone hero produit simulée */}
               <div
-                className="mx-3 mt-3 rounded-xl flex items-center justify-center relative overflow-hidden"
-                style={{ height: '72px', background: t.heroColor }}
+                className="mx-3 mt-1.5 rounded-xl flex items-center justify-center relative overflow-hidden"
+                style={{ height: '56px', background: t.heroColor }}
               >
-                {/* Image produit si disponible */}
-                {t.img && (
-                  <img
-                    src={t.img}
-                    alt={t.name}
-                    className="absolute inset-0 w-full h-full object-cover opacity-50"
-                  />
-                )}
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%)' }} />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%)' }} />
                 {/* Badge label */}
                 <div
-                  className="absolute top-2 left-2 text-[9px] font-black px-2 py-0.5 rounded-full"
+                  className="absolute top-1.5 left-2 text-[8px] font-black px-1.5 py-0.5 rounded-full"
                   style={{ background: 'rgba(0,0,0,0.45)', color: '#fff', backdropFilter: 'blur(4px)' }}
                 >
                   {t.label}
                 </div>
                 {/* Icone produit simulé */}
-                {!t.img && (
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
-                    style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)' }}
-                  >
-                    {t.name === 'Mode & Fashion' ? '👗' : t.name === 'Tech & Gadgets' ? '🎧' : t.name === 'Beauté & Bien-être' ? '💆' : '🏋️'}
-                  </div>
-                )}
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
+                  style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)' }}
+                >
+                  {t.name === 'Mode & Fashion' ? '👗' : t.name === 'Tech & Gadgets' ? '🎧' : t.name === 'Beauté & Bien-être' ? '💆' : '🏋️'}
+                </div>
               </div>
 
               {/* Corps de la landing page simulée */}
@@ -723,41 +760,92 @@ function Slide3() {
           </Link>
         </div>
         <div className="flex flex-col relative mt-4 lg:mt-0">
-          {/* Dashboard image */}
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
-            <img
-              src="/images/dashboard-analytics.jpg"
-              alt="Dashboard analytics KONVERT"
-              className="w-full object-cover"
-              style={{ height: 'clamp(180px, 40vw, 340px)' }}
-            />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(8,9,26,0.9) 0%, rgba(8,9,26,0.2) 60%, transparent 100%)' }} />
-            {/* Metric overlays */}
-            <div className="absolute bottom-4 left-4 right-4 grid grid-cols-3 gap-2">
+          {/* Dashboard HTML généré */}
+          <div
+            className="relative rounded-3xl overflow-hidden shadow-2xl"
+            style={{ border: '1px solid rgba(255,255,255,0.1)', background: '#0f1020' }}
+          >
+            {/* Barre URL navigateur */}
+            <div
+              className="flex items-center gap-2.5 px-4 py-2.5"
+              style={{ background: '#1a1b2e', borderBottom: '1px solid rgba(255,255,255,0.07)' }}
+            >
+              <div className="flex gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#ef4444' }} />
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#f59e0b' }} />
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#10b981' }} />
+              </div>
+              <div
+                className="flex-1 rounded-md px-3 py-1 text-[11px] font-mono"
+                style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.08)' }}
+              >
+                app.konvert.io/analytics
+              </div>
+              <div
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold"
+                style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981', border: '1px solid rgba(16,185,129,0.25)' }}
+              >
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#10b981' }} />
+                Live
+              </div>
+            </div>
+
+            {/* Métriques top — 3 cards */}
+            <div className="grid grid-cols-3 gap-px p-3 gap-3">
               {[
-                { label: 'CVR', value: '4.8%', delta: '+1.2pts', color: '#10b981' },
-                { label: 'ROAS', value: 'x4.2', delta: '+0.8', color: '#7c6af7' },
-                { label: 'Views', value: '12 847', delta: '+23%', color: '#f59e0b' },
-              ].map((s) => (
+                { label: 'CVR', value: '4.8%', delta: '+1.2pts', color: '#10b981', bg: 'rgba(16,185,129,0.12)' },
+                { label: 'ROAS', value: 'x4.2', delta: '+0.8', color: '#a78bfa', bg: 'rgba(124,106,247,0.12)' },
+                { label: 'Views', value: '12K', delta: '+23%', color: '#f59e0b', bg: 'rgba(245,158,11,0.12)' },
+              ].map((m) => (
                 <div
-                  key={s.label}
-                  className="flex flex-col gap-0.5 px-3 py-2.5 rounded-xl"
-                  style={{ background: 'rgba(12,13,28,0.85)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.1)' }}
+                  key={m.label}
+                  className="flex flex-col gap-1 p-3 rounded-2xl"
+                  style={{ background: m.bg, border: `1px solid ${m.color}25` }}
                 >
-                  <span className="text-white/50 text-[10px] font-medium">{s.label}</span>
-                  <span className="text-white font-black text-base leading-none">{s.value}</span>
-                  <span className="text-[10px] font-bold" style={{ color: s.color }}>{s.delta}</span>
+                  <span className="text-[10px] font-bold" style={{ color: 'rgba(255,255,255,0.45)' }}>{m.label}</span>
+                  <span className="text-white font-black text-lg leading-none">{m.value}</span>
+                  <span className="text-[10px] font-bold" style={{ color: m.color }}>{m.delta}</span>
                 </div>
               ))}
             </div>
-            {/* Floating badge */}
-            <div
-              className="float-anim absolute top-4 right-4 flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-white"
-              style={{ background: 'rgba(16,185,129,0.9)', backdropFilter: 'blur(8px)' }}
-            >
-              <TrendUp className="w-3.5 h-3.5" />
-              Live
+
+            {/* Graphe en barres */}
+            <div className="px-4 pb-4">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[11px] font-semibold" style={{ color: 'rgba(255,255,255,0.4)' }}>Conversions — 7 derniers jours</span>
+              </div>
+              <div className="flex items-end gap-2" style={{ height: '80px' }}>
+                {[40, 65, 50, 80, 60, 90, 75].map((h, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                    <div
+                      className="w-full rounded-md"
+                      style={{
+                        height: `${h}%`,
+                        background: i === 5
+                          ? 'linear-gradient(to top, #5B47F5, #a78bfa)'
+                          : i === 6
+                          ? 'linear-gradient(to top, #7c3aed, #a78bfa)'
+                          : 'rgba(91,71,245,0.22)',
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="flex justify-between mt-2">
+                {['L','M','M','J','V','S','D'].map((d, i) => (
+                  <span key={i} className="flex-1 text-center text-[9px]" style={{ color: 'rgba(255,255,255,0.25)' }}>{d}</span>
+                ))}
+              </div>
             </div>
+          </div>
+
+          {/* Floating badge TrendUp */}
+          <div
+            className="float-anim absolute -top-3 -right-3 hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-white shadow-2xl"
+            style={{ background: 'rgba(16,185,129,0.92)', backdropFilter: 'blur(8px)' }}
+          >
+            <TrendUp className="w-3.5 h-3.5" />
+            +1.2pts CVR cette semaine
           </div>
         </div>
       </div>
@@ -2119,10 +2207,28 @@ function AnalyticsShowcase() {
 /* ═══════════════════════════════════════════════════════════════════════════
    PUBLISH SECTION — multi-plateforme, image à droite
 ═══════════════════════════════════════════════════════════════════════════ */
+const PUBLISH_PLATFORM_ICONS: Record<string, React.ReactNode> = {
+  Shopify: (
+    <svg viewBox="0 0 24 24" style={{ width: 28, height: 28, fill: '#96BF48' }}>
+      <path d="M15.337 23.979l7.216-1.561s-2.604-17.613-2.625-17.73c-.018-.116-.114-.192-.211-.192s-1.929-.136-1.929-.136-1.275-1.274-1.439-1.411c-.045-.037-.075-.057-.121-.074l-.914 21.104h.023zM11.71 11.305s-.81-.424-1.774-.424c-1.447 0-1.504.906-1.504 1.141 0 1.232 3.24 1.715 3.24 4.629 0 2.295-1.44 3.76-3.406 3.76-2.354 0-3.54-1.465-3.54-1.465l.646-2.086s1.245 1.066 2.28 1.066c.675 0 .975-.545.975-.932 0-1.619-2.654-1.694-2.654-4.359-.034-2.237 1.571-4.416 4.827-4.416 1.257 0 1.875.361 1.875.361l-.945 2.715-.02.01zM11.17.83c.136 0 .271.038.405.135-.984.465-2.064 1.639-2.508 3.992-.656.213-1.293.405-1.889.578C7.697 3.75 8.951.84 11.17.84V.83zm1.235 2.949v.135c-.754.232-1.583.484-2.394.736.466-1.777 1.333-2.645 2.085-2.971.193.501.309 1.176.309 2.1zm.539-2.234c.694.074 1.141.867 1.429 1.755-.349.114-.735.231-1.158.366v-.252c0-.752-.096-1.371-.271-1.871v.002zm2.992 1.289c-.02 0-.06.021-.078.021s-.289.075-.714.21c-.423-1.233-1.176-2.37-2.508-2.37h-.115C12.135.209 11.669 0 11.265 0 8.159 0 6.675 3.877 6.21 5.846c-1.194.365-2.063.636-2.16.674-.675.213-.694.232-.772.87-.075.462-1.83 14.063-1.83 14.063L15.009 24l.927-21.166z"/>
+    </svg>
+  ),
+  WooCommerce: (
+    <svg viewBox="0 0 24 24" style={{ width: 28, height: 28, fill: '#7F54B3' }}>
+      <path d="M21.994 9.28a2.19 2.19 0 0 0-1.818-.98H2.805A2.19 2.19 0 0 0 .628 10.46l1.34 7.993a2.19 2.19 0 0 0 2.157 1.822h15.74a2.19 2.19 0 0 0 2.157-1.822l1.34-7.994a2.19 2.19 0 0 0-.368-1.178zM6.129 16.27c-.37 0-.7-.218-.855-.556l-1.312-2.842-.29 2.27a.938.938 0 0 1-.929.816.938.938 0 0 1-.937-.938.929.929 0 0 1 .009-.128l.573-4.478a.938.938 0 0 1 1.792-.231l1.95 4.223 1.95-4.223a.938.938 0 0 1 1.793.231l.572 4.478a.938.938 0 0 1-.928 1.066.938.938 0 0 1-.929-.816l-.29-2.27-1.311 2.842a.938.938 0 0 1-.856.556zm7.5 0c-.37 0-.7-.218-.855-.556l-1.311-2.842-.291 2.27a.938.938 0 0 1-.928.816.938.938 0 0 1-.938-.938.929.929 0 0 1 .009-.128l.573-4.478a.938.938 0 0 1 1.792-.231l1.95 4.223 1.949-4.223a.938.938 0 0 1 1.793.231l.573 4.478a.929.929 0 0 1 .009.128.938.938 0 0 1-.938.938.938.938 0 0 1-.929-.816l-.29-2.27-1.311 2.842a.938.938 0 0 1-.856.556zm6.57-.468a2.104 2.104 0 1 1 0-4.209 2.104 2.104 0 0 1 0 4.21z"/>
+    </svg>
+  ),
+  'Export HTML': (
+    <div style={{ width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(14,165,233,0.15)', borderRadius: 6 }}>
+      <span style={{ color: '#5B47F5', fontWeight: 900, fontSize: 13, letterSpacing: '-0.5px', fontFamily: 'monospace' }}>&lt;/&gt;</span>
+    </div>
+  ),
+}
+
 const PUBLISH_PLATFORMS = [
-  { name: 'Shopify',     color: '#96BF48', emoji: '🛍️', status: 'Publié',   time: 'Il y a 2 min' },
-  { name: 'WooCommerce', color: '#7F54B3', emoji: '🛒', status: 'En ligne',  time: 'Il y a 1h' },
-  { name: 'Export HTML', color: '#0ea5e9', emoji: '📄', status: 'Prêt',      time: 'À télécharger' },
+  { name: 'Shopify',     color: '#96BF48', status: 'Publié',   time: 'Il y a 2 min' },
+  { name: 'WooCommerce', color: '#7F54B3', status: 'En ligne',  time: 'Il y a 1h' },
+  { name: 'Export HTML', color: '#0ea5e9', status: 'Prêt',      time: 'À télécharger' },
 ]
 
 function PublishSection() {
@@ -2177,15 +2283,33 @@ function PublishSection() {
                 </div>
               </div>
 
-              {/* Aperçu page — fond lavande */}
+              {/* Aperçu page — mini page produit KONVERT */}
               <div className="mx-5 mt-5 rounded-2xl overflow-hidden" style={{ border: '1px solid #e8e2ff' }}>
+                {/* Bannière produit gradient violet */}
                 <div
-                  className="h-28 flex flex-col justify-end p-3"
-                  style={{ background: 'linear-gradient(135deg,#5B47F5 0%,#a78bfa 100%)' }}
+                  className="relative flex items-center justify-between px-4"
+                  style={{ height: '90px', background: 'linear-gradient(135deg,#4c1d95 0%,#5B47F5 55%,#7c6af7 100%)' }}
                 >
-                  <div className="h-3 rounded-full w-2/3 mb-1.5" style={{ background: 'rgba(255,255,255,0.5)' }} />
-                  <div className="h-2 rounded-full w-1/2" style={{ background: 'rgba(255,255,255,0.25)' }} />
+                  {/* Cercles déco */}
+                  <div style={{ position: 'absolute', top: -15, right: -15, width: 60, height: 60, borderRadius: '50%', background: 'rgba(255,255,255,0.07)' }} />
+                  <div style={{ position: 'absolute', bottom: -10, left: 30, width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />
+                  {/* Contenu produit */}
+                  <div className="relative z-10">
+                    <div className="text-[10px] font-bold text-white/60 mb-0.5">RUNNING PRO X</div>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-white font-black text-base">€79.90</span>
+                      <span className="text-white/40 text-xs line-through">€129</span>
+                    </div>
+                  </div>
+                  {/* Bouton acheter */}
+                  <div
+                    className="relative z-10 px-3 py-1.5 rounded-lg text-[11px] font-black text-gray-900"
+                    style={{ background: '#fff' }}
+                  >
+                    Acheter
+                  </div>
                 </div>
+                {/* Barre URL */}
                 <div className="px-3 py-2 flex items-center justify-between" style={{ background: '#f8f6ff' }}>
                   <span className="text-gray-400 text-xs font-mono">konvert.app/p/running-pro</span>
                   <span
@@ -2206,10 +2330,10 @@ function PublishSection() {
                     style={{ background: '#f8f6ff', border: '1px solid #ede8ff' }}
                   >
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
+                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                       style={{ background: `${p.color}15`, border: `1px solid ${p.color}28` }}
                     >
-                      {p.emoji}
+                      {PUBLISH_PLATFORM_ICONS[p.name]}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-gray-800 text-sm font-semibold">{p.name}</div>

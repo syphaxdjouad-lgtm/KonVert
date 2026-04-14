@@ -72,7 +72,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </div>
 
         {/* Nav principale */}
-        <nav className="flex-1 flex flex-col items-center py-3 gap-1">
+        <nav className="flex-1 flex flex-col items-center py-4 gap-1.5">
           {NAV_ITEMS.map(({ href, icon: Icon, label }) => {
             const active = isNavActive(href)
             return (
@@ -80,21 +80,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 key={href}
                 href={href}
                 title={label}
-                className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
+                className="w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-200"
                 style={active ? {
-                  background: '#f3f0ff',
-                  color: '#7c3aed',
+                  background: 'linear-gradient(135deg, #7c3aed, #5b21b6)',
+                  color: '#ffffff',
+                  boxShadow: '0 4px 12px rgba(124,58,237,0.35)',
                 } : {
-                  color: '#9090a8',
+                  color: '#a0a0b8',
+                  background: 'transparent',
                 }}
                 onMouseEnter={e => {
-                  if (!active) (e.currentTarget as HTMLElement).style.background = '#F5F4FA'
+                  if (!active) {
+                    (e.currentTarget as HTMLElement).style.background = '#F0EDF8'
+                    ;(e.currentTarget as HTMLElement).style.color = '#7c3aed'
+                  }
                 }}
                 onMouseLeave={e => {
-                  if (!active) (e.currentTarget as HTMLElement).style.background = 'transparent'
+                  if (!active) {
+                    (e.currentTarget as HTMLElement).style.background = 'transparent'
+                    ;(e.currentTarget as HTMLElement).style.color = '#a0a0b8'
+                  }
                 }}
               >
-                <Icon className="w-[18px] h-[18px]" />
+                <Icon className="w-[19px] h-[19px]" strokeWidth={active ? 2.2 : 1.8} />
               </Link>
             )
           })}
@@ -102,40 +110,58 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Footer actions */}
         <div
-          className="flex flex-col items-center py-3 gap-1 border-t"
+          className="flex flex-col items-center py-3 gap-1.5 border-t"
           style={{ borderColor: '#E4E2EE' }}
         >
           <Link
             href="/dashboard/new"
             title="Créer une page"
-            className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-            style={{ color: '#9090a8' }}
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#F5F4FA')}
-            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
+            className="w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-200"
+            style={{ color: '#a0a0b8', background: 'transparent' }}
+            onMouseEnter={e => {
+              ;(e.currentTarget as HTMLElement).style.background = '#F0EDF8'
+              ;(e.currentTarget as HTMLElement).style.color = '#7c3aed'
+            }}
+            onMouseLeave={e => {
+              ;(e.currentTarget as HTMLElement).style.background = 'transparent'
+              ;(e.currentTarget as HTMLElement).style.color = '#a0a0b8'
+            }}
           >
-            <Plus className="w-[18px] h-[18px]" />
+            <Plus className="w-[19px] h-[19px]" strokeWidth={1.8} />
           </Link>
 
           <Link
             href="/pricing"
             title="Upgrader mon plan"
-            className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-            style={{ color: '#7c3aed' }}
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#f3f0ff')}
-            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
+            className="w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-200"
+            style={{ background: '#f3f0ff', color: '#7c3aed' }}
+            onMouseEnter={e => {
+              ;(e.currentTarget as HTMLElement).style.background = '#ede9fe'
+              ;(e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(124,58,237,0.2)'
+            }}
+            onMouseLeave={e => {
+              ;(e.currentTarget as HTMLElement).style.background = '#f3f0ff'
+              ;(e.currentTarget as HTMLElement).style.boxShadow = 'none'
+            }}
           >
-            <Zap className="w-[18px] h-[18px]" />
+            <Zap className="w-[18px] h-[18px]" strokeWidth={2} />
           </Link>
 
           <button
             onClick={handleLogout}
             title="Déconnexion"
-            className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-            style={{ color: '#9090a8' }}
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#F5F4FA')}
-            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
+            className="w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-200"
+            style={{ color: '#a0a0b8', background: 'transparent' }}
+            onMouseEnter={e => {
+              ;(e.currentTarget as HTMLElement).style.background = '#fff0f0'
+              ;(e.currentTarget as HTMLElement).style.color = '#ef4444'
+            }}
+            onMouseLeave={e => {
+              ;(e.currentTarget as HTMLElement).style.background = 'transparent'
+              ;(e.currentTarget as HTMLElement).style.color = '#a0a0b8'
+            }}
           >
-            <LogOut className="w-[18px] h-[18px]" />
+            <LogOut className="w-[18px] h-[18px]" strokeWidth={1.8} />
           </button>
         </div>
       </aside>

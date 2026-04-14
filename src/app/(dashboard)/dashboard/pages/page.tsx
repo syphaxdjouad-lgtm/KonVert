@@ -146,22 +146,16 @@ function PageRow({ page, last }: { page: any; last: boolean }) {
             href={page.published_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-lg transition-colors"
-            style={{ color: '#9ca3af' }}
+            className="p-2 rounded-lg transition-colors text-gray-400 hover:text-gray-700 hover:bg-gray-100"
             title="Voir la page"
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#374151'; (e.currentTarget as HTMLElement).style.background = '#f3f4f6' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#9ca3af'; (e.currentTarget as HTMLElement).style.background = 'transparent' }}
           >
             <Globe className="w-4 h-4" />
           </a>
         )}
         <Link
           href={`/dashboard/pages/${page.id}/ab-test`}
-          className="p-2 rounded-lg transition-colors"
-          style={{ color: '#9ca3af' }}
+          className="p-2 rounded-lg transition-colors text-gray-400 hover:text-purple-600 hover:bg-purple-50"
           title="A/B Test"
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#7c3aed'; (e.currentTarget as HTMLElement).style.background = 'rgba(124,58,237,0.06)' }}
-          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#9ca3af'; (e.currentTarget as HTMLElement).style.background = 'transparent' }}
         >
           <FlaskConical className="w-4 h-4" />
         </Link>

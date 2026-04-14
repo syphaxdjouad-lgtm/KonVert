@@ -27,7 +27,7 @@ const FEATURES_MAIN = [
   {
     id: 'ia',
     icon: Robot,
-    badge: '🤖 IA Native',
+    badge: 'IA Native',
     title: 'Génération IA avec Claude',
     subtitle: 'Le copy parfait. En 30 secondes.',
     desc: "KONVERT utilise Claude AI d'Anthropic — le modèle de langage le plus avancé pour le copywriting e-commerce. Accroche percutante, proposition de valeur unique, liste de bénéfices, FAQ personnalisée, CTA optimisés. Tout en 30 secondes.",
@@ -52,7 +52,7 @@ const FEATURES_MAIN = [
   {
     id: 'templates',
     icon: Palette,
-    badge: '🎨 17 Templates',
+    badge: '17 Templates',
     title: '17 Templates Premium',
     subtitle: 'Un design pour chaque niche.',
     desc: "17 templates conçus par des experts e-commerce et testés sur des milliers de boutiques. Mode, Tech, Beauté, Sport, Gaming, Alimentation, Animaux... Chaque template est optimisé pour maximiser les conversions dans sa niche.",
@@ -77,7 +77,7 @@ const FEATURES_MAIN = [
   {
     id: 'analytics',
     icon: ChartBar,
-    badge: '📊 Analytics',
+    badge: 'Analytics',
     title: 'Analytics Temps Réel',
     subtitle: 'Vos données. Vos décisions.',
     desc: "Suivez chaque interaction sur vos pages : scroll depth, clics CTA, temps passé, taux de rebond, conversions, ROAS. Un tableau de bord en temps réel pour prendre des décisions basées sur les données — pas sur des intuitions.",
@@ -102,7 +102,7 @@ const FEATURES_MAIN = [
   {
     id: 'integrations',
     icon: LinkSimple,
-    badge: '🔗 Intégrations',
+    badge: 'Intégrations',
     title: 'Shopify & WooCommerce Natifs',
     subtitle: 'Publiez en 1 clic.',
     desc: "Connexion OAuth sécurisée avec Shopify et WooCommerce. Une fois connecté, publiez n'importe quelle page directement sur votre boutique sans copier-coller de code. Synchronisation automatique des prix et stocks.",
@@ -127,7 +127,7 @@ const FEATURES_MAIN = [
   {
     id: 'abtesting',
     icon: Flask,
-    badge: '🧪 A/B Testing',
+    badge: 'A/B Testing',
     title: 'A/B Testing Intégré',
     subtitle: 'Testez. Apprenez. Optimisez.',
     desc: "Créez des variantes de vos pages en quelques clics et testez-les en parallèle. KONVERT distribue le trafic automatiquement et identifie la version gagnante avec une significativité statistique. Gardez ce qui performe.",
@@ -152,7 +152,7 @@ const FEATURES_MAIN = [
   {
     id: 'langues',
     icon: Globe,
-    badge: '🌍 8 Langues',
+    badge: '8 Langues',
     title: 'Génération Multi-langues',
     subtitle: 'Vendez partout dans le monde.',
     desc: "Générez vos pages en français, anglais, espagnol, allemand, italien, portugais, arabe et chinois. Chaque copy est natif — pas une traduction mécanique. Atteignez des marchés internationaux sans agence de traduction.",
@@ -198,7 +198,7 @@ const DEEP_DIVE_TABS = [
   {
     id: 'ia',
     label: 'Génération IA',
-    icon: '🤖',
+    icon: null,
     title: 'Comment fonctionne la génération IA ?',
     desc: "KONVERT utilise Claude AI d'Anthropic, entraîné sur des millions de pages e-commerce performantes. En analysant votre URL produit, il extrait les informations clés et génère un copy optimisé pour la conversion.",
     steps: [
@@ -215,7 +215,7 @@ const DEEP_DIVE_TABS = [
   {
     id: 'abtesting',
     label: 'A/B Testing',
-    icon: '🧪',
+    icon: null,
     title: 'Un A/B testing qui travaille pour vous',
     desc: "L'A/B testing manuel est chronophage et statistiquement risqué. KONVERT automatise tout : distribution du trafic, calcul de la significativité, et déclaration du gagnant — sans intervention de votre part.",
     steps: [
@@ -232,7 +232,7 @@ const DEEP_DIVE_TABS = [
   {
     id: 'analytics',
     label: 'Analytics',
-    icon: '📊',
+    icon: null,
     title: 'Des analytics qui révèlent ce qui convertit',
     desc: "Les analytics KONVERT vont au-delà des simples pages vues. Chaque section de votre page est tracée : où les visiteurs décrochent, quels CTA fonctionnent, et quel segment d'audience convertit le mieux.",
     steps: [

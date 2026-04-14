@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Target, Heart, Zap, Globe, Users, TrendingUp } from 'lucide-react'
+import { ArrowRight, Target, Heart, Zap, Globe, Users, TrendingUp, Store, Building2, Bot, Mail, type LucideIcon } from 'lucide-react'
 
 const GLOBAL_CSS = `
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
@@ -48,23 +48,29 @@ const VALUES = [
   },
 ]
 
-const TEAM_NEW = [
+const TEAM_NEW: { Icon: LucideIcon; iconBg: string; iconColor: string; name: string; role: string; desc: string; link?: string }[] = [
   {
-    avatar: '🏢',
+    Icon: Building2,
+    iconBg: 'rgba(91,71,245,0.1)',
+    iconColor: '#5B47F5',
     name: 'KONVERT',
     role: 'Fondé en 2024',
     desc: "Né de la frustration de perdre des heures sur des pages médiocres. KONVERT est construit par une équipe passionnée par l'e-commerce et obsédée par les conversions.",
   },
   {
-    avatar: '🤖',
+    Icon: Bot,
+    iconBg: 'rgba(16,185,129,0.1)',
+    iconColor: '#10b981',
     name: 'Équipe IA',
     role: 'Design, Dev, Contenu',
     desc: "Une équipe d'agents IA s'occupe de tout : génération de copy, tests, optimisations, rapports. Disponible 24h/24, jamais en vacances.",
   },
   {
-    avatar: '✉️',
+    Icon: Mail,
+    iconBg: 'rgba(249,115,22,0.1)',
+    iconColor: '#f97316',
     name: 'On recrute',
-    role: 'Rejoindre l\'aventure',
+    role: "Rejoindre l'aventure",
     desc: "Tu veux construire le futur de l'e-commerce ? On cherche des profils passionnés. Écris-nous directement.",
     link: '/contact',
   },
@@ -77,24 +83,27 @@ const STATS_DATA = [
   { raw: 8, display: '8', label: 'langues supportées', suffix: '' },
 ]
 
-const VISION_CARDS = [
+const VISION_CARDS: { Icon: LucideIcon; title: string; desc: string; color: string; bg: string }[] = [
   {
-    icon: '💰',
+    Icon: TrendingUp,
     title: '1M€ ARR',
     desc: "L'objectif : devenir le standard du copywriting e-commerce en Europe. 1 million d'euros de revenu annuel récurrent d'ici 2027.",
     color: '#5B47F5',
+    bg: 'rgba(91,71,245,0.1)',
   },
   {
-    icon: '🌍',
+    Icon: Globe,
     title: '10 langues',
     desc: "Expansion vers le marché anglophone, hispanophone et arabe. Chaque e-commerçant dans le monde mérite d'avoir KONVERT dans sa langue.",
     color: '#10b981',
+    bg: 'rgba(16,185,129,0.1)',
   },
   {
-    icon: '🏪',
+    Icon: Store,
     title: '10 000 boutiques',
     desc: "De 2 800 à 10 000 boutiques actives. Un réseau d'e-commerçants qui partagent les mêmes templates, les mêmes insights, le même avantage.",
     color: '#f97316',
+    bg: 'rgba(249,115,22,0.1)',
   },
 ]
 
@@ -294,7 +303,9 @@ export default function AboutPage() {
                 className={`reveal delay-${idx + 1} rounded-3xl p-8 border-2 transition-all hover:-translate-y-1`}
                 style={{ background: '#fff', borderColor: `${card.color}30` }}
               >
-                <div className="text-4xl mb-4">{card.icon}</div>
+                <div className="w-11 h-11 rounded-2xl flex items-center justify-center mb-4" style={{ background: card.bg }}>
+                  <card.Icon className="w-5 h-5" style={{ color: card.color }} />
+                </div>
                 <h3 className="text-2xl font-black mb-3" style={{ color: card.color }}>{card.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{card.desc}</p>
               </div>
@@ -313,9 +324,11 @@ export default function AboutPage() {
           </div>
 
           <div className="grid sm:grid-cols-3 gap-8">
-            {TEAM_NEW.map(({ name, role, avatar, desc, link }, idx) => (
+            {TEAM_NEW.map(({ name, role, Icon, iconBg, iconColor, desc, link }, idx) => (
               <div key={name} className={`reveal delay-${idx + 1} text-center p-8 rounded-3xl border border-gray-100 hover:shadow-lg hover:shadow-[#5B47F5]/8 transition-all`}>
-                <div className="text-5xl mb-4">{avatar}</div>
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: iconBg }}>
+                  <Icon className="w-7 h-7" style={{ color: iconColor }} />
+                </div>
                 <h3 className="font-bold text-gray-900 mb-1">{name}</h3>
                 <p className="text-xs font-semibold text-[#5B47F5] mb-3">{role}</p>
                 <p className="text-sm text-gray-500 leading-relaxed mb-4">{desc}</p>

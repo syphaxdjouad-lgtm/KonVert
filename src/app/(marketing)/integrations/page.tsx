@@ -1,63 +1,80 @@
 import Link from 'next/link'
-import { ArrowRight, Check, Clock } from 'lucide-react'
+import { ArrowRight, Check, Clock, ShoppingBag, Store, Bot, CreditCard, Package, Zap, BarChart2 } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 export const metadata = { title: 'Intégrations — Konvert' }
 
-const INTEGRATIONS = [
+const INTEGRATIONS: { name: string; desc: string; status: string; Icon: LucideIcon; color: string; bg: string; href: string | null }[] = [
   {
     name: 'Shopify',
     desc: 'Connectez votre boutique Shopify en un clic. Importez vos produits et publiez directement.',
     status: 'available',
-    logo: '🛍️',
+    Icon: ShoppingBag,
+    color: '#96BF48',
+    bg: 'rgba(150,191,72,0.1)',
     href: '/dashboard/stores',
   },
   {
     name: 'WooCommerce',
     desc: 'Reliez votre boutique WooCommerce via l\'API REST. Compatible avec toutes les versions.',
     status: 'available',
-    logo: '🔧',
+    Icon: Store,
+    color: '#7F54B3',
+    bg: 'rgba(127,84,179,0.1)',
     href: '/dashboard/stores',
   },
   {
     name: 'Claude AI',
     desc: 'Génération automatique de copy optimisé conversion via Claude Sonnet (Anthropic).',
     status: 'available',
-    logo: '🤖',
+    Icon: Bot,
+    color: '#5B47F5',
+    bg: 'rgba(91,71,245,0.1)',
     href: '/features',
   },
   {
     name: 'Stripe',
     desc: 'Gestion des abonnements, paiements sécurisés, facturation automatique.',
     status: 'available',
-    logo: '💳',
+    Icon: CreditCard,
+    color: '#635BFF',
+    bg: 'rgba(99,91,255,0.1)',
     href: '/pricing',
   },
   {
     name: 'PrestaShop',
     desc: 'Intégration native PrestaShop — import produits et publication directe.',
     status: 'coming',
-    logo: '🔜',
+    Icon: Package,
+    color: '#DF0067',
+    bg: 'rgba(223,0,103,0.08)',
     href: null,
   },
   {
     name: 'BigCommerce',
     desc: 'Connectez votre boutique BigCommerce et gérez vos landing pages depuis Konvert.',
     status: 'coming',
-    logo: '🔜',
+    Icon: Package,
+    color: '#34313F',
+    bg: 'rgba(52,49,63,0.08)',
     href: null,
   },
   {
     name: 'Zapier / Make',
     desc: 'Automatisez vos workflows — déclenchez des actions sur chaque publication de page.',
     status: 'coming',
-    logo: '⚡',
+    Icon: Zap,
+    color: '#FF4F00',
+    bg: 'rgba(255,79,0,0.08)',
     href: null,
   },
   {
     name: 'Google Analytics',
     desc: 'Suivez les performances de vos pages directement dans GA4.',
     status: 'coming',
-    logo: '📊',
+    Icon: BarChart2,
+    color: '#E37400',
+    bg: 'rgba(227,116,0,0.08)',
     href: null,
   },
 ]
@@ -90,7 +107,7 @@ export default function IntegrationsPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {available.map((integ) => (
               <div key={integ.name} className="p-5 rounded-2xl border border-gray-100 hover:border-[#5B47F5]/30 hover:shadow-md transition-all">
-                <div className="text-3xl mb-3">{integ.logo}</div>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: integ.bg }}><integ.Icon className="w-5 h-5" style={{ color: integ.color }} /></div>
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="font-bold text-gray-900">{integ.name}</h3>
                   <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-semibold">
@@ -119,7 +136,7 @@ export default function IntegrationsPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {coming.map((integ) => (
               <div key={integ.name} className="p-5 rounded-2xl border border-dashed border-gray-200 opacity-70">
-                <div className="text-3xl mb-3">{integ.logo}</div>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: integ.bg }}><integ.Icon className="w-5 h-5" style={{ color: integ.color }} /></div>
                 <div className="flex items-center gap-2 mb-2">
                   <h3 className="font-bold text-gray-700">{integ.name}</h3>
                   <span className="inline-flex items-center gap-1 text-xs text-amber-600 font-semibold">

@@ -59,7 +59,7 @@ export default function BeforeAfter() {
               {/* Badge */}
               <span className="inline-block self-start text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full mb-3 sm:mb-5"
                     style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}>
-                ⚡ OFFRE -40% — Aujourd&apos;hui seulement
+                OFFRE -40% — Aujourd&apos;hui seulement
               </span>
               <h3 className="text-white font-black text-base sm:text-2xl leading-tight mb-2 sm:mb-3 max-w-xs">
                 Écouteurs Pro 5.0<br />Son Studio HD

@@ -24,6 +24,17 @@ import {
   Lightning,
   TrendUp,
   Sparkle,
+  File as FileText2,
+  PencilSimple as Pencil2,
+  Image as Image2,
+  Gear as Settings2,
+  ShoppingCart,
+  Trophy,
+  Handbag,
+  Headphones,
+  Flower,
+  Barbell,
+  TrendUp as TrendUpBadge,
 } from '@phosphor-icons/react'
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -520,6 +531,8 @@ const TEMPLATE_CARDS = [
     oldPrice: '89€',
     label: 'Nouvelle collection',
     cta: 'Acheter maintenant',
+    Icon: Handbag,
+    BadgeIcon: TrendUpBadge,
     badge: { color: '#7c6af7', text: '+38% CVR', icon: '↑' },
     delay: '0s',
     shapes: [
@@ -537,6 +550,8 @@ const TEMPLATE_CARDS = [
     oldPrice: '199€',
     label: 'Meilleure vente',
     cta: 'Commander',
+    Icon: Headphones,
+    BadgeIcon: Lightning,
     badge: { color: '#0ea5e9', text: 'ROAS ×4.2', icon: '⚡' },
     delay: '0.15s',
     shapes: [
@@ -554,6 +569,8 @@ const TEMPLATE_CARDS = [
     oldPrice: '59€',
     label: '-41% ce week-end',
     cta: 'J\'en profite',
+    Icon: Flower,
+    BadgeIcon: ShoppingCart,
     badge: { color: '#f97316', text: '+52% Add to cart', icon: '🛒' },
     delay: '0.3s',
     shapes: [
@@ -571,6 +588,8 @@ const TEMPLATE_CARDS = [
     oldPrice: '119€',
     label: 'Top performance',
     cta: 'Découvrir',
+    Icon: Barbell,
+    BadgeIcon: Trophy,
     badge: { color: '#0d9488', text: '×3.8 ROAS', icon: '🏆' },
     delay: '0.45s',
     shapes: [
@@ -678,7 +697,7 @@ function Slide2() {
                   className="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
                   style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)' }}
                 >
-                  {t.name === 'Mode & Fashion' ? '👗' : t.name === 'Tech & Gadgets' ? '🎧' : t.name === 'Beauté & Bien-être' ? '💆' : '🏋️'}
+                  <t.Icon size={16} weight="bold" color="rgba(255,255,255,0.85)" />
                 </div>
               </div>
 
@@ -713,7 +732,7 @@ function Slide2() {
                   animationDelay: t.delay,
                 }}
               >
-                <span>{t.badge.icon}</span>
+                <t.BadgeIcon size={9} weight="bold" />
                 <span>{t.badge.text}</span>
               </div>
 
@@ -1974,13 +1993,21 @@ function BuilderSection() {
                   className="flex flex-col gap-1.5 py-3 px-1.5 flex-shrink-0"
                   style={{ width: '52px', background: '#111120', borderRight: '1px solid rgba(255,255,255,0.05)' }}
                 >
-                  {['📄', '✏️', '🖼️', '⚡', '📊', '⚙️'].map((icon, idx) => (
+                  {[
+                    { Icon: FileText2, label: 'Pages' },
+                    { Icon: Pencil2, label: 'Edit' },
+                    { Icon: Image2, label: 'Images' },
+                    { Icon: Lightning, label: 'Actions' },
+                    { Icon: ChartBar, label: 'Stats' },
+                    { Icon: Settings2, label: 'Settings' },
+                  ].map(({ Icon, label }, idx) => (
                     <div
                       key={idx}
-                      className="w-8 h-8 rounded-lg flex items-center justify-center text-xs"
-                      style={{ background: idx === 0 ? 'rgba(91,71,245,0.35)' : 'transparent' }}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center"
+                      style={{ background: idx === 0 ? 'rgba(91,71,245,0.35)' : 'transparent', opacity: idx === 0 ? 1 : 0.35 }}
+                      title={label}
                     >
-                      {icon}
+                      <Icon size={16} weight="bold" color={idx === 0 ? '#b5f23d' : '#ffffff'} />
                     </div>
                   ))}
                 </div>
@@ -2866,7 +2893,7 @@ function FinalCTA() {
           14 jours gratuit · Aucune CB requise · Résiliation en 1 clic
         </p>
         <p className="mt-2 text-sm font-semibold" style={{ color: 'rgba(134,239,172,0.7)' }}>
-          ✅ Satisfait ou remboursé 30 jours — Sans question
+          <Check size={14} weight="bold" className="inline mr-1" /> Satisfait ou remboursé 30 jours — Sans question
         </p>
       </div>
     </section>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo } from 'react'
+import { Target } from 'lucide-react'
 
 /* ─────────────────────────────────────────────
    TYPES
@@ -227,7 +228,7 @@ export default function Leadmeter({ html }: Props) {
             className="text-center py-3 rounded-xl text-xs font-bold"
             style={{ background: 'rgba(16,185,129,0.08)', color: '#10b981' }}
           >
-            🎯 Page parfaite !
+            <Target className="inline w-3.5 h-3.5 mr-1" /> Page parfaite !
           </div>
         )}
       </div>

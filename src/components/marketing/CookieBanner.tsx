@@ -31,7 +31,7 @@ export default function CookieBanner() {
         style={{ boxShadow: '0 -2px 20px rgba(0,0,0,0.08), 0 4px 24px rgba(0,0,0,0.06)', border: '1px solid #f0f0f0' }}
       >
         <p className="text-sm text-gray-600 flex-1 leading-relaxed">
-          🍪 On utilise des cookies pour améliorer votre expérience.{' '}
+          On utilise des cookies pour améliorer votre expérience.{' '}
           <Link href="/legal/cookies" className="text-[#5B47F5] font-semibold hover:underline">
             En savoir plus
           </Link>

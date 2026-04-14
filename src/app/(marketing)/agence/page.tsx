@@ -73,11 +73,11 @@ const PRICING_AGENCE = [
   { label: 'Clients inclus',       value: 'Illimité' },
   { label: 'Pages / mois',         value: 'Illimitées' },
   { label: 'Membres équipe',       value: 'Illimité' },
-  { label: 'White-label',          value: '✅ Inclus' },
-  { label: 'Rapports PDF',         value: '✅ Auto' },
-  { label: 'Support prioritaire',  value: '✅ Dédié' },
-  { label: 'Onboarding guidé',     value: '✅ Offert' },
-  { label: 'Appel mensuel',        value: '✅ 60 min' },
+  { label: 'White-label',          value: 'Inclus' },
+  { label: 'Rapports PDF',         value: 'Auto' },
+  { label: 'Support prioritaire',  value: 'Dédié' },
+  { label: 'Onboarding guidé',     value: 'Offert' },
+  { label: 'Appel mensuel',        value: '60 min' },
 ]
 
 export default function AgencePage() {

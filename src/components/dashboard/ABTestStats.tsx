@@ -1,6 +1,7 @@
 'use client'
 
 import type { ABVariantRow, ABTestStatus, ABVariantLetter } from '@/types'
+import { Trophy } from 'lucide-react'
 
 /* ─────────────────────────────────────────────────────────────────
    Calcule le taux (sécurisé division par zéro)
@@ -108,7 +109,7 @@ export default function ABTestStats({
                   className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px] font-bold text-white"
                   style={{ background: '#10b981' }}
                 >
-                  🏆 Gagnant
+                  <Trophy className="inline w-3 h-3 mr-1" /> Gagnant
                 </div>
               )}
 
@@ -175,7 +176,7 @@ export default function ABTestStats({
                     border: `1px solid ${letter === 'A' ? 'rgba(124,58,237,0.2)' : 'rgba(37,99,235,0.2)'}`,
                   }}
                 >
-                  {declaring ? '...' : `🏆 Déclarer ${letter} gagnant`}
+                  {declaring ? '...' : <><Trophy className="inline w-3 h-3 mr-1" />Déclarer {letter} gagnant</>}
                 </button>
               )}
             </div>

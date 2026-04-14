@@ -39,6 +39,12 @@ function heroImage(data: LandingPageData, style = ''): string {
 // ─── TEMPLATE 1 — MINIMAL DARK ────────────────────────────────────────────────
 
 export function templateMinimalDark(data: LandingPageData): string {
+  const benefitsGrid = data.benefits.map(b => `
+    <div style="display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--border);">
+      <span style="width:28px;height:28px;background:rgba(239,68,68,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.75rem;color:var(--accent);font-weight:900;">✓</span>
+      <span style="font-size:.92rem;opacity:.85;line-height:1.5;">${b}</span>
+    </div>`).join('')
+
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -59,49 +65,108 @@ export function templateMinimalDark(data: LandingPageData): string {
   .urgency{margin-top:14px;font-size:.85rem;opacity:.6;letter-spacing:.02em;}
   ul{list-style:none;margin:30px 0;}
   .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;}
+  @media(max-width:600px){.hero-grid{grid-template-columns:1fr!important;}}
+  .faq-q{width:100%;background:transparent;border:none;color:var(--text);font-size:.95rem;font-weight:700;padding:18px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .faq-q .arr{transition:transform .3s;color:var(--accent);font-size:.8rem;}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .faq-a.open{max-height:200px;}
+  .faq-a p{padding:0 0 16px;font-size:.88rem;opacity:.7;line-height:1.65;}
 </style>
 </head>
 <body>
-  <section>
-    <div class="wrap">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;">
-        <div>
-          <span class="badge">${data.product_name}</span>
-          <h1>${data.headline}</h1>
-          <p class="subtitle">${data.subtitle}</p>
-          ${priceBlock(data)}
-          <button class="cta">${data.cta}</button>
-          <p class="urgency">${data.urgency}</p>
-        </div>
-        <div>${heroImage(data, 'box-shadow:0 24px 80px rgba(0,0,0,.5);')}</div>
-      </div>
-    </div>
-  </section>
 
-  <section style="padding-top:0;">
-    <div class="wrap">
+<section>
+  <div class="wrap">
+    <div class="hero-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;">
+      <div>
+        <span class="badge">${data.product_name}</span>
+        <h1>${data.headline}</h1>
+        <p class="subtitle">${data.subtitle}</p>
+        ${priceBlock(data)}
+        <button class="cta">${data.cta}</button>
+        <p class="urgency">${data.urgency}</p>
+      </div>
+      <div>${heroImage(data, 'width:100%;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.5);')}</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BADGES -->
+<div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 24px;">
+  <div class="wrap">
+    <div style="display:flex;justify-content:center;gap:32px;flex-wrap:wrap;">
+      <span style="display:flex;align-items:center;gap:8px;font-size:.82rem;opacity:.7;"><span style="font-size:1.1rem;">📦</span> Livraison 48h</span>
+      <span style="display:flex;align-items:center;gap:8px;font-size:.82rem;opacity:.7;"><span style="font-size:1.1rem;">🛡️</span> Garantie 30 jours</span>
+      <span style="display:flex;align-items:center;gap:8px;font-size:.82rem;opacity:.7;"><span style="font-size:1.1rem;">💬</span> Support 24/7</span>
+    </div>
+  </div>
+</div>
+
+<!-- BÉNÉFICES -->
+<section style="padding-top:48px;">
+  <div class="wrap">
+    <div class="card">
+      <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:4px;">Pourquoi vous allez l'adorer</h2>
+      <p style="font-size:.85rem;opacity:.5;margin-bottom:20px;">Chaque détail compte.</p>
+      ${benefitsGrid}
+    </div>
+  </div>
+</section>
+
+<!-- AVIS CLIENTS -->
+<section>
+  <div class="wrap">
+    <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:24px;">Ce qu'ils en pensent</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
       <div class="card">
-        <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:8px;">Pourquoi vous allez l'adorer</h2>
-        <ul>${benefits(data)}</ul>
+        <div style="color:#f59e0b;font-size:.9rem;letter-spacing:2px;margin-bottom:8px;">★★★★★</div>
+        <p style="font-size:.88rem;opacity:.8;font-style:italic;margin-bottom:12px;">"Qualité vraiment premium. J'utilise le ${data.product_name} chaque jour, je ne pourrais plus m'en passer."</p>
+        <p style="font-size:.78rem;opacity:.5;font-weight:700;">— Julien T., client vérifié</p>
+      </div>
+      <div class="card">
+        <div style="color:#f59e0b;font-size:.9rem;letter-spacing:2px;margin-bottom:8px;">★★★★★</div>
+        <p style="font-size:.88rem;opacity:.8;font-style:italic;margin-bottom:12px;">"Livraison ultra-rapide, emballage soigné. Le produit correspond exactement à la description."</p>
+        <p style="font-size:.78rem;opacity:.5;font-weight:700;">— Sarah M., cliente vérifiée</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section>
-    <div class="wrap">
-      <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:28px;">Questions fréquentes</h2>
-      ${faq(data)}
+<!-- FAQ ACCORDION -->
+<section style="padding-top:0;">
+  <div class="wrap">
+    <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:8px;">Questions fréquentes</h2>
+    <div class="card" style="padding:0 32px;">
+      ${data.faq.map((item, i) => `
+      <div style="border-bottom:1px solid var(--border);">
+        <button class="faq-q" onclick="tF(${i})" id="fq${i}">
+          ${item.question}<span class="arr" id="fa${i}">▼</span>
+        </button>
+        <div class="faq-a" id="fb${i}"><p>${item.answer}</p></div>
+      </div>`).join('')}
     </div>
-  </section>
+  </div>
+</section>
 
-  <section style="text-align:center;background:var(--card);border-radius:20px;margin:0 24px 60px;">
-    <div class="wrap" style="padding:60px 24px;">
-      <h2 style="font-size:1.8rem;font-weight:900;margin-bottom:12px;">${data.headline}</h2>
-      <p style="opacity:.7;margin-bottom:30px;">${data.urgency}</p>
-      ${priceBlock(data)}
-      <button class="cta">${data.cta}</button>
-    </div>
-  </section>
+<!-- CTA FINAL -->
+<section style="text-align:center;background:var(--card);border-radius:20px;margin:0 24px 60px;">
+  <div class="wrap" style="padding:60px 24px;">
+    <h2 style="font-size:1.8rem;font-weight:900;margin-bottom:12px;">${data.headline}</h2>
+    <p style="opacity:.6;margin-bottom:24px;">${data.urgency}</p>
+    ${priceBlock(data)}
+    <button class="cta">${data.cta}</button>
+  </div>
+</section>
+
+<script>
+function tF(i){
+  var b=document.getElementById('fb'+i),a=document.getElementById('fa'+i);
+  var o=b.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(function(el){el.classList.remove('open');});
+  document.querySelectorAll('.arr').forEach(function(el){el.style.transform='';});
+  if(!o){b.classList.add('open');a.style.transform='rotate(180deg)';}
+}
+</script>
 </body>
 </html>`
 }
@@ -109,6 +174,12 @@ export function templateMinimalDark(data: LandingPageData): string {
 // ─── TEMPLATE 2 — CLEAN WHITE ─────────────────────────────────────────────────
 
 export function templateCleanWhite(data: LandingPageData): string {
+  const benefitsEnhanced = data.benefits.map(b => `
+    <li style="display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);">
+      <span style="width:24px;height:24px;background:rgba(124,58,237,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.7rem;color:var(--accent);font-weight:900;">✓</span>
+      <span style="font-size:.92rem;color:#374151;line-height:1.5;">${b}</span>
+    </li>`).join('')
+
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -126,51 +197,110 @@ export function templateCleanWhite(data: LandingPageData): string {
   .cta{display:inline-block;background:var(--accent);color:#fff;font-weight:700;padding:15px 34px;border-radius:10px;text-decoration:none;cursor:pointer;border:none;font-size:.95rem;}
   .cta:hover{filter:brightness(1.1);}
   .urgency{margin-top:12px;font-size:.82rem;color:#9ca3af;}
-  ul{list-style:none;margin:24px 0;}
+  ul{list-style:none;}
   .divider{border:none;border-top:1px solid var(--border);margin:0;}
   .pill{background:rgba(124,58,237,.1);color:var(--accent);border-radius:20px;padding:5px 14px;font-size:.78rem;font-weight:700;display:inline-block;margin-bottom:18px;}
+  .faq-q{width:100%;background:transparent;border:none;color:var(--text);font-size:.95rem;font-weight:700;padding:18px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .faq-q .arr{color:var(--accent);font-size:.8rem;transition:transform .3s;}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .faq-a.open{max-height:200px;}
+  .faq-a p{padding:0 0 16px;font-size:.88rem;color:#6b7280;line-height:1.65;}
 </style>
 </head>
 <body>
-  <section>
-    <div class="wrap">
-      <span class="pill">${data.product_name}</span>
-      <h1>${data.headline}</h1>
-      <p class="subtitle">${data.subtitle}</p>
-      ${priceBlock(data)}
-      <button class="cta">${data.cta}</button>
-      <p class="urgency">${data.urgency}</p>
+
+<section>
+  <div class="wrap">
+    <span class="pill">${data.product_name}</span>
+    <h1>${data.headline}</h1>
+    <p class="subtitle">${data.subtitle}</p>
+    ${priceBlock(data)}
+    <button class="cta">${data.cta}</button>
+    <p class="urgency">${data.urgency}</p>
+  </div>
+</section>
+
+<!-- TRUST BADGES -->
+<div style="background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:18px 24px;">
+  <div class="wrap" style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;">
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:#374151;background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px 14px;">✓ Livraison 48h</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:#374151;background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px 14px;">✓ Garantie 30 jours</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:#374151;background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px 14px;">✓ Support 24/7</span>
+  </div>
+</div>
+
+${data.images?.[0] ? `<div style="background:var(--card);padding:40px 24px;text-align:center;">
+  ${heroImage(data, 'max-height:420px;object-fit:cover;border-radius:16px;border:1px solid var(--border);')}
+</div>` : ''}
+
+<!-- BÉNÉFICES -->
+<section>
+  <div class="wrap">
+    <p style="font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Ce que vous gagnez</p>
+    <h2 style="font-size:1.75rem;font-weight:800;margin-bottom:28px;">Tout ce dont vous avez besoin</h2>
+    <ul>${benefitsEnhanced}</ul>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- TÉMOIGNAGES -->
+<section>
+  <div class="wrap">
+    <p style="font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Ils l'ont adopté</p>
+    <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:24px;">Ce qu'en disent nos clients</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;">
+        <div style="color:#f59e0b;font-size:.9rem;letter-spacing:2px;margin-bottom:10px;">★★★★★</div>
+        <p style="font-size:.88rem;color:#374151;font-style:italic;margin-bottom:14px;">"Exactement ce que je cherchais. Le ${data.product_name} est de très bonne qualité et la livraison était rapide."</p>
+        <p style="font-size:.78rem;color:#9ca3af;font-weight:700;">— Marie L., cliente vérifiée</p>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;">
+        <div style="color:#f59e0b;font-size:.9rem;letter-spacing:2px;margin-bottom:10px;">★★★★★</div>
+        <p style="font-size:.88rem;color:#374151;font-style:italic;margin-bottom:14px;">"Je recommande à 100%. Très bon rapport qualité-prix et un service client réactif."</p>
+        <p style="font-size:.78rem;color:#9ca3af;font-weight:700;">— Antoine B., client vérifié</p>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  ${data.images?.[0] ? `<div style="background:var(--card);padding:40px 24px;text-align:center;">
-    ${heroImage(data, 'max-height:420px;object-fit:cover;border-radius:16px;border:1px solid var(--border);')}
-  </div>` : ''}
+<hr class="divider"/>
 
-  <section>
-    <div class="wrap">
-      <p style="font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;">Ce que vous gagnez</p>
-      <h2 style="font-size:1.75rem;font-weight:800;margin-bottom:28px;">Tout ce dont vous avez besoin</h2>
-      <ul>${benefits(data)}</ul>
+<!-- FAQ ACCORDION -->
+<section>
+  <div class="wrap">
+    <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:8px;">Questions fréquentes</h2>
+    <div>
+      ${data.faq.map((item, i) => `
+      <div style="border-bottom:1px solid var(--border);">
+        <button class="faq-q" onclick="tF(${i})">
+          ${item.question}<span class="arr" id="fa${i}">▼</span>
+        </button>
+        <div class="faq-a" id="fb${i}"><p>${item.answer}</p></div>
+      </div>`).join('')}
     </div>
-  </section>
+  </div>
+</section>
 
-  <hr class="divider"/>
+<!-- CTA FINAL -->
+<section style="background:var(--accent);color:#fff;text-align:center;">
+  <div class="wrap" style="padding:60px 24px;">
+    <h2 style="font-size:1.8rem;font-weight:900;margin-bottom:12px;">${data.headline}</h2>
+    <p style="opacity:.8;margin-bottom:20px;">${data.urgency}</p>
+    ${data.price ? `<p style="font-size:2rem;font-weight:900;margin:16px 0;">${data.price}€</p>` : ''}
+    <button style="background:#fff;color:var(--accent);font-weight:800;padding:15px 34px;border-radius:10px;border:none;cursor:pointer;font-size:.95rem;">${data.cta}</button>
+  </div>
+</section>
 
-  <section>
-    <div class="wrap">
-      <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:28px;">Questions fréquentes</h2>
-      ${faq(data)}
-    </div>
-  </section>
-
-  <section style="background:var(--accent);color:#fff;text-align:center;border-radius:0;">
-    <div class="wrap" style="padding:60px 24px;">
-      <h2 style="font-size:1.8rem;font-weight:900;margin-bottom:12px;">${data.headline}</h2>
-      ${data.price ? `<p style="font-size:2rem;font-weight:900;margin:16px 0;">${data.price}€</p>` : ''}
-      <button style="background:#fff;color:var(--accent);font-weight:800;padding:15px 34px;border-radius:10px;border:none;cursor:pointer;font-size:.95rem;">${data.cta}</button>
-    </div>
-  </section>
+<script>
+function tF(i){
+  var b=document.getElementById('fb'+i),a=document.getElementById('fa'+i);
+  var o=b.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(function(el){el.classList.remove('open');});
+  document.querySelectorAll('.arr').forEach(function(el){el.style.transform='';});
+  if(!o){b.classList.add('open');a.style.transform='rotate(180deg)';}
+}
+</script>
 </body>
 </html>`
 }
@@ -197,46 +327,139 @@ export function templateBoldSales(data: LandingPageData): string {
   section{padding:60px 0;}
   ul{list-style:none;margin:24px 0;}
   .strike{text-decoration:line-through;opacity:.5;}
+  .faq-q{width:100%;background:transparent;border:none;color:var(--text);font-size:.95rem;font-weight:700;padding:18px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .faq-q .arr{color:var(--accent);font-size:.8rem;transition:transform .3s;}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .faq-a.open{max-height:200px;}
+  .faq-a p{padding:0 0 16px;font-size:.88rem;color:#78350f;line-height:1.65;}
 </style>
 </head>
 <body>
-  <div class="hero">
-    <p style="font-size:.8rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;opacity:.8;margin-bottom:16px;">${data.product_name}</p>
-    <h1>${data.headline}</h1>
-    <p class="subtitle">${data.subtitle}</p>
-    ${data.original_price ? `<p style="margin-bottom:8px;"><span class="strike">${data.original_price}€</span> <span style="font-size:2.5rem;font-weight:900;">${data.price}€</span></p>` : data.price ? `<p style="font-size:2.5rem;font-weight:900;margin-bottom:8px;">${data.price}€</p>` : ''}
-    <button class="cta">${data.cta}</button>
-    <p class="urgency">${data.urgency}</p>
+
+<!-- HERO -->
+<div class="hero">
+  <p style="font-size:.8rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;opacity:.8;margin-bottom:16px;">${data.product_name}</p>
+  <h1>${data.headline}</h1>
+  <p class="subtitle">${data.subtitle}</p>
+  ${data.original_price ? `<p style="margin-bottom:8px;"><span class="strike">${data.original_price}€</span> <span style="font-size:2.5rem;font-weight:900;">${data.price}€</span></p>` : data.price ? `<p style="font-size:2.5rem;font-weight:900;margin-bottom:8px;">${data.price}€</p>` : ''}
+  <button class="cta">${data.cta}</button>
+  <p class="urgency">${data.urgency}</p>
+</div>
+
+<!-- COMPTE À REBOURS STATIQUE -->
+<div style="background:#7c2d12;padding:20px 24px;text-align:center;">
+  <p style="color:#fed7aa;font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;">⏰ Offre expire dans</p>
+  <div style="display:flex;justify-content:center;gap:12px;">
+    <div style="background:#fff;color:#7c2d12;border-radius:10px;padding:10px 16px;min-width:60px;text-align:center;">
+      <div style="font-size:1.8rem;font-weight:900;line-height:1;">02</div>
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Jours</div>
+    </div>
+    <div style="background:#fff;color:#7c2d12;border-radius:10px;padding:10px 16px;min-width:60px;text-align:center;">
+      <div style="font-size:1.8rem;font-weight:900;line-height:1;">14</div>
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Heures</div>
+    </div>
+    <div style="background:#fff;color:#7c2d12;border-radius:10px;padding:10px 16px;min-width:60px;text-align:center;">
+      <div style="font-size:1.8rem;font-weight:900;line-height:1;">37</div>
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Minutes</div>
+    </div>
   </div>
+</div>
 
-  ${data.images?.[0] ? `<div style="text-align:center;padding:40px 24px;background:#fff8f0;">
-    ${heroImage(data, 'max-height:380px;border-radius:12px;box-shadow:0 16px 60px rgba(234,88,12,.2);')}
-  </div>` : ''}
-
-  <section>
-    <div class="wrap">
-      <h2 style="font-size:1.6rem;font-weight:900;color:var(--accent);margin-bottom:24px;">Voici ce que vous obtenez :</h2>
-      <ul>${benefits(data)}</ul>
-      <div style="margin-top:32px;text-align:center;">
-        <button class="cta">${data.cta}</button>
-      </div>
+<!-- TRUST BADGES -->
+<div style="background:#fff;border-bottom:2px solid var(--border);padding:18px 24px;">
+  <div class="wrap" style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg);border:1px solid var(--border);border-radius:10px;">
+      <span style="font-size:1.1rem;">📦</span>
+      <span style="font-size:.8rem;font-weight:700;color:#92400e;">Livraison 48h</span>
     </div>
-  </section>
-
-  <section style="background:#fff;border-top:3px solid var(--border);">
-    <div class="wrap">
-      <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:24px;">Vos questions, nos réponses</h2>
-      ${faq(data)}
+    <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg);border:1px solid var(--border);border-radius:10px;">
+      <span style="font-size:1.1rem;">🛡️</span>
+      <span style="font-size:.8rem;font-weight:700;color:#92400e;">Garantie 30 jours</span>
     </div>
-  </section>
+    <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg);border:1px solid var(--border);border-radius:10px;">
+      <span style="font-size:1.1rem;">🔒</span>
+      <span style="font-size:.8rem;font-weight:700;color:#92400e;">Paiement sécurisé</span>
+    </div>
+  </div>
+</div>
 
-  <div style="background:linear-gradient(135deg,#dc2626,#ea580c);color:#fff;padding:60px 24px;text-align:center;">
-    <div class="wrap">
-      <h2 style="font-size:2rem;font-weight:900;margin-bottom:16px;">${data.urgency}</h2>
-      ${data.price ? `<p style="font-size:2.5rem;font-weight:900;margin-bottom:24px;">${data.price}€</p>` : ''}
+${data.images?.[0] ? `<div style="text-align:center;padding:40px 24px;background:#fff8f0;">
+  ${heroImage(data, 'max-height:380px;border-radius:12px;box-shadow:0 16px 60px rgba(234,88,12,.2);')}
+</div>` : ''}
+
+<!-- BÉNÉFICES -->
+<section>
+  <div class="wrap">
+    <h2 style="font-size:1.6rem;font-weight:900;color:var(--accent);margin-bottom:24px;">Voici ce que vous obtenez :</h2>
+    <ul>${benefits(data)}</ul>
+    <div style="margin-top:32px;text-align:center;">
       <button class="cta">${data.cta}</button>
     </div>
   </div>
+</section>
+
+<!-- GARANTIE -->
+<div style="background:#fff;border:2px solid var(--border);border-radius:16px;margin:0 24px;padding:32px;text-align:center;">
+  <div style="font-size:2.5rem;margin-bottom:12px;">🏅</div>
+  <h3 style="font-size:1.2rem;font-weight:900;margin-bottom:8px;">Satisfait ou remboursé — 30 jours</h3>
+  <p style="font-size:.88rem;color:#78350f;max-width:400px;margin:0 auto;">Si vous n'êtes pas 100% satisfait dans les 30 jours suivant votre achat, nous vous remboursons intégralement. Sans question.</p>
+</div>
+
+<!-- TÉMOIGNAGES -->
+<section>
+  <div class="wrap">
+    <h2 style="font-size:1.5rem;font-weight:900;margin-bottom:24px;">Ce qu'ils en disent 🔥</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div style="background:#fff;border:2px solid var(--border);border-radius:14px;padding:20px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">😍</div>
+        <div style="color:#f59e0b;font-size:.9rem;letter-spacing:2px;margin-bottom:8px;">★★★★★</div>
+        <p style="font-size:.85rem;color:#78350f;font-style:italic;margin-bottom:10px;">"Incroyable ! Le ${data.product_name} a dépassé mes attentes. Je le recommande à tous mes proches !"</p>
+        <p style="font-size:.75rem;color:#9ca3af;font-weight:700;">— Camille R.</p>
+      </div>
+      <div style="background:#fff;border:2px solid var(--border);border-radius:14px;padding:20px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🤩</div>
+        <div style="color:#f59e0b;font-size:.9rem;letter-spacing:2px;margin-bottom:8px;">★★★★★</div>
+        <p style="font-size:.85rem;color:#78350f;font-style:italic;margin-bottom:10px;">"Commande reçue en 2 jours. Produit conforme à la description, très bonne qualité !"</p>
+        <p style="font-size:.75rem;color:#9ca3af;font-weight:700;">— Lucas P.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ ACCORDION -->
+<section style="background:#fff;border-top:3px solid var(--border);">
+  <div class="wrap">
+    <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:8px;">Vos questions, nos réponses</h2>
+    <div>
+      ${data.faq.map((item, i) => `
+      <div style="border-bottom:1px solid var(--border);">
+        <button class="faq-q" onclick="tF(${i})">
+          ${item.question}<span class="arr" id="fa${i}">▼</span>
+        </button>
+        <div class="faq-a" id="fb${i}"><p>${item.answer}</p></div>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<div style="background:linear-gradient(135deg,#dc2626,#ea580c);color:#fff;padding:60px 24px;text-align:center;">
+  <div class="wrap">
+    <h2 style="font-size:2rem;font-weight:900;margin-bottom:16px;">${data.urgency}</h2>
+    ${data.price ? `<p style="font-size:2.5rem;font-weight:900;margin-bottom:24px;">${data.price}€</p>` : ''}
+    <button class="cta">${data.cta}</button>
+  </div>
+</div>
+
+<script>
+function tF(i){
+  var b=document.getElementById('fb'+i),a=document.getElementById('fa'+i);
+  var o=b.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(function(el){el.classList.remove('open');});
+  document.querySelectorAll('.arr').forEach(function(el){el.style.transform='';});
+  if(!o){b.classList.add('open');a.style.transform='rotate(180deg)';}
+}
+</script>
 </body>
 </html>`
 }
@@ -251,7 +474,7 @@ export function templateLuxury(data: LandingPageData): string {
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>${data.product_name}</title>
 <style>
-  :root{--bg:#faf9f7;--text:#1a1714;--gold:#c9993a;--border:#e8e0d5;--card:#f5f0e8;}
+  :root{--bg:#faf9f7;--text:#1a1714;--gold:#c9993a;--border:#e8e0d5;--card:#f5f0e8;--dark:#0d0b09;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:Georgia,'Times New Roman',serif;line-height:1.7;}
   .wrap{max-width:680px;margin:0 auto;padding:0 32px;}
@@ -264,48 +487,108 @@ export function templateLuxury(data: LandingPageData): string {
   .urgency{margin-top:16px;font-size:.82rem;color:#9c8460;font-family:-apple-system,sans-serif;letter-spacing:.04em;}
   section{padding:70px 0;}
   ul{list-style:none;}
+  .faq-q{width:100%;background:transparent;border:none;border-bottom:1px solid var(--gold);color:var(--text);font-family:Georgia,serif;font-size:.95rem;font-weight:700;padding:20px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .faq-q .arr{color:var(--gold);font-size:.75rem;transition:transform .3s;font-family:-apple-system,sans-serif;}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .faq-a.open{max-height:200px;}
+  .faq-a p{padding:12px 0 20px;font-size:.88rem;color:#6b5d4e;line-height:1.65;font-family:-apple-system,sans-serif;}
 </style>
 </head>
 <body>
-  <div class="hero">
-    <p class="overline">${data.product_name}</p>
-    <h1>${data.headline}</h1>
-    <p class="subtitle">${data.subtitle}</p>
-    ${data.price ? `<p style="font-size:1.6rem;color:var(--gold);margin-bottom:24px;letter-spacing:.02em;">${data.price}€ ${data.original_price ? `<span style="text-decoration:line-through;font-size:1rem;opacity:.5;">${data.original_price}€</span>` : ''}</p>` : ''}
-    <button class="cta">${data.cta}</button>
-    <p class="urgency">${data.urgency}</p>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="overline">${data.product_name}</p>
+  <h1>${data.headline}</h1>
+  <p class="subtitle">${data.subtitle}</p>
+  ${data.price ? `<p style="font-size:1.6rem;color:var(--gold);margin-bottom:24px;letter-spacing:.02em;">${data.price}€ ${data.original_price ? `<span style="text-decoration:line-through;font-size:1rem;opacity:.5;">${data.original_price}€</span>` : ''}</p>` : ''}
+  <button class="cta">${data.cta}</button>
+  <p class="urgency">${data.urgency}</p>
+</div>
+
+${data.images?.[0] ? `<div style="text-align:center;padding:50px 32px;background:var(--card);">
+  ${heroImage(data, 'max-height:440px;object-fit:cover;')}
+</div>` : ''}
+
+<!-- TRUST BADGE DISCRET -->
+<div style="text-align:center;padding:20px 24px;border-bottom:1px solid var(--border);font-family:-apple-system,sans-serif;font-size:.78rem;letter-spacing:.06em;color:#9c8460;">
+  ◆ Livraison offerte &nbsp;·&nbsp; ◆ Retour 14 jours &nbsp;·&nbsp; ◆ Authenticité garantie
+</div>
+
+<!-- BÉNÉFICES / L'ESSENTIEL -->
+<section>
+  <div class="wrap">
+    <p class="overline" style="margin-bottom:16px;">L'essentiel</p>
+    <ul>${data.benefits.map(b => `<li style="padding:16px 0;border-bottom:1px solid var(--border);font-size:.95rem;color:#3d2f20;display:flex;gap:16px;align-items:flex-start;">
+      <span style="color:var(--gold);font-size:.75rem;margin-top:5px;">◆</span>${b}</li>`).join('')}</ul>
   </div>
+</section>
 
-  ${data.images?.[0] ? `<div style="text-align:center;padding:50px 32px;background:var(--card);">
-    ${heroImage(data, 'max-height:440px;object-fit:cover;')}
-  </div>` : ''}
+<!-- MATIÈRES & FABRICATION -->
+<section style="background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <p class="overline" style="margin-bottom:16px;">Matières &amp; Fabrication</p>
+    <h2 style="font-size:1.3rem;font-weight:400;margin-bottom:24px;">Un savoir-faire d'exception</h2>
+    <ul>
+      <li style="padding:14px 0;border-bottom:1px solid var(--border);font-size:.9rem;color:#3d2f20;display:flex;gap:14px;align-items:center;font-family:-apple-system,sans-serif;"><span style="color:var(--gold);">◆</span> Matériaux sélectionnés pour leur durabilité et leur élégance</li>
+      <li style="padding:14px 0;border-bottom:1px solid var(--border);font-size:.9rem;color:#3d2f20;display:flex;gap:14px;align-items:center;font-family:-apple-system,sans-serif;"><span style="color:var(--gold);">◆</span> Fabrication artisanale, contrôlée à chaque étape</li>
+      <li style="padding:14px 0;font-size:.9rem;color:#3d2f20;display:flex;gap:14px;align-items:center;font-family:-apple-system,sans-serif;"><span style="color:var(--gold);">◆</span> Finitions soignées, aucun compromis sur la qualité</li>
+    </ul>
+  </div>
+</section>
 
-  <section>
-    <div class="wrap">
-      <p class="overline" style="margin-bottom:16px;">L'essentiel</p>
-      <ul>${data.benefits.map(b => `<li style="padding:16px 0;border-bottom:1px solid var(--border);font-size:.95rem;color:#3d2f20;display:flex;gap:16px;align-items:flex-start;">
-        <span style="color:var(--gold);font-size:.75rem;margin-top:5px;">◆</span>${b}</li>`).join('')}</ul>
+<!-- CITATIONS CLIENTS -->
+<section>
+  <div class="wrap">
+    <p class="overline" style="margin-bottom:16px;">Ils l'ont choisi</p>
+    <div style="display:flex;flex-direction:column;gap:28px;">
+      <div style="border-left:2px solid var(--gold);padding-left:24px;">
+        <p style="font-size:1rem;font-style:italic;color:#3d2f20;line-height:1.8;margin-bottom:10px;">"Une pièce d'exception. La qualité dépasse largement ce que l'on trouve habituellement à ce prix."</p>
+        <p style="font-size:.8rem;color:var(--gold);font-family:-apple-system,sans-serif;letter-spacing:.06em;">— Isabelle M., Directrice créative</p>
+      </div>
+      <div style="border-left:2px solid var(--gold);padding-left:24px;">
+        <p style="font-size:1rem;font-style:italic;color:#3d2f20;line-height:1.8;margin-bottom:10px;">"Je l'ai offert en cadeau et la personne a été conquise immédiatement. Un vrai luxe accessible."</p>
+        <p style="font-size:.8rem;color:var(--gold);font-family:-apple-system,sans-serif;letter-spacing:.06em;">— Philippe D., Architecte</p>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section style="background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
-    <div class="wrap">
-      <p class="overline" style="margin-bottom:20px;">Questions</p>
-      ${data.faq.map(item => `<div style="padding:20px 0;border-bottom:1px solid var(--border);">
-        <p style="font-weight:700;margin-bottom:8px;font-size:.95rem;">${item.question}</p>
-        <p style="color:#6b5d4e;font-size:.9rem;font-family:-apple-system,sans-serif;">${item.answer}</p>
+<!-- FAQ STYLISÉ SERIF -->
+<section style="background:var(--card);border-top:1px solid var(--border);">
+  <div class="wrap">
+    <p class="overline" style="margin-bottom:16px;">Questions</p>
+    <div>
+      ${data.faq.map((item, i) => `
+      <div>
+        <button class="faq-q" onclick="tF(${i})">
+          ${item.question}<span class="arr" id="fa${i}">▼</span>
+        </button>
+        <div class="faq-a" id="fb${i}"><p>${item.answer}</p></div>
       </div>`).join('')}
     </div>
-  </section>
+  </div>
+</section>
 
-  <section style="text-align:center;">
-    <div class="wrap">
-      <p class="overline" style="margin-bottom:16px;">Commander</p>
-      <h2 style="font-size:1.8rem;font-weight:400;margin-bottom:20px;">${data.headline}</h2>
-      ${data.price ? `<p style="font-size:1.8rem;color:var(--gold);margin-bottom:28px;">${data.price}€</p>` : ''}
-      <button class="cta">${data.cta}</button>
-    </div>
-  </section>
+<!-- CTA FINAL DARK/OR -->
+<section style="background:var(--dark);color:#fff;text-align:center;">
+  <div class="wrap" style="padding:70px 32px;">
+    <p style="font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-family:-apple-system,sans-serif;">Commander</p>
+    <h2 style="font-size:clamp(1.4rem,3vw,2rem);font-weight:400;margin-bottom:20px;">${data.headline}</h2>
+    ${data.price ? `<p style="font-size:1.8rem;color:var(--gold);margin-bottom:28px;">${data.price}€</p>` : ''}
+    <button class="cta" style="background:var(--gold);color:#0d0b09;">${data.cta}</button>
+  </div>
+</section>
+
+<script>
+function tF(i){
+  var b=document.getElementById('fb'+i),a=document.getElementById('fa'+i);
+  var o=b.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(function(el){el.classList.remove('open');});
+  document.querySelectorAll('.arr').forEach(function(el){el.style.transform='';});
+  if(!o){b.classList.add('open');a.style.transform='rotate(180deg)';}
+}
+</script>
 </body>
 </html>`
 }
@@ -322,7 +605,7 @@ export function templateMobileFirst(data: LandingPageData): string {
 <style>
   :root{--bg:#fff;--text:#111;--accent:#2563eb;--light:#eff6ff;--border:#dbeafe;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;max-width:480px;margin:0 auto;}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;max-width:480px;margin:0 auto;padding-bottom:80px;}
   .hero{padding:32px 20px 28px;background:var(--light);border-bottom:2px solid var(--border);}
   .tag{background:var(--accent);color:#fff;font-size:.7rem;font-weight:800;padding:4px 12px;border-radius:20px;letter-spacing:.06em;display:inline-block;margin-bottom:14px;text-transform:uppercase;}
   h1{font-size:1.6rem;font-weight:900;line-height:1.15;letter-spacing:-.01em;margin-bottom:10px;}
@@ -334,39 +617,112 @@ export function templateMobileFirst(data: LandingPageData): string {
   h2{font-size:1.1rem;font-weight:800;margin-bottom:16px;}
   ul{list-style:none;}
   .price-big{font-size:2rem;font-weight:900;color:var(--accent);}
+  /* FAQ compact */
+  .faq-q{width:100%;background:transparent;border:none;color:var(--text);font-size:.88rem;font-weight:700;padding:12px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .faq-q .arr{color:var(--accent);font-size:.75rem;transition:transform .3s;}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .faq-a.open{max-height:200px;}
+  .faq-a p{padding:0 0 12px;font-size:.82rem;color:#6b7280;line-height:1.6;}
+  /* Sticky bar */
+  .sticky-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,.08);}
+  .sticky-price{font-size:1.3rem;font-weight:900;color:var(--accent);flex-shrink:0;}
+  .sticky-cta{flex:1;background:var(--accent);color:#fff;font-weight:800;font-size:.9rem;padding:12px;border-radius:10px;border:none;cursor:pointer;text-align:center;}
 </style>
 </head>
 <body>
-  <div class="hero">
-    <span class="tag">${data.product_name}</span>
-    <h1>${data.headline}</h1>
-    <p class="subtitle">${data.subtitle}</p>
-    ${data.price ? `<div style="margin-bottom:16px;">${data.original_price ? `<span style="text-decoration:line-through;color:#9ca3af;font-size:.9rem;margin-right:8px;">${data.original_price}€</span>` : ''}<span class="price-big">${data.price}€</span></div>` : ''}
-    <button class="cta">${data.cta}</button>
-    <p class="urgency">${data.urgency}</p>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="tag">${data.product_name}</span>
+  <h1>${data.headline}</h1>
+  <p class="subtitle">${data.subtitle}</p>
+  ${data.price ? `<div style="margin-bottom:16px;">${data.original_price ? `<span style="text-decoration:line-through;color:#9ca3af;font-size:.9rem;margin-right:8px;">${data.original_price}€</span>` : ''}<span class="price-big">${data.price}€</span></div>` : ''}
+  <button class="cta">${data.cta}</button>
+  <p class="urgency">${data.urgency}</p>
+  <!-- Trust badges inline -->
+  <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:14px;">
+    <span style="font-size:.72rem;color:#6b7280;display:flex;align-items:center;gap:4px;">📦 Livraison 48h</span>
+    <span style="font-size:.72rem;color:#6b7280;display:flex;align-items:center;gap:4px;">🛡️ Garantie 30j</span>
+    <span style="font-size:.72rem;color:#6b7280;display:flex;align-items:center;gap:4px;">🔒 Paiement sécurisé</span>
   </div>
+</div>
 
-  ${data.images?.[0] ? `<div class="img-wrap">${heroImage(data, 'width:100%;border-radius:10px;')}</div>` : ''}
+${data.images?.[0] ? `<div class="img-wrap">${heroImage(data, 'width:100%;border-radius:10px;')}</div>` : ''}
 
-  <section>
-    <h2>Pourquoi le choisir ?</h2>
-    <ul>${data.benefits.map(b => `<li style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;font-size:.9rem;">
-      <span style="color:var(--accent);font-weight:900;flex-shrink:0;">✓</span>${b}</li>`).join('')}</ul>
-  </section>
+<!-- BÉNÉFICES -->
+<section>
+  <h2>Pourquoi le choisir ?</h2>
+  <ul>${data.benefits.map(b => `<li style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;font-size:.9rem;border-bottom:1px solid #f3f4f6;">
+    <span style="color:var(--accent);font-weight:900;flex-shrink:0;margin-top:2px;">✓</span>${b}</li>`).join('')}</ul>
+</section>
 
-  <section>
-    <h2>Questions fréquentes</h2>
-    ${data.faq.map(item => `<div style="margin-bottom:16px;">
-      <p style="font-weight:700;font-size:.9rem;margin-bottom:4px;">${item.question}</p>
-      <p style="font-size:.85rem;color:#6b7280;">${item.answer}</p>
+<!-- SECTION SOCIAL PROOF -->
+<section style="background:var(--light);">
+  <div style="text-align:center;margin-bottom:16px;">
+    <div style="color:#f59e0b;font-size:1rem;letter-spacing:3px;margin-bottom:6px;">★★★★★</div>
+    <p style="font-size:.88rem;font-weight:800;">Rejoignez 12 000+ clients satisfaits</p>
+  </div>
+  <!-- Avis compacts -->
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="width:32px;height:32px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">😊</span>
+        <div>
+          <p style="font-weight:700;font-size:.82rem;">Lucie V.</p>
+          <div style="color:#f59e0b;font-size:.7rem;letter-spacing:1px;">★★★★★</div>
+        </div>
+      </div>
+      <p style="font-size:.82rem;color:#4b5563;">"Super produit, livraison rapide. Je recommande !"</p>
+    </div>
+    <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="width:32px;height:32px;background:#10b981;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🙌</span>
+        <div>
+          <p style="font-weight:700;font-size:.82rem;">Marc T.</p>
+          <div style="color:#f59e0b;font-size:.7rem;letter-spacing:1px;">★★★★★</div>
+        </div>
+      </div>
+      <p style="font-size:.82rem;color:#4b5563;">"Qualité premium pour ce prix. Très satisfait de mon achat."</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ COMPACT ACCORDION -->
+<section>
+  <h2>Questions fréquentes</h2>
+  <div>
+    ${data.faq.map((item, i) => `
+    <div style="border-bottom:1px solid #f3f4f6;">
+      <button class="faq-q" onclick="tF(${i})">
+        ${item.question}<span class="arr" id="fa${i}">▼</span>
+      </button>
+      <div class="faq-a" id="fb${i}"><p>${item.answer}</p></div>
     </div>`).join('')}
-  </section>
+  </div>
+</section>
 
-  <section style="text-align:center;">
-    ${data.price ? `<div class="price-big" style="margin-bottom:14px;">${data.price}€</div>` : ''}
-    <button class="cta">${data.cta}</button>
-    <p class="urgency" style="margin-top:10px;">${data.urgency}</p>
-  </section>
+<!-- CTA SECTION -->
+<section style="text-align:center;">
+  ${data.price ? `<div class="price-big" style="margin-bottom:14px;">${data.price}€</div>` : ''}
+  <button class="cta">${data.cta}</button>
+  <p class="urgency" style="margin-top:10px;">${data.urgency}</p>
+</section>
+
+<!-- STICKY BOTTOM BAR -->
+<div class="sticky-bar">
+  ${data.price ? `<span class="sticky-price">${data.price}€</span>` : ''}
+  <button class="sticky-cta">${data.cta}</button>
+</div>
+
+<script>
+function tF(i){
+  var b=document.getElementById('fb'+i),a=document.getElementById('fa'+i);
+  var o=b.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(function(el){el.classList.remove('open');});
+  document.querySelectorAll('.arr').forEach(function(el){el.style.transform='';});
+  if(!o){b.classList.add('open');a.style.transform='rotate(180deg)';}
+}
+</script>
 </body>
 </html>`
 }

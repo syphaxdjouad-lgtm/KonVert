@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
+import { X, CheckCircle } from 'lucide-react'
 
 const SESSION_KEY = 'konvert-exit-intent-shown'
 
@@ -123,7 +123,9 @@ export default function ExitIntentPopup() {
             </>
           ) : (
             <div className="text-center py-4">
-              <div className="text-5xl mb-4">🎉</div>
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: 'rgba(91,71,245,0.12)' }}>
+                <CheckCircle className="w-7 h-7 text-[#5B47F5]" />
+              </div>
               <h2 className="text-xl font-black text-gray-900 mb-2">C&apos;est parti !</h2>
               <p className="text-gray-500 text-sm">
                 Check tes emails — ton accès arrive dans quelques secondes.

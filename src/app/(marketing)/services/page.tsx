@@ -5,7 +5,7 @@ const SERVICES = [
   {
     id: 'seo',
     icon: Search,
-    badge: '🔍 Audit SEO',
+    badge: 'Audit SEO',
     title: 'Audit SEO Complet',
     subtitle: 'Pour les boutiques qui veulent du trafic organique gratuit.',
     desc: "Analyse technique de votre boutique Shopify ou WooCommerce : vitesse, Core Web Vitals, maillage interne, balises méta, structured data. On identifie précisément ce qui freine votre positionnement Google.",
@@ -29,7 +29,7 @@ const SERVICES = [
   {
     id: 'reporting',
     icon: BarChart3,
-    badge: '📊 Reporting',
+    badge: 'Reporting',
     title: 'Suivi & Reporting Mensuel',
     subtitle: 'Pour piloter votre croissance avec des données fiables.',
     desc: "Dashboard personnalisé avec vos KPIs e-commerce : ROAS, CVR, CAC, LTV, taux de retour. Un rapport mensuel commenté avec des recommandations actionnables. Vous savez exactement où investir.",
@@ -53,7 +53,7 @@ const SERVICES = [
   {
     id: 'coaching',
     icon: TrendingUp,
-    badge: '🎯 Coaching',
+    badge: 'Coaching',
     title: 'Coaching E-commerce',
     subtitle: 'Pour les entrepreneurs qui veulent aller plus vite.',
     desc: "Accompagnement personnalisé par un expert e-commerce : stratégie produit, optimisation des ads, CRO, sélection de fournisseurs. Des sessions pratiques focalisées sur votre situation réelle.",
@@ -268,7 +268,9 @@ export default function ServicesPage() {
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section className="py-20" style={{ background: 'linear-gradient(135deg, #08080f, #0f0f2e)' }}>
         <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">
-          <div className="text-4xl mb-5">🚀</div>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(91,71,245,0.25)' }}>
+            <Zap className="w-7 h-7 text-[#a78bfa]" />
+          </div>
           <h2 className="text-3xl font-black text-white mb-4">
             Prêt à accélérer votre croissance ?
           </h2>

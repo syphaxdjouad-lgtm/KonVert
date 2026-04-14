@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import Link from 'next/link'
-import { Zap, ArrowRight, Check, Shield, Globe, Palette, BarChart3, Copy, ExternalLink, Sparkles, Clock, AlertCircle } from 'lucide-react'
+import { Zap, ArrowRight, Check, Shield, Globe, Palette, BarChart3, Copy, ExternalLink, Sparkles, Clock, AlertCircle, Link2, Bot, Rocket } from 'lucide-react'
 
 /* ── TEMPLATES DISPONIBLES ─────────────────────────────────────────────────── */
 const DEMO_TEMPLATES = [
@@ -335,7 +335,7 @@ export default function DemoPage() {
                   <div className="max-w-2xl">
                     <span className="inline-block text-xs font-bold px-3 py-1 rounded-full mb-4"
                           style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}>
-                      ⚡ OFFRE LIMITÉE — -40% aujourd'hui
+                      OFFRE LIMITÉE — -40% aujourd'hui
                     </span>
                     <h1 className={`text-2xl sm:text-3xl font-black mb-4 leading-tight ${selectedTemplate.text}`}>
                       {result.title}
@@ -449,12 +449,14 @@ export default function DemoPage() {
             </div>
             <div className="grid sm:grid-cols-3 gap-8">
               {[
-                { step: '01', icon: '📋', title: 'Collez une URL', desc: 'AliExpress, Amazon ou Alibaba. KONVERT scrape automatiquement les données produit.' },
-                { step: '02', icon: '🤖', title: 'IA génère le copy', desc: 'Claude AI rédige accroche, bénéfices, FAQ et CTA optimisés pour la conversion.' },
-                { step: '03', icon: '🚀', title: 'Publiez en 1 clic', desc: 'Connectez votre Shopify ou WooCommerce et publiez directement depuis KONVERT.' },
-              ].map(({ step: s, icon, title, desc }) => (
+                { step: '01', Icon: Link2, color: '#5B47F5', bg: 'rgba(91,71,245,0.1)', title: 'Collez une URL', desc: 'AliExpress, Amazon ou Alibaba. KONVERT scrape automatiquement les données produit.' },
+                { step: '02', Icon: Bot, color: '#10b981', bg: 'rgba(16,185,129,0.1)', title: 'IA génère le copy', desc: 'Claude AI rédige accroche, bénéfices, FAQ et CTA optimisés pour la conversion.' },
+                { step: '03', Icon: Rocket, color: '#f97316', bg: 'rgba(249,115,22,0.1)', title: 'Publiez en 1 clic', desc: 'Connectez votre Shopify ou WooCommerce et publiez directement depuis KONVERT.' },
+              ].map(({ step: s, Icon, color, bg, title, desc }) => (
                 <div key={s} className="text-center p-8 rounded-2xl border border-gray-100">
-                  <div className="text-4xl mb-4">{icon}</div>
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: bg }}>
+                    <Icon className="w-7 h-7" style={{ color }} />
+                  </div>
                   <span className="text-xs font-black text-[#5B47F5]/40 block mb-2">{s}</span>
                   <h3 className="font-black text-gray-900 mb-2">{title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>

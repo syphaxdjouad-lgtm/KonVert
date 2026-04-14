@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { BarChart2 } from 'lucide-react'
 
 /* ─── Données mockup dashboard ─────────────────────────────────────────── */
 const LEADS = [
@@ -157,7 +158,7 @@ export default function LeadEnrichmentDemo() {
               <div style={{ display: 'flex', minHeight: 360 }}>
                 {/* Sidebar */}
                 <div style={{ width: 52, background: '#0f172a', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 16, gap: 16 }}>
-                  {['K','≡','◎','⚡','📊'].map((icon, i) => (
+                  {['K','≡','◎','⚡'].map((icon, i) => (
                     <div
                       key={i}
                       style={{
@@ -173,6 +174,17 @@ export default function LeadEnrichmentDemo() {
                       {icon}
                     </div>
                   ))}
+                  <div
+                    style={{
+                      width: 32, height: 32, borderRadius: 8,
+                      background: 'transparent',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      color: 'rgba(255,255,255,0.4)',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <BarChart2 size={14} />
+                  </div>
                 </div>
 
                 {/* Main content */}

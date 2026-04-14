@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Check, Zap, ChevronDown, ArrowRight } from 'lucide-react'
+import { Check, Zap, ChevronDown, ArrowRight, Lock, CreditCard, ShieldCheck } from 'lucide-react'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import TrustBadges from '@/components/marketing/TrustBadges'
@@ -397,7 +397,7 @@ function PricingContent() {
                   )}
                   {/* Mini trust sous le CTA */}
                   <p className="text-center mt-2" style={{ fontSize: '10px', color: plan.enterprise ? 'rgba(255,255,255,0.3)' : '#9ca3af' }}>
-                    🔒 SSL · 💳 Stripe · ✅ Sans engagement
+                    <Lock className="inline w-2.5 h-2.5 mr-0.5" /> SSL · <CreditCard className="inline w-2.5 h-2.5 mr-0.5" /> Stripe · <ShieldCheck className="inline w-2.5 h-2.5 mr-0.5" /> Sans engagement
                   </p>
                 </div>
               )
@@ -415,7 +415,7 @@ function PricingContent() {
               className="inline-flex items-center gap-3 px-6 py-3.5 rounded-2xl"
               style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}
             >
-              <span className="text-xl" aria-hidden="true">✅</span>
+              <ShieldCheck className="w-5 h-5 text-green-600 flex-shrink-0" aria-hidden="true" />
               <p className="text-sm font-semibold text-green-800">
                 Satisfait ou remboursé 30 jours —{' '}
                 <span className="font-normal text-green-700">Sans question</span>
@@ -580,7 +580,7 @@ function PricingContent() {
           Stripe · Annulation à tout moment · Sans engagement
         </p>
         <p className="mt-2 text-sm font-semibold" style={{ color: 'rgba(134,239,172,0.8)' }}>
-          ✅ Satisfait ou remboursé 30 jours — Sans question
+          <ShieldCheck className="inline w-3.5 h-3.5 mr-1" /> Satisfait ou remboursé 30 jours — Sans question
         </p>
       </div>
 

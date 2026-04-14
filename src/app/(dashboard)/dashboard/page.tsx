@@ -59,10 +59,10 @@ export default async function DashboardPage() {
       {/* ── STAT CARDS ── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 
-        {/* Card 1 — Hero dark */}
+        {/* Card 1 — Hero violet */}
         <div
           className="relative rounded-2xl p-6 overflow-hidden"
-          style={{ background: '#0f0f1e', border: '1px solid #1e1e2e' }}
+          style={{ background: 'linear-gradient(135deg, #7c3aed, #5b21b6)', border: '1px solid #6d28d9' }}
         >
           {/* Badge arrow haut droite */}
           <div className="absolute top-4 right-4">
@@ -70,13 +70,13 @@ export default async function DashboardPage() {
               className="w-7 h-7 rounded-lg flex items-center justify-center"
               style={{ background: '#b5f23d' }}
             >
-              <ArrowUpRight className="w-3.5 h-3.5" style={{ color: '#0f0f1e' }} />
+              <ArrowUpRight className="w-3.5 h-3.5" style={{ color: '#3b0764' }} />
             </div>
           </div>
 
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-            style={{ background: 'rgba(255,255,255,0.08)' }}
+            style={{ background: 'rgba(255,255,255,0.15)' }}
           >
             <FileText className="w-5 h-5 text-white" />
           </div>
@@ -90,7 +90,7 @@ export default async function DashboardPage() {
           <div className="text-[14px] font-semibold text-white mb-1">
             Pages créées
           </div>
-          <div className="text-[12px]" style={{ color: '#9090a8' }}>
+          <div className="text-[12px]" style={{ color: 'rgba(255,255,255,0.6)' }}>
             {published} publiées
           </div>
         </div>
@@ -239,13 +239,13 @@ export default async function DashboardPage() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        {/* Action 1 — Créer une page (dark) */}
+        {/* Action 1 — Créer une page (violet) */}
         <Link
           href="/dashboard/new"
-          className="relative group rounded-2xl p-6 flex flex-col gap-4 overflow-hidden transition-all hover:shadow-[0_0_0_2px_rgba(124,58,237,0.4),0_8px_32px_rgba(124,58,237,0.15)]"
+          className="relative group rounded-2xl p-6 flex flex-col gap-4 overflow-hidden transition-all hover:shadow-[0_4px_24px_rgba(124,58,237,0.3)]"
           style={{
-            background: '#0f0f1e',
-            border: '1px solid #1e1e2e',
+            background: 'linear-gradient(135deg, #7c3aed, #5b21b6)',
+            border: '1px solid #6d28d9',
           }}
         >
           {/* Flèche haut droite */}
@@ -255,16 +255,16 @@ export default async function DashboardPage() {
 
           <div
             className="w-11 h-11 rounded-xl flex items-center justify-center"
-            style={{ background: 'rgba(181,242,61,0.12)' }}
+            style={{ background: 'rgba(255,255,255,0.15)' }}
           >
-            <Plus className="w-5 h-5" style={{ color: '#b5f23d' }} />
+            <Plus className="w-5 h-5 text-white" />
           </div>
 
           <div>
             <div className="text-[15px] font-black text-white mb-1">
               Créer une page
             </div>
-            <div className="text-[13px]" style={{ color: '#9090a8' }}>
+            <div className="text-[13px]" style={{ color: 'rgba(255,255,255,0.6)' }}>
               Colle une URL produit ou saisis manuellement
             </div>
           </div>

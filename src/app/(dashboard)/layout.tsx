@@ -164,7 +164,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   href={href}
                   className="px-4 py-1.5 rounded-lg text-[13px] font-semibold transition-all"
                   style={active ? {
-                    background: '#0f0f1e',
+                    background: '#7c3aed',
                     color: '#ffffff',
                   } : {
                     color: '#6b6b84',

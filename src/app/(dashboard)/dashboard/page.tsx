@@ -242,18 +242,10 @@ export default async function DashboardPage() {
         {/* Action 1 — Créer une page (dark) */}
         <Link
           href="/dashboard/new"
-          className="relative group rounded-2xl p-6 flex flex-col gap-4 overflow-hidden transition-all"
+          className="relative group rounded-2xl p-6 flex flex-col gap-4 overflow-hidden transition-all hover:shadow-[0_0_0_2px_rgba(124,58,237,0.4),0_8px_32px_rgba(124,58,237,0.15)]"
           style={{
             background: '#0f0f1e',
             border: '1px solid #1e1e2e',
-          }}
-          onMouseEnter={e => {
-            const el = e.currentTarget as HTMLElement
-            el.style.boxShadow = '0 0 0 2px rgba(124,58,237,0.4), 0 8px 32px rgba(124,58,237,0.15)'
-          }}
-          onMouseLeave={e => {
-            const el = e.currentTarget as HTMLElement
-            el.style.boxShadow = 'none'
           }}
         >
           {/* Flèche haut droite */}
@@ -281,20 +273,10 @@ export default async function DashboardPage() {
         {/* Action 2 — Connecter un store (blanc) */}
         <Link
           href="/dashboard/stores"
-          className="relative group rounded-2xl p-6 flex flex-col gap-4 overflow-hidden transition-all"
+          className="relative group rounded-2xl p-6 flex flex-col gap-4 overflow-hidden transition-all hover:border-purple-400 hover:shadow-[0_0_0_1px_rgba(124,58,237,0.2)]"
           style={{
             background: '#FFFFFF',
             border: '1px solid #E4E2EE',
-          }}
-          onMouseEnter={e => {
-            const el = e.currentTarget as HTMLElement
-            el.style.borderColor = '#7c3aed'
-            el.style.boxShadow = '0 0 0 1px rgba(124,58,237,0.2)'
-          }}
-          onMouseLeave={e => {
-            const el = e.currentTarget as HTMLElement
-            el.style.borderColor = '#E4E2EE'
-            el.style.boxShadow = 'none'
           }}
         >
           <div

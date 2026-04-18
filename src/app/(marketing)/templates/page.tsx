@@ -16,26 +16,32 @@ import type { LandingPageData } from '@/types'
 // ---------------------------------------------------------------------------
 
 const SAMPLE: LandingPageData = {
-  product_name: 'ProRunner X5',
+  product_name: 'ProRunner X5 Carbon',
   headline: 'Les chaussures qui transforment ta course',
-  subtitle: 'Technologie carbone légère. 47% plus rapide. Approuvé par 12 000 athlètes.',
+  subtitle: 'Technologie carbone ultra-légère. Amorti réactif breveté. Approuvé par 12 000 athlètes dans 47 pays.',
   cta: 'Commander maintenant — Livraison offerte',
-  urgency: '⚡ Stock limité — Il reste 23 paires',
+  urgency: '⚡ Stock limité — Il reste 23 paires en taille 42',
   benefits: [
-    'Semelle carbone ultra-légère (-40% vs standard)',
-    'Amorti réactif pour chaque foulée',
-    'Respirant mesh technique 360°',
-    'Semelle antidérapante tout terrain',
-    'Compatible avec toutes les morphologies',
+    'Semelle carbone ultra-légère (-40% vs chaussure standard)',
+    'Amorti réactif breveté — énergie restituée à chaque foulée',
+    'Mesh respirant technique 360° — pieds au frais même à effort max',
+    'Semelle antidérapante tout terrain — grip parfait sur toutes surfaces',
+    'Conçu avec des podologues — adapté à toutes les morphologies de pied',
   ],
   faq: [
-    { question: 'Quelle taille choisir ?', answer: 'Prenez votre taille habituelle. En cas de doute entre deux tailles, choisissez la plus grande pour plus de confort.' },
-    { question: 'Délai de livraison ?', answer: 'Livraison en 2–4 jours ouvrés. Expédition le jour même si commande avant 14h. Suivi inclus.' },
-    { question: 'Politique de retour ?', answer: 'Retours acceptés sous 30 jours. Produit intact, emballage d\'origine requis. Remboursement sous 5 jours ouvrés.' },
+    { question: 'Quelle taille choisir ?', answer: 'Prenez votre taille habituelle. En cas de doute entre deux tailles, prenez la plus grande. Notre guide des tailles est disponible sur la page produit.' },
+    { question: 'Quel est le délai de livraison ?', answer: 'Livraison express en 2–4 jours ouvrés. Expédition le jour même si commande avant 14h. Numéro de suivi envoyé par email dès l\'expédition.' },
+    { question: 'Puis-je retourner le produit ?', answer: 'Retours acceptés sous 30 jours. Produit intact dans son emballage d\'origine. Remboursement complet sous 5 jours ouvrés après réception.' },
+    { question: 'Sont-elles adaptées à la compétition ?', answer: 'Absolument. Les ProRunner X5 Carbon sont utilisées par des athlètes professionnels en compétition. Conformes aux règles World Athletics.' },
   ],
   price: '79',
   original_price: '129',
-  images: [],
+  images: [
+    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80',
+    'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800&q=80',
+    'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80',
+    'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&q=80',
+  ],
 }
 
 // ---------------------------------------------------------------------------

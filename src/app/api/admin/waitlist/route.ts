@@ -41,7 +41,10 @@ export async function POST(req: NextRequest) {
     .select()
     .single()
 
-  if (error) throw error
+  if (error) {
+    console.error('[/api/admin/waitlist] invitation error:', error.message)
+    return NextResponse.json({ error: 'Erreur lors de la création de l\'invitation' }, { status: 500 })
+  }
 
   // Met à jour le statut dans la waitlist
   if (waitlist_id) {

@@ -46,15 +46,35 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   })
 }
 
+/** Échappe les caractères HTML spéciaux pour prévenir les injections XSS */
+function esc(str: unknown): string {
+  if (str == null) return ''
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+}
+
+/** Valide qu'une valeur est une couleur CSS sûre (hex ou rgb) */
+function safeCssColor(value: unknown, fallback: string): string {
+  if (typeof value !== 'string') return fallback
+  // Accepter uniquement hex (#xxx ou #xxxxxx) ou rgb()/rgba()
+  if (/^#[0-9a-fA-F]{3,6}$/.test(value)) return value
+  if (/^rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+(\s*,\s*[\d.]+)?\s*\)$/.test(value)) return value
+  return fallback
+}
+
 function buildReportHtml({ workspace, pages, stats, generatedAt }: any): string {
-  const brandColor = workspace.brand_color || '#7c3aed'
-  const brandName  = workspace.brand_name || 'KONVERT'
+  const brandColor = safeCssColor(workspace.brand_color, '#7c3aed')
+  const brandName  = esc(workspace.brand_name) || 'KONVERT'
 
   const pagesRows = pages.map((p: any) => `
     <tr>
       <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;color:#111;max-width:250px">
-        <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title || 'Sans titre'}</div>
-        ${p.published_url ? `<div style="font-size:11px;color:#888;margin-top:2px">${p.published_url}</div>` : ''}
+        <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.title) || 'Sans titre'}</div>
+        ${p.published_url ? `<div style="font-size:11px;color:#888;margin-top:2px">${esc(p.published_url)}</div>` : ''}
       </td>
       <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;text-align:center">
         <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:${p.status === 'published' ? '#dcfce7' : '#f3f4f6'};color:${p.status === 'published' ? '#16a34a' : '#6b7280'}">
@@ -63,7 +83,7 @@ function buildReportHtml({ workspace, pages, stats, generatedAt }: any): string 
       </td>
       <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:700;font-size:13px">${(p.views || 0).toLocaleString('fr-FR')}</td>
       <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:700;font-size:13px;color:${brandColor}">${(p.cta_clicks || 0).toLocaleString('fr-FR')}</td>
-      <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px;color:#888">${new Date(p.created_at).toLocaleDateString('fr-FR')}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:12px;color:#888">${esc(new Date(p.created_at).toLocaleDateString('fr-FR'))}</td>
     </tr>
   `).join('')
 
@@ -72,7 +92,7 @@ function buildReportHtml({ workspace, pages, stats, generatedAt }: any): string 
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Rapport — ${workspace.client_name || workspace.name}</title>
+<title>Rapport — ${esc(workspace.client_name || workspace.name)}</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f8f8; color: #333; }
@@ -92,7 +112,7 @@ function buildReportHtml({ workspace, pages, stats, generatedAt }: any): string 
     <div style="font-size:24px;font-weight:900;letter-spacing:-0.5px">${brandName}</div>
     <div style="font-size:32px;font-weight:900;margin-top:16px">Rapport de performance</div>
     <div style="font-size:16px;opacity:0.8;margin-top:6px">
-      ${workspace.client_name ? `Client : ${workspace.client_name}` : workspace.name}
+      ${workspace.client_name ? `Client : ${esc(workspace.client_name)}` : esc(workspace.name)}
     </div>
     <div style="font-size:13px;opacity:0.6;margin-top:4px">Généré le ${generatedAt}</div>
   </div>
@@ -133,7 +153,7 @@ function buildReportHtml({ workspace, pages, stats, generatedAt }: any): string 
 
   <!-- Footer -->
   <div style="padding:24px 48px;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:center">
-    <span style="font-size:12px;color:#aaa">Rapport généré par ${brandName}</span>
+    <span style="font-size:12px;color:#aaa">Rapport généré par ${brandName} via KONVERT</span>
     <button class="no-print" onclick="window.print()"
       style="background:${brandColor};color:white;border:none;padding:8px 20px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer">
       Imprimer / Exporter PDF

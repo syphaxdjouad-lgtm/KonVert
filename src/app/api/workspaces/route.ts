@@ -18,7 +18,10 @@ export async function GET() {
     .eq('owner_id', user.id)
     .order('created_at', { ascending: false })
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('[/api/workspaces GET]', error.message)
+    return NextResponse.json({ error: 'Erreur lors de la récupération des workspaces.' }, { status: 500 })
+  }
   return NextResponse.json({ data })
 }
 
@@ -45,7 +48,24 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const { name, client_name, client_email, brand_name, brand_color } = body
 
-  if (!name) return NextResponse.json({ error: 'Nom du workspace requis' }, { status: 400 })
+  if (!name || typeof name !== 'string' || name.trim().length === 0) {
+    return NextResponse.json({ error: 'Nom du workspace requis' }, { status: 400 })
+  }
+
+  // Longueur max sur les champs texte pour éviter la pollution DB
+  if (name.length > 100 || (client_name && client_name.length > 100) || (brand_name && brand_name.length > 100)) {
+    return NextResponse.json({ error: 'Champs trop longs (max 100 caractères)' }, { status: 400 })
+  }
+
+  // Validation email basique
+  if (client_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(client_email)) {
+    return NextResponse.json({ error: 'Email client invalide' }, { status: 400 })
+  }
+
+  // Validation brand_color — uniquement hex ou rgb() pour éviter l'injection CSS/XSS
+  if (brand_color && !/^#[0-9a-fA-F]{3,6}$/.test(brand_color) && !/^rgba?\(\s*\d+\s*,\s*\d+\s*,\s*\d+(\s*,\s*[\d.]+)?\s*\)$/.test(brand_color)) {
+    return NextResponse.json({ error: 'Couleur invalide — utilise un format hex (#ffffff) ou rgb()' }, { status: 400 })
+  }
 
   const { data, error } = await supabase
     .from('workspaces')
@@ -53,6 +73,9 @@ export async function POST(req: NextRequest) {
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('[/api/workspaces POST]', error.message)
+    return NextResponse.json({ error: 'Erreur lors de la création du workspace.' }, { status: 500 })
+  }
   return NextResponse.json({ data }, { status: 201 })
 }

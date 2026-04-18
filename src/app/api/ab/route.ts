@@ -196,6 +196,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'test_id et winner (A|B) requis' }, { status: 400 })
     }
 
+    // Vérifier que ce test appartient bien à l'utilisateur courant
+    const { data: ownedTest } = await supabase
+      .from('ab_tests')
+      .select('id, pages!inner(user_id)')
+      .eq('id', test_id)
+      .eq('pages.user_id', user.id)
+      .maybeSingle()
+
+    if (!ownedTest) {
+      return NextResponse.json({ error: 'Test introuvable' }, { status: 404 })
+    }
+
     await supabaseAdmin
       .from('ab_tests')
       .update({ status: 'completed', winner })
@@ -211,6 +223,18 @@ export async function POST(req: NextRequest) {
 
     if (!test_id || !allowed.includes(status)) {
       return NextResponse.json({ error: 'test_id et status valide requis' }, { status: 400 })
+    }
+
+    // Vérifier que ce test appartient bien à l'utilisateur courant
+    const { data: ownedTest } = await supabase
+      .from('ab_tests')
+      .select('id, pages!inner(user_id)')
+      .eq('id', test_id)
+      .eq('pages.user_id', user.id)
+      .maybeSingle()
+
+    if (!ownedTest) {
+      return NextResponse.json({ error: 'Test introuvable' }, { status: 404 })
     }
 
     await supabaseAdmin

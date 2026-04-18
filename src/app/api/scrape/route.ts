@@ -1,11 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { scrapeProduct, cleanProduct } from '@/lib/scraper'
+import { createClient } from '@/lib/supabase/server'
 
 // Vercel Pro permet jusqu'à 60s — on garde 55s pour les scrapes lourds
 export const maxDuration = 55
 
+// Domaines e-commerce supportés
+const ALLOWED_DOMAINS = [
+  'aliexpress.com', 'amazon.', 'alibaba.com', 'amazon.fr', 'amazon.co.uk',
+  'amazon.de', 'amazon.es', 'amazon.it', 'amazon.ca', 'amazon.com',
+]
+
+// Patterns bloqués pour prévenir le SSRF (accès aux IPs internes/métadonnées)
+const BLOCKED_PATTERNS = [
+  /^127\./, /^10\./, /^172\.(1[6-9]|2[0-9]|3[01])\./, /^192\.168\./,
+  /^169\.254\./, /^::1$/, /^fc00:/, /^fe80:/,
+  /localhost/i, /metadata/i, /169\.254\.169\.254/,
+]
+
 export async function POST(req: NextRequest) {
   try {
+    // Auth obligatoire — pas de scraping sans compte
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Authentification requise' }, { status: 401 })
+    }
+
     const body = await req.json()
     const { url } = body
 
@@ -23,6 +44,18 @@ export async function POST(req: NextRequest) {
 
     if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
       return NextResponse.json({ error: 'Protocol non autorisé' }, { status: 400 })
+    }
+
+    // Protection SSRF — bloquer les IPs internes et métadonnées cloud
+    const hostname = parsedUrl.hostname
+    if (BLOCKED_PATTERNS.some(p => p.test(hostname))) {
+      return NextResponse.json({ error: 'URL non autorisée' }, { status: 403 })
+    }
+
+    // Whitelist domaines e-commerce supportés
+    const isAllowed = ALLOWED_DOMAINS.some(d => hostname.includes(d))
+    if (!isAllowed) {
+      return NextResponse.json({ error: 'Domaine non supporté. Utilisez AliExpress, Amazon ou Alibaba.' }, { status: 403 })
     }
 
     const start = Date.now()
@@ -48,7 +81,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error('[/api/scrape]', err)
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Erreur de scraping' },
+      { error: 'Erreur lors du scraping. Vérifie l\'URL et réessaie.' },
       { status: 500 }
     )
   }

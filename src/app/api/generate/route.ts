@@ -3,42 +3,35 @@ import { generateLandingPage } from '@/lib/anthropic/generate'
 import { scrapeProduct, cleanProduct } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import { createClient } from '@/lib/supabase/server'
-import { PLAN_LIMITS } from '@/types'
-import type { ScrapedProduct, PlanType } from '@/types'
+import type { ScrapedProduct } from '@/types'
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}))
 
-    // Vérification quota si user authentifié (skip pour les routes de test sans auth)
-    const supabase    = await createClient()
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
-    if (user) {
-      const { data: profile } = await supabase
-        .from('users')
-        .select('plan, pages_used_this_month')
-        .eq('id', user.id)
-        .single()
+    // Auth obligatoire — pas de génération sans compte
+    if (!user) {
+      return NextResponse.json({ error: 'Authentification requise' }, { status: 401 })
+    }
 
-      if (profile) {
-        const plan   = (profile.plan || 'starter') as PlanType
-        const limit  = PLAN_LIMITS[plan].pages
-        const used   = profile.pages_used_this_month || 0
+    // Vérification et incrément atomique du quota via fonction SQL (FOR UPDATE)
+    // Évite la race condition : deux requêtes simultanées ne peuvent pas dépasser le quota
+    const { data: quotaOk, error: quotaError } = await supabase
+      .rpc('check_and_increment_quota', { p_user_id: user.id })
 
-        if (used >= limit) {
-          return NextResponse.json(
-            { error: `Quota mensuel atteint (${used}/${limit} pages). Upgrade ton plan pour continuer.` },
-            { status: 429 }
-          )
-        }
+    if (quotaError) {
+      console.error('[/api/generate] quota RPC error:', quotaError.message)
+      return NextResponse.json({ error: 'Erreur lors de la vérification du quota.' }, { status: 500 })
+    }
 
-        // Incrémenter le compteur
-        await supabase
-          .from('users')
-          .update({ pages_used_this_month: used + 1 })
-          .eq('id', user.id)
-      }
+    if (!quotaOk) {
+      return NextResponse.json(
+        { error: 'Quota mensuel atteint. Upgrade ton plan pour continuer.' },
+        { status: 429 }
+      )
     }
 
     let product: ScrapedProduct
@@ -74,6 +67,7 @@ export async function POST(req: NextRequest) {
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Erreur inconnue'
+    console.error('[/api/generate]', message)
 
     // JSON parse error = Claude a retourné du texte invalide
     if (message.includes('JSON') || message.includes('parse')) {
@@ -83,8 +77,9 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Ne jamais exposer les détails internes en prod
     return NextResponse.json(
-      { error: message },
+      { error: 'Une erreur est survenue lors de la génération. Réessaie.' },
       { status: 500 }
     )
   }

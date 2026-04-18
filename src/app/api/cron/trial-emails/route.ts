@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail } from '@/lib/email'
-import { emailDay3, emailDay7, emailDay10, emailDay13, emailDay14 } from '@/lib/email/templates'
+import { emailDay1, emailDay3, emailDay7, emailDay10, emailDay12, emailDay13, emailDay14 } from '@/lib/email/templates'
 
 // Jours où on envoie un email de trial
-const TRIAL_DAYS = [3, 7, 10, 13, 14] as const
+const TRIAL_DAYS = [1, 3, 7, 10, 12, 13, 14] as const
 type TrialDay = typeof TRIAL_DAYS[number]
 
 const supabaseAdmin = createClient(
@@ -14,18 +14,22 @@ const supabaseAdmin = createClient(
 
 function getEmailForDay(day: TrialDay, name: string) {
   switch (day) {
+    case 1:  return emailDay1(name)
     case 3:  return emailDay3(name)
     case 7:  return emailDay7(name)
     case 10: return emailDay10(name)
+    case 12: return emailDay12(name)
     case 13: return emailDay13(name)
     case 14: return emailDay14(name)
   }
 }
 
 // Protection cron : vérifie le header Vercel
-function isAuthorized(req: NextRequest) {
+function isAuthorized(req: NextRequest): boolean {
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret) return false  // variable non configurée → bloquer systématiquement
   const secret = req.headers.get('authorization')
-  return secret === `Bearer ${process.env.CRON_SECRET}`
+  return secret === `Bearer ${cronSecret}`
 }
 
 export async function GET(req: NextRequest) {
@@ -50,8 +54,8 @@ export async function GET(req: NextRequest) {
     .limit(500)
 
   if (error) {
-    console.error('[cron/trial-emails] Supabase error:', error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error('[cron/trial-emails] Supabase error:', error.message)
+    return NextResponse.json({ error: 'Erreur lors de la récupération des utilisateurs en trial.' }, { status: 500 })
   }
 
   for (const user of users ?? []) {

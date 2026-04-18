@@ -36,7 +36,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('[invite POST]', error.message)
+    return NextResponse.json({ error: 'Erreur lors de l\'invitation' }, { status: 500 })
+  }
 
   // Envoyer l'email d'invitation via Supabase Auth
   try {
@@ -59,6 +62,16 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
+
+  // Vérifier que l'utilisateur est le owner du workspace avant de lister les membres
+  const { data: workspace } = await supabase
+    .from('workspaces')
+    .select('id')
+    .eq('id', workspaceId)
+    .eq('owner_id', user.id)
+    .maybeSingle()
+
+  if (!workspace) return NextResponse.json({ error: 'Workspace introuvable' }, { status: 404 })
 
   const { data } = await supabase
     .from('workspace_members')

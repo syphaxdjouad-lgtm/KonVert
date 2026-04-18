@@ -74,14 +74,16 @@ export async function GET(req: NextRequest) {
     try {
       const name = user.name ?? user.email.split('@')[0]
       const { subject, html } = getEmailForDay(dayToSend as TrialDay, name)
-      await sendEmail({ to: user.email, subject, html })
 
-      // Marquer l'email comme envoyé
-      await supabaseAdmin
+      // Marquer AVANT d'envoyer — évite les doublons si l'update échoue après envoi
+      const { error: updateErr } = await supabaseAdmin
         .from('users')
         .update({ trial_emails_sent: [...emailsSent, dayToSend] })
         .eq('id', user.id)
 
+      if (updateErr) throw updateErr
+
+      await sendEmail({ to: user.email, subject, html })
       sent++
     } catch (err) {
       console.error(`[cron/trial-emails] Erreur user ${user.id}:`, err)

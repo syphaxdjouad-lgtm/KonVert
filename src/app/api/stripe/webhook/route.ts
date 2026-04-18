@@ -46,7 +46,11 @@ export async function POST(req: NextRequest) {
         const userId = sub.metadata?.supabase_user_id
         if (!userId) break
 
-        const plan = getPlanFromPrice(sub.items.data[0]?.price.id)
+        const plan = getPlanFromPrice(sub.items.data?.[0]?.price?.id)
+        if (!plan) {
+          console.warn('[webhook] Plan introuvable pour subscription:', sub.id)
+          break
+        }
         if (plan) {
           const periodEnd = (sub as any).current_period_end ?? 0
           await updateSubscription(userId, plan, sub.status, periodEnd)

@@ -135,6 +135,9 @@ export function encryptCredentials(consumerKey: string, consumerSecret: string):
 
 export function decryptCredentials(encrypted: string): { consumerKey: string; consumerSecret: string } {
   const decrypted = decryptToken(encrypted)
-  const [consumerKey, consumerSecret] = decrypted.split('::')
-  return { consumerKey, consumerSecret }
+  const parts = decrypted.split('::')
+  if (parts.length !== 2 || !parts[0] || !parts[1]) {
+    throw new Error('Format de credentials WooCommerce invalide — reconnecte le store')
+  }
+  return { consumerKey: parts[0], consumerSecret: parts[1] }
 }

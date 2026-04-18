@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       // Page déjà publiée → on extrait l'ID et on met à jour
       const existingId = parseInt(page.published_url.split('/').pop() || '0', 10)
       if (existingId) {
-        await client.updatePage(existingId, page.title, page.html_content)
+        await client.updatePage(existingId, page.title, trackedHtml)
         result = { id: existingId, url: page.published_url }
       } else {
         result = await client.createPage(page.title, trackedHtml)

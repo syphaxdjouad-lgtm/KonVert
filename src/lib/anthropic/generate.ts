@@ -111,7 +111,12 @@ export async function generateLandingPage(
     .replace(/```\s*$/i, '')
     .trim()
 
-  const data = JSON.parse(cleaned) as LandingPageData
+  let data: LandingPageData
+  try {
+    data = JSON.parse(cleaned) as LandingPageData
+  } catch {
+    throw new Error(`JSON invalide reçu de Claude — réessaie`)
+  }
 
   // Ajouter les images du produit si disponibles
   if (product.images?.length > 0) {

@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
       const existingId = match ? parseInt(match[1] || match[2], 10) : 0
 
       if (existingId) {
-        await client.updatePage(existingId, page.title, page.html_content)
+        await client.updatePage(existingId, page.title, trackedHtml)
         result = { id: existingId, url: page.published_url }
       } else {
         result = await client.createPage(page.title, trackedHtml)

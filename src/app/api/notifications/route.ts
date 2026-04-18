@@ -165,7 +165,7 @@ export async function GET() {
   // ── 9. High CTR (CTR > 5% ET views > 20) ────────────────────────────────────
   if (pages) {
     const highCtrPages = pages.filter(
-      p => p.views > 20 && (p.cta_clicks / p.views) * 100 > 5
+      p => p.views > 20 && p.cta_clicks > 0 && (p.cta_clicks / p.views) * 100 > 5
     )
     for (const page of highCtrPages) {
       const ctrValue = ((page.cta_clicks / page.views) * 100).toFixed(1)

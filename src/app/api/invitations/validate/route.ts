@@ -10,13 +10,13 @@ export async function GET(req: NextRequest) {
   const token = req.nextUrl.searchParams.get('token')
   if (!token) return NextResponse.json({ valid: false })
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('invitations')
     .select('id, email, used, expires_at')
     .eq('token', token)
-    .single()
+    .maybeSingle()
 
-  if (!data) return NextResponse.json({ valid: false })
+  if (error || !data) return NextResponse.json({ valid: false })
   if (data.used) return NextResponse.json({ valid: false, reason: 'used' })
   if (new Date(data.expires_at) < new Date()) return NextResponse.json({ valid: false, reason: 'expired' })
 

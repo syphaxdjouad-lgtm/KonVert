@@ -22,11 +22,12 @@ type Mode = 'wizard' | 'generating' | 'editor'
 type InputMode = 'url' | 'manual'
 
 const STYLES = [
-  { id: 'shein-pro',     name: 'Shein Pro',      desc: 'Mode e-commerce premium, grande image hero, look fashion', emoji: '✨' },
-  { id: 'minimal-dark',  name: 'Minimal Dark',   desc: 'Fond sombre, typographie bold, accents rouges',           emoji: '🖤' },
-  { id: 'clean-white',   name: 'Clean White',    desc: 'Fond blanc, épuré, conversion optimisée',                  emoji: '🤍' },
-  { id: 'bold-sales',    name: 'Bold Orange',    desc: 'Fort contraste, urgence, dropshipping style',              emoji: '🔥' },
-  { id: 'premium-glass', name: 'Premium Glass',  desc: 'Glassmorphism violet, effet luxe tech',                    emoji: '💎' },
+  { id: 'etec-blue',   name: 'ETEC Blue',   desc: 'Moderne et universel — bleu électrique, fond blanc, boutons ronds', emoji: '🔵' },
+  { id: 'etec-noir',   name: 'ETEC Noir',   desc: 'Dark premium élégant — fond noir, accents blancs',                  emoji: '🖤' },
+  { id: 'etec-rose',   name: 'ETEC Rose',   desc: 'Beauté & lifestyle — rose chaud, UGC, conversion beauté',           emoji: '🌸' },
+  { id: 'etec-sage',   name: 'ETEC Sage',   desc: 'Organic & bien-être — vert forêt, tons naturels, certifications',   emoji: '🌿' },
+  { id: 'etec-gold',   name: 'ETEC Gold',   desc: 'Luxe & exclusivité — fond noir, accents dorés, haute gamme',        emoji: '✨' },
+  { id: 'etec-energy', name: 'ETEC Energy', desc: 'Sport & fitness — orange vif, urgence, dynamisme total',             emoji: '⚡' },
 ]
 
 const TONES = [

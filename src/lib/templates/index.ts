@@ -7,6 +7,7 @@ export { templateEtecSage }   from './etec-sage'
 export { templateEtecGold }   from './etec-gold'
 export { templateEtecEnergy } from './etec-energy'
 export { templateEtecBeauty } from './etec-beauty'
+export { templateEtecStyle }  from './etec-style'
 
 import { templateEtecBlue }   from './etec-blue'
 import { templateEtecNoir }   from './etec-noir'
@@ -15,6 +16,7 @@ import { templateEtecSage }   from './etec-sage'
 import { templateEtecGold }   from './etec-gold'
 import { templateEtecEnergy } from './etec-energy'
 import { templateEtecBeauty } from './etec-beauty'
+import { templateEtecStyle }  from './etec-style'
 
 // ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
 
@@ -48,6 +50,7 @@ export const TEMPLATES = [
   { id: 'etec-gold',   name: 'ETEC Gold',   category: 'luxury'  as const, fn: templateEtecGold,   label: 'Luxe · Haute Gamme · Or',     accent: '#D4A853', badge: 'Exclusif'      },
   { id: 'etec-energy', name: 'ETEC Energy', category: 'sport'   as const, fn: templateEtecEnergy, label: 'Sport · Fitness · DTC',       accent: '#E63000', badge: 'Nouveau'       },
   { id: 'etec-beauty', name: 'ETEC Beauty', category: 'beauty' as const, fn: templateEtecBeauty, label: 'Hair Care · Premium · Organic', accent: '#E8622A', badge: 'Nouveau'       },
+  { id: 'etec-style', name: 'ETEC Style',  category: 'luxury' as const, fn: templateEtecStyle,  label: 'Fashion · Styling · Luxe accessible', accent: '#C9B49A', badge: 'Nouveau' },
 ]
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
@@ -61,6 +64,7 @@ export function renderTemplate(templateId: string, data: LandingPageData): strin
     case 'etec-gold':       return templateEtecGold(data)
     case 'etec-energy':     return templateEtecEnergy(data)
     case 'etec-beauty':     return templateEtecBeauty(data)
+    case 'etec-style':      return templateEtecStyle(data)
     case 'minimal-dark':
     case 'gaming-zone':
     case 'automotive-pro':  return templateEtecNoir(data)

@@ -8,6 +8,8 @@ import {
   templateEtecSage,
   templateEtecGold,
   templateEtecEnergy,
+  templateEtecBeauty,
+  templateEtecStyle,
 } from '@/lib/templates'
 import type { LandingPageData } from '@/types'
 
@@ -144,6 +146,38 @@ const TEMPLATES = [
     niches: ['Sport', 'Fitness', 'Nutrition', 'Outdoor'],
     fn: templateEtecEnergy,
     preview: '/images/etec-energy.jpg',
+  },
+  {
+    id: 'etec-beauty',
+    name: 'ETEC Beauty',
+    tagline: 'Hair Care · Premium · Organic',
+    desc: 'Design élégant tons crème et orange brûlé. Inspiré des meilleures pages hair care premium. Idéal pour soins capillaires, beauté naturelle et cosmétiques bio.',
+    accent: '#E8622A',
+    accentLight: '#FFF3D0',
+    bg: '#FBF8F3',
+    textColor: '#2C2C2C',
+    badge: 'Nouveau',
+    badgeBg: '#E8622A',
+    cvr: '5.2%',
+    niches: ['Beauté', 'Hair Care', 'Organic', 'Skincare'],
+    fn: templateEtecBeauty,
+    preview: '/images/etec-beauty.jpg',
+  },
+  {
+    id: 'etec-style',
+    name: 'ETEC Style',
+    tagline: 'Fashion · Styling · Luxe accessible',
+    desc: 'Minimaliste et élégant, fond beige caramel et blanc. Inspiré des meilleurs sites de personal styling. Parfait pour mode, conseil en image et lifestyle premium.',
+    accent: '#1A1A1A',
+    accentLight: '#F8F7F3',
+    bg: '#F8F7F3',
+    textColor: '#1A1A1A',
+    badge: 'Nouveau',
+    badgeBg: '#C9B49A',
+    cvr: '4.8%',
+    niches: ['Mode', 'Lifestyle', 'Luxe', 'Accessoires'],
+    fn: templateEtecStyle,
+    preview: '/images/etec-style.jpg',
   },
 ]
 
@@ -350,7 +384,7 @@ export default function TemplatesPage() {
         <div className="max-w-4xl mx-auto text-center">
 
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm mb-6" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)' }}>
-            6 templates — design ETEC · mis à jour régulièrement
+            8 templates — design ETEC · mis à jour régulièrement
           </div>
 
           <h1 className="text-5xl sm:text-6xl font-black text-white leading-tight tracking-tight mb-5">
@@ -365,9 +399,9 @@ export default function TemplatesPage() {
 
           {/* Stats */}
           <div className="flex items-center justify-center gap-4 text-sm mb-12" style={{ color: 'rgba(255,255,255,0.35)' }}>
-            <span className="font-semibold" style={{ color: 'rgba(255,255,255,0.7)' }}>6 templates</span>
+            <span className="font-semibold" style={{ color: 'rgba(255,255,255,0.7)' }}>8 templates</span>
             <span>·</span>
-            <span className="font-semibold" style={{ color: 'rgba(255,255,255,0.7)' }}>6 niches</span>
+            <span className="font-semibold" style={{ color: 'rgba(255,255,255,0.7)' }}>8 niches</span>
             <span>·</span>
             <span className="font-semibold" style={{ color: 'rgba(255,255,255,0.7)' }}>CVR moyen +4.9%</span>
           </div>
@@ -421,7 +455,7 @@ export default function TemplatesPage() {
             <span style={{ color: '#5B47F5' }}>Pro.</span>
           </h2>
           <p className="text-base mb-8" style={{ color: 'rgba(255,255,255,0.45)' }}>
-            Accédez aux 6 templates ETEC, aux mises à jour futures et aux nouvelles niches dès la sortie.
+            Accédez aux 8 templates ETEC, aux mises à jour futures et aux nouvelles niches dès la sortie.
           </p>
           <a
             href="/signup"

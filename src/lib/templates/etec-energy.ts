@@ -159,9 +159,9 @@ export function templateEtecEnergy(data: LandingPageData): string {
 <!-- ═══ BREADCRUMB ═══════════════════════════════════════════════════════════ -->
 <div style="background:${C.card};border-bottom:2px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:13px 24px;font-size:12px;color:${C.muted};font-family:'Barlow',sans-serif;letter-spacing:.03em;text-transform:uppercase;">
-    <a href="#" style="color:${C.accent};text-decoration:none;font-weight:600;">Accueil</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;font-weight:600;">Accueil</a>
     <span style="margin:0 8px;opacity:.4;">›</span>
-    <a href="#" style="color:${C.accent};text-decoration:none;font-weight:600;">Boutique</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;font-weight:600;">Boutique</a>
     <span style="margin:0 8px;opacity:.4;">›</span>
     <span style="color:${C.muted};">${data.product_name}</span>
   </div>
@@ -216,12 +216,12 @@ export function templateEtecEnergy(data: LandingPageData): string {
       </ul>
 
       <!-- CTA principal — Barlow Condensed UPPERCASE bold -->
-      <a href="#" style="display:block;text-align:center;background:${C.accent};color:#fff;padding:18px 32px;border-radius:100px;font-size:16px;font-weight:900;text-decoration:none;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;box-shadow:0 4px 20px rgba(230,48,0,0.40);transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+      <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:${C.accent};color:#fff;padding:18px 32px;border-radius:100px;font-size:16px;font-weight:900;text-decoration:none;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;box-shadow:0 4px 20px rgba(230,48,0,0.40);transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
         ${data.cta || 'COMMANDER MAINTENANT'} →
       </a>
 
       <!-- CTA secondaire -->
-      <a href="#" style="display:block;text-align:center;background:transparent;color:${C.text};padding:14px 32px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;border:2px solid ${C.border};margin-bottom:20px;font-family:'Barlow',sans-serif;transition:border-color .15s;" onmouseover="this.style.borderColor='${C.accent}';this.style.color='${C.accent}';" onmouseout="this.style.borderColor='${C.border}';this.style.color='${C.text}';">
+      <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:transparent;color:${C.text};padding:14px 32px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;border:2px solid ${C.border};margin-bottom:20px;font-family:'Barlow',sans-serif;transition:border-color .15s;" onmouseover="this.style.borderColor='${C.accent}';this.style.color='${C.accent}';" onmouseout="this.style.borderColor='${C.border}';this.style.color='${C.text}';">
         Ajouter au panier
       </a>
 
@@ -369,7 +369,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
   <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:52px;font-weight:900;color:#fff;letter-spacing:-.01em;text-transform:uppercase;margin-bottom:16px;line-height:1.05;">${data.headline || 'PRÊT À PASSER AU NIVEAU SUPÉRIEUR ?'}</h2>
   <p style="color:rgba(255,255,255,.85);font-size:16px;margin-bottom:14px;max-width:480px;margin-left:auto;margin-right:auto;font-family:'Barlow',sans-serif;line-height:1.75;">${data.subtitle || ''}</p>
   ${data.urgency ? `<p style="color:rgba(255,255,255,.95);font-size:14px;font-weight:700;margin-bottom:36px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.06em;">${data.urgency}</p>` : '<div style="margin-bottom:36px;"></div>'}
-  <a href="#" style="display:inline-block;background:#fff;color:${C.accent};padding:20px 56px;border-radius:100px;font-size:18px;font-weight:900;text-decoration:none;font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 8px 32px rgba(0,0,0,0.25);transition:transform .15s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+  <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-block;background:#fff;color:${C.accent};padding:20px 56px;border-radius:100px;font-size:18px;font-weight:900;text-decoration:none;font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 8px 32px rgba(0,0,0,0.25);transition:transform .15s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
     ${data.cta || 'COMMANDER MAINTENANT'} →
   </a>
   <p style="margin-top:24px;font-size:13px;color:rgba(255,255,255,.5);font-family:'Barlow',sans-serif;">Paiement sécurisé · Livraison express · Retour 30 jours · Certifié anti-dopage</p>

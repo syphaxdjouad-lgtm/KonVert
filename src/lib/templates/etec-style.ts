@@ -836,7 +836,7 @@ export function templateEtecStyle(data: LandingPageData): string {
       <span>Menu</span>
     </div>
     <ul class="nav-links" role="list">
-      <li><a href="#" class="active">Home</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()" class="active">Home</a></li>
       <li><a href="#styles">Lookbook</a></li>
       <li><a href="#styles">Favorite</a></li>
       <li><a href="#quote">Blog</a></li>
@@ -998,37 +998,37 @@ export function templateEtecStyle(data: LandingPageData): string {
       <div>
         <p class="footer-col-title">Explore</p>
         <ul class="footer-links" role="list">
-          <li><a href="#">Lookbook</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Lookbook</a></li>
           <li><a href="#styles">Styles</a></li>
-          <li><a href="#">Favorites</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Favorites</a></li>
           <li><a href="#quote">Blog</a></li>
         </ul>
       </div>
       <div>
         <p class="footer-col-title">Services</p>
         <ul class="footer-links" role="list">
-          <li><a href="#">Personal Styling</a></li>
-          <li><a href="#">Wardrobe Edit</a></li>
-          <li><a href="#">Shopping Day</a></li>
-          <li><a href="#">Online Session</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Personal Styling</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Wardrobe Edit</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Shopping Day</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Online Session</a></li>
         </ul>
       </div>
       <div>
         <p class="footer-col-title">Contact</p>
         <ul class="footer-links" role="list">
-          <li><a href="#">Book a session</a></li>
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">LinkedIn</a></li>
-          <li><a href="#">hello@${brandName.toLowerCase().replace(/\s+/g, '')}.com</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Book a session</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Instagram</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">LinkedIn</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">hello@${brandName.toLowerCase().replace(/\s+/g, '')}.com</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <p class="footer-copy">&copy; ${new Date().getFullYear()} ${brandName}. All rights reserved.</p>
       <ul class="footer-bottom-links" role="list">
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Use</a></li>
-        <li><a href="#">Cookie Settings</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Privacy Policy</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Terms of Use</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Cookie Settings</a></li>
       </ul>
     </div>
   </footer>

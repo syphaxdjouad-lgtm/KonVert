@@ -162,9 +162,9 @@ export function templateEtecGold(data: LandingPageData): string {
 <!-- ═══ BREADCRUMB ═══════════════════════════════════════════════════════════ -->
 <div style="background:${C.card};border-bottom:1px solid ${C.divider};">
   <div style="max-width:1100px;margin:0 auto;padding:14px 24px;font-size:12px;color:${C.muted};font-family:'Montserrat',sans-serif;letter-spacing:.04em;">
-    <a href="#" style="color:${C.accent};text-decoration:none;">Accueil</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">Accueil</a>
     <span style="margin:0 10px;opacity:.35;">›</span>
-    <a href="#" style="color:${C.accent};text-decoration:none;">Collection</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">Collection</a>
     <span style="margin:0 10px;opacity:.35;">›</span>
     <span style="color:${C.muted};">${data.product_name}</span>
   </div>
@@ -214,7 +214,7 @@ export function templateEtecGold(data: LandingPageData): string {
 
       <!-- CTA principal — outline doré, background transparent avec hover ──
            Comportement hover simulé via onmouseover/onmouseout -->
-      <a href="#"
+      <a href="javascript:void(0)" onclick="event.preventDefault()"
         onmouseover="this.style.background='${C.accent}';this.style.color='${C.bg}';"
         onmouseout="this.style.background='transparent';this.style.color='${C.accent}';"
         style="display:block;text-align:center;background:transparent;color:${C.accent};padding:17px 32px;border-radius:100px;font-size:13px;font-weight:600;text-decoration:none;margin-bottom:12px;letter-spacing:.1em;text-transform:uppercase;font-family:'Montserrat',sans-serif;border:2px solid ${C.accent};transition:all .25s;"
@@ -223,7 +223,7 @@ export function templateEtecGold(data: LandingPageData): string {
       </a>
 
       <!-- CTA secondaire -->
-      <a href="#"
+      <a href="javascript:void(0)" onclick="event.preventDefault()"
         style="display:block;text-align:center;background:transparent;color:${C.muted};padding:15px 32px;border-radius:100px;font-size:13px;font-weight:500;text-decoration:none;border:1px solid ${C.border};margin-bottom:24px;letter-spacing:.06em;font-family:'Montserrat',sans-serif;transition:all .2s;"
         onmouseover="this.style.borderColor='${C.divider}';this.style.color='${C.text}';"
         onmouseout="this.style.borderColor='${C.border}';this.style.color='${C.muted}';"
@@ -375,7 +375,7 @@ export function templateEtecGold(data: LandingPageData): string {
   <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:40px;font-weight:600;color:${C.text};letter-spacing:-.01em;margin-bottom:18px;line-height:1.2;">${data.headline || 'L\'excellence mérite votre attention'}</h2>
   <p style="color:${C.muted};font-size:15px;margin-bottom:16px;max-width:480px;margin-left:auto;margin-right:auto;font-family:'Montserrat',sans-serif;line-height:1.85;">${data.subtitle || ''}</p>
   ${data.urgency ? `<p style="color:${C.accent};font-size:13px;font-weight:600;margin-bottom:40px;font-family:'Montserrat',sans-serif;letter-spacing:.04em;">${data.urgency}</p>` : '<div style="margin-bottom:40px;"></div>'}
-  <a href="#"
+  <a href="javascript:void(0)" onclick="event.preventDefault()"
     onmouseover="this.style.background='${C.accent}';this.style.color='${C.bg}';"
     onmouseout="this.style.background='transparent';this.style.color='${C.accent}';"
     style="display:inline-block;background:transparent;color:${C.accent};padding:18px 56px;border-radius:100px;font-size:13px;font-weight:600;text-decoration:none;font-family:'Montserrat',sans-serif;letter-spacing:.1em;text-transform:uppercase;border:2px solid ${C.accent};transition:all .25s;"

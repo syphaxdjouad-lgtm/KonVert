@@ -176,7 +176,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
 
     <!-- Logo -->
-    <a href="#" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;font-weight:600;color:${C.text};letter-spacing:-.01em;flex-shrink:0;">${data.product_name}</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;font-weight:600;color:${C.text};letter-spacing:-.01em;flex-shrink:0;">${data.product_name}</a>
 
     <!-- Liens centre -->
     <div class="nav-links" style="display:flex;align-items:center;gap:32px;">
@@ -212,15 +212,15 @@ export function templateEtecBeauty(data: LandingPageData): string {
     <div class="hero-socials" style="display:flex;flex-direction:column;align-items:center;gap:18px;position:absolute;left:0;top:50%;transform:translateY(-50%);">
       <div style="width:1px;height:40px;background:${C.muted};opacity:.3;"></div>
       <!-- Twitter -->
-      <a href="#" style="opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.55'">
+      <a href="javascript:void(0)" onclick="event.preventDefault()" style="opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.55'">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="${C.text}"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 22.43.36a9 9 0 0 1-2.88 1.1A4.52 4.52 0 0 0 11.08 8a12.8 12.8 0 0 1-9.29-4.71 4.52 4.52 0 0 0 1.4 6.03A4.47 4.47 0 0 1 1 8.78v.06a4.52 4.52 0 0 0 3.62 4.43 4.54 4.54 0 0 1-2.04.08 4.52 4.52 0 0 0 4.22 3.14A9.07 9.07 0 0 1 0 18.54a12.8 12.8 0 0 0 6.92 2"/></svg>
       </a>
       <!-- Instagram -->
-      <a href="#" style="opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.55'">
+      <a href="javascript:void(0)" onclick="event.preventDefault()" style="opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.55'">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${C.text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
       </a>
       <!-- Facebook -->
-      <a href="#" style="opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.55'">
+      <a href="javascript:void(0)" onclick="event.preventDefault()" style="opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.55'">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="${C.text}"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
       </a>
       <div style="width:1px;height:40px;background:${C.muted};opacity:.3;"></div>
@@ -397,7 +397,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
           <div style="padding:20px 24px 24px;">
             <h3 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;font-weight:600;color:${C.text};margin-bottom:6px;">${card.title}</h3>
             <p style="font-size:13px;color:${C.muted};line-height:1.7;font-family:'DM Sans',sans-serif;margin-bottom:14px;">${card.desc}</p>
-            <a href="#" style="font-size:13px;font-weight:700;color:${C.orange};font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:gap .2s;" onmouseover="this.style.gap='10px'" onmouseout="this.style.gap='6px'">
+            <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;font-weight:700;color:${C.orange};font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:gap .2s;" onmouseover="this.style.gap='10px'" onmouseout="this.style.gap='6px'">
               Order Now
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
@@ -531,7 +531,7 @@ ${data.faq && data.faq.length > 0 ? `
 
       <!-- Brand colonne -->
       <div style="flex:1.4;min-width:200px;">
-        <a href="#" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:600;color:${C.white};display:block;margin-bottom:16px;">${data.product_name}</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:600;color:${C.white};display:block;margin-bottom:16px;">${data.product_name}</a>
         <p style="font-size:13px;color:rgba(255,255,255,0.45);line-height:1.8;font-family:'DM Sans',sans-serif;margin-bottom:20px;max-width:240px;">Votre partenaire beauté capillaire premium depuis 2020. Formulé avec amour, livré avec soin.</p>
         <!-- Contact -->
         <p style="font-size:12px;color:rgba(255,255,255,0.4);font-family:'DM Sans',sans-serif;margin-bottom:6px;">hello@${data.product_name.toLowerCase().replace(/\s/g,'')}.com</p>
@@ -543,7 +543,7 @@ ${data.faq && data.faq.length > 0 ? `
             `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`,
             `<svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,0.5)"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>`,
           ].map(icon => `
-            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background .2s;" onmouseover="this.style.background='${C.orange}'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">${icon}</a>`).join('')}
+            <a href="javascript:void(0)" onclick="event.preventDefault()" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;transition:background .2s;" onmouseover="this.style.background='${C.orange}'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">${icon}</a>`).join('')}
         </div>
       </div>
 
@@ -559,7 +559,7 @@ ${data.faq && data.faq.length > 0 ? `
           <ul style="list-style:none;">
             ${col.links.map(link => `
               <li style="margin-bottom:10px;">
-                <a href="#" style="font-size:13px;color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='${C.white}'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">${link}</a>
+                <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='${C.white}'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">${link}</a>
               </li>`).join('')}
           </ul>
         </div>`).join('')}
@@ -571,7 +571,7 @@ ${data.faq && data.faq.length > 0 ? `
       <p style="font-size:12px;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;">© 2026 ${data.product_name}. Tous droits réservés.</p>
       <div style="display:flex;gap:20px;">
         ${['Politique de confidentialité', 'CGV', 'Cookies'].map(link => `
-          <a href="#" style="font-size:12px;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">${link}</a>`).join('')}
+          <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:12px;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">${link}</a>`).join('')}
       </div>
     </div>
 

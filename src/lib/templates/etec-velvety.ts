@@ -98,7 +98,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
           <span style="font-size:18px;font-weight:700;color:${C.accent};font-family:'DM Sans',sans-serif;">${productPrices[i]}</span>
           <span style="font-size:12px;color:${C.gold};letter-spacing:2px;">${productRatings[i].stars} <span style="color:${C.muted};letter-spacing:0;font-size:11px;">${productRatings[i].score}</span></span>
         </div>
-        <a href="#" style="display:block;text-align:center;margin-top:14px;background:${C.accentDark};color:#fff;padding:10px 16px;border-radius:100px;font-size:13px;font-weight:600;text-decoration:none;font-family:'DM Sans',sans-serif;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Add to bag</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;margin-top:14px;background:${C.accentDark};color:#fff;padding:10px 16px;border-radius:100px;font-size:13px;font-weight:600;text-decoration:none;font-family:'DM Sans',sans-serif;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Add to bag</a>
       </div>
     </div>`).join('')
 
@@ -203,20 +203,20 @@ export function templateEtecVelvety(data: LandingPageData): string {
   <div style="max-width:1280px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:68px;">
 
     <!-- Logo -->
-    <a href="#" style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:${C.accentDark};letter-spacing:-.01em;">
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:${C.accentDark};letter-spacing:-.01em;">
       ${data.product_name.split(' ')[0]}
     </a>
 
     <!-- Nav links -->
     <div class="nav-linkv" style="display:flex;align-items:center;gap:36px;">
       ${['Products', 'About', 'Blog', 'Contact'].map(link => `
-        <a href="#" style="font-size:14px;font-weight:500;color:${C.muted};transition:color .2s;font-family:'DM Sans',sans-serif;" onmouseover="this.style.color='${C.accentDark}'" onmouseout="this.style.color='${C.muted}'">${link}</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:14px;font-weight:500;color:${C.muted};transition:color .2s;font-family:'DM Sans',sans-serif;" onmouseover="this.style.color='${C.accentDark}'" onmouseout="this.style.color='${C.muted}'">${link}</a>
       `).join('')}
     </div>
 
     <!-- CTA + hamburger -->
     <div style="display:flex;align-items:center;gap:14px;">
-      <a href="#" style="background:${C.accentDark};color:#fff;padding:10px 24px;border-radius:100px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Shop now</a>
+      <a href="javascript:void(0)" onclick="event.preventDefault()" style="background:${C.accentDark};color:#fff;padding:10px 24px;border-radius:100px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Shop now</a>
       <!-- Hamburger (mobile) -->
       <button class="nav-hambv" style="display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;" aria-label="Menu">
         <span style="display:block;width:22px;height:2px;background:${C.accentDark};border-radius:2px;"></span>
@@ -273,7 +273,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
 
         <!-- CTA -->
         <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:40px;">
-          <a href="#" style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:${C.accentDark};padding:15px 32px;border-radius:100px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.25);transition:transform .2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+          <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-flex;align-items:center;gap:8px;background:#fff;color:${C.accentDark};padding:15px 32px;border-radius:100px;font-size:15px;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.25);transition:transform .2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
             Shop now →
           </a>
           <a href="#about-v" style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;padding:15px 28px;border-radius:100px;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;border:1.5px solid rgba(255,255,255,.35);transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(255,255,255,.8)'" onmouseout="this.style.borderColor='rgba(255,255,255,.35)'">
@@ -383,7 +383,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
         <p style="font-size:15px;color:${C.muted};line-height:1.85;margin-bottom:24px;font-family:'DM Sans',sans-serif;">
           ${data.subtitle || `We were born from a simple belief: the most effective skincare is the kind that works in harmony with your skin, not against it. Every product we craft starts with a botanical story — a plant, a root, a flower — and ends with a formula your skin will love.`}
         </p>
-        <a href="#" style="display:inline-flex;align-items:center;gap:6px;color:${C.accent};font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;border-bottom:1.5px solid ${C.border};padding-bottom:2px;transition:border-color .2s;" onmouseover="this.style.borderColor='${C.accent}'" onmouseout="this.style.borderColor='${C.border}'">Learn more →</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-flex;align-items:center;gap:6px;color:${C.accent};font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;border-bottom:1.5px solid ${C.border};padding-bottom:2px;transition:border-color .2s;" onmouseover="this.style.borderColor='${C.accent}'" onmouseout="this.style.borderColor='${C.border}'">Learn more →</a>
       </div>
 
       <!-- Colonne droite -->
@@ -462,7 +462,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
         <p style="font-size:15px;color:${C.muted};line-height:1.8;margin-bottom:36px;font-family:'DM Sans',sans-serif;max-width:440px;">
           Not sure which products are right for your skin? Our quick skin quiz analyses your skin type, concerns, and lifestyle — then recommends your ideal personalised routine.
         </p>
-        <a href="#" style="display:inline-flex;align-items:center;gap:8px;background:${C.accentDark};color:#fff;padding:15px 32px;border-radius:100px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;transition:opacity .2s;box-shadow:0 6px 24px rgba(30,61,47,.25);" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+        <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-flex;align-items:center;gap:8px;background:${C.accentDark};color:#fff;padding:15px 32px;border-radius:100px;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;transition:opacity .2s;box-shadow:0 6px 24px rgba(30,61,47,.25);" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
           Find my diagnosis →
         </a>
       </div>
@@ -544,7 +544,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
           <p style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);font-family:'DM Sans',sans-serif;margin-bottom:10px;">${pillar.label}</p>
           <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:#fff;margin-bottom:14px;line-height:1.3;">${pillar.title}</h3>
           <p style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.8;margin-bottom:22px;font-family:'DM Sans',sans-serif;">${pillar.desc}</p>
-          <a href="#" style="font-size:13px;font-weight:600;color:${C.accentLight};font-family:'DM Sans',sans-serif;border-bottom:1px solid rgba(214,232,217,.3);padding-bottom:2px;transition:border-color .2s;" onmouseover="this.style.borderColor='${C.accentLight}'" onmouseout="this.style.borderColor='rgba(214,232,217,.3)'">${pillar.link}</a>
+          <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;font-weight:600;color:${C.accentLight};font-family:'DM Sans',sans-serif;border-bottom:1px solid rgba(214,232,217,.3);padding-bottom:2px;transition:border-color .2s;" onmouseover="this.style.borderColor='${C.accentLight}'" onmouseout="this.style.borderColor='rgba(214,232,217,.3)'">${pillar.link}</a>
         </div>`).join('')}
 
     </div>
@@ -602,7 +602,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
   <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:44px;font-weight:600;color:${C.text};letter-spacing:-.02em;line-height:1.15;margin-bottom:16px;max-width:600px;margin-left:auto;margin-right:auto;">${data.headline || 'Begin your organic skincare ritual today'}</h2>
   <p style="font-size:16px;color:${C.muted};margin-bottom:10px;max-width:460px;margin-left:auto;margin-right:auto;font-family:'DM Sans',sans-serif;line-height:1.75;">${data.subtitle || ''}</p>
   ${data.urgency ? `<p style="font-size:14px;font-weight:600;color:${C.accent};margin-bottom:36px;font-family:'DM Sans',sans-serif;">${data.urgency}</p>` : '<div style="margin-bottom:36px;"></div>'}
-  <a href="#" style="display:inline-flex;align-items:center;gap:8px;background:${C.accentDark};color:#fff;padding:17px 48px;border-radius:100px;font-size:16px;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 8px 28px rgba(30,61,47,.25);transition:transform .2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+  <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-flex;align-items:center;gap:8px;background:${C.accentDark};color:#fff;padding:17px 48px;border-radius:100px;font-size:16px;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 8px 28px rgba(30,61,47,.25);transition:transform .2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
     ${data.cta || 'Shop the collection'} →
   </a>
   <p style="margin-top:20px;font-size:13px;color:${C.muted};font-family:'DM Sans',sans-serif;">Free shipping · 30-day returns · Certified organic · Cruelty-free</p>
@@ -618,7 +618,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
 
       <!-- Col 1 — Logo + adresse -->
       <div>
-        <a href="#" style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:600;color:#fff;display:block;margin-bottom:16px;">${data.product_name.split(' ')[0]}</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:600;color:#fff;display:block;margin-bottom:16px;">${data.product_name.split(' ')[0]}</a>
         <p style="font-size:13px;color:rgba(255,255,255,.45);line-height:1.9;font-family:'DM Sans',sans-serif;margin-bottom:20px;">
           12 Rue des Botanistes<br/>
           75008 Paris, France<br/>
@@ -627,7 +627,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
         <!-- Socials -->
         <div style="display:flex;gap:12px;">
           ${['IG', 'FB', 'TK', 'YT'].map(s => `
-            <a href="#" style="width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;transition:all .2s;" onmouseover="this.style.borderColor='${C.accentLight}';this.style.color='${C.accentLight}'" onmouseout="this.style.borderColor='rgba(255,255,255,.15)';this.style.color='rgba(255,255,255,.5)'">${s}</a>
+            <a href="javascript:void(0)" onclick="event.preventDefault()" style="width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;transition:all .2s;" onmouseover="this.style.borderColor='${C.accentLight}';this.style.color='${C.accentLight}'" onmouseout="this.style.borderColor='rgba(255,255,255,.15)';this.style.color='rgba(255,255,255,.5)'">${s}</a>
           `).join('')}
         </div>
       </div>
@@ -637,7 +637,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
         <h5 style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);font-family:'DM Sans',sans-serif;margin-bottom:18px;">Shop</h5>
         <ul style="list-style:none;">
           ${['All Products', 'Facial Care', 'Body Care', 'Serums', 'Gift Sets', 'New Arrivals'].map(link => `
-            <li style="margin-bottom:10px;"><a href="#" style="font-size:13px;color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.55)'">${link}</a></li>
+            <li style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.55)'">${link}</a></li>
           `).join('')}
         </ul>
       </div>
@@ -647,7 +647,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
         <h5 style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);font-family:'DM Sans',sans-serif;margin-bottom:18px;">Help Desk</h5>
         <ul style="list-style:none;">
           ${['FAQ', 'Shipping & Returns', 'Track my Order', 'Contact Us', 'Skin Quiz', 'Privacy Policy'].map(link => `
-            <li style="margin-bottom:10px;"><a href="#" style="font-size:13px;color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.55)'">${link}</a></li>
+            <li style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.55)'">${link}</a></li>
           `).join('')}
         </ul>
       </div>
@@ -657,7 +657,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
         <h5 style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);font-family:'DM Sans',sans-serif;margin-bottom:18px;">Location</h5>
         <ul style="list-style:none;">
           ${['Paris Flagship', 'London – Covent Garden', 'Amsterdam – De Pijp', 'Online Worldwide', 'Wholesale Enquiries'].map(link => `
-            <li style="margin-bottom:10px;"><a href="#" style="font-size:13px;color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.55)'">${link}</a></li>
+            <li style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.55)'">${link}</a></li>
           `).join('')}
         </ul>
       </div>

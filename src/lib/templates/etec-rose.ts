@@ -158,9 +158,9 @@ export function templateEtecRose(data: LandingPageData): string {
 <!-- ═══ BREADCRUMB ═══════════════════════════════════════════════════════════ -->
 <div style="background:${C.card};border-bottom:1px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:13px 24px;font-size:13px;color:${C.muted};font-family:'Inter',sans-serif;">
-    <a href="#" style="color:${C.accent};text-decoration:none;">Accueil</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">Accueil</a>
     <span style="margin:0 8px;opacity:.4;">›</span>
-    <a href="#" style="color:${C.accent};text-decoration:none;">Boutique</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">Boutique</a>
     <span style="margin:0 8px;opacity:.4;">›</span>
     <span style="color:${C.muted};">${data.product_name}</span>
   </div>
@@ -213,12 +213,12 @@ export function templateEtecRose(data: LandingPageData): string {
       </ul>
 
       <!-- CTA principal -->
-      <a href="#" style="display:block;text-align:center;background:${C.accent};color:#fff;padding:17px 32px;border-radius:100px;font-size:15px;font-weight:700;text-decoration:none;margin-bottom:12px;letter-spacing:.01em;font-family:'Inter',sans-serif;box-shadow:0 4px 20px rgba(214,51,112,0.35);transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+      <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:${C.accent};color:#fff;padding:17px 32px;border-radius:100px;font-size:15px;font-weight:700;text-decoration:none;margin-bottom:12px;letter-spacing:.01em;font-family:'Inter',sans-serif;box-shadow:0 4px 20px rgba(214,51,112,0.35);transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
         ${data.cta || 'Ajouter au panier'} →
       </a>
 
       <!-- CTA secondaire -->
-      <a href="#" style="display:block;text-align:center;background:transparent;color:${C.accent};padding:15px 32px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;border:2px solid ${C.accent};margin-bottom:22px;font-family:'Inter',sans-serif;transition:all .2s;" onmouseover="this.style.background='${C.accentLight}'" onmouseout="this.style.background='transparent'">
+      <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:transparent;color:${C.accent};padding:15px 32px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;border:2px solid ${C.accent};margin-bottom:22px;font-family:'Inter',sans-serif;transition:all .2s;" onmouseover="this.style.background='${C.accentLight}'" onmouseout="this.style.background='transparent'">
         En savoir plus
       </a>
 
@@ -348,7 +348,7 @@ export function templateEtecRose(data: LandingPageData): string {
   <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:42px;font-weight:600;color:#fff;letter-spacing:-.01em;margin-bottom:16px;line-height:1.15;">${data.headline || 'Sublimez votre beauté dès aujourd\'hui'}</h2>
   <p style="color:rgba(255,255,255,.8);font-size:16px;margin-bottom:14px;max-width:480px;margin-left:auto;margin-right:auto;font-family:'Inter',sans-serif;line-height:1.75;">${data.subtitle || ''}</p>
   ${data.urgency ? `<p style="color:rgba(255,255,255,.95);font-size:14px;font-weight:600;margin-bottom:36px;font-family:'Inter',sans-serif;">${data.urgency}</p>` : '<div style="margin-bottom:36px;"></div>'}
-  <a href="#" style="display:inline-block;background:#fff;color:${C.accent};padding:18px 52px;border-radius:100px;font-size:16px;font-weight:700;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:.01em;box-shadow:0 8px 32px rgba(0,0,0,0.2);transition:transform .2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+  <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-block;background:#fff;color:${C.accent};padding:18px 52px;border-radius:100px;font-size:16px;font-weight:700;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:.01em;box-shadow:0 8px 32px rgba(0,0,0,0.2);transition:transform .2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
     ${data.cta || 'Commander maintenant'} →
   </a>
   <p style="margin-top:22px;font-size:13px;color:rgba(255,255,255,.5);font-family:'Inter',sans-serif;">Paiement sécurisé · Livraison offerte · Retour 30 jours · Satisfaite ou remboursée</p>

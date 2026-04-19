@@ -357,12 +357,12 @@ export function templateEtecShopz(data: LandingPageData): string {
   <div class="promo-bar">&#127873; Promo &mdash; Get 25% Cash Back on your first order</div>
 
   <nav class="nav">
-    <a href="#" class="nav-logo">Shopz</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" class="nav-logo">Shopz</a>
     <ul class="nav-links">
-      <li><a href="#">Home</a></li>
-      <li><a href="#" class="active">Men</a></li>
-      <li><a href="#">Woman</a></li>
-      <li><a href="#">Kids</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()">Home</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()" class="active">Men</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()">Woman</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()">Kids</a></li>
     </ul>
     <div class="nav-icons">
       <button class="nav-icon-btn">${ICON_SEARCH}</button>
@@ -374,9 +374,9 @@ export function templateEtecShopz(data: LandingPageData): string {
   </nav>
 
   <div class="breadcrumb">
-    <a href="#">Home</a><span class="breadcrumb-sep">/</span>
-    <a href="#">Men</a><span class="breadcrumb-sep">/</span>
-    <a href="#">Tops</a><span class="breadcrumb-sep">/</span>
+    <a href="javascript:void(0)" onclick="event.preventDefault()">Home</a><span class="breadcrumb-sep">/</span>
+    <a href="javascript:void(0)" onclick="event.preventDefault()">Men</a><span class="breadcrumb-sep">/</span>
+    <a href="javascript:void(0)" onclick="event.preventDefault()">Tops</a><span class="breadcrumb-sep">/</span>
     <span class="breadcrumb-current">${productName}</span>
   </div>
 
@@ -515,48 +515,48 @@ export function templateEtecShopz(data: LandingPageData): string {
       <div>
         <p class="footer-col-title">About Us</p>
         <ul class="footer-links">
-          <li><a href="#">Information</a></li>
-          <li><a href="#">Store Locator</a></li>
-          <li><a href="#">Bulk Purchase</a></li>
-          <li><a href="#">Alteration Service</a></li>
-          <li><a href="#">Gift Delivery</a></li>
-          <li><a href="#">Live Station</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Information</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Store Locator</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Bulk Purchase</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Alteration Service</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Gift Delivery</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Live Station</a></li>
         </ul>
       </div>
       <div>
         <p class="footer-col-title">Help</p>
         <ul class="footer-links">
-          <li><a href="#">FAQ</a></li>
-          <li><a href="#">Online Shopping Guide</a></li>
-          <li><a href="#">Return Policy</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Accessibility</a></li>
-          <li><a href="#">Contact Us</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">FAQ</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Online Shopping Guide</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Return Policy</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Privacy Policy</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Accessibility</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Contact Us</a></li>
         </ul>
       </div>
       <div>
         <p class="footer-col-title">Account</p>
         <ul class="footer-links">
-          <li><a href="#">Membership</a></li>
-          <li><a href="#">Profile</a></li>
-          <li><a href="#">Coupons</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Membership</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Profile</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Coupons</a></li>
         </ul>
       </div>
       <div>
         <p class="footer-col-title">Social Media</p>
         <ul class="footer-links">
-          <li><a href="#">${ICON_TWITTER} Twitter</a></li>
-          <li><a href="#">${ICON_FACEBOOK} Facebook</a></li>
-          <li><a href="#">${ICON_INSTAGRAM} Instagram</a></li>
-          <li><a href="#">${ICON_YOUTUBE} Youtube</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${ICON_TWITTER} Twitter</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${ICON_FACEBOOK} Facebook</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${ICON_INSTAGRAM} Instagram</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${ICON_YOUTUBE} Youtube</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <p class="footer-copy">&copy;Shopz 2026. All rights reserved.</p>
       <div class="footer-legal">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms and Conditions</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()">Privacy Policy</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()">Terms and Conditions</a>
       </div>
     </div>
   </footer>

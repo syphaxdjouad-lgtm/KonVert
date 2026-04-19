@@ -1,4 +1,5 @@
 import type { LandingPageData } from '@/types'
+import { ico } from './icons'
 
 const IMGS = [
   'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -137,9 +138,9 @@ body{font-family:'Inter',sans-serif;background:#FAFAFA;color:#1D1D1F;}
 
       <!-- TRUST MINI -->
       <div style="display:flex;gap:20px;margin-top:20px;padding-top:16px;border-top:1px solid #E8E8ED;" class="blue-trust-grid">
-        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">🚚 Livraison offerte</span>
-        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">🔒 Paiement sécurisé</span>
-        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">↩ Retour 30j</span>
+        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">${ico.truck(16)} Livraison offerte</span>
+        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">${ico.lock(16)} Paiement sécurisé</span>
+        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">${ico.return(16)} Retour 30j</span>
       </div>
     </div>
   </div>

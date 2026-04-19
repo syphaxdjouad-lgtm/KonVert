@@ -1,4 +1,5 @@
 import type { LandingPageData } from '@/types'
+import { ico } from './icons'
 
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=80',
@@ -224,19 +225,19 @@ export function templateEtecRose(data: LandingPageData): string {
       <!-- Urgence -->
       ${data.urgency ? `
       <div style="display:flex;align-items:center;gap:10px;background:#FFF3F7;border:1px solid #F4B8D0;border-radius:12px;padding:12px 16px;margin-bottom:24px;">
-        <span style="font-size:16px;">🌸</span>
+        <span style="color:${C.accent};">${ico.star(16)}</span>
         <p style="font-size:13px;color:${C.accent};font-weight:600;font-family:'Inter',sans-serif;">${data.urgency}</p>
       </div>` : ''}
 
       <!-- Trust badges fond rosé -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:${C.border};border:1px solid ${C.border};border-radius:16px;overflow:hidden;margin-bottom:24px;">
         ${[
-          ['✨', 'Formule certifiée', 'Dermatologiquement testé'],
-          ['🚚', 'Livraison offerte', 'Dès 50€ d\'achat'],
-          ['🌿', 'Retour 30 jours', 'Satisfaite ou remboursée'],
+          [ico.star(22), 'Formule certifiée', 'Dermatologiquement testé'],
+          [ico.truck(22), 'Livraison offerte', 'Dès 50€ d\'achat'],
+          [ico.return(22), 'Retour 30 jours', 'Satisfaite ou remboursée'],
         ].map(([icon, title, sub]) => `
           <div style="background:${C.accentLight};padding:14px 10px;text-align:center;">
-            <div style="font-size:20px;margin-bottom:5px;">${icon}</div>
+            <div style="color:${C.accent};display:flex;justify-content:center;margin-bottom:6px;">${icon}</div>
             <div style="font-size:11px;font-weight:700;color:${C.text};margin-bottom:2px;font-family:'Inter',sans-serif;">${title}</div>
             <div style="font-size:11px;color:${C.muted};font-family:'Inter',sans-serif;">${sub}</div>
           </div>`).join('')}

@@ -1,4 +1,5 @@
 import type { LandingPageData } from '@/types'
+import { ico } from './icons'
 
 const IMGS = [
   'https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -69,7 +70,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#0A0A0A;color:#fff;}
 
 <!-- URGENCY BANNER -->
 <div style="background:#00FF87;color:#0A0A0A;text-align:center;padding:10px 20px;font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">
-  ⚡ ${data.urgency || 'Stock limité — Commandez avant rupture'}
+  <span style="display:inline-flex;align-items:center;gap:8px;">${ico.flash(16)} ${data.urgency || 'Stock limité — Commandez avant rupture'}</span>
 </div>
 
 <!-- BREADCRUMB -->
@@ -129,15 +130,15 @@ body{font-family:'Space Grotesk',sans-serif;background:#0A0A0A;color:#fff;}
       </div>
       <div style="margin-top:20px;display:flex;flex-direction:column;gap:8px;" class="noir-trust-grid">
         <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
-          <span style="color:#00FF87;font-size:14px;">🚚</span>
+          <span style="color:#00FF87;">${ico.truck(16)}</span>
           <span style="font-size:12px;color:#666;">Livraison express disponible</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
-          <span style="font-size:14px;">🔒</span>
+          <span style="color:#00FF87;">${ico.lock(16)}</span>
           <span style="font-size:12px;color:#666;">Paiement 100% sécurisé</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;padding:8px 0;">
-          <span style="font-size:14px;">↩</span>
+          <span style="color:#00FF87;">${ico.return(16)}</span>
           <span style="font-size:12px;color:#666;">Retour gratuit 30 jours</span>
         </div>
       </div>

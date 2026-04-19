@@ -1,4 +1,5 @@
 import type { LandingPageData } from '@/types'
+import { ico } from './icons'
 
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
@@ -227,7 +228,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
       <!-- Urgence + COUNTDOWN TIMER — élément unique Energy -->
       ${data.urgency ? `
       <div style="background:#111;color:#fff;padding:14px 16px;margin-bottom:20px;border-left:4px solid ${C.accent};">
-        <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-family:'Barlow Condensed',sans-serif;color:${C.accent};margin-bottom:10px;">⚡ ${data.urgency}</p>
+        <p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-family:'Barlow Condensed',sans-serif;color:${C.accent};margin-bottom:10px;display:flex;align-items:center;gap:6px;">${ico.flash(14)} ${data.urgency}</p>
         <div class="countdown-bar" style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:11px;color:#aaa;font-family:'Barlow',sans-serif;font-weight:500;margin-right:4px;">L'offre expire dans :</span>
           <div style="display:flex;align-items:center;gap:4px;">
@@ -252,12 +253,12 @@ export function templateEtecEnergy(data: LandingPageData): string {
       <!-- Trust badges -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:${C.border};border:1px solid ${C.border};margin-bottom:22px;">
         ${[
-          ['🏆', 'Certifié', 'Anti-dopage'],
-          ['🚚', 'Livraison', 'Express 48h'],
-          ['↩️', 'Retour', '30 jours'],
+          [ico.trophy(22), 'Certifié', 'Anti-dopage'],
+          [ico.truck(22), 'Livraison', 'Express 48h'],
+          [ico.return(22), 'Retour', '30 jours'],
         ].map(([icon, title, sub]) => `
           <div style="background:${C.card};padding:12px 8px;text-align:center;">
-            <div style="font-size:18px;margin-bottom:4px;">${icon}</div>
+            <div style="color:${C.accent};display:flex;justify-content:center;margin-bottom:5px;">${icon}</div>
             <div style="font-size:11px;font-weight:700;color:${C.text};margin-bottom:1px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.04em;">${title}</div>
             <div style="font-size:11px;color:${C.muted};font-family:'Barlow',sans-serif;">${sub}</div>
           </div>`).join('')}

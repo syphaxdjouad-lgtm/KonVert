@@ -1,4 +1,5 @@
 import type { LandingPageData } from '@/types'
+import { ico } from './icons'
 
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80',
@@ -205,9 +206,9 @@ export function templateEtecSage(data: LandingPageData): string {
 
       <!-- Badges certifications BIO — élément unique Sage -->
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
-        <span style="display:inline-flex;align-items:center;gap:5px;background:#E8F5E9;color:${C.accent};font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;border:1px solid ${C.border};font-family:'DM Sans',sans-serif;">🌿 Bio</span>
-        <span style="display:inline-flex;align-items:center;gap:5px;background:#E8F5E9;color:${C.accent};font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;border:1px solid ${C.border};font-family:'DM Sans',sans-serif;">🧪 Sans additifs</span>
-        <span style="display:inline-flex;align-items:center;gap:5px;background:#E8F5E9;color:${C.accent};font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;border:1px solid ${C.border};font-family:'DM Sans',sans-serif;">♻️ Éco-responsable</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;background:#E8F5E9;color:${C.accent};font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;border:1px solid ${C.border};font-family:'DM Sans',sans-serif;">${ico.leaf(12)} Bio</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;background:#E8F5E9;color:${C.accent};font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;border:1px solid ${C.border};font-family:'DM Sans',sans-serif;">${ico.flask(12)} Sans additifs</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;background:#E8F5E9;color:${C.accent};font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;border:1px solid ${C.border};font-family:'DM Sans',sans-serif;">${ico.recycle(12)} Éco-responsable</span>
       </div>
 
       <!-- Description courte -->
@@ -231,19 +232,19 @@ export function templateEtecSage(data: LandingPageData): string {
       <!-- Urgence -->
       ${data.urgency ? `
       <div style="display:flex;align-items:center;gap:10px;background:#F1F8F2;border:1px solid ${C.border};border-radius:12px;padding:12px 16px;margin-bottom:24px;">
-        <span style="font-size:16px;">🌱</span>
+        <span style="color:${C.accent};">${ico.leaf(16)}</span>
         <p style="font-size:13px;color:${C.accent};font-weight:600;font-family:'DM Sans',sans-serif;">${data.urgency}</p>
       </div>` : ''}
 
       <!-- Trust badges fond vert clair -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:${C.border};border:1px solid ${C.border};border-radius:14px;overflow:hidden;margin-bottom:24px;">
         ${[
-          ['🌿', 'Certifié bio', 'Agriculture raisonnée'],
-          ['🚚', 'Livraison offerte', 'Dès 40€ d\'achat'],
-          ['↩️', 'Retour 30 jours', 'Sans frais'],
+          [ico.leaf(22), 'Certifié bio', 'Agriculture raisonnée'],
+          [ico.truck(22), 'Livraison offerte', 'Dès 40€ d\'achat'],
+          [ico.return(22), 'Retour 30 jours', 'Sans frais'],
         ].map(([icon, title, sub]) => `
           <div style="background:${C.accentLight};padding:14px 10px;text-align:center;">
-            <div style="font-size:20px;margin-bottom:5px;">${icon}</div>
+            <div style="color:${C.accent};display:flex;justify-content:center;margin-bottom:6px;">${icon}</div>
             <div style="font-size:11px;font-weight:700;color:${C.text};margin-bottom:2px;font-family:'DM Sans',sans-serif;">${title}</div>
             <div style="font-size:11px;color:${C.muted};font-family:'DM Sans',sans-serif;">${sub}</div>
           </div>`).join('')}

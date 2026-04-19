@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       success: true,
       data: landingPage,
       meta: {
-        model: 'claude-haiku-4-5',
+        model: 'claude-haiku-4-5-20251001',
         product_source: body.url ? 'scraped' : body.product ? 'provided' : 'mock',
       },
     })

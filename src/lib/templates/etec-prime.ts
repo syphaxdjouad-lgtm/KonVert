@@ -10,11 +10,6 @@ const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1612532275214-e4ca76d0e4d1?w=800&q=80',
 ]
 
-const INGREDIENT_IMGS = [
-  'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&q=80', // turmeric
-  'https://images.unsplash.com/photo-1605289355680-75fb41239154?w=400&q=80', // ashwagandha
-  'https://images.unsplash.com/photo-1611967164521-abae8fba4668?w=400&q=80', // spirulina
-]
 
 const C = {
   bg:         '#F8F7F4',
@@ -445,12 +440,12 @@ export function templateEtecPrime(data: LandingPageData): string {
 <nav class="nav">
   <div class="nav-logo">◆ Prime</div>
   <div class="nav-links">
-    <a class="nav-link" href="#">Science</a>
-    <a class="nav-link" href="#">Ingredients</a>
-    <a class="nav-link" href="#">Reviews</a>
-    <a class="nav-link" href="#">FAQ</a>
+    <a class="nav-link" href="javascript:void(0)">Science</a>
+    <a class="nav-link" href="javascript:void(0)">Ingredients</a>
+    <a class="nav-link" href="javascript:void(0)">Reviews</a>
+    <a class="nav-link" href="javascript:void(0)">FAQ</a>
   </div>
-  <a class="nav-cta" href="#">Get Started →</a>
+  <a class="nav-cta" href="javascript:void(0)">Get Started →</a>
 </nav>
 
 <!-- TICKER -->
@@ -483,7 +478,7 @@ export function templateEtecPrime(data: LandingPageData): string {
     <div class="hero-urgency">${urgency}</div>
     <div style="height:16px"></div>
     <div class="hero-cta">
-      <a href="#" class="hero-btn">${ctaText}</a>
+      <a href="javascript:void(0)" class="hero-btn">${ctaText}</a>
       <p class="hero-sub">Free shipping · Cancel anytime · 30-day guarantee</p>
     </div>
   </div>
@@ -619,7 +614,7 @@ export function templateEtecPrime(data: LandingPageData): string {
         <div class="reviews-count">Based on 12,847 reviews</div>
       </div>
     </div>
-    <a href="#" style="font-size:13px;font-weight:700;color:${C.greenBright};text-decoration:none">Read all reviews →</a>
+    <a href="javascript:void(0)" style="font-size:13px;font-weight:700;color:${C.greenBright};text-decoration:none">Read all reviews →</a>
   </div>
   <div class="reviews-grid">${reviewsHTML}</div>
 </section>
@@ -654,7 +649,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   <div class="final-inner">
     <h2 class="final-title">Ready to feel <span>extraordinary?</span></h2>
     <p class="final-sub">Join 200,000+ people who made Prime Formula part of their daily routine. Your best self starts here.</p>
-    <a href="#" class="final-btn">${ctaText}</a>
+    <a href="javascript:void(0)" class="final-btn">${ctaText}</a>
     <p class="final-note">Free shipping · 30-day guarantee · Cancel anytime</p>
   </div>
 </section>
@@ -669,24 +664,24 @@ export function templateEtecPrime(data: LandingPageData): string {
       </div>
       <div>
         <div class="footer-col-title">Product</div>
-        <a class="footer-link" href="#">Daily Formula</a>
-        <a class="footer-link" href="#">Ingredients</a>
-        <a class="footer-link" href="#">Certifications</a>
-        <a class="footer-link" href="#">Subscribe & Save</a>
+        <a class="footer-link" href="javascript:void(0)">Daily Formula</a>
+        <a class="footer-link" href="javascript:void(0)">Ingredients</a>
+        <a class="footer-link" href="javascript:void(0)">Certifications</a>
+        <a class="footer-link" href="javascript:void(0)">Subscribe & Save</a>
       </div>
       <div>
         <div class="footer-col-title">Company</div>
-        <a class="footer-link" href="#">Our Science</a>
-        <a class="footer-link" href="#">About Us</a>
-        <a class="footer-link" href="#">Reviews</a>
-        <a class="footer-link" href="#">Affiliates</a>
+        <a class="footer-link" href="javascript:void(0)">Our Science</a>
+        <a class="footer-link" href="javascript:void(0)">About Us</a>
+        <a class="footer-link" href="javascript:void(0)">Reviews</a>
+        <a class="footer-link" href="javascript:void(0)">Affiliates</a>
       </div>
       <div>
         <div class="footer-col-title">Support</div>
-        <a class="footer-link" href="#">FAQ</a>
-        <a class="footer-link" href="#">Shipping</a>
-        <a class="footer-link" href="#">Returns</a>
-        <a class="footer-link" href="#">Contact Us</a>
+        <a class="footer-link" href="javascript:void(0)">FAQ</a>
+        <a class="footer-link" href="javascript:void(0)">Shipping</a>
+        <a class="footer-link" href="javascript:void(0)">Returns</a>
+        <a class="footer-link" href="javascript:void(0)">Contact Us</a>
       </div>
     </div>
     <div class="footer-bottom">

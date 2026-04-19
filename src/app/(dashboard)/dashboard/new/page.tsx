@@ -22,12 +22,17 @@ type Mode = 'wizard' | 'generating' | 'editor'
 type InputMode = 'url' | 'manual'
 
 const STYLES = [
-  { id: 'etec-blue',   name: 'ETEC Blue',   desc: 'Moderne et universel — bleu électrique, fond blanc, boutons ronds', emoji: '🔵' },
-  { id: 'etec-noir',   name: 'ETEC Noir',   desc: 'Dark premium élégant — fond noir, accents blancs',                  emoji: '🖤' },
-  { id: 'etec-rose',   name: 'ETEC Rose',   desc: 'Beauté & lifestyle — rose chaud, UGC, conversion beauté',           emoji: '🌸' },
-  { id: 'etec-sage',   name: 'ETEC Sage',   desc: 'Organic & bien-être — vert forêt, tons naturels, certifications',   emoji: '🌿' },
-  { id: 'etec-gold',   name: 'ETEC Gold',   desc: 'Luxe & exclusivité — fond noir, accents dorés, haute gamme',        emoji: '✨' },
-  { id: 'etec-energy', name: 'ETEC Energy', desc: 'Sport & fitness — orange vif, urgence, dynamisme total',             emoji: '⚡' },
+  { id: 'etec-blue',    name: 'Blue',    desc: 'Moderne et universel — bleu électrique, fond blanc, boutons ronds',        emoji: '🔵' },
+  { id: 'etec-noir',    name: 'Noir',    desc: 'Dark premium élégant — fond noir profond, accents violets, gaming/luxe',   emoji: '🖤' },
+  { id: 'etec-rose',    name: 'Rose',    desc: 'Beauté & skincare — rose chaud, galerie UGC, top conversion beauté',       emoji: '🌸' },
+  { id: 'etec-sage',    name: 'Sage',    desc: 'Organic & bien-être — vert forêt, tons naturels, certifications bio',      emoji: '🌿' },
+  { id: 'etec-gold',    name: 'Gold',    desc: 'Luxe & exclusivité — fond noir, accents dorés, haute gamme',               emoji: '✨' },
+  { id: 'etec-energy',  name: 'Energy',  desc: 'Sport & fitness — orange vif, countdown, dynamisme total',                 emoji: '⚡' },
+  { id: 'etec-beauty',  name: 'Beauty',  desc: 'Hair care premium — crème & orange brûlé, routine capillaire, UGC',        emoji: '💆' },
+  { id: 'etec-style',   name: 'Style',   desc: 'Fashion & personal styling — beige caramel, minimaliste élégant',          emoji: '👗' },
+  { id: 'etec-shopz',   name: 'Shopz',   desc: 'E-commerce clothing — galerie interactive, swatches couleur/taille',       emoji: '🛍️' },
+  { id: 'etec-velvety', name: 'Velvety', desc: 'Skincare botanique — vert forêt, grille produits, newsletter',             emoji: '🍃' },
+  { id: 'etec-prime',   name: 'Prime',   desc: 'Supplements premium — dark + lime, ingrédients cliniques, subscribe',      emoji: '💊' },
 ]
 
 const TONES = [

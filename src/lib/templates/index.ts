@@ -6,6 +6,7 @@ export { templateEtecRose }   from './etec-rose'
 export { templateEtecSage }   from './etec-sage'
 export { templateEtecGold }   from './etec-gold'
 export { templateEtecEnergy } from './etec-energy'
+export { templateEtecBeauty } from './etec-beauty'
 
 import { templateEtecBlue }   from './etec-blue'
 import { templateEtecNoir }   from './etec-noir'
@@ -13,9 +14,11 @@ import { templateEtecRose }   from './etec-rose'
 import { templateEtecSage }   from './etec-sage'
 import { templateEtecGold }   from './etec-gold'
 import { templateEtecEnergy } from './etec-energy'
+import { templateEtecBeauty } from './etec-beauty'
 
 // ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
 
+export const templateHealingBird    = templateEtecBeauty
 export const templateMinimalDark    = templateEtecNoir
 export const templateCleanWhite     = templateEtecBlue
 export const templateBoldSales      = templateEtecEnergy
@@ -44,6 +47,7 @@ export const TEMPLATES = [
   { id: 'etec-sage',   name: 'ETEC Sage',   category: 'organic' as const, fn: templateEtecSage,   label: 'Organic · Bio · Bien-être',   accent: '#2D6A4F', badge: ''              },
   { id: 'etec-gold',   name: 'ETEC Gold',   category: 'luxury'  as const, fn: templateEtecGold,   label: 'Luxe · Haute Gamme · Or',     accent: '#D4A853', badge: 'Exclusif'      },
   { id: 'etec-energy', name: 'ETEC Energy', category: 'sport'   as const, fn: templateEtecEnergy, label: 'Sport · Fitness · DTC',       accent: '#E63000', badge: 'Nouveau'       },
+  { id: 'etec-beauty', name: 'ETEC Beauty', category: 'beauty' as const, fn: templateEtecBeauty, label: 'Hair Care · Premium · Organic', accent: '#E8622A', badge: 'Nouveau'       },
 ]
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
@@ -56,6 +60,7 @@ export function renderTemplate(templateId: string, data: LandingPageData): strin
     case 'etec-sage':       return templateEtecSage(data)
     case 'etec-gold':       return templateEtecGold(data)
     case 'etec-energy':     return templateEtecEnergy(data)
+    case 'etec-beauty':     return templateEtecBeauty(data)
     case 'minimal-dark':
     case 'gaming-zone':
     case 'automotive-pro':  return templateEtecNoir(data)

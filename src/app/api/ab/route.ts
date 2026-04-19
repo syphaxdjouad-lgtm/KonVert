@@ -34,12 +34,12 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'page_id et visitor_id requis' }, { status: 400 })
   }
 
-  // Chercher un test actif pour cette page
+  // Chercher un test actif pour cette page (uniquement les tests en cours, pas en pause)
   const { data: test } = await supabaseAdmin
     .from('ab_tests')
     .select('id, status')
     .eq('page_id', page_id)
-    .in('status', ['running', 'paused'])
+    .eq('status', 'running')
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle()
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
 
   const { data: variant } = await supabaseAdmin
     .from('ab_variants')
-    .select('id, variant, page_content')
+    .select('id, variant')
     .eq('ab_test_id', test.id)
     .eq('variant', variantLetter)
     .maybeSingle()
@@ -65,8 +65,6 @@ export async function GET(req: NextRequest) {
     variant: variantLetter,
     variant_id: variant.id,
     test_id: test.id,
-    page_content: variant.page_content,
-    test_status: test.status,
   })
 }
 

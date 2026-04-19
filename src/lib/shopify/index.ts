@@ -62,12 +62,13 @@ export async function exchangeCodeForToken(shop: string, code: string): Promise<
 
 // ─── Chiffrement du token ─────────────────────────────────────────────────────
 
-const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex')
+const _RAW_KEY = process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex')
+// Dériver une clé AES-256 propre (32 bytes) via SHA-256 — indépendant de la longueur de l'env var
+const ENCRYPTION_KEY = crypto.createHash('sha256').update(_RAW_KEY).digest()
 
 export function encryptToken(token: string): string {
   const iv  = crypto.randomBytes(12)
-  const key = Buffer.from(ENCRYPTION_KEY.slice(0, 32).padEnd(32, '0'))
-  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv)
+  const cipher = crypto.createCipheriv('aes-256-gcm', ENCRYPTION_KEY, iv)
   const encrypted = Buffer.concat([cipher.update(token, 'utf8'), cipher.final()])
   const tag = cipher.getAuthTag()
   return [iv.toString('hex'), encrypted.toString('hex'), tag.toString('hex')].join(':')
@@ -75,8 +76,7 @@ export function encryptToken(token: string): string {
 
 export function decryptToken(encrypted: string): string {
   const [ivHex, dataHex, tagHex] = encrypted.split(':')
-  const key = Buffer.from(ENCRYPTION_KEY.slice(0, 32).padEnd(32, '0'))
-  const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(ivHex, 'hex'))
+  const decipher = crypto.createDecipheriv('aes-256-gcm', ENCRYPTION_KEY, Buffer.from(ivHex, 'hex'))
   decipher.setAuthTag(Buffer.from(tagHex, 'hex'))
   const decrypted = Buffer.concat([
     decipher.update(Buffer.from(dataHex, 'hex')),

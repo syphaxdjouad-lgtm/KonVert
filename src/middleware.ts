@@ -8,8 +8,8 @@ const RATE_LIMITS: Record<string, { limit: number; windowMs: number }> = {
   '/api/scrape':          { limit: 10,  windowMs: 60_000 },       // 10 req/min
   '/api/stripe':          { limit: 20,  windowMs: 60_000 },       // 20 req/min
   '/api/waitlist':        { limit: 5,   windowMs: 60_000 },       // 5 req/min (anti-spam)
-  '/api/admin':           { limit: 20,  windowMs: 60_000 },       // 20 req/min
-  '/api/ab':              { limit: 60,  windowMs: 60_000 },       // 60 req/min (tracking public)
+  '/api/admin':           { limit: 5,   windowMs: 60_000 },       // 5 req/min (protection brute-force admin)
+  '/api/ab':              { limit: 30,  windowMs: 60_000 },       // 30 req/min (tracking public)
   '/login':               { limit: 10,  windowMs: 15 * 60_000 },  // 10 tentatives / 15 min
   '/signup':              { limit: 5,   windowMs: 15 * 60_000 },  // 5 tentatives / 15 min
 }

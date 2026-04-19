@@ -1,15 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import crypto from 'crypto'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-// Protection admin basique par secret header
+// Protection admin — comparaison timing-safe pour éviter les timing attacks
 function isAdmin(req: NextRequest) {
   const secret = req.headers.get('x-admin-secret')
-  return !!process.env.ADMIN_SECRET && secret === process.env.ADMIN_SECRET
+  const expected = process.env.ADMIN_SECRET
+  if (!secret || !expected) return false
+  // Padding à longueur égale obligatoire pour timingSafeEqual
+  const a = Buffer.alloc(64)
+  const b = Buffer.alloc(64)
+  Buffer.from(secret).copy(a)
+  Buffer.from(expected).copy(b)
+  return crypto.timingSafeEqual(a, b) && secret.length === expected.length
 }
 
 export async function GET(req: NextRequest) {

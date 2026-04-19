@@ -5,16 +5,24 @@ import { createClient } from '@/lib/supabase/server'
 // Vercel Pro permet jusqu'à 60s — on garde 55s pour les scrapes lourds
 export const maxDuration = 55
 
-// Domaines e-commerce supportés
-const ALLOWED_DOMAINS = [
-  'aliexpress.com', 'amazon.', 'alibaba.com', 'amazon.fr', 'amazon.co.uk',
-  'amazon.de', 'amazon.es', 'amazon.it', 'amazon.ca', 'amazon.com',
-]
+// Domaines e-commerce autorisés — liste exacte de hosts valides (pas de includes() pour éviter le spoofing)
+const ALLOWED_HOSTS = new Set([
+  'aliexpress.com', 'fr.aliexpress.com', 'www.aliexpress.com',
+  'alibaba.com', 'www.alibaba.com',
+  'amazon.com', 'www.amazon.com',
+  'amazon.fr', 'www.amazon.fr',
+  'amazon.co.uk', 'www.amazon.co.uk',
+  'amazon.de', 'www.amazon.de',
+  'amazon.es', 'www.amazon.es',
+  'amazon.it', 'www.amazon.it',
+  'amazon.ca', 'www.amazon.ca',
+])
 
-// Patterns bloqués pour prévenir le SSRF (accès aux IPs internes/métadonnées)
+// Patterns bloqués pour prévenir le SSRF (IPs privées, métadonnées cloud, IPv6 loopback)
 const BLOCKED_PATTERNS = [
   /^127\./, /^10\./, /^172\.(1[6-9]|2[0-9]|3[01])\./, /^192\.168\./,
-  /^169\.254\./, /^::1$/, /^fc00:/, /^fe80:/,
+  /^169\.254\./, /^::1$/, /^\[::1\]$/, /^0\.0\.0\.0/,
+  /^fc00:/, /^fe80:/, /^\[fc00/i, /^\[fe80/i,
   /localhost/i, /metadata/i, /169\.254\.169\.254/,
 ]
 
@@ -52,9 +60,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'URL non autorisée' }, { status: 403 })
     }
 
-    // Whitelist domaines e-commerce supportés
-    const isAllowed = ALLOWED_DOMAINS.some(d => hostname.includes(d))
-    if (!isAllowed) {
+    // Whitelist exacte — évite le spoofing type "amazon.attacker.com"
+    if (!ALLOWED_HOSTS.has(hostname)) {
       return NextResponse.json({ error: 'Domaine non supporté. Utilisez AliExpress, Amazon ou Alibaba.' }, { status: 403 })
     }
 

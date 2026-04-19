@@ -163,7 +163,7 @@ function TemplatePreview({ fn }: { fn: (d: LandingPageData) => string }) {
           pointerEvents: 'none',
           display: 'block',
         }}
-        sandbox="allow-same-origin allow-scripts"
+        sandbox="allow-scripts allow-popups"
       />
       <div style={{ position: 'absolute', inset: 0 }} />
     </div>
@@ -232,7 +232,7 @@ function TemplateModal({ t, onClose }: { t: typeof TEMPLATES[0]; onClose: () => 
           srcDoc={html}
           title={t.name}
           style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
-          sandbox="allow-same-origin allow-scripts"
+          sandbox="allow-scripts allow-popups"
         />
       </div>
     </div>

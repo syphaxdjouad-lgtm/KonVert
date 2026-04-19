@@ -1,230 +1,244 @@
 import type { LandingPageData } from '@/types'
 
 const IMGS = [
-  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80',
-  'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800&q=80',
-  'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&q=80',
-  'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&q=80',
+  'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/1456706/pexels-photo-1456706.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/1464625/pexels-photo-1464625.jpeg?auto=compress&cs=tinysrgb&w=800',
 ]
+const BEFORE_IMG = 'https://images.pexels.com/photos/1571939/pexels-photo-1571939.jpeg?auto=compress&cs=tinysrgb&w=600'
+const AFTER_IMG  = 'https://images.pexels.com/photos/2803158/pexels-photo-2803158.jpeg?auto=compress&cs=tinysrgb&w=600'
 
 export function templateEtecBlue(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
-  const main = imgs[0]
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
-  const acc = '#0057FF', accL = '#EEF3FF', accT = '#fff'
 
-  const thumbs = imgs.slice(0, 4).map((img, i) => `
-    <div onclick="document.getElementById('mi').src='${img}';document.querySelectorAll('.th').forEach(function(t,j){t.style.outline=j===${i}?'2px solid ${acc}':'2px solid transparent';t.style.opacity=j===${i}?'1':'.55';});" class="th" style="border-radius:10px;overflow:hidden;aspect-ratio:1;cursor:pointer;outline:2px solid ${i === 0 ? acc : 'transparent'};opacity:${i === 0 ? 1 : .55};transition:all .2s;">
-      <img src="${img}" style="width:100%;height:100%;object-fit:cover;display:block;" />
-    </div>`).join('')
-
-  const bens = benefits.map(b => `
-    <li style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;">
-      <span style="width:22px;height:22px;border-radius:50%;background:${acc};color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">✓</span>
-      <span style="font-size:14px;color:#444;line-height:1.6;">${b}</span>
-    </li>`).join('')
-
-  const feats = [
-    { label: 'Performance', title: benefits[0] || data.product_name, desc: data.subtitle || '', img: imgs[0] },
-    { label: 'Confort', title: benefits[1] || 'Conçu pour vous', desc: benefits[3] || '', img: imgs[1] },
-    { label: 'Durabilité', title: benefits[2] || 'Fait pour durer', desc: benefits[4] || '', img: imgs[2] },
-  ].map((f, i) => `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;margin-bottom:72px;" class="fr">
-      <div style="order:${i%2?2:1};border-radius:20px;overflow:hidden;aspect-ratio:4/3;">
-        <img src="${f.img}" style="width:100%;height:100%;object-fit:cover;display:block;" />
-      </div>
-      <div style="order:${i%2?1:2};">
-        <p style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${acc};margin-bottom:12px;">${f.label}</p>
-        <h3 style="font-size:22px;font-weight:800;line-height:1.25;letter-spacing:-.02em;color:#0D0D0D;margin-bottom:14px;">${f.title}</h3>
-        <p style="font-size:14px;color:#666;line-height:1.8;">${f.desc || 'Un avantage clé qui fait toute la différence au quotidien.'}</p>
-      </div>
-    </div>`).join('')
-
-  const reviews = [
-    { t: '"Franchement bluffant. La qualité est là, livraison en 2 jours, emballage soigné. Je recommande sans hésiter à tout le monde."', n: 'Alexandre M.', d: 'Il y a 3 jours' },
-    { t: '"J\'hésitais mais après les avis j\'ai sauté le pas. Vraiment contente ! Conforme à la description, bien emballé. Top qualité."', n: 'Sophie L.', d: 'Il y a 1 semaine' },
-    { t: '"Rapport qualité/prix imbattable. Commandé pour un cadeau, la personne était ravie. Service client très réactif aussi."', n: 'Thomas R.', d: 'Il y a 2 semaines' },
-  ].map(r => `
-    <div style="background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:26px;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
-        <span style="color:#FBBF24;font-size:14px;letter-spacing:2px;">★★★★★</span>
-        <span style="font-size:11px;color:#16a34a;font-weight:600;background:#dcfce7;padding:3px 8px;border-radius:20px;">✓ Achat vérifié</span>
-      </div>
-      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:18px;font-style:italic;">${r.t}</p>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:32px;height:32px;border-radius:50%;background:#EEF3FF;color:${acc};font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;">${r.n[0]}</div>
-        <div><p style="font-size:13px;font-weight:700;color:#111;">${r.n}</p><p style="font-size:11px;color:#999;">${r.d}</p></div>
-      </div>
-    </div>`).join('')
-
-  const faqs = data.faq.map((f, i) => `
-    <div style="border-bottom:1px solid #E5E7EB;">
-      <button onclick="var p=this.nextElementSibling,o=p.style.maxHeight&&p.style.maxHeight!=='0px';document.querySelectorAll('.fp').forEach(function(x){x.style.maxHeight='0';x.style.paddingBottom='0';});document.querySelectorAll('.fi').forEach(function(x){x.textContent='+';x.style.transform='rotate(0deg)';});if(!o){p.style.maxHeight='220px';p.style.paddingBottom='16px';this.querySelector('.fi').textContent='−';}" style="width:100%;background:none;border:none;padding:20px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;font-family:inherit;">
-        <span style="font-size:15px;font-weight:600;color:#111;">${f.question}</span>
-        <span class="fi" style="color:${acc};font-size:22px;font-weight:300;line-height:1;flex-shrink:0;">${i===0?'−':'+'}</span>
+  const faqHtml = data.faq.map((f, i) => `
+    <div style="border-bottom:1px solid #E8E8ED;overflow:hidden;">
+      <button onclick="(function(){var c=document.getElementById('faq1-${i}');var a=document.getElementById('arr1-${i}');var open=c.style.maxHeight!=='0px'&&c.style.maxHeight!=='';c.style.maxHeight=open?'0px':'500px';c.style.paddingTop=open?'0':'12px';a.style.transform=open?'rotate(0deg)':'rotate(180deg)';})()" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:18px 0;background:none;border:none;cursor:pointer;text-align:left;">
+        <span style="font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:#1D1D1F;">${f.question}</span>
+        <span id="arr1-${i}" style="font-size:18px;color:#6E6E73;transition:transform .3s;flex-shrink:0;margin-left:16px;">›</span>
       </button>
-      <div class="fp" style="max-height:${i===0?'220px':'0'};overflow:hidden;transition:max-height .3s ease,padding-bottom .3s;padding-bottom:${i===0?'16px':'0'};font-size:14px;color:#666;line-height:1.8;">${f.answer}</div>
+      <div id="faq1-${i}" style="max-height:0;overflow:hidden;transition:max-height .35s ease,padding-top .35s ease;padding-top:0;">
+        <p style="font-family:'Inter',sans-serif;font-size:14px;color:#6E6E73;line-height:1.7;padding-bottom:18px;margin:0;">${f.answer}</p>
+      </div>
     </div>`).join('')
+
+  const tabContents = [
+    { id: 'tab1-garantie', label: 'Garantie', content: `<p style="font-size:14px;color:#6E6E73;line-height:1.7;margin:0;">Satisfait ou remboursé pendant 30 jours. Si vous n'êtes pas entièrement satisfait de votre achat, retournez-le dans son emballage d'origine pour un remboursement complet. Garantie fabricant 12 mois incluse.</p>` },
+    { id: 'tab1-livraison', label: 'Livraison', content: `<p style="font-size:14px;color:#6E6E73;line-height:1.7;margin:0;">Livraison gratuite dès 50€. Expédition sous 24–48h ouvrées. Livraison standard 3–5 jours, express 24h disponible. Suivi en temps réel par SMS et email. Livraison dans toute l'Europe.</p>` },
+    { id: 'tab1-support', label: 'Support', content: `<p style="font-size:14px;color:#6E6E73;line-height:1.7;margin:0;">Notre équipe support est disponible du lundi au samedi, 9h–19h. Chat en ligne, email sous 2h, téléphone disponible. Nous parlons français, anglais et espagnol.</p>` },
+  ]
+
+  const specItems = [
+    { num: benefits[0] ? '01' : '—', title: benefits[0] || 'Performance', desc: data.subtitle || 'Conçu pour dépasser vos attentes' },
+    { num: benefits[1] ? '02' : '—', title: benefits[1] || 'Qualité', desc: 'Matériaux premium sélectionnés avec soin' },
+    { num: benefits[2] ? '03' : '—', title: benefits[2] || 'Design', desc: 'Esthétique épurée, finitions premium' },
+  ]
 
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${data.product_name}</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:#F8F9FA;color:#0D0D0D;font-family:'Inter',sans-serif;line-height:1.6;font-size:15px;}
-  .w{max-width:1100px;margin:0 auto;padding:0 24px;}
-  img{display:block;}
-  @media(max-width:768px){.pg,.fr,.rg{grid-template-columns:1fr!important;gap:24px!important;}.fr>div{order:unset!important;}h1{font-size:26px!important;}.hiw{grid-template-columns:1fr!important;}}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:#FAFAFA;color:#1D1D1F;}
+.blue-btn-primary{background:#0055D4;color:#fff;border:none;border-radius:12px;padding:16px 32px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .2s,transform .15s;}
+.blue-btn-primary:hover{background:#0040A8;transform:translateY(-1px);}
+.blue-btn-secondary{background:transparent;color:#0055D4;border:2px solid #0055D4;border-radius:12px;padding:14px 32px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;}
+.blue-btn-secondary:hover{background:#EEF3FF;}
+@media(max-width:768px){
+  .blue-hero-grid{flex-direction:column!important;}
+  .blue-hero-img-col{width:100%!important;}
+  .blue-hero-info-col{width:100%!important;padding:24px 20px!important;}
+  .blue-specs-grid{grid-template-columns:1fr!important;}
+  .blue-before-after{flex-direction:column!important;}
+  .blue-reviews-grid{grid-template-columns:1fr!important;}
+  .blue-trust-grid{grid-template-columns:1fr 1fr!important;gap:12px!important;}
+  .blue-hero-img-col img{border-radius:0!important;}
+  .blue-tabs{flex-wrap:wrap!important;}
+}
 </style>
 </head>
 <body>
 
-<!-- breadcrumb -->
-<div style="background:#fff;border-bottom:1px solid #E5E7EB;">
-  <div class="w" style="padding:12px 24px;font-size:13px;color:#999;">
-    <a href="#" style="color:${acc};text-decoration:none;">Accueil</a> <span style="margin:0 6px;">›</span>
-    <a href="#" style="color:${acc};text-decoration:none;">Boutique</a> <span style="margin:0 6px;">›</span>
-    ${data.product_name}
+<!-- BREADCRUMB -->
+<nav style="background:#fff;border-bottom:1px solid #E8E8ED;padding:12px 24px;">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;">
+    <span style="font-size:12px;color:#6E6E73;cursor:pointer;">Accueil</span>
+    <span style="font-size:12px;color:#C7C7CC;">›</span>
+    <span style="font-size:12px;color:#6E6E73;cursor:pointer;">Catalogue</span>
+    <span style="font-size:12px;color:#C7C7CC;">›</span>
+    <span style="font-size:12px;color:#1D1D1F;font-weight:500;">${data.product_name}</span>
   </div>
+</nav>
+
+<!-- URGENCY BANNER -->
+<div style="background:#0055D4;color:#fff;text-align:center;padding:10px 20px;font-size:13px;font-weight:600;letter-spacing:0.02em;">
+  ${data.urgency || 'Offre limitée — Stock en cours d\'épuisement'}
 </div>
 
-<!-- hero -->
-<div class="w">
-  <div class="pg" style="display:grid;grid-template-columns:55% 45%;gap:56px;padding:44px 0 80px;align-items:start;">
+<!-- HERO — 60/40 SPLIT -->
+<section style="background:#fff;padding:0;">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:580px;" class="blue-hero-grid">
 
-    <!-- gallery -->
-    <div>
-      <div style="background:#fff;border-radius:20px;overflow:hidden;aspect-ratio:1;border:1px solid #E5E7EB;margin-bottom:12px;">
-        <img id="mi" src="${main}" alt="${data.product_name}" style="width:100%;height:100%;object-fit:cover;" />
+    <!-- IMAGE COLUMN -->
+    <div style="width:60%;position:relative;background:#F5F5F7;" class="blue-hero-img-col">
+      <img id="mi1" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:0 24px 24px 0;min-height:480px;" alt="${data.product_name}">
+      <!-- Thumbnails overlay -->
+      <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">
+        ${imgs.slice(0,4).map((img, i) => `
+        <div onclick="document.getElementById('mi1').src='${img}';document.querySelectorAll('.th1').forEach(function(t,j){t.style.outline=j===${i}?'2px solid #0055D4':'2px solid transparent';t.style.opacity=j===${i}?'1':'.6';});" class="th1" style="width:52px;height:52px;border-radius:8px;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?'#0055D4':'transparent'};opacity:${i===0?1:.6};transition:all .2s;background:#fff;">
+          <img src="${img}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div>`).join('')}
       </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">${thumbs}</div>
     </div>
 
-    <!-- info -->
-    <div style="padding-top:8px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${acc};margin-bottom:10px;">Nouveau · Bestseller</p>
-      <h1 style="font-size:34px;font-weight:900;line-height:1.1;letter-spacing:-.03em;margin-bottom:14px;">${data.product_name}</h1>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
-        <span style="color:#FBBF24;font-size:14px;letter-spacing:2px;">★★★★★</span>
-        <a href="#reviews" style="font-size:13px;color:${acc};text-decoration:none;">127 avis clients</a>
-      </div>
-      <p style="font-size:14px;color:#555;line-height:1.8;margin-bottom:24px;">${data.subtitle||''}</p>
+    <!-- INFO COLUMN -->
+    <div style="width:40%;padding:48px 40px;display:flex;flex-direction:column;justify-content:center;" class="blue-hero-info-col">
+      ${savePct > 0 ? `<div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:16px;"><span style="background:#EEF3FF;color:#0055D4;font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:0.05em;">ÉCONOMISEZ ${savePct}%</span></div>` : ''}
+      <h1 style="font-size:38px;font-weight:900;color:#1D1D1F;line-height:1.1;letter-spacing:-0.04em;margin-bottom:12px;">${data.headline}</h1>
+      <p style="font-size:15px;color:#6E6E73;line-height:1.6;margin-bottom:24px;">${data.subtitle}</p>
 
-      <!-- price -->
-      <div style="background:${accL};border-radius:14px;padding:18px 20px;margin-bottom:28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-        ${data.price?`<span style="font-size:38px;font-weight:900;letter-spacing:-.03em;">${data.price}€</span>`:''}
-        ${data.original_price?`<span style="font-size:18px;color:#999;text-decoration:line-through;">${data.original_price}€</span>`:''}
-        ${savePct>0?`<span style="background:${acc};color:#fff;padding:5px 12px;border-radius:100px;font-size:12px;font-weight:700;">-${savePct}%</span>`:''}
+      <!-- PRICE BLOCK -->
+      <div style="background:#F5F5F7;border-radius:12px;padding:16px 20px;margin-bottom:24px;display:inline-block;">
+        <div style="display:flex;align-items:baseline;gap:12px;">
+          ${data.price ? `<span style="font-size:32px;font-weight:800;color:#1D1D1F;">${data.price}€</span>` : ''}
+          ${data.original_price ? `<span style="font-size:18px;color:#8E8E93;text-decoration:line-through;">${data.original_price}€</span>` : ''}
+        </div>
+        ${savePct > 0 ? `<p style="font-size:12px;color:#0055D4;font-weight:600;margin-top:4px;">Vous économisez ${+data.original_price! - +data.price!}€</p>` : ''}
       </div>
 
-      <ul style="list-style:none;margin-bottom:28px;">${bens}</ul>
+      <!-- BENEFITS -->
+      <ul style="list-style:none;margin-bottom:28px;display:flex;flex-direction:column;gap:8px;">
+        ${benefits.map(b => `
+        <li style="display:flex;align-items:flex-start;gap:10px;">
+          <span style="width:20px;height:20px;border-radius:50%;background:#0055D4;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">✓</span>
+          <span style="font-size:14px;color:#444;line-height:1.5;">${b}</span>
+        </li>`).join('')}
+      </ul>
 
       <!-- CTAs -->
-      <a href="#" style="display:block;text-align:center;background:${acc};color:${accT};padding:16px;border-radius:100px;font-size:15px;font-weight:700;text-decoration:none;margin-bottom:10px;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">${data.cta||'Commander maintenant'}</a>
-      <a href="#" style="display:block;text-align:center;background:transparent;color:#111;padding:14px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;border:2px solid #E5E7EB;margin-bottom:18px;" onmouseover="this.style.borderColor='${acc}'" onmouseout="this.style.borderColor='#E5E7EB'">Ajouter au panier</a>
-
-      ${data.urgency?`<div style="display:flex;align-items:center;gap:8px;background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:11px 14px;margin-bottom:22px;"><span style="font-size:16px;">⚡</span><p style="font-size:13px;color:#c2410c;font-weight:600;">${data.urgency}</p></div>`:''}
-
-      <!-- trust -->
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#E5E7EB;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;margin-bottom:20px;">
-        ${[['🚚','Livraison offerte','Dès 50€'],['🔒','Paiement sécurisé','SSL 256-bit'],['↩️','Retour 30 jours','Sans frais']].map(([ic,ti,su])=>`
-          <div style="background:#fff;padding:14px 8px;text-align:center;">
-            <div style="font-size:18px;margin-bottom:5px;">${ic}</div>
-            <div style="font-size:11px;font-weight:700;margin-bottom:2px;">${ti}</div>
-            <div style="font-size:11px;color:#999;">${su}</div>
-          </div>`).join('')}
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <button class="blue-btn-primary" style="width:100%;justify-content:center;font-size:16px;padding:18px 32px;">
+          ${data.cta || 'Ajouter au panier'} →
+        </button>
+        <button class="blue-btn-secondary" style="width:100%;justify-content:center;">
+          Acheter maintenant
+        </button>
       </div>
 
-      <!-- tabs -->
-      <div style="border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;">
-        <div style="display:flex;border-bottom:1px solid #E5E7EB;">
-          ${['Garantie','Livraison','Support'].map((t,i)=>`<button onclick="document.querySelectorAll('.tp').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tb').forEach(function(b,j){b.style.background=j===${i}?'${accL}':'transparent';b.style.color=j===${i}?'${acc}':'#999';b.style.fontWeight=j===${i}?'700':'500';});" class="tb" style="flex:1;padding:12px 6px;background:${i===0?accL:'transparent'};border:none;cursor:pointer;font-size:13px;font-weight:${i===0?'700':'500'};color:${i===0?acc:'#999'};font-family:inherit;">${t}</button>`).join('')}
+      <!-- TRUST MINI -->
+      <div style="display:flex;gap:20px;margin-top:20px;padding-top:16px;border-top:1px solid #E8E8ED;" class="blue-trust-grid">
+        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">🚚 Livraison offerte</span>
+        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">🔒 Paiement sécurisé</span>
+        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">↩ Retour 30j</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECS SECTION — APPLE STYLE 3 COLONNES -->
+<section style="padding:80px 24px;background:#F5F5F7;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#6E6E73;text-align:center;text-transform:uppercase;margin-bottom:8px;">Caractéristiques</p>
+    <h2 style="font-size:32px;font-weight:800;color:#1D1D1F;text-align:center;letter-spacing:-0.03em;margin-bottom:56px;">${data.product_name} en chiffres</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#E8E8ED;border-radius:20px;overflow:hidden;" class="blue-specs-grid">
+      ${specItems.map(s => `
+      <div style="background:#fff;padding:40px 32px;display:flex;flex-direction:column;gap:12px;">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.1em;color:#0055D4;text-transform:uppercase;">${s.num}</span>
+        <h3 style="font-size:20px;font-weight:700;color:#1D1D1F;line-height:1.3;">${s.title}</h3>
+        <p style="font-size:14px;color:#6E6E73;line-height:1.6;">${s.desc}</p>
+      </div>`).join('')}
+    </div>
+  </div>
+</section>
+
+<!-- TABS — GARANTIE / LIVRAISON / SUPPORT -->
+<section style="padding:60px 24px;background:#fff;">
+  <div style="max-width:800px;margin:0 auto;">
+    <div style="display:flex;border-bottom:2px solid #E8E8ED;margin-bottom:32px;gap:0;" class="blue-tabs">
+      ${tabContents.map((t, i) => `
+      <button id="tbtn1-${i}" onclick="(function(){document.querySelectorAll('.tp1').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tbtn1').forEach(function(b,j){b.style.borderBottom=j===${i}?'2px solid #0055D4':'2px solid transparent';b.style.color=j===${i}?'#0055D4':'#6E6E73';b.style.marginBottom='-2px';});})()" class="tbtn1" style="padding:14px 24px;background:none;border:none;border-bottom:${i===0?'2px solid #0055D4':'2px solid transparent'};color:${i===0?'#0055D4':'#6E6E73'};font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:-2px;transition:all .2s;">${t.label}</button>`).join('')}
+    </div>
+    ${tabContents.map((t, i) => `
+    <div id="${t.id}" class="tp1" style="display:${i===0?'block':'none'};">${t.content}</div>`).join('')}
+  </div>
+</section>
+
+<!-- AVANT / APRES -->
+<section style="padding:80px 24px;background:#FAFAFA;">
+  <div style="max-width:1000px;margin:0 auto;">
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#6E6E73;text-align:center;text-transform:uppercase;margin-bottom:8px;">La différence</p>
+    <h2 style="font-size:32px;font-weight:800;color:#1D1D1F;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">Avant / Après</h2>
+    <div style="display:flex;gap:24px;" class="blue-before-after">
+      <div style="flex:1;position:relative;border-radius:20px;overflow:hidden;">
+        <img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:320px;object-fit:cover;display:block;filter:saturate(0.6);" alt="Avant">
+        <div style="position:absolute;top:16px;left:16px;background:rgba(0,0,0,0.6);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:100px;letter-spacing:0.05em;">AVANT</div>
+      </div>
+      <div style="flex:1;position:relative;border-radius:20px;overflow:hidden;">
+        <img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:320px;object-fit:cover;display:block;" alt="Après">
+        <div style="position:absolute;top:16px;left:16px;background:#0055D4;color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:100px;letter-spacing:0.05em;">APRÈS</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AVIS CLIENTS -->
+<section style="padding:80px 24px;background:#fff;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#6E6E73;text-align:center;text-transform:uppercase;margin-bottom:8px;">Avis clients</p>
+    <h2 style="font-size:32px;font-weight:800;color:#1D1D1F;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">Ce qu'ils en pensent</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="blue-reviews-grid">
+      ${[
+        { name: 'Marie T.', text: `Exactement ce que je cherchais. Qualité irréprochable, livraison rapide. Je recommande les yeux fermés !`, date: 'Il y a 3 jours' },
+        { name: 'Lucas B.', text: `Franchement impressionné. Le ${data.product_name} dépasse mes attentes. La qualité est là, le design aussi.`, date: 'Il y a 1 semaine' },
+        { name: 'Sophie M.', text: `Acheté pour offrir. La personne l'adore ! Emballage soigné, produit impeccable. Parfait.`, date: 'Il y a 2 semaines' },
+      ].map(r => `
+      <div style="background:#FAFAFA;border-radius:16px;padding:28px 24px;border:1px solid #F0F0F5;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:#0055D4;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;">${r.name[0]}</div>
+          <div>
+            <p style="font-size:14px;font-weight:700;color:#1D1D1F;">${r.name}</p>
+            <p style="font-size:11px;color:#6E6E73;">${r.date}</p>
+          </div>
         </div>
-        <div class="tp" style="padding:16px;font-size:13px;color:#666;line-height:1.8;background:#fff;">Garantie <strong>1 an</strong> pièces et main d'œuvre. Remplacement ou remboursement intégral en cas de défaut.</div>
-        <div class="tp" style="padding:16px;font-size:13px;color:#666;line-height:1.8;display:none;background:#fff;">Livraison <strong>2–4 jours</strong> ouvrés. Expédition le jour même avant 14h. Suivi par email.</div>
-        <div class="tp" style="padding:16px;font-size:13px;color:#666;line-height:1.8;display:none;background:#fff;">Équipe disponible <strong>7j/7</strong>. Réponse sous 24h garantie. Satisfait ou remboursé.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- features -->
-<div style="background:#fff;padding:80px 0;border-top:1px solid #E5E7EB;">
-  <div class="w">
-    <div style="text-align:center;margin-bottom:56px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${acc};margin-bottom:10px;">Caractéristiques</p>
-      <h2 style="font-size:30px;font-weight:900;letter-spacing:-.03em;margin-bottom:10px;">${data.headline||data.product_name}</h2>
-      <p style="font-size:15px;color:#666;max-width:500px;margin:0 auto;">${data.subtitle||''}</p>
-    </div>
-    ${feats}
-  </div>
-</div>
-
-<!-- avant/après -->
-<div style="background:#F8F9FA;padding:80px 0;">
-  <div class="w">
-    <div style="text-align:center;margin-bottom:48px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${acc};margin-bottom:10px;">Transformation</p>
-      <h2 style="font-size:30px;font-weight:900;letter-spacing:-.03em;">Avant / Après</h2>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" class="rg">
-      <div style="background:#fff;border-radius:16px;overflow:hidden;border:1px solid #E5E7EB;">
-        <div style="position:relative;aspect-ratio:4/3;overflow:hidden;">
-          <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80" style="width:100%;height:100%;object-fit:cover;" />
-          <span style="position:absolute;top:12px;left:12px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;">AVANT</span>
+        <div style="color:#0055D4;font-size:14px;letter-spacing:2px;margin-bottom:12px;">★★★★★</div>
+        <p style="font-size:14px;color:#444;line-height:1.7;">"${r.text}"</p>
+        <div style="margin-top:16px;display:inline-flex;align-items:center;gap:6px;background:#EEF3FF;padding:4px 10px;border-radius:100px;">
+          <span style="font-size:11px;color:#0055D4;font-weight:600;">✓ Achat vérifié</span>
         </div>
-        <div style="padding:20px;"><p style="font-weight:700;margin-bottom:6px;">Avant ${data.product_name}</p><p style="font-size:13px;color:#666;line-height:1.7;">Résultats limités malgré les efforts. Frustration et perte de temps au quotidien.</p></div>
-      </div>
-      <div style="background:#fff;border-radius:16px;overflow:hidden;border:1px solid ${acc}20;">
-        <div style="position:relative;aspect-ratio:4/3;overflow:hidden;">
-          <img src="https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=600&q=80" style="width:100%;height:100%;object-fit:cover;" />
-          <span style="position:absolute;top:12px;left:12px;background:rgba(22,163,74,.9);color:#fff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;">APRÈS</span>
-        </div>
-        <div style="padding:20px;"><p style="font-weight:700;margin-bottom:6px;color:${acc};">Après ${data.product_name}</p><p style="font-size:13px;color:#666;line-height:1.7;">Résultats visibles dès la première utilisation. Performance et confiance décuplées.</p></div>
-      </div>
+      </div>`).join('')}
     </div>
   </div>
-</div>
+</section>
 
-<!-- reviews -->
-<div id="reviews" style="background:#fff;padding:80px 0;border-top:1px solid #E5E7EB;">
-  <div class="w">
-    <div style="text-align:center;margin-bottom:48px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${acc};margin-bottom:10px;">Avis clients</p>
-      <h2 style="font-size:30px;font-weight:900;letter-spacing:-.03em;margin-bottom:10px;">Ce que disent nos clients</h2>
-      <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
-        <span style="color:#FBBF24;letter-spacing:3px;">★★★★★</span>
-        <span style="font-size:14px;color:#666;">4.9/5 · 127 avis vérifiés</span>
-      </div>
-    </div>
-    <div class="rg" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">${reviews}</div>
+<!-- FAQ -->
+<section style="padding:80px 24px;background:#F5F5F7;">
+  <div style="max-width:700px;margin:0 auto;">
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#6E6E73;text-align:center;text-transform:uppercase;margin-bottom:8px;">FAQ</p>
+    <h2 style="font-size:32px;font-weight:800;color:#1D1D1F;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">Questions fréquentes</h2>
+    <div style="background:#fff;border-radius:20px;padding:8px 28px;">${faqHtml}</div>
   </div>
-</div>
+</section>
 
-<!-- faq -->
-<div style="background:#F8F9FA;padding:80px 0;">
-  <div class="w" style="max-width:700px;">
-    <div style="text-align:center;margin-bottom:48px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${acc};margin-bottom:10px;">FAQ</p>
-      <h2 style="font-size:30px;font-weight:900;letter-spacing:-.03em;">Questions fréquentes</h2>
-    </div>
-    ${faqs}
+<!-- CTA FINAL -->
+<section style="padding:80px 24px;background:#0055D4;">
+  <div style="max-width:700px;margin:0 auto;text-align:center;">
+    <h2 style="font-size:36px;font-weight:900;color:#fff;letter-spacing:-0.03em;margin-bottom:16px;">${data.headline}</h2>
+    <p style="font-size:16px;color:rgba(255,255,255,0.8);margin-bottom:32px;">${data.subtitle}</p>
+    ${data.price ? `<p style="font-size:48px;font-weight:900;color:#fff;margin-bottom:32px;">${data.price}€</p>` : ''}
+    <button style="background:#fff;color:#0055D4;border:none;border-radius:12px;padding:18px 48px;font-family:'Inter',sans-serif;font-size:17px;font-weight:800;cursor:pointer;">${data.cta || 'Commander maintenant'} →</button>
+    <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:16px;">Livraison gratuite · Paiement sécurisé · Retour 30 jours</p>
   </div>
-</div>
-
-<!-- cta final -->
-<div style="background:${acc};padding:80px 24px;text-align:center;">
-  <h2 style="font-size:36px;font-weight:900;color:#fff;letter-spacing:-.03em;margin-bottom:14px;">${data.headline||'Prêt à commander ?'}</h2>
-  <p style="color:rgba(255,255,255,.75);font-size:16px;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto;">${data.urgency||'Livraison offerte · Paiement sécurisé · Retour 30 jours'}</p>
-  <a href="#" style="display:inline-block;background:#fff;color:${acc};padding:16px 48px;border-radius:100px;font-size:16px;font-weight:800;text-decoration:none;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">${data.cta||'Commander maintenant'} →</a>
-  <p style="margin-top:18px;font-size:13px;color:rgba(255,255,255,.4);">Paiement sécurisé · Satisfait ou remboursé · Livraison offerte</p>
-</div>
+</section>
 
 </body>
 </html>`

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   templateEtecBlue,
   templateEtecNoir,
@@ -646,6 +647,7 @@ function TemplateCard({ t, onOpen }: { t: typeof TEMPLATES[0]; onOpen: (t: typeo
 // ---------------------------------------------------------------------------
 
 export default function TemplatesPage() {
+  const router = useRouter()
   const [selected, setSelected] = useState<typeof TEMPLATES[0] | null>(null)
   const [activeFilter, setActiveFilter] = useState('Tous')
 
@@ -661,16 +663,25 @@ export default function TemplatesPage() {
       {selected && <TemplateModal t={selected} onClose={() => setSelected(null)} />}
 
       {/* HERO */}
-      <section className="pt-32 pb-16 px-6" style={{ background: '#08080f' }}>
+      <section className="pt-32 pb-16 px-6" style={{ background: '#f8f7ff' }}>
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm mb-6" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)' }}>
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-1.5 text-sm font-medium mb-8 transition-all mx-auto"
+            style={{ color: '#9ca3af' }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#5B47F5' }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#9ca3af' }}
+          >
+            ← Retour
+          </button>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm mb-6" style={{ background: 'rgba(91,71,245,0.08)', border: '1px solid rgba(91,71,245,0.15)', color: '#5B47F5' }}>
             12 templates · chaque niche a son design
           </div>
-          <h1 className="text-5xl sm:text-6xl font-black text-white leading-tight tracking-tight mb-5">
+          <h1 className="text-5xl sm:text-6xl font-black leading-tight tracking-tight mb-5" style={{ color: '#0f0f1a' }}>
             Le bon design pour{' '}
             <span style={{ color: '#5B47F5' }}>chaque niche.</span>
           </h1>
-          <p className="text-lg max-w-2xl mx-auto mb-10" style={{ color: 'rgba(255,255,255,0.5)' }}>
+          <p className="text-lg max-w-2xl mx-auto mb-10" style={{ color: '#6b7280' }}>
             Chaque template est inspiré des meilleures landing pages mondiales,
             optimisé pour convertir dans sa niche spécifique.
           </p>
@@ -681,9 +692,9 @@ export default function TemplatesPage() {
                 onClick={() => setActiveFilter(tab)}
                 className="px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200"
                 style={{
-                  background: activeFilter === tab ? '#5B47F5' : 'rgba(255,255,255,0.05)',
-                  color: activeFilter === tab ? '#fff' : 'rgba(255,255,255,0.55)',
-                  borderColor: activeFilter === tab ? '#5B47F5' : 'rgba(255,255,255,0.1)',
+                  background: activeFilter === tab ? '#5B47F5' : '#fff',
+                  color: activeFilter === tab ? '#fff' : '#6b7280',
+                  borderColor: activeFilter === tab ? '#5B47F5' : '#e5e7eb',
                 }}
               >
                 {tab}

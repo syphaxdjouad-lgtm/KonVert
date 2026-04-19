@@ -8,6 +8,7 @@ import {
   templateEtecSage,
   templateEtecBeauty,
   templateEtecStyle,
+  templateEtecShopz,
 } from '@/lib/templates'
 import type { LandingPageData } from '@/types'
 
@@ -259,6 +260,20 @@ const TEMPLATES = [
     fn: templateEtecBeauty,
     sample: SAMPLE_HAIRGLOW,
     preview: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80',
+  },
+  {
+    id: 'etec-shopz',
+    name: 'Shopz',
+    tagline: 'E-commerce · Clothing · Mode Urbaine',
+    desc: 'Page produit e-commerce complète style Shopz. Galerie interactive, sélecteur couleur/taille, avis avec barres de distribution, section "You might like" et footer dark.',
+    accent: '#1A5C30',
+    badgeBg: '#1A5C30',
+    badge: 'E-commerce',
+    cvr: '5.6%',
+    niches: ['Clothing', 'E-commerce', 'Mode', 'Streetwear'],
+    fn: templateEtecShopz,
+    sample: SAMPLE_BLUE,
+    preview: 'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80',
   },
   {
     id: 'etec-style',

@@ -11,6 +11,7 @@ export { templateEtecStyle }  from './etec-style'
 export { templateEtecShopz }   from './etec-shopz'
 export { templateEtecVelvety } from './etec-velvety'
 export { templateEtecPrime }  from './etec-prime'
+export { templateEtecBlusho } from './etec-blusho'
 
 import { templateEtecBlue }   from './etec-blue'
 import { templateEtecNoir }   from './etec-noir'
@@ -23,6 +24,7 @@ import { templateEtecStyle }  from './etec-style'
 import { templateEtecShopz }   from './etec-shopz'
 import { templateEtecVelvety } from './etec-velvety'
 import { templateEtecPrime }  from './etec-prime'
+import { templateEtecBlusho } from './etec-blusho'
 
 // ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
 
@@ -60,6 +62,7 @@ export const TEMPLATES = [
   { id: 'etec-shopz',   name: 'Shopz',   category: 'modern'  as const, fn: templateEtecShopz,   label: 'E-commerce · Clothing · Shopz Style', accent: '#1A5C30', badge: 'Nouveau'       },
   { id: 'etec-velvety', name: 'Velvety', category: 'organic' as const, fn: templateEtecVelvety, label: 'Skincare · Botanique · Haut de gamme',accent: '#4A7C59', badge: 'Nouveau'       },
   { id: 'etec-prime',   name: 'Prime',   category: 'modern'  as const, fn: templateEtecPrime,   label: 'Supplements · Health · DTC Premium',  accent: '#3CB043', badge: 'Nouveau'       },
+  { id: 'etec-blusho',  name: 'Blusho',  category: 'beauty'  as const, fn: templateEtecBlusho,  label: 'Cosmetics · Skincare · E-com Premium', accent: '#7A8C6E', badge: 'Nouveau'       },
 ]
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
@@ -77,6 +80,7 @@ export function renderTemplate(templateId: string, data: LandingPageData): strin
     case 'etec-shopz':      return templateEtecShopz(data)
     case 'etec-velvety':    return templateEtecVelvety(data)
     case 'etec-prime':      return templateEtecPrime(data)
+    case 'etec-blusho':     return templateEtecBlusho(data)
     case 'minimal-dark':
     case 'gaming-zone':
     case 'automotive-pro':  return templateEtecNoir(data)

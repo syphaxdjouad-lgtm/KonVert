@@ -63,6 +63,7 @@ const TEMPLATES = [
     cvr: '4.9%',
     niches: ['Tech', 'Mode', 'Accessoires', 'Universel'],
     fn: templateEtecBlue,
+    preview: '/images/etec-blue.jpg',
   },
   {
     id: 'etec-noir',
@@ -78,6 +79,7 @@ const TEMPLATES = [
     cvr: '4.7%',
     niches: ['Électronique', 'Montres', 'Auto', 'Gaming'],
     fn: templateEtecNoir,
+    preview: '/images/etec-noir.jpg',
   },
   {
     id: 'etec-rose',
@@ -93,6 +95,7 @@ const TEMPLATES = [
     cvr: '5.8%',
     niches: ['Beauté', 'Skincare', 'Makeup', 'Femme'],
     fn: templateEtecRose,
+    preview: '/images/etec-rose.jpg',
   },
   {
     id: 'etec-sage',
@@ -108,6 +111,7 @@ const TEMPLATES = [
     cvr: '4.3%',
     niches: ['Alimentation', 'Bio', 'Cosmétiques naturels', 'Maison'],
     fn: templateEtecSage,
+    preview: '/images/etec-sage.jpg',
   },
   {
     id: 'etec-gold',
@@ -123,6 +127,7 @@ const TEMPLATES = [
     cvr: '4.5%',
     niches: ['Bijoux', 'Parfums', 'Maroquinerie', 'Luxe'],
     fn: templateEtecGold,
+    preview: '/images/etec-gold.jpg',
   },
   {
     id: 'etec-energy',
@@ -138,34 +143,25 @@ const TEMPLATES = [
     cvr: '5.5%',
     niches: ['Sport', 'Fitness', 'Nutrition', 'Outdoor'],
     fn: templateEtecEnergy,
+    preview: '/images/etec-energy.jpg',
   },
 ]
 
 const FILTER_TABS = ['Tous', 'Tech', 'Beauté', 'Sport', 'Luxe', 'Organic', 'Mode']
 
 // ---------------------------------------------------------------------------
-// Preview iframe component
+// Preview image component
 // ---------------------------------------------------------------------------
 
-function TemplatePreview({ fn }: { fn: (d: LandingPageData) => string }) {
-  const html = fn(SAMPLE)
+function TemplatePreview({ preview, name }: { preview: string; name: string }) {
   return (
     <div style={{ position: 'relative', overflow: 'hidden', height: '220px', background: '#f3f3f3' }}>
-      <iframe
-        srcDoc={html}
-        title="preview"
-        style={{
-          width: '900px',
-          height: '560px',
-          transform: 'scale(0.44)',
-          transformOrigin: 'top left',
-          border: 'none',
-          pointerEvents: 'none',
-          display: 'block',
-        }}
-        sandbox="allow-scripts allow-popups"
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={preview}
+        alt={`Preview ${name}`}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
       />
-      <div style={{ position: 'absolute', inset: 0 }} />
     </div>
   )
 }
@@ -254,7 +250,7 @@ function TemplateCard({ t, onOpen }: { t: typeof TEMPLATES[0]; onOpen: (t: typeo
     >
       {/* Preview */}
       <div className="relative">
-        <TemplatePreview fn={t.fn} />
+        <TemplatePreview preview={t.preview} name={t.name} />
 
         {/* Overlay hover */}
         <div

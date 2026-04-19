@@ -29,6 +29,15 @@ export const metadata: Metadata = {
       'Génère ta fiche produit et landing page optimisées en 30 secondes. SEO, mobile, conversion — prêt à copier-coller sur ta boutique Shopify.',
     images: [`${APP_URL}/opengraph-image`],
   },
+  icons: {
+    icon: [
+      { url: '/favicon.png', type: 'image/png', sizes: '32x32' },
+      { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   alternates: {
     canonical: APP_URL,
   },

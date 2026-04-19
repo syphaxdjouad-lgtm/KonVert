@@ -19,12 +19,12 @@ const securityHeaders = [
       "default-src 'self'",
       // Scripts : Stripe, inline (shadcn/next), unsafe-eval pour GrapesJS builder
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
-      // Styles : inline partout (Tailwind + GrapesJS injecte du CSS dynamique)
-      "style-src 'self' 'unsafe-inline'",
+      // Styles : inline + Google Fonts CSS
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       // Images : data URIs, blob (GrapesJS), et tous les CDN produits e-commerce
       "img-src 'self' data: blob: https:",
-      // Polices
-      "font-src 'self' data:",
+      // Polices : Google Fonts (templates) + local
+      "font-src 'self' data: https://fonts.gstatic.com",
       // Connexions API
       "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com",
       // Iframes Stripe (checkout embedded)

@@ -609,7 +609,7 @@ function Slide2() {
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
             <Palette className="w-3.5 h-3.5" />
-            17 templates premium
+            6 templates premium
           </div>
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
             Tes visiteurs jugent ta page{' '}
@@ -618,7 +618,7 @@ function Slide2() {
             </span>
           </h1>
           <p className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0">
-            17 templates premium — chaque design suit les tendances mondiales et est calibré pour déclencher l&apos;achat. Mode, Tech, Beauté, Sport, Gaming et plus.
+            6 templates premium — chaque design suit les tendances mondiales et est calibré pour déclencher l&apos;achat. Mode, Tech, Beauté, Sport, Gaming et plus.
           </p>
           <Link
             href="/templates"
@@ -1240,9 +1240,9 @@ const FEATURES = [
     Icon: Palette,
     color: '#f97316',
     bg: 'rgba(249,115,22,0.08)',
-    title: '17 templates qui convertissent',
-    desc: 'Chaque template suit les tendances mondiales. Mode, tech, beauté, sport, gaming — le bon design pour chaque niche.',
-    tooltip: '17 designs optimisés par niche e-commerce',
+    title: '6 templates qui convertissent',
+    desc: 'Chaque template suit les tendances mondiales. Tech, Montres, Beauté, Bio, Hair Care, Fashion — le bon design pour chaque niche.',
+    tooltip: '6 designs optimisés par niche e-commerce',
   },
   {
     Icon: ChartBar,
@@ -2438,14 +2438,12 @@ function PublishSection() {
    TEMPLATES PREVIEW
 ═══════════════════════════════════════════════════════════════════════════ */
 const TEMPLATE_GRID = [
-  { name: 'Impulse Dark',    gradient: 'linear-gradient(135deg,#5B47F5,#7c6af7)',  tag: 'Mode',      img: '/images/template-fashion.jpg' },
-  { name: 'Glacier Clean',   gradient: 'linear-gradient(135deg,#0f172a,#1e293b)',  tag: 'Tech',      img: '/images/template-tech.jpg' },
-  { name: 'Ember Warm',      gradient: 'linear-gradient(135deg,#f97316,#fb923c)',  tag: 'Beauté',    img: '/images/template-beauty.jpg' },
-  { name: 'Teal Minimal',    gradient: 'linear-gradient(135deg,#0d9488,#2dd4bf)',  tag: 'Sport',     img: null },
-  { name: 'Neon Gaming',     gradient: 'linear-gradient(135deg,#7c3aed,#4f46e5)',  tag: 'Gaming',    img: null },
-  { name: 'Rose Luxury',     gradient: 'linear-gradient(135deg,#be185d,#db2777)',  tag: 'Luxe',      img: null },
-  { name: 'Ocean Bold',      gradient: 'linear-gradient(135deg,#0369a1,#0ea5e9)',  tag: 'Lifestyle', img: null },
-  { name: 'Forest Organic',  gradient: 'linear-gradient(135deg,#166534,#16a34a)',  tag: 'Bio',       img: null },
+  { name: 'ETEC Blue',   gradient: 'linear-gradient(135deg,#0057FF,#3b82f6)', tag: 'Tech · Sport',   img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80' },
+  { name: 'ETEC Noir',   gradient: 'linear-gradient(135deg,#0D0D0D,#1f1f2e)', tag: 'Montres · Luxe', img: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=600&q=80' },
+  { name: 'ETEC Rose',   gradient: 'linear-gradient(135deg,#D63370,#f472b6)', tag: 'Beauté · Skin',  img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80' },
+  { name: 'ETEC Sage',   gradient: 'linear-gradient(135deg,#2D6A4F,#40916c)', tag: 'Bio · Organic',  img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80' },
+  { name: 'Hair Glow',   gradient: 'linear-gradient(135deg,#E8622A,#f97316)', tag: 'Hair Care',      img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80' },
+  { name: 'Style Pro',   gradient: 'linear-gradient(135deg,#C9B49A,#a8926e)', tag: 'Fashion · Mode', img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80' },
 ]
 
 function TemplatesPreview() {
@@ -2464,7 +2462,7 @@ function TemplatesPreview() {
             Chaque niche a son template.
           </h2>
           <p className="reveal delay-2 text-lg text-gray-500 max-w-xl mx-auto">
-            17 designs calibrés pour convertir — Mode, Tech, Beauté, Sport, Gaming, Bio et plus. Le bon design pour le bon produit, immédiatement.
+            6 designs calibrés pour convertir — Tech, Montres, Beauté, Bio, Hair Care, Fashion. Le bon design pour le bon produit, immédiatement.
           </p>
         </div>
 
@@ -2650,7 +2648,7 @@ const PLANS = [
     name: 'Pro',
     monthly: 79,
     desc: 'Pour scaler votre e-commerce',
-    features: ['Pages illimitées', '17 templates', 'Analytics avancé', 'A/B Testing', 'Publish Shopify & Woo', 'Support prioritaire'],
+    features: ['Pages illimitées', '6 templates premium', 'Analytics avancé', 'A/B Testing', 'Publish Shopify & Woo', 'Support prioritaire'],
     cta: 'Choisir Pro',
     highlighted: true,
   },

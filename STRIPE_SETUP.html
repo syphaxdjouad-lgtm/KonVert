@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration Stripe LIVE — KONVERT</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --violet: #7c3aed;
+      --violet-light: #ede9fe;
+      --violet-mid: #c4b5fd;
+      --green: #16a34a;
+      --green-light: #dcfce7;
+      --red: #ef4444;
+      --red-light: #fee2e2;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --code-bg: #f5f4fa;
+      --border: #e5e7eb;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #ffffff;
+      color: var(--gray-900);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* PROGRESS BAR */
+    .progress-bar-container {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 24px;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 760px;
+      margin: 0 auto 6px;
+    }
+
+    .progress-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-500);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .progress-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--violet);
+    }
+
+    .progress-track {
+      max-width: 760px;
+      margin: 0 auto;
+      height: 5px;
+      background: var(--gray-100);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--violet), #a855f7);
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* LAYOUT */
+    .wrapper {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--gray-900);
+      letter-spacing: -0.03em;
+    }
+
+    .logo span {
+      color: var(--violet);
+    }
+
+    .badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-light);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 99px;
+      border: 1px solid #bbf7d0;
+    }
+
+    .badge-live::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--gray-900);
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+      margin-top: 20px;
+    }
+
+    .page-intro {
+      font-size: 14px;
+      color: var(--gray-500);
+      margin-bottom: 36px;
+    }
+
+    /* STEP CARD */
+    .step-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .step-card.completed {
+      border-color: #bbf7d0;
+      background: #fafffe;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .step-checkbox-wrap {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .step-checkbox {
+      display: none;
+    }
+
+    .step-checkbox-label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .checkbox-custom {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--gray-300);
+      border-radius: 6px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .step-checkbox:checked + .step-checkbox-label .checkbox-custom {
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .checkbox-custom svg {
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .step-checkbox:checked + .step-checkbox-label .checkbox-custom svg {
+      opacity: 1;
+    }
+
+    .step-meta {
+      flex: 1;
+    }
+
+    .step-number-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 2px;
+    }
+
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      background: var(--violet);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .step-url {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 1px;
+    }
+
+    .step-url a {
+      color: var(--violet);
+      text-decoration: none;
+    }
+
+    .step-url a:hover {
+      text-decoration: underline;
+    }
+
+    .step-body {
+      padding-left: 34px;
+    }
+
+    /* TABLE */
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .price-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gray-500);
+      padding: 0 12px 8px;
+    }
+
+    .price-table th:first-child {
+      padding-left: 0;
+    }
+
+    .price-table td {
+      padding: 10px 12px;
+      border-top: 1px solid var(--gray-100);
+      vertical-align: middle;
+    }
+
+    .price-table td:first-child {
+      padding-left: 0;
+    }
+
+    .plan-name {
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .plan-price {
+      color: var(--violet);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .plan-period {
+      font-size: 13px;
+      color: var(--gray-400);
+    }
+
+    /* INPUTS */
+    .input-group {
+      margin-bottom: 14px;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 5px;
+    }
+
+    .styled-input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: "SFMono-Regular", "Consolas", monospace;
+      color: var(--gray-900);
+      background: var(--gray-50);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+
+    .styled-input:focus {
+      border-color: var(--violet);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.08);
+      background: #fff;
+    }
+
+    .styled-input::placeholder {
+      color: var(--gray-300);
+    }
+
+    /* CODE BLOCK */
+    .code-block-wrap {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 16px 16px 16px 18px;
+      font-family: "SFMono-Regular", "Consolas", "Menlo", monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--gray-700);
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-500);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .copy-btn:hover {
+      background: var(--violet);
+      border-color: var(--violet);
+      color: #fff;
+    }
+
+    .copy-btn.copied {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    /* EVENTS LIST */
+    .events-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .events-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-family: "SFMono-Regular", "Consolas", monospace;
+      color: var(--gray-700);
+    }
+
+    .events-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--violet-mid);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gray-400);
+      margin-bottom: 10px;
+    }
+
+    /* BADGES VERCEL */
+    .env-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .env-badge {
+      display: inline-flex;
+      align-items: center;
+      background: var(--code-bg);
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-family: "SFMono-Regular", "Consolas", monospace;
+      color: var(--violet);
+      font-weight: 600;
+    }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: var(--gray-100);
+      margin: 16px 0;
+    }
+
+    /* SUMMARY TABLE */
+    .summary-card {
+      background: var(--gray-50);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 32px;
+    }
+
+    .summary-card-header {
+      padding: 16px 20px;
+      background: var(--violet);
+      color: #fff;
+    }
+
+    .summary-card-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .summary-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gray-400);
+      padding: 10px 20px;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-table td {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: middle;
+    }
+
+    .summary-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .summary-table td:first-child {
+      width: 80px;
+      font-size: 18px;
+    }
+
+    .summary-table td:nth-child(2) {
+      font-weight: 600;
+      color: var(--gray-900);
+    }
+
+    .tag-code {
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: var(--green-light);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+
+    .tag-you {
+      color: var(--violet);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: var(--violet-light);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+
+    /* ENDPOINT DISPLAY */
+    .endpoint-box {
+      background: var(--code-bg);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-family: "SFMono-Regular", "Consolas", monospace;
+      font-size: 13px;
+      color: var(--violet);
+      font-weight: 600;
+      margin-bottom: 16px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+
+<!-- STICKY PROGRESS BAR -->
+<div class="progress-bar-container">
+  <div class="progress-meta">
+    <span class="progress-label">Progression</span>
+    <span class="progress-count" id="progress-count">0 / 6 étapes</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">KON<span>VERT</span></div>
+    <span class="badge-live">Stripe LIVE</span>
+  </div>
+
+  <h1 class="page-title">Configuration Stripe LIVE</h1>
+  <p class="page-intro">Checklist complète pour passer de test à production. Faire dans l'ordre.</p>
+
+  <!-- ÉTAPE 1 -->
+  <div class="step-card" id="card-1">
+    <div class="step-header">
+      <div class="step-checkbox-wrap">
+        <input type="checkbox" class="step-checkbox" id="step-1" data-step="1" />
+        <label for="step-1" class="step-checkbox-label">
+          <span class="checkbox-custom">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </label>
+      </div>
+      <div class="step-meta">
+        <div class="step-number-title">
+          <span class="step-badge">1</span>
+          <span class="step-title">Créer les 3 produits dans Stripe Dashboard</span>
+        </div>
+        <div class="step-url">
+          <a href="https://dashboard.stripe.com/products" target="_blank">dashboard.stripe.com</a>
+          &rarr; Catalogue produits &rarr; Créer un produit
+        </div>
+      </div>
+    </div>
+
+    <div class="step-body">
+      <table class="price-table">
+        <thead>
+          <tr>
+            <th>Plan</th>
+            <th>Prix</th>
+            <th>Période</th>
+            <th>Price ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="plan-name">KONVERT Starter</span></td>
+            <td><span class="plan-price">39,00 €</span></td>
+            <td><span class="plan-period">Mensuel</span></td>
+            <td><input type="text" class="styled-input" placeholder="price_..." style="min-width:180px" /></td>
+          </tr>
+          <tr>
+            <td><span class="plan-name">KONVERT Pro</span></td>
+            <td><span class="plan-price">79,00 €</span></td>
+            <td><span class="plan-period">Mensuel</span></td>
+            <td><input type="text" class="styled-input" placeholder="price_..." style="min-width:180px" /></td>
+          </tr>
+          <tr>
+            <td><span class="plan-name">KONVERT Agency</span></td>
+            <td><span class="plan-price">199,00 €</span></td>
+            <td><span class="plan-period">Mensuel</span></td>
+            <td><input type="text" class="styled-input" placeholder="price_..." style="min-width:180px" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 2 -->
+  <div class="step-card" id="card-2">
+    <div class="step-header">
+      <div class="step-checkbox-wrap">
+        <input type="checkbox" class="step-checkbox" id="step-2" data-step="2" />
+        <label for="step-2" class="step-checkbox-label">
+          <span class="checkbox-custom">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </label>
+      </div>
+      <div class="step-meta">
+        <div class="step-number-title">
+          <span class="step-badge">2</span>
+          <span class="step-title">Récupérer les clés LIVE</span>
+        </div>
+        <div class="step-url">
+          <a href="https://dashboard.stripe.com/apikeys" target="_blank">dashboard.stripe.com</a>
+          &rarr; Développeurs &rarr; Clés API &rarr; basculer sur "Live"
+        </div>
+      </div>
+    </div>
+
+    <div class="step-body">
+      <div class="input-group">
+        <label class="input-label">Publishable key</label>
+        <input type="text" class="styled-input" placeholder="pk_live_..." />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Secret key</label>
+        <input type="password" class="styled-input" placeholder="sk_live_..." />
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 -->
+  <div class="step-card" id="card-3">
+    <div class="step-header">
+      <div class="step-checkbox-wrap">
+        <input type="checkbox" class="step-checkbox" id="step-3" data-step="3" />
+        <label for="step-3" class="step-checkbox-label">
+          <span class="checkbox-custom">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </label>
+      </div>
+      <div class="step-meta">
+        <div class="step-number-title">
+          <span class="step-badge">3</span>
+          <span class="step-title">Créer le webhook</span>
+        </div>
+        <div class="step-url">
+          <a href="https://dashboard.stripe.com/webhooks" target="_blank">dashboard.stripe.com</a>
+          &rarr; Développeurs &rarr; Webhooks &rarr; Ajouter un endpoint
+        </div>
+      </div>
+    </div>
+
+    <div class="step-body">
+      <p class="section-label">Endpoint URL</p>
+      <div class="endpoint-box">https://konvert.app/api/stripe/webhook</div>
+
+      <p class="section-label">Événements minimum à sélectionner</p>
+      <ul class="events-list">
+        <li>checkout.session.completed</li>
+        <li>customer.subscription.updated</li>
+        <li>customer.subscription.deleted</li>
+        <li>invoice.payment_succeeded</li>
+        <li>invoice.payment_failed</li>
+      </ul>
+
+      <div class="input-group">
+        <label class="input-label">Signing secret</label>
+        <input type="password" class="styled-input" placeholder="whsec_..." />
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 4 -->
+  <div class="step-card" id="card-4">
+    <div class="step-header">
+      <div class="step-checkbox-wrap">
+        <input type="checkbox" class="step-checkbox" id="step-4" data-step="4" />
+        <label for="step-4" class="step-checkbox-label">
+          <span class="checkbox-custom">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </label>
+      </div>
+      <div class="step-meta">
+        <div class="step-number-title">
+          <span class="step-badge">4</span>
+          <span class="step-title">Mettre à jour .env.local</span>
+        </div>
+        <div class="step-url">Coller ces 7 variables dans le fichier .env.local à la racine du projet</div>
+      </div>
+    </div>
+
+    <div class="step-body">
+      <div class="code-block-wrap">
+        <pre class="code-block" id="code-env">NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_PRICE_STARTER=price_...
+STRIPE_PRICE_PRO=price_...
+STRIPE_PRICE_AGENCY=price_...
+NEXT_PUBLIC_APP_URL=https://konvert.app</pre>
+        <button class="copy-btn" onclick="copyCode('code-env', this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copier
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 5 -->
+  <div class="step-card" id="card-5">
+    <div class="step-header">
+      <div class="step-checkbox-wrap">
+        <input type="checkbox" class="step-checkbox" id="step-5" data-step="5" />
+        <label for="step-5" class="step-checkbox-label">
+          <span class="checkbox-custom">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </label>
+      </div>
+      <div class="step-meta">
+        <div class="step-number-title">
+          <span class="step-badge">5</span>
+          <span class="step-title">Variables Vercel</span>
+        </div>
+        <div class="step-url">
+          <a href="https://vercel.com" target="_blank">vercel.com</a>
+          &rarr; konvert &rarr; Settings &rarr; Environment Variables
+        </div>
+      </div>
+    </div>
+
+    <div class="step-body">
+      <p class="section-label">Ces 7 variables sont à ajouter</p>
+      <div class="env-badges">
+        <span class="env-badge">NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY</span>
+        <span class="env-badge">STRIPE_SECRET_KEY</span>
+        <span class="env-badge">STRIPE_WEBHOOK_SECRET</span>
+        <span class="env-badge">STRIPE_PRICE_STARTER</span>
+        <span class="env-badge">STRIPE_PRICE_PRO</span>
+        <span class="env-badge">STRIPE_PRICE_AGENCY</span>
+        <span class="env-badge">NEXT_PUBLIC_APP_URL</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 6 -->
+  <div class="step-card" id="card-6">
+    <div class="step-header">
+      <div class="step-checkbox-wrap">
+        <input type="checkbox" class="step-checkbox" id="step-6" data-step="6" />
+        <label for="step-6" class="step-checkbox-label">
+          <span class="checkbox-custom">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </label>
+      </div>
+      <div class="step-meta">
+        <div class="step-number-title">
+          <span class="step-badge">6</span>
+          <span class="step-title">Push &amp; test</span>
+        </div>
+        <div class="step-url">Déployer en production puis tester un achat complet avec une vraie CB</div>
+      </div>
+    </div>
+
+    <div class="step-body">
+      <div class="code-block-wrap">
+        <pre class="code-block" id="code-push">git add -A && git commit -m "feat: stripe live" && git push origin main</pre>
+        <button class="copy-btn" onclick="copyCode('code-push', this)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copier
+        </button>
+      </div>
+      <p style="font-size: 14px; color: var(--gray-500); margin-top: 8px;">Ensuite : tester un achat complet avec une vraie carte de crédit.</p>
+    </div>
+  </div>
+
+  <!-- RÉSUMÉ FINAL -->
+  <div class="summary-card">
+    <div class="summary-card-header">
+      <div class="summary-card-title">Résumé — Qui fait quoi</div>
+    </div>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>Statut</th>
+          <th>Qui</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>&#x2705;</td>
+          <td>Code <span class="tag-code">FAIT</span></td>
+          <td>Correction prix (39 / 79 / 199 €)</td>
+        </tr>
+        <tr>
+          <td>&#x1FAF5;</td>
+          <td>Toi <span class="tag-you">A FAIRE</span></td>
+          <td>Créer les 3 produits Stripe Dashboard</td>
+        </tr>
+        <tr>
+          <td>&#x1FAF5;</td>
+          <td>Toi <span class="tag-you">A FAIRE</span></td>
+          <td>Clés live (pk_live / sk_live)</td>
+        </tr>
+        <tr>
+          <td>&#x1FAF5;</td>
+          <td>Toi <span class="tag-you">A FAIRE</span></td>
+          <td>Créer le webhook konvert.app</td>
+        </tr>
+        <tr>
+          <td>&#x1FAF5;</td>
+          <td>Toi <span class="tag-you">A FAIRE</span></td>
+          <td>Remplir .env.local + Vercel</td>
+        </tr>
+        <tr>
+          <td>&#x2705;</td>
+          <td>Code <span class="tag-code">PRET</span></td>
+          <td>Push final</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  // PROGRESS BAR
+  const checkboxes = document.querySelectorAll('.step-checkbox');
+  const progressFill = document.getElementById('progress-fill');
+  const progressCount = document.getElementById('progress-count');
+  const total = checkboxes.length;
+
+  function updateProgress() {
+    const checked = document.querySelectorAll('.step-checkbox:checked').length;
+    const pct = (checked / total) * 100;
+    progressFill.style.width = pct + '%';
+    progressCount.textContent = checked + ' / ' + total + ' étapes';
+  }
+
+  checkboxes.forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      const step = this.dataset.step;
+      const card = document.getElementById('card-' + step);
+      if (this.checked) {
+        card.classList.add('completed');
+      } else {
+        card.classList.remove('completed');
+      }
+      updateProgress();
+    });
+  });
+
+  // COPY CODE
+  function copyCode(id, btn) {
+    const el = document.getElementById(id);
+    const text = el.textContent;
+    navigator.clipboard.writeText(text).then(function() {
+      btn.classList.add('copied');
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copié';
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copier';
+      }, 2000);
+    });
+  }
+</script>
+
+</body>
+</html>

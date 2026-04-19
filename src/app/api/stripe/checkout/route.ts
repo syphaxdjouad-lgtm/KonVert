@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       customer:   customerId,
       mode:       'subscription',
       line_items: [{ price: STRIPE_PRICES[plan], quantity: 1 }],
-      success_url: `${appUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${appUrl}/success?session_id={CHECKOUT_SESSION_ID}&plan=${plan}`,
       cancel_url:  `${appUrl}/pricing?canceled=true`,
       metadata: {
         supabase_user_id: user.id,

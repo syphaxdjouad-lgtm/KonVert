@@ -316,6 +316,13 @@ alter table public.pages
 
 create index if not exists idx_pages_workspace_id on public.pages(workspace_id);
 
+-- ─── MIGRATION : colonnes trial email ────────────────────────────
+-- À lancer dans Supabase Dashboard > SQL Editor si la table existe déjà
+
+ALTER TABLE public.users
+  ADD COLUMN IF NOT EXISTS trial_started_at    timestamptz DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS trial_emails_sent   integer[]   DEFAULT '{}';
+
 -- ═══════════════════════════════════════════════════════════════════
 -- FIN DU SCHEMA
 -- Coller ce SQL dans : Supabase Dashboard > SQL Editor > New query

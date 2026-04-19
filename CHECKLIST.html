@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>KONVERT — Checklist complète</title>
+<style>
+  :root {
+    --bg: #0f0f13;
+    --surface: #18181f;
+    --border: #2a2a35;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --purple: #7c3aed;
+    --purple-light: #a78bfa;
+    --red: #ef4444;
+    --orange: #f97316;
+    --yellow: #eab308;
+    --green: #22c55e;
+    --blue: #3b82f6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .header {
+    background: linear-gradient(135deg, #1a0a2e 0%, #0f0f13 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .header-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .logo {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #a78bfa, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .progress-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .progress-label {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .progress-bar {
+    width: 220px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #7c3aed, #a78bfa);
+    border-radius: 99px;
+    transition: width 0.3s ease;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+    user-select: none;
+  }
+
+  .item:last-child { border-bottom: none; }
+  .item:hover { background: rgba(124, 58, 237, 0.06); }
+  .item.done { opacity: 0.45; }
+  .item.done .item-title { text-decoration: line-through; color: var(--muted); }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    background: transparent;
+  }
+
+  .item.done .checkbox {
+    background: var(--purple);
+    border-color: var(--purple);
+  }
+
+  .checkbox::after {
+    content: '';
+    width: 5px;
+    height: 9px;
+    border: 2px solid white;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+    display: none;
+  }
+
+  .item.done .checkbox::after { display: block; }
+
+  .item-content { flex: 1; min-width: 0; }
+
+  .item-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 3px;
+  }
+
+  .item-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .item-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-top: 2px;
+  }
+
+  .badge {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .badge-p0 { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+  .badge-p1 { background: rgba(249,115,22,0.15); color: #fb923c; border: 1px solid rgba(249,115,22,0.25); }
+  .badge-p2 { background: rgba(234,179,8,0.15); color: #facc15; border: 1px solid rgba(234,179,8,0.25); }
+
+  .tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .tag-tech    { background: rgba(59,130,246,0.12); color: #60a5fa; }
+  .tag-stripe  { background: rgba(99,102,241,0.12); color: #818cf8; }
+  .tag-design  { background: rgba(236,72,153,0.12); color: #f472b6; }
+  .tag-ux      { background: rgba(20,184,166,0.12); color: #2dd4bf; }
+  .tag-seo     { background: rgba(34,197,94,0.12); color: #4ade80; }
+  .tag-legal   { background: rgba(251,191,36,0.12); color: #fbbf24; }
+  .tag-ops     { background: rgba(168,85,247,0.12); color: #c084fc; }
+  .tag-biz     { background: rgba(239,68,68,0.12); color: #f87171; }
+  .tag-copy    { background: rgba(156,163,175,0.12); color: #9ca3af; }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 28px;
+    font-weight: 900;
+    background: linear-gradient(90deg, #a78bfa, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .last-updated {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="logo">KONVERT</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">Checklist de lancement — mise à jour 18 avril 2026</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-label" id="progress-label">0 / 0 complétés</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Stats -->
+  <div class="summary-grid">
+    <div class="stat-card">
+      <div class="stat-num" id="count-p0">—</div>
+      <div class="stat-label" style="color:#f87171">P0 Bloquants</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="count-p1">—</div>
+      <div class="stat-label" style="color:#fb923c">P1 Importants</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="count-p2">—</div>
+      <div class="stat-label" style="color:#facc15">P2 À planifier</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="count-done">—</div>
+      <div class="stat-label" style="color:#4ade80">Complétés</div>
+    </div>
+  </div>
+
+  <!-- ─── P0 BLOQUANTS ─── -->
+  <div class="section">
+    <div class="section-title">P0 — Bloquants · À corriger avant toute acquisition</div>
+    <div class="card">
+
+      <div class="item" data-id="p0-1" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p0">P0</span>
+            <span class="tag tag-tech">Tech</span>
+            <span class="item-title">Vérifier la sauvegarde GrapesJS end-to-end</span>
+          </div>
+          <div class="item-desc">Pas de route API POST/PATCH /api/pages visible pour sauvegarder le JSON/HTML depuis le builder. Le flow génère → édite → sauvegarde → publie doit fonctionner de A à Z.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p0-2" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p0">P0</span>
+            <span class="tag tag-stripe">Stripe</span>
+            <span class="item-title">Aligner les limites de plans partout</span>
+          </div>
+          <div class="item-desc">Starter = 50 pages dans types/index.ts, 75 dans la page pricing, 10 dans les emails trial. Trois chiffres différents = chargebacks assurés. Choisir un chiffre, le mettre partout.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p0-3" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p0">P0</span>
+            <span class="tag tag-stripe">Stripe</span>
+            <span class="item-title">Implémenter le pricing annuel dans Stripe</span>
+          </div>
+          <div class="item-desc">Le toggle -25% annuel/mensuel existe visuellement mais zéro price ID annuel dans lib/stripe/index.ts. Créer les 3 produits annuels dans Stripe et ajouter les IDs dans les env vars.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p0-4" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p0">P0</span>
+            <span class="tag tag-tech">Tech</span>
+            <span class="item-title">Migrer le rate limiting vers Redis/Upstash</span>
+          </div>
+          <div class="item-desc">L'implémentation actuelle utilise un Map en mémoire Node.js. Sur Vercel serverless chaque instance a son propre store — le rate limiting ne fonctionne pas du tout en production distribuée.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p0-5" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p0">P0</span>
+            <span class="tag tag-biz">Business</span>
+            <span class="item-title">Corriger le funnel cassé : "Essai gratuit" → bêta fermée</span>
+          </div>
+          <div class="item-desc">La page pricing dit "Essai gratuit, aucune CB" mais le CTA renvoie vers /signup qui est fermé (invitation requise). 100% des prospects sont bloqués. Décider : ouvrir le signup OU changer les CTAs.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p0-6" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p0">P0</span>
+            <span class="tag tag-copy">Copy</span>
+            <span class="item-title">Supprimer le code promo -30% promis dans l'email J+13</span>
+          </div>
+          <div class="item-desc">emailDay13 promet "code automatique -30% à la checkout" mais aucune logique promo code n'existe dans le système. Promesse mensongère → perte de confiance immédiate.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p0-7" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p0">P0</span>
+            <span class="tag tag-tech">Tech</span>
+            <span class="item-title">Vérifier Puppeteer sur Vercel (limite 50MB)</span>
+          </div>
+          <div class="item-desc">Puppeteer + Chromium dépasse souvent la limite de 50MB des Vercel Functions. Le scraper peut crasher silencieusement en prod. Tester ou migrer vers Browserless/ScrapingBee.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p0-8" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p0">P0</span>
+            <span class="tag tag-design">Design</span>
+            <span class="item-title">Dashboard non responsive — sidebar cassée sur mobile</span>
+          </div>
+          <div class="item-desc">La sidebar est fixe 68px, aucune gestion mobile. Sur < 640px le dashboard est inutilisable. Ajouter un hamburger menu + sidebar en drawer sur mobile.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p0-9" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p0">P0</span>
+            <span class="tag tag-ux">UX</span>
+            <span class="item-title">Formulaire contact ne fait rien</span>
+          </div>
+          <div class="item-desc">contact/page.tsx ligne 105 : setTimeout fictif de 1.2s, aucun envoi réel. Le message "On vous répond sous 24h" s'affiche mais rien n'est envoyé. Brancher Resend ou un service email.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p0-10" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p0">P0</span>
+            <span class="tag tag-tech">Tech</span>
+            <span class="item-title">Ajouter les variables Vercel manquantes</span>
+          </div>
+          <div class="item-desc">CRON_SECRET, ENCRYPTION_KEY (nouvelle clé sécurisée), ANTHROPIC_API_KEY (régénérée), NEXT_PUBLIC_SENTRY_DSN. Sans ça, plusieurs systèmes tournent en mode dégradé ou cassé.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── P1 IMPORTANTS ─── -->
+  <div class="section">
+    <div class="section-title">P1 — Importants · Avant 100 clients payants</div>
+    <div class="card">
+
+      <div class="item" data-id="p1-1" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-stripe">Stripe</span>
+            <span class="item-title">Rendre le portail Stripe accessible depuis Settings</span>
+          </div>
+          <div class="item-desc">La route /api/stripe/portal est codée mais aucun bouton dans le dashboard Settings n'y mène. Les utilisateurs ne peuvent pas gérer leur abonnement. Ajouter un bouton "Gérer mon abonnement".</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-2" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-stripe">Stripe</span>
+            <span class="item-title">Gérer l'état past_due avec bannière in-app</span>
+          </div>
+          <div class="item-desc">Le webhook marque past_due en DB mais l'app ne fait rien. L'utilisateur en retard de paiement continue normalement. Ajouter une bannière d'alerte et bloquer après 7 jours.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-3" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-seo">SEO</span>
+            <span class="item-title">Écrire le vrai contenu des 7 articles de blog</span>
+          </div>
+          <div class="item-desc">blog/[slug]/page.tsx génère un template vide sans contenu. Google indexe des pages vides → pénalité SEO. Pire que pas de blog du tout. Écrire au minimum 800 mots par article.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-4" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-ux">UX</span>
+            <span class="item-title">Onboarding in-app minimal (checklist 3 étapes)</span>
+          </div>
+          <div class="item-desc">L'utilisateur arrive sur un dashboard vide avec zéro guide. Pas de "Welcome modal", pas de checklist. Ajouter : 1) Connecter un store 2) Créer une page 3) Publier. Taux d'activation = métrique clé.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-5" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-tech">Tech</span>
+            <span class="item-title">Implémenter le routing A/B test (variante → visiteur)</span>
+          </div>
+          <div class="item-desc">L'interface A/B test et les stats existent mais il n'y a aucun routing réel : quand quelqu'un visite une URL, comment est-il assigné à la variante A ou B ? Il manque la route /p/[id] avec split-traffic.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-6" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-tech">Tech</span>
+            <span class="item-title">Page de publication publique /p/[slug] hébergée par KONVERT</span>
+          </div>
+          <div class="item-desc">Un utilisateur sans Shopify/WooCommerce ne peut pas obtenir un lien public pour ses pubs Facebook. Créer une route /p/[id] qui sert le HTML d'une page KONVERT directement.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-7" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-ux">UX</span>
+            <span class="item-title">Emails post-abonnement pour les clients payants</span>
+          </div>
+          <div class="item-desc">La séquence trial couvre 14 jours. Zéro email pour les payants : pas de bienvenue post-paiement, pas de rapport mensuel, pas de tips d'utilisation. La rétention payant n'est pas travaillée.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-8" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-ops">Ops</span>
+            <span class="item-title">Intégrer un support in-app (Crisp gratuit)</span>
+          </div>
+          <div class="item-desc">Pas d'outil de support depuis le dashboard. Les utilisateurs bloqués ne peuvent pas demander d'aide facilement. Crisp est gratuit jusqu'à 2 sièges. 1 ligne de code à ajouter dans le layout.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-9" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-legal">Légal</span>
+            <span class="item-title">Cookie banner avec vrai consentement RGPD</span>
+          </div>
+          <div class="item-desc">CookieBanner existe mais sans logique de mémorisation ni blocage des scripts. Non conforme RGPD. Au minimum : localStorage pour le consentement + ne pas charger les analytics sans "Accepter".</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-10" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-ops">Ops</span>
+            <span class="item-title">Page status branchée sur un vrai monitoring</span>
+          </div>
+          <div class="item-desc">/status affiche des uptime hardcodés (99.9%) qui ne changent jamais. En cas de panne réelle, cette page dira "tout va bien". Brancher Better Uptime, Checkly ou Pulsetic (gratuits).</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-11" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-design">Design</span>
+            <span class="item-title">Tables responsive (Analytics + Pricing)</span>
+          </div>
+          <div class="item-desc">analytics/page.tsx et pricing/page.tsx ont des grids/tables sans scroll horizontal sur mobile. Illisibles sur < 768px. Ajouter overflow-x-auto + simplifier les layouts pour mobile.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-12" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-copy">Copy</span>
+            <span class="item-title">Labelliser les testimonials comme "exemples" ou remplacer par du vrai</span>
+          </div>
+          <div class="item-desc">Login, Signup, Services et Homepage ont des testimonials fictifs (Karim B., Mehdi B., Sarah T.) avec de fausses stats. Non labelés "exemple". Si un prospect vérifie, perte de crédibilité totale.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-13" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-seo">SEO</span>
+            <span class="item-title">Brancher la newsletter sur Resend Audiences ou Loops</span>
+          </div>
+          <div class="item-desc">Le formulaire newsletter du blog a un bouton "Je m'abonne" sans aucune route API derrière. Formulaire mort. Brancher sur Resend Audiences (gratuit jusqu'à 3000 contacts).</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-14" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-legal">Légal</span>
+            <span class="item-title">Compléter les mentions légales (SIRET, adresse, représentant)</span>
+          </div>
+          <div class="item-desc">Les CGU mentionnent NEXARA sans SIRET, adresse physique, ni représentant légal. Obligatoire pour une entreprise française collectant des paiements. À compléter avant tout client.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-15" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-biz">Business</span>
+            <span class="item-title">Process de remboursement 30 jours (promesse CGU)</span>
+          </div>
+          <div class="item-desc">Les CGU et la page pricing promettent "satisfait ou remboursé 30 jours". Aucun formulaire dédié, aucun workflow Stripe configuré. Promesse contractuelle sans processus = risque légal.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-16" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-design">Design</span>
+            <span class="item-title">Unifier le système de styles (inline vs Tailwind)</span>
+          </div>
+          <div class="item-desc">90% du dashboard utilise des inline styles hardcodés (#7c3aed, background:'#F5F4FA'). La page homepage mélange CSS custom variables et Tailwind. Choisir un système et uniformiser.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p1-17" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p1">P1</span>
+            <span class="tag tag-ux">UX</span>
+            <span class="item-title">Ajouter la vérification email au signup</span>
+          </div>
+          <div class="item-desc">Après le signup, l'utilisateur va directement sur le dashboard sans confirmer son email. Des emails invalides peuvent s'inscrire. Activer la confirmation Supabase ou ajouter une étape de vérification.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── P2 À PLANIFIER ─── -->
+  <div class="section">
+    <div class="section-title">P2 — À planifier · Pour scaler</div>
+    <div class="card">
+
+      <div class="item" data-id="p2-1" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-biz">Business</span>
+            <span class="item-title">Programme referral (invite un ami = 1 mois gratuit)</span>
+          </div>
+          <div class="item-desc">Meilleur ROI d'acquisition pour un SaaS e-commerce. Un e-commerçant qui aime l'outil en parle à 3 collègues. Sans mécanisme, cette énergie est perdue.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-2" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-ops">Ops</span>
+            <span class="item-title">Dashboard admin avec métriques SaaS (MRR, churn, LTV)</span>
+          </div>
+          <div class="item-desc">Le seul dashboard admin existant est la gestion de waitlist. Pas de vue MRR, ARR, churn rate, LTV/CAC. Impossible de prendre des décisions business sans ces chiffres.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-3" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-seo">SEO</span>
+            <span class="item-title">Pages templates SEO par niche (/templates/[id] avec vrai contenu)</span>
+          </div>
+          <div class="item-desc">17 templates existent. Chaque page /templates/[id] devrait avoir des screenshots, cas d'usage, et cibler "template landing page [niche] dropshipping" — potentiel SEO énorme non exploité.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-4" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-biz">Business</span>
+            <span class="item-title">Process de vente Enterprise (Calendly + demo booking)</span>
+          </div>
+          <div class="item-desc">Le CTA Enterprise renvoie vers /contact (formulaire email). Pour vendre 499€+/mois il faut un Calendly, un Sales playbook, et une démo personnalisée. Pas un formulaire générique.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-5" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-design">Design</span>
+            <span class="item-title">Dark mode complet sur le dashboard</span>
+          </div>
+          <div class="item-desc">4 occurrences de dark: dans tout le projet. Le dashboard est light-only avec des couleurs hardcodées. Ajouter le support dark mode complet via CSS variables ou Tailwind dark:.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-6" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-ux">UX</span>
+            <span class="item-title">URL de preview partageable (type Figma)</span>
+          </div>
+          <div class="item-desc">Un utilisateur solo ne peut pas partager une page pour review client sans donner accès à son compte. Une URL de preview publique en lecture seule permettrait de valider avec le client.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-7" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-ops">Ops</span>
+            <span class="item-title">Alertes Slack/email sur erreurs critiques (Sentry + billing)</span>
+          </div>
+          <div class="item-desc">Sentry est installé mais sans alertes configurées. Pas de notification si le scraper crash, si les webhooks Stripe échouent, ou si les appels Claude explosent. Tu apprendras les pannes via les tweets.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-8" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-ux">UX</span>
+            <span class="item-title">Password strength indicator au signup</span>
+          </div>
+          <div class="item-desc">La validation du mot de passe vérifie 8 caractères minimum mais sans indicateur visuel de force. Ajouter une barre de force (weak/medium/strong) améliore la confiance et réduit les mots de passe faibles.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-9" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-ux">UX</span>
+            <span class="item-title">Changelog in-app (page /changelog vide)</span>
+          </div>
+          <div class="item-desc">La page /changelog existe dans la structure mais est probablement vide. Les utilisateurs ne savent pas quand de nouvelles features arrivent. Nourrit l'engagement et la rétention.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-10" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-tech">Tech</span>
+            <span class="item-title">Supprimer Framer Motion (importé mais jamais utilisé)</span>
+          </div>
+          <div class="item-desc">Framer Motion est en dépendances mais aucune utilisation de &lt;motion.div&gt; dans le projet. Tout est en CSS keyframes custom. Retirer la dépendance pour alléger le bundle (~50KB).</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-11" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-ops">Ops</span>
+            <span class="item-title">Stratégie de backup et procédure d'incident documentée</span>
+          </div>
+          <div class="item-desc">Supabase a des backups auto (plans payants) mais aucune documentation ni test de restore. En cas de suppression accidentelle, quelle est la procédure ? À documenter avant les premiers clients.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-12" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-design">Design</span>
+            <span class="item-title">Clarifier la page démo (données fictives non labelées)</span>
+          </div>
+          <div class="item-desc">demo/page.tsx utilise un produit mock "écouteurs Bluetooth" avec une URL AliExpress démo. Les utilisateurs pensent que c'est live. Ajouter un bandeau "Démo — données exemples" ou brancher un vrai scrape.</div>
+        </div>
+      </div>
+
+      <div class="item" data-id="p2-13" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header">
+            <span class="badge badge-p2">P2</span>
+            <span class="tag tag-ux">UX</span>
+            <span class="item-title">Page transitions + animations Notification Bell</span>
+          </div>
+          <div class="item-desc">Les transitions entre pages Next.js sont abruptes. La notification bell apparaît/disparaît instantanément. Ajouter des animations CSS ou Framer Motion sur ces interactions clés.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── SÉCURITÉ DÉJÀ FAITE ─── -->
+  <div class="section">
+    <div class="section-title">Sécurité — Déjà complété (18 avril 2026)</div>
+    <div class="card">
+
+      <div class="item done" data-id="sec-1" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-ops">Sécu</span><span class="item-title">/api/generate + /api/scrape — auth obligatoire</span></div>
+          <div class="item-desc">Accès sans authentification fermé sur les deux routes les plus sensibles.</div>
+        </div>
+      </div>
+
+      <div class="item done" data-id="sec-2" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-ops">Sécu</span><span class="item-title">SSRF protection sur /api/scrape + whitelist domaines</span></div>
+          <div class="item-desc">IPs internes bloquées, domaines e-commerce whitelistés uniquement.</div>
+        </div>
+      </div>
+
+      <div class="item done" data-id="sec-3" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-ops">Sécu</span><span class="item-title">IDOR corrigé sur /api/ab (winner/status)</span></div>
+          <div class="item-desc">Ownership check ajouté via pages.user_id avant toute modification.</div>
+        </div>
+      </div>
+
+      <div class="item done" data-id="sec-4" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-ops">Sécu</span><span class="item-title">Headers HTTP sécurité (CSP, X-Frame-Options, HSTS…)</span></div>
+          <div class="item-desc">next.config.ts configuré avec 6 headers de sécurité.</div>
+        </div>
+      </div>
+
+      <div class="item done" data-id="sec-5" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-ops">Sécu</span><span class="item-title">XSS corrigé dans les rapports HTML workspace</span></div>
+          <div class="item-desc">esc() + safeCssColor() sur toutes les variables utilisateur injectées.</div>
+        </div>
+      </div>
+
+      <div class="item done" data-id="sec-6" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-ops">Sécu</span><span class="item-title">Race condition quota → RPC SQL atomique (FOR UPDATE)</span></div>
+          <div class="item-desc">check_and_increment_quota remplace la lecture/écriture non atomique.</div>
+        </div>
+      </div>
+
+      <div class="item done" data-id="sec-7" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-ops">Sécu</span><span class="item-title">Sentry installé et configuré (client/server/edge)</span></div>
+          <div class="item-desc">Activer en ajoutant NEXT_PUBLIC_SENTRY_DSN dans les variables Vercel.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── BUGS CORRIGÉS ─── -->
+  <div class="section">
+    <div class="section-title">Bugs — Déjà corrigés (18 avril 2026)</div>
+    <div class="card">
+
+      <div class="item done" data-id="bug-1" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-tech">Bug</span><span class="item-title">Tracker analytics perdu sur update Shopify + WooCommerce</span></div>
+          <div class="item-desc">page.html_content → trackedHtml sur updatePage dans les deux routes push.</div>
+        </div>
+      </div>
+
+      <div class="item done" data-id="bug-2" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-tech">Bug</span><span class="item-title">Crash .single() sur token invalide (invitations/validate)</span></div>
+          <div class="item-desc">Migré vers .maybeSingle() avec check error → 200 {valid:false} au lieu de 500.</div>
+        </div>
+      </div>
+
+      <div class="item done" data-id="bug-3" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-tech">Bug</span><span class="item-title">Auth manquante workspaces/invite GET + IDOR</span></div>
+          <div class="item-desc">Ownership check ajouté. Un user ne peut plus lire les membres d'un workspace étranger.</div>
+        </div>
+      </div>
+
+      <div class="item done" data-id="bug-4" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-tech">Bug</span><span class="item-title">Stripe webhook items[0] undefined + plan introuvable</span></div>
+          <div class="item-desc">Guard null + break si plan non trouvé dans la map.</div>
+        </div>
+      </div>
+
+      <div class="item done" data-id="bug-5" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-tech">Bug</span><span class="item-title">JSON.parse sans try/catch dans anthropic/generate</span></div>
+          <div class="item-desc">Wrappé dans try/catch avec message d'erreur clair.</div>
+        </div>
+      </div>
+
+      <div class="item done" data-id="bug-6" onclick="toggle(this)">
+        <div class="checkbox"></div>
+        <div class="item-content">
+          <div class="item-header"><span class="tag tag-tech">Bug</span><span class="item-title">Division par zéro notifications + doublons emails cron</span></div>
+          <div class="item-desc">Guard p.cta_clicks > 0 ajouté. Update DB avant envoi email pour éviter les doublons.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="last-updated">Checklist générée le 18 avril 2026 · Audit complet KONVERT par KURAMA</div>
+
+</div>
+
+<script>
+  function toggle(el) {
+    el.classList.toggle('done')
+    const id = el.dataset.id
+    const done = el.classList.contains('done')
+    localStorage.setItem('ck_' + id, done ? '1' : '0')
+    updateProgress()
+  }
+
+  function updateProgress() {
+    const all = document.querySelectorAll('.item[data-id]')
+    const active = document.querySelectorAll('.item[data-id]:not([data-id^="sec-"]):not([data-id^="bug-"])')
+    const doneTodo = [...active].filter(el => el.classList.contains('done')).length
+    const total = active.length
+    const pct = total ? Math.round(doneTodo / total * 100) : 0
+
+    document.getElementById('progress-fill').style.width = pct + '%'
+    document.getElementById('progress-label').textContent = doneTodo + ' / ' + total + ' complétés (' + pct + '%)'
+
+    const p0 = [...document.querySelectorAll('[data-id^="p0-"]')].filter(el => !el.classList.contains('done')).length
+    const p1 = [...document.querySelectorAll('[data-id^="p1-"]')].filter(el => !el.classList.contains('done')).length
+    const p2 = [...document.querySelectorAll('[data-id^="p2-"]')].filter(el => !el.classList.contains('done')).length
+
+    document.getElementById('count-p0').textContent = p0
+    document.getElementById('count-p1').textContent = p1
+    document.getElementById('count-p2').textContent = p2
+    document.getElementById('count-done').textContent = doneTodo
+  }
+
+  // Restaurer l'état depuis localStorage
+  document.querySelectorAll('.item[data-id]').forEach(el => {
+    const id = el.dataset.id
+    const saved = localStorage.getItem('ck_' + id)
+    if (saved === '1') el.classList.add('done')
+    else if (saved === '0') el.classList.remove('done')
+  })
+
+  updateProgress()
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 import { Resend } from 'resend'
 
-export type TrialEmailStep = 0 | 3 | 7 | 10 | 13 | 14
+export type TrialEmailStep = 0 | 1 | 3 | 7 | 10 | 12 | 13 | 14
 
 // Lazy init — évite l'erreur au build si RESEND_API_KEY n'est pas définie
 function getResend() {

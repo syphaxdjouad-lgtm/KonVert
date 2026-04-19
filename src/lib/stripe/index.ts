@@ -12,7 +12,7 @@ export const STRIPE_PRICES: Record<PlanType, string> = {
 }
 
 export const PLAN_NAMES: Record<PlanType, string> = {
-  starter: 'Starter — 29€/mois',
-  pro:     'Pro — 49€/mois',
-  agency:  'Agency — 119€/mois',
+  starter: 'Starter — 39€/mois',
+  pro:     'Pro — 79€/mois',
+  agency:  'Agency — 199€/mois',
 }

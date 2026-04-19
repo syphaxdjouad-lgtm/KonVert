@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Konvert — SaaS Roadmap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-root: #fdf6e3;
+      --bg-card: #fffbf0;
+      --bg-card-hover: #fef7e0;
+      --bg-input: #f5edd8;
+      --border: #e8d9b8;
+      --border-hover: #d4bf95;
+      --primary: #7c3aed;
+      --primary-light: #9d5bf0;
+      --primary-dark: #5b21b6;
+      --primary-glow: rgba(124, 58, 237, 0.15);
+      --primary-glow-strong: rgba(124, 58, 237, 0.3);
+      --text: #1a1205;
+      --text-secondary: #6b5333;
+      --text-muted: #9c8460;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.1);
+      --warning: #f59e0b;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 16px;
+      --transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-root);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── LAYOUT ─────────────────────────────────────── */
+    .page-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 24px 96px;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────── */
+    .header {
+      margin-bottom: 48px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-glow);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      border-radius: 999px;
+      padding: 4px 14px 4px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #a78bfa;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .logo-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 8px var(--primary);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+
+    .project-title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .project-title span {
+      color: var(--primary-light);
+    }
+
+    .project-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-weight: 400;
+    }
+
+    /* ─── PROGRESS GLOBAL ────────────────────────────── */
+    .global-progress-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .global-progress-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      opacity: 0.6;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .progress-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .progress-counter {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    .progress-counter .done {
+      color: var(--primary-light);
+    }
+
+    .progress-counter .total {
+      color: var(--text-muted);
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .global-bar-track {
+      background: #ede3cc;
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .global-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-dark), var(--primary), var(--primary-light));
+      border-radius: 999px;
+      transition: width 400ms cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .global-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 40px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2));
+      border-radius: 999px;
+    }
+
+    .progress-percent {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .progress-percent strong {
+      color: var(--primary-light);
+      font-weight: 700;
+    }
+
+    /* ─── PHASE STATS ROW ────────────────────────────── */
+    .phase-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .phase-stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+    }
+
+    .phase-stat:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+    }
+
+    .phase-stat.active {
+      border-color: var(--primary);
+      background: var(--primary-glow);
+    }
+
+    .phase-stat-number {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .phase-stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 4px;
+    }
+
+    .phase-stat-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* ─── FILTER BUTTONS ─────────────────────────────── */
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 16px var(--primary-glow-strong);
+    }
+
+    .filter-btn .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.7;
+    }
+
+    /* ─── PHASE SECTION ──────────────────────────────── */
+    .phase-section {
+      margin-bottom: 40px;
+    }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .phase-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .phase-1 .phase-tag { background: rgba(124, 58, 237, 0.15); color: #a78bfa; border: 1px solid rgba(124, 58, 237, 0.3); }
+    .phase-2 .phase-tag { background: rgba(59, 130, 246, 0.12); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.25); }
+    .phase-3 .phase-tag { background: rgba(16, 185, 129, 0.12); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.25); }
+    .phase-4 .phase-tag { background: rgba(245, 158, 11, 0.12); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.25); }
+
+    .phase-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .phase-timeline {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* ─── TASK CARD ──────────────────────────────────── */
+    .task-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+
+    .task-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    .task-card.all-done {
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.03);
+    }
+
+    .task-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .task-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .task-card.all-done .task-number {
+      background: var(--success-bg);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: var(--success);
+    }
+
+    .task-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .task-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .task-progress-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .task-progress-text .done-count {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .mini-bar-track {
+      width: 80px;
+      height: 4px;
+      background: #ede3cc;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .mini-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+      border-radius: 999px;
+      transition: width 300ms ease;
+    }
+
+    .task-card.all-done .mini-bar-fill {
+      background: linear-gradient(90deg, #059669, var(--success));
+    }
+
+    .chevron {
+      width: 16px;
+      height: 16px;
+      color: var(--text-muted);
+      transition: transform var(--transition);
+      flex-shrink: 0;
+    }
+
+    .task-card.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    /* ─── TASK BODY ──────────────────────────────────── */
+    .task-body {
+      display: none;
+      border-top: 1px solid var(--border);
+    }
+
+    .task-card.open .task-body {
+      display: block;
+    }
+
+    .task-items {
+      padding: 4px 0 8px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 9px 20px 9px 20px;
+      cursor: pointer;
+      transition: background var(--transition);
+      border-radius: 0;
+      position: relative;
+    }
+
+    .task-item:hover {
+      background: rgba(0, 0, 0, 0.025);
+    }
+
+    .task-item:hover .item-text {
+      color: var(--text);
+    }
+
+    /* ─── CUSTOM CHECKBOX ────────────────────────────── */
+    .checkbox {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1.5px solid var(--border-hover);
+      background: var(--bg-input);
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      position: relative;
+    }
+
+    .task-item.checked .checkbox {
+      background: var(--primary);
+      border-color: var(--primary);
+      box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
+    }
+
+    .checkbox svg {
+      width: 10px;
+      height: 10px;
+      color: #fff;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 150ms ease;
+    }
+
+    .task-item.checked .checkbox svg {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .item-text {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      transition: color var(--transition);
+    }
+
+    .task-item.checked .item-text {
+      color: var(--text-muted);
+      text-decoration: line-through;
+      text-decoration-color: rgba(124, 58, 237, 0.4);
+    }
+
+    /* code dans les items */
+    .item-text code {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 12px;
+      background: rgba(124, 58, 237, 0.12);
+      color: #c4b5fd;
+      border: 1px solid rgba(124, 58, 237, 0.2);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    /* ─── EMPTY STATE ────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
+    .footer {
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: gap;
+      gap: 16px;
+    }
+
+    .footer-brand {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-brand span {
+      color: var(--primary-light);
+    }
+
+    .reset-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      transition: all var(--transition);
+    }
+
+    .reset-btn:hover {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    /* ─── CELEBRATION ────────────────────────────────── */
+    @keyframes celebrate {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .celebrating {
+      animation: celebrate 300ms ease;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 640px) {
+      .page-wrapper { padding: 24px 16px 64px; }
+      .phase-stats { grid-template-columns: repeat(2, 1fr); }
+      .project-title { font-size: 24px; }
+      .mini-bar-track { display: none; }
+      .global-progress-card { padding: 20px; }
+      .filter-bar { gap: 6px; }
+      .filter-btn { padding: 6px 12px; font-size: 12px; }
+      .footer { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 400px) {
+      .phase-stats { grid-template-columns: repeat(2, 1fr); }
+      .task-card-header { padding: 14px 14px; gap: 10px; }
+      .task-item { padding: 9px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-top">
+        <div class="logo-badge">
+          <span class="logo-dot"></span>
+          En construction
+        </div>
+      </div>
+      <h1 class="project-title">KON<span>VERT</span> — Roadmap SaaS</h1>
+      <p class="project-subtitle">Générateur de landing pages e-commerce par IA &nbsp;·&nbsp; Style xPage.ai &nbsp;·&nbsp; Next.js + Supabase + Stripe</p>
+    </header>
+
+    <!-- PROGRESS GLOBAL -->
+    <div class="global-progress-card">
+      <div class="progress-header">
+        <span class="progress-title">Progression globale</span>
+        <div class="progress-counter">
+          <span class="done" id="global-done">0</span>
+          <span class="total"> / 89 tâches complétées</span>
+        </div>
+      </div>
+      <div class="global-bar-track">
+        <div class="global-bar-fill" id="global-bar" style="width: 0%"></div>
+      </div>
+      <div class="progress-percent">
+        <strong id="global-percent">0%</strong> du projet réalisé
+      </div>
+    </div>
+
+    <!-- PHASE STATS -->
+    <div class="phase-stats">
+      <div class="phase-stat active" data-filter="all" onclick="setFilter('all', this)">
+        <div class="phase-stat-number">89</div>
+        <div class="phase-stat-label">Total</div>
+        <div class="phase-stat-sub">Toutes les phases</div>
+      </div>
+      <div class="phase-stat" data-filter="phase-1" onclick="setFilter('phase-1', this)">
+        <div class="phase-stat-number">4</div>
+        <div class="phase-stat-label">Phase 1</div>
+        <div class="phase-stat-sub">Fondations</div>
+      </div>
+      <div class="phase-stat" data-filter="phase-2" onclick="setFilter('phase-2', this)">
+        <div class="phase-stat-number">4</div>
+        <div class="phase-stat-label">Phase 2</div>
+        <div class="phase-stat-sub">Builder + Exports</div>
+      </div>
+      <div class="phase-stat" data-filter="phase-3" onclick="setFilter('phase-3', this)">
+        <div class="phase-stat-number">4</div>
+        <div class="phase-stat-label">Phase 3</div>
+        <div class="phase-stat-sub">Monétisation</div>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">
+        <span class="dot"></span> Tout afficher
+      </button>
+      <button class="filter-btn" data-filter="phase-1" onclick="setFilter('phase-1', this)">
+        <span class="dot"></span> Phase 1 — Fondations
+      </button>
+      <button class="filter-btn" data-filter="phase-2" onclick="setFilter('phase-2', this)">
+        <span class="dot"></span> Phase 2 — Builder
+      </button>
+      <button class="filter-btn" data-filter="phase-3" onclick="setFilter('phase-3', this)">
+        <span class="dot"></span> Phase 3 — Monétisation
+      </button>
+      <button class="filter-btn" data-filter="phase-4" onclick="setFilter('phase-4', this)">
+        <span class="dot"></span> Phase 4 — Lancement
+      </button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content">
+
+      <!-- ════════════ PHASE 1 ════════════ -->
+      <section class="phase-section phase-1" data-phase="phase-1">
+        <div class="phase-header">
+          <span class="phase-tag">Phase 1</span>
+          <h2 class="phase-title">Fondations</h2>
+          <span class="phase-timeline">Semaine 1–2</span>
+        </div>
+
+        <!-- Tâche 1 -->
+        <div class="task-card" id="task-1">
+          <div class="task-card-header" onclick="toggleCard('task-1')">
+            <div class="task-number">01</div>
+            <div class="task-card-title">Setup du projet</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-1">0</span> / 8</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-1" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-1-1" onclick="toggleItem('item-1-1','task-1',8)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer le repo GitHub</span>
+              </div>
+              <div class="task-item" id="item-1-2" onclick="toggleItem('item-1-2','task-1',8)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Initialiser Next.js 14 avec App Router (<code>npx create-next-app@latest</code>)</span>
+              </div>
+              <div class="task-item" id="item-1-3" onclick="toggleItem('item-1-3','task-1',8)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Configurer Tailwind CSS + shadcn/ui</span>
+              </div>
+              <div class="task-item" id="item-1-4" onclick="toggleItem('item-1-4','task-1',8)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer le projet Supabase (DB + Auth + Storage)</span>
+              </div>
+              <div class="task-item" id="item-1-5" onclick="toggleItem('item-1-5','task-1',8)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Connecter Supabase au projet Next.js (variables d'env)</span>
+              </div>
+              <div class="task-item" id="item-1-6" onclick="toggleItem('item-1-6','task-1',8)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Installer Stripe SDK (<code>npm install stripe @stripe/stripe-js</code>)</span>
+              </div>
+              <div class="task-item" id="item-1-7" onclick="toggleItem('item-1-7','task-1',8)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Déployer sur Vercel (domaine temporaire)</span>
+              </div>
+              <div class="task-item" id="item-1-8" onclick="toggleItem('item-1-8','task-1',8)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Setup ESLint + Prettier</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tâche 2 -->
+        <div class="task-card" id="task-2">
+          <div class="task-card-header" onclick="toggleCard('task-2')">
+            <div class="task-number">02</div>
+            <div class="task-card-title">Schema base de données (Supabase)</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-2">0</span> / 7</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-2" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-2-1" onclick="toggleItem('item-2-1','task-2',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Table <code>users</code> (id, email, name, plan, created_at)</span>
+              </div>
+              <div class="task-item" id="item-2-2" onclick="toggleItem('item-2-2','task-2',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Table <code>subscriptions</code> (id, user_id, stripe_customer_id, stripe_subscription_id, plan, status, current_period_end)</span>
+              </div>
+              <div class="task-item" id="item-2-3" onclick="toggleItem('item-2-3','task-2',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Table <code>stores</code> (id, user_id, platform, store_url, access_token, name)</span>
+              </div>
+              <div class="task-item" id="item-2-4" onclick="toggleItem('item-2-4','task-2',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Table <code>pages</code> (id, user_id, store_id, title, product_url, html_content, json_content, status, created_at)</span>
+              </div>
+              <div class="task-item" id="item-2-5" onclick="toggleItem('item-2-5','task-2',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Table <code>templates</code> (id, name, preview_url, html_template, category)</span>
+              </div>
+              <div class="task-item" id="item-2-6" onclick="toggleItem('item-2-6','task-2',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Configurer les politiques RLS (Row Level Security) pour chaque table</span>
+              </div>
+              <div class="task-item" id="item-2-7" onclick="toggleItem('item-2-7','task-2',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer les indexes sur <code>user_id</code> pour les performances</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tâche 3 -->
+        <div class="task-card" id="task-3">
+          <div class="task-card-header" onclick="toggleCard('task-3')">
+            <div class="task-number">03</div>
+            <div class="task-card-title">Scraper AliExpress / URL produit</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-3">0</span> / 7</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-3" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-3-1" onclick="toggleItem('item-3-1','task-3',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Installer Puppeteer (<code>npm install puppeteer</code>)</span>
+              </div>
+              <div class="task-item" id="item-3-2" onclick="toggleItem('item-3-2','task-3',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer la route API <code>/api/scrape</code> (POST)</span>
+              </div>
+              <div class="task-item" id="item-3-3" onclick="toggleItem('item-3-3','task-3',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Extraire : titre du produit, description, liste d'images, prix, variantes (taille/couleur)</span>
+              </div>
+              <div class="task-item" id="item-3-4" onclick="toggleItem('item-3-4','task-3',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Gérer les cas AliExpress bloqué → fallback Apify API</span>
+              </div>
+              <div class="task-item" id="item-3-5" onclick="toggleItem('item-3-5','task-3',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Parser et nettoyer les données extraites</span>
+              </div>
+              <div class="task-item" id="item-3-6" onclick="toggleItem('item-3-6','task-3',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Tester sur 10 URLs différentes (AliExpress, Amazon, Alibaba)</span>
+              </div>
+              <div class="task-item" id="item-3-7" onclick="toggleItem('item-3-7','task-3',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Gérer les timeouts et erreurs réseau</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tâche 4 -->
+        <div class="task-card" id="task-4">
+          <div class="task-card-header" onclick="toggleCard('task-4')">
+            <div class="task-number">04</div>
+            <div class="task-card-title">Génération IA de la landing page</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-4">0</span> / 7</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-4" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-4-1" onclick="toggleItem('item-4-1','task-4',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Installer le SDK Anthropic (<code>npm install @anthropic-ai/sdk</code>)</span>
+              </div>
+              <div class="task-item" id="item-4-2" onclick="toggleItem('item-4-2','task-4',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer la route API <code>/api/generate</code> (POST)</span>
+              </div>
+              <div class="task-item" id="item-4-3" onclick="toggleItem('item-4-3','task-4',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Prompt système : rôle de copywriter e-commerce expert</span>
+              </div>
+              <div class="task-item" id="item-4-4" onclick="toggleItem('item-4-4','task-4',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Générer : headline accrocheur, sous-titre, 5 bullets bénéfices, section FAQ (5 questions), CTA principal, urgency text</span>
+              </div>
+              <div class="task-item" id="item-4-5" onclick="toggleItem('item-4-5','task-4',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Retourner un JSON structuré <code>&#123; headline, subtitle, benefits[], faq[], cta, urgency &#125;</code></span>
+              </div>
+              <div class="task-item" id="item-4-6" onclick="toggleItem('item-4-6','task-4',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Gérer les tokens et les limites de rate</span>
+              </div>
+              <div class="task-item" id="item-4-7" onclick="toggleItem('item-4-7','task-4',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Tester sur 5 types de produits différents</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════ PHASE 2 ════════════ -->
+      <section class="phase-section phase-2" data-phase="phase-2">
+        <div class="phase-header">
+          <span class="phase-tag">Phase 2</span>
+          <h2 class="phase-title">Builder + Exports</h2>
+          <span class="phase-timeline">Semaine 3–4</span>
+        </div>
+
+        <!-- Tâche 5 -->
+        <div class="task-card" id="task-5">
+          <div class="task-card-header" onclick="toggleCard('task-5')">
+            <div class="task-number">05</div>
+            <div class="task-card-title">Builder visuel drag &amp; drop</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-5">0</span> / 10</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-5" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-5-1" onclick="toggleItem('item-5-1','task-5',10)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Installer GrapesJS (<code>npm install grapesjs</code>)</span>
+              </div>
+              <div class="task-item" id="item-5-2" onclick="toggleItem('item-5-2','task-5',10)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Intégrer GrapesJS dans un composant React</span>
+              </div>
+              <div class="task-item" id="item-5-3" onclick="toggleItem('item-5-3','task-5',10)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer Template 1 : "Minimal Dark" (fond sombre, CTA rouge)</span>
+              </div>
+              <div class="task-item" id="item-5-4" onclick="toggleItem('item-5-4','task-5',10)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer Template 2 : "Clean White" (fond blanc, moderne)</span>
+              </div>
+              <div class="task-item" id="item-5-5" onclick="toggleItem('item-5-5','task-5',10)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer Template 3 : "Bold Sales" (couleurs vives, urgence)</span>
+              </div>
+              <div class="task-item" id="item-5-6" onclick="toggleItem('item-5-6','task-5',10)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer Template 4 : "Luxury" (premium, haut de gamme)</span>
+              </div>
+              <div class="task-item" id="item-5-7" onclick="toggleItem('item-5-7','task-5',10)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer Template 5 : "Mobile First" (optimisé smartphone)</span>
+              </div>
+              <div class="task-item" id="item-5-8" onclick="toggleItem('item-5-8','task-5',10)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Preview desktop / tablet / mobile dans l'éditeur</span>
+              </div>
+              <div class="task-item" id="item-5-9" onclick="toggleItem('item-5-9','task-5',10)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Sauvegarder le JSON de la page en DB à chaque modification</span>
+              </div>
+              <div class="task-item" id="item-5-10" onclick="toggleItem('item-5-10','task-5',10)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Export HTML standalone</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tâche 6 -->
+        <div class="task-card" id="task-6">
+          <div class="task-card-header" onclick="toggleCard('task-6')">
+            <div class="task-number">06</div>
+            <div class="task-card-title">Intégration Shopify</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-6">0</span> / 7</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-6" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-6-1" onclick="toggleItem('item-6-1','task-6',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer un compte Shopify Partner (gratuit)</span>
+              </div>
+              <div class="task-item" id="item-6-2" onclick="toggleItem('item-6-2','task-6',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer une Shopify App (Custom App)</span>
+              </div>
+              <div class="task-item" id="item-6-3" onclick="toggleItem('item-6-3','task-6',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Implémenter le flux OAuth Shopify (autorisation du store)</span>
+              </div>
+              <div class="task-item" id="item-6-4" onclick="toggleItem('item-6-4','task-6',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Stocker l'access token chiffré en DB</span>
+              </div>
+              <div class="task-item" id="item-6-5" onclick="toggleItem('item-6-5','task-6',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Route API <code>/api/shopify/push</code> → créer une page dans le store</span>
+              </div>
+              <div class="task-item" id="item-6-6" onclick="toggleItem('item-6-6','task-6',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Tester sur un store Shopify de dev</span>
+              </div>
+              <div class="task-item" id="item-6-7" onclick="toggleItem('item-6-7','task-6',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Gérer les erreurs API (token expiré, store inactif)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tâche 7 -->
+        <div class="task-card" id="task-7">
+          <div class="task-card-header" onclick="toggleCard('task-7')">
+            <div class="task-number">07</div>
+            <div class="task-card-title">Intégration WooCommerce</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-7">0</span> / 5</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-7" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-7-1" onclick="toggleItem('item-7-1','task-7',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Formulaire de connexion : URL du store + clé API + secret</span>
+              </div>
+              <div class="task-item" id="item-7-2" onclick="toggleItem('item-7-2','task-7',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Valider la connexion WooCommerce REST API</span>
+              </div>
+              <div class="task-item" id="item-7-3" onclick="toggleItem('item-7-3','task-7',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Route API <code>/api/woocommerce/push</code> → créer une page via l'API WooCommerce</span>
+              </div>
+              <div class="task-item" id="item-7-4" onclick="toggleItem('item-7-4','task-7',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Tester sur une instance WooCommerce de dev</span>
+              </div>
+              <div class="task-item" id="item-7-5" onclick="toggleItem('item-7-5','task-7',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Gérer les erreurs de certificat SSL et les timeouts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tâche 8 -->
+        <div class="task-card" id="task-8">
+          <div class="task-card-header" onclick="toggleCard('task-8')">
+            <div class="task-number">08</div>
+            <div class="task-card-title">Dashboard utilisateur</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-8">0</span> / 6</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-8" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-8-1" onclick="toggleItem('item-8-1','task-8',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Page <code>/dashboard</code> — vue d'ensemble (pages créées, stores connectés, crédits)</span>
+              </div>
+              <div class="task-item" id="item-8-2" onclick="toggleItem('item-8-2','task-8',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Page <code>/dashboard/pages</code> — liste de toutes les pages avec preview miniature</span>
+              </div>
+              <div class="task-item" id="item-8-3" onclick="toggleItem('item-8-3','task-8',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Page <code>/dashboard/stores</code> — gestion des stores connectés (Shopify + WooCommerce)</span>
+              </div>
+              <div class="task-item" id="item-8-4" onclick="toggleItem('item-8-4','task-8',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Page <code>/dashboard/new</code> — formulaire de création (coller une URL ou saisir manuellement)</span>
+              </div>
+              <div class="task-item" id="item-8-5" onclick="toggleItem('item-8-5','task-8',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Barre de progression de la limite mensuelle de pages</span>
+              </div>
+              <div class="task-item" id="item-8-6" onclick="toggleItem('item-8-6','task-8',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Navigation sidebar responsive</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════ PHASE 3 ════════════ -->
+      <section class="phase-section phase-3" data-phase="phase-3">
+        <div class="phase-header">
+          <span class="phase-tag">Phase 3</span>
+          <h2 class="phase-title">Monétisation</h2>
+          <span class="phase-timeline">Semaine 5–6</span>
+        </div>
+
+        <!-- Tâche 9 -->
+        <div class="task-card" id="task-9">
+          <div class="task-card-header" onclick="toggleCard('task-9')">
+            <div class="task-number">09</div>
+            <div class="task-card-title">Plans &amp; abonnements Stripe</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-9">0</span> / 9</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-9" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-9-1" onclick="toggleItem('item-9-1','task-9',9)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer les 3 produits dans Stripe Dashboard</span>
+              </div>
+              <div class="task-item" id="item-9-2" onclick="toggleItem('item-9-2','task-9',9)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Plan Starter : 29€/mois — 50 pages/mois, 2 stores</span>
+              </div>
+              <div class="task-item" id="item-9-3" onclick="toggleItem('item-9-3','task-9',9)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Plan Pro : 49€/mois — 200 pages/mois, 5 stores</span>
+              </div>
+              <div class="task-item" id="item-9-4" onclick="toggleItem('item-9-4','task-9',9)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Plan Agency : 119€/mois — 500 pages/mois, 15 stores, white-label</span>
+              </div>
+              <div class="task-item" id="item-9-5" onclick="toggleItem('item-9-5','task-9',9)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Route API <code>/api/stripe/checkout</code> — créer une session de paiement</span>
+              </div>
+              <div class="task-item" id="item-9-6" onclick="toggleItem('item-9-6','task-9',9)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Route API <code>/api/stripe/webhook</code> — gérer les événements (paiement réussi, annulation, échec)</span>
+              </div>
+              <div class="task-item" id="item-9-7" onclick="toggleItem('item-9-7','task-9',9)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Page <code>/pricing</code> avec les 3 plans</span>
+              </div>
+              <div class="task-item" id="item-9-8" onclick="toggleItem('item-9-8','task-9',9)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Page de succès post-paiement</span>
+              </div>
+              <div class="task-item" id="item-9-9" onclick="toggleItem('item-9-9','task-9',9)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Gestion des limites : bloquer la génération si quota dépassé</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tâche 10 -->
+        <div class="task-card" id="task-10">
+          <div class="task-card-header" onclick="toggleCard('task-10')">
+            <div class="task-number">10</div>
+            <div class="task-card-title">Analytics de conversion</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-10">0</span> / 5</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-10" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-10-1" onclick="toggleItem('item-10-1','task-10',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Script de tracking léger à injecter dans chaque page générée</span>
+              </div>
+              <div class="task-item" id="item-10-2" onclick="toggleItem('item-10-2','task-10',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Tracker : vues uniques, scroll depth (25%, 50%, 75%, 100%), clics sur CTA</span>
+              </div>
+              <div class="task-item" id="item-10-3" onclick="toggleItem('item-10-3','task-10',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Stocker les events en DB (table <code>analytics_events</code>)</span>
+              </div>
+              <div class="task-item" id="item-10-4" onclick="toggleItem('item-10-4','task-10',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Dashboard analytics par page : taux de clic CTA, engagement scroll</span>
+              </div>
+              <div class="task-item" id="item-10-5" onclick="toggleItem('item-10-5','task-10',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Graphique simple (Chart.js) pour visualiser les performances</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tâche 11 -->
+        <div class="task-card" id="task-11">
+          <div class="task-card-header" onclick="toggleCard('task-11')">
+            <div class="task-number">11</div>
+            <div class="task-card-title">Mode Agence</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-11">0</span> / 5</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-11" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-11-1" onclick="toggleItem('item-11-1','task-11',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Système de "workspaces" clients sous un compte Agency</span>
+              </div>
+              <div class="task-item" id="item-11-2" onclick="toggleItem('item-11-2','task-11',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Chaque workspace = nom du client + ses pages + ses stores</span>
+              </div>
+              <div class="task-item" id="item-11-3" onclick="toggleItem('item-11-3','task-11',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">White-label : remplacer le branding de l'outil par celui de l'agence</span>
+              </div>
+              <div class="task-item" id="item-11-4" onclick="toggleItem('item-11-4','task-11',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Génération de rapport PDF client (html2pdf) avec stats et pages créées</span>
+              </div>
+              <div class="task-item" id="item-11-5" onclick="toggleItem('item-11-5','task-11',5)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Invitation de collaborateurs par email sur un workspace</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tâche 12 -->
+        <div class="task-card" id="task-12">
+          <div class="task-card-header" onclick="toggleCard('task-12')">
+            <div class="task-number">12</div>
+            <div class="task-card-title">Landing page marketing</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-12">0</span> / 7</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-12" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-12-1" onclick="toggleItem('item-12-1','task-12',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Hero section : titre fort + démo GIF animée</span>
+              </div>
+              <div class="task-item" id="item-12-2" onclick="toggleItem('item-12-2','task-12',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Section "Comment ça marche" (3 étapes)</span>
+              </div>
+              <div class="task-item" id="item-12-3" onclick="toggleItem('item-12-3','task-12',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Section pricing (lié aux plans Stripe)</span>
+              </div>
+              <div class="task-item" id="item-12-4" onclick="toggleItem('item-12-4','task-12',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Section témoignages (même fictifs pour la beta)</span>
+              </div>
+              <div class="task-item" id="item-12-5" onclick="toggleItem('item-12-5','task-12',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Section FAQ</span>
+              </div>
+              <div class="task-item" id="item-12-6" onclick="toggleItem('item-12-6','task-12',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">CTA final + collecte email waitlist (Supabase)</span>
+              </div>
+              <div class="task-item" id="item-12-7" onclick="toggleItem('item-12-7','task-12',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">SEO : meta tags, OG tags, sitemap</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════ PHASE 4 ════════════ -->
+      <section class="phase-section phase-4" data-phase="phase-4">
+        <div class="phase-header">
+          <span class="phase-tag">Phase 4</span>
+          <h2 class="phase-title">Lancement</h2>
+          <span class="phase-timeline">Mois 2–3</span>
+        </div>
+
+        <!-- Tâche 13 -->
+        <div class="task-card" id="task-13">
+          <div class="task-card-header" onclick="toggleCard('task-13')">
+            <div class="task-number">13</div>
+            <div class="task-card-title">Beta fermée</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-13">0</span> / 6</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-13" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-13-1" onclick="toggleItem('item-13-1','task-13',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Recruter 20 early adopters (communauté SMMA francophone, Reddit, LinkedIn)</span>
+              </div>
+              <div class="task-item" id="item-13-2" onclick="toggleItem('item-13-2','task-13',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Créer un formulaire d'inscription beta (Typeform ou natif)</span>
+              </div>
+              <div class="task-item" id="item-13-3" onclick="toggleItem('item-13-3','task-13',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Onboarding personnalisé : email de bienvenue + guide de démarrage</span>
+              </div>
+              <div class="task-item" id="item-13-4" onclick="toggleItem('item-13-4','task-13',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Session de feedback individuelle avec chaque bêta testeur</span>
+              </div>
+              <div class="task-item" id="item-13-5" onclick="toggleItem('item-13-5','task-13',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Prioriser les bugs critiques remontés</span>
+              </div>
+              <div class="task-item" id="item-13-6" onclick="toggleItem('item-13-6','task-13',6)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Objectif : 5 pages créées et exportées par bêta testeur</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tâche 14 -->
+        <div class="task-card" id="task-14">
+          <div class="task-card-header" onclick="toggleCard('task-14')">
+            <div class="task-number">14</div>
+            <div class="task-card-title">Lancement public</div>
+            <div class="task-card-meta">
+              <span class="task-progress-text"><span class="done-count" id="done-task-14">0</span> / 7</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="bar-task-14" style="width:0%"></div>
+              </div>
+              <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="task-items">
+              <div class="task-item" id="item-14-1" onclick="toggleItem('item-14-1','task-14',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Soumettre sur Product Hunt (préparer assets : logo, screenshots, démo vidéo)</span>
+              </div>
+              <div class="task-item" id="item-14-2" onclick="toggleItem('item-14-2','task-14',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Préparer la campagne AppSumo (deal lifetime à 69$ pour les 500 premiers)</span>
+              </div>
+              <div class="task-item" id="item-14-3" onclick="toggleItem('item-14-3','task-14',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Post Reddit r/dropship + r/entrepreneur + r/SaaS</span>
+              </div>
+              <div class="task-item" id="item-14-4" onclick="toggleItem('item-14-4','task-14',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Vidéo TikTok / YouTube : "Je génère une landing page en 30 secondes"</span>
+              </div>
+              <div class="task-item" id="item-14-5" onclick="toggleItem('item-14-5','task-14',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Email à la liste waitlist construite pendant la beta</span>
+              </div>
+              <div class="task-item" id="item-14-6" onclick="toggleItem('item-14-6','task-14',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Programme d'affiliation : 30% de commission récurrente</span>
+              </div>
+              <div class="task-item" id="item-14-7" onclick="toggleItem('item-14-7','task-14',7)">
+                <div class="checkbox"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+                <span class="item-text">Objectif J+30 : 100 clients payants, 3.000€ MRR</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-brand">PAGE<span>GEN</span> &nbsp;·&nbsp; NEXARA Internal Tool</div>
+      <button class="reset-btn" onclick="confirmReset()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Remettre à zéro
+      </button>
+    </footer>
+
+  </div>
+
+  <script>
+    // ─── CONFIG ──────────────────────────────────────────────────────
+    const TOTAL_TASKS = 89;
+    const STORAGE_KEY = 'konvert_roadmap_v1';
+
+    // ─── STATE ───────────────────────────────────────────────────────
+    let state = {};
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        state = raw ? JSON.parse(raw) : {};
+      } catch (e) {
+        state = {};
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {}
+    }
+
+    // ─── TOGGLE ITEM ─────────────────────────────────────────────────
+    function toggleItem(itemId, cardId, cardTotal) {
+      const el = document.getElementById(itemId);
+      if (!el) return;
+
+      const isChecked = el.classList.contains('checked');
+      if (isChecked) {
+        el.classList.remove('checked');
+        state[itemId] = false;
+      } else {
+        el.classList.add('checked');
+        state[itemId] = true;
+      }
+
+      saveState();
+      updateCardProgress(cardId, cardTotal);
+      updateGlobalProgress();
+    }
+
+    // ─── UPDATE CARD PROGRESS ─────────────────────────────────────────
+    function updateCardProgress(cardId, total) {
+      const card = document.getElementById(cardId);
+      if (!card) return;
+
+      const items = card.querySelectorAll('.task-item');
+      let done = 0;
+      items.forEach(item => { if (item.classList.contains('checked')) done++; });
+
+      const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+
+      const doneEl = document.getElementById('done-' + cardId);
+      const barEl = document.getElementById('bar-' + cardId);
+
+      if (doneEl) doneEl.textContent = done;
+      if (barEl) barEl.style.width = percent + '%';
+
+      if (done === total && total > 0) {
+        card.classList.add('all-done');
+      } else {
+        card.classList.remove('all-done');
+      }
+    }
+
+    // ─── UPDATE GLOBAL PROGRESS ───────────────────────────────────────
+    function updateGlobalProgress() {
+      let done = 0;
+      document.querySelectorAll('.task-item.checked').forEach(() => done++);
+
+      const percent = Math.round((done / TOTAL_TASKS) * 100);
+
+      const globalDone = document.getElementById('global-done');
+      const globalBar = document.getElementById('global-bar');
+      const globalPercent = document.getElementById('global-percent');
+
+      if (globalDone) {
+        globalDone.textContent = done;
+        if (done > parseInt(globalDone.dataset.prev || '0')) {
+          globalDone.closest('.global-progress-card').classList.add('celebrating');
+          setTimeout(() => globalDone.closest('.global-progress-card').classList.remove('celebrating'), 300);
+        }
+        globalDone.dataset.prev = done;
+      }
+      if (globalBar) globalBar.style.width = percent + '%';
+      if (globalPercent) globalPercent.textContent = percent + '%';
+    }
+
+    // ─── TOGGLE CARD (open/close) ─────────────────────────────────────
+    function toggleCard(cardId) {
+      const card = document.getElementById(cardId);
+      if (!card) return;
+      card.classList.toggle('open');
+    }
+
+    // ─── FILTER ──────────────────────────────────────────────────────
+    function setFilter(filter, clickedEl) {
+      // Update all filter buttons (both in filter-bar and phase-stats)
+      document.querySelectorAll('[data-filter]').forEach(el => {
+        el.classList.remove('active');
+      });
+      // Activate all elements with same data-filter
+      document.querySelectorAll('[data-filter="' + filter + '"]').forEach(el => {
+        el.classList.add('active');
+      });
+
+      document.querySelectorAll('.phase-section').forEach(section => {
+        const phase = section.getAttribute('data-phase');
+        if (filter === 'all' || filter === phase) {
+          section.style.display = '';
+        } else {
+          section.style.display = 'none';
+        }
+      });
+    }
+
+    // ─── RESET ───────────────────────────────────────────────────────
+    function confirmReset() {
+      if (confirm('Remettre toutes les tâches à zéro ? Cette action est irréversible.')) {
+        state = {};
+        saveState();
+        initUI();
+      }
+    }
+
+    // ─── INIT UI ──────────────────────────────────────────────────────
+    function initUI() {
+      // Map card IDs to their total items
+      const cards = {
+        'task-1': 8, 'task-2': 7, 'task-3': 7, 'task-4': 7,
+        'task-5': 10, 'task-6': 7, 'task-7': 5, 'task-8': 6,
+        'task-9': 9, 'task-10': 5, 'task-11': 5, 'task-12': 7,
+        'task-13': 6, 'task-14': 7
+      };
+
+      // Restore checked state from localStorage
+      Object.entries(state).forEach(([itemId, checked]) => {
+        if (checked) {
+          const el = document.getElementById(itemId);
+          if (el) el.classList.add('checked');
+        }
+      });
+
+      // Update all card progress bars
+      Object.entries(cards).forEach(([cardId, total]) => {
+        updateCardProgress(cardId, total);
+      });
+
+      // Update global progress
+      updateGlobalProgress();
+    }
+
+    // ─── BOOT ────────────────────────────────────────────────────────
+    loadState();
+    initUI();
+  </script>
+</body>
+</html>

@@ -375,28 +375,21 @@ function Slide1() {
               </div>
             </div>
 
-            {/* Hero produit — bannière violet/indigo */}
+            {/* Hero produit — image réelle sneaker */}
             <div
               className="relative flex flex-col justify-end"
-              style={{
-                height: '120px',
-                background: 'linear-gradient(135deg, #4c1d95 0%, #5B47F5 50%, #7c6af7 100%)',
-                overflow: 'hidden',
-              }}
+              style={{ height: '140px', overflow: 'hidden' }}
             >
-              {/* Cercles décoratifs */}
-              <div style={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} />
-              <div style={{ position: 'absolute', top: 10, right: 30, width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
-              {/* Icône produit stylisée */}
-              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 52, height: 52, borderRadius: 14, background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <line x1="3" y1="6" x2="21" y2="6" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                  <path d="M16 10a4 4 0 01-8 0" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700&q=85"
+                alt="Air Jordan Pro"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+              />
+              {/* Overlay gradient sombre en bas */}
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 55%, transparent 100%)' }} />
               {/* Badge promo */}
-              <div style={{ position: 'absolute', top: 8, left: 10, background: 'rgba(16,185,129,0.9)', color: '#fff', fontSize: 9, fontWeight: 800, padding: '2px 7px', borderRadius: 6 }}>
+              <div style={{ position: 'absolute', top: 8, left: 10, background: 'rgba(16,185,129,0.92)', color: '#fff', fontSize: 9, fontWeight: 800, padding: '2px 7px', borderRadius: 6, backdropFilter: 'blur(4px)' }}>
                 PROMO -36%
               </div>
               {/* Étoiles */}
@@ -526,7 +519,7 @@ const TEMPLATE_CARDS = [
     accent: '#7c6af7',
     bg: 'linear-gradient(160deg,#1a1040 0%,#2d1f6e 100%)',
     heroColor: 'linear-gradient(135deg,#5B47F5,#7c6af7)',
-    img: '/images/template-fashion.jpg',
+    img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&q=80',
     price: '49,90€',
     oldPrice: '89€',
     label: 'Nouvelle collection',
@@ -545,7 +538,7 @@ const TEMPLATE_CARDS = [
     accent: '#38bdf8',
     bg: 'linear-gradient(160deg,#0a0f1a 0%,#0f1f35 100%)',
     heroColor: 'linear-gradient(135deg,#0ea5e9,#38bdf8)',
-    img: '/images/template-tech.jpg',
+    img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80',
     price: '129€',
     oldPrice: '199€',
     label: 'Meilleure vente',
@@ -564,7 +557,7 @@ const TEMPLATE_CARDS = [
     accent: '#fb923c',
     bg: 'linear-gradient(160deg,#1f0d00 0%,#3d1f05 100%)',
     heroColor: 'linear-gradient(135deg,#f97316,#fb923c)',
-    img: '/images/template-beauty.jpg',
+    img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500&q=80',
     price: '34,90€',
     oldPrice: '59€',
     label: '-41% ce week-end',
@@ -583,7 +576,7 @@ const TEMPLATE_CARDS = [
     accent: '#2dd4bf',
     bg: 'linear-gradient(160deg,#001a18 0%,#04312d 100%)',
     heroColor: 'linear-gradient(135deg,#0d9488,#2dd4bf)',
-    img: null as string | null,
+    img: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&q=80',
     price: '79,90€',
     oldPrice: '119€',
     label: 'Top performance',
@@ -679,25 +672,24 @@ function Slide2() {
                 </span>
               </div>
 
-              {/* Zone hero produit simulée */}
+              {/* Zone hero produit — image réelle */}
               <div
-                className="mx-3 mt-1.5 rounded-xl flex items-center justify-center relative overflow-hidden"
-                style={{ height: '56px', background: t.heroColor }}
+                className="mx-3 mt-1.5 rounded-xl relative overflow-hidden"
+                style={{ height: '72px', background: t.heroColor }}
               >
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%)' }} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={t.img}
+                  alt={t.name}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+                />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)' }} />
                 {/* Badge label */}
                 <div
                   className="absolute top-1.5 left-2 text-[8px] font-black px-1.5 py-0.5 rounded-full"
-                  style={{ background: 'rgba(0,0,0,0.45)', color: '#fff', backdropFilter: 'blur(4px)' }}
+                  style={{ background: 'rgba(0,0,0,0.5)', color: '#fff', backdropFilter: 'blur(4px)' }}
                 >
                   {t.label}
-                </div>
-                {/* Icone produit simulé */}
-                <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-sm"
-                  style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)' }}
-                >
-                  <t.Icon size={16} weight="bold" color="rgba(255,255,255,0.85)" />
                 </div>
               </div>
 
@@ -2040,17 +2032,28 @@ function BuilderSection() {
                     className="flex-1 relative overflow-hidden"
                     style={{ background: '#ffffff' }}
                   >
-                    {/* Hero bannière produit */}
-                    <div style={{ background: 'linear-gradient(135deg,#1a0a4e 0%,#5B47F5 100%)', padding: '12px 14px 14px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                        <span style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 8, fontWeight: 800, padding: '2px 7px', borderRadius: 99 }}>-42% CE WEEK-END</span>
-                        <div style={{ display: 'flex', gap: 2 }}>{[1,2,3,4,5].map(i=><svg key={i} width="8" height="8" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="#fbbf24"/></svg>)}</div>
-                      </div>
-                      <div style={{ fontWeight: 900, fontSize: 12, color: '#fff', lineHeight: 1.3, marginBottom: 3 }}>Casque Pro Studio X</div>
-                      <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.65)' }}>Son cristallin · Réduction de bruit active</div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8 }}>
-                        <span style={{ fontWeight: 900, fontSize: 15, color: '#fff' }}>79€</span>
-                        <span style={{ fontSize: 10, textDecoration: 'line-through', color: 'rgba(255,255,255,0.45)' }}>139€</span>
+                    {/* Hero bannière produit — image réelle headphone */}
+                    <div style={{ position: 'relative', overflow: 'hidden', minHeight: 90 }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=85"
+                        alt="Casque Pro Studio X"
+                        style={{ width: '100%', height: 90, objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+                      />
+                      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(26,10,78,0.88) 0%, rgba(91,71,245,0.55) 100%)' }} />
+                      <div style={{ position: 'absolute', inset: 0, padding: '10px 14px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ background: 'rgba(255,255,255,0.18)', color: '#fff', fontSize: 8, fontWeight: 800, padding: '2px 7px', borderRadius: 99, backdropFilter: 'blur(4px)' }}>-42% CE WEEK-END</span>
+                          <div style={{ display: 'flex', gap: 2 }}>{[1,2,3,4,5].map(i=><svg key={i} width="8" height="8" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="#fbbf24"/></svg>)}</div>
+                        </div>
+                        <div>
+                          <div style={{ fontWeight: 900, fontSize: 12, color: '#fff', lineHeight: 1.3, marginBottom: 2 }}>Casque Pro Studio X</div>
+                          <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.65)', marginBottom: 4 }}>Son cristallin · Réduction de bruit active</div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{ fontWeight: 900, fontSize: 15, color: '#fff' }}>79€</span>
+                            <span style={{ fontSize: 10, textDecoration: 'line-through', color: 'rgba(255,255,255,0.45)' }}>139€</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     {/* CTA et avis */}

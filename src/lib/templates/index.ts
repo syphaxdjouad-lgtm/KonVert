@@ -12,6 +12,9 @@ export { templateEtecShopz }   from './etec-shopz'
 export { templateEtecVelvety } from './etec-velvety'
 export { templateEtecPrime }  from './etec-prime'
 export { templateEtecBlusho } from './etec-blusho'
+export { templateEtecCasa }   from './etec-casa'
+export { templateEtecPet }    from './etec-pet'
+export { templateEtecGadget } from './etec-gadget'
 
 import { templateEtecBlue }   from './etec-blue'
 import { templateEtecNoir }   from './etec-noir'
@@ -25,6 +28,9 @@ import { templateEtecShopz }   from './etec-shopz'
 import { templateEtecVelvety } from './etec-velvety'
 import { templateEtecPrime }  from './etec-prime'
 import { templateEtecBlusho } from './etec-blusho'
+import { templateEtecCasa }   from './etec-casa'
+import { templateEtecPet }    from './etec-pet'
+import { templateEtecGadget } from './etec-gadget'
 
 // ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
 
@@ -63,6 +69,9 @@ export const TEMPLATES = [
   { id: 'etec-velvety', name: 'Velvety', category: 'organic' as const, fn: templateEtecVelvety, label: 'Skincare · Botanique · Haut de gamme',accent: '#4A7C59', badge: 'Nouveau'       },
   { id: 'etec-prime',   name: 'Prime',   category: 'modern'  as const, fn: templateEtecPrime,   label: 'Supplements · Health · DTC Premium',  accent: '#3CB043', badge: 'Nouveau'       },
   { id: 'etec-blusho',  name: 'Blusho',  category: 'beauty'  as const, fn: templateEtecBlusho,  label: 'Cosmetics · Skincare · E-com Premium', accent: '#7A8C6E', badge: 'Nouveau'       },
+  { id: 'etec-casa',    name: 'Casa',    category: 'organic' as const, fn: templateEtecCasa,    label: 'Maison · Déco · Artisanat Premium',    accent: '#B5541B', badge: 'Nouveau'       },
+  { id: 'etec-pet',     name: 'Pet',     category: 'modern'  as const, fn: templateEtecPet,     label: 'Animaux · Bien-être · Pet Care',       accent: '#E8722A', badge: 'Nouveau'       },
+  { id: 'etec-gadget',  name: 'Gadget',  category: 'modern'  as const, fn: templateEtecGadget,  label: 'Tech · Electronics · Apple Style',     accent: '#0066CC', badge: 'Nouveau'       },
 ]
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
@@ -81,6 +90,9 @@ export function renderTemplate(templateId: string, data: LandingPageData): strin
     case 'etec-velvety':    return templateEtecVelvety(data)
     case 'etec-prime':      return templateEtecPrime(data)
     case 'etec-blusho':     return templateEtecBlusho(data)
+    case 'etec-casa':       return templateEtecCasa(data)
+    case 'etec-pet':        return templateEtecPet(data)
+    case 'etec-gadget':     return templateEtecGadget(data)
     case 'minimal-dark':
     case 'gaming-zone':
     case 'automotive-pro':  return templateEtecNoir(data)

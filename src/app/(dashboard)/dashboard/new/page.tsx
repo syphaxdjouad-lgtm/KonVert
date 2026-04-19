@@ -33,6 +33,9 @@ const STYLES = [
   { id: 'etec-shopz',   name: 'Shopz',   desc: 'E-commerce clothing — galerie interactive, swatches couleur/taille',       emoji: '🛍️' },
   { id: 'etec-velvety', name: 'Velvety', desc: 'Skincare botanique — vert forêt, grille produits, newsletter',             emoji: '🍃' },
   { id: 'etec-prime',   name: 'Prime',   desc: 'Supplements premium — dark + lime, ingrédients cliniques, subscribe',      emoji: '💊' },
+  { id: 'etec-casa',    name: 'Casa',    desc: 'Maison & déco artisanale — serif élégant, terre cuite, galerie lifestyle',   emoji: '🏠' },
+  { id: 'etec-pet',     name: 'Pet',     desc: 'Animaux & pet care — orange chaleureux, sélecteur taille, avis espèce',     emoji: '🐾' },
+  { id: 'etec-gadget',  name: 'Gadget',  desc: 'Tech & électronique — Apple-style, glassmorphism, color picker, specs',     emoji: '📱' },
 ]
 
 const TONES = [

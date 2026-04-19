@@ -11,6 +11,9 @@ import {
   templateEtecShopz,
   templateEtecVelvety,
   templateEtecPrime,
+  templateEtecCasa,
+  templateEtecPet,
+  templateEtecGadget,
 } from '@/lib/templates'
 import type { LandingPageData } from '@/types'
 
@@ -244,6 +247,90 @@ const SAMPLE_PRIME: LandingPageData = {
   ],
 }
 
+const SAMPLE_CASA: LandingPageData = {
+  product_name: 'Bougie Aromatique Handmade',
+  headline: 'Un intérieur qui sent bon — l\'art de vivre à la française',
+  subtitle: 'Cires végétales, huiles essentielles pures, mèche coton 100% naturel. Fabriqué à la main en Provence. Livraison offerte.',
+  cta: 'Commander maintenant — Livraison offerte',
+  urgency: '🏡 Stock limité — Édition Automne',
+  benefits: [
+    'Cire de soja 100% végétale — aucune paraffine, aucun produit chimique',
+    'Huiles essentielles pures de Provence — senteur naturelle et authentique',
+    'Mèche coton certifiée — combustion propre sans suie',
+    'Coulée et moulée à la main — chaque bougie est unique',
+    'Contenant réutilisable — pot céramique artisanal fait main',
+  ],
+  faq: [
+    { question: 'Durée de combustion ?', answer: 'Entre 40 et 60 heures selon la taille choisie. La cire de soja brûle plus lentement que la paraffine.' },
+    { question: 'Les senteurs sont-elles naturelles ?', answer: 'Oui, uniquement des huiles essentielles pures. Aucun parfum synthétique, aucun perturbateur endocrinien.' },
+    { question: 'Livraison et retours ?', answer: 'Livraison soignée sous 3–5 jours. Retours acceptés sous 14 jours si produit non utilisé.' },
+  ],
+  price: '34',
+  original_price: '49',
+  images: [
+    'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=800&q=80',
+    'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+    'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=800&q=80',
+    'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=800&q=80',
+  ],
+}
+
+const SAMPLE_PET: LandingPageData = {
+  product_name: 'Collar Premium ProFlex',
+  headline: 'Le collier que ton chien mérite vraiment',
+  subtitle: 'Nylon militaire ultra-résistant, boucle aluminium anti-rouille, réflecteurs sécurité 360°. Confort toute la journée, durabilité à vie.',
+  cta: 'Commander le mien →',
+  urgency: '🐾 Livraison offerte dès 2 articles',
+  benefits: [
+    'Nylon militaire grade 2000D — résiste aux tractions les plus fortes',
+    'Boucle aluminium traité anti-corrosion — ne se casse jamais',
+    'Réflecteurs 360° intégrés — visible dans l\'obscurité totale',
+    'Largeur 2.5cm — parfait pour toutes les tailles de cou',
+    'Lavable en machine — hygiène garantie sans effort',
+  ],
+  faq: [
+    { question: 'Quelle taille pour mon chien ?', answer: 'Mesurez le tour de cou et ajoutez 3cm. Notre guide de tailles est disponible en fiche produit.' },
+    { question: 'Résiste-t-il à l\'eau ?', answer: 'Oui, le nylon militaire est hydrofuge. Séchage rapide en moins de 2 heures.' },
+    { question: 'Garantie ?', answer: 'Garantie à vie contre les défauts de fabrication. Si ça casse, on remplace.' },
+  ],
+  price: '24',
+  original_price: '39',
+  images: [
+    'https://images.unsplash.com/photo-1601758124510-52d02ddb7cbd?w=800&q=80',
+    'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80',
+    'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80',
+    'https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=800&q=80',
+  ],
+}
+
+const SAMPLE_GADGET: LandingPageData = {
+  product_name: 'NovaPad Pro X',
+  headline: 'La tablette repensée pour les créatifs.',
+  subtitle: 'Écran OLED 120Hz, stylet magnétique inclus, autonomie 18h. Légère comme une feuille, puissante comme un studio.',
+  cta: 'Précommander — 20% de réduction',
+  urgency: '⚡ Offre de lancement — 72h restantes',
+  benefits: [
+    'Écran OLED 2K 120Hz — couleurs parfaites, fluidité absolue',
+    'Stylet magnétique inclus — 4096 niveaux de pression, latence 9ms',
+    'Autonomie 18h — travaille toute la journée sans recharger',
+    'Puce A-Pro M3 — performance studio, chaleur zéro',
+    '1.2kg seulement — léger comme un carnet de notes',
+  ],
+  faq: [
+    { question: 'Compatibilité stylet ?', answer: 'Le stylet NovaPen 3.0 est inclus. Compatible avec les anciens modèles NovaPen 2.x.' },
+    { question: 'Mise à jour logiciel ?', answer: '5 ans de mises à jour garanties. Support matériel 7 ans.' },
+    { question: 'Retours ?', answer: '30 jours d\'essai. Retour gratuit, remboursement sous 48h.' },
+  ],
+  price: '649',
+  original_price: '849',
+  images: [
+    'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&q=80',
+    'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=800&q=80',
+    'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80',
+    'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80',
+  ],
+}
+
 // ---------------------------------------------------------------------------
 // Templates registry
 // ---------------------------------------------------------------------------
@@ -374,6 +461,48 @@ const TEMPLATES = [
     fn: templateEtecPrime,
     sample: SAMPLE_PRIME,
     preview: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80',
+  },
+  {
+    id: 'etec-casa',
+    name: 'Casa',
+    tagline: 'Maison · Déco · Artisanat Premium',
+    desc: 'Design élégant inspiré des grandes maisons de déco. Serif Garamond, tons terre cuite et sable, galerie lifestyle asymétrique. Idéal pour bougies, linge de maison, artisanat.',
+    accent: '#B5541B',
+    badgeBg: '#B5541B',
+    badge: 'Maison',
+    cvr: '4.8%',
+    niches: ['Maison', 'Déco', 'Artisanat', 'Lifestyle'],
+    fn: templateEtecCasa,
+    sample: SAMPLE_CASA,
+    preview: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=600&q=80',
+  },
+  {
+    id: 'etec-pet',
+    name: 'Pet',
+    tagline: 'Animaux · Pet Care · Well-being',
+    desc: 'Template chaleureux orange & brun pour produits animaux. Galerie interactive, sélecteur de taille, section "media logos", avis avec espèce de l\'animal. Pour colliers, snacks, accessoires.',
+    accent: '#E8722A',
+    badgeBg: '#E8722A',
+    badge: 'Animaux',
+    cvr: '4.6%',
+    niches: ['Animaux', 'Pet Care', 'Accessoires', 'Bien-être'],
+    fn: templateEtecPet,
+    sample: SAMPLE_PET,
+    preview: 'https://images.unsplash.com/photo-1601758124510-52d02ddb7cbd?w=600&q=80',
+  },
+  {
+    id: 'etec-gadget',
+    name: 'Gadget',
+    tagline: 'Tech · Électronique · Apple Style',
+    desc: 'Design Apple-inspired ultra-clean. Glassmorphism nav, hero split product, specs grid sombre, color picker, tableau comparatif. Pour smartphones, tablettes, gadgets et électronique.',
+    accent: '#0066CC',
+    badgeBg: '#0066CC',
+    badge: 'Tech',
+    cvr: '5.0%',
+    niches: ['Tech', 'Électronique', 'Gadgets', 'High-tech'],
+    fn: templateEtecGadget,
+    sample: SAMPLE_GADGET,
+    preview: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=600&q=80',
   },
 ]
 
@@ -520,7 +649,7 @@ export default function TemplatesPage() {
   const [selected, setSelected] = useState<typeof TEMPLATES[0] | null>(null)
   const [activeFilter, setActiveFilter] = useState('Tous')
 
-  const FILTERS = ['Tous', 'Tech', 'Beauté', 'Bio', 'Luxe', 'Fashion', 'Hair Care', 'Skincare', 'Health']
+  const FILTERS = ['Tous', 'Tech', 'Beauté', 'Bio', 'Luxe', 'Fashion', 'Hair Care', 'Skincare', 'Health', 'Maison', 'Animaux', 'Électronique']
 
   const filtered = TEMPLATES.filter(t => {
     if (activeFilter === 'Tous') return true
@@ -535,7 +664,7 @@ export default function TemplatesPage() {
       <section className="pt-32 pb-16 px-6" style={{ background: '#08080f' }}>
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm mb-6" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)' }}>
-            9 templates · chaque niche a son design
+            12 templates · chaque niche a son design
           </div>
           <h1 className="text-5xl sm:text-6xl font-black text-white leading-tight tracking-tight mb-5">
             Le bon design pour{' '}
@@ -586,7 +715,7 @@ export default function TemplatesPage() {
             <span style={{ color: '#5B47F5' }}>Pro.</span>
           </h2>
           <p className="text-base mb-8" style={{ color: 'rgba(255,255,255,0.45)' }}>
-            Accédez aux 9 templates, aux mises à jour futures et aux nouveaux designs dès leur sortie.
+            Accédez aux 12 templates, aux mises à jour futures et aux nouveaux designs dès leur sortie.
           </p>
           <a
             href="/signup"

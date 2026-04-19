@@ -128,9 +128,9 @@ const SAMPLE_SAGE: LandingPageData = {
   original_price: '59',
   images: [
     'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80',
-    'https://images.unsplash.com/photo-1505471768190-275e2ad070d9?w=800&q=80',
+    'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80',
     'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=800&q=80',
-    'https://images.unsplash.com/photo-1510622216446-1435f0f20bd2?w=800&q=80',
+    'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=800&q=80',
   ],
 }
 

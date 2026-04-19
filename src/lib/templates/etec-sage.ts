@@ -3,9 +3,9 @@ import { ico } from './icons'
 
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80',
-  'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&q=80',
-  'https://images.unsplash.com/photo-1509803874385-db7a23559082?w=800&q=80',
-  'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?w=800&q=80',
+  'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80',
+  'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=800&q=80',
+  'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=800&q=80',
 ]
 const BEFORE_IMG = 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80'
 const AFTER_IMG  = 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80'

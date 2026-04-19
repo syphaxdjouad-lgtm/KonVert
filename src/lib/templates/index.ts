@@ -17,6 +17,7 @@ export { templateEtecPet }    from './etec-pet'
 export { templateEtecGadget } from './etec-gadget'
 export { templateEtecAura }  from './etec-aura'
 export { templateEtecLuxe }  from './etec-luxe'
+export { templateEtecPulse } from './etec-pulse'
 
 import { templateEtecBlue }   from './etec-blue'
 import { templateEtecNoir }   from './etec-noir'
@@ -35,6 +36,7 @@ import { templateEtecPet }    from './etec-pet'
 import { templateEtecGadget } from './etec-gadget'
 import { templateEtecAura }  from './etec-aura'
 import { templateEtecLuxe }  from './etec-luxe'
+import { templateEtecPulse } from './etec-pulse'
 
 // ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
 
@@ -78,6 +80,7 @@ export const TEMPLATES = [
   { id: 'etec-gadget',  name: 'Gadget',  category: 'modern'  as const, fn: templateEtecGadget,  label: 'Tech · Electronics · Apple Style',     accent: '#0066CC', badge: 'Nouveau'       },
   { id: 'etec-aura',   name: 'Aura',   category: 'organic' as const, fn: templateEtecAura,   label: 'Wellness · Lavande · Ritual',          accent: '#7C5CBF', badge: 'Nouveau'       },
   { id: 'etec-luxe',   name: 'Luxe',   category: 'luxury'  as const, fn: templateEtecLuxe,   label: 'Joaillerie · Noir & Or · Ultra Premium',accent: '#C9A84C', badge: 'Exclusif'      },
+  { id: 'etec-pulse',  name: 'Pulse',  category: 'dark'    as const, fn: templateEtecPulse,  label: 'Tech · Cyberpunk · Gadgets Dark',        accent: '#00D4FF', badge: 'Nouveau'       },
 ]
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
@@ -101,6 +104,7 @@ export function renderTemplate(templateId: string, data: LandingPageData): strin
     case 'etec-gadget':     return templateEtecGadget(data)
     case 'etec-aura':       return templateEtecAura(data)
     case 'etec-luxe':       return templateEtecLuxe(data)
+    case 'etec-pulse':      return templateEtecPulse(data)
     case 'minimal-dark':
     case 'gaming-zone':
     case 'automotive-pro':  return templateEtecNoir(data)

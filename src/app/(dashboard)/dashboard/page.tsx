@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { PLAN_LIMITS } from '@/types'
 import Link from 'next/link'
 import { FileText, Store, Plus, TrendingUp, ArrowUpRight } from 'lucide-react'
+import OnboardingChecklist from '@/components/dashboard/OnboardingChecklist'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -11,7 +12,7 @@ export default async function DashboardPage() {
 
   const [profileRes, pagesRes, storesRes] = await Promise.all([
     supabase.from('users').select('*').eq('id', user.id).single(),
-    supabase.from('pages').select('id, status, created_at').eq('user_id', user.id),
+    supabase.from('pages').select('id, status, views, created_at').eq('user_id', user.id),
     supabase.from('stores').select('id, name, platform').eq('user_id', user.id),
   ])
 
@@ -22,7 +23,8 @@ export default async function DashboardPage() {
   const limits    = PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS]
   const used      = profile?.pages_used_this_month || 0
   const pct       = Math.min(Math.round((used / limits.pages) * 100), 100)
-  const published = pages.filter(p => p.status === 'published').length
+  const published    = pages.filter(p => p.status === 'published').length
+  const hasAnalytics = pages.some(p => (p.views ?? 0) > 0)
 
   const barFill =
     pct >= 90 ? '#ef4444' :
@@ -55,6 +57,14 @@ export default async function DashboardPage() {
           Plan {plan}
         </span>
       </div>
+
+      {/* ── ONBOARDING CHECKLIST ── */}
+      <OnboardingChecklist
+        pagesCount={pages.length}
+        storesCount={stores.length}
+        publishedCount={published}
+        hasAnalytics={hasAnalytics}
+      />
 
       {/* ── STAT CARDS ── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

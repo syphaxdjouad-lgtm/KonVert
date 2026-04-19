@@ -9,6 +9,8 @@ import {
   templateEtecBeauty,
   templateEtecStyle,
   templateEtecShopz,
+  templateEtecVelvety,
+  templateEtecPrime,
 } from '@/lib/templates'
 import type { LandingPageData } from '@/types'
 
@@ -186,6 +188,62 @@ const SAMPLE_STYLEPRO: LandingPageData = {
   ],
 }
 
+const SAMPLE_VELVETY: LandingPageData = {
+  product_name: 'Velvety Glow Ritual',
+  headline: 'Your skin deserves nature\'s finest',
+  subtitle: 'Botanical skincare crafted with 100% organic actives. Dermatologist-tested. Cruelty-free. Designed for your daily glow ritual.',
+  cta: 'Discover the ritual →',
+  urgency: '🌿 Free delivery from 2 products ordered',
+  benefits: [
+    'Formulated with 100% certified organic ingredients — no parabens, no sulfates, no compromise.',
+    'Dermatologist-tested and adapted to all skin types, including sensitive and reactive skin.',
+    'Ready-to-use ritual — just one step for radiant, moisturized skin every morning.',
+    'Made from plant-based actives sourced from sustainable, cruelty-free farms.',
+    'Biodegradable packaging — our commitment to your skin and to the planet.',
+  ],
+  faq: [
+    { question: 'Is it suitable for sensitive skin?', answer: 'Yes. All our formulas are dermatologist-tested and free from common irritants. Perfect for reactive and sensitive skin types.' },
+    { question: 'When will I see results?', answer: 'Most customers notice a difference in skin texture and radiance after 7–14 days of consistent use.' },
+    { question: 'Are products cruelty-free?', answer: 'Absolutely. We are PETA certified cruelty-free. We never test on animals and source only from ethical suppliers.' },
+  ],
+  price: '34.90',
+  original_price: '49.90',
+  images: [
+    'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&q=80',
+    'https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=800&q=80',
+    'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=800&q=80',
+    'https://images.unsplash.com/photo-1585842378054-ee2e52f94ba2?w=800&q=80',
+  ],
+}
+
+const SAMPLE_PRIME: LandingPageData = {
+  product_name: 'Daily Prime Formula',
+  headline: 'Feel extraordinary. Every single day.',
+  subtitle: '75 science-backed nutrients in one daily supplement. No guesswork, no compromise — just everything your body needs to thrive.',
+  cta: 'Start Your Transformation →',
+  urgency: '🔥 Save 20% on first order · Free shipping · Cancel anytime',
+  benefits: [
+    'Clinically dosed — no proprietary blends, ever',
+    '75 nutrients in one capsule — simplify your routine',
+    'Third-party tested for purity and potency',
+    'Ships in sustainable, plastic-neutral packaging',
+    'Backed by a 30-day money-back guarantee',
+  ],
+  faq: [
+    { question: 'When will I see results?', answer: 'Most users notice improved energy and focus within 7–14 days. Optimal results are typically seen after 30–60 days of consistent use.' },
+    { question: 'Is it safe with medications?', answer: 'Our formula is generally well-tolerated. However, consult your healthcare provider if you take any medications or have underlying conditions.' },
+    { question: 'Can I cancel my subscription?', answer: 'Yes, you can cancel anytime before your next billing date with no fees. We offer a 30-day money-back guarantee no questions asked.' },
+  ],
+  price: '79',
+  original_price: '99',
+  images: [
+    'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&q=80',
+    'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=800&q=80',
+    'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&q=80',
+    'https://images.unsplash.com/photo-1616671276441-2f2c277b8bf6?w=800&q=80',
+  ],
+}
+
 // ---------------------------------------------------------------------------
 // Templates registry
 // ---------------------------------------------------------------------------
@@ -288,6 +346,34 @@ const TEMPLATES = [
     fn: templateEtecStyle,
     sample: SAMPLE_STYLEPRO,
     preview: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80',
+  },
+  {
+    id: 'etec-velvety',
+    name: 'Velvety',
+    tagline: 'Skincare · Botanique · Organic Premium',
+    desc: 'Design botanique élégant fond crème et vert forêt. Grille produits avec filtres, témoignages slider et capture newsletter. Idéal pour skincare, cosmétiques bio et bien-être.',
+    accent: '#4A7C59',
+    badgeBg: '#4A7C59',
+    badge: 'Skincare',
+    cvr: '5.1%',
+    niches: ['Skincare', 'Bio', 'Beauté', 'Organic'],
+    fn: templateEtecVelvety,
+    sample: SAMPLE_VELVETY,
+    preview: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=600&q=80',
+  },
+  {
+    id: 'etec-prime',
+    name: 'Prime',
+    tagline: 'Supplements · Health · DTC Premium',
+    desc: 'Landing page premium style AG1 / Hims. Dark hero fond noir, accents lime électrique, ingrédients transparents avec doses cliniques. Pour compléments, nutrition et santé DTC.',
+    accent: '#3CB043',
+    badgeBg: '#3CB043',
+    badge: 'Health',
+    cvr: '5.4%',
+    niches: ['Supplements', 'Santé', 'Health', 'DTC'],
+    fn: templateEtecPrime,
+    sample: SAMPLE_PRIME,
+    preview: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80',
   },
 ]
 
@@ -434,7 +520,7 @@ export default function TemplatesPage() {
   const [selected, setSelected] = useState<typeof TEMPLATES[0] | null>(null)
   const [activeFilter, setActiveFilter] = useState('Tous')
 
-  const FILTERS = ['Tous', 'Tech', 'Beauté', 'Bio', 'Luxe', 'Fashion', 'Hair Care']
+  const FILTERS = ['Tous', 'Tech', 'Beauté', 'Bio', 'Luxe', 'Fashion', 'Hair Care', 'Skincare', 'Health']
 
   const filtered = TEMPLATES.filter(t => {
     if (activeFilter === 'Tous') return true
@@ -449,7 +535,7 @@ export default function TemplatesPage() {
       <section className="pt-32 pb-16 px-6" style={{ background: '#08080f' }}>
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm mb-6" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)' }}>
-            6 templates · chaque niche a son design
+            9 templates · chaque niche a son design
           </div>
           <h1 className="text-5xl sm:text-6xl font-black text-white leading-tight tracking-tight mb-5">
             Le bon design pour{' '}
@@ -500,7 +586,7 @@ export default function TemplatesPage() {
             <span style={{ color: '#5B47F5' }}>Pro.</span>
           </h2>
           <p className="text-base mb-8" style={{ color: 'rgba(255,255,255,0.45)' }}>
-            Accédez aux 6 templates, aux mises à jour futures et aux nouveaux designs dès leur sortie.
+            Accédez aux 9 templates, aux mises à jour futures et aux nouveaux designs dès leur sortie.
           </p>
           <a
             href="/signup"

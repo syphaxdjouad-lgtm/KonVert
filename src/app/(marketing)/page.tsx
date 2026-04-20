@@ -264,86 +264,39 @@ function Slide1() {
             </Link>
           </div>
 
-          {/* ── TRUSTPILOT + TRUST BADGES ──────────────────────────── */}
+          {/* ── TRUSTPILOT + 3 badges ──────────────────────────────── */}
           <div
-            className="mt-6 flex flex-col items-center lg:items-start gap-3"
+            className="mt-6 flex flex-col items-center lg:items-start gap-2.5"
             style={{ animation: 'slideUp .7s .35s cubic-bezier(.16,1,.3,1) both' }}
           >
-            {/* Trustpilot widget */}
             <div className="flex items-center gap-3">
-              {/* Logo Trustpilot — étoile verte SVG */}
               <div className="flex items-center gap-1.5">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <rect width="24" height="24" rx="4" fill="#00B67A"/>
                   <path d="M12 16.5L7.5 19l1.2-5.1L5 10.5l5.2-.4L12 5l1.8 5.1 5.2.4-3.7 3.4 1.2 5.1z" fill="white"/>
                 </svg>
-                <span className="text-xs font-black tracking-wide" style={{ color: '#00B67A' }}>Trustpilot</span>
+                <span className="text-xs font-black" style={{ color: '#00B67A' }}>Trustpilot</span>
               </div>
-              {/* Étoiles */}
               <div className="flex items-center gap-0.5">
                 {[1,2,3,4,5].map(i => (
-                  <svg key={i} width="16" height="16" viewBox="0 0 24 24">
+                  <svg key={i} width="14" height="14" viewBox="0 0 24 24">
                     <rect width="24" height="24" rx="3" fill="#00B67A"/>
                     <path d="M12 16.5L7.5 19l1.2-5.1L5 10.5l5.2-.4L12 5l1.8 5.1 5.2.4-3.7 3.4 1.2 5.1z" fill="white"/>
                   </svg>
                 ))}
               </div>
-              <div className="text-sm font-bold text-white">4.9</div>
-              <div className="text-sm text-white/40">· 127 avis</div>
+              <span className="text-sm font-bold text-white">4.9</span>
+              <span className="text-sm text-white/35">· 127 avis</span>
             </div>
-
-            {/* Trust badges */}
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <div className="flex items-center gap-4 flex-wrap">
               {[
-                {
-                  icon: (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <rect width="24" height="24" rx="4" fill="#635BFF"/>
-                      <path d="M13.5 7.5C13.5 8.33 12.83 9 12 9s-1.5-.67-1.5-1.5S11.17 6 12 6s1.5.67 1.5 1.5zM7 17c0-2.76 2.24-5 5-5s5 2.24 5 5H7z" fill="white"/>
-                    </svg>
-                  ),
-                  label: 'Paiement Stripe sécurisé',
-                },
-                {
-                  icon: (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <rect width="24" height="24" rx="4" fill="#96BF48"/>
-                      <path d="M12 4L6 7v5c0 3.31 2.55 6.41 6 7.16C15.45 18.41 18 15.31 18 12V7l-6-3z" fill="white"/>
-                    </svg>
-                  ),
-                  label: 'Shopify Partner',
-                },
-                {
-                  icon: (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <rect width="24" height="24" rx="4" fill="#374151"/>
-                      <path d="M12 2C9.24 2 7 4.24 7 7v1H6a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1V9a1 1 0 00-1-1h-1V7c0-2.76-2.24-5-5-5zm0 2c1.65 0 3 1.35 3 3v1H9V7c0-1.65 1.35-3 3-3zm0 9a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" fill="white"/>
-                    </svg>
-                  ),
-                  label: 'SSL & données chiffrées',
-                },
-                {
-                  icon: (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <rect width="24" height="24" rx="4" fill="#1d4ed8"/>
-                      <text x="3" y="17" fontSize="10" fontWeight="800" fill="white">EU</text>
-                    </svg>
-                  ),
-                  label: 'Conforme RGPD',
-                },
-                {
-                  icon: (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                      <rect width="24" height="24" rx="4" fill="#16a34a"/>
-                      <path d="M9 12l2 2 4-4" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  ),
-                  label: '14 jours gratuits · Sans CB',
-                },
-              ].map(({ icon, label }) => (
+                { dot: '#96BF48', label: 'Shopify Partner' },
+                { dot: '#635BFF', label: 'Stripe sécurisé' },
+                { dot: '#16a34a', label: '14j gratuits · Sans CB' },
+              ].map(({ dot, label }) => (
                 <div key={label} className="flex items-center gap-1.5">
-                  {icon}
-                  <span className="text-xs font-medium text-white/50">{label}</span>
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: dot }} />
+                  <span className="text-xs text-white/40 font-medium">{label}</span>
                 </div>
               ))}
             </div>
@@ -371,14 +324,14 @@ function Slide1() {
                 className="flex-1 rounded-md px-3 py-1 text-xs text-gray-400 font-mono"
                 style={{ background: '#ffffff', border: '1px solid #e2e8f0' }}
               >
-                konvert.app/p/air-jordan-pro
+                konvert.app/p/nike-runner-pro
               </div>
             </div>
 
             {/* Hero produit — image réelle sneaker */}
             <div
               className="relative flex flex-col justify-end"
-              style={{ height: '140px', overflow: 'hidden' }}
+              style={{ height: '195px', overflow: 'hidden' }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -404,14 +357,13 @@ function Slide1() {
 
             {/* Contenu produit */}
             <div className="p-4 rounded-b-2xl" style={{ background: '#ffffff' }}>
-              <h4 className="font-black text-gray-900 text-sm mb-1 leading-snug">Air Jordan Pro</h4>
+              <h4 className="font-black text-gray-900 text-sm mb-0.5 leading-snug">Nike Runner Pro</h4>
+              <p className="text-xs text-gray-400 mb-2.5">Amorti gel · Mesh respirant · Semelle carbone</p>
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-base font-black" style={{ color: '#5B47F5' }}>89€</span>
                 <span className="text-sm line-through" style={{ color: '#94a3b8' }}>139€</span>
                 <span className="text-xs font-bold px-1.5 py-0.5 rounded" style={{ background: '#fee2e2', color: '#ef4444' }}>-36%</span>
               </div>
-              <div className="h-1.5 rounded-full mb-1 w-full" style={{ background: '#f1f5f9' }} />
-              <div className="h-1.5 rounded-full mb-4 w-4/5" style={{ background: '#f1f5f9' }} />
               <div
                 className="w-full py-2.5 rounded-xl text-center text-sm font-bold text-white"
                 style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)', boxShadow: '0 4px 14px rgba(91,71,245,0.35)' }}

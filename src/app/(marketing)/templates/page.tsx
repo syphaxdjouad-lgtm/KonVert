@@ -159,7 +159,7 @@ const SAMPLE_HAIRGLOW: LandingPageData = {
     'https://images.unsplash.com/photo-1560869713-7d0a29430803?w=800&q=80',
     'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800&q=80',
     'https://images.unsplash.com/photo-1519415387722-a1c3bbef716c?w=800&q=80',
-    'https://images.unsplash.com/photo-1527799820374-87591a16f5e6?w=800&q=80',
+    'https://images.unsplash.com/photo-1519735777090-ec97162dc266?w=800&q=80',
   ],
 }
 
@@ -214,7 +214,7 @@ const SAMPLE_VELVETY: LandingPageData = {
   original_price: '49.90',
   images: [
     'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&q=80',
-    'https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=800&q=80',
+    'https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=800&q=80',
     'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=800&q=80',
     'https://images.unsplash.com/photo-1585842378054-ee2e52f94ba2?w=800&q=80',
   ],
@@ -244,7 +244,7 @@ const SAMPLE_PRIME: LandingPageData = {
     'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&q=80',
     'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=800&q=80',
     'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&q=80',
-    'https://images.unsplash.com/photo-1616671276441-2f2c277b8bf6?w=800&q=80',
+    'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80',
   ],
 }
 
@@ -419,7 +419,7 @@ const TEMPLATES = [
     niches: ['Clothing', 'E-commerce', 'Mode', 'Streetwear'],
     fn: templateEtecShopz,
     sample: SAMPLE_BLUE,
-    preview: 'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80',
+    preview: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&q=80',
   },
   {
     id: 'etec-style',

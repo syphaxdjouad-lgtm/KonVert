@@ -4,8 +4,8 @@ import { ico } from './icons'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80',
   'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
-  'https://images.unsplash.com/photo-1536852300-34c8ae6d3eed?w=800&q=80',
-  'https://images.unsplash.com/photo-1559181567-c3190ca9be5b?w=800&q=80',
+  'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80',
+  'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=800&q=80',
 ]
 
 const C = {

@@ -5,7 +5,7 @@ const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1601758003122-53c40e686a19?w=800&q=80',
   'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80',
   'https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=800&q=80',
-  'https://images.unsplash.com/photo-1596854407944-bf87f6fdd049?w=800&q=80',
+  'https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=800&q=80',
 ]
 
 const C = {

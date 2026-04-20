@@ -5,7 +5,7 @@ const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=80',
   'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80',
   'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&q=80',
-  'https://images.unsplash.com/photo-1574181611642-1b9dd7b71c00?w=800&q=80',
+  'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=800&q=80',
 ]
 const BEFORE_IMG = 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80'
 const AFTER_IMG  = 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=600&q=80'

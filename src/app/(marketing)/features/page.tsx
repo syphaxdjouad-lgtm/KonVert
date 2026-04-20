@@ -28,9 +28,9 @@ const FEATURES_MAIN = [
     id: 'ia',
     icon: Robot,
     badge: 'IA Native',
-    title: 'Génération IA avec Claude',
+    title: 'Génération IA Native',
     subtitle: 'Le copy parfait. En 30 secondes.',
-    desc: "KONVERT utilise Claude AI d'Anthropic — le modèle de langage le plus avancé pour le copywriting e-commerce. Accroche percutante, proposition de valeur unique, liste de bénéfices, FAQ personnalisée, CTA optimisés. Tout en 30 secondes.",
+    desc: "KONVERT utilise un moteur IA de dernière génération spécialisé pour le copywriting e-commerce. Accroche percutante, proposition de valeur unique, liste de bénéfices, FAQ personnalisée, CTA optimisés. Tout en 30 secondes.",
     details: [
       'Copy entièrement personnalisé par produit',
       'Adapté à votre niche et audience cible',
@@ -200,10 +200,10 @@ const DEEP_DIVE_TABS = [
     label: 'Génération IA',
     icon: null,
     title: 'Comment fonctionne la génération IA ?',
-    desc: "KONVERT utilise Claude AI d'Anthropic, entraîné sur des millions de pages e-commerce performantes. En analysant votre URL produit, il extrait les informations clés et génère un copy optimisé pour la conversion.",
+    desc: "KONVERT utilise un moteur IA entraîné sur des millions de pages e-commerce performantes. En analysant votre URL produit, il extrait les informations clés et génère un copy optimisé pour la conversion.",
     steps: [
       { num: '1', title: 'Vous collez l\'URL produit', detail: 'KONVERT scrape automatiquement le titre, les images, le prix, la description et les avis.' },
-      { num: '2', title: 'L\'IA analyse et génère', detail: 'Claude identifie les arguments de vente clés, les objections possibles et rédige une page complète en 30 secondes.' },
+      { num: '2', title: 'L\'IA analyse et génère', detail: 'Le moteur IA identifie les arguments de vente clés, les objections possibles et rédige une page complète en 30 secondes.' },
       { num: '3', title: 'Vous personnalisez et publiez', detail: 'Éditez chaque bloc dans le builder, choisissez un template et publiez en 1 clic sur votre boutique.' },
     ],
     metrics: [
@@ -399,7 +399,11 @@ function FeatureVisualContent({ id, accent }: { id: string; accent: string }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0 }}>
           {/* Shopify */}
           <div style={{ background: '#fff', borderRadius: 14, padding: '10px 14px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid #e5e7eb', textAlign: 'center', minWidth: 74 }}>
-            <div style={{ fontSize: 18, marginBottom: 2 }}>🛍️</div>
+            <svg width="28" height="28" viewBox="0 0 109 124" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', margin: '0 auto 4px' }}>
+              <path d="M95.5 23.5c-.1-.7-.7-1.1-1.2-1.1-.5 0-9.9-.2-9.9-.2s-7.8-7.6-8.6-8.4c-.8-.8-2.4-.6-3-.4-.1 0-1.7.5-4.4 1.4C65.9 9.3 62.4 5 56.2 5c-.2 0-.3 0-.5.1C54.3 3.2 52.5 2 50.5 2c-14.9 0-22 18.6-24.2 28.1-5.8 1.8-9.9 3.1-10.4 3.2-3.2 1-3.3 1.1-3.7 4.1-.3 2.3-8.8 67.9-8.8 67.9L74 117l37.5-8.1S95.6 24.2 95.5 23.5zm-29.1-7c-2.1.7-4.5 1.4-7.1 2.2.7-4.8 2.2-9.6 4.9-12.7 1.7 3.2 3.2 7.6 2.2 10.5zM56.3 7c.5 0 1 .1 1.5.4-3.5 3.7-5.1 9.1-5.8 14.3-2.9.9-5.8 1.8-8.4 2.6C46.1 15.2 51 7 56.3 7zM50.7 63.5c.3 4.2 11.3 5.1 11.9 14.9.5 7.7-4.1 13-10.6 13.4-7.9.5-12.3-4.2-12.3-4.2l1.7-7.2s4.4 3.3 7.9 3.1c2.3-.1 3.1-2 3-3.2-.4-5.5-9.3-5.2-9.9-14.2-.5-7.6 4.5-15.3 15.4-15.9 4.2-.3 6.3.8 6.3.8L61.7 59s-2.7-1.3-6-1.1c-4.8.3-4.8 3.4-5 5.6zm16.2-42.1c0-.4 0-.8-.1-1.2 3.4.6 5.6 4.4 7 7.6l-5.7 1.8c-.2-2.8-.7-5.7-1.2-8.2z" fill="#95BF47"/>
+              <path d="M94.3 22.4c-.5 0-9.9-.2-9.9-.2s-7.8-7.6-8.6-8.4c-.3-.3-.7-.4-1.1-.5l-1.3 87.8L111.5 109 95.5 23.5c-.1-.7-.7-1.1-1.2-1.1z" fill="#5E8E3E"/>
+              <path d="M56.2 44.8l-3.4 12.6s-3.8-1.7-8.3-1.4c-6.6.4-6.7 4.6-6.6 5.6.4 5.7 15.2 7 16 20.8.6 10.8-5.7 18.1-14.9 18.7-10.9.7-16.9-5.8-16.9-5.8l2.3-9.8s5.9 4.5 10.6 4.2c3.1-.2 4.2-2.7 4.1-4.4-.5-7.4-12.5-7-13.3-19.6-.7-10.5 6.2-21.1 21.3-22 6-.4 9 1.1 9 1.1z" fill="#fff"/>
+            </svg>
             <p style={{ fontSize: 10, fontWeight: 800, color: '#96bf48', margin: 0 }}>Shopify</p>
           </div>
           {/* Flèche */}
@@ -409,7 +413,13 @@ function FeatureVisualContent({ id, accent }: { id: string; accent: string }) {
           </div>
           {/* KONVERT */}
           <div style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', borderRadius: 14, padding: '10px 14px', boxShadow: '0 4px 16px rgba(91,71,245,0.35)', textAlign: 'center', minWidth: 74 }}>
-            <div style={{ fontSize: 18, marginBottom: 2 }}>⚡</div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 52 52" fill="none" style={{ display: 'block', margin: '0 auto 4px' }}>
+              <rect width="52" height="52" rx="10" fill="rgba(255,255,255,0.15)"/>
+              <rect x="14" y="12" width="6" height="28" rx="2" fill="white"/>
+              <path d="M20 26 L35 13" stroke="white" strokeWidth="5" strokeLinecap="round"/>
+              <path d="M20 26 L33 39" stroke="#b5f23d" strokeWidth="5" strokeLinecap="round"/>
+              <polygon points="33,39 24,37 31,30" fill="#b5f23d"/>
+            </svg>
             <p style={{ fontSize: 10, fontWeight: 800, color: '#fff', margin: 0 }}>KONVERT</p>
           </div>
           {/* Flèche */}
@@ -419,7 +429,12 @@ function FeatureVisualContent({ id, accent }: { id: string; accent: string }) {
           </div>
           {/* WooCommerce */}
           <div style={{ background: '#fff', borderRadius: 14, padding: '10px 14px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid #e5e7eb', textAlign: 'center', minWidth: 74 }}>
-            <div style={{ fontSize: 18, marginBottom: 2 }}>🛒</div>
+            <svg width="28" height="28" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', margin: '0 auto 4px' }}>
+              <rect width="300" height="300" rx="50" fill="#7F54B3"/>
+              <path d="M30 60C30 48 40 38 52 38H248C260 38 270 48 270 60V175C270 187 260 197 248 197H195L214 262L145 197H52C40 197 30 187 30 175V60Z" fill="#7F54B3"/>
+              <path d="M30 60C30 48 40 38 52 38H248C260 38 270 48 270 60V175C270 187 260 197 248 197H195L214 262L145 197H52C40 197 30 187 30 175V60Z" fill="white" fillOpacity="0.15"/>
+              <text x="53" y="155" fontSize="130" fontWeight="900" fill="white" fontFamily="Arial">W</text>
+            </svg>
             <p style={{ fontSize: 10, fontWeight: 800, color: '#7c2d8e', margin: 0 }}>WooCommerce</p>
           </div>
         </div>
@@ -494,14 +509,14 @@ function FeatureVisualContent({ id, accent }: { id: string; accent: string }) {
   // ── LANGUES ─────────────────────────────────────────────────────────────────
   if (id === 'langues') {
     const langs = [
-      { flag: '🇫🇷', code: 'FR', active: true },
-      { flag: '🇬🇧', code: 'EN', active: false },
-      { flag: '🇪🇸', code: 'ES', active: false },
-      { flag: '🇩🇪', code: 'DE', active: false },
-      { flag: '🇮🇹', code: 'IT', active: false },
-      { flag: '🇵🇹', code: 'PT', active: false },
-      { flag: '🇸🇦', code: 'AR', active: false },
-      { flag: '🇨🇳', code: 'ZH', active: false },
+      { flag: '🇫🇷', code: 'Français',   active: true },
+      { flag: '🇬🇧', code: 'English',    active: false },
+      { flag: '🇪🇸', code: 'Español',    active: false },
+      { flag: '🇩🇪', code: 'Deutsch',    active: false },
+      { flag: '🇮🇹', code: 'Italiano',   active: false },
+      { flag: '🇵🇹', code: 'Português',  active: false },
+      { flag: '🇸🇦', code: 'العربية',    active: false },
+      { flag: '🇨🇳', code: '中文',        active: false },
     ]
     return (
       <div style={{ padding: '20px', height: '100%', display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -521,7 +536,7 @@ function FeatureVisualContent({ id, accent }: { id: string; accent: string }) {
               }}
             >
               <div style={{ fontSize: 16, lineHeight: 1 }}>{l.flag}</div>
-              <div style={{ fontSize: 9, fontWeight: 800, color: l.active ? '#14b8a6' : '#6b7280', marginTop: 3 }}>{l.code}</div>
+              <div style={{ fontSize: 8, fontWeight: 700, color: l.active ? '#14b8a6' : '#6b7280', marginTop: 3, lineHeight: 1.2 }}>{l.code}</div>
             </div>
           ))}
         </div>

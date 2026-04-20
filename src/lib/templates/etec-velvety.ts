@@ -5,7 +5,7 @@ import { ico } from './icons'
 
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&q=80',
-  'https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=800&q=80',
+  'https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=800&q=80',
   'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=800&q=80',
   'https://images.unsplash.com/photo-1585842378054-ee2e52f94ba2?w=800&q=80',
 ]

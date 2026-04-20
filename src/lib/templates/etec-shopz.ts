@@ -3,7 +3,7 @@ import type { LandingPageData } from '@/types'
 // ─── FALLBACK IMAGES — menswear premium ───────────────────────────────────────
 
 const FALLBACK_IMGS = [
-  'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80',
+  'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=80',
   'https://images.unsplash.com/photo-1611911813383-67769b37a149?w=800&q=80',
   'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80',
   'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80',

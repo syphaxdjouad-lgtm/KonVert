@@ -15,7 +15,7 @@ const CAT_IMGS = [
   'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80',
   'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&q=80',
   'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&q=80',
-  'https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&q=80',
+  'https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=400&q=80',
   'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=400&q=80',
 ]
 

@@ -248,6 +248,310 @@ const DEEP_DIVE_TABS = [
   },
 ]
 
+function FeatureVisualContent({ id, accent }: { id: string; accent: string }) {
+  // ── IA ──────────────────────────────────────────────────────────────────────
+  if (id === 'ia') {
+    return (
+      <div style={{ fontFamily: 'inherit', padding: '20px', height: '100%', display: 'flex', flexDirection: 'column', gap: '0' }}>
+        {/* Terminal header */}
+        <div style={{ background: '#1e1e2e', borderRadius: '16px 16px 0 0', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff5f57', display: 'inline-block' }} />
+          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#febc2e', display: 'inline-block' }} />
+          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28c840', display: 'inline-block' }} />
+          <span style={{ marginLeft: 8, fontSize: 11, color: '#8b8baa', fontWeight: 600 }}>KONVERT — Génération IA</span>
+        </div>
+        {/* Body en 2 colonnes */}
+        <div style={{ background: '#ffffff', borderRadius: '0 0 16px 16px', border: '1px solid #e5e7eb', borderTop: 'none', flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, overflow: 'hidden' }}>
+          {/* Gauche — input */}
+          <div style={{ padding: '18px 16px', borderRight: '1px solid #f0f0f5', display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <p style={{ fontSize: 10, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>URL Produit</p>
+            <div style={{ background: '#f8f7ff', border: '1px solid #ede9fe', borderRadius: 10, padding: '8px 12px', fontSize: 11, color: '#6d6d8a', lineHeight: 1.4 }}>
+              aliexpress.com/item/<br />
+              <span style={{ color: '#5B47F5', fontWeight: 600 }}>casque-pro-studio...</span>
+            </div>
+            <button style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 12px', fontSize: 11, fontWeight: 700, cursor: 'pointer', textAlign: 'center' }}>
+              Analyser →
+            </button>
+            <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', display: 'inline-block', flexShrink: 0 }} />
+              <span style={{ fontSize: 10, color: '#10b981', fontWeight: 700 }}>Généré en 28s</span>
+            </div>
+          </div>
+          {/* Droite — résultat */}
+          <div style={{ padding: '18px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <p style={{ fontSize: 10, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>Résultat</p>
+            <p style={{ fontSize: 13, fontWeight: 900, color: '#111827', margin: 0, lineHeight: 1.3 }}>Casque Pro Studio X</p>
+            <p style={{ fontSize: 10, color: '#6b7280', margin: 0 }}>Son cristallin · ANC active</p>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 2 }}>
+              <span style={{ fontSize: 15, fontWeight: 900, color: '#5B47F5' }}>79€</span>
+              <span style={{ fontSize: 11, color: '#9ca3af', textDecoration: 'line-through' }}>139€</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: '#ef4444', background: '#fef2f2', borderRadius: 4, padding: '1px 5px' }}>-43%</span>
+            </div>
+            <button style={{ marginTop: 'auto', background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer' }}>
+              Ajouter au panier
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── TEMPLATES ───────────────────────────────────────────────────────────────
+  if (id === 'templates') {
+    const cards = [
+      { img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&q=80', niche: 'Sport', cvr: '+5.2%' },
+      { img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&q=80', niche: 'Beauté', cvr: '+4.8%' },
+      { img: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=300&q=80', niche: 'Luxe', cvr: '+6.1%' },
+      { img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80', niche: 'Mode', cvr: '+4.3%' },
+      { img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&q=80', niche: 'Tech', cvr: '+5.7%' },
+      { img: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=300&q=80', niche: 'Maison', cvr: '+3.9%' },
+    ]
+    return (
+      <div style={{ padding: '20px', height: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <p style={{ fontSize: 10, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>Templates par niche</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, flex: 1 }}>
+          {cards.map((c) => (
+            <div key={c.niche} style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', height: 100 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={c.img}
+                alt={c.niche}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%)' }} />
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '6px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <span style={{ fontSize: 10, fontWeight: 700, color: '#fff' }}>{c.niche}</span>
+                <span style={{ fontSize: 9, fontWeight: 800, color: '#4ade80', background: 'rgba(0,0,0,0.5)', borderRadius: 4, padding: '1px 4px' }}>{c.cvr}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  // ── ANALYTICS ───────────────────────────────────────────────────────────────
+  if (id === 'analytics') {
+    const bars = [
+      { day: 'L', h: 55, active: false },
+      { day: 'M', h: 70, active: false },
+      { day: 'M', h: 48, active: false },
+      { day: 'J', h: 82, active: false },
+      { day: 'V', h: 91, active: false },
+      { day: 'S', h: 76, active: false },
+      { day: 'D', h: 100, active: true },
+    ]
+    return (
+      <div style={{ padding: '20px', height: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {/* Header */}
+        <div style={{ background: '#1e1e2e', borderRadius: 12, padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: '#e2e8f0' }}>Analytics · Boutique Alpha</span>
+          <span style={{ fontSize: 10, fontWeight: 700, color: '#10b981', background: 'rgba(16,185,129,0.15)', borderRadius: 20, padding: '2px 8px' }}>● Live</span>
+        </div>
+        {/* KPIs */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6 }}>
+          <div style={{ background: 'rgba(16,185,129,0.1)', borderRadius: 10, padding: '8px 10px', border: '1px solid rgba(16,185,129,0.2)' }}>
+            <p style={{ fontSize: 14, fontWeight: 900, color: '#10b981', margin: 0 }}>4.8%</p>
+            <p style={{ fontSize: 9, color: '#6b7280', margin: '2px 0 0' }}>CVR</p>
+            <p style={{ fontSize: 9, fontWeight: 700, color: '#10b981', margin: 0 }}>+1.4pts</p>
+          </div>
+          <div style={{ background: 'rgba(91,71,245,0.1)', borderRadius: 10, padding: '8px 10px', border: '1px solid rgba(91,71,245,0.2)' }}>
+            <p style={{ fontSize: 14, fontWeight: 900, color: '#5B47F5', margin: 0 }}>x4.2</p>
+            <p style={{ fontSize: 9, color: '#6b7280', margin: '2px 0 0' }}>ROAS</p>
+            <p style={{ fontSize: 9, fontWeight: 700, color: '#5B47F5', margin: 0 }}>+0.9</p>
+          </div>
+          <div style={{ background: 'rgba(249,115,22,0.1)', borderRadius: 10, padding: '8px 10px', border: '1px solid rgba(249,115,22,0.2)' }}>
+            <p style={{ fontSize: 14, fontWeight: 900, color: '#f97316', margin: 0 }}>28K</p>
+            <p style={{ fontSize: 9, color: '#6b7280', margin: '2px 0 0' }}>Vues</p>
+            <p style={{ fontSize: 9, fontWeight: 700, color: '#f97316', margin: 0 }}>+31%</p>
+          </div>
+        </div>
+        {/* Barres */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 5, height: 60 }}>
+            {bars.map((b, i) => (
+              <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, height: '100%', justifyContent: 'flex-end' }}>
+                <div style={{ width: '100%', borderRadius: '4px 4px 0 0', background: b.active ? '#5B47F5' : 'rgba(91,71,245,0.25)', height: `${b.h}%`, transition: 'height 0.4s ease' }} />
+                <span style={{ fontSize: 9, color: b.active ? '#5B47F5' : '#9ca3af', fontWeight: b.active ? 800 : 500 }}>{b.day}</span>
+              </div>
+            ))}
+          </div>
+          {/* Scroll depth */}
+          <div style={{ background: '#f8f7ff', borderRadius: 8, padding: '8px 10px', marginTop: 2 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+              <span style={{ fontSize: 10, color: '#6b7280' }}>Scroll depth moyen</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: '#5B47F5' }}>72%</span>
+            </div>
+            <div style={{ background: '#e9d5ff', borderRadius: 4, height: 5, overflow: 'hidden' }}>
+              <div style={{ width: '72%', height: '100%', background: 'linear-gradient(90deg, #5B47F5, #7c6af7)', borderRadius: 4 }} />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── INTEGRATIONS ────────────────────────────────────────────────────────────
+  if (id === 'integrations') {
+    return (
+      <div style={{ padding: '24px 20px', height: '100%', display: 'flex', flexDirection: 'column', gap: 20, justifyContent: 'center' }}>
+        {/* Logos connectés */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0 }}>
+          {/* Shopify */}
+          <div style={{ background: '#fff', borderRadius: 14, padding: '10px 14px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid #e5e7eb', textAlign: 'center', minWidth: 74 }}>
+            <div style={{ fontSize: 18, marginBottom: 2 }}>🛍️</div>
+            <p style={{ fontSize: 10, fontWeight: 800, color: '#96bf48', margin: 0 }}>Shopify</p>
+          </div>
+          {/* Flèche */}
+          <div style={{ display: 'flex', alignItems: 'center', padding: '0 6px' }}>
+            <div style={{ height: 2, width: 16, background: 'linear-gradient(90deg, #96bf48, #5B47F5)' }} />
+            <span style={{ fontSize: 10, color: '#5B47F5' }}>›</span>
+          </div>
+          {/* KONVERT */}
+          <div style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', borderRadius: 14, padding: '10px 14px', boxShadow: '0 4px 16px rgba(91,71,245,0.35)', textAlign: 'center', minWidth: 74 }}>
+            <div style={{ fontSize: 18, marginBottom: 2 }}>⚡</div>
+            <p style={{ fontSize: 10, fontWeight: 800, color: '#fff', margin: 0 }}>KONVERT</p>
+          </div>
+          {/* Flèche */}
+          <div style={{ display: 'flex', alignItems: 'center', padding: '0 6px' }}>
+            <div style={{ height: 2, width: 16, background: 'linear-gradient(90deg, #5B47F5, #7c2d8e)' }} />
+            <span style={{ fontSize: 10, color: '#7c2d8e' }}>›</span>
+          </div>
+          {/* WooCommerce */}
+          <div style={{ background: '#fff', borderRadius: 14, padding: '10px 14px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid #e5e7eb', textAlign: 'center', minWidth: 74 }}>
+            <div style={{ fontSize: 18, marginBottom: 2 }}>🛒</div>
+            <p style={{ fontSize: 10, fontWeight: 800, color: '#7c2d8e', margin: 0 }}>WooCommerce</p>
+          </div>
+        </div>
+        {/* Card confirmations */}
+        <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #e5e7eb', padding: '14px 16px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {[
+            'Boutique Sneakers connectée',
+            '3 pages publiées aujourd\'hui',
+            'Prix synchronisés en temps réel',
+          ].map((txt) => (
+            <div key={txt} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ width: 16, height: 16, borderRadius: '50%', background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, color: '#10b981', fontWeight: 900, flexShrink: 0 }}>✓</span>
+              <span style={{ fontSize: 11, color: '#374151', fontWeight: 500 }}>{txt}</span>
+            </div>
+          ))}
+          <div style={{ marginTop: 4, background: 'rgba(249,115,22,0.08)', borderRadius: 8, padding: '5px 10px', display: 'inline-flex', alignItems: 'center', gap: 5, alignSelf: 'flex-start' }}>
+            <span style={{ fontSize: 12 }}>🔒</span>
+            <span style={{ fontSize: 10, fontWeight: 700, color: '#f97316' }}>OAuth Sécurisé</span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── A/B TESTING ─────────────────────────────────────────────────────────────
+  if (id === 'abtesting') {
+    return (
+      <div style={{ padding: '20px', height: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {/* Header */}
+        <div style={{ background: '#1e1e2e', borderRadius: 12, padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: '#e2e8f0' }}>Test en cours</span>
+          <span style={{ fontSize: 10, fontWeight: 700, color: '#a78bfa', background: 'rgba(167,139,250,0.15)', borderRadius: 20, padding: '2px 8px' }}>847 visiteurs</span>
+        </div>
+        {/* 2 cartes */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, flex: 1 }}>
+          {/* Variante A */}
+          <div style={{ background: '#f9fafb', borderRadius: 12, border: '1px solid #e5e7eb', padding: '12px 12px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: 10, fontWeight: 800, color: '#6b7280', background: '#e5e7eb', borderRadius: 6, padding: '2px 7px' }}>Variante A</span>
+            </div>
+            <p style={{ fontSize: 12, fontWeight: 700, color: '#374151', margin: 0 }}>Acheter</p>
+            <p style={{ fontSize: 15, fontWeight: 900, color: '#6b7280', margin: 0 }}>3.2%</p>
+            <p style={{ fontSize: 9, color: '#9ca3af', margin: 0 }}>CVR actuel</p>
+            <div style={{ background: '#e5e7eb', borderRadius: 4, height: 6, overflow: 'hidden', marginTop: 'auto' }}>
+              <div style={{ width: '32%', height: '100%', background: '#9ca3af', borderRadius: 4 }} />
+            </div>
+          </div>
+          {/* Variante B — gagnant */}
+          <div style={{ background: 'rgba(91,71,245,0.06)', borderRadius: 12, border: '2px solid rgba(91,71,245,0.4)', padding: '12px 12px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: 10, fontWeight: 800, color: '#5B47F5', background: 'rgba(91,71,245,0.12)', borderRadius: 6, padding: '2px 7px' }}>Variante B</span>
+              <span style={{ fontSize: 9 }}>🏆</span>
+            </div>
+            <p style={{ fontSize: 12, fontWeight: 700, color: '#5B47F5', margin: 0 }}>Commander maintenant</p>
+            <p style={{ fontSize: 15, fontWeight: 900, color: '#5B47F5', margin: 0 }}>5.8%</p>
+            <p style={{ fontSize: 9, color: '#7c6af7', margin: 0 }}>CVR actuel</p>
+            <div style={{ background: 'rgba(91,71,245,0.15)', borderRadius: 4, height: 6, overflow: 'hidden', marginTop: 'auto' }}>
+              <div style={{ width: '58%', height: '100%', background: 'linear-gradient(90deg, #5B47F5, #7c6af7)', borderRadius: 4 }} />
+            </div>
+          </div>
+        </div>
+        {/* Footer */}
+        <div style={{ background: 'rgba(91,71,245,0.06)', borderRadius: 10, padding: '8px 12px', border: '1px solid rgba(91,71,245,0.15)' }}>
+          <p style={{ fontSize: 10, color: '#5B47F5', fontWeight: 600, margin: 0, textAlign: 'center' }}>
+            Significativité statistique : <strong>97%</strong> — Winner déclaré automatiquement
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  // ── LANGUES ─────────────────────────────────────────────────────────────────
+  if (id === 'langues') {
+    const langs = [
+      { flag: '🇫🇷', code: 'FR', active: true },
+      { flag: '🇬🇧', code: 'EN', active: false },
+      { flag: '🇪🇸', code: 'ES', active: false },
+      { flag: '🇩🇪', code: 'DE', active: false },
+      { flag: '🇮🇹', code: 'IT', active: false },
+      { flag: '🇵🇹', code: 'PT', active: false },
+      { flag: '🇸🇦', code: 'AR', active: false },
+      { flag: '🇨🇳', code: 'ZH', active: false },
+    ]
+    return (
+      <div style={{ padding: '20px', height: '100%', display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <p style={{ fontSize: 10, fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>Langue de génération</p>
+        {/* Grille 4×2 */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 7 }}>
+          {langs.map((l) => (
+            <div
+              key={l.code}
+              style={{
+                borderRadius: 10,
+                padding: '7px 4px',
+                textAlign: 'center',
+                background: l.active ? 'rgba(20,184,166,0.12)' : '#f8f9fa',
+                border: l.active ? '1.5px solid rgba(20,184,166,0.5)' : '1.5px solid #e5e7eb',
+                cursor: 'default',
+              }}
+            >
+              <div style={{ fontSize: 16, lineHeight: 1 }}>{l.flag}</div>
+              <div style={{ fontSize: 9, fontWeight: 800, color: l.active ? '#14b8a6' : '#6b7280', marginTop: 3 }}>{l.code}</div>
+            </div>
+          ))}
+        </div>
+        {/* Carte traductions */}
+        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #e5e7eb', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+            <span style={{ fontSize: 14, flexShrink: 0 }}>🇫🇷</span>
+            <p style={{ fontSize: 11, color: '#374151', margin: 0, fontWeight: 500, lineHeight: 1.4 }}>
+              Profitez de <strong style={{ color: '#14b8a6' }}>-40%</strong> ce week-end seulement →
+            </p>
+          </div>
+          <div style={{ width: '100%', height: 1, background: '#f0f0f5' }} />
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+            <span style={{ fontSize: 14, flexShrink: 0 }}>🇬🇧</span>
+            <p style={{ fontSize: 11, color: '#6b7280', margin: 0, lineHeight: 1.4 }}>
+              Get <strong>40% off</strong> this weekend only →
+            </p>
+          </div>
+        </div>
+        {/* Badge */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(20,184,166,0.08)', borderRadius: 8, padding: '6px 10px', border: '1px solid rgba(20,184,166,0.2)', alignSelf: 'flex-start' }}>
+          <span style={{ fontSize: 10, fontWeight: 700, color: '#14b8a6' }}>Copy natif · Pas de Google Traduction</span>
+        </div>
+      </div>
+    )
+  }
+
+  return null
+}
+
 export default function FeaturesPage() {
   const [activeTab, setActiveTab] = useState('ia')
 
@@ -337,36 +641,9 @@ export default function FeaturesPage() {
                 </div>
 
                 {/* Visual */}
-                <div className={`reveal delay-2 ${f.reversed ? 'lg:col-start-1 lg:row-start-1' : ''} rounded-3xl p-10 min-h-[280px] flex flex-col items-center justify-center relative overflow-hidden gap-6`}
-                     style={{ background: `linear-gradient(135deg, ${f.accent}15 0%, ${f.accent}06 100%)` }}>
-                  <Tooltip content={f.subtitle} position="top">
-                    <div className={`w-20 h-20 rounded-3xl ${f.accentBg} flex items-center justify-center cursor-default transition-transform duration-200 hover:scale-110`}
-                         style={{ boxShadow: `0 20px 60px ${f.accent}25` }}>
-                      <Icon className={`w-10 h-10 ${f.accentText}`} weight="duotone" />
-                    </div>
-                  </Tooltip>
-                  {/* Preview mock card */}
-                  <div className="w-full max-w-xs rounded-2xl bg-white/70 border border-white/80 p-4 backdrop-blur-sm shadow-sm">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${f.accent}20` }}>
-                        <Icon className={`w-4 h-4 ${f.accentText}`} weight="duotone" />
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold text-gray-800">{f.badge}</div>
-                        <div className="text-xs text-gray-400">{f.subtitle}</div>
-                      </div>
-                    </div>
-                    <div className="flex gap-3">
-                      {f.stats.map((s) => (
-                        <div key={s.label} className="flex-1 rounded-xl p-2 text-center" style={{ background: `${f.accent}10` }}>
-                          <p className="text-sm font-black" style={{ color: f.accent }}>{s.value}</p>
-                          <p className="text-[10px] text-gray-400">{s.label}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  {/* Décoration */}
-                  <div className="absolute top-5 right-5 text-4xl opacity-20 select-none">{f.badge.split(' ')[0]}</div>
+                <div className={`reveal delay-2 ${f.reversed ? 'lg:col-start-1 lg:row-start-1' : ''} rounded-3xl relative overflow-hidden`}
+                     style={{ background: `linear-gradient(135deg, ${f.accent}15 0%, ${f.accent}06 100%)`, minHeight: '320px' }}>
+                  <FeatureVisualContent id={f.id} accent={f.accent} />
                 </div>
               </div>
             )

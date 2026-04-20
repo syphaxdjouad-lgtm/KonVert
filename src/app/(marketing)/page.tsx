@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { templateEtecNoir } from '@/lib/templates'
+import { templateEtecBeauty } from '@/lib/templates'
 import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
 import KonvertEasterEgg from '@/components/marketing/KonvertEasterEgg'
 import BeforeAfter from '@/components/marketing/BeforeAfter'
@@ -1871,36 +1871,37 @@ function DarkFeatureCards() {
 /* ═══════════════════════════════════════════════════════════════════════════
    AI BUILDER DEMO — iframe template réelle + AI chat overlay + A/B test
 ═══════════════════════════════════════════════════════════════════════════ */
-const DEMO_NOIR_DATA = {
-  product_name: 'Phantom Watch X',
-  headline: "L'heure n'attend pas. Et vous non plus.",
-  subtitle: 'Mouvement automatique suisse. Boîtier titane 42mm. Verre saphir anti-reflets. Édition limitée à 500 exemplaires.',
-  cta: 'Réserver la mienne — Stock limité',
-  urgency: '🖤 Édition limitée — 47 pièces restantes',
+const DEMO_BEAUTY_DATA = {
+  product_name: 'LuxHair Pro',
+  headline: 'Des cheveux transformés, une confiance retrouvée',
+  subtitle: 'Formule kératine premium enrichie aux huiles botaniques. Sans sulfates, sans parabènes. Résultats visibles en 7 jours.',
+  cta: 'Découvrir la routine — Livraison offerte',
+  urgency: '🌿 Édition limitée — Stock faible',
   benefits: [
-    'Mouvement automatique certifié COSC — précision Swiss Made',
-    'Boîtier titane grade 5 — ultra-léger, anti-allergie',
-    'Verre saphir 3 couches anti-reflets — lisibilité parfaite',
-    'Étanchéité 200m — conçu pour l\'aventure et le prestige',
-    'Bracelet cuir vegan premium — confort toute la journée',
+    'Formule kératine premium — lissage naturel durable',
+    'Huiles botaniques bio — argan, ricin, jojoba',
+    'Sans sulfates, sans parabènes — respecte le cuir chevelu',
+    'Résultats visibles en 7 jours — testé et approuvé',
+    'Convient à tous les types de cheveux — même colorés',
   ],
   faq: [
-    { question: 'Garantie ?', answer: 'Garantie 3 ans pièces et main d\'œuvre. Service après-vente dédié.' },
-    { question: 'Livraison ?', answer: 'Livraison sécurisée en écrin premium sous 5–7 jours ouvrés.' },
-    { question: 'Retours ?', answer: 'Retours acceptés sous 14 jours si produit intact.' },
+    { question: 'Convient aux cheveux colorés ?', answer: 'Oui, notre formule est spécialement conçue pour respecter les cheveux colorés et traités chimiquement.' },
+    { question: 'Délai de livraison ?', answer: 'Livraison express en 2–3 jours ouvrés. Expédition le jour même avant 14h.' },
+    { question: 'Garantie satisfait ou remboursé ?', answer: 'Satisfait ou remboursé sous 30 jours. Aucune question posée.' },
   ],
-  price: '899',
-  original_price: '1299',
+  price: '49',
+  original_price: '79',
   images: [
-    'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=800&q=80',
-    'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
-    'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=800&q=80',
-    'https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?w=800&q=80',
+    'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80',
+    'https://images.unsplash.com/photo-1560869713-7d0a29430803?w=800&q=80',
+    'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800&q=80',
+    'https://images.unsplash.com/photo-1519415387722-a1c3bbef716c?w=800&q=80',
+    'https://images.unsplash.com/photo-1527799820374-87591a16f5e6?w=800&q=80',
   ],
 }
 
 function AIBuilderDemoSection() {
-  const html = useMemo(() => templateEtecNoir(DEMO_NOIR_DATA), [])
+  const html = useMemo(() => templateEtecBeauty(DEMO_BEAUTY_DATA), [])
 
   return (
     <section style={{ background: '#08080f', borderTop: '1px solid rgba(255,255,255,0.05)' }}>

@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { templateEtecNoir } from '@/lib/templates'
 import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
 import KonvertEasterEgg from '@/components/marketing/KonvertEasterEgg'
 import BeforeAfter from '@/components/marketing/BeforeAfter'
@@ -1868,229 +1869,197 @@ function DarkFeatureCards() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   AI BUILDER DEMO — builder + AI chat overlay + A/B test panel
+   AI BUILDER DEMO — iframe template réelle + AI chat overlay + A/B test
 ═══════════════════════════════════════════════════════════════════════════ */
+const DEMO_NOIR_DATA = {
+  product_name: 'Phantom Watch X',
+  headline: "L'heure n'attend pas. Et vous non plus.",
+  subtitle: 'Mouvement automatique suisse. Boîtier titane 42mm. Verre saphir anti-reflets. Édition limitée à 500 exemplaires.',
+  cta: 'Réserver la mienne — Stock limité',
+  urgency: '🖤 Édition limitée — 47 pièces restantes',
+  benefits: [
+    'Mouvement automatique certifié COSC — précision Swiss Made',
+    'Boîtier titane grade 5 — ultra-léger, anti-allergie',
+    'Verre saphir 3 couches anti-reflets — lisibilité parfaite',
+    'Étanchéité 200m — conçu pour l\'aventure et le prestige',
+    'Bracelet cuir vegan premium — confort toute la journée',
+  ],
+  faq: [
+    { question: 'Garantie ?', answer: 'Garantie 3 ans pièces et main d\'œuvre. Service après-vente dédié.' },
+    { question: 'Livraison ?', answer: 'Livraison sécurisée en écrin premium sous 5–7 jours ouvrés.' },
+    { question: 'Retours ?', answer: 'Retours acceptés sous 14 jours si produit intact.' },
+  ],
+  price: '899',
+  original_price: '1299',
+  images: [
+    'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=800&q=80',
+    'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
+    'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=800&q=80',
+    'https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?w=800&q=80',
+  ],
+}
+
 function AIBuilderDemoSection() {
+  const html = useMemo(() => templateEtecNoir(DEMO_NOIR_DATA), [])
+
   return (
-    <section style={{ background: '#0d0e1c', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+    <section style={{ background: '#08080f', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
 
         {/* Header */}
         <div className="text-center mb-14">
           <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold mb-5"
-            style={{ background: 'rgba(181,242,61,0.1)', color: '#b5f23d', border: '1px solid rgba(181,242,61,0.2)' }}
+            style={{ background: 'rgba(181,242,61,0.08)', color: '#b5f23d', border: '1px solid rgba(181,242,61,0.18)' }}
           >
             ✦ Propulsé par Claude AI
           </div>
           <h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-4 leading-tight">
             Génère. Modifie. Teste.<br />
-            <span style={{ color: '#b5f23d' }}>Tout depuis un seul endroit.</span>
+            <span style={{ color: '#b5f23d' }}>Tout depuis un seul outil.</span>
           </h2>
-          <p className="reveal delay-1 text-base text-white/45 max-w-xl mx-auto leading-relaxed">
+          <p className="reveal delay-1 text-base max-w-xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.4)' }}>
             Dis à l&apos;IA ce que tu veux changer. Elle le fait en secondes.
             Le A/B test tourne en fond et te dit quelle version gagne.
           </p>
         </div>
 
-        {/* Demo layout */}
-        <div className="reveal delay-2 flex flex-col lg:flex-row gap-4 items-stretch">
+        {/* Demo grid */}
+        <div className="reveal delay-2 flex flex-col lg:flex-row gap-5 items-stretch">
 
-          {/* ── LEFT : Browser + AI chat overlay ── */}
-          <div className="flex-1 relative" style={{ minHeight: '500px' }}>
-
-            {/* Browser window */}
+          {/* ── LEFT : Browser window avec vraie template ── */}
+          <div className="flex-1 min-w-0 relative">
             <div
-              className="w-full h-full rounded-2xl overflow-hidden"
+              className="rounded-2xl overflow-hidden"
               style={{
-                background: '#1a1b30',
+                background: '#111122',
                 border: '1.5px solid rgba(255,255,255,0.08)',
-                boxShadow: '0 32px 80px rgba(0,0,0,0.5)',
-                display: 'flex',
-                flexDirection: 'column',
+                boxShadow: '0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)',
               }}
             >
               {/* Chrome bar */}
               <div
                 className="flex items-center gap-3 px-4 py-3 flex-shrink-0"
-                style={{ background: '#13142a', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+                style={{ background: '#0d0e1e', borderBottom: '1px solid rgba(255,255,255,0.07)' }}
               >
                 <div className="flex gap-1.5">
                   {['#ef4444','#f59e0b','#22c55e'].map(c => (
                     <div key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c }} />
                   ))}
                 </div>
-                <div className="flex items-center gap-2">
-                  {['📋 Form','💳 Checkout'].map(t => (
-                    <span
-                      key={t}
-                      className="text-xs font-semibold px-3 py-1 rounded-md"
-                      style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.45)' }}
-                    >{t}</span>
-                  ))}
-                </div>
-                <div className="flex-1" />
-                <span
-                  className="text-xs font-bold px-4 py-1.5 rounded-full"
-                  style={{ background: 'rgba(91,71,245,0.9)', color: '#fff' }}
+                <div
+                  className="flex-1 mx-3 flex items-center gap-2 px-3 py-1 rounded-md text-xs"
+                  style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.3)', fontFamily: 'monospace' }}
                 >
-                  ✦ Générer
+                  <div className="w-2 h-2 rounded-full" style={{ background: 'rgba(255,255,255,0.15)' }} />
+                  konvert.app/p/phantom-watch-x
+                </div>
+                <span
+                  className="text-xs font-bold px-3 py-1.5 rounded-full flex-shrink-0"
+                  style={{ background: 'rgba(91,71,245,0.85)', color: '#fff' }}
+                >
+                  ✦ Éditer avec l&apos;IA
                 </span>
               </div>
 
-              {/* Editor body */}
-              <div className="flex flex-1">
-
-                {/* Sidebar éléments */}
+              {/* Template iframe scalée */}
+              <div style={{ position: 'relative', overflow: 'hidden', height: '480px' }}>
+                <iframe
+                  srcDoc={html}
+                  title="Template KONVERT — Phantom Watch X"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '1280px',
+                    height: '960px',
+                    transform: 'scale(0.5)',
+                    transformOrigin: 'top left',
+                    border: 'none',
+                    pointerEvents: 'none',
+                    display: 'block',
+                  }}
+                  sandbox="allow-scripts"
+                />
+                {/* Dégradé bas pour fondre proprement */}
                 <div
-                  className="flex-shrink-0 p-3 flex flex-col gap-1.5"
-                  style={{ width: '148px', background: '#0f1024', borderRight: '1px solid rgba(255,255,255,0.05)' }}
-                >
-                  <p className="text-xs font-bold mb-2" style={{ color: 'rgba(255,255,255,0.25)' }}>Éléments</p>
-                  {[
-                    { icon: '📝', label: 'Formulaire Contact' },
-                    { icon: '╶', label: 'Champ Nom' },
-                    { icon: '╶', label: 'Champ Email' },
-                    { icon: '╶', label: 'Message' },
-                    { icon: '╶', label: 'Bouton Envoyer' },
-                    { icon: null, label: '' },
-                    { icon: '📋', label: 'Inscription' },
-                    { icon: '╶', label: 'Prénom' },
-                    { icon: '╶', label: 'Nom' },
-                    { icon: '╶', label: 'Email' },
-                    { icon: '╶', label: 'S\'inscrire' },
-                  ].map((item, i) => item.label ? (
-                    <div key={i} className="flex items-center gap-1.5">
-                      <span className="text-xs w-3" style={{ color: 'rgba(255,255,255,0.2)' }}>{item.icon}</span>
-                      <span className="text-xs truncate" style={{ color: 'rgba(255,255,255,0.3)' }}>{item.label}</span>
-                    </div>
-                  ) : (
-                    <div key={i} className="h-px my-1" style={{ background: 'rgba(255,255,255,0.05)' }} />
-                  ))}
-                </div>
-
-                {/* Canvas — page sage/vert */}
-                <div className="flex-1 relative overflow-hidden" style={{ background: '#2D4A3E' }}>
-                  <div className="p-6">
-                    {/* Badge urgence */}
-                    <div
-                      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-4"
-                      style={{ background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)' }}
-                    >
-                      <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#b5f23d' }} />
-                      <span className="text-white/75 text-xs font-medium">Inscriptions — 200 places restantes</span>
-                    </div>
-                    {/* Titre */}
-                    <h3 className="text-white font-black text-xl leading-tight mb-1">
-                      Reprends ton énergie.
-                    </h3>
-                    <h3 className="font-black text-xl leading-tight mb-3" style={{ color: '#b5f23d' }}>
-                      Transforme ta façon de te sentir.
-                    </h3>
-                    <p className="text-white/50 text-xs leading-relaxed mb-5" style={{ maxWidth: '210px' }}>
-                      Un programme de 8 semaines. Nutrition personnalisée, mouvement et coaching d&apos;accountability.
-                    </p>
-                    {/* CTA — corail pour contraste */}
-                    <button
-                      className="px-5 py-2.5 rounded-xl text-white font-bold text-sm"
-                      style={{ background: '#E8622A', boxShadow: '0 4px 16px rgba(232,98,42,0.4)' }}
-                    >
-                      Commencer →
-                    </button>
-                    <div className="mt-4 flex items-center gap-3 text-white/35 text-xs">
-                      <span>★★★★★ 4.9/5</span>
-                      <span>·</span>
-                      <span>12K+ transformations</span>
-                    </div>
-                  </div>
-                  {/* Dégradé déco droite */}
-                  <div
-                    className="absolute right-0 top-0 bottom-0 w-24 pointer-events-none"
-                    style={{ background: 'linear-gradient(to right, transparent, rgba(45,74,62,0.7))' }}
-                  />
-                </div>
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '100px',
+                    background: 'linear-gradient(to bottom, transparent, #111122)',
+                    pointerEvents: 'none',
+                  }}
+                />
               </div>
             </div>
 
-            {/* ── AI Chat overlay (flottant sur le browser) ── */}
+            {/* ── AI Chat overlay ── */}
             <div
               className="absolute z-20 rounded-2xl overflow-hidden"
               style={{
-                bottom: '24px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '340px',
+                bottom: '28px',
+                right: '24px',
+                width: '300px',
                 background: '#ffffff',
-                border: '1px solid rgba(0,0,0,0.09)',
-                boxShadow: '0 28px 64px rgba(0,0,0,0.38)',
+                border: '1px solid rgba(0,0,0,0.08)',
+                boxShadow: '0 24px 56px rgba(0,0,0,0.5)',
               }}
             >
-              {/* Header chat */}
-              <div
-                className="flex items-center justify-between px-4 py-3"
-                style={{ borderBottom: '1px solid #f0f0f0' }}
-              >
+              {/* Chat header */}
+              <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid #f0f0f0' }}>
                 <div className="flex items-center gap-2">
                   <div
                     className="w-6 h-6 rounded-lg flex items-center justify-center font-black text-white text-xs"
                     style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)' }}
                   >K</div>
                   <span className="font-black text-sm text-gray-900">KONVERT IA</span>
-                  <span
-                    className="text-xs px-2 py-0.5 rounded-full font-semibold"
-                    style={{ background: '#f3f4f6', color: '#6b7280' }}
-                  >⚡ 1.8k</span>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2.5 h-2.5 rounded-full border-2" style={{ background: '#d1d5db', borderColor: '#9ca3af' }} />
-                    <span className="text-xs text-gray-400">Pure Roots Bio</span>
-                  </div>
+                  <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: '#f3f4f6', color: '#6b7280' }}>⚡ 2.1k</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <span className="cursor-pointer hover:text-gray-500">↺</span>
-                  <span className="cursor-pointer hover:text-gray-500">✎</span>
-                  <span className="cursor-pointer hover:text-gray-500">✕</span>
+                <div className="flex items-center gap-1.5 text-gray-300 text-xs">
+                  <span className="cursor-pointer">↺</span>
+                  <span className="cursor-pointer">✕</span>
                 </div>
               </div>
 
               {/* Messages */}
-              <div className="p-4 flex flex-col gap-3">
-                {/* User msg */}
+              <div className="p-3 flex flex-col gap-2.5">
                 <div
-                  className="self-end px-4 py-2.5 rounded-2xl text-white text-sm"
-                  style={{ background: '#5B47F5', maxWidth: '88%' }}
+                  className="self-end px-3.5 py-2 rounded-2xl text-white text-xs leading-relaxed"
+                  style={{ background: '#5B47F5', maxWidth: '90%' }}
                 >
-                  Rends le CTA plus visible sur ce fond
+                  Rends le fond plus sombre et le CTA plus lumineux
                 </div>
-                {/* User msg 2 */}
+                <p className="text-xs text-gray-500 leading-relaxed px-1">
+                  Fond passé en noir profond #08080f. CTA changé en violet électrique avec halo lumineux.
+                </p>
                 <div
-                  className="self-end px-4 py-2.5 rounded-2xl text-white text-sm"
-                  style={{ background: '#5B47F5', maxWidth: '88%' }}
+                  className="self-end px-3.5 py-2 rounded-2xl text-white text-xs leading-relaxed"
+                  style={{ background: '#5B47F5', maxWidth: '90%' }}
                 >
-                  Rends le CTA plus visible sur ce fond
+                  Ajoute un badge &quot;Édition Limitée&quot; en rouge
                 </div>
                 {/* Typing dots */}
-                <div className="flex items-center gap-1.5 px-1">
+                <div className="flex items-center gap-1.5 px-1 py-1">
                   {[0,1,2].map(i => (
                     <div
                       key={i}
                       className="w-2 h-2 rounded-full"
-                      style={{ background: '#d1d5db', animation: `wave-move ${0.6 + i * 0.15}s ease-in-out infinite` }}
+                      style={{ background: '#d1d5db', animation: `wave-move ${0.5 + i * 0.15}s ease-in-out infinite` }}
                     />
                   ))}
                 </div>
-                {/* AI response */}
-                <p className="text-sm text-gray-500 px-1 leading-relaxed" style={{ maxWidth: '92%' }}>
-                  Changé en corail chaud pour un meilleur contraste sur le fond vert sage.
-                </p>
               </div>
 
               {/* Input */}
-              <div className="px-4 pb-4">
+              <div className="px-3 pb-3">
                 <div
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-gray-400"
                   style={{ background: '#f9fafb', border: '1.5px solid #e5e7eb' }}
                 >
-                  <span className="text-sm text-gray-400 flex-1">Demande à l&apos;IA de modifier...</span>
+                  Demande à l&apos;IA de modifier la page...
                 </div>
               </div>
             </div>
@@ -2100,9 +2069,9 @@ function AIBuilderDemoSection() {
           <div
             className="lg:w-72 xl:w-80 flex-shrink-0 rounded-2xl flex flex-col"
             style={{
-              background: '#14152b',
-              border: '1.5px solid rgba(255,255,255,0.08)',
-              boxShadow: '0 32px 80px rgba(0,0,0,0.4)',
+              background: '#0f1020',
+              border: '1.5px solid rgba(255,255,255,0.07)',
+              boxShadow: '0 24px 64px rgba(0,0,0,0.4)',
             }}
           >
             {/* Panel header */}
@@ -2110,9 +2079,7 @@ function AIBuilderDemoSection() {
               className="flex items-center justify-between px-5 py-4"
               style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
             >
-              <div className="flex items-center gap-2">
-                <span className="font-black text-white text-sm">A/B Test</span>
-              </div>
+              <span className="font-black text-white text-sm">A/B Test</span>
               <span
                 className="text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5"
                 style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981' }}
@@ -2125,14 +2092,14 @@ function AIBuilderDemoSection() {
             {/* Test label */}
             <div
               className="px-5 py-3 text-xs"
-              style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.35)' }}
+              style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.3)' }}
             >
-              CTA couleur plus marquée vs original
+              CTA lumineux vs CTA original
             </div>
 
             {/* Stats */}
-            <div className="px-5 py-5 flex flex-col gap-4">
-              <p className="text-xs font-bold tracking-widest" style={{ color: 'rgba(255,255,255,0.25)' }}>
+            <div className="px-5 py-5 flex flex-col gap-5">
+              <p className="text-xs font-bold tracking-widest" style={{ color: 'rgba(255,255,255,0.22)' }}>
                 TAUX DE CONVERSION
               </p>
 
@@ -2140,73 +2107,93 @@ function AIBuilderDemoSection() {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full" style={{ background: '#5B47F5' }} />
-                    <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.5)' }}>Variante A — original</span>
+                    <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#5B47F5' }} />
+                    <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.45)' }}>Variante A — original</span>
                   </div>
                   <span className="text-xs font-bold text-white/50">2.1%</span>
                 </div>
                 <div className="h-2 rounded-full w-full" style={{ background: 'rgba(255,255,255,0.06)' }}>
                   <div className="h-full rounded-full" style={{ width: '35%', background: '#5B47F5' }} />
                 </div>
-                <p className="text-xs mt-1.5" style={{ color: 'rgba(255,255,255,0.22)' }}>32 / 1 505 visites</p>
+                <p className="text-xs mt-1.5" style={{ color: 'rgba(255,255,255,0.2)' }}>32 / 1 505 visites</p>
               </div>
 
               {/* Variant B */}
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full" style={{ background: '#b5f23d' }} />
-                    <span className="text-xs font-semibold" style={{ color: '#b5f23d' }}>Variante B — CTA corail</span>
+                    <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: '#b5f23d' }} />
+                    <span className="text-xs font-semibold" style={{ color: '#b5f23d' }}>Variante B — CTA lumineux</span>
                   </div>
-                  <span className="text-xs font-bold" style={{ color: '#b5f23d' }}>4.3%</span>
+                  <span className="text-xs font-bold" style={{ color: '#b5f23d' }}>4.7%</span>
                 </div>
                 <div className="h-2 rounded-full w-full" style={{ background: 'rgba(181,242,61,0.1)' }}>
-                  <div className="h-full rounded-full" style={{ width: '72%', background: '#b5f23d' }} />
+                  <div className="h-full rounded-full" style={{ width: '78%', background: '#b5f23d' }} />
                 </div>
-                <p className="text-xs mt-1.5" style={{ color: 'rgba(181,242,61,0.45)' }}>65 / 1 505 visites</p>
+                <p className="text-xs mt-1.5" style={{ color: 'rgba(181,242,61,0.4)' }}>71 / 1 505 visites</p>
               </div>
 
-              {/* Winner badge */}
+              {/* Winner card */}
               <div
                 className="px-4 py-3 rounded-xl"
-                style={{ background: 'rgba(181,242,61,0.07)', border: '1px solid rgba(181,242,61,0.2)' }}
+                style={{ background: 'rgba(181,242,61,0.07)', border: '1px solid rgba(181,242,61,0.18)' }}
               >
                 <p className="text-xs font-bold mb-1" style={{ color: '#b5f23d' }}>
-                  ✓ Variante B — 87% de confiance
+                  ✓ Variante B — 91% confiance
                 </p>
-                <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                  +105% de conversions — Smart Traffic redirige le trafic automatiquement
+                <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                  +124% de conversions — Smart Traffic redirige automatiquement
                 </p>
               </div>
 
               {/* Smart Traffic */}
               <div
                 className="flex items-center justify-between px-3.5 py-3 rounded-xl"
-                style={{ background: 'rgba(91,71,245,0.12)', border: '1px solid rgba(91,71,245,0.22)' }}
+                style={{ background: 'rgba(91,71,245,0.1)', border: '1px solid rgba(91,71,245,0.2)' }}
               >
                 <div className="flex items-center gap-2">
-                  <span style={{ color: '#a78bfa', fontSize: '14px' }}>⚡</span>
+                  <span style={{ color: '#a78bfa', fontSize: '13px' }}>⚡</span>
                   <span className="text-xs font-bold" style={{ color: '#a78bfa' }}>Smart Traffic</span>
                 </div>
                 <span className="text-xs font-bold" style={{ color: '#10b981' }}>Actif</span>
               </div>
+
+              {/* Heatmap preview */}
+              <div
+                className="px-4 py-3 rounded-xl"
+                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
+              >
+                <p className="text-xs font-bold mb-2.5" style={{ color: 'rgba(255,255,255,0.35)' }}>Heatmap clics</p>
+                <div className="flex gap-1 items-end h-10">
+                  {[30,55,40,80,95,70,85,60,90,75].map((h, i) => (
+                    <div
+                      key={i}
+                      className="flex-1 rounded-sm"
+                      style={{
+                        height: `${h}%`,
+                        background: h > 80
+                          ? 'rgba(239,68,68,0.7)'
+                          : h > 60
+                          ? 'rgba(251,146,60,0.5)'
+                          : 'rgba(91,71,245,0.35)',
+                      }}
+                    />
+                  ))}
+                </div>
+                <p className="text-xs mt-2" style={{ color: 'rgba(255,255,255,0.2)' }}>Zone CTA — haute densité</p>
+              </div>
             </div>
 
-            {/* Insights CTA */}
+            {/* CTA */}
             <div className="px-5 pb-5 mt-auto">
               <button
-                className="w-full py-2.5 rounded-xl text-xs font-bold transition-all"
-                style={{
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.07)',
-                  color: 'rgba(255,255,255,0.35)',
-                }}
+                className="w-full py-2.5 rounded-xl text-xs font-bold"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.3)' }}
               >
                 Voir les Insights →
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </section>

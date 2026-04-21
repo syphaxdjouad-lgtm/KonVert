@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import {
-  Plus, Pencil, Clock, FileText, Eye, Zap,
+  Plus, Pencil, Clock, FileText, Eye, Zap, Download,
   FlaskConical, Search, X, ChevronDown, SlidersHorizontal, Globe,
 } from 'lucide-react'
 import type { Page, Store } from '@/types'
@@ -347,6 +347,23 @@ function PageRow({ page, last }: { page: Page; last: boolean }) {
         >
           <Pencil className="w-4 h-4" />
         </Link>
+        {page.html_content && (
+          <button
+            onClick={() => {
+              const blob = new Blob([page.html_content!], { type: 'text/html' })
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement('a')
+              a.href = url
+              a.download = `konvert-${(page.title || 'page').replace(/\s+/g, '-').toLowerCase()}.html`
+              a.click()
+              URL.revokeObjectURL(url)
+            }}
+            className="p-2 rounded-lg transition-colors text-gray-400 hover:text-purple-600 hover:bg-purple-50"
+            title="Exporter HTML"
+          >
+            <Download className="w-4 h-4" />
+          </button>
+        )}
       </div>
     </div>
   )

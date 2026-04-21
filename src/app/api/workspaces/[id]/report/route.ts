@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { jsPDF } from 'jspdf'
 
 // GET /api/workspaces/[id]/report — génère les données du rapport PDF
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -30,14 +31,26 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const totalClicks = list.reduce((s, p) => s + (p.cta_clicks || 0), 0)
   const published   = list.filter(p => p.status === 'published').length
 
-  // Générer le HTML du rapport
-  const html = buildReportHtml({
+  const reportData = {
     workspace,
     pages: list,
     stats: { totalViews, totalClicks, published, total: list.length },
     generatedAt: new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }),
-  })
+  }
 
+  const format = req.nextUrl.searchParams.get('format')
+
+  if (format === 'pdf') {
+    const pdfBytes = buildReportPdf(reportData)
+    return new NextResponse(pdfBytes, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="rapport-${workspace.name.replace(/\s+/g, '-')}.pdf"`,
+      },
+    })
+  }
+
+  const html = buildReportHtml(reportData)
   return new NextResponse(html, {
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
@@ -163,4 +176,136 @@ function buildReportHtml({ workspace, pages, stats, generatedAt }: any): string 
 </div>
 </body>
 </html>`
+}
+
+/* ─── PDF GENERATION ──────────────────────────────────────────────────── */
+
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace('#', '')
+  const n = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16)
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
+}
+
+function buildReportPdf({ workspace, pages, stats, generatedAt }: any): ArrayBuffer {
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+  const brandHex = safeCssColor(workspace.brand_color, '#7c3aed')
+  const brand = hexToRgb(brandHex)
+  const brandName = workspace.brand_name || 'KONVERT'
+  const clientName = workspace.client_name || workspace.name
+  const W = 210
+  const margin = 20
+  let y = 0
+
+  // ── Header band ──
+  doc.setFillColor(brand[0], brand[1], brand[2])
+  doc.rect(0, 0, W, 52, 'F')
+  doc.setTextColor(255, 255, 255)
+  doc.setFontSize(20)
+  doc.setFont('helvetica', 'bold')
+  doc.text(brandName, margin, 18)
+  doc.setFontSize(14)
+  doc.text('Rapport de performance', margin, 30)
+  doc.setFontSize(10)
+  doc.setFont('helvetica', 'normal')
+  doc.text(`Client : ${clientName}`, margin, 39)
+  doc.setFontSize(8)
+  doc.text(`Généré le ${generatedAt}`, margin, 46)
+  y = 62
+
+  // ── Stats boxes ──
+  const statItems = [
+    { label: 'Pages créées', value: String(stats.total) },
+    { label: 'Publiées', value: String(stats.published) },
+    { label: 'Vues totales', value: stats.totalViews.toLocaleString('fr-FR') },
+    { label: 'Clics CTA', value: stats.totalClicks.toLocaleString('fr-FR') },
+  ]
+  const boxW = (W - margin * 2 - 12) / 4
+  statItems.forEach((s, i) => {
+    const x = margin + i * (boxW + 4)
+    doc.setFillColor(248, 248, 248)
+    doc.roundedRect(x, y, boxW, 22, 2, 2, 'F')
+    doc.setTextColor(brand[0], brand[1], brand[2])
+    doc.setFontSize(16)
+    doc.setFont('helvetica', 'bold')
+    doc.text(s.value, x + boxW / 2, y + 10, { align: 'center' })
+    doc.setTextColor(130, 130, 130)
+    doc.setFontSize(7)
+    doc.setFont('helvetica', 'normal')
+    doc.text(s.label.toUpperCase(), x + boxW / 2, y + 18, { align: 'center' })
+  })
+  y += 32
+
+  // ── Table header ──
+  doc.setFontSize(12)
+  doc.setFont('helvetica', 'bold')
+  doc.setTextColor(30, 30, 30)
+  doc.text('Détail des pages', margin, y)
+  y += 8
+
+  const cols = [
+    { label: 'Page', x: margin, w: 70, align: 'left' as const },
+    { label: 'Statut', x: margin + 72, w: 28, align: 'center' as const },
+    { label: 'Vues', x: margin + 102, w: 25, align: 'right' as const },
+    { label: 'Clics', x: margin + 129, w: 25, align: 'right' as const },
+    { label: 'Date', x: margin + 156, w: 24, align: 'right' as const },
+  ]
+
+  // Header row
+  doc.setFillColor(245, 245, 245)
+  doc.rect(margin, y, W - margin * 2, 8, 'F')
+  doc.setFontSize(7)
+  doc.setFont('helvetica', 'bold')
+  doc.setTextColor(130, 130, 130)
+  cols.forEach(c => {
+    const tx = c.align === 'right' ? c.x + c.w : c.align === 'center' ? c.x + c.w / 2 : c.x + 2
+    doc.text(c.label.toUpperCase(), tx, y + 5.5, { align: c.align })
+  })
+  y += 10
+
+  // Data rows
+  doc.setFontSize(8)
+  doc.setFont('helvetica', 'normal')
+  pages.forEach((p: any) => {
+    if (y > 270) {
+      doc.addPage()
+      y = 20
+    }
+    doc.setTextColor(30, 30, 30)
+    const title = (p.title || 'Sans titre').substring(0, 45)
+    doc.text(title, cols[0].x + 2, y + 4)
+
+    const status = p.status === 'published' ? 'Publié' : 'Brouillon'
+    doc.setTextColor(p.status === 'published' ? 22 : 107, p.status === 'published' ? 163 : 114, p.status === 'published' ? 74 : 128)
+    doc.text(status, cols[1].x + cols[1].w / 2, y + 4, { align: 'center' })
+
+    doc.setTextColor(30, 30, 30)
+    doc.text(String(p.views || 0), cols[2].x + cols[2].w, y + 4, { align: 'right' })
+
+    doc.setTextColor(brand[0], brand[1], brand[2])
+    doc.text(String(p.cta_clicks || 0), cols[3].x + cols[3].w, y + 4, { align: 'right' })
+
+    doc.setTextColor(160, 160, 160)
+    doc.text(new Date(p.created_at).toLocaleDateString('fr-FR'), cols[4].x + cols[4].w, y + 4, { align: 'right' })
+
+    doc.setDrawColor(240, 240, 240)
+    doc.line(margin, y + 7, W - margin, y + 7)
+    y += 9
+  })
+
+  if (pages.length === 0) {
+    doc.setTextColor(160, 160, 160)
+    doc.text('Aucune page dans ce workspace', margin + 2, y + 4)
+    y += 10
+  }
+
+  // ── Footer ──
+  const pageCount = doc.getNumberOfPages()
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i)
+    doc.setFontSize(7)
+    doc.setTextColor(180, 180, 180)
+    doc.text(`Rapport ${brandName} via KONVERT — Page ${i}/${pageCount}`, W / 2, 290, { align: 'center' })
+  }
+
+  return doc.output('arraybuffer')
 }

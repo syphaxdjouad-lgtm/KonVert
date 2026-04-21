@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Space_Grotesk } from 'next/font/google'
+import CrispChat from '@/components/CrispChat'
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['400','500','600','700'], variable: '--font-space-grotesk' })
 
@@ -50,7 +51,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className="h-full antialiased">
-      <body className={`min-h-full flex flex-col ${spaceGrotesk.variable}`}>{children}</body>
+      <body className={`min-h-full flex flex-col ${spaceGrotesk.variable}`}>{children}<CrispChat /></body>
     </html>
   );
 }

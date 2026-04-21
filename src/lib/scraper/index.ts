@@ -288,9 +288,12 @@ async function scrapeViaApify(url: string): Promise<ScrapedProduct> {
       ? 'apify/amazon-product-scraper'
       : 'apify/aliexpress-scraper'
 
-  const res = await fetch(`https://api.apify.com/v2/acts/${actorId}/run-sync-get-dataset-items?token=${apiKey}`, {
+  const res = await fetch(`https://api.apify.com/v2/acts/${actorId}/run-sync-get-dataset-items`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+    },
     body: JSON.stringify({ startUrls: [{ url }], maxItems: 1 }),
     signal: AbortSignal.timeout(60000),
   })

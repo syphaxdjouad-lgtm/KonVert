@@ -24,6 +24,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'URL du store invalide' }, { status: 400 })
     }
 
+    // Protection SSRF — bloquer les IPs privees et localhost
+    const host = parsedUrl.hostname
+    const blockedPatterns = [
+      /^127\./, /^10\./, /^172\.(1[6-9]|2[0-9]|3[01])\./, /^192\.168\./,
+      /^169\.254\./, /^0\.0\.0\.0/, /^localhost$/i, /^\[::1\]$/,
+    ]
+    if (blockedPatterns.some(p => p.test(host))) {
+      return NextResponse.json({ error: 'URL du store invalide' }, { status: 400 })
+    }
+
     // Tester la connexion avant de sauvegarder
     const client = new WooCommerceClient(store_url, consumer_key, consumer_secret)
     let storeInfo: { name: string; url: string; version: string }

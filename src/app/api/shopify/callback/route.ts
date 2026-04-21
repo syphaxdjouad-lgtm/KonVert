@@ -8,6 +8,11 @@ export async function GET(req: NextRequest) {
   const params = Object.fromEntries(req.nextUrl.searchParams.entries())
   const { shop, code, state, hmac } = params
 
+  // 0. Valider le format du shop domain
+  if (!shop || !/^[a-z0-9][a-z0-9-]*\.myshopify\.com$/.test(shop)) {
+    return NextResponse.redirect(new URL('/dashboard?error=invalid_shop', req.url))
+  }
+
   // 1. Vérifier le state CSRF
   const cookieStore = await cookies()
   const savedState = cookieStore.get('shopify_oauth_state')?.value

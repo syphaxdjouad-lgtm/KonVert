@@ -22,6 +22,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'event_type invalide' }, { status: 400 })
     }
 
+    // Valider que page_id est un UUID valide et que la page existe
+    const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!uuidRe.test(page_id)) {
+      return NextResponse.json({ error: 'page_id invalide' }, { status: 400 })
+    }
+
+    const { data: page } = await supabaseAdmin
+      .from('pages')
+      .select('id')
+      .eq('id', page_id)
+      .single()
+
+    if (!page) {
+      return NextResponse.json({ error: 'Page introuvable' }, { status: 404 })
+    }
+
     // Hash de l'IP pour anonymat RGPD
     const ip     = req.headers.get('x-forwarded-for')?.split(',')[0] || req.headers.get('x-real-ip') || ''
     const ipHash = ip ? await hashIp(ip) : null

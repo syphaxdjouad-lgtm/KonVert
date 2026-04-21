@@ -144,11 +144,11 @@ export default function Navbar() {
             Voir la démo
           </Link>
           <Link
-            href="/signup"
+            href="/essai"
             className="flex items-center gap-1.5 text-sm font-bold px-4 py-2 rounded-full text-white transition-all whitespace-nowrap hover:opacity-90"
             style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 4px 14px rgba(91,71,245,0.3)' }}
           >
-            Essai gratuit
+            1 page gratuite
             <ArrowRight className="w-3.5 h-3.5 flex-shrink-0" />
           </Link>
         </div>
@@ -205,11 +205,11 @@ export default function Navbar() {
                 Démo
               </Link>
               <Link
-                href="/signup"
+                href="/essai"
                 className="text-center text-sm font-bold py-3.5 rounded-full text-white"
                 style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)' }}
               >
-                Essai gratuit 14 jours
+                1 page gratuite
               </Link>
             </div>
           </div>

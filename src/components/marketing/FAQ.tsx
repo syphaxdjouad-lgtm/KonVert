@@ -17,7 +17,7 @@ const FAQ_ITEMS = [
   {
     question: 'Est-ce que je peux essayer avant de payer ?',
     answer:
-      'Absolument. KONVERT propose 14 jours gratuits, sans carte bancaire requise. Tu peux générer des pages, tester les templates et voir les résultats avant de décider si tu passes à un plan payant.',
+      'Absolument. KONVERT te permet de générer 1 page produit gratuitement, sans carte bancaire. Tu vois le résultat immédiatement avant de décider si tu passes à un plan payant.',
   },
   {
     question: 'KONVERT est-il adapté aux débutants ?',

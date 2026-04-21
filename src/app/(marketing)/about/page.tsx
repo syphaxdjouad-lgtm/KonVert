@@ -447,7 +447,7 @@ export default function AboutPage() {
             Rejoignez les 2 800+ boutiques<br />qui convertissent avec KONVERT.
           </h2>
           <p className="reveal delay-1 text-sm mb-8" style={{ color: '#8b8baa' }}>
-            14 jours d'essai gratuit. Aucune carte de crédit. Annulation en 1 clic.
+            1 page gratuite. Aucune carte de crédit. Résultat immédiat.
           </p>
           <div className="reveal delay-2 flex flex-col sm:flex-row gap-3 justify-center">
             <Link

@@ -18,11 +18,11 @@ export default function StickyMobileCTA() {
     >
       <div className="px-4 py-3">
         <Link
-          href="/signup"
+          href="/essai"
           className="flex items-center justify-center w-full rounded-xl font-bold text-white text-base py-3.5 transition-all active:scale-95"
           style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)' }}
         >
-          Essayer gratuitement — 14 jours
+          Générer ma page — gratuit
         </Link>
       </div>
     </div>

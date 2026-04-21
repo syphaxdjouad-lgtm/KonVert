@@ -803,7 +803,7 @@ export default function FeaturesPage() {
             Prêt à tester toutes ces fonctionnalités ?
           </h2>
           <p className="reveal delay-1 text-sm mb-8" style={{ color: '#8b8baa' }}>
-            14 jours d'accès complet. Sans carte de crédit.
+            1 page gratuite. Sans carte de crédit. Résultat en 30 secondes.
           </p>
           <div className="reveal delay-2 flex flex-col sm:flex-row gap-3 justify-center">
             <Link

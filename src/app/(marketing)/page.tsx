@@ -2969,7 +2969,7 @@ function PricingTeaser() {
             Moins cher qu&apos;un freelance. Disponible maintenant.
           </h2>
           <p className="reveal delay-2 text-lg text-gray-500 max-w-xl mx-auto mb-8">
-            14 jours gratuits, sans carte bancaire. Vois le résultat avant de payer.
+            1 page gratuite, sans carte bancaire. Vois le résultat avant de payer.
           </p>
           <div className="reveal delay-3 inline-flex items-center gap-3 p-1 rounded-full" style={{ background: '#ede8ff' }}>
             <button
@@ -3177,7 +3177,7 @@ function FinalCTA() {
         </div>
 
         <p className="reveal delay-4 text-white/35 text-sm">
-          14 jours gratuit · Aucune CB requise · Résiliation en 1 clic
+          1 page gratuite · Aucune CB requise · Résiliation en 1 clic
         </p>
         <p className="mt-2 text-sm font-semibold" style={{ color: 'rgba(134,239,172,0.7)' }}>
           <Check size={14} weight="bold" className="inline mr-1" /> Satisfait ou remboursé 30 jours — Sans question

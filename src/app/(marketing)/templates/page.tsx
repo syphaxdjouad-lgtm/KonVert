@@ -733,10 +733,10 @@ export default function TemplatesPage() {
             className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
             style={{ background: '#5B47F5' }}
           >
-            Commencer l&apos;essai gratuit →
+            Générer ma première page — gratuit →
           </a>
           <p className="mt-4 text-sm" style={{ color: 'rgba(255,255,255,0.25)' }}>
-            14 jours gratuits &nbsp;·&nbsp; Aucune CB &nbsp;·&nbsp; Annulez quand vous voulez
+            1 page gratuite &nbsp;·&nbsp; Aucune CB &nbsp;·&nbsp; Annulez quand vous voulez
           </p>
         </div>
       </section>

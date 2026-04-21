@@ -342,7 +342,7 @@ export default function TestimonialsPage() {
           Prêt à rejoindre ces résultats ?
         </h2>
         <p className="text-white/60 mb-8 max-w-md mx-auto">
-          14 jours gratuits. Aucune carte de crédit. Annulation en 1 clic.
+          1 page gratuite. Aucune carte de crédit. Résultat immédiat.
         </p>
         <Link
           href="/signup"

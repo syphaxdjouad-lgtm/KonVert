@@ -216,7 +216,7 @@ function SignupContent() {
           <span style={{ color: 'rgba(139,92,246,0.4)' }}>·</span>
           <span>4.9 Trustpilot</span>
           <span style={{ color: 'rgba(139,92,246,0.4)' }}>·</span>
-          <span>14j gratuits</span>
+          <span>1 page gratuite</span>
         </div>
       </div>
 

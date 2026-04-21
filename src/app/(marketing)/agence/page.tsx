@@ -197,11 +197,11 @@ export default function AgencePage() {
 
           <div className="mt-6 text-center">
             <Link
-              href="/contact?subject=Plan+Agence"
+              href="/essai"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-bold"
               style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
             >
-              Démarrer l'essai gratuit 14 jours
+              Générer ma première page — gratuit
               <ArrowRight className="w-4 h-4" />
             </Link>
             <p className="text-xs text-gray-400 mt-3">Sans CB · Annulation en 1 clic · Onboarding offert</p>
@@ -251,14 +251,14 @@ export default function AgencePage() {
             Prêt à scaler votre agence ?
           </h2>
           <p className="text-gray-500 text-sm mb-8">
-            Prêt à scaler votre agence ? Commencez gratuitement — 14 jours d&apos;essai, sans engagement, sans carte bancaire.
+            Prêt à scaler votre agence ? Générez votre première page gratuitement — sans engagement, sans carte bancaire.
           </p>
           <Link
-            href="/signup"
+            href="/essai"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-bold"
             style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
           >
-            Démarrer l&apos;essai gratuit →
+            Générer ma première page →
           </Link>
         </div>
       </section>

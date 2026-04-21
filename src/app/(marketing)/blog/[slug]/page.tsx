@@ -149,7 +149,7 @@ export default function BlogArticlePage({ params }: { params: { slug: string } }
           <div className="mt-12 p-8 rounded-3xl text-center" style={{ background: 'linear-gradient(135deg, #0a0a1a, #0f0f2e)' }}>
             <p className="text-white font-black text-xl mb-2">Testez sur vos produits maintenant</p>
             <p className="text-sm mb-6" style={{ color: '#8b8baa' }}>
-              14 jours gratuits · Aucune carte de crédit requise
+              1 page gratuite · Aucune carte de crédit requise
             </p>
             <Link
               href="/signup"

@@ -45,7 +45,7 @@ export default function CguPage() {
           <Section title="4. Abonnement et paiement">
             <ul>
               <li>• Les plans sont facturés mensuellement ou annuellement via Stripe.</li>
-              <li>• Un essai gratuit de 14 jours est proposé sans obligation d&apos;achat.</li>
+              <li>• Une page gratuite est offerte pour tester le service sans obligation d&apos;achat.</li>
               <li>• L&apos;abonnement se renouvelle automatiquement à la date d&apos;échéance.</li>
               <li>• Vous pouvez annuler à tout moment depuis les paramètres de votre compte.</li>
               <li>• En cas d&apos;annulation, l&apos;accès reste actif jusqu&apos;à la fin de la période en cours.</li>

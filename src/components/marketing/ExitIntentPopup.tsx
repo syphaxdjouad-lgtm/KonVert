@@ -80,7 +80,7 @@ export default function ExitIntentPopup() {
                 Attends ! Avant de partir...
               </h2>
               <p className="text-gray-500 mb-6 text-sm leading-relaxed">
-                Lance ton essai gratuit de <strong>14 jours</strong> — sans carte bancaire.
+                Génère ta première page produit <strong>gratuitement</strong> — sans carte bancaire.
                 Des centaines de e-commerçants ont déjà boosté leur CVR avec Konvert.
               </p>
 
@@ -94,7 +94,7 @@ export default function ExitIntentPopup() {
                 </p>
                 <ul className="text-sm space-y-1" style={{ color: '#4a3fa0' }}>
                   <li>✓ 17 templates haute conversion</li>
-                  <li>✓ Génération IA illimitée pendant 14 jours</li>
+                  <li>✓ 1 page produit générée par l'IA — résultat immédiat</li>
                   <li>✓ Aucune carte bancaire requise</li>
                 </ul>
               </div>
@@ -113,7 +113,7 @@ export default function ExitIntentPopup() {
                   className="w-full rounded-xl font-bold text-white py-3.5 text-sm transition-all hover:opacity-90 active:scale-95"
                   style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)' }}
                 >
-                  Démarrer mon essai gratuit →
+                  Générer ma page gratuite →
                 </button>
               </form>
 

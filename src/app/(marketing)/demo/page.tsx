@@ -415,7 +415,7 @@ export default function DemoPage() {
             {/* CTA upgrade */}
             <div className="mt-6 p-8 rounded-3xl text-center" style={{ background: 'linear-gradient(135deg, #08080f, #0f0f2e)' }}>
               <p className="text-white font-black text-xl mb-2">Publiez cette page sur votre boutique.</p>
-              <p className="text-sm mb-6" style={{ color: '#8b8baa' }}>Connexion Shopify ou WooCommerce en 1 clic. 14 jours gratuits.</p>
+              <p className="text-sm mb-6" style={{ color: '#8b8baa' }}>Connexion Shopify ou WooCommerce en 1 clic. 1 page gratuite pour tester.</p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
                   href="/signup"

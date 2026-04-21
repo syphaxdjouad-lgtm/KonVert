@@ -24,6 +24,10 @@ export { templateEtecTrendy } from './etec-trendy'
 export { templateEtecSolo } from './etec-solo'
 export { templateEtecPrestige } from './etec-prestige'
 export { templateEtecGlow } from './etec-glow'
+export { templateEtecHomestyle } from './etec-homestyle'
+export { templateEtecJewel } from './etec-jewel'
+export { templateEtecTechcase } from './etec-techcase'
+export { templateEtecArtisan } from './etec-artisan'
 
 import { templateEtecBlue }   from './etec-blue'
 import { templateEtecNoir }   from './etec-noir'
@@ -49,6 +53,10 @@ import { templateEtecTrendy } from './etec-trendy'
 import { templateEtecSolo } from './etec-solo'
 import { templateEtecPrestige } from './etec-prestige'
 import { templateEtecGlow } from './etec-glow'
+import { templateEtecHomestyle } from './etec-homestyle'
+import { templateEtecJewel } from './etec-jewel'
+import { templateEtecTechcase } from './etec-techcase'
+import { templateEtecArtisan } from './etec-artisan'
 
 // ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
 
@@ -99,6 +107,10 @@ export const TEMPLATES = [
   { id: 'etec-solo', name: 'Solo', category: 'modern' as const, fn: templateEtecSolo, label: 'Mono-produit · Single Product · DTC',       accent: '#334FB4', badge: 'Nouveau'        },
   { id: 'etec-prestige', name: 'Prestige', category: 'luxury' as const, fn: templateEtecPrestige, label: 'Premium · Haut de gamme · Artisanal', accent: '#DD1D1D', badge: 'Exclusif'   },
   { id: 'etec-glow', name: 'Glow', category: 'beauty' as const, fn: templateEtecGlow, label: 'Skincare · Beauty · Ritual',                accent: '#EF4A65', badge: 'Nouveau'        },
+  { id: 'etec-homestyle', name: 'HomeStyle', category: 'organic' as const, fn: templateEtecHomestyle, label: 'Mobilier · Déco · Maison',          accent: '#8B6914', badge: 'Nouveau'     },
+  { id: 'etec-jewel', name: 'Jewel', category: 'dark' as const, fn: templateEtecJewel, label: 'Bijoux · Joaillerie · Dark Luxe',              accent: '#a37249', badge: 'Exclusif'       },
+  { id: 'etec-techcase', name: 'TechCase', category: 'modern' as const, fn: templateEtecTechcase, label: 'Accessoires Tech · Phone · Minimal', accent: '#000000', badge: 'Nouveau'      },
+  { id: 'etec-artisan', name: 'Artisan', category: 'organic' as const, fn: templateEtecArtisan, label: 'Handmade · Savon · Naturel',            accent: '#FF871D', badge: 'Nouveau'       },
 ]
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
@@ -129,6 +141,10 @@ export function renderTemplate(templateId: string, data: LandingPageData): strin
     case 'etec-solo':       return templateEtecSolo(data)
     case 'etec-prestige':   return templateEtecPrestige(data)
     case 'etec-glow':       return templateEtecGlow(data)
+    case 'etec-homestyle':  return templateEtecHomestyle(data)
+    case 'etec-jewel':      return templateEtecJewel(data)
+    case 'etec-techcase':   return templateEtecTechcase(data)
+    case 'etec-artisan':    return templateEtecArtisan(data)
     case 'minimal-dark':
     case 'gaming-zone':
     case 'automotive-pro':  return templateEtecNoir(data)

@@ -38,6 +38,10 @@ export { templateEtecPlatina } from './etec-platina'
 export { templateEtecStreetz } from './etec-streetz'
 export { templateEtecPoterie } from './etec-poterie'
 export { templateEtecElectro } from './etec-electro'
+export { templateEtecAgency } from './etec-agency'
+export { templateEtecSupreme } from './etec-supreme'
+export { templateEtecQuarter } from './etec-quarter'
+export { templateEtecBoost } from './etec-boost'
 
 import { templateEtecBlue }   from './etec-blue'
 import { templateEtecNoir }   from './etec-noir'
@@ -77,6 +81,10 @@ import { templateEtecPlatina } from './etec-platina'
 import { templateEtecStreetz } from './etec-streetz'
 import { templateEtecPoterie } from './etec-poterie'
 import { templateEtecElectro } from './etec-electro'
+import { templateEtecAgency } from './etec-agency'
+import { templateEtecSupreme } from './etec-supreme'
+import { templateEtecQuarter } from './etec-quarter'
+import { templateEtecBoost } from './etec-boost'
 
 // ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
 
@@ -141,6 +149,10 @@ export const TEMPLATES = [
   { id: 'etec-streetz', name: 'StreetZ', category: 'dark' as const, fn: templateEtecStreetz, label: 'Streetwear · Urban · Bold',             accent: '#E11D48', badge: 'Nouveau'       },
   { id: 'etec-poterie', name: 'Poterie', category: 'organic' as const, fn: templateEtecPoterie, label: 'Céramique · Artisanat · Terre',     accent: '#A0522D', badge: 'Nouveau'       },
   { id: 'etec-electro', name: 'Electro', category: 'sport' as const, fn: templateEtecElectro, label: 'Supplements · Sport · Hydratation',   accent: '#00B4D8', badge: 'Nouveau'       },
+  { id: 'etec-agency', name: 'Agency', category: 'modern' as const, fn: templateEtecAgency, label: 'Corporate · Services · Professionnel', accent: '#334FB4', badge: 'Nouveau'       },
+  { id: 'etec-supreme', name: 'Supreme', category: 'dark' as const, fn: templateEtecSupreme, label: 'Exclusive · Monospace · Streetwear',   accent: '#FE0100', badge: 'Exclusif'      },
+  { id: 'etec-quarter', name: 'Quarter', category: 'luxury' as const, fn: templateEtecQuarter, label: 'Minimal Luxe · Épuré · Noir & Blanc', accent: '#121212', badge: 'Nouveau'       },
+  { id: 'etec-boost', name: 'Boost', category: 'beauty' as const, fn: templateEtecBoost, label: 'Conversion · Wellness · DTC Premium',    accent: '#FF2277', badge: 'Top conversion' },
 ]
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
@@ -185,6 +197,10 @@ export function renderTemplate(templateId: string, data: LandingPageData): strin
     case 'etec-streetz':    return templateEtecStreetz(data)
     case 'etec-poterie':    return templateEtecPoterie(data)
     case 'etec-electro':    return templateEtecElectro(data)
+    case 'etec-agency':     return templateEtecAgency(data)
+    case 'etec-supreme':    return templateEtecSupreme(data)
+    case 'etec-quarter':    return templateEtecQuarter(data)
+    case 'etec-boost':      return templateEtecBoost(data)
     case 'minimal-dark':
     case 'gaming-zone':
     case 'automotive-pro':  return templateEtecNoir(data)

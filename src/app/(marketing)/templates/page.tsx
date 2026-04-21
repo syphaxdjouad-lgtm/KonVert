@@ -1042,7 +1042,7 @@ const SAMPLE_ELECTRO: LandingPageData = {
 const TEMPLATES = [
   {
     id: 'etec-blue',
-    name: 'ETEC Blue',
+    name: 'Blue',
     tagline: 'Tech · Sport · Universel',
     desc: 'Design épuré fond blanc cassé et bleu électrique. Idéal pour les produits tech, sport et lifestyle universel. Le template le plus polyvalent.',
     accent: '#0057FF',
@@ -1056,7 +1056,7 @@ const TEMPLATES = [
   },
   {
     id: 'etec-noir',
-    name: 'ETEC Noir',
+    name: 'Noir',
     tagline: 'Montres · Électronique · Luxe Dark',
     desc: 'Fond sombre profond, contrastes parfaits. Positionne instantanément le produit comme haut de gamme. Parfait pour montres, électronique et gaming.',
     accent: '#7C3AED',
@@ -1070,7 +1070,7 @@ const TEMPLATES = [
   },
   {
     id: 'etec-rose',
-    name: 'ETEC Rose',
+    name: 'Rose',
     tagline: 'Beauté · Skincare · Makeup',
     desc: 'Tons rose chauds et féminins. Galerie produit et avis UGC mis en avant. Maximise les ventes dans l\'univers beauté et skincare.',
     accent: '#D63370',
@@ -1084,7 +1084,7 @@ const TEMPLATES = [
   },
   {
     id: 'etec-sage',
-    name: 'ETEC Sage',
+    name: 'Sage',
     tagline: 'Bio · Organic · Bien-être',
     desc: 'Vert forêt naturel, tons organiques, certifications visibles. Inspire confiance. Parfait pour les produits bio, compléments alimentaires et bien-être.',
     accent: '#2D6A4F',
@@ -1350,7 +1350,7 @@ const TEMPLATES = [
   },
   {
     id: 'etec-gold',
-    name: 'ETEC Gold',
+    name: 'Gold',
     tagline: 'Luxe · Haute Gamme · Or',
     desc: 'Fond noir profond, accents dorés, typographie serif. Positionne instantanément comme ultra-premium. Parfait pour montres, bijoux et maroquinerie.',
     accent: '#D4A853',
@@ -1364,7 +1364,7 @@ const TEMPLATES = [
   },
   {
     id: 'etec-energy',
-    name: 'ETEC Energy',
+    name: 'Energy',
     tagline: 'Sport · Fitness · DTC',
     desc: 'Design dynamique orange vif et fond sombre. Countdown, urgence, social proof. Maximise les conversions pour sport, fitness et produits DTC.',
     accent: '#E63000',

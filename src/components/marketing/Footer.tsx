@@ -41,9 +41,10 @@ const COLS = [
     links: [
       { label: 'À propos',         href: '/about' },
       { label: 'CGU',              href: '/legal/cgu' },
+      { label: 'CGV',              href: '/legal/cgv' },
       { label: 'Confidentialité',  href: '/legal/privacy' },
-      { label: 'RGPD',             href: '/legal/privacy' },
       { label: 'Mentions légales', href: '/legal/mentions' },
+      { label: 'Cookies',          href: '/legal/cookies' },
     ],
   },
 ]

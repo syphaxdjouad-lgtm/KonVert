@@ -1,74 +1,120 @@
-import { Scale } from 'lucide-react'
+import type { Metadata } from 'next'
+import Link from 'next/link'
 
-export const metadata = { title: 'Mentions légales — KONVERT' }
+export const metadata: Metadata = {
+  title: 'Mentions legales — Konvert',
+  description: 'Mentions legales du site konvert.app',
+}
 
-export default function MentionsPage() {
+export default function MentionsLegalesPage() {
   return (
-    <div className="min-h-screen py-24 px-4" style={{ background: '#fafafa' }}>
-      <div className="max-w-2xl mx-auto">
-
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-10">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(124,58,237,0.08)' }}>
-            <Scale className="w-5 h-5" style={{ color: '#7c3aed' }} />
-          </div>
-          <div>
-            <h1 className="text-2xl font-black" style={{ color: '#111' }}>Mentions légales</h1>
-            <p className="text-sm" style={{ color: '#9ca3af' }}>Mise à jour : avril 2026</p>
-          </div>
+    <>
+      <section className="pt-32 pb-14" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
+        <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
+          <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">Mentions legales</h1>
+          <p className="text-sm" style={{ color: '#8b8baa' }}>Derniere mise a jour : 21 avril 2026</p>
         </div>
+      </section>
 
-        <div className="space-y-8">
-          <Section title="Éditeur du site">
-            <p>Le site <strong>konvert.app</strong> est édité par :</p>
-            <ul>
-              <li><strong>Raison sociale :</strong> NEXARA</li>
-              <li><strong>Statut :</strong> Auto-entrepreneur</li>
-              <li><strong>Email :</strong> <a href="mailto:contact@konvert.app" style={{ color: '#7c3aed' }}>contact@konvert.app</a></li>
-            </ul>
-          </Section>
+      <section className="py-16 bg-white">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8">
 
-          <Section title="Hébergement">
-            <ul>
-              <li><strong>Hébergeur :</strong> Vercel Inc.</li>
-              <li><strong>Adresse :</strong> 340 Pine Street, Suite 701, San Francisco, CA 94104, États-Unis</li>
-              <li><strong>Site :</strong> <a href="https://vercel.com" style={{ color: '#7c3aed' }}>vercel.com</a></li>
-            </ul>
-          </Section>
+          <H2>1. Editeur du site</H2>
+          <P>Le site <strong>konvert.app</strong> est edite par :</P>
+          <ul className="text-gray-600 text-sm leading-relaxed mb-6 list-disc pl-5 space-y-1">
+            <li><strong>Raison sociale :</strong> Konvert SAS</li>
+            <li><strong>Forme juridique :</strong> Societe par Actions Simplifiee (SAS)</li>
+            <li><strong>Siege social :</strong> France</li>
+            <li><strong>Capital social :</strong> 1 000 euros</li>
+            <li><strong>Email :</strong> <A href="mailto:contact@konvert.app">contact@konvert.app</A></li>
+            <li><strong>Directeur de la publication :</strong> Le President de Konvert SAS</li>
+          </ul>
 
-          <Section title="Propriété intellectuelle">
-            <p>
-              L&apos;ensemble du contenu de ce site (textes, images, logo, interface, code) est protégé par le droit d&apos;auteur et appartient à NEXARA, sauf mention contraire.
-              Toute reproduction, même partielle, est interdite sans autorisation préalable.
-            </p>
-          </Section>
+          <H2>2. Hebergement</H2>
+          <P>
+            Le site est heberge par <strong>Vercel Inc.</strong>, 340 S Lemon Ave #4133, Walnut, CA 91789, USA.
+            Les donnees sont stockees sur des serveurs situes dans la region <strong>cdg1 (Paris, France)</strong> conformement
+            a notre engagement de souverainete des donnees europeennes.
+          </P>
 
-          <Section title="Données personnelles">
-            <p>
-              Les données collectées lors de l&apos;utilisation de KONVERT sont traitées conformément à notre{' '}
-              <a href="/legal/privacy" style={{ color: '#7c3aed' }}>Politique de confidentialité</a>.
-            </p>
-          </Section>
+          <H2>3. Propriete intellectuelle</H2>
+          <P>
+            L&apos;ensemble des elements du site konvert.app (textes, images, logos, icones, logiciels, base de donnees,
+            structure, design, templates) est protege par les lois francaises et internationales relatives a la propriete intellectuelle.
+          </P>
+          <P>
+            Toute reproduction, representation, modification, publication ou adaptation de tout ou partie des elements du site,
+            quel que soit le moyen ou le procede utilise, est interdite sans autorisation ecrite prealable de Konvert SAS.
+          </P>
 
-          <Section title="Contact">
-            <p>
-              Pour toute question, vous pouvez nous écrire à{' '}
-              <a href="mailto:contact@konvert.app" style={{ color: '#7c3aed' }}>contact@konvert.app</a>.
-            </p>
-          </Section>
+          <H2>4. Donnees personnelles</H2>
+          <P>
+            Conformement au Reglement General sur la Protection des Donnees (RGPD) et a la loi Informatique et Libertes,
+            vous disposez d&apos;un droit d&apos;acces, de rectification, de suppression et de portabilite de vos donnees personnelles.
+          </P>
+          <P>
+            Pour exercer ces droits, contactez-nous a <A href="mailto:privacy@konvert.app">privacy@konvert.app</A>.
+            Pour plus de details, consultez notre <Link href="/legal/privacy" className="text-[#5B47F5] font-semibold hover:underline">politique de confidentialite</Link>.
+          </P>
+
+          <H2>5. Cookies</H2>
+          <P>
+            Le site utilise des cookies pour assurer son bon fonctionnement et ameliorer l&apos;experience utilisateur.
+            Pour en savoir plus, consultez notre <Link href="/legal/cookies" className="text-[#5B47F5] font-semibold hover:underline">politique de cookies</Link>.
+          </P>
+
+          <H2>6. Responsabilite</H2>
+          <P>
+            Konvert SAS s&apos;efforce de fournir des informations aussi precises que possible sur le site.
+            Toutefois, elle ne pourra etre tenue responsable des omissions, des inexactitudes ou des carences
+            dans la mise a jour de ces informations.
+          </P>
+          <P>
+            Konvert SAS ne saurait etre tenue responsable des dommages directs ou indirects causes au materiel
+            de l&apos;utilisateur lors de l&apos;acces au site.
+          </P>
+
+          <H2>7. Liens hypertextes</H2>
+          <P>
+            Le site peut contenir des liens hypertextes vers d&apos;autres sites internet. Konvert SAS n&apos;exerce aucun
+            controle sur ces sites et decline toute responsabilite quant a leur contenu.
+          </P>
+
+          <H2>8. Droit applicable</H2>
+          <P last>
+            Les presentes mentions legales sont soumises au droit francais. En cas de litige, les tribunaux francais
+            seront seuls competents.
+          </P>
+
+          <Nav current="mentions" />
         </div>
-      </div>
-    </div>
+      </section>
+    </>
   )
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function H2({ children }: { children: React.ReactNode }) {
+  return <h2 className="text-xl font-bold text-gray-900 mb-4 mt-8 first:mt-0">{children}</h2>
+}
+function P({ children, last }: { children: React.ReactNode; last?: boolean }) {
+  return <p className={`text-sm text-gray-600 leading-relaxed ${last ? 'mb-0' : 'mb-4'}`}>{children}</p>
+}
+function A({ href, children }: { href: string; children: React.ReactNode }) {
+  return <a href={href} className="text-[#5B47F5] font-semibold hover:underline">{children}</a>
+}
+function Nav({ current }: { current: string }) {
+  const links = [
+    { href: '/legal/cgu', label: 'CGU' },
+    { href: '/legal/cgv', label: 'CGV' },
+    { href: '/legal/privacy', label: 'Confidentialite' },
+    { href: '/legal/cookies', label: 'Cookies' },
+    { href: '/legal/mentions', label: 'Mentions legales' },
+  ]
   return (
-    <div className="rounded-2xl p-6" style={{ background: '#fff', border: '1px solid #e5e7eb' }}>
-      <h2 className="text-base font-black mb-4" style={{ color: '#111' }}>{title}</h2>
-      <div className="text-sm space-y-2 [&_ul]:space-y-1.5 [&_ul]:list-none [&_ul]:pl-0 [&_p]:leading-relaxed" style={{ color: '#6b7280' }}>
-        {children}
-      </div>
+    <div className="mt-10 pt-8 border-t border-gray-100 flex flex-wrap gap-4 text-sm">
+      {links.filter(l => !l.href.endsWith(current)).map(l => (
+        <Link key={l.href} href={l.href} className="text-[#5B47F5] font-semibold hover:underline">{l.label}</Link>
+      ))}
     </div>
   )
 }

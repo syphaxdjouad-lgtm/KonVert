@@ -178,10 +178,10 @@ function PricingContent() {
               Connexion
             </Link>
             <Link
-              href="/signup"
+              href="/essai"
               className="text-sm font-bold px-4 py-2.5 rounded-lg text-white bg-green-600 hover:bg-green-700 transition-colors"
             >
-              Essai gratuit
+              1 page gratuite
             </Link>
           </div>
         </div>
@@ -541,7 +541,7 @@ function PricingContent() {
               },
               {
                 q: 'Y a-t-il une période d\'essai gratuite ?',
-                a: 'Oui — lors de l\'inscription, tu bénéficies de 50 pages gratuites pour tester KONVERT sans carte bancaire. Aucun engagement.',
+                a: 'Oui — tu peux générer 1 page produit gratuitement sans créer de compte. Aucune carte bancaire, résultat immédiat. Si la page te convainc, tu choisis un plan pour l\'utiliser sur ta boutique.',
               },
               {
                 q: 'Comment annuler mon abonnement ?',
@@ -566,14 +566,14 @@ function PricingContent() {
           Prêt à générer ta première page ?
         </h2>
         <p className="text-lg mb-8" style={{ color: 'rgba(255,255,255,0.6)' }}>
-          50 pages offertes dès l'inscription. Aucune carte bancaire.
+          Génère ta 1ère page gratuitement — vois le résultat avant de payer.
         </p>
         <Link
-          href="/signup"
+          href="/essai"
           className="inline-flex items-center gap-2 font-bold px-10 py-4 rounded-lg text-white text-base bg-green-600 hover:bg-green-700 transition-colors"
           style={{ boxShadow: '0 4px 20px rgba(22,163,74,0.35)' }}
         >
-          Commencer gratuitement
+          Générer ma première page — gratuit
           <ArrowRight className="w-4 h-4" />
         </Link>
         <p className="mt-3 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>

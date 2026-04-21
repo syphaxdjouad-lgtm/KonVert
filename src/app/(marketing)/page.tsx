@@ -249,11 +249,11 @@ function Slide1() {
             style={{ animation: 'slideUp .7s .2s cubic-bezier(.16,1,.3,1) both' }}
           >
             <Link
-              href="/demo"
+              href="/essai"
               className="btn-shimmer btn-ripple inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg"
               onClick={addRipple}
             >
-              Tester gratuitement — sans compte <ArrowRight className="w-4 h-4" />
+              Génère ta première page — gratuit <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/signup"
@@ -293,7 +293,7 @@ function Slide1() {
               {[
                 { dot: '#96BF48', label: 'Shopify Partner' },
                 { dot: '#635BFF', label: 'Stripe sécurisé' },
-                { dot: '#16a34a', label: '14j gratuits · Sans CB' },
+                { dot: '#16a34a', label: '1 page gratuite · Aucune CB' },
               ].map(({ dot, label }) => (
                 <div key={label} className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: dot }} />
@@ -3135,7 +3135,7 @@ function FinalCTA() {
           style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
         >
           <Sparkle className="w-3.5 h-3.5" />
-          Essai gratuit 14 jours
+          1 page gratuite — sans compte
         </div>
 
         <h2

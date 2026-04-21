@@ -19,6 +19,11 @@ export { templateEtecAura }  from './etec-aura'
 export { templateEtecLuxe }  from './etec-luxe'
 export { templateEtecNordic } from './etec-nordic'
 export { templateEtecPulse } from './etec-pulse'
+export { templateEtecCosmetix } from './etec-cosmetix'
+export { templateEtecTrendy } from './etec-trendy'
+export { templateEtecSolo } from './etec-solo'
+export { templateEtecPrestige } from './etec-prestige'
+export { templateEtecGlow } from './etec-glow'
 
 import { templateEtecBlue }   from './etec-blue'
 import { templateEtecNoir }   from './etec-noir'
@@ -39,6 +44,11 @@ import { templateEtecAura }  from './etec-aura'
 import { templateEtecLuxe }  from './etec-luxe'
 import { templateEtecPulse }  from './etec-pulse'
 import { templateEtecNordic } from './etec-nordic'
+import { templateEtecCosmetix } from './etec-cosmetix'
+import { templateEtecTrendy } from './etec-trendy'
+import { templateEtecSolo } from './etec-solo'
+import { templateEtecPrestige } from './etec-prestige'
+import { templateEtecGlow } from './etec-glow'
 
 // ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
 
@@ -84,6 +94,11 @@ export const TEMPLATES = [
   { id: 'etec-luxe',   name: 'Luxe',   category: 'luxury'  as const, fn: templateEtecLuxe,   label: 'Joaillerie · Noir & Or · Ultra Premium',accent: '#C9A84C', badge: 'Exclusif'      },
   { id: 'etec-pulse',  name: 'Pulse',  category: 'dark'    as const, fn: templateEtecPulse,  label: 'Tech · Cyberpunk · Gadgets Dark',        accent: '#00D4FF', badge: 'Nouveau'       },
   { id: 'etec-nordic', name: 'Nordic', category: 'organic' as const, fn: templateEtecNordic, label: 'Lifestyle · Minimaliste · Scandinave',    accent: '#4A7C88', badge: 'Nouveau'       },
+  { id: 'etec-cosmetix', name: 'Cosmetix', category: 'beauty' as const, fn: templateEtecCosmetix, label: 'Cosmétiques · Skincare · Clean Beauty', accent: '#334FB4', badge: 'Nouveau'    },
+  { id: 'etec-trendy', name: 'Trendy', category: 'modern' as const, fn: templateEtecTrendy, label: 'Fashion · Mode · Streetwear',             accent: '#319da0', badge: 'Nouveau'      },
+  { id: 'etec-solo', name: 'Solo', category: 'modern' as const, fn: templateEtecSolo, label: 'Mono-produit · Single Product · DTC',       accent: '#334FB4', badge: 'Nouveau'        },
+  { id: 'etec-prestige', name: 'Prestige', category: 'luxury' as const, fn: templateEtecPrestige, label: 'Premium · Haut de gamme · Artisanal', accent: '#DD1D1D', badge: 'Exclusif'   },
+  { id: 'etec-glow', name: 'Glow', category: 'beauty' as const, fn: templateEtecGlow, label: 'Skincare · Beauty · Ritual',                accent: '#EF4A65', badge: 'Nouveau'        },
 ]
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
@@ -109,6 +124,11 @@ export function renderTemplate(templateId: string, data: LandingPageData): strin
     case 'etec-luxe':       return templateEtecLuxe(data)
     case 'etec-pulse':      return templateEtecPulse(data)
     case 'etec-nordic':     return templateEtecNordic(data)
+    case 'etec-cosmetix':   return templateEtecCosmetix(data)
+    case 'etec-trendy':     return templateEtecTrendy(data)
+    case 'etec-solo':       return templateEtecSolo(data)
+    case 'etec-prestige':   return templateEtecPrestige(data)
+    case 'etec-glow':       return templateEtecGlow(data)
     case 'minimal-dark':
     case 'gaming-zone':
     case 'automotive-pro':  return templateEtecNoir(data)

@@ -28,6 +28,16 @@ export { templateEtecHomestyle } from './etec-homestyle'
 export { templateEtecJewel } from './etec-jewel'
 export { templateEtecTechcase } from './etec-techcase'
 export { templateEtecArtisan } from './etec-artisan'
+export { templateEtecOutfit } from './etec-outfit'
+export { templateEtecElla } from './etec-ella'
+export { templateEtecStarter } from './etec-starter'
+export { templateEtecGlowup } from './etec-glowup'
+export { templateEtecHue } from './etec-hue'
+export { templateEtecInterior } from './etec-interior'
+export { templateEtecPlatina } from './etec-platina'
+export { templateEtecStreetz } from './etec-streetz'
+export { templateEtecPoterie } from './etec-poterie'
+export { templateEtecElectro } from './etec-electro'
 
 import { templateEtecBlue }   from './etec-blue'
 import { templateEtecNoir }   from './etec-noir'
@@ -57,6 +67,16 @@ import { templateEtecHomestyle } from './etec-homestyle'
 import { templateEtecJewel } from './etec-jewel'
 import { templateEtecTechcase } from './etec-techcase'
 import { templateEtecArtisan } from './etec-artisan'
+import { templateEtecOutfit } from './etec-outfit'
+import { templateEtecElla } from './etec-ella'
+import { templateEtecStarter } from './etec-starter'
+import { templateEtecGlowup } from './etec-glowup'
+import { templateEtecHue } from './etec-hue'
+import { templateEtecInterior } from './etec-interior'
+import { templateEtecPlatina } from './etec-platina'
+import { templateEtecStreetz } from './etec-streetz'
+import { templateEtecPoterie } from './etec-poterie'
+import { templateEtecElectro } from './etec-electro'
 
 // ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
 
@@ -111,6 +131,16 @@ export const TEMPLATES = [
   { id: 'etec-jewel', name: 'Jewel', category: 'dark' as const, fn: templateEtecJewel, label: 'Bijoux · Joaillerie · Dark Luxe',              accent: '#a37249', badge: 'Exclusif'       },
   { id: 'etec-techcase', name: 'TechCase', category: 'modern' as const, fn: templateEtecTechcase, label: 'Accessoires Tech · Phone · Minimal', accent: '#000000', badge: 'Nouveau'      },
   { id: 'etec-artisan', name: 'Artisan', category: 'organic' as const, fn: templateEtecArtisan, label: 'Handmade · Savon · Naturel',            accent: '#FF871D', badge: 'Nouveau'       },
+  { id: 'etec-outfit', name: 'Outfit', category: 'modern' as const, fn: templateEtecOutfit, label: 'Vêtements · E-com · Warm Neutral',       accent: '#B5854B', badge: 'Nouveau'       },
+  { id: 'etec-ella', name: 'Ella', category: 'beauty' as const, fn: templateEtecElla, label: 'Mode Féminine · Élégant · Mauve',            accent: '#C77DBA', badge: 'Nouveau'       },
+  { id: 'etec-starter', name: 'Starter', category: 'modern' as const, fn: templateEtecStarter, label: 'Polyvalent · Clean · Universel',     accent: '#4F46E5', badge: 'Nouveau'       },
+  { id: 'etec-glowup', name: 'GlowUp', category: 'beauty' as const, fn: templateEtecGlowup, label: 'Beauté · Makeup · Glamour',             accent: '#D4508B', badge: 'Nouveau'       },
+  { id: 'etec-hue', name: 'Hue', category: 'modern' as const, fn: templateEtecHue, label: 'Créatif · Couleurs · Audacieux',                accent: '#FF6B35', badge: 'Nouveau'       },
+  { id: 'etec-interior', name: 'Interior', category: 'organic' as const, fn: templateEtecInterior, label: 'Mobilier · Intérieur · Nature',  accent: '#5B7553', badge: 'Nouveau'       },
+  { id: 'etec-platina', name: 'Platina', category: 'luxury' as const, fn: templateEtecPlatina, label: 'Bijoux · Joaillerie · Raffiné',      accent: '#B8860B', badge: 'Exclusif'      },
+  { id: 'etec-streetz', name: 'StreetZ', category: 'dark' as const, fn: templateEtecStreetz, label: 'Streetwear · Urban · Bold',             accent: '#E11D48', badge: 'Nouveau'       },
+  { id: 'etec-poterie', name: 'Poterie', category: 'organic' as const, fn: templateEtecPoterie, label: 'Céramique · Artisanat · Terre',     accent: '#A0522D', badge: 'Nouveau'       },
+  { id: 'etec-electro', name: 'Electro', category: 'sport' as const, fn: templateEtecElectro, label: 'Supplements · Sport · Hydratation',   accent: '#00B4D8', badge: 'Nouveau'       },
 ]
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
@@ -145,6 +175,16 @@ export function renderTemplate(templateId: string, data: LandingPageData): strin
     case 'etec-jewel':      return templateEtecJewel(data)
     case 'etec-techcase':   return templateEtecTechcase(data)
     case 'etec-artisan':    return templateEtecArtisan(data)
+    case 'etec-outfit':     return templateEtecOutfit(data)
+    case 'etec-ella':       return templateEtecElla(data)
+    case 'etec-starter':    return templateEtecStarter(data)
+    case 'etec-glowup':     return templateEtecGlowup(data)
+    case 'etec-hue':        return templateEtecHue(data)
+    case 'etec-interior':   return templateEtecInterior(data)
+    case 'etec-platina':    return templateEtecPlatina(data)
+    case 'etec-streetz':    return templateEtecStreetz(data)
+    case 'etec-poterie':    return templateEtecPoterie(data)
+    case 'etec-electro':    return templateEtecElectro(data)
     case 'minimal-dark':
     case 'gaming-zone':
     case 'automotive-pro':  return templateEtecNoir(data)

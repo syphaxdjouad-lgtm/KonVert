@@ -1980,7 +1980,7 @@ function AIBuilderDemoSection() {
                     pointerEvents: 'none',
                     display: 'block',
                   }}
-                  sandbox="allow-scripts"
+                  sandbox="allow-scripts allow-same-origin"
                 />
                 {/* Dégradé bas pour fondre proprement */}
                 <div

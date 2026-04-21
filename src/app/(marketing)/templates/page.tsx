@@ -1631,7 +1631,7 @@ function TemplateModal({ t, onClose }: { t: typeof TEMPLATES[0]; onClose: () => 
           srcDoc={html}
           title={t.name}
           style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
-          sandbox="allow-scripts allow-popups"
+          sandbox="allow-scripts allow-popups allow-same-origin"
         />
       </div>
     </div>

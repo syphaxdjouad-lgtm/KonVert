@@ -31,6 +31,16 @@ import {
   templateEtecJewel,
   templateEtecTechcase,
   templateEtecArtisan,
+  templateEtecOutfit,
+  templateEtecElla,
+  templateEtecStarter,
+  templateEtecGlowup,
+  templateEtecHue,
+  templateEtecInterior,
+  templateEtecPlatina,
+  templateEtecStreetz,
+  templateEtecPoterie,
+  templateEtecElectro,
 } from '@/lib/templates'
 import type { LandingPageData } from '@/types'
 
@@ -765,6 +775,266 @@ const SAMPLE_ARTISAN: LandingPageData = {
   ],
 }
 
+const SAMPLE_OUTFIT: LandingPageData = {
+  product_name: 'Essentials Tee — Coton Bio',
+  headline: 'Le t-shirt parfait existe.',
+  subtitle: 'Coton bio 240g/m², coupe décontractée, teinture végétale. Porté par 15 000+ clients fidèles.',
+  cta: 'Ajouter au panier — 39€',
+  urgency: '🔥 Nouvelle collection — Pré-commande ouverte',
+  benefits: [
+    'Coton biologique certifié GOTS — douceur incomparable',
+    'Coupe oversized décontractée — confort toute la journée',
+    'Teinture végétale — couleurs durables, zéro chimique',
+    'Coutures renforcées — qualité qui dure des années',
+    'Livraison offerte dès 2 pièces — retours gratuits 30 jours',
+  ],
+  faq: [
+    { question: 'Guide des tailles ?', answer: 'Coupe légèrement oversize. En cas de doute, prenez votre taille habituelle.' },
+    { question: 'Entretien ?', answer: 'Lavage 30°C, séchage à l\'air libre pour préserver les fibres.' },
+    { question: 'Retours ?', answer: 'Retours gratuits sous 30 jours, même porté.' },
+  ],
+  price: '39',
+  original_price: '55',
+  images: [
+    'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80',
+    'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?w=800&q=80',
+  ],
+}
+
+const SAMPLE_ELLA: LandingPageData = {
+  product_name: 'Robe Ella — Soie Lavande',
+  headline: 'L\'élégance au quotidien.',
+  subtitle: 'Soie naturelle, coupe fluide, teinte lavande exclusive. Pour les femmes qui veulent se sentir belles sans effort.',
+  cta: 'Craquer — 129€ au lieu de 189€',
+  urgency: '💜 Édition limitée — Plus que 23 pièces',
+  benefits: [
+    'Soie naturelle grade A — toucher incomparable, légèreté absolue',
+    'Coupe fluide flatteuse — sublime toutes les silhouettes',
+    'Teinte lavande exclusive — couleur unique non reproductible',
+    'Doublure en viscose — confort et maintien parfait',
+    'Emballage cadeau offert — prête à offrir ou se faire plaisir',
+  ],
+  faq: [
+    { question: 'Taille ?', answer: 'Du 34 au 46. Coupe régulière, prenez votre taille habituelle.' },
+    { question: 'Entretien ?', answer: 'Nettoyage à sec recommandé ou lavage main eau froide.' },
+    { question: 'Retours ?', answer: 'Échange ou remboursement sous 14 jours.' },
+  ],
+  price: '129',
+  original_price: '189',
+  images: [
+    'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80',
+    'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80',
+  ],
+}
+
+const SAMPLE_STARTER: LandingPageData = {
+  product_name: 'SmartLamp Pro — LED Connectée',
+  headline: 'L\'éclairage intelligent qui change tout.',
+  subtitle: 'WiFi + Bluetooth, 16M de couleurs, compatible Alexa & Google Home. Installation en 30 secondes.',
+  cta: 'Commander — 49€ livraison offerte',
+  urgency: '⚡ -30% lancement — Offre limitée',
+  benefits: [
+    'WiFi + Bluetooth — contrôle vocal ou appli, sans hub',
+    '16 millions de couleurs — ambiance parfaite en un tap',
+    'Compatible Alexa, Google, HomeKit — intégration totale',
+    'Mode circadien — lumière adaptée à votre rythme biologique',
+    'Installation 30 secondes — vis standard E27, prêt à l\'emploi',
+  ],
+  faq: [
+    { question: 'Besoin d\'un hub ?', answer: 'Non, connexion WiFi directe à votre routeur.' },
+    { question: 'Durée de vie ?', answer: '25 000 heures, soit environ 11 ans d\'utilisation normale.' },
+    { question: 'Garantie ?', answer: '2 ans constructeur, SAV en France.' },
+  ],
+  price: '49',
+  original_price: '69',
+  images: [
+    'https://images.unsplash.com/photo-1507473885765-e6ed057ab6fe?w=800&q=80',
+    'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=800&q=80',
+  ],
+}
+
+const SAMPLE_GLOWUP: LandingPageData = {
+  product_name: 'GlowUp Kit — Routine Teint Parfait',
+  headline: 'Ton glow-up commence ici.',
+  subtitle: 'Primer + Fond de teint + Setting spray. Formule clean, coverage modulable, tenue 16h.',
+  cta: 'Shopper le kit — 59€ au lieu de 87€',
+  urgency: '💄 Best-seller — 8 000+ kits vendus ce mois',
+  benefits: [
+    'Primer hydratant — lisse les pores, base parfaite longue tenue',
+    'Fond de teint buildable — coverage light à full, zéro masque',
+    'Setting spray fixateur — tenue 16h prouvée cliniquement',
+    'Formule clean & vegan — sans parabène, sans test animal',
+    'Kit complet -32% — 3 produits essentiels, 1 seul prix',
+  ],
+  faq: [
+    { question: 'Pour quel type de peau ?', answer: 'Toutes peaux. Formule non comédogène, testée dermato.' },
+    { question: 'Teintes disponibles ?', answer: '24 teintes du très clair au très foncé. Guide teinte sur le site.' },
+    { question: 'Retours ?', answer: 'Satisfaite ou remboursée 30 jours, même ouvert.' },
+  ],
+  price: '59',
+  original_price: '87',
+  images: [
+    'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80',
+    'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&q=80',
+  ],
+}
+
+const SAMPLE_HUE: LandingPageData = {
+  product_name: 'ArtPrint Canvas — Poster Abstrait',
+  headline: 'L\'art qui fait vibrer tes murs.',
+  subtitle: 'Impression giclée sur toile coton 380g. Couleurs ultra-vibrantes, cadre inclus. Livré prêt à accrocher.',
+  cta: 'Choisir mon format — Dès 45€',
+  urgency: '🎨 Collection limitée — 5 designs exclusifs',
+  benefits: [
+    'Toile coton 380g — qualité musée, texture premium au toucher',
+    'Encres pigmentaires archivales — couleurs vibrantes 75+ ans',
+    'Cadre bois inclus — prêt à accrocher, aucun montage',
+    '5 formats disponibles — du 30×40 au 100×150 cm',
+    'Emballage anti-choc — livraison sécurisée garantie',
+  ],
+  faq: [
+    { question: 'Délai de livraison ?', answer: 'Impression sous 48h, livraison 3-5 jours ouvrés.' },
+    { question: 'Personnalisation ?', answer: 'Oui, envoyez votre image pour un tirage custom.' },
+    { question: 'Retours ?', answer: 'Remboursement sous 14 jours si le produit ne vous convient pas.' },
+  ],
+  price: '45',
+  original_price: '69',
+  images: [
+    'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&q=80',
+    'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=800&q=80',
+  ],
+}
+
+const SAMPLE_INTERIOR: LandingPageData = {
+  product_name: 'Fauteuil Oslo — Chêne & Lin',
+  headline: 'Le confort scandinave chez vous.',
+  subtitle: 'Chêne massif certifié FSC, lin lavé français, mousse HR 40kg. Design primé, fabriqué en Europe.',
+  cta: 'Ajouter au panier — 590€',
+  urgency: '🪴 Précommande — Livraison mai',
+  benefits: [
+    'Chêne massif FSC — bois européen responsable et durable',
+    'Lin lavé français — tissu naturel respirant, toucher doux',
+    'Mousse HR haute résilience — confort optimal pendant 10+ ans',
+    'Design primé IF Award — lignes épurées, intemporelles',
+    'Montage 15 min — notice illustrée, outils inclus',
+  ],
+  faq: [
+    { question: 'Dimensions ?', answer: 'L75 × P80 × H85 cm. Assise H42 cm.' },
+    { question: 'Tissu lavable ?', answer: 'Housse déhoussable, lavable en machine 30°C.' },
+    { question: 'Garantie ?', answer: '5 ans structure, 2 ans tissu.' },
+  ],
+  price: '590',
+  original_price: '790',
+  images: [
+    'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80',
+    'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=800&q=80',
+  ],
+}
+
+const SAMPLE_PLATINA: LandingPageData = {
+  product_name: 'Bague Platina — Or 18k & Diamant',
+  headline: 'Une pièce unique, comme vous.',
+  subtitle: 'Or 18 carats, diamant VVS1 0.5ct, sertissage main par nos artisans joailliers. Certificat GIA inclus.',
+  cta: 'Réserver ma pièce — 1 290€',
+  urgency: '💍 Sur commande — Délai 3 semaines',
+  benefits: [
+    'Or 18 carats recyclé — luxe responsable certifié RJC',
+    'Diamant VVS1 certifié GIA — brillance et pureté exceptionnelles',
+    'Sertissage main — savoir-faire joaillier français depuis 1987',
+    'Écrin cuir premium offert — présentation digne de la pièce',
+    'Gravure personnalisée offerte — votre message secret à l\'intérieur',
+  ],
+  faq: [
+    { question: 'Taille ?', answer: 'Baguier offert sur demande. Ajustement gratuit après réception.' },
+    { question: 'Certificat ?', answer: 'Certificat GIA + poinçon or 750 + facture détaillée.' },
+    { question: 'Retours ?', answer: '30 jours satisfait ou remboursé. Échange taille gratuit.' },
+  ],
+  price: '1290',
+  original_price: '1890',
+  images: [
+    'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&q=80',
+    'https://images.unsplash.com/photo-1515562141589-67f0d569b6f5?w=800&q=80',
+  ],
+}
+
+const SAMPLE_STREETZ: LandingPageData = {
+  product_name: 'Hoodie StreetZ — Oversize Premium',
+  headline: 'La street, version premium.',
+  subtitle: 'Coton lourd 420g, broderie chaînette, coupe oversize. Drop limité à 200 pièces.',
+  cta: 'Cop maintenant — 89€',
+  urgency: '🧢 DROP #07 — 63% sold out',
+  benefits: [
+    'Coton lourd 420g — épaisseur premium, tombé impeccable',
+    'Broderie chaînette artisanale — détail qui fait la différence',
+    'Coupe oversize streetwear — style urbain authentique',
+    'Drop limité 200 pièces — exclusivité garantie, pas de restock',
+    'Packaging collector — boîte sérigraphiée numérotée',
+  ],
+  faq: [
+    { question: 'Taille ?', answer: 'Coupe oversize. Si vous hésitez, prenez votre taille habituelle.' },
+    { question: 'Restock ?', answer: 'Non, chaque drop est unique et ne sera jamais reproduit.' },
+    { question: 'Livraison ?', answer: 'Expédié sous 48h. Suivi inclus.' },
+  ],
+  price: '89',
+  original_price: '129',
+  images: [
+    'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80',
+    'https://images.unsplash.com/photo-1578681994506-b8f463449011?w=800&q=80',
+  ],
+}
+
+const SAMPLE_POTERIE: LandingPageData = {
+  product_name: 'Vase Terre — Céramique Artisanale',
+  headline: 'Chaque pièce raconte une histoire.',
+  subtitle: 'Tourné main, grès émaillé haute température, pièce unique signée. Fabriqué dans notre atelier provençal.',
+  cta: 'Adopter cette pièce — 65€',
+  urgency: '🏺 Pièce unique — Chaque vase est différent',
+  benefits: [
+    'Tourné main par nos artisans — chaque pièce est unique',
+    'Grès émaillé 1280°C — solidité et beauté durables',
+    'Étanche sans traitement — prêt à accueillir vos fleurs',
+    'Signé et numéroté — certificat d\'authenticité inclus',
+    'Emballage artisanal — papier de soie, paille protectrice',
+  ],
+  faq: [
+    { question: 'Dimensions ?', answer: 'Environ H20 × Ø12 cm. Variations naturelles possibles.' },
+    { question: 'Entretien ?', answer: 'Lavage main à l\'eau tiède. Compatible lave-vaisselle.' },
+    { question: 'Retours ?', answer: 'Échange ou remboursement sous 14 jours si la pièce ne vous plaît pas.' },
+  ],
+  price: '65',
+  original_price: '85',
+  images: [
+    'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=800&q=80',
+    'https://images.unsplash.com/photo-1610701596061-2ecf227e85b2?w=800&q=80',
+  ],
+}
+
+const SAMPLE_ELECTRO: LandingPageData = {
+  product_name: 'HydraBoost — Électrolytes Performance',
+  headline: 'Hydrate. Performe. Domine.',
+  subtitle: '6 électrolytes essentiels, 0 sucre, 0 colorant. Formule sport validée par 200+ athlètes pro.',
+  cta: 'Essayer — Pack 30 sticks à 29€',
+  urgency: '💧 Nouveau parfum Citron Yuzu — Stock limité',
+  benefits: [
+    '6 électrolytes dosés cliniquement — sodium, potassium, magnésium, calcium, zinc, chlorure',
+    'Zéro sucre, zéro colorant — clean label, formule transparente',
+    'Absorption rapide en 15 min — technologie osmolalité optimisée',
+    'Validé par 200+ athlètes pro — rugby, trail, crossfit, cycling',
+    '3 parfums : Citron Yuzu, Fruits Rouges, Nature — sans arrière-goût',
+  ],
+  faq: [
+    { question: 'Quand le prendre ?', answer: 'Avant, pendant ou après l\'effort. 1 stick dans 500ml d\'eau.' },
+    { question: 'Anti-dopage ?', answer: 'Certifié Informed Sport, sans substance interdite.' },
+    { question: 'Abonnement ?', answer: 'Oui, -15% en abonnement mensuel, résiliable à tout moment.' },
+  ],
+  price: '29',
+  original_price: '39',
+  images: [
+    'https://images.unsplash.com/photo-1622543925917-763c34d1a86e?w=800&q=80',
+    'https://images.unsplash.com/photo-1594498653385-d5172c532c00?w=800&q=80',
+  ],
+}
+
 // ---------------------------------------------------------------------------
 // Templates registry
 // ---------------------------------------------------------------------------
@@ -1162,6 +1432,146 @@ const TEMPLATES = [
     sample: SAMPLE_ARTISAN,
     preview: 'https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?w=600&q=80',
   },
+  {
+    id: 'etec-outfit',
+    name: 'Outfit',
+    tagline: 'Vêtements · E-com · Warm Neutral',
+    desc: 'Tons neutres chauds, galerie lookbook lifestyle. Swatches taille/couleur, grille produit, ambiance mode casual. Idéal vêtements, accessoires, lifestyle brands.',
+    accent: '#B5854B',
+    badgeBg: '#B5854B',
+    badge: 'Fashion',
+    cvr: '4.6%',
+    niches: ['Fashion', 'E-commerce', 'Lifestyle'],
+    fn: templateEtecOutfit,
+    sample: SAMPLE_OUTFIT,
+    preview: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80',
+  },
+  {
+    id: 'etec-ella',
+    name: 'Ella',
+    tagline: 'Mode Féminine · Élégant · Mauve',
+    desc: 'Palette mauve raffinée, serif élégant, lifestyle féminin. Photos éditoriales, storytelling marque, CTA doux. Pour mode femme, accessoires, beauté lifestyle.',
+    accent: '#C77DBA',
+    badgeBg: '#C77DBA',
+    badge: 'Fashion',
+    cvr: '4.4%',
+    niches: ['Fashion', 'Beauté', 'Lifestyle'],
+    fn: templateEtecElla,
+    sample: SAMPLE_ELLA,
+    preview: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80',
+  },
+  {
+    id: 'etec-starter',
+    name: 'Starter',
+    tagline: 'Polyvalent · Clean · Universel',
+    desc: 'Design indigo clean et universel, parfait pour débuter. Structure claire, sections bien définies, conversion optimisée. S\'adapte à toutes les niches.',
+    accent: '#4F46E5',
+    badgeBg: '#4F46E5',
+    badge: 'Populaire',
+    cvr: '4.7%',
+    niches: ['Tech', 'E-commerce', 'Lifestyle', 'Health'],
+    fn: templateEtecStarter,
+    sample: SAMPLE_STARTER,
+    preview: 'https://images.unsplash.com/photo-1507473885765-e6ed057ab6fe?w=600&q=80',
+  },
+  {
+    id: 'etec-glowup',
+    name: 'GlowUp',
+    tagline: 'Beauté · Makeup · Glamour',
+    desc: 'Rose glamour, galerie UGC, routine maquillage. Guide teinte interactif, before/after, social proof massif. Pour makeup, skincare, beauté féminine.',
+    accent: '#D4508B',
+    badgeBg: '#D4508B',
+    badge: 'Beauté',
+    cvr: '5.1%',
+    niches: ['Beauté', 'Skincare', 'Fashion'],
+    fn: templateEtecGlowup,
+    sample: SAMPLE_GLOWUP,
+    preview: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80',
+  },
+  {
+    id: 'etec-hue',
+    name: 'Hue',
+    tagline: 'Créatif · Couleurs · Audacieux',
+    desc: 'Orange vif et couleurs vibrantes, design bold et créatif. Galerie artistique, typographie expressive, mise en page audacieuse. Pour art, déco, créatifs.',
+    accent: '#FF6B35',
+    badgeBg: '#FF6B35',
+    badge: 'Créatif',
+    cvr: '4.3%',
+    niches: ['Lifestyle', 'Maison', 'E-commerce'],
+    fn: templateEtecHue,
+    sample: SAMPLE_HUE,
+    preview: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=600&q=80',
+  },
+  {
+    id: 'etec-interior',
+    name: 'Interior',
+    tagline: 'Mobilier · Intérieur · Nature',
+    desc: 'Vert nature, lifestyle maison, design organique. Photos ambiance, dimensions produit, matériaux détaillés. Pour mobilier, décoration intérieure, design.',
+    accent: '#5B7553',
+    badgeBg: '#5B7553',
+    badge: 'Maison',
+    cvr: '4.5%',
+    niches: ['Maison', 'Lifestyle', 'Bio'],
+    fn: templateEtecInterior,
+    sample: SAMPLE_INTERIOR,
+    preview: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80',
+  },
+  {
+    id: 'etec-platina',
+    name: 'Platina',
+    tagline: 'Bijoux · Joaillerie · Raffiné',
+    desc: 'Doré raffiné, serif premium, mise en valeur des pièces uniques. Zoom détail, certificats, storytelling artisan. Pour bijoux, montres, joaillerie fine.',
+    accent: '#B8860B',
+    badgeBg: '#B8860B',
+    badge: 'Luxe',
+    cvr: '4.9%',
+    niches: ['Luxe', 'Fashion', 'E-commerce'],
+    fn: templateEtecPlatina,
+    sample: SAMPLE_PLATINA,
+    preview: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80',
+  },
+  {
+    id: 'etec-streetz',
+    name: 'StreetZ',
+    tagline: 'Streetwear · Urban · Bold',
+    desc: 'Rouge bold, design audacieux, mode urbaine. Drop countdown, stock limité, packaging collector. Pour streetwear, sneakers, urban fashion.',
+    accent: '#E11D48',
+    badgeBg: '#E11D48',
+    badge: 'Fashion',
+    cvr: '5.2%',
+    niches: ['Fashion', 'Lifestyle', 'E-commerce'],
+    fn: templateEtecStreetz,
+    sample: SAMPLE_STREETZ,
+    preview: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80',
+  },
+  {
+    id: 'etec-poterie',
+    name: 'Poterie',
+    tagline: 'Céramique · Artisanat · Terre',
+    desc: 'Tons terre cuite, style artisanal authentique. Photos atelier, processus de fabrication, pièces uniques signées. Pour céramique, poterie, artisanat d\'art.',
+    accent: '#A0522D',
+    badgeBg: '#A0522D',
+    badge: 'Artisanat',
+    cvr: '4.4%',
+    niches: ['Bio', 'Artisanat', 'Maison'],
+    fn: templateEtecPoterie,
+    sample: SAMPLE_POTERIE,
+    preview: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=600&q=80',
+  },
+  {
+    id: 'etec-electro',
+    name: 'Electro',
+    tagline: 'Supplements · Sport · Hydratation',
+    desc: 'Bleu cyan dynamique, visuel sport & performance. Ingrédients détaillés, validation athlètes, abonnement. Pour supplements, nutrition sportive, hydratation.',
+    accent: '#00B4D8',
+    badgeBg: '#00B4D8',
+    badge: 'Health',
+    cvr: '4.8%',
+    niches: ['Health', 'Wellness', 'E-commerce'],
+    fn: templateEtecElectro,
+    sample: SAMPLE_ELECTRO,
+    preview: 'https://images.unsplash.com/photo-1622543925917-763c34d1a86e?w=600&q=80',
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -1308,7 +1718,7 @@ export default function TemplatesPage() {
   const [selected, setSelected] = useState<typeof TEMPLATES[0] | null>(null)
   const [activeFilter, setActiveFilter] = useState('Tous')
 
-  const FILTERS = ['Tous', 'Tech', 'Beauté', 'Bio', 'Luxe', 'Fashion', 'Hair Care', 'Skincare', 'Health', 'Maison', 'Animaux', 'Électronique', 'Wellness', 'Gaming', 'Lifestyle', 'E-commerce']
+  const FILTERS = ['Tous', 'Tech', 'Beauté', 'Bio', 'Luxe', 'Fashion', 'Hair Care', 'Skincare', 'Health', 'Maison', 'Animaux', 'Électronique', 'Wellness', 'Gaming', 'Lifestyle', 'E-commerce', 'Artisanat', 'Créatif']
 
   const filtered = TEMPLATES.filter(t => {
     if (activeFilter === 'Tous') return true

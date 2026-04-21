@@ -50,6 +50,16 @@ const STYLES = [
   { id: 'etec-jewel',      name: 'Jewel',     desc: 'Bijoux dark luxe — fond sombre, accents dorés, joaillerie premium',        emoji: '💎' },
   { id: 'etec-techcase',   name: 'TechCase',  desc: 'Accessoires tech — minimal noir, coques phone, gadgets Apple style',       emoji: '📱' },
   { id: 'etec-artisan',    name: 'Artisan',   desc: 'Handmade & naturel — tons orangés, savon artisanal, fait main',           emoji: '🧼' },
+  { id: 'etec-outfit',     name: 'Outfit',    desc: 'Vêtements e-com — tons neutres chauds, galerie lookbook, warm neutral',   emoji: '👕' },
+  { id: 'etec-ella',       name: 'Ella',      desc: 'Mode féminine — mauve élégant, serif raffiné, lifestyle féminin',        emoji: '👠' },
+  { id: 'etec-starter',    name: 'Starter',   desc: 'Polyvalent & clean — indigo, design universel, idéal pour débuter',      emoji: '🚀' },
+  { id: 'etec-glowup',     name: 'GlowUp',   desc: 'Beauté & makeup — rose glamour, galerie UGC, routine maquillage',        emoji: '💄' },
+  { id: 'etec-hue',        name: 'Hue',       desc: 'Créatif & audacieux — orange vif, couleurs vibrantes, design bold',      emoji: '🎨' },
+  { id: 'etec-interior',   name: 'Interior',  desc: 'Mobilier & intérieur — vert nature, lifestyle maison, design organique', emoji: '🪴' },
+  { id: 'etec-platina',    name: 'Platina',   desc: 'Bijoux & joaillerie — doré raffiné, serif premium, pièces uniques',      emoji: '💍' },
+  { id: 'etec-streetz',    name: 'StreetZ',   desc: 'Streetwear & urban — rouge bold, design audacieux, mode urbaine',        emoji: '🧢' },
+  { id: 'etec-poterie',    name: 'Poterie',   desc: 'Céramique & artisanat — terre cuite, fait main, style organique',        emoji: '🏺' },
+  { id: 'etec-electro',    name: 'Electro',   desc: 'Supplements & sport — bleu cyan, hydratation, energy boost',             emoji: '💧' },
 ]
 
 const TONES = [

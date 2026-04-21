@@ -71,7 +71,7 @@ export async function GET() {
     }
   }
 
-  // ── 3 & 4. Trial ────────────────────────────────────────────────────────────
+  // ── 3 & 4. Abonnement expiré ou bientôt ──────────────────────────────────
   if (subscription?.status === 'trialing') {
     const endMs = new Date(subscription.current_period_end).getTime()
     const daysLeft = Math.ceil((endMs - now) / 86_400_000)
@@ -80,15 +80,15 @@ export async function GET() {
       notifications.push({
         id: 'trial_expired',
         type: 'error',
-        title: 'Période d\'essai expirée',
-        body: 'Votre essai gratuit est terminé. Choisissez un plan pour continuer.',
+        title: 'Accès expiré',
+        body: 'Choisissez un plan pour continuer à utiliser KONVERT.',
         href: '/pricing',
       })
     } else if (daysLeft <= 3) {
       notifications.push({
         id: 'trial_ending',
         type: 'warning',
-        title: `Essai gratuit : ${daysLeft} jour${daysLeft > 1 ? 's' : ''} restant${daysLeft > 1 ? 's' : ''}`,
+        title: `Accès limité : ${daysLeft} jour${daysLeft > 1 ? 's' : ''} restant${daysLeft > 1 ? 's' : ''}`,
         body: 'Passez à un plan payant pour ne pas perdre vos données.',
         href: '/pricing',
       })

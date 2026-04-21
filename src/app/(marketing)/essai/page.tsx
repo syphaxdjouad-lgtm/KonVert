@@ -1,20 +1,38 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowRight, Loader2, Link2, Pencil, Sparkles } from 'lucide-react'
 
 type Step = 'email' | 'product' | 'generating'
 type InputMode = 'url' | 'manual'
 
 export default function EssaiPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen" style={{ background: '#0d0d1a' }} />}>
+      <EssaiContent />
+    </Suspense>
+  )
+}
+
+function EssaiContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [step, setStep] = useState<Step>('email')
   const [inputMode, setInputMode] = useState<InputMode>('url')
 
   // Champs
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
+
+  // Pré-remplir l'email si passé en query param (ex: depuis ExitIntentPopup)
+  useEffect(() => {
+    const emailParam = searchParams.get('email')
+    if (emailParam) {
+      setEmail(emailParam)
+      setStep('product')
+    }
+  }, [searchParams])
   const [url, setUrl] = useState('')
   const [productName, setProductName] = useState('')
   const [productDesc, setProductDesc] = useState('')

@@ -52,14 +52,14 @@ function p(text: string) {
   return `<p style="margin:0 0 16px;font-size:15px;color:rgba(196,181,253,0.8);line-height:1.6;">${text}</p>`
 }
 
-// ─── Templates ───────────────────────────────────────────────────────────────
+// ─── Templates (utilisateurs avec compte) ────────────────────────────────────
 
 export function emailWelcome(name: string) {
   return {
-    subject: `Bienvenue dans la bêta KONVERT, ${name} 🎉`,
+    subject: `Bienvenue sur KONVERT, ${name} 🎉`,
     html: layout(`
       ${h1(`Bienvenue ${name}, t'es dans la place.`)}
-      ${p(`Ton essai de <strong style="color:#a78bfa;">14 jours</strong> commence maintenant. Voilà par où démarrer :`)}
+      ${p(`Ton compte est actif. Voilà comment démarrer :`)}
 
       <table style="width:100%;margin:24px 0;">
         ${['Colle un lien AliExpress/Amazon → KONVERT scrape le produit', 'L\'IA génère le copy de ta landing page en 30 secondes', 'Connecte ton Shopify et publie en 1 clic'].map((step, i) => `
@@ -103,7 +103,7 @@ export function emailDay1(name: string) {
         </tr>`).join('')}
       </table>
 
-      ${p(`Il te reste <strong style="color:#a78bfa;">13 jours</strong> d'essai. La page est générée en moins d'une minute.`)}
+      ${p(`La page est générée en moins d'une minute. Teste sur n'importe quel produit.`)}
       <div style="text-align:center;margin-top:28px;">
         ${btn('Créer ma première page →', 'https://konvert.app/dashboard/new')}
       </div>
@@ -115,8 +115,8 @@ export function emailDay3(name: string) {
   return {
     subject: `${name}, t'as essayé le scraper ? ⚡`,
     html: layout(`
-      ${h1(`Il reste 11 jours sur ton essai.`)}
-      ${p(`La fonctionnalité que nos bêta-testeurs adorent le plus : <strong style="color:#a78bfa;">le scraper automatique</strong>.`)}
+      ${h1(`Le scraper, t'as testé ?`)}
+      ${p(`La fonctionnalité que nos utilisateurs adorent le plus : <strong style="color:#a78bfa;">le scraper automatique</strong>.`)}
       ${p(`Colle un lien produit AliExpress ou Amazon → KONVERT récupère le titre, les images, le prix et génère une landing page complète en moins de 60 secondes.`)}
       ${p(`Teste-le maintenant sur n'importe quel produit de ton catalogue.`)}
       <div style="text-align:center;margin-top:28px;">
@@ -128,16 +128,16 @@ export function emailDay3(name: string) {
 
 export function emailDay7(name: string) {
   return {
-    subject: `${name}, à mi-chemin de ton essai — bilan ?`,
+    subject: `${name}, comment ça se passe avec KONVERT ?`,
     html: layout(`
-      ${h1(`7 jours. Qu'est-ce que tu en penses ?`)}
-      ${p(`Tu es à la moitié de ton essai KONVERT. On veut savoir ce qui marche et ce qui peut être amélioré pour toi.`)}
+      ${h1(`Ça fait une semaine. Ton retour ?`)}
+      ${p(`Tu utilises KONVERT depuis 7 jours. On veut savoir ce qui marche et ce qui peut être amélioré pour toi.`)}
 
       <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:16px;padding:20px;margin:20px 0;">
         <p style="margin:0;font-size:14px;color:rgba(196,181,253,0.9);font-style:italic;">
           "Les landing pages KONVERT convertissent mieux que tout ce qu'on avait fait avant. Le scraper fait gagner 2h par produit."
         </p>
-        <p style="margin:8px 0 0;font-size:12px;color:rgba(167,139,250,0.6);">— Bêta testeur, e-commerçant dropshipping</p>
+        <p style="margin:8px 0 0;font-size:12px;color:rgba(167,139,250,0.6);">— E-commerçant dropshipping</p>
       </div>
 
       ${p(`Si t'as des questions ou des blocages, réponds directement à cet email — je réponds personnellement.`)}
@@ -150,16 +150,16 @@ export function emailDay7(name: string) {
 
 export function emailDay10(name: string) {
   return {
-    subject: `⏳ ${name}, il reste 4 jours sur ton essai`,
+    subject: `${name}, tu utilises tout le potentiel de KONVERT ?`,
     html: layout(`
-      ${h1(`4 jours restants.`)}
-      ${p(`Ton essai gratuit se termine dans <strong style="color:#f59e0b;">4 jours</strong>. Pour ne pas perdre tes pages et continuer à convertir :`)}
+      ${h1(`Tu profites de tout ?`)}
+      ${p(`Beaucoup d'utilisateurs ne connaissent pas encore toutes les fonctionnalités. Voilà ce que tu peux faire :`)}
 
       <table style="width:100%;margin:20px 0;border-collapse:collapse;">
         ${[
-          ['Starter — 39€/mois', 'Jusqu\'à 10 pages actives, scraper inclus'],
-          ['Pro — 79€/mois', '50 pages, multi-boutiques, analytics avancés'],
-          ['Agency — 199€/mois', 'Pages illimitées, clients illimités, mode agence'],
+          ['Starter — 39€/mois', 'Jusqu\'à 50 pages actives, scraper inclus'],
+          ['Pro — 79€/mois', '200 pages, multi-boutiques, analytics avancés'],
+          ['Agency — 199€/mois', '500 pages, clients illimités, mode agence'],
         ].map(([plan, desc]) => `
         <tr>
           <td style="padding:12px;border-bottom:1px solid rgba(139,92,246,0.1);">
@@ -170,7 +170,7 @@ export function emailDay10(name: string) {
       </table>
 
       <div style="text-align:center;margin-top:28px;">
-        ${btn('Choisir mon plan →', 'https://konvert.app/pricing')}
+        ${btn('Voir les plans →', 'https://konvert.app/pricing')}
       </div>
     `),
   }
@@ -178,21 +178,20 @@ export function emailDay10(name: string) {
 
 export function emailDay12(name: string) {
   return {
-    subject: `⚠️ ${name}, encore 2 jours sur ton essai KONVERT`,
+    subject: `${name}, besoin d'aide avec KONVERT ?`,
     html: layout(`
-      ${h1(`2 jours restants.`)}
-      ${p(`Ton essai KONVERT se termine dans <strong style="color:#f59e0b;">48 heures</strong>.`)}
-      ${p(`Souscris maintenant pour garder l'accès à toutes tes pages et continuer à convertir sans interruption.`)}
+      ${h1(`On peut t'aider.`)}
+      ${p(`Si tu n'as pas encore trouvé ton rythme avec KONVERT, on est là. Voilà ce que tu gardes avec ton plan :`)}
 
       <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:16px;padding:20px;margin:20px 0;">
-        <p style="margin:0 0 12px;font-size:13px;font-weight:700;color:rgba(167,139,250,0.9);">CE QUE TU GARDES</p>
-        ${['Toutes tes pages créées pendant l\'essai', 'Accès au scraper IA 24h/7j', 'Push direct vers Shopify &amp; WooCommerce'].map(item => `
+        <p style="margin:0 0 12px;font-size:13px;font-weight:700;color:rgba(167,139,250,0.9);">CE QUE TU AS</p>
+        ${['Toutes tes pages créées restent actives', 'Accès au scraper IA 24h/7j', 'Push direct vers Shopify &amp; WooCommerce'].map(item => `
         <p style="margin:0 0 8px;font-size:14px;color:rgba(196,181,253,0.85);">✓ ${item}</p>
         `).join('')}
       </div>
 
       <div style="text-align:center;margin-top:24px;">
-        ${btn('Activer mon abonnement →', 'https://konvert.app/pricing')}
+        ${btn('Voir mon dashboard →', 'https://konvert.app/dashboard')}
       </div>
       ${p(`<small style="color:rgba(167,139,250,0.5);">Questions ? Réponds directement à cet email.</small>`)}
     `),
@@ -201,11 +200,10 @@ export function emailDay12(name: string) {
 
 export function emailDay13(name: string) {
   return {
-    subject: `🚨 ${name}, dernière chance — ton essai expire demain`,
+    subject: `${name}, une offre spéciale pour toi`,
     html: layout(`
-      ${h1(`Demain, ton essai se termine.`)}
-      ${p(`Dans <strong style="color:#ef4444;">24 heures</strong>, tu perdras l'accès à tes pages et au scraper KONVERT.`)}
-      ${p(`Souscris maintenant pour conserver tout ce que tu as créé pendant ta période d'essai.`)}
+      ${h1(`On a quelque chose pour toi.`)}
+      ${p(`Pour te remercier d'utiliser KONVERT, voilà une offre exclusive :`)}
 
       <div style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);border-radius:16px;padding:20px;margin:20px 0;text-align:center;">
         <p style="margin:0 0 4px;font-size:13px;color:rgba(74,222,128,0.8);font-weight:700;">OFFRE DE LANCEMENT</p>
@@ -214,7 +212,7 @@ export function emailDay13(name: string) {
       </div>
 
       <div style="text-align:center;margin-top:20px;">
-        ${btn('Activer mon abonnement →', 'https://konvert.app/pricing')}
+        ${btn('Profiter de l\'offre →', 'https://konvert.app/pricing')}
       </div>
     `),
   }
@@ -222,16 +220,15 @@ export function emailDay13(name: string) {
 
 export function emailDay14(name: string) {
   return {
-    subject: `${name}, ton essai KONVERT est terminé`,
+    subject: `${name}, ton avis compte pour nous`,
     html: layout(`
-      ${h1(`Ton essai est terminé.`)}
-      ${p(`Merci d'avoir testé KONVERT pendant ces 14 jours. Tes pages sont en pause mais pas supprimées — elles t'attendent.`)}
-      ${p(`Si tu veux continuer à convertir avec des landing pages IA, il suffit de choisir un plan. Tes données sont intactes.`)}
-      ${p(`Si l'expérience n'a pas été à la hauteur, réponds à cet email et dis-moi pourquoi — je veux comprendre.`)}
+      ${h1(`Comment s'est passée ton expérience ?`)}
+      ${p(`Tu utilises KONVERT depuis deux semaines. On aimerait avoir ton retour pour continuer à améliorer le produit.`)}
+      ${p(`Si l'expérience a été positive, continue à convertir. Si quelque chose peut être amélioré, réponds à cet email — je lis tout personnellement.`)}
       <div style="text-align:center;margin-top:28px;">
-        ${btn('Réactiver mon compte →', 'https://konvert.app/pricing')}
+        ${btn('Voir mon dashboard →', 'https://konvert.app/dashboard')}
       </div>
-      ${p(`<small style="color:rgba(167,139,250,0.5);">P.S. Si tu veux un accès prolongé gratuitement, réponds à cet email en me disant comment KONVERT pourrait mieux coller à tes besoins.</small>`)}
+      ${p(`<small style="color:rgba(167,139,250,0.5);">P.S. Si tu veux en discuter, réponds directement.</small>`)}
     `),
   }
 }

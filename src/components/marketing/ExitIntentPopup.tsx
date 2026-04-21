@@ -1,11 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { X, CheckCircle } from 'lucide-react'
 
 const SESSION_KEY = 'konvert-exit-intent-shown'
 
 export default function ExitIntentPopup() {
+  const router = useRouter()
   const [visible, setVisible] = useState(false)
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
@@ -35,6 +37,10 @@ export default function ExitIntentPopup() {
     e.preventDefault()
     if (!email) return
     setSubmitted(true)
+    // Redirige vers /essai après un court délai pour montrer la confirmation
+    setTimeout(() => {
+      router.push(`/essai?email=${encodeURIComponent(email)}`)
+    }, 1200)
   }
 
   if (!visible) return null

@@ -458,7 +458,7 @@ const SAMPLE_PULSE: LandingPageData = {
   price: '89',
   original_price: '129',
   images: [
-    'https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=800&q=80',
+    'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',
     'https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=800&q=80',
   ],
 }

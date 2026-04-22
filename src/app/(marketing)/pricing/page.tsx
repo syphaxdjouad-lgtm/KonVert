@@ -473,7 +473,7 @@ function PricingContent() {
             {[
               { feature: 'Pages / mois',     values: ['75', '300', 'Illimitées', 'Illimitées'] },
               { feature: 'Stores connectés', values: ['2', '7', 'Illimités', 'Illimités'] },
-              { feature: 'Templates',        values: ['17', 'Tous', 'Tous', 'Tous'] },
+              { feature: 'Templates',        values: ['42+', 'Tous', 'Tous', 'Tous'] },
               { feature: 'Copy AI',          values: [true, true, true, true] },
               { feature: 'Export HTML',      values: [true, true, true, true] },
               { feature: 'Analytics',        values: [false, true, true, true] },

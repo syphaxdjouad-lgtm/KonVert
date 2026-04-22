@@ -182,8 +182,8 @@ export default function AgencePage() {
         <div className="max-w-3xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-10">
             <p className="text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">Plan Agence</p>
-            <h2 className="text-3xl font-black text-gray-900">149€/mois. Tout compris.</h2>
-            <p className="text-gray-500 mt-2 text-sm">Ou 119€/mois en annuel — soit 2 mois offerts.</p>
+            <h2 className="text-3xl font-black text-gray-900">199€/mois. Tout compris.</h2>
+            <p className="text-gray-500 mt-2 text-sm">Ou 159€/mois en annuel — soit 2 mois offerts.</p>
           </div>
 
           <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm">

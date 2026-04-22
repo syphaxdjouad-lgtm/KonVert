@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Politique de confidentialite — Konvert',
-  description: 'Politique de confidentialite et RGPD du service Konvert — konvert.app',
+  title: 'Politique de confidentialité — Konvert',
+  description: 'Politique de confidentialité et RGPD du service Konvert — konvert.app',
 }
 
 export default function PrivacyPage() {
@@ -11,8 +11,8 @@ export default function PrivacyPage() {
     <>
       <section className="pt-32 pb-14" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
-          <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">Politique de confidentialite</h1>
-          <p className="text-sm" style={{ color: '#8b8baa' }}>Derniere mise a jour : 21 avril 2026 — Conforme RGPD</p>
+          <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">Politique de confidentialité</h1>
+          <p className="text-sm" style={{ color: '#8b8baa' }}>Dernière mise à jour : 22 avril 2026 — Conforme RGPD</p>
         </div>
       </section>
 
@@ -21,55 +21,55 @@ export default function PrivacyPage() {
 
           <H2 first>1. Responsable du traitement</H2>
           <P>
-            Le responsable du traitement des donnees personnelles est <strong>Konvert SAS</strong>, dont le siege
-            social est situe en France. Pour toute question relative a vos donnees personnelles :{' '}
+            Le responsable du traitement des données personnelles est <strong>Konvert SAS</strong>, dont le siège
+            social est situé en France. Pour toute question relative à vos données personnelles :{' '}
             <A href="mailto:privacy@konvert.app">privacy@konvert.app</A>.
           </P>
 
-          <H2>2. Donnees collectees</H2>
+          <H2>2. Données collectées</H2>
 
-          <h3 className="text-base font-semibold text-gray-800 mb-2 mt-4">Donnees d&apos;identification</h3>
-          <Ul items={['Nom et prenom', 'Adresse email', 'Mot de passe (chiffre)']} />
+          <h3 className="text-base font-semibold text-gray-800 mb-2 mt-4">Données d&apos;identification</h3>
+          <Ul items={['Nom et prénom', 'Adresse email', 'Mot de passe (chiffré)']} />
 
-          <h3 className="text-base font-semibold text-gray-800 mb-2">Donnees de facturation</h3>
+          <h3 className="text-base font-semibold text-gray-800 mb-2">Données de facturation</h3>
           <Ul items={[
-            'Informations de paiement (traitees par Stripe, jamais stockees sur nos serveurs)',
+            'Informations de paiement (traitées par Stripe, jamais stockées sur nos serveurs)',
             'Adresse de facturation',
             'Historique des transactions',
           ]} />
 
-          <h3 className="text-base font-semibold text-gray-800 mb-2">Donnees d&apos;utilisation</h3>
+          <h3 className="text-base font-semibold text-gray-800 mb-2">Données d&apos;utilisation</h3>
           <Ul items={[
-            'Pages generees et leur contenu',
-            "Boutiques connectees (URL, tokens d'acces OAuth)",
+            'Pages générées et leur contenu',
+            "Boutiques connectées (URL, tokens d'accès OAuth)",
             "Statistiques d'utilisation (nombre de pages, vues, clics)",
           ]} />
 
-          <h3 className="text-base font-semibold text-gray-800 mb-2">Donnees techniques</h3>
+          <h3 className="text-base font-semibold text-gray-800 mb-2">Données techniques</h3>
           <Ul items={[
             'Adresse IP',
-            "Type de navigateur et systeme d'exploitation",
-            'Pages visitees et duree de visite',
+            "Type de navigateur et système d'exploitation",
+            'Pages visitées et durée de visite',
             'Cookies et identifiants de session',
           ]} />
 
-          <H2>3. Finalites du traitement</H2>
+          <H2>3. Finalités du traitement</H2>
           <div className="overflow-x-auto mb-6">
             <table className="w-full text-sm text-gray-600 border-collapse">
               <thead>
                 <tr className="border-b-2 border-gray-200">
-                  <th className="text-left py-3 pr-4 font-bold text-gray-900">Finalite</th>
-                  <th className="text-left py-3 pr-4 font-bold text-gray-900">Base legale</th>
-                  <th className="text-left py-3 font-bold text-gray-900">Duree</th>
+                  <th className="text-left py-3 pr-4 font-bold text-gray-900">Finalité</th>
+                  <th className="text-left py-3 pr-4 font-bold text-gray-900">Base légale</th>
+                  <th className="text-left py-3 font-bold text-gray-900">Durée</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['Gestion du compte utilisateur', 'Execution du contrat', 'Duree du compte + 30 jours'],
-                  ['Facturation et paiements', 'Obligation legale', '10 ans (obligation comptable)'],
-                  ['Generation de landing pages', 'Execution du contrat', 'Duree du compte + 30 jours'],
-                  ['Emails transactionnels et sequences', 'Interet legitime', "Jusqu'a desinscription"],
-                  ['Amelioration du Service', 'Interet legitime', '26 mois (donnees anonymisees)'],
+                  ['Gestion du compte utilisateur', 'Exécution du contrat', 'Durée du compte + 30 jours'],
+                  ['Facturation et paiements', 'Obligation légale', '10 ans (obligation comptable)'],
+                  ['Génération de landing pages', 'Exécution du contrat', 'Durée du compte + 30 jours'],
+                  ['Emails transactionnels et séquences', 'Intérêt légitime', "Jusqu'à désinscription"],
+                  ['Amélioration du Service', 'Intérêt légitime', '26 mois (données anonymisées)'],
                   ["Mesure d'audience", 'Consentement', '13 mois'],
                 ].map(([f, b, d]) => (
                   <tr key={f} className="border-b border-gray-100">
@@ -82,24 +82,24 @@ export default function PrivacyPage() {
             </table>
           </div>
 
-          <H2>4. Sous-traitants et transferts de donnees</H2>
-          <P>Vos donnees peuvent etre traitees par les sous-traitants suivants :</P>
+          <H2>4. Sous-traitants et transferts de données</H2>
+          <P>Vos données peuvent être traitées par les sous-traitants suivants :</P>
           <div className="overflow-x-auto mb-4">
             <table className="w-full text-sm text-gray-600 border-collapse">
               <thead>
                 <tr className="border-b-2 border-gray-200">
                   <th className="text-left py-3 pr-4 font-bold text-gray-900">Sous-traitant</th>
-                  <th className="text-left py-3 pr-4 font-bold text-gray-900">Finalite</th>
+                  <th className="text-left py-3 pr-4 font-bold text-gray-900">Finalité</th>
                   <th className="text-left py-3 font-bold text-gray-900">Localisation</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['Supabase', 'Base de donnees et authentification', 'EU (Francfort)'],
-                  ['Vercel', 'Hebergement (region cdg1 Paris)', 'France'],
+                  ['Supabase', 'Base de données et authentification', 'EU (Francfort)'],
+                  ['Vercel', 'Hébergement (région cdg1 Paris)', 'France'],
                   ['Stripe', 'Paiement', 'EU / USA (SCC)'],
                   ['Resend', "Envoi d'emails", 'USA (SCC)'],
-                  ['Anthropic (Claude AI)', 'Generation de contenu', 'USA (SCC)'],
+                  ['Anthropic (Claude AI)', 'Génération de contenu', 'USA (SCC)'],
                 ].map(([name, purpose, loc]) => (
                   <tr key={name} className="border-b border-gray-100">
                     <td className="py-3 pr-4 font-medium">{name}</td>
@@ -111,49 +111,49 @@ export default function PrivacyPage() {
             </table>
           </div>
           <P>
-            Les transferts vers les USA sont encadres par des Clauses Contractuelles Types (SCC) approuvees par la Commission europeenne.
+            Les transferts vers les USA sont encadrés par des Clauses Contractuelles Types (SCC) approuvées par la Commission européenne.
           </P>
 
           <H2>5. Vos droits (RGPD)</H2>
-          <P>Conformement au RGPD, vous disposez des droits suivants :</P>
+          <P>Conformément au RGPD, vous disposez des droits suivants :</P>
           <ul className="text-sm text-gray-600 leading-relaxed mb-4 list-disc pl-5 space-y-1">
-            <li><strong>Droit d&apos;acces :</strong> obtenir une copie de vos donnees personnelles</li>
-            <li><strong>Droit de rectification :</strong> corriger vos donnees inexactes ou incompletes</li>
-            <li><strong>Droit de suppression :</strong> demander l&apos;effacement de vos donnees</li>
-            <li><strong>Droit a la portabilite :</strong> recevoir vos donnees dans un format structure et lisible</li>
-            <li><strong>Droit d&apos;opposition :</strong> vous opposer au traitement de vos donnees pour motif legitime</li>
-            <li><strong>Droit a la limitation :</strong> demander la suspension du traitement de vos donnees</li>
-            <li><strong>Droit de retirer votre consentement :</strong> a tout moment pour les traitements bases sur le consentement</li>
+            <li><strong>Droit d&apos;accès :</strong> obtenir une copie de vos données personnelles</li>
+            <li><strong>Droit de rectification :</strong> corriger vos données inexactes ou incomplètes</li>
+            <li><strong>Droit de suppression :</strong> demander l&apos;effacement de vos données</li>
+            <li><strong>Droit à la portabilité :</strong> recevoir vos données dans un format structuré et lisible</li>
+            <li><strong>Droit d&apos;opposition :</strong> vous opposer au traitement de vos données pour motif légitime</li>
+            <li><strong>Droit à la limitation :</strong> demander la suspension du traitement de vos données</li>
+            <li><strong>Droit de retirer votre consentement :</strong> à tout moment pour les traitements basés sur le consentement</li>
           </ul>
           <P>
-            Pour exercer ces droits, envoyez un email a <A href="mailto:privacy@konvert.app">privacy@konvert.app</A> avec
-            une copie de votre piece d&apos;identite. Nous repondrons sous 30 jours.
+            Pour exercer ces droits, envoyez un email à <A href="mailto:privacy@konvert.app">privacy@konvert.app</A> avec
+            une copie de votre pièce d&apos;identité. Nous répondrons sous 30 jours.
           </P>
           <P>
-            Vous avez egalement le droit d&apos;introduire une reclamation aupres de la <strong>CNIL</strong> (Commission
-            Nationale de l&apos;Informatique et des Libertes) : <strong>cnil.fr</strong>.
+            Vous avez également le droit d&apos;introduire une réclamation auprès de la <strong>CNIL</strong> (Commission
+            Nationale de l&apos;Informatique et des Libertés) : <strong>cnil.fr</strong>.
           </P>
 
-          <H2>6. Securite des donnees</H2>
-          <P>Nous mettons en place les mesures suivantes pour proteger vos donnees :</P>
+          <H2>6. Sécurité des données</H2>
+          <P>Nous mettons en place les mesures suivantes pour protéger vos données :</P>
           <Ul items={[
-            'Chiffrement des donnees en transit (TLS 1.3) et au repos',
-            'Authentification securisee avec hachage bcrypt des mots de passe',
-            'Row Level Security (RLS) sur toutes les tables de la base de donnees',
-            "Tokens d'acces OAuth chiffres pour les integrations tierces",
-            'Revue reguliere des acces et des permissions',
+            'Chiffrement des données en transit (TLS 1.3) et au repos',
+            'Authentification sécurisée avec hachage bcrypt des mots de passe',
+            'Row Level Security (RLS) sur toutes les tables de la base de données',
+            "Tokens d'accès OAuth chiffrés pour les intégrations tierces",
+            'Revue régulière des accès et des permissions',
           ]} />
 
           <H2>7. Cookies</H2>
           <P>
-            Notre utilisation des cookies est detaillee dans notre{' '}
+            Notre utilisation des cookies est détaillée dans notre{' '}
             <Link href="/legal/cookies" className="text-[#5B47F5] font-semibold hover:underline">politique de cookies</Link>.
           </P>
 
           <H2>8. Modifications</H2>
           <P last>
-            Nous pouvons mettre a jour cette politique periodiquement. Toute modification substantielle sera notifiee
-            par email ou par notification dans le Service au moins 15 jours avant son entree en vigueur.
+            Nous pouvons mettre à jour cette politique périodiquement. Toute modification substantielle sera notifiée
+            par email ou par notification dans le Service au moins 15 jours avant son entrée en vigueur.
           </P>
 
           <Nav current="privacy" />
@@ -183,9 +183,9 @@ function Nav({ current }: { current: string }) {
   const links = [
     { href: '/legal/cgu', label: 'CGU' },
     { href: '/legal/cgv', label: 'CGV' },
-    { href: '/legal/privacy', label: 'Confidentialite' },
+    { href: '/legal/privacy', label: 'Confidentialité' },
     { href: '/legal/cookies', label: 'Cookies' },
-    { href: '/legal/mentions', label: 'Mentions legales' },
+    { href: '/legal/mentions', label: 'Mentions légales' },
   ]
   return (
     <div className="mt-10 pt-8 border-t border-gray-100 flex flex-wrap gap-4 text-sm">

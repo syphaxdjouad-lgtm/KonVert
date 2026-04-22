@@ -34,7 +34,7 @@ const PLANS = [
     features: [
       '75 pages / mois',
       '2 stores connectés',
-      '38+ templates',
+      '42+ templates',
       'Génération copy AI',
       'Export HTML',
       'Support email',

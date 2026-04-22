@@ -247,7 +247,7 @@ export default function AboutPage() {
                 { year: '2024 T2', event: 'Premiers bêta-testeurs. 100 pages générées en 2 semaines.', col: '#10b981' },
                 { year: '2024 T3', event: 'Lancement public. Intégration Shopify & WooCommerce native.', col: '#f97316' },
                 { year: '2024 T4', event: '2 800 boutiques connectées. 50 000 pages générées.', col: '#ec4899' },
-                { year: '2025', event: "Lancement des 17 templates, de l'A/B testing et du mode Agence.", col: '#8b77ff' },
+                { year: '2025', event: "Lancement des 42 templates, de l'A/B testing et du mode Agence.", col: '#8b77ff' },
               ].map(({ year, event, col }) => (
                 <div key={year} className="flex gap-4 items-start">
                   <div className="w-16 flex-shrink-0 pt-0.5">

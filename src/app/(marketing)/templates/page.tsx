@@ -1742,7 +1742,7 @@ export default function TemplatesPage() {
             ← Retour
           </button>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm mb-6" style={{ background: 'rgba(91,71,245,0.08)', border: '1px solid rgba(91,71,245,0.15)', color: '#5B47F5' }}>
-            12 templates · chaque niche a son design
+            42 templates · chaque niche a son design
           </div>
           <h1 className="text-5xl sm:text-6xl font-black leading-tight tracking-tight mb-5" style={{ color: '#0f0f1a' }}>
             Le bon design pour{' '}
@@ -1793,7 +1793,7 @@ export default function TemplatesPage() {
             <span style={{ color: '#5B47F5' }}>Pro.</span>
           </h2>
           <p className="text-base mb-8" style={{ color: 'rgba(255,255,255,0.45)' }}>
-            Accédez aux 12 templates, aux mises à jour futures et aux nouveaux designs dès leur sortie.
+            Accédez aux 42 templates, aux mises à jour futures et aux nouveaux designs dès leur sortie.
           </p>
           <a
             href="/signup"

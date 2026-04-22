@@ -431,7 +431,7 @@ export default function DemoPage() {
                   style={{ borderColor: 'rgba(255,255,255,0.2)', color: '#fff' }}
                 >
                   <Palette className="w-4 h-4" />
-                  Voir les 17 templates
+                  Voir les 42 templates
                 </Link>
               </div>
             </div>

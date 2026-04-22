@@ -28,7 +28,7 @@ const GUIDES = [
   {
     icon: BookOpen,
     title: 'Guide des templates',
-    desc: 'Découvrez nos 17 templates produits et leurs cas d\'usage.',
+    desc: 'Découvrez nos 42 templates produits et leurs cas d\'usage.',
     href: '/templates',
     cta: 'Voir les templates',
   },

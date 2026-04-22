@@ -61,7 +61,7 @@ const VERSIONS = [
     badgeColor: '',
     changes: [
       { type: 'new', text: 'Connexion Shopify OAuth 2.0' },
-      { type: 'new', text: '17 templates produits haute conversion' },
+      { type: 'new', text: '42 templates produits haute conversion' },
       { type: 'new', text: 'Scraper AliExpress / Amazon / Alibaba' },
       { type: 'improved', text: 'Interface de démo interactive avec preview live' },
     ],

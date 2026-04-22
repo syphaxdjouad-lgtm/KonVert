@@ -380,7 +380,7 @@ const SAMPLE_BLUSHO: LandingPageData = {
   original_price: '45',
   images: [
     'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&q=80',
-    'https://images.unsplash.com/photo-1570194065650-d99fb4ee3313?w=800&q=80',
+    'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80',
     'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=800&q=80',
   ],
 }
@@ -433,7 +433,7 @@ const SAMPLE_LUXE: LandingPageData = {
   original_price: '1290',
   images: [
     'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&q=80',
-    'https://images.unsplash.com/photo-1515562141589-67f0d8e18d2b?w=800&q=80',
+    'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80',
   ],
 }
 
@@ -588,7 +588,7 @@ const SAMPLE_PRESTIGE: LandingPageData = {
   price: '45',
   original_price: '65',
   images: [
-    'https://images.unsplash.com/photo-1602607688851-84460e2b0ea9?w=800&q=80',
+    'https://images.unsplash.com/photo-1618220179428-22790b461013?w=800&q=80',
     'https://images.unsplash.com/photo-1603006905003-be475563bc59?w=800&q=80',
   ],
 }
@@ -615,7 +615,7 @@ const SAMPLE_GLOW: LandingPageData = {
   original_price: '48',
   images: [
     'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80',
-    'https://images.unsplash.com/photo-1570194065650-d99fb4ee3313?w=800&q=80',
+    'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80',
   ],
 }
 
@@ -718,7 +718,7 @@ const SAMPLE_JEWEL: LandingPageData = {
   price: '79',
   original_price: '129',
   images: [
-    'https://images.unsplash.com/photo-1515562141589-67f0d569b6fc?w=800&q=80',
+    'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80',
     'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800&q=80',
   ],
 }
@@ -848,7 +848,7 @@ const SAMPLE_STARTER: LandingPageData = {
   price: '49',
   original_price: '69',
   images: [
-    'https://images.unsplash.com/photo-1507473885765-e6ed057ab6fe?w=800&q=80',
+    'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800&q=80',
     'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=800&q=80',
   ],
 }
@@ -953,7 +953,7 @@ const SAMPLE_PLATINA: LandingPageData = {
   original_price: '1890',
   images: [
     'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&q=80',
-    'https://images.unsplash.com/photo-1515562141589-67f0d569b6f5?w=800&q=80',
+    'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&q=80',
   ],
 }
 
@@ -1248,7 +1248,7 @@ const TEMPLATES = [
     niches: ['Luxe', 'Montres', 'Électronique', 'Fashion'],
     fn: templateEtecLuxe,
     sample: SAMPLE_LUXE,
-    preview: 'https://images.unsplash.com/photo-1515562141589-67f0d569b6fc?w=600&q=80',
+    preview: 'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=600&q=80',
   },
   {
     id: 'etec-pulse',
@@ -1332,7 +1332,7 @@ const TEMPLATES = [
     niches: ['Luxe', 'Artisanat', 'Maison', 'Lifestyle'],
     fn: templateEtecPrestige,
     sample: SAMPLE_PRESTIGE,
-    preview: 'https://images.unsplash.com/photo-1602607688851-84460e2b0ea9?w=600&q=80',
+    preview: 'https://images.unsplash.com/photo-1618220179428-22790b461013?w=600&q=80',
   },
   {
     id: 'etec-glow',
@@ -1346,7 +1346,7 @@ const TEMPLATES = [
     niches: ['Beauté', 'Skincare', 'Cosmétiques', 'Femme'],
     fn: templateEtecGlow,
     sample: SAMPLE_GLOW,
-    preview: 'https://images.unsplash.com/photo-1570194065650-d99fb4ee3313?w=600&q=80',
+    preview: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80',
   },
   {
     id: 'etec-gold',
@@ -1402,7 +1402,7 @@ const TEMPLATES = [
     niches: ['Luxe', 'Fashion', 'Cosmétiques', 'Lifestyle'],
     fn: templateEtecJewel,
     sample: SAMPLE_JEWEL,
-    preview: 'https://images.unsplash.com/photo-1515562141589-67f0d569b6fc?w=600&q=80',
+    preview: 'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=600&q=80',
   },
   {
     id: 'etec-techcase',
@@ -1472,7 +1472,7 @@ const TEMPLATES = [
     niches: ['Tech', 'E-commerce', 'Lifestyle', 'Health'],
     fn: templateEtecStarter,
     sample: SAMPLE_STARTER,
-    preview: 'https://images.unsplash.com/photo-1507473885765-e6ed057ab6fe?w=600&q=80',
+    preview: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&q=80',
   },
   {
     id: 'etec-glowup',

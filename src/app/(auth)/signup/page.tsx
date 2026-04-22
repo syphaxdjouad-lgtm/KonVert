@@ -122,101 +122,223 @@ function SignupContent() {
   return (
     <div className="min-h-screen flex" style={{ background: '#0d0d1a' }}>
 
-      {/* ── Colonne gauche — panneau visuel KONVERT ─────────────────────── */}
+      {/* ── Colonne gauche — showcase pages e-commerce ─────────────────── */}
       <div
         className="hidden lg:flex flex-col justify-between p-10 flex-shrink-0"
         style={{
           width: '50%',
           background: 'linear-gradient(160deg, #0d0b20 0%, #130f2e 50%, #0d0b20 100%)',
           borderRight: '1px solid rgba(139,92,246,0.15)',
+          overflow: 'hidden',
         }}
       >
         {/* Logo */}
-        <div>
+        <div className="relative z-10">
           <span className="font-black text-2xl tracking-tight" style={{ letterSpacing: '-0.03em' }}>
             <span style={{ color: '#fff' }}>KON</span>
             <span style={{ background: 'linear-gradient(135deg,#a78bfa,#7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>VERT</span>
           </span>
         </div>
 
-        {/* Titre central */}
-        <div className="flex-1 flex flex-col justify-center gap-10 py-10">
-          <div>
+        {/* Showcase central */}
+        <div className="flex-1 flex flex-col justify-center py-8 relative z-10">
+          <div className="mb-8">
             <h2 className="text-3xl font-black text-white leading-tight mb-3">
-              Génère ta première page<br />
+              Des pages qui<br />
               <span style={{ background: 'linear-gradient(135deg,#a78bfa,#7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                en 30 secondes.
+                donnent envie d&apos;acheter.
               </span>
             </h2>
             <p className="text-sm" style={{ color: 'rgba(167,139,250,0.55)' }}>
-              Rejoins 2 800+ e-commerçants qui convertissent avec KONVERT.
+              Rejoins 2 800+ e-commercants qui convertissent avec KONVERT.
             </p>
           </div>
 
-          {/* Témoignages */}
-          <div className="flex flex-col gap-4">
-            {[
-              {
-                quote: 'Ma CVR est passée de 1.2% à 4.8% en 1 semaine',
-                author: 'Mehdi B.',
-                role: 'Dropshippeur',
-                avatar: 'M',
-                color: '#7c3aed',
-              },
-              {
-                quote: "J'ai multiplié mon ROAS par 3 avec les templates KONVERT",
-                author: 'Sarah T.',
-                role: 'E-commerçante',
-                avatar: 'S',
-                color: '#10b981',
-              },
-              {
-                quote: 'On gère 23 clients avec une équipe de 4. Indispensable.',
-                author: 'Agence DigiScale',
-                role: 'Agence SMMA',
-                avatar: 'D',
-                color: '#f59e0b',
-              },
-            ].map((t) => (
-              <div
-                key={t.author}
-                className="flex gap-3 p-4 rounded-2xl"
-                style={{
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(139,92,246,0.15)',
-                }}
-              >
-                <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-black flex-shrink-0"
-                  style={{ background: t.color }}
-                >
-                  {t.avatar}
+          {/* Overlapping product page cards */}
+          <div className="relative" style={{ height: 340 }}>
+            {/* Card 1 — back left — Beauty store */}
+            <div
+              className="absolute rounded-2xl overflow-hidden shadow-2xl"
+              style={{
+                width: 260,
+                height: 300,
+                top: 20,
+                left: 0,
+                transform: 'rotate(-4deg)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                zIndex: 1,
+              }}
+            >
+              <div className="h-full bg-white flex flex-col">
+                {/* Mini navbar */}
+                <div className="flex items-center justify-between px-3 py-2" style={{ background: '#faf5f0', borderBottom: '1px solid #f0e8df' }}>
+                  <span className="text-[9px] font-bold text-gray-800">blusho</span>
+                  <div className="flex gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-white/80 leading-snug mb-1">&ldquo;{t.quote}&rdquo;</p>
-                  <p className="text-xs font-bold" style={{ color: 'rgba(167,139,250,0.55)' }}>
-                    {t.author} · {t.role}
+                {/* Hero image */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80"
+                  alt="Produits cosmétiques beauté"
+                  className="w-full h-32 object-cover"
+                />
+                {/* Content */}
+                <div className="p-3 flex-1">
+                  <p className="text-[8px] text-rose-400 font-semibold mb-0.5">BEAUTE & SOIN</p>
+                  <p className="text-[10px] font-bold text-gray-900 leading-tight mb-1.5">
+                    High Cosmetics<br />Product For You
                   </p>
+                  <div className="flex items-center gap-1 mb-2">
+                    {[1,2,3,4,5].map(i => (
+                      <svg key={i} className="w-2 h-2" viewBox="0 0 20 20" fill="#f59e0b"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.34L10 13.27l-4.77 2.46.91-5.34L2.27 6.62l5.34-.78L10 1z"/></svg>
+                    ))}
+                    <span className="text-[7px] text-gray-400">4.9</span>
+                  </div>
+                  <div className="flex gap-1.5">
+                    {[1,2,3].map(i => (
+                      <div key={i} className="w-8 h-8 rounded bg-gray-100" />
+                    ))}
+                  </div>
                 </div>
               </div>
-            ))}
+            </div>
+
+            {/* Card 2 — center — Fashion/Accessories store (main) */}
+            <div
+              className="absolute rounded-2xl overflow-hidden shadow-2xl"
+              style={{
+                width: 280,
+                height: 320,
+                top: 0,
+                left: '50%',
+                transform: 'translateX(-50%) rotate(0deg)',
+                border: '1px solid rgba(139,92,246,0.3)',
+                zIndex: 3,
+                boxShadow: '0 20px 60px rgba(124,58,237,0.25)',
+              }}
+            >
+              <div className="h-full bg-white flex flex-col">
+                {/* Mini navbar */}
+                <div className="flex items-center justify-between px-3 py-2" style={{ background: '#fff', borderBottom: '1px solid #f0f0f0' }}>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-4 h-4 rounded-md flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)' }}>
+                      <span className="text-[6px] font-black text-white">K</span>
+                    </div>
+                    <span className="text-[8px] font-bold text-gray-800">KONVERT</span>
+                  </div>
+                  <span className="text-[7px] font-semibold px-1.5 py-0.5 rounded-full text-white" style={{ background: '#5B47F5' }}>Acheter</span>
+                </div>
+                {/* Promo */}
+                <div className="text-center py-1" style={{ background: 'linear-gradient(90deg,#5B47F5,#7c6af7)' }}>
+                  <span className="text-[7px] text-white font-semibold">Livraison GRATUITE — Offre limitee</span>
+                </div>
+                {/* Product image */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80"
+                  alt="Montre design minimaliste"
+                  className="w-full h-28 object-cover"
+                  style={{ objectPosition: 'center 30%' }}
+                />
+                {/* Content */}
+                <div className="p-3 flex-1 flex flex-col">
+                  <div className="flex items-center gap-1 mb-1">
+                    {[1,2,3,4,5].map(i => (
+                      <svg key={i} className="w-2 h-2" viewBox="0 0 20 20" fill="#f59e0b"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.34L10 13.27l-4.77 2.46.91-5.34L2.27 6.62l5.34-.78L10 1z"/></svg>
+                    ))}
+                    <span className="text-[7px] text-gray-400 ml-0.5">2 847 avis</span>
+                  </div>
+                  <p className="text-[11px] font-black text-gray-900 leading-tight mb-1">
+                    Montre Minimaliste Pro —<br />Design qui fait tourner les tetes
+                  </p>
+                  <div className="flex items-baseline gap-1.5 mb-2">
+                    <span className="text-sm font-black text-gray-900">89,90€</span>
+                    <span className="text-[10px] text-gray-400 line-through">149,90€</span>
+                    <span className="text-[7px] font-bold text-green-600 bg-green-50 px-1 py-0.5 rounded">-40%</span>
+                  </div>
+                  <div className="space-y-0.5 mb-2">
+                    {['Verre saphir anti-rayures', 'Etanche 50m', 'Bracelet cuir italien'].map(b => (
+                      <div key={b} className="flex items-center gap-1">
+                        <span className="text-[8px] text-green-500">✓</span>
+                        <span className="text-[8px] text-gray-600">{b}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <button className="w-full py-1.5 rounded-lg text-[8px] font-bold text-white mt-auto" style={{ background: 'linear-gradient(135deg,#5B47F5,#7c6af7)' }}>
+                    Commander — Livraison gratuite
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3 — back right — Tech store */}
+            <div
+              className="absolute rounded-2xl overflow-hidden shadow-2xl"
+              style={{
+                width: 240,
+                height: 290,
+                top: 30,
+                right: 0,
+                transform: 'rotate(5deg)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                zIndex: 2,
+              }}
+            >
+              <div className="h-full flex flex-col" style={{ background: '#0a0a1a' }}>
+                {/* Mini navbar dark */}
+                <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                  <span className="text-[9px] font-bold text-white/70">TECHWAVE</span>
+                  <div className="flex gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                  </div>
+                </div>
+                {/* Product image */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&q=80"
+                  alt="Ecouteurs sans fil tech"
+                  className="w-full h-28 object-cover"
+                />
+                {/* Content dark */}
+                <div className="p-3 flex-1">
+                  <p className="text-[8px] font-semibold mb-0.5" style={{ color: '#a78bfa' }}>BEST-SELLER</p>
+                  <p className="text-[10px] font-bold text-white leading-tight mb-1.5">
+                    SoundPro X5<br />40h de musique
+                  </p>
+                  <div className="flex items-baseline gap-1.5 mb-2">
+                    <span className="text-xs font-black text-white">29,90€</span>
+                    <span className="text-[9px] text-white/40 line-through">49,90€</span>
+                  </div>
+                  <button className="w-full py-1.5 rounded-lg text-[8px] font-bold text-white" style={{ background: '#5B47F5' }}>
+                    Ajouter au panier
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Glow effect behind cards */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-60 h-60 rounded-full" style={{ background: 'radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)', zIndex: 0 }} />
           </div>
         </div>
 
         {/* Stats bas de page */}
-        <div
-          className="flex items-center gap-2 px-4 py-3 rounded-2xl text-xs font-semibold"
-          style={{
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(139,92,246,0.15)',
-            color: 'rgba(167,139,250,0.6)',
-          }}
-        >
-          <span>50 000+ pages générées</span>
-          <span style={{ color: 'rgba(139,92,246,0.4)' }}>·</span>
-          <span>4.9 Trustpilot</span>
-          <span style={{ color: 'rgba(139,92,246,0.4)' }}>·</span>
-          <span>1 page gratuite</span>
+        <div className="relative z-10 flex items-center gap-6">
+          {[
+            { icon: '📈', value: '+300%', label: 'CTR moyen' },
+            { icon: '⚡', value: '28s', label: 'Generation' },
+            { icon: '⭐', value: '4.9/5', label: '247 avis' },
+          ].map(s => (
+            <div key={s.label} className="flex-1 text-center p-3 rounded-2xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(139,92,246,0.15)' }}>
+              <p className="text-sm mb-0.5">{s.icon}</p>
+              <p className="text-lg font-black" style={{ color: '#a78bfa' }}>{s.value}</p>
+              <p className="text-[10px]" style={{ color: 'rgba(167,139,250,0.5)' }}>{s.label}</p>
+            </div>
+          ))}
         </div>
       </div>
 

@@ -187,7 +187,7 @@ export const articlesPart2: BlogArticle[] = [
 <h3 class="text-xl font-bold text-gray-900 mt-6 mb-3">Les images</h3>
 <p class="text-lg text-gray-600 leading-relaxed mb-4">Renommez vos fichiers images : <code>ecouteurs-bluetooth-sans-fil.webp</code> au lieu de <code>IMG_4532.jpg</code>. Ajoutez des alt text descriptifs. Compressez en WebP. Les images sont une source de trafic via Google Images.</p>
 
-<figure class="my-8"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80" alt="Dashboard analytics SEO avec métriques de performance" class="w-full rounded-2xl" /><figcaption class="text-sm text-gray-400 mt-2 text-center">Suivez vos métriques SEO pour mesurer vos progrès</figcaption></figure>
+<figure class="my-8"><img src="https://images.unsplash.com/photo-1590859808308-3d2d9c515b1a?w=1200&q=80" alt="Ecran montrant des résultats de recherche Google optimisés SEO" class="w-full rounded-2xl" /><figcaption class="text-sm text-gray-400 mt-2 text-center">Suivez vos métriques SEO pour mesurer vos progrès</figcaption></figure>
 
 <h2 class="text-2xl font-black text-gray-900 mt-10 mb-4">Le problème du contenu dupliqué en dropshipping</h2>
 
@@ -265,13 +265,13 @@ export const articlesPart2: BlogArticle[] = [
     dateISO: '2026-04-18',
     updatedISO: '2026-04-22',
     keywords: ['A/B testing e-commerce', 'split testing', 'test AB boutique en ligne', 'optimisation conversion', 'CRO e-commerce'],
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1543286386-713bdd548da4?w=1200&q=80',
     imageAlt: 'Dashboard A/B testing et analyse de données e-commerce',
     content: `<p class="text-lg text-gray-600 leading-relaxed mb-4">Vous pensez que votre bouton "Ajouter au panier" est parfait ? Que votre titre produit est optimal ? Que votre prix est bien affiché ? En réalité, vous n'en savez rien — tant que vous n'avez pas testé. L'A/B testing élimine les opinions et les remplace par des données.</p>
 
 <p class="text-lg text-gray-600 leading-relaxed mb-4">Ce guide est conçu pour les e-commerçants qui veulent des résultats concrets, pas un cours de statistiques.</p>
 
-<figure class="my-8"><img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1200&q=80" alt="Analyse de données et graphiques pour A/B testing e-commerce" class="w-full rounded-2xl" /><figcaption class="text-sm text-gray-400 mt-2 text-center">L'A/B testing transforme vos intuitions en certitudes</figcaption></figure>
+<figure class="my-8"><img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=1200&q=80" alt="Interface web avec tests A/B et analyse des variantes" class="w-full rounded-2xl" /><figcaption class="text-sm text-gray-400 mt-2 text-center">L'A/B testing transforme vos intuitions en certitudes</figcaption></figure>
 
 <h2 class="text-2xl font-black text-gray-900 mt-10 mb-4">Qu'est-ce que l'A/B testing ?</h2>
 
@@ -497,7 +497,7 @@ export const articlesPart2: BlogArticle[] = [
     imageAlt: 'Fiche produit e-commerce parfaitement optimisée pour la conversion',
     content: `<p class="text-lg text-gray-600 leading-relaxed mb-4">Vous pouvez dépenser des milliers d'euros en publicité pour amener du trafic sur votre boutique — si votre fiche produit est médiocre, cet argent est gaspillé. La fiche produit est l'endroit où la vente se fait ou se perd. Après avoir analysé des milliers de pages e-commerce, voici les 12 éléments qui font la différence.</p>
 
-<figure class="my-8"><img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1200&q=80" alt="Interface e-commerce avec fiche produit optimisée" class="w-full rounded-2xl" /><figcaption class="text-sm text-gray-400 mt-2 text-center">Chaque élément d'une fiche produit a un rôle précis dans le parcours de conversion</figcaption></figure>
+<figure class="my-8"><img src="https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200&q=80" alt="Boutique e-commerce avec produits bien présentés" class="w-full rounded-2xl" /><figcaption class="text-sm text-gray-400 mt-2 text-center">Chaque élément d'une fiche produit a un rôle précis dans le parcours de conversion</figcaption></figure>
 
 <h2 class="text-2xl font-black text-gray-900 mt-10 mb-4">1. Le titre produit optimisé</h2>
 

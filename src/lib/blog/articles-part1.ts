@@ -19,7 +19,7 @@ export const articlesPart1: BlogArticle[] = [
 
 <p class="text-lg text-gray-600 leading-relaxed mb-4">Si vous faites du e-commerce ou du dropshipping, vous avez probablement déjà investi dans la publicité Facebook, TikTok ou Google. Mais sans une page d'atterrissage performante, vous brûlez littéralement votre budget. Dans ce guide complet, on décortique tout ce qu'il faut savoir pour <strong>créer une landing page e-commerce</strong> qui transforme vos visiteurs en acheteurs.</p>
 
-<figure class="my-8"><img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=80" alt="Personne effectuant un achat en ligne sur une landing page e-commerce" class="w-full rounded-2xl" /><figcaption class="text-sm text-gray-400 mt-2 text-center">Une landing page bien conçue guide naturellement le visiteur vers l'achat</figcaption></figure>
+<figure class="my-8"><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&q=80" alt="Personne effectuant un achat en ligne sur une landing page e-commerce" class="w-full rounded-2xl" /><figcaption class="text-sm text-gray-400 mt-2 text-center">Une landing page bien conçue guide naturellement le visiteur vers l'achat</figcaption></figure>
 
 <h2 class="text-2xl font-black text-gray-900 mt-10 mb-4">Qu'est-ce qu'une landing page e-commerce (et pourquoi c'est différent d'une fiche produit) ?</h2>
 
@@ -616,7 +616,7 @@ export const articlesPart1: BlogArticle[] = [
 
 <p class="text-lg text-gray-600 leading-relaxed mb-4">Et quel que soit votre CMS, vous pouvez utiliser <a href="/features" class="text-[#5B47F5] font-semibold hover:underline">KONVERT</a> pour générer des <a href="/blog/comment-creer-landing-page-ecommerce" class="text-[#5B47F5] font-semibold hover:underline">landing pages qui convertissent</a>, indépendamment de votre plateforme principale.</p>
 
-<figure class="my-8"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80" alt="Dashboard analytique e-commerce montrant des métriques de performance" class="w-full rounded-2xl" /><figcaption class="text-sm text-gray-400 mt-2 text-center">Les performances de votre boutique dépendent autant de la plateforme que de votre stratégie</figcaption></figure>
+<figure class="my-8"><img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1200&q=80" alt="Dashboard analytique e-commerce montrant des métriques de performance" class="w-full rounded-2xl" /><figcaption class="text-sm text-gray-400 mt-2 text-center">Les performances de votre boutique dépendent autant de la plateforme que de votre stratégie</figcaption></figure>
 
 <h2 class="text-2xl font-black text-gray-900 mt-10 mb-4">Tableau récapitulatif : Shopify vs WooCommerce</h2>
 

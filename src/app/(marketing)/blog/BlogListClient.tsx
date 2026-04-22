@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import Image from 'next/image'
 import { ArrowRight, Clock, Search, BookOpen } from 'lucide-react'
 import type { BlogArticle } from '@/lib/blog/types'
 
@@ -35,10 +36,21 @@ export default function BlogListClient({ articles, categories }: Props) {
     <>
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section
-        className="pt-28 pb-16"
+        className="pt-28 pb-16 relative overflow-hidden"
         style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}
       >
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 text-center">
+        {/* Background image */}
+        <div className="absolute inset-0 opacity-[0.12]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1600&q=80"
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(8,8,15,0.4), rgba(15,15,46,0.95))' }} />
+
+        <div className="max-w-5xl mx-auto px-5 sm:px-8 text-center relative z-10">
           <div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-6 border"
             style={{

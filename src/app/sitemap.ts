@@ -1,17 +1,7 @@
 import { MetadataRoute } from 'next'
+import { allArticles } from '@/lib/blog'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
-
-// Articles de blog — ajouter les nouveaux slugs ici
-const BLOG_SLUGS = [
-  'comment-tripler-taux-conversion-landing-page',
-  'aliexpress-a-shopify-en-30-secondes',
-  'meilleurs-templates-dropshipping-2025',
-  'shopify-vs-woocommerce-2025',
-  'ia-ecommerce-claude-vs-chatgpt',
-  'ab-testing-pages-produit',
-  'seo-pages-produit-dropshipping',
-]
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -46,6 +36,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${APP_URL}/essai`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
       url: `${APP_URL}/about`,
       lastModified: new Date(),
       changeFrequency: 'yearly',
@@ -55,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${APP_URL}/blog`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.8,
+      priority: 0.9,
     },
     {
       url: `${APP_URL}/login`,
@@ -71,11 +67,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
-  const blogRoutes: MetadataRoute.Sitemap = BLOG_SLUGS.map((slug) => ({
-    url: `${APP_URL}/blog/${slug}`,
-    lastModified: new Date(),
+  const blogRoutes: MetadataRoute.Sitemap = allArticles.map((article) => ({
+    url: `${APP_URL}/blog/${article.slug}`,
+    lastModified: new Date(article.updatedISO),
     changeFrequency: 'monthly' as const,
-    priority: 0.7,
+    priority: 0.8,
   }))
 
   return [...staticRoutes, ...blogRoutes]

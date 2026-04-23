@@ -170,7 +170,8 @@ export default function LoginPage() {
               src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&h=400&fit=crop&q=80"
               alt="Dashboard KONVERT"
               className="w-full object-cover"
-              style={{ height: '220px' }}
+              style={{ height: '220px', background: 'linear-gradient(135deg, #1e1b4b, #312e81)' }}
+              onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
             />
           </div>
 
@@ -198,12 +199,10 @@ export default function LoginPage() {
               &ldquo;Mon CTR est passé de 1.2% à 4.8% sur ma première page générée. En 30 secondes j&apos;avais un résultat meilleur que 4 heures de travail.&rdquo;
             </p>
             <div className="flex items-center gap-3">
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face"
-                alt="Karim B."
-                className="w-8 h-8 rounded-full object-cover"
-                style={{ border: '2px solid rgba(139,92,246,0.3)' }}
-              />
+              <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0"
+                style={{ background: 'linear-gradient(135deg, #7c3aed, #5b21b6)', color: '#fff', border: '2px solid rgba(139,92,246,0.3)' }}>
+                K
+              </div>
               <div>
                 <div className="text-xs font-bold text-white">Karim B.</div>
                 <div className="text-[11px]" style={{ color: 'rgba(167,139,250,0.5)' }}>Dropshippeur · 3 stores Shopify</div>

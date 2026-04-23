@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
-import { rateLimit } from '@/lib/security/ratelimit'
+import { rateLimitAsync } from '@/lib/security/ratelimit'
 
 // Routes avec rate limiting et leurs limites (requêtes / fenêtre)
 const RATE_LIMITS: Record<string, { limit: number; windowMs: number }> = {
@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith(route)) {
       const ip = getClientIp(request)
       const key = `rl:${route}:${ip}`
-      const result = rateLimit(key, config.limit, config.windowMs)
+      const result = await rateLimitAsync(key, config.limit, config.windowMs)
 
       if (!result.allowed) {
         return new NextResponse(

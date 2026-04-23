@@ -36,11 +36,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname()
   const router   = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [userInitial, setUserInitial] = useState('K')
 
   // Fermer le menu mobile quand on change de page
   useEffect(() => {
     setMobileMenuOpen(false)
   }, [pathname])
+
+  // Récupérer l'initiale de l'utilisateur
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return
+      const name = user.user_metadata?.full_name || user.user_metadata?.name || user.email || ''
+      const initial = name.charAt(0).toUpperCase()
+      if (initial) setUserInitial(initial)
+    })
+  }, [])
 
   async function handleLogout() {
     const supabase = createClient()
@@ -357,7 +369,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-black"
               style={{ background: 'linear-gradient(135deg, #7c3aed, #5b21b6)' }}
             >
-              K
+              {userInitial}
             </div>
           </div>
         </header>

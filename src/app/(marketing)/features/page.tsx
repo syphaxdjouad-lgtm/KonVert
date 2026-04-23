@@ -33,7 +33,7 @@ const FEATURES_MAIN = [
     desc: "KONVERT utilise un moteur IA de dernière génération spécialisé pour le copywriting e-commerce. Accroche percutante, proposition de valeur unique, liste de bénéfices, FAQ personnalisée, CTA optimisés. Tout en 30 secondes.",
     details: [
       'Copy entièrement personnalisé par produit',
-      'Adapté à votre niche et audience cible',
+      'Adapté à ta niche et audience cible',
       'Optimisé pour la conversion (pas juste beau)',
       'Rééditable manuellement dans le builder',
     ],
@@ -79,8 +79,8 @@ const FEATURES_MAIN = [
     icon: ChartBar,
     badge: 'Analytics',
     title: 'Analytics Temps Réel',
-    subtitle: 'Vos données. Vos décisions.',
-    desc: "Suivez chaque interaction sur vos pages : scroll depth, clics CTA, temps passé, taux de rebond, conversions, ROAS. Un tableau de bord en temps réel pour prendre des décisions basées sur les données — pas sur des intuitions.",
+    subtitle: 'Tes données. Tes décisions.',
+    desc: "Suis chaque interaction sur tes pages : scroll depth, clics CTA, temps passé, taux de rebond, conversions, ROAS. Un tableau de bord en temps réel pour prendre des décisions basées sur les données — pas sur des intuitions.",
     details: [
       'Scroll depth & heatmap par section',
       'Tracking conversions Shopify/WooCommerce',
@@ -105,7 +105,7 @@ const FEATURES_MAIN = [
     badge: 'Intégrations',
     title: 'Shopify & WooCommerce Natifs',
     subtitle: 'Publiez en 1 clic.',
-    desc: "Connexion OAuth sécurisée avec Shopify et WooCommerce. Une fois connecté, publiez n'importe quelle page directement sur votre boutique sans copier-coller de code. Synchronisation automatique des prix et stocks.",
+    desc: "Connexion OAuth sécurisée avec Shopify et WooCommerce. Une fois connecté, publie n'importe quelle page directement sur ta boutique sans copier-coller de code. Synchronisation automatique des prix et stocks.",
     details: [
       'OAuth sécurisé — pas de mot de passe stocké',
       'Publication directe sans copier-coller',
@@ -130,7 +130,7 @@ const FEATURES_MAIN = [
     badge: 'A/B Testing',
     title: 'A/B Testing Intégré',
     subtitle: 'Testez. Apprenez. Optimisez.',
-    desc: "Créez des variantes de vos pages en quelques clics et testez-les en parallèle. KONVERT distribue le trafic automatiquement et identifie la version gagnante avec une significativité statistique. Gardez ce qui performe.",
+    desc: "Crée des variantes de tes pages en quelques clics et teste-les en parallèle. KONVERT distribue le trafic automatiquement et identifie la version gagnante avec une significativité statistique. Garde ce qui performe.",
     details: [
       'Variantes illimitées par page',
       'Distribution trafic automatique 50/50',
@@ -155,7 +155,7 @@ const FEATURES_MAIN = [
     badge: '8 Langues',
     title: 'Génération Multi-langues',
     subtitle: 'Vendez partout dans le monde.',
-    desc: "Générez vos pages en français, anglais, espagnol, allemand, italien, portugais, arabe et chinois. Chaque copy est natif — pas une traduction mécanique. Atteignez des marchés internationaux sans agence de traduction.",
+    desc: "Génère tes pages en français, anglais, espagnol, allemand, italien, portugais, arabe et chinois. Chaque copy est natif — pas une traduction mécanique. Atteins des marchés internationaux sans agence de traduction.",
     details: [
       'FR, EN, ES, DE, IT, PT, AR, ZH',
       'Copy natif, pas une traduction Google',
@@ -182,12 +182,12 @@ const OTHER_FEATURES = [
   { icon: Clock,       title: 'Génération en 30 secondes',  desc: "Le record absolu vs n'importe quel outil concurrent.",     tooltip: 'De l\'URL au copy complet en 30 secondes' },
   { icon: TrendUp,     title: 'Optimisé Core Web Vitals',   desc: 'LCP < 2s, CLS = 0, INP optimal. Score SEO maximal.',      tooltip: 'LCP < 2s · CLS 0 · Score SEO optimal' },
   { icon: Sparkle,     title: 'Scraper multi-sources',      desc: 'AliExpress, Amazon, Alibaba, Temu, Shein et plus.',        tooltip: 'Scrape AliExpress, Amazon, Alibaba et plus' },
-  { icon: ChartBar,    title: 'Rapports PDF auto',          desc: 'Générés et envoyés automatiquement à vos clients.',        tooltip: 'PDF brandés envoyés automatiquement aux clients' },
+  { icon: ChartBar,    title: 'Rapports PDF auto',          desc: 'Générés et envoyés automatiquement à tes clients.',        tooltip: 'PDF brandés envoyés automatiquement aux clients' },
 ]
 
 const COMPARE_ROWS = [
   { label: 'Temps pour créer une page', konvert: '30 secondes', diy: '4–6 heures', freelance: '2–5 jours' },
-  { label: 'Coût', konvert: 'Dès 39€/mois', diy: '0€ (mais votre temps)', freelance: '300–1500€/page' },
+  { label: 'Coût', konvert: 'Dès 39€/mois', diy: '0€ (mais ton temps)', freelance: '300–1500€/page' },
   { label: 'Qualité copy', konvert: 'IA spécialisée e-com', diy: 'Variable, souvent faible', freelance: 'Dépend du freelance' },
   { label: 'Intégration Shopify', konvert: 'Native, 1 clic', diy: 'Manuelle, copier-coller', freelance: 'Parfois incluse' },
   { label: 'A/B Testing', konvert: 'Intégré & automatisé', diy: 'Impossible sans dev', freelance: 'En option payante' },
@@ -200,11 +200,11 @@ const DEEP_DIVE_TABS = [
     label: 'Génération IA',
     icon: null,
     title: 'Comment fonctionne la génération IA ?',
-    desc: "KONVERT utilise un moteur IA entraîné sur des millions de pages e-commerce performantes. En analysant votre URL produit, il extrait les informations clés et génère un copy optimisé pour la conversion.",
+    desc: "KONVERT utilise un moteur IA entraîné sur des millions de pages e-commerce performantes. En analysant ton URL produit, il extrait les informations clés et génère un copy optimisé pour la conversion.",
     steps: [
-      { num: '1', title: 'Vous collez l\'URL produit', detail: 'KONVERT scrape automatiquement le titre, les images, le prix, la description et les avis.' },
+      { num: '1', title: 'Tu colles l\'URL produit', detail: 'KONVERT scrape automatiquement le titre, les images, le prix, la description et les avis.' },
       { num: '2', title: 'L\'IA analyse et génère', detail: 'Le moteur IA identifie les arguments de vente clés, les objections possibles et rédige une page complète en 30 secondes.' },
-      { num: '3', title: 'Vous personnalisez et publiez', detail: 'Éditez chaque bloc dans le builder, choisissez un template et publiez en 1 clic sur votre boutique.' },
+      { num: '3', title: 'Tu personnalises et publies', detail: 'Édite chaque bloc dans le builder, choisis un template et publie en 1 clic sur ta boutique.' },
     ],
     metrics: [
       { value: '30s', label: 'Temps moyen de génération' },
@@ -217,7 +217,7 @@ const DEEP_DIVE_TABS = [
     label: 'A/B Testing',
     icon: null,
     title: 'Un A/B testing qui travaille pour vous',
-    desc: "L'A/B testing manuel est chronophage et statistiquement risqué. KONVERT automatise tout : distribution du trafic, calcul de la significativité, et déclaration du gagnant — sans intervention de votre part.",
+    desc: "L'A/B testing manuel est chronophage et statistiquement risqué. KONVERT automatise tout : distribution du trafic, calcul de la significativité, et déclaration du gagnant — sans intervention de ta part.",
     steps: [
       { num: '1', title: 'Créez une variante en 1 clic', detail: 'Dupliquez une page existante, modifiez le titre, le CTA ou le layout. Chaque changement est tracké séparément.' },
       { num: '2', title: 'KONVERT distribue le trafic', detail: 'Le trafic est divisé 50/50 automatiquement. Aucun code à ajouter, aucun plugin externe.' },
@@ -234,9 +234,9 @@ const DEEP_DIVE_TABS = [
     label: 'Analytics',
     icon: null,
     title: 'Des analytics qui révèlent ce qui convertit',
-    desc: "Les analytics KONVERT vont au-delà des simples pages vues. Chaque section de votre page est tracée : où les visiteurs décrochent, quels CTA fonctionnent, et quel segment d'audience convertit le mieux.",
+    desc: "Les analytics KONVERT vont au-delà des simples pages vues. Chaque section de ta page est tracée : où les visiteurs décrochent, quels CTA fonctionnent, et quel segment d'audience convertit le mieux.",
     steps: [
-      { num: '1', title: 'Tracking automatique à l\'installation', detail: 'Dès que votre page est publiée, KONVERT commence à collecter les données. Aucun tag Google Analytics à configurer.' },
+      { num: '1', title: 'Tracking automatique à l\'installation', detail: 'Dès que ta page est publiée, KONVERT commence à collecter les données. Aucun tag Google Analytics à configurer.' },
       { num: '2', title: 'Tableau de bord en temps réel', detail: 'Scroll depth par section, taux de clic CTA, temps passé, taux de rebond et conversions — tout en live.' },
       { num: '3', title: 'Rapports PDF automatiques', detail: 'Chaque semaine, un rapport PDF brandé est généré et envoyé par email. Parfait pour les agences qui gèrent plusieurs clients.' },
     ],
@@ -604,7 +604,7 @@ export default function FeaturesPage() {
             <span style={{ color: '#8b77ff' }}>vendre plus. Dès aujourd'hui.</span>
           </h1>
           <p className="reveal delay-2 text-lg max-w-2xl mx-auto leading-relaxed mb-8" style={{ color: '#8b8baa' }}>
-            KONVERT combine IA générative, templates optimisés, analytics temps réel et intégrations natives pour vous donner un avantage concurrentiel immédiat.
+            KONVERT combine IA générative, templates optimisés, analytics temps réel et intégrations natives pour te donner un avantage concurrentiel immédiat.
           </p>
           <div className="reveal delay-3">
             <Link

@@ -36,64 +36,92 @@ export default function BlogListClient({ articles, categories }: Props) {
     <>
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section
-        className="pt-28 pb-16 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}
+        className="pt-24 pb-12 relative overflow-hidden"
+        style={{ background: 'linear-gradient(150deg, #ffffff 0%, #f5f3ff 45%, #f0fdf4 100%)' }}
       >
-        {/* Background image */}
-        <div className="absolute inset-0 opacity-[0.12]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1600&q=80"
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(8,8,15,0.4), rgba(15,15,46,0.95))' }} />
+        {/* Halo droit subtil */}
+        <div
+          className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(91,71,245,0.06) 0%, transparent 70%)',
+            transform: 'translate(30%, -30%)',
+          }}
+        />
+        {/* Halo gauche subtil */}
+        <div
+          className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(34,197,94,0.05) 0%, transparent 70%)',
+            transform: 'translate(-30%, 30%)',
+          }}
+        />
 
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 text-center relative z-10">
-          <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-6 border"
-            style={{
-              background: 'rgba(91,71,245,0.15)',
-              borderColor: 'rgba(91,71,245,0.3)',
-              color: '#a78bfa',
-            }}
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            Blog & Ressources
-          </div>
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
 
-          <h1 className="text-4xl sm:text-5xl font-black text-white mb-5 leading-tight">
-            Apprenez a vendre plus,
-            <br />
-            <span style={{ color: '#8b77ff' }}>sans travailler plus.</span>
-          </h1>
-          <p
-            className="text-lg max-w-2xl mx-auto mb-10"
-            style={{ color: '#8b8baa' }}
-          >
-            Guides SEO, tutoriels Shopify, strategies de conversion et conseils
-            dropshipping pour booster vos ventes e-commerce.
-          </p>
+            {/* Colonne texte + search */}
+            <div>
+              <div
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-6 border"
+                style={{
+                  background: 'rgba(91,71,245,0.08)',
+                  borderColor: 'rgba(91,71,245,0.2)',
+                  color: '#5B47F5',
+                }}
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                Blog & Ressources
+              </div>
 
-          {/* Search */}
-          <div className="max-w-xl mx-auto relative">
-            <Search
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4"
-              style={{ color: '#6b6b8a' }}
-            />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher un article..."
-              className="w-full pl-11 pr-4 py-3.5 rounded-full text-sm outline-none border transition-all"
-              style={{
-                background: 'rgba(255,255,255,0.08)',
-                borderColor: 'rgba(255,255,255,0.12)',
-                color: '#fff',
-              }}
-            />
+              <h1
+                className="text-4xl sm:text-5xl font-black mb-5 leading-tight"
+                style={{ color: '#0f0f2e' }}
+              >
+                Apprenez a vendre plus,
+                <br />
+                <span style={{ color: '#5B47F5' }}>sans travailler plus.</span>
+              </h1>
+              <p
+                className="text-lg max-w-xl mb-10 leading-relaxed"
+                style={{ color: '#6b7280' }}
+              >
+                Guides SEO, tutoriels Shopify, strategies de conversion et conseils
+                dropshipping pour booster vos ventes e-commerce.
+              </p>
+
+              {/* Search */}
+              <div className="max-w-md relative">
+                <Search
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4"
+                  style={{ color: '#9ca3af' }}
+                />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Rechercher un article..."
+                  className="w-full pl-11 pr-4 py-3.5 rounded-full text-sm outline-none border transition-all"
+                  style={{
+                    background: '#ffffff',
+                    borderColor: '#e0e7ff',
+                    color: '#0f0f2e',
+                    boxShadow: '0 2px 12px rgba(91,71,245,0.08)',
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Colonne illustration SVG */}
+            <div className="hidden lg:flex justify-center items-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/blog-hero.svg"
+                alt="Dashboard e-commerce avec graphiques de croissance"
+                className="w-full max-w-[580px]"
+                style={{ filter: 'drop-shadow(0 20px 40px rgba(91,71,245,0.12))' }}
+              />
+            </div>
+
           </div>
         </div>
       </section>

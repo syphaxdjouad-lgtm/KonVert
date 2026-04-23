@@ -42,3 +42,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# previews
+homepage-preview.html
+section-demo-preview.html
+preview-noir.mjs
+
+# video subdir
+video/

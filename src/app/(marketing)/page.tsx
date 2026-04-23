@@ -1354,20 +1354,25 @@ function ABTestingSection() {
                 </div>
                 <div className="flex-1 rounded px-2 py-0.5 text-xs text-gray-400 font-mono bg-white border border-gray-200">konvert.app/p/air-max-pro</div>
               </div>
-              {/* Hero produit */}
-              <div style={{ background: 'linear-gradient(135deg,#5B47F5 0%,#7c6af7 100%)', padding: '16px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+              {/* Hero produit — image sneaker */}
+              <div style={{ background: 'linear-gradient(135deg,#5B47F5 0%,#7c6af7 100%)', padding: '12px 16px', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6, position: 'relative', zIndex: 2 }}>
                   <span style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: 9, fontWeight: 800, padding: '2px 8px', borderRadius: 99 }}>NOUVEAUTÉ</span>
                   <div style={{ display: 'flex', gap: 2 }}>
                     {[1,2,3,4,5].map(i => <svg key={i} width="9" height="9" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="#fbbf24"/></svg>)}
                   </div>
                 </div>
-                {/* Forme produit stylisée */}
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8 }}>
-                  <div style={{ width: 72, height: 44, background: 'rgba(255,255,255,0.15)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke="white" strokeWidth="1.5" strokeLinecap="round"/></svg>
-                  </div>
+                {/* Image produit */}
+                <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 2 }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80"
+                    alt="Air Max Pro sneaker"
+                    style={{ width: 140, height: 80, objectFit: 'contain', filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.3))' }}
+                  />
                 </div>
+                {/* Halo lumineux derrière le produit */}
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', filter: 'blur(20px)' }} />
               </div>
               {/* Info produit */}
               <div className="p-4 bg-white">
@@ -2734,7 +2739,7 @@ const TEMPLATE_GRID = [
   { name: 'StreetZ',  gradient: 'linear-gradient(135deg,#E11D48,#f43f5e)', tag: 'Streetwear · Urban',  img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80' },
   { name: 'GlowUp',   gradient: 'linear-gradient(135deg,#D4508B,#ec4899)', tag: 'Makeup · Glamour',    img: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&q=80' },
   { name: 'Platina',  gradient: 'linear-gradient(135deg,#B8860B,#d4a853)', tag: 'Joaillerie · Raffiné',img: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80' },
-  { name: 'Starter',  gradient: 'linear-gradient(135deg,#4F46E5,#6366f1)', tag: 'Polyvalent · Clean',  img: 'https://images.unsplash.com/photo-1507473885765-e6ed057ab6fe?w=600&q=80' },
+  { name: 'Starter',  gradient: 'linear-gradient(135deg,#4F46E5,#6366f1)', tag: 'Polyvalent · Clean',  img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80' },
 ]
 
 function TemplatesPreview() {

@@ -41,6 +41,10 @@ import {
   templateEtecStreetz,
   templateEtecPoterie,
   templateEtecElectro,
+  templateEtecAgency,
+  templateEtecSupreme,
+  templateEtecQuarter,
+  templateEtecBoost,
 } from '@/lib/templates'
 import type { LandingPageData } from '@/types'
 
@@ -1039,6 +1043,110 @@ const SAMPLE_ELECTRO: LandingPageData = {
 // Templates registry
 // ---------------------------------------------------------------------------
 
+const SAMPLE_AGENCY: LandingPageData = {
+  product_name: 'KONVERT Agency — Marketing Services',
+  headline: 'Votre agence e-commerce clé en main',
+  subtitle: 'Stratégie, design, conversion — on gère tout pour que vous vendiez plus.',
+  cta: 'Réserver un appel découverte',
+  urgency: '📅 3 créneaux disponibles cette semaine',
+  benefits: [
+    'Audit conversion offert — analyse complète de votre boutique',
+    'Pages optimisées par des experts e-commerce certifiés',
+    'Suivi performance hebdomadaire avec rapports PDF',
+    'Account manager dédié — réponse sous 4h',
+    'Résultats garantis ou remboursé sous 30 jours',
+  ],
+  faq: [
+    { question: 'Pour qui ?', answer: 'E-commerçants faisant +10K€/mois qui veulent scaler sans recruter.' },
+    { question: 'Engagement ?', answer: 'Aucun. Mois par mois, résiliable à tout moment.' },
+    { question: 'Délai ?', answer: 'Premières pages livrées sous 48h après onboarding.' },
+  ],
+  price: '499',
+  original_price: '799',
+  images: [
+    'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80',
+    'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80',
+  ],
+}
+
+const SAMPLE_SUPREME: LandingPageData = {
+  product_name: 'Supreme Box Logo Tee',
+  headline: 'L\'icône streetwear. Édition limitée.',
+  subtitle: 'Coton heavyweight 320gsm. Sérigraphie premium. Coupe oversized. Drop exclusif — une fois sold out, c\'est fini.',
+  cta: 'Cop maintenant — Drop limité',
+  urgency: '🔴 DROP EN COURS — 12 pièces restantes',
+  benefits: [
+    'Coton heavyweight 320gsm — toucher dense et premium',
+    'Sérigraphie artisanale — résiste à 500+ lavages',
+    'Coupe oversized — fit streetwear authentique',
+    'Édition limitée numérotée — certificat d\'authenticité inclus',
+    'Packaging collector — boîte rigide + stickers exclusifs',
+  ],
+  faq: [
+    { question: 'Taille ?', answer: 'Coupe oversized. Prenez votre taille habituelle pour un fit loose, une taille en dessous pour un fit normal.' },
+    { question: 'Retours ?', answer: 'Échange uniquement sous 14 jours, produit neuf avec étiquettes.' },
+    { question: 'Réassort ?', answer: 'Non. Chaque drop est unique et limité. Pas de réassort prévu.' },
+  ],
+  price: '89',
+  original_price: '149',
+  images: [
+    'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80',
+    'https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?w=800&q=80',
+  ],
+}
+
+const SAMPLE_QUARTER: LandingPageData = {
+  product_name: 'Atelier Noir — Bougie Signature',
+  headline: 'Le luxe discret. Sans compromis.',
+  subtitle: 'Cire de soja artisanale. Mèche coton. Parfum exclusif par un nez français. Édition 200 pièces.',
+  cta: 'Ajouter au panier',
+  urgency: '✦ Édition limitée — 34 disponibles',
+  benefits: [
+    'Cire de soja 100% naturelle — combustion propre, 60h de durée',
+    'Parfum créé par un maître parfumeur français — exclusivité totale',
+    'Mèche coton écologique — flamme stable, sans suie',
+    'Packaging minimaliste — boîte noire mate, ruban satin',
+    'Gravure personnalisable — idéal cadeau premium',
+  ],
+  faq: [
+    { question: 'Durée ?', answer: '60 heures de combustion. Première utilisation : laisser fondre 2h minimum.' },
+    { question: 'Parfum ?', answer: 'Notes de tête : bergamote, poivre noir. Cœur : iris, cuir. Fond : bois de santal, musc blanc.' },
+    { question: 'Livraison ?', answer: 'Écrin cadeau. Livraison express 48h en France métropolitaine.' },
+  ],
+  price: '59',
+  original_price: '89',
+  images: [
+    'https://images.unsplash.com/photo-1602607688066-0a460710ce5f?w=800&q=80',
+    'https://images.unsplash.com/photo-1603006905003-be475563bc59?w=800&q=80',
+  ],
+}
+
+const SAMPLE_BOOST: LandingPageData = {
+  product_name: 'GlowSerum — Sérum Vitamine C',
+  headline: 'L\'éclat en 14 jours. Garanti.',
+  subtitle: 'Vitamine C stabilisée 20% + Acide Hyaluronique + Niacinamide. Formule clean, résultats cliniques.',
+  cta: 'Essayer — Satisfaite ou remboursée',
+  urgency: '🔥 -30% Premier achat — Code GLOW30',
+  benefits: [
+    'Vitamine C stabilisée 20% — 3x plus efficace que la Vit C classique',
+    'Résultats visibles en 14 jours — testé cliniquement sur 200 femmes',
+    'Texture sérum-eau — pénètre en 10 secondes, zéro film gras',
+    'Sans parfum, sans alcool, sans silicone — clean beauty certifiée',
+    'Flacon airless anti-oxydation — formule stable 12 mois après ouverture',
+  ],
+  faq: [
+    { question: 'Pour quel type de peau ?', answer: 'Toutes peaux, y compris sensibles. pH 3.5 — non irritant.' },
+    { question: 'Matin ou soir ?', answer: 'Matin de préférence, avant la crème hydratante et le SPF.' },
+    { question: 'Garantie ?', answer: '30 jours satisfaite ou remboursée. Pas de questions.' },
+  ],
+  price: '34',
+  original_price: '49',
+  images: [
+    'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80',
+    'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=800&q=80',
+  ],
+}
+
 const TEMPLATES = [
   {
     id: 'etec-blue',
@@ -1572,6 +1680,62 @@ const TEMPLATES = [
     sample: SAMPLE_ELECTRO,
     preview: 'https://images.unsplash.com/photo-1622543925917-763c34d1a86e?w=600&q=80',
   },
+  {
+    id: 'etec-agency',
+    name: 'Agency',
+    tagline: 'Corporate · Services · Professionnel',
+    desc: 'Design professionnel et corporate. Idéal pour agences, services B2B et offres sur mesure. Tons bleus, structure claire, CTA direct.',
+    accent: '#334FB4',
+    badgeBg: '#334FB4',
+    badge: 'Pro',
+    cvr: '4.6%',
+    niches: ['B2B', 'Services', 'Agence'],
+    fn: templateEtecAgency,
+    sample: SAMPLE_AGENCY,
+    preview: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80',
+  },
+  {
+    id: 'etec-supreme',
+    name: 'Supreme',
+    tagline: 'Exclusive · Monospace · Streetwear',
+    desc: 'Inspiration streetwear et drops exclusifs. Fond sombre, typo monospace, urgence maximale. Pour éditions limitées, sneakers, mode urbaine.',
+    accent: '#FE0100',
+    badgeBg: '#FE0100',
+    badge: 'Exclusif',
+    cvr: '5.2%',
+    niches: ['Streetwear', 'Mode', 'Sneakers'],
+    fn: templateEtecSupreme,
+    sample: SAMPLE_SUPREME,
+    preview: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&q=80',
+  },
+  {
+    id: 'etec-quarter',
+    name: 'Quarter',
+    tagline: 'Minimal Luxe · Épuré · Noir & Blanc',
+    desc: 'Minimalisme luxueux en noir et blanc. Typographie élégante, grands espaces, photos studio. Pour bougies, parfums, objets de décoration premium.',
+    accent: '#121212',
+    badgeBg: '#121212',
+    badge: 'Premium',
+    cvr: '4.3%',
+    niches: ['Luxe', 'Décoration', 'Lifestyle'],
+    fn: templateEtecQuarter,
+    sample: SAMPLE_QUARTER,
+    preview: 'https://images.unsplash.com/photo-1602607688066-0a460710ce5f?w=600&q=80',
+  },
+  {
+    id: 'etec-boost',
+    name: 'Boost',
+    tagline: 'Conversion · Wellness · DTC Premium',
+    desc: 'Optimisé pour la conversion maximale. Badges confiance, preuves sociales, garantie mise en avant. Idéal sérums, skincare, DTC wellness.',
+    accent: '#FF2277',
+    badgeBg: '#FF2277',
+    badge: 'Top conversion',
+    cvr: '5.8%',
+    niches: ['Wellness', 'Beauty', 'DTC'],
+    fn: templateEtecBoost,
+    sample: SAMPLE_BOOST,
+    preview: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80',
+  },
 ]
 
 // ---------------------------------------------------------------------------
@@ -1742,7 +1906,7 @@ export default function TemplatesPage() {
             ← Retour
           </button>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm mb-6" style={{ background: 'rgba(91,71,245,0.08)', border: '1px solid rgba(91,71,245,0.15)', color: '#5B47F5' }}>
-            42 templates · chaque niche a son design
+            {TEMPLATES.length} templates · chaque niche a son design
           </div>
           <h1 className="text-5xl sm:text-6xl font-black leading-tight tracking-tight mb-5" style={{ color: '#0f0f1a' }}>
             Le bon design pour{' '}
@@ -1793,7 +1957,7 @@ export default function TemplatesPage() {
             <span style={{ color: '#5B47F5' }}>Pro.</span>
           </h2>
           <p className="text-base mb-8" style={{ color: 'rgba(255,255,255,0.45)' }}>
-            Accédez aux 42 templates, aux mises à jour futures et aux nouveaux designs dès leur sortie.
+            Accédez aux {TEMPLATES.length} templates, aux mises à jour futures et aux nouveaux designs dès leur sortie.
           </p>
           <a
             href="/signup"

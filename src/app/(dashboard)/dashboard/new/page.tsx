@@ -60,6 +60,10 @@ const STYLES = [
   { id: 'etec-streetz',    name: 'StreetZ',   desc: 'Streetwear & urban — rouge bold, design audacieux, mode urbaine',        emoji: '🧢' },
   { id: 'etec-poterie',    name: 'Poterie',   desc: 'Céramique & artisanat — terre cuite, fait main, style organique',        emoji: '🏺' },
   { id: 'etec-electro',    name: 'Electro',   desc: 'Supplements & sport — bleu cyan, hydratation, energy boost',             emoji: '💧' },
+  { id: 'etec-agency',     name: 'Agency',    desc: 'Corporate & services — bleu pro, structure claire, B2B',                 emoji: '🏢' },
+  { id: 'etec-supreme',    name: 'Supreme',   desc: 'Streetwear & drops — fond dark, monospace, urgence maximale',            emoji: '🔴' },
+  { id: 'etec-quarter',    name: 'Quarter',   desc: 'Minimal luxe — noir & blanc épuré, typographie élégante',                emoji: '◼️' },
+  { id: 'etec-boost',      name: 'Boost',     desc: 'Conversion max — badges confiance, preuves sociales, DTC wellness',     emoji: '🚀' },
 ]
 
 const TONES = [

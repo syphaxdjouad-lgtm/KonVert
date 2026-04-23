@@ -86,7 +86,10 @@ export async function POST(req: NextRequest) {
     // Email J+0 — livraison immédiate (fire & forget)
     fetch(`${req.nextUrl.origin}/api/email/preview`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-internal-secret': process.env.CRON_SECRET || '',
+      },
       body: JSON.stringify({
         email: email.toLowerCase(),
         name: name || email.split('@')[0],

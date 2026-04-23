@@ -11,6 +11,12 @@ import {
 type PreviewStep = 0 | 1 | 3 | 5 | 7
 
 export async function POST(req: NextRequest) {
+  // Protection : uniquement appelable en interne (fire-and-forget depuis /api/generate/public)
+  const internalSecret = req.headers.get('x-internal-secret')
+  if (internalSecret !== process.env.CRON_SECRET) {
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+  }
+
   try {
     const { email, name, preview_id, product_title, step } = await req.json()
 

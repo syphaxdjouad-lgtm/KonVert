@@ -150,7 +150,7 @@ function SignupContent() {
               </span>
             </h2>
             <p className="text-sm" style={{ color: 'rgba(167,139,250,0.55)' }}>
-              Rejoins 2 800+ e-commercants qui convertissent avec KONVERT.
+              Rejoins 2 800+ e-commerçants qui convertissent avec KONVERT.
             </p>
           </div>
 
@@ -253,7 +253,7 @@ function SignupContent() {
                     <span className="text-[7px] text-gray-400 ml-0.5">2 847 avis</span>
                   </div>
                   <p className="text-[11px] font-black text-gray-900 leading-tight mb-1">
-                    Montre Minimaliste Pro —<br />Design qui fait tourner les tetes
+                    Montre Minimaliste Pro —<br />Design qui fait tourner les têtes
                   </p>
                   <div className="flex items-baseline gap-1.5 mb-2">
                     <span className="text-sm font-black text-gray-900">89,90€</span>
@@ -261,7 +261,7 @@ function SignupContent() {
                     <span className="text-[7px] font-bold text-green-600 bg-green-50 px-1 py-0.5 rounded">-40%</span>
                   </div>
                   <div className="space-y-0.5 mb-2">
-                    {['Verre saphir anti-rayures', 'Etanche 50m', 'Bracelet cuir italien'].map(b => (
+                    {['Verre saphir anti-rayures', 'Étanche 50m', 'Bracelet cuir italien'].map(b => (
                       <div key={b} className="flex items-center gap-1">
                         <span className="text-[8px] text-green-500">✓</span>
                         <span className="text-[8px] text-gray-600">{b}</span>

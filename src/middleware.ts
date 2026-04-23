@@ -6,12 +6,13 @@ import { rateLimit } from '@/lib/security/ratelimit'
 const RATE_LIMITS: Record<string, { limit: number; windowMs: number }> = {
   '/api/generate':        { limit: 10,  windowMs: 60_000 },       // 10 req/min
   '/api/scrape':          { limit: 10,  windowMs: 60_000 },       // 10 req/min
-  '/api/stripe':          { limit: 20,  windowMs: 60_000 },       // 20 req/min
+  '/api/stripe/checkout': { limit: 20,  windowMs: 60_000 },       // 20 req/min (pas webhook)
+  '/api/stripe/portal':   { limit: 10,  windowMs: 60_000 },       // 10 req/min
   '/api/waitlist':        { limit: 5,   windowMs: 60_000 },       // 5 req/min (anti-spam)
   '/api/admin':           { limit: 5,   windowMs: 60_000 },       // 5 req/min (protection brute-force admin)
   '/api/ab':              { limit: 30,  windowMs: 60_000 },       // 30 req/min (tracking public)
-  '/login':               { limit: 10,  windowMs: 15 * 60_000 },  // 10 tentatives / 15 min
-  '/signup':              { limit: 5,   windowMs: 15 * 60_000 },  // 5 tentatives / 15 min
+  '/api/analytics':       { limit: 100, windowMs: 60_000 },       // 100 req/min (tracking pages)
+  '/api/contact':         { limit: 5,   windowMs: 60_000 },       // 5 req/min (anti-spam)
 }
 
 function getClientIp(req: NextRequest): string {

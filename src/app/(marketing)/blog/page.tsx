@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   ...genMeta({
     title: 'Blog E-commerce & Dropshipping | KONVERT',
     description:
-      'Guides SEO, tutoriels Shopify, strategies de conversion et conseils dropshipping. Tout pour vendre plus avec vos landing pages e-commerce.',
+      'Guides SEO, tutoriels Shopify, stratégies de conversion et conseils dropshipping. Tout pour vendre plus avec vos landing pages e-commerce.',
     path: '/blog',
   }),
   keywords: [
@@ -45,7 +45,7 @@ export default function BlogPage() {
     '@context': 'https://schema.org',
     '@type': 'Blog',
     name: 'Blog KONVERT',
-    description: 'Guides pratiques et strategies pour le e-commerce et le dropshipping.',
+    description: 'Guides pratiques et stratégies pour le e-commerce et le dropshipping.',
     url: `${APP_URL}/blog`,
     publisher: {
       '@type': 'Organization',

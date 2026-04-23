@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Valider le format du shop
-  if (!/^[a-zA-Z0-9-]+\.myshopify\.com$/.test(shop)) {
+  if (!/^[a-z0-9][a-z0-9-]*\.myshopify\.com$/.test(shop.toLowerCase())) {
     return NextResponse.json({ error: 'Format shop invalide (ex: mon-store.myshopify.com)' }, { status: 400 })
   }
 

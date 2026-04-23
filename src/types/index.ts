@@ -3,9 +3,9 @@
 export type PlanType = 'starter' | 'pro' | 'agency'
 
 export const PLAN_LIMITS: Record<PlanType, { pages: number; stores: number; whiteLabel: boolean }> = {
-  starter: { pages: 50,  stores: 2,  whiteLabel: false },
-  pro:     { pages: 200, stores: 5,  whiteLabel: false },
-  agency:  { pages: 500, stores: 15, whiteLabel: true  },
+  starter: { pages: 75,   stores: 2,  whiteLabel: false },
+  pro:     { pages: 300,  stores: 7,  whiteLabel: false },
+  agency:  { pages: 9999, stores: 99, whiteLabel: true  },
 }
 
 // ─── USER ────────────────────────────────────────────────────────────────────

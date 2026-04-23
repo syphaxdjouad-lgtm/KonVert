@@ -157,7 +157,7 @@ function NewPageInner() {
   const [afterPhotos,  setAfterPhotos]  = useState<string[]>([])
 
   // Step 5 — Style & Ton
-  const [selectedStyle, setSelectedStyle] = useState('shein-pro')
+  const [selectedStyle, setSelectedStyle] = useState('etec-blue')
   const [selectedTone,  setSelectedTone]  = useState('persuasif')
 
   // Step 6 — Plateforme cible
@@ -831,7 +831,7 @@ function NewPageInner() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
-                      {s.id === 'shein-pro' && (
+                      {s.id === 'etec-blue' && (
                         <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#fef3c7', color: '#d97706' }}>POPULAIRE</span>
                       )}
                     </div>

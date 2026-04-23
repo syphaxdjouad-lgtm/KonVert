@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Space_Grotesk } from 'next/font/google'
 import CrispChat from '@/components/CrispChat'
@@ -7,7 +7,14 @@ const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['400','500','6
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#5B47F5',
+}
+
 export const metadata: Metadata = {
+  metadataBase: new URL(APP_URL),
   title: {
     template: '%s | KONVERT',
     default: 'KONVERT — Tes produits méritent des pages qui vendent',
@@ -32,11 +39,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.png', type: 'image/png', sizes: '32x32' },
-      { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/favicon.ico', type: 'image/x-icon', sizes: '32x32' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
     ],
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
   alternates: {

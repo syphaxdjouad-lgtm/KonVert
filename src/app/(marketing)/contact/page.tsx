@@ -29,10 +29,10 @@ const SUBJECTS = [
 const CONTACT_CARDS = [
   {
     icon: MessageSquare,
-    title: 'Chat en direct',
-    desc: 'Réponse en moins de 2 minutes.',
+    title: 'Support direct',
+    desc: 'Réponse en moins de 24h.',
     detail: 'Lun–Ven, 9h–19h',
-    action: 'Ouvrir le chat',
+    action: 'Écrire au support',
     href: 'mailto:hello@konvert.app',
     color: 'text-[#5B47F5]',
     bg: 'bg-[#5B47F5]/10',

@@ -179,7 +179,7 @@ export default function PreviewPage() {
             pointerEvents: 'none',
           }}
           title={`Preview — ${data.product_title}`}
-          sandbox="allow-same-origin"
+          sandbox="allow-scripts"
         />
       </div>
 

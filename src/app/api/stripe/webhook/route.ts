@@ -51,10 +51,8 @@ export async function POST(req: NextRequest) {
           console.warn('[webhook] Plan introuvable pour subscription:', sub.id)
           break
         }
-        if (plan) {
-          const periodEnd = (sub as any).current_period_end ?? 0
-          await updateSubscription(userId, plan, sub.status, periodEnd)
-        }
+        const periodEnd = (sub as any).current_period_end ?? 0
+        await updateSubscription(userId, plan, sub.status, periodEnd)
         break
       }
 

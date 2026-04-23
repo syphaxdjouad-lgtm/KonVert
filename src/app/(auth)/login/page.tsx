@@ -75,6 +75,25 @@ export default function LoginPage() {
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-[13px] font-bold" style={{ color: 'rgba(196,181,253,0.8)' }}>Mot de passe</label>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    if (!email) { setError('Entre ton email pour recevoir le lien de réinitialisation.'); return }
+                    const supabase = createClient()
+                    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                      redirectTo: `${window.location.origin}/dashboard/settings`,
+                    })
+                    if (error) setError(error.message)
+                    else setError(null)
+                    alert('Un email de réinitialisation a été envoyé.')
+                  }}
+                  className="text-[12px] font-semibold transition-colors"
+                  style={{ color: 'rgba(167,139,250,0.6)' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#a78bfa')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(167,139,250,0.6)')}
+                >
+                  Mot de passe oublié ?
+                </button>
               </div>
               <input
                 type="password"
@@ -114,7 +133,7 @@ export default function LoginPage() {
 
           <p className="text-center text-sm mt-6" style={{ color: 'rgba(167,139,250,0.5)' }}>
             Pas encore de compte ?{' '}
-            <Link href="/signup" className="font-bold" style={{ color: '#a78bfa' }}>Rejoindre la bêta</Link>
+            <Link href="/signup" className="font-bold" style={{ color: '#a78bfa' }}>Créer un compte</Link>
           </p>
         </div>
       </div>
@@ -144,7 +163,7 @@ export default function LoginPage() {
                 <div className="w-2.5 h-2.5 rounded-full bg-green-400/50" />
               </div>
               <div className="flex-1 mx-3 py-1 px-3 rounded-md text-[11px] font-mono text-center" style={{ background: 'rgba(0,0,0,0.3)', color: 'rgba(167,139,250,0.6)' }}>
-                app.konvert.io/dashboard
+                app.konvert.app/dashboard
               </div>
             </div>
             <img

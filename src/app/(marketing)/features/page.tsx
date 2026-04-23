@@ -187,7 +187,7 @@ const OTHER_FEATURES = [
 
 const COMPARE_ROWS = [
   { label: 'Temps pour créer une page', konvert: '30 secondes', diy: '4–6 heures', freelance: '2–5 jours' },
-  { label: 'Coût', konvert: 'Dès 29€/mois', diy: '0€ (mais votre temps)', freelance: '300–1500€/page' },
+  { label: 'Coût', konvert: 'Dès 39€/mois', diy: '0€ (mais votre temps)', freelance: '300–1500€/page' },
   { label: 'Qualité copy', konvert: 'IA spécialisée e-com', diy: 'Variable, souvent faible', freelance: 'Dépend du freelance' },
   { label: 'Intégration Shopify', konvert: 'Native, 1 clic', diy: 'Manuelle, copier-coller', freelance: 'Parfois incluse' },
   { label: 'A/B Testing', konvert: 'Intégré & automatisé', diy: 'Impossible sans dev', freelance: 'En option payante' },

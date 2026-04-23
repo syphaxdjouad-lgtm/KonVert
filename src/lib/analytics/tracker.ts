@@ -4,7 +4,7 @@
 export function buildTrackingScript(pageId: string, apiUrl: string): string {
   return `<script>
 (function(){
-  var pid='${pageId}',base='${apiUrl}',sent={};
+  var pid=${JSON.stringify(pageId)},base=${JSON.stringify(apiUrl)},sent={};
   function t(e){
     if(sent[e])return;
     sent[e]=1;

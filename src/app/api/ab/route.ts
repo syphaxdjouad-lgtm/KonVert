@@ -20,6 +20,17 @@ function assignVariant(visitorId: string): 'A' | 'B' {
   return Math.abs(hash) % 2 === 0 ? 'A' : 'B'
 }
 
+// Headers CORS pour les appels cross-origin (pages Shopify/WooCommerce)
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS })
+}
+
 /* ─────────────────────────────────────────────────────────────────
    GET /api/ab?page_id=xxx&visitor_id=yyy
    Retourne : { variant: 'A'|'B', variant_id: string, test_id: string }

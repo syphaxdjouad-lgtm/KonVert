@@ -7,6 +7,17 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
+// Headers CORS pour les appels cross-origin (pages Shopify/WooCommerce)
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS })
+}
+
 // POST /api/analytics/track
 // Appelé par le script de tracking injecté dans les pages générées
 export async function POST(req: NextRequest) {
@@ -56,11 +67,11 @@ export async function POST(req: NextRequest) {
       await supabaseAdmin.rpc('increment_cta_clicks', { p_page_id: page_id })
     }
 
-    return NextResponse.json({ ok: true })
+    return NextResponse.json({ ok: true }, { headers: CORS_HEADERS })
   } catch (err) {
     // On ne renvoie pas d'erreur pour ne pas bloquer les pages visiteurs
     console.error('[analytics/track]', err)
-    return NextResponse.json({ ok: true })
+    return NextResponse.json({ ok: true }, { headers: CORS_HEADERS })
   }
 }
 

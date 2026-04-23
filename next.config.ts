@@ -9,7 +9,7 @@ const securityHeaders = [
   // Limite les infos de référent envoyées aux sites tiers
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   // Désactive les APIs navigateur non utilisées
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=()' },
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
   // Force HTTPS pendant 1 an (activer uniquement en prod — Vercel gère déjà le HTTPS)
   { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
   // Content Security Policy
@@ -18,7 +18,7 @@ const securityHeaders = [
     value: [
       "default-src 'self'",
       // Scripts : Stripe, inline (shadcn/next), unsafe-eval pour GrapesJS builder
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://client.crisp.chat",
       // Styles : inline + Google Fonts CSS
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       // Images : data URIs, blob (GrapesJS), et tous les CDN produits e-commerce
@@ -26,9 +26,9 @@ const securityHeaders = [
       // Polices : Google Fonts (templates) + local
       "font-src 'self' data: https://fonts.gstatic.com",
       // Connexions API
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://client.crisp.chat wss://client.relay.crisp.chat",
       // Iframes Stripe (checkout embedded)
-      "frame-src https://js.stripe.com https://hooks.stripe.com",
+      "frame-src https://js.stripe.com https://hooks.stripe.com https://game.crisp.chat",
       // Workers (Next.js)
       "worker-src 'self' blob:",
     ].join('; '),

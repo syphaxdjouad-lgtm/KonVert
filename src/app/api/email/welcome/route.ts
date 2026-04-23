@@ -3,6 +3,12 @@ import { sendEmail } from '@/lib/email'
 import { emailWelcome } from '@/lib/email/templates'
 
 export async function POST(req: NextRequest) {
+  // Protection : uniquement appelable en interne
+  const internalSecret = req.headers.get('x-internal-secret')
+  if (internalSecret !== process.env.CRON_SECRET) {
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+  }
+
   try {
     const { email, name } = await req.json()
     if (!email || !name) {

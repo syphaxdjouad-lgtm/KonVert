@@ -85,7 +85,7 @@ export default function BlogListClient({ articles, categories }: Props) {
                 className="text-lg max-w-xl mb-10 leading-relaxed"
                 style={{ color: '#6b7280' }}
               >
-                Guides SEO, tutoriels Shopify, strategies de conversion et conseils
+                Guides SEO, tutoriels Shopify, stratégies de conversion et conseils
                 dropshipping pour booster vos ventes e-commerce.
               </p>
 
@@ -273,7 +273,7 @@ export default function BlogListClient({ articles, categories }: Props) {
           </h2>
           <p className="text-sm mb-8" style={{ color: '#8b8baa' }}>
             1 conseil actionnable par semaine. Strategies, analyses, outils.
-            Rejoignez 4 200+ e-commercants.
+            Rejoignez 4 200+ e-commerçants.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input

@@ -33,7 +33,7 @@ function BeforeSide() {
       </div>
 
       {/* Product image — style AliExpress */}
-      <div className="relative bg-gray-100" style={{ minHeight: '35%' }}>
+      <div className="relative bg-gray-100 h-[160px] sm:h-[200px] flex-shrink-0">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=600&q=80"
@@ -134,7 +134,7 @@ function AfterSide() {
       </div>
 
       {/* Product image hero */}
-      <div className="relative" style={{ minHeight: '32%', background: 'linear-gradient(160deg,#f0edff,#e8e3ff)' }}>
+      <div className="relative h-[160px] sm:h-[200px] flex-shrink-0" style={{ background: 'linear-gradient(160deg,#f0edff,#e8e3ff)' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=600&q=80"

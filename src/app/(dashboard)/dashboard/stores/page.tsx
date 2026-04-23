@@ -2,10 +2,74 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Plus, Store, Trash2, CheckCircle, AlertCircle, Zap, ExternalLink, Link2 } from 'lucide-react'
+import { Plus, Store, Trash2, CheckCircle, AlertCircle, Zap, ExternalLink, Link2, X } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
+/* ── Modale de confirmation ─────────────────────────────────────────────── */
+function ConfirmModal({
+  open,
+  title,
+  message,
+  onConfirm,
+  onCancel,
+  loading,
+}: {
+  open: boolean
+  title: string
+  message: string
+  onConfirm: () => void
+  onCancel: () => void
+  loading?: boolean
+}) {
+  if (!open) return null
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/40" onClick={onCancel} />
+      <div
+        className="relative w-full max-w-sm rounded-2xl p-6"
+        style={{ background: '#fff', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}
+      >
+        <button
+          onClick={onCancel}
+          className="absolute top-4 right-4 w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+          style={{ color: '#9ca3af' }}
+          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = '#f3f4f6')}
+          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
+        >
+          <X className="w-4 h-4" />
+        </button>
+
+        <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: 'rgba(220,38,38,0.08)' }}>
+          <Trash2 className="w-5 h-5" style={{ color: '#dc2626' }} />
+        </div>
+
+        <h3 className="text-center font-black text-base mb-1" style={{ color: '#111' }}>{title}</h3>
+        <p className="text-center text-sm mb-6" style={{ color: '#6b7280' }}>{message}</p>
+
+        <div className="flex gap-3">
+          <button
+            onClick={onCancel}
+            className="flex-1 font-bold py-2.5 rounded-xl text-sm transition-colors"
+            style={{ border: '1px solid #e5e7eb', color: '#374151', background: '#fff' }}
+          >
+            Annuler
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={loading}
+            className="flex-1 text-white font-bold py-2.5 rounded-xl text-sm transition-all disabled:opacity-50"
+            style={{ background: '#dc2626' }}
+          >
+            {loading ? 'Suppression...' : 'Supprimer'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ── Contenu principal ──────────────────────────────────────────────────── */
 function StoresContent() {
   const [stores, setStores]         = useState<any[]>([])
   const [loading, setLoading]       = useState(true)
@@ -15,6 +79,10 @@ function StoresContent() {
   const [error, setError]           = useState<string | null>(null)
   const searchParams                = useSearchParams()
   const justConnected               = searchParams.get('connected')
+
+  // State pour la modale de suppression
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null)
+  const [deleting, setDeleting]         = useState(false)
 
   useEffect(() => { loadStores() }, [])
 
@@ -47,15 +115,28 @@ function StoresContent() {
     }
   }
 
-  async function deleteStore(id: string) {
-    if (!confirm('Supprimer ce store ?')) return
+  async function confirmDeleteStore() {
+    if (!deleteTarget) return
+    setDeleting(true)
     const supabase = createClient()
-    await supabase.from('stores').delete().eq('id', id)
-    setStores(stores.filter(s => s.id !== id))
+    await supabase.from('stores').delete().eq('id', deleteTarget.id)
+    setStores(stores.filter(s => s.id !== deleteTarget.id))
+    setDeleteTarget(null)
+    setDeleting(false)
   }
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
+
+      {/* Modale de confirmation */}
+      <ConfirmModal
+        open={!!deleteTarget}
+        title="Supprimer ce store ?"
+        message={`Le store "${deleteTarget?.name || ''}" sera déconnecté. Tes pages existantes ne seront pas supprimées.`}
+        onConfirm={confirmDeleteStore}
+        onCancel={() => setDeleteTarget(null)}
+        loading={deleting}
+      />
 
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
@@ -90,7 +171,7 @@ function StoresContent() {
         <>
           <div className="space-y-3 mb-6">
             {stores.map(store => (
-              <StoreCard key={store.id} store={store} onDelete={() => deleteStore(store.id)} />
+              <StoreCard key={store.id} store={store} onDelete={() => setDeleteTarget({ id: store.id, name: store.name })} />
             ))}
           </div>
 

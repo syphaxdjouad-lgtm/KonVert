@@ -6,11 +6,11 @@ import { Zap, ArrowRight, Check, Shield, Globe, Palette, BarChart3, Copy, Extern
 
 /* ── TEMPLATES DISPONIBLES ─────────────────────────────────────────────────── */
 const DEMO_TEMPLATES = [
-  { id: 'shein-pro',    name: 'Shein Pro',      gradient: 'from-[#5B47F5] to-[#8b77ff]', text: 'text-white' },
-  { id: 'bold-orange',  name: 'Bold Orange',    gradient: 'from-orange-500 to-amber-400', text: 'text-white' },
-  { id: 'minimal-dark', name: 'Minimal Dark',   gradient: 'from-gray-900 to-gray-700',   text: 'text-white' },
-  { id: 'clean-white',  name: 'Clean White',    gradient: 'from-gray-50 to-white',        text: 'text-gray-900', border: 'border border-gray-300' },
-  { id: 'beauty',       name: 'Beauty Studio',  gradient: 'from-pink-400 to-rose-500',   text: 'text-white' },
+  { id: 'etec-blue',    name: 'Blue',           gradient: 'from-[#0057FF] to-[#3b82f6]', text: 'text-white' },
+  { id: 'etec-noir',    name: 'Noir',           gradient: 'from-gray-900 to-gray-700',   text: 'text-white' },
+  { id: 'etec-rose',    name: 'Rose',           gradient: 'from-pink-400 to-rose-500',   text: 'text-white' },
+  { id: 'etec-gold',    name: 'Gold',           gradient: 'from-amber-400 to-yellow-600', text: 'text-white' },
+  { id: 'etec-energy',  name: 'Energy',         gradient: 'from-orange-500 to-red-500',  text: 'text-white' },
 ]
 
 const SUPPORTED = [
@@ -60,7 +60,7 @@ function generateMockPage(url: string, templateId: string, lang: string) {
 /* ── COMPOSANT PAGE DÉMO ────────────────────────────────────────────────────── */
 export default function DemoPage() {
   const [url,          setUrl]         = useState('')
-  const [selectedTpl,  setSelectedTpl] = useState('shein-pro')
+  const [selectedTpl,  setSelectedTpl] = useState('etec-blue')
   const [selectedLang, setLang]        = useState('fr')
   const [step,         setStep]        = useState<'idle' | 'loading' | 'result'>('idle')
   const [progress,     setProgress]    = useState(0)

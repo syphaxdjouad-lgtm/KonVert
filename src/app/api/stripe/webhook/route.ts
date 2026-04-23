@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice
-        const subId   = (invoice as any).subscription as string
+        const subId   = (invoice.parent?.subscription_details?.subscription ?? (invoice as any).subscription) as string
         if (!subId) break
 
         await supabaseAdmin
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
 
       case 'invoice.payment_succeeded': {
         const invoice = event.data.object as Stripe.Invoice
-        const subId   = (invoice as any).subscription as string
+        const subId   = (invoice.parent?.subscription_details?.subscription ?? (invoice as any).subscription) as string
         if (!subId) break
 
         // Réinitialiser le quota mensuel au renouvellement

@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createAdmin } from '@supabase/supabase-js'
+import { stripe } from '@/lib/stripe'
 import { revalidatePath } from 'next/cache'
 
 const supabaseAdmin = createAdmin(
@@ -33,7 +34,7 @@ export async function sendPasswordReset() {
   if (!user?.email) return { error: 'Email introuvable' }
 
   const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/reset-password`,
+    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings`,
   })
 
   if (error) return { error: 'Erreur envoi email' }
@@ -54,7 +55,6 @@ export async function deleteAccount() {
 
   if (sub?.stripe_subscription_id) {
     try {
-      const { stripe } = await import('@/lib/stripe')
       await stripe.subscriptions.cancel(sub.stripe_subscription_id)
     } catch (err) {
       console.error('[deleteAccount] Stripe cancel error:', err)

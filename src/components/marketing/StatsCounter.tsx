@@ -11,10 +11,10 @@ interface Stat {
 }
 
 const STATS: Stat[] = [
-  { value: 4200,  prefix: '',  suffix: '+',  label: 'pages créées' },
+  { value: 50000, prefix: '',  suffix: '+',  label: 'pages générées' },
   { value: 2.1,   prefix: '€', suffix: 'M',  label: 'générés par nos clients', isFloat: true },
   { value: 98,    prefix: '',  suffix: '%',  label: 'de satisfaction' },
-  { value: 1200,  prefix: '',  suffix: '+',  label: 'e-commerçants actifs' },
+  { value: 2800,  prefix: '',  suffix: '+',  label: 'e-commerçants actifs' },
   { value: 47,    prefix: '',  suffix: '',   label: 'pays' },
 ]
 

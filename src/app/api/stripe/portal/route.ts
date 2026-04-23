@@ -29,8 +29,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ url: session.url })
   } catch (err) {
     console.error('[stripe/portal]', err)
+    console.error('[stripe/portal] detail:', err instanceof Error ? err.message : err)
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : 'Erreur Stripe' },
+      { error: 'Erreur Stripe. Réessaie ou contacte le support.' },
       { status: 500 }
     )
   }

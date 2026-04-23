@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { timingSafeEqual } from 'crypto'
 import { sendEmail } from '@/lib/email'
 import {
   emailPreviewDelivery,
@@ -8,12 +9,18 @@ import {
   emailPreviewDay7,
 } from '@/lib/email/preview-templates'
 
+function safeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  return timingSafeEqual(Buffer.from(a), Buffer.from(b))
+}
+
 type PreviewStep = 0 | 1 | 3 | 5 | 7
 
 export async function POST(req: NextRequest) {
   // Protection : uniquement appelable en interne (fire-and-forget depuis /api/generate/public)
-  const internalSecret = req.headers.get('x-internal-secret')
-  if (internalSecret !== process.env.CRON_SECRET) {
+  const internalSecret = req.headers.get('x-internal-secret') || ''
+  const cronSecret = process.env.CRON_SECRET || ''
+  if (!cronSecret || !safeCompare(internalSecret, cronSecret)) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
   }
 

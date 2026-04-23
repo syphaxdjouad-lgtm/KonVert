@@ -743,7 +743,7 @@ function Slide3() {
                 className="flex-1 rounded-md px-3 py-1 text-[11px] font-mono"
                 style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
-                app.konvert.io/analytics
+                app.konvert.app/analytics
               </div>
               <div
                 className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold"
@@ -1985,7 +1985,7 @@ function AIBuilderDemoSection() {
                     pointerEvents: 'none',
                     display: 'block',
                   }}
-                  sandbox="allow-scripts allow-same-origin"
+                  sandbox="allow-scripts"
                 />
                 {/* Dégradé bas pour fondre proprement */}
                 <div

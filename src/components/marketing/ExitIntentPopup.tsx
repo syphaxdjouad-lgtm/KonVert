@@ -77,8 +77,30 @@ export default function ExitIntentPopup() {
             <X className="w-4 h-4" />
           </button>
 
-          {/* Emoji */}
-          <div className="text-4xl mb-4">✋</div>
+          {/* Hero image — mockup landing page */}
+          <div className="w-full rounded-xl overflow-hidden mb-5" style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', padding: '20px 24px 0' }}>
+            <div className="rounded-t-lg overflow-hidden shadow-lg" style={{ background: '#fff' }}>
+              {/* Browser bar */}
+              <div className="flex items-center gap-1.5 px-3 py-2" style={{ background: '#f3f3f6' }}>
+                <div className="w-2 h-2 rounded-full" style={{ background: '#ff5f57' }} />
+                <div className="w-2 h-2 rounded-full" style={{ background: '#ffbd2e' }} />
+                <div className="w-2 h-2 rounded-full" style={{ background: '#28c840' }} />
+                <div className="flex-1 mx-2 h-4 rounded-md" style={{ background: '#e4e4e9' }} />
+              </div>
+              {/* Page content mockup */}
+              <div className="px-4 py-3 space-y-2">
+                <div className="flex gap-3">
+                  <div className="w-16 h-16 rounded-lg flex-shrink-0" style={{ background: 'linear-gradient(135deg, #e0d9ff, #c4b5fd)' }} />
+                  <div className="flex-1 space-y-1.5">
+                    <div className="h-3 rounded-full w-3/4" style={{ background: '#1a1a2e' }} />
+                    <div className="h-2 rounded-full w-full" style={{ background: '#e4e4e9' }} />
+                    <div className="h-2 rounded-full w-2/3" style={{ background: '#e4e4e9' }} />
+                  </div>
+                </div>
+                <div className="h-7 rounded-lg w-full" style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)' }} />
+              </div>
+            </div>
+          </div>
 
           {!submitted ? (
             <>

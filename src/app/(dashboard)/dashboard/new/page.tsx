@@ -92,14 +92,30 @@ const LANGUAGES = [
 
 // ── Composant StepIndicator ──
 function StepIndicator({ current, total, labels }: { current: number; total: number; labels: string[] }) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!scrollRef.current) return
+    const activeEl = scrollRef.current.querySelector('[data-active="true"]') as HTMLElement | null
+    if (activeEl) {
+      const container = scrollRef.current
+      const scrollLeft = activeEl.offsetLeft - container.offsetWidth / 2 + activeEl.offsetWidth / 2
+      container.scrollTo({ left: scrollLeft, behavior: 'smooth' })
+    }
+  }, [current])
+
   return (
-    <div className="flex items-center gap-0">
+    <div
+      ref={scrollRef}
+      className="hidden sm:flex items-center gap-0 overflow-x-auto scrollbar-hide pb-1"
+      style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+    >
       {labels.map((label, i) => {
         const step = i + 1
         const done   = step < current
         const active = step === current
         return (
-          <div key={step} className="flex items-center">
+          <div key={step} className="flex items-center flex-shrink-0" data-active={active ? 'true' : undefined}>
             <div className="flex flex-col items-center gap-1">
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all"

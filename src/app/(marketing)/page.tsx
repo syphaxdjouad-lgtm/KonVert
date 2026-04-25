@@ -2934,7 +2934,7 @@ function Testimonials() {
 const PLANS = [
   {
     name: 'Starter',
-    monthly: 29,
+    monthly: 39,
     desc: 'Pour démarrer et tester',
     features: ['5 pages / mois', '42+ templates', 'Analytics basique', 'Export HTML'],
     cta: 'Démarrer',
@@ -2949,8 +2949,8 @@ const PLANS = [
     highlighted: true,
   },
   {
-    name: 'Agence',
-    monthly: 149,
+    name: 'Agency',
+    monthly: 199,
     desc: 'Pour les agences SMMA',
     features: ['Tout dans Pro', 'Multi-clients illimité', 'White-label (logo + couleurs)', 'Rapports clients', 'Accès API (bientôt)', 'Onboarding personnalisé'],
     cta: 'Contacter les ventes',

@@ -65,7 +65,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ sent: true })
   } catch (err) {
+    // 500 pour que Sentry/Vercel remontent vraiment l'erreur — l'ancien 200
+    // masquait les pannes Resend / templates cassés.
     console.error('[email/preview]', err)
-    return NextResponse.json({ sent: false }, { status: 200 })
+    return NextResponse.json({ sent: false, error: 'Email send failed' }, { status: 500 })
   }
 }

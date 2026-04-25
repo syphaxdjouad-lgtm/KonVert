@@ -20,14 +20,9 @@ create index if not exists public_previews_email_idx on public_previews (email);
 -- Index pour les previews non-expirées
 create index if not exists public_previews_expires_idx on public_previews (expires_at);
 
--- RLS : lecture publique par ID uniquement (pas de liste)
+-- RLS : aucune policy → seul le service_role accède.
+-- /api/generate/public et /api/preview/[id] utilisent supabaseAdmin (service_role).
+-- Les anciennes policies "using (true)" laissaient anon lire/insérer toutes les
+-- previews (fuite emails leads + HTML) — supprimées dans la migration suivante :
+-- 20260425_security_rls_lockdown.sql
 alter table public_previews enable row level security;
-
--- Pas de select * public — uniquement via l'API server-side (service role)
--- La route API /api/preview/[id] utilise le service role ou anon avec cette policy
-create policy "Lecture par ID" on public_previews
-  for select using (true);
-
--- Insert via API uniquement (service role bypass RLS)
-create policy "Insert via API" on public_previews
-  for insert with check (true);

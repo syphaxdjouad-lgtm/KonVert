@@ -39,11 +39,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'page_id invalide' }, { status: 400 })
     }
 
+    // Tracker uniquement les pages publiées — bloque la pollution de stats
+    // sur des brouillons / pages archivées.
     const { data: page } = await supabaseAdmin
       .from('pages')
-      .select('id')
+      .select('id, status')
       .eq('id', page_id)
-      .single()
+      .eq('status', 'published')
+      .maybeSingle()
 
     if (!page) {
       return NextResponse.json({ error: 'Page introuvable' }, { status: 404 })

@@ -1,6 +1,42 @@
 import { anthropic } from '@/lib/anthropic'
 import type { ScrapedProduct, LandingPageData } from '@/types'
 
+// Escape les caractères HTML dangereux. Les templates injectent les champs
+// Claude via `${...}` sans escape ; sans cette sanitization, un produit
+// scrapé contenant un payload (ou une dérive de Claude) pourrait XSS la
+// preview / la page publiée chez le client (Shopify/Woo).
+function escapeHtml(s: string): string {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+}
+
+// Filtre les URLs d'images : uniquement http(s) — bloque javascript:, data:, etc.
+function safeImageUrl(url: string): boolean {
+  return typeof url === 'string' && /^https?:\/\//i.test(url)
+}
+
+function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
+  return {
+    headline:       escapeHtml(d.headline ?? ''),
+    subtitle:       escapeHtml(d.subtitle ?? ''),
+    benefits:       (d.benefits ?? []).map(escapeHtml),
+    faq:            (d.faq ?? []).map(f => ({
+      question: escapeHtml(f.question ?? ''),
+      answer:   escapeHtml(f.answer   ?? ''),
+    })),
+    cta:            escapeHtml(d.cta ?? ''),
+    urgency:        escapeHtml(d.urgency ?? ''),
+    product_name:   escapeHtml(d.product_name ?? ''),
+    price:          d.price ? escapeHtml(d.price) : d.price,
+    original_price: d.original_price ? escapeHtml(d.original_price) : d.original_price,
+    images:         (d.images ?? []).filter(safeImageUrl),
+  }
+}
+
 const LANGUAGE_NAMES: Record<string, string> = {
   fr: 'français',
   en: 'English',
@@ -123,5 +159,7 @@ export async function generateLandingPage(
     data.images = product.images
   }
 
-  return data
+  // Sanitization globale — protège tous les templates (42) d'un coup contre
+  // une injection HTML/JS via le contenu scrapé ou un drift de Claude.
+  return sanitizeLandingPageData(data)
 }

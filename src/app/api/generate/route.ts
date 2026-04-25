@@ -3,6 +3,7 @@ import { generateLandingPage } from '@/lib/anthropic/generate'
 import { scrapeProduct, cleanProduct } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import { createClient } from '@/lib/supabase/server'
+import { validateScrapeUrl } from '@/lib/security/url-allow'
 import type { ScrapedProduct } from '@/types'
 
 export async function POST(req: NextRequest) {
@@ -37,8 +38,12 @@ export async function POST(req: NextRequest) {
     let product: ScrapedProduct
 
     if (body.url) {
-      // Mode scraping réel depuis une URL
-      const raw = await scrapeProduct(body.url)
+      // Mode scraping réel depuis une URL — anti-SSRF via whitelist e-commerce
+      const check = validateScrapeUrl(body.url)
+      if (!check.ok) {
+        return NextResponse.json({ error: check.error }, { status: check.status })
+      }
+      const raw = await scrapeProduct(check.parsed.toString())
       product = cleanProduct(raw)
     } else {
       // Produit fourni directement ou mock

@@ -57,23 +57,21 @@ export async function POST(req: NextRequest) {
 
     let result: { id: number; url: string }
 
-    if (page.published_url) {
-      // Page déjà publiée → on extrait l'ID et on met à jour
-      const existingId = parseInt(page.published_url.split('/').pop() || '0', 10)
-      if (existingId) {
-        await client.updatePage(existingId, page.title, trackedHtml)
-        result = { id: existingId, url: page.published_url }
-      } else {
-        result = await client.createPage(page.title, trackedHtml)
-      }
+    // ID Shopify stocké dans une colonne dédiée — plus fiable que reparser
+    // l'URL stockée (qui peut avoir été éditée dans le store).
+    const existingId = page.published_id ?? 0
+
+    if (existingId) {
+      await client.updatePage(existingId, page.title, trackedHtml)
+      result = { id: existingId, url: page.published_url || '' }
     } else {
       result = await client.createPage(page.title, trackedHtml)
     }
 
-    // Sauvegarder l'URL publiée dans la DB
+    // Sauvegarder l'URL ET l'ID natif Shopify
     await supabase
       .from('pages')
-      .update({ published_url: result.url, status: 'published' })
+      .update({ published_url: result.url, published_id: result.id, status: 'published' })
       .eq('id', page_id)
 
     return NextResponse.json({

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { timingSafeEqual } from 'crypto'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail } from '@/lib/email'
 import { emailDay1, emailDay3, emailDay7, emailDay10, emailDay12, emailDay13, emailDay14 } from '@/lib/email/templates'
@@ -24,12 +25,17 @@ function getEmailForDay(day: TrialDay, name: string) {
   }
 }
 
+function safeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  return timingSafeEqual(Buffer.from(a), Buffer.from(b))
+}
+
 // Protection cron : vérifie le header Vercel
 function isAuthorized(req: NextRequest): boolean {
   const cronSecret = process.env.CRON_SECRET
   if (!cronSecret) return false  // variable non configurée → bloquer systématiquement
-  const secret = req.headers.get('authorization')
-  return secret === `Bearer ${cronSecret}`
+  const header = req.headers.get('authorization') ?? ''
+  return safeCompare(header, `Bearer ${cronSecret}`)
 }
 
 export async function GET(req: NextRequest) {

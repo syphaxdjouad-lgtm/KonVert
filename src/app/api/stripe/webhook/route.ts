@@ -1,8 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server'
+import * as Sentry from '@sentry/nextjs'
 import { stripe } from '@/lib/stripe'
 import { createClient } from '@supabase/supabase-js'
 import type Stripe from 'stripe'
 import type { PlanType } from '@/types'
+
+// Stripe a déplacé `invoice.subscription` dans `invoice.parent.subscription_details.subscription`
+// au fil des versions de l'API. On lit les deux pour rester compatible sans `any`.
+function extractSubscriptionId(invoice: Stripe.Invoice): string | null {
+  const fromParent = invoice.parent?.subscription_details?.subscription
+  if (typeof fromParent === 'string') return fromParent
+  if (fromParent && typeof fromParent === 'object' && 'id' in fromParent) return fromParent.id
+
+  const legacy = (invoice as unknown as { subscription?: string | { id: string } }).subscription
+  if (typeof legacy === 'string') return legacy
+  if (legacy && typeof legacy === 'object' && 'id' in legacy) return legacy.id
+
+  return null
+}
+
+function extractPeriodEnd(sub: Stripe.Subscription): number {
+  return (sub as unknown as { current_period_end?: number }).current_period_end ?? 0
+}
 
 // Webhook Stripe — utilise le service role pour bypasser RLS
 const supabaseAdmin = createClient(
@@ -46,13 +65,18 @@ export async function POST(req: NextRequest) {
         const userId = sub.metadata?.supabase_user_id
         if (!userId) break
 
-        const plan = getPlanFromPrice(sub.items.data?.[0]?.price?.id)
+        const priceId = sub.items.data?.[0]?.price?.id
+        const plan = getPlanFromPrice(priceId)
         if (!plan) {
-          console.warn('[webhook] Plan introuvable pour subscription:', sub.id)
+          // PriceId non mappé → Sentry pour qu'on l'ajoute au mapping plutôt
+          // que de laisser silencieusement passer un upgrade non honoré.
+          Sentry.captureMessage('[stripe/webhook] Unknown priceId', {
+            level: 'warning',
+            extra: { priceId, subscriptionId: sub.id, userId },
+          })
           break
         }
-        const periodEnd = (sub as any).current_period_end ?? 0
-        await updateSubscription(userId, plan, sub.status, periodEnd)
+        await updateSubscription(userId, plan, sub.status, extractPeriodEnd(sub))
         break
       }
 
@@ -76,7 +100,7 @@ export async function POST(req: NextRequest) {
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice
-        const subId   = (invoice.parent?.subscription_details?.subscription ?? (invoice as any).subscription) as string
+        const subId = extractSubscriptionId(invoice)
         if (!subId) break
 
         await supabaseAdmin
@@ -88,7 +112,7 @@ export async function POST(req: NextRequest) {
 
       case 'invoice.payment_succeeded': {
         const invoice = event.data.object as Stripe.Invoice
-        const subId   = (invoice.parent?.subscription_details?.subscription ?? (invoice as any).subscription) as string
+        const subId = extractSubscriptionId(invoice)
         if (!subId) break
 
         // Réinitialiser le quota mensuel au renouvellement
@@ -130,7 +154,7 @@ async function activateSubscription(
     stripe_subscription_id: subscriptionId,
     plan,
     status:                 'active',
-    current_period_end:     new Date(((stripeSub as any).current_period_end ?? 0) * 1000).toISOString(),
+    current_period_end:     new Date(extractPeriodEnd(stripeSub) * 1000).toISOString(),
   }, { onConflict: 'user_id' })
 
   await supabaseAdmin

@@ -27,12 +27,24 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   if (!workspace) return NextResponse.json({ error: 'Workspace introuvable' }, { status: 404 })
 
   const { email, role = 'viewer' } = await req.json()
-  if (!email) return NextResponse.json({ error: 'Email requis' }, { status: 400 })
+  if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return NextResponse.json({ error: 'Email invalide' }, { status: 400 })
+  }
 
-  // Ajouter le membre (statut pending)
+  const allowedRoles = ['viewer', 'editor', 'admin']
+  if (!allowedRoles.includes(role)) {
+    return NextResponse.json({ error: 'Rôle invalide' }, { status: 400 })
+  }
+
+  // Email normalisé pour matcher la policy RLS lower(email).
+  const normalizedEmail = email.trim().toLowerCase()
+
   const { data: member, error } = await supabaseAdmin
     .from('workspace_members')
-    .upsert({ workspace_id: workspaceId, email, role, status: 'pending' }, { onConflict: 'workspace_id,email' })
+    .upsert(
+      { workspace_id: workspaceId, email: normalizedEmail, role, status: 'pending' },
+      { onConflict: 'workspace_id,email' }
+    )
     .select()
     .single()
 
@@ -43,7 +55,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   // Envoyer l'email d'invitation via Supabase Auth
   try {
-    await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+    await supabaseAdmin.auth.admin.inviteUserByEmail(normalizedEmail, {
       redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?workspace=${workspaceId}`,
       data: { workspace_name: workspace.name, role },
     })

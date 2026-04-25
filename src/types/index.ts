@@ -63,6 +63,7 @@ export interface Page {
   views: number
   cta_clicks: number
   published_url: string | null
+  published_id: number | null
   created_at: string
   updated_at: string
 }

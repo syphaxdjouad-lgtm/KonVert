@@ -27,8 +27,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ sent: true })
   } catch (err) {
-    // Ne pas bloquer le signup si l'email échoue
+    // 500 pour Sentry — le caller (signup) est en fire-and-forget, donc le user
+    // n'est pas bloqué. Mais on a besoin de remonter les pannes Resend.
     console.error('[email/welcome]', err)
-    return NextResponse.json({ sent: false }, { status: 200 })
+    return NextResponse.json({ sent: false, error: 'Email send failed' }, { status: 500 })
   }
 }

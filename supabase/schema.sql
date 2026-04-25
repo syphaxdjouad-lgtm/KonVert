@@ -26,6 +26,9 @@ create policy "Users can view own profile"   on public.users for select using (a
 create policy "Users can update own profile" on public.users for update using (auth.uid() = id);
 
 -- Trigger : créer le profil auto à l'inscription
+-- email normalisé en lower(trim(...)) — assure que la policy RLS de
+-- workspace_members (lower(email) = ...) match toujours, et empêche les
+-- doublons dérivés de "Bob@x.com" vs "bob@x.com".
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path = ''
 as $$
@@ -33,7 +36,7 @@ begin
   insert into public.users (id, email, name)
   values (
     new.id,
-    new.email,
+    lower(trim(new.email)),
     coalesce(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1))
   );
   return new;
@@ -48,7 +51,7 @@ create trigger on_auth_user_created
 
 create table public.subscriptions (
   id                       uuid primary key default uuid_generate_v4(),
-  user_id                  uuid references public.users(id) on delete cascade not null,
+  user_id                  uuid references public.users(id) on delete cascade not null unique,
   stripe_customer_id       text unique,
   stripe_subscription_id   text unique,
   plan                     text not null default 'starter' check (plan in ('starter','pro','agency')),
@@ -114,6 +117,7 @@ create table public.pages (
   json_content   jsonb,           -- LandingPageData structuré
   status         text not null default 'draft' check (status in ('draft','published','archived')),
   published_url  text,            -- URL après push Shopify/WooCommerce
+  published_id   bigint,           -- ID natif Shopify (page.id) ou WP (post.ID)
   views          int not null default 0,
   cta_clicks     int not null default 0,
   created_at     timestamptz not null default now(),
@@ -302,10 +306,10 @@ create policy "Workspace owners can manage members" on public.workspace_members
       and workspaces.owner_id = auth.uid()
     )
   );
--- Un membre peut lire son propre enregistrement
+-- Un membre peut lire son propre enregistrement (email comparé en lower)
 create policy "Members can view own membership" on public.workspace_members
   for select using (
-    email = (select email from public.users where id = auth.uid())
+    lower(email) = (select lower(email) from public.users where id = auth.uid())
   );
 
 -- ─── COLONNE workspace_id sur PAGES ───────────────────────────────
@@ -388,8 +392,9 @@ create table public.ab_events (
 create index idx_ab_events_variant_id on public.ab_events(variant_id);
 create index idx_ab_events_visitor    on public.ab_events(visitor_id, variant_id, event_type);
 
--- ab_events est public (tracking visiteur) — pas de RLS
--- (Service role key utilisée côté API)
+-- ab_events : RLS activée sans policy → bloqué pour anon/auth.
+-- /api/ab utilise le service_role pour insert/select.
+alter table public.ab_events enable row level security;
 
 -- ─── FONCTIONS ATOMIQUES A/B ──────────────────────────────────────
 

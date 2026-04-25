@@ -62,13 +62,23 @@ export async function exchangeCodeForToken(shop: string, code: string): Promise<
 
 // ─── Chiffrement du token ─────────────────────────────────────────────────────
 
-const _RAW_KEY = process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex')
-// Dériver une clé AES-256 propre (32 bytes) via SHA-256 — indépendant de la longueur de l'env var
-const ENCRYPTION_KEY = crypto.createHash('sha256').update(_RAW_KEY).digest()
+// Fail-fast en runtime serveur : sans ENCRYPTION_KEY stable, on régénérerait
+// une clé à chaque cold-start → tous les access_tokens en DB deviendraient
+// indéchiffrables. La clé doit être une env var permanente.
+function getEncryptionKey(): Buffer {
+  const raw = process.env.ENCRYPTION_KEY
+  if (!raw || raw.length < 32) {
+    throw new Error(
+      'ENCRYPTION_KEY manquante ou trop courte (min 32 caractères). ' +
+        'Sans elle, les tokens Shopify chiffrés en DB deviennent illisibles.'
+    )
+  }
+  return crypto.createHash('sha256').update(raw).digest()
+}
 
 export function encryptToken(token: string): string {
   const iv  = crypto.randomBytes(12)
-  const cipher = crypto.createCipheriv('aes-256-gcm', ENCRYPTION_KEY, iv)
+  const cipher = crypto.createCipheriv('aes-256-gcm', getEncryptionKey(), iv)
   const encrypted = Buffer.concat([cipher.update(token, 'utf8'), cipher.final()])
   const tag = cipher.getAuthTag()
   return [iv.toString('hex'), encrypted.toString('hex'), tag.toString('hex')].join(':')
@@ -76,7 +86,7 @@ export function encryptToken(token: string): string {
 
 export function decryptToken(encrypted: string): string {
   const [ivHex, dataHex, tagHex] = encrypted.split(':')
-  const decipher = crypto.createDecipheriv('aes-256-gcm', ENCRYPTION_KEY, Buffer.from(ivHex, 'hex'))
+  const decipher = crypto.createDecipheriv('aes-256-gcm', getEncryptionKey(), Buffer.from(ivHex, 'hex'))
   decipher.setAuthTag(Buffer.from(tagHex, 'hex'))
   const decrypted = Buffer.concat([
     decipher.update(Buffer.from(dataHex, 'hex')),

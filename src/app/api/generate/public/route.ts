@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 import { generateLandingPage } from '@/lib/anthropic/generate'
 import { scrapeProduct, cleanProduct } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import { templateEtecBlue } from '@/lib/templates/etec-blue'
-import { createClient } from '@/lib/supabase/server'
+import { validateScrapeUrl } from '@/lib/security/url-allow'
 import type { ScrapedProduct } from '@/types'
+
+// Service role — la table public_previews n'est plus exposée via la clé anon (RLS lock)
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 // Génération publique — 1 page gratuite sans compte
 // Stocke la preview en base avec expiration 7 jours
@@ -14,18 +21,17 @@ export async function POST(req: NextRequest) {
 
     const { email, name, url, product: productInput } = body
 
-    if (!email || typeof email !== 'string' || !email.includes('@')) {
+    if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Email invalide' }, { status: 400 })
     }
 
-    // Rate limiting : 1 génération par email (check en base)
-    const supabase = await createClient()
-    const { data: existing } = await supabase
+    // Rate limiting : 1 génération par email actif (preview non-expirée)
+    const { data: existing } = await supabaseAdmin
       .from('public_previews')
       .select('id')
       .eq('email', email.toLowerCase())
       .gte('expires_at', new Date().toISOString())
-      .single()
+      .maybeSingle()
 
     if (existing) {
       return NextResponse.json(
@@ -38,7 +44,12 @@ export async function POST(req: NextRequest) {
     let product: ScrapedProduct
 
     if (url) {
-      const raw = await scrapeProduct(url)
+      // Anti-SSRF — même whitelist que /api/scrape (sinon route ouverte SSRF Puppeteer)
+      const check = validateScrapeUrl(url)
+      if (!check.ok) {
+        return NextResponse.json({ error: check.error }, { status: check.status })
+      }
+      const raw = await scrapeProduct(check.parsed.toString())
       product = cleanProduct(raw)
     } else if (productInput) {
       product = productInput
@@ -63,8 +74,8 @@ export async function POST(req: NextRequest) {
     const expiresAt = new Date()
     expiresAt.setDate(expiresAt.getDate() + 7)
 
-    // Stockage en base
-    const { data: preview, error: dbError } = await supabase
+    // Stockage en base (service_role — la table est lockée pour anon)
+    const { data: preview, error: dbError } = await supabaseAdmin
       .from('public_previews')
       .insert({
         email: email.toLowerCase(),
@@ -77,6 +88,22 @@ export async function POST(req: NextRequest) {
       })
       .select('id')
       .single()
+
+    // Race condition : 2 requêtes simultanées passent toutes deux le SELECT initial.
+    // L'index unique partiel `public_previews_email_active_uniq` (migration 20260425)
+    // bloque la 2e au niveau DB → on convertit en 409 propre.
+    if (dbError?.code === '23505') {
+      const { data: dup } = await supabaseAdmin
+        .from('public_previews')
+        .select('id')
+        .eq('email', email.toLowerCase())
+        .gte('expires_at', new Date().toISOString())
+        .maybeSingle()
+      return NextResponse.json(
+        { error: 'Une page a déjà été générée pour cet email.', preview_id: dup?.id },
+        { status: 409 }
+      )
+    }
 
     if (dbError || !preview) {
       console.error('[generate/public] DB error:', dbError?.message)

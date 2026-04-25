@@ -37,8 +37,8 @@ export async function GET() {
     { data: pages },
     { data: stores },
   ] = await Promise.all([
-    supabase.from('users').select('*').eq('id', user.id).single<UserProfile>(),
-    supabase.from('subscriptions').select('*').eq('user_id', user.id).single<Subscription>(),
+    supabase.from('users').select('*').eq('id', user.id).maybeSingle<UserProfile>(),
+    supabase.from('subscriptions').select('*').eq('user_id', user.id).maybeSingle<Subscription>(),
     supabase.from('pages').select('*').eq('user_id', user.id).returns<Page[]>(),
     supabase.from('stores').select('*').eq('user_id', user.id).returns<Store[]>(),
   ])

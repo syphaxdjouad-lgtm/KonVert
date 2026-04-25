@@ -7,17 +7,17 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-// Protection admin — comparaison timing-safe pour éviter les timing attacks
+// Protection admin — comparaison timing-safe pour éviter les timing attacks.
+// On hash les deux secrets en SHA-256 avant compare : longueur identique,
+// pas de leak de la longueur du secret (le `&& length === length` précédent
+// court-circuitait après timingSafeEqual et faisait fuiter cette info).
 function isAdmin(req: NextRequest) {
   const secret = req.headers.get('x-admin-secret')
   const expected = process.env.ADMIN_SECRET
   if (!secret || !expected) return false
-  // Padding à longueur égale obligatoire pour timingSafeEqual
-  const a = Buffer.alloc(64)
-  const b = Buffer.alloc(64)
-  Buffer.from(secret).copy(a)
-  Buffer.from(expected).copy(b)
-  return crypto.timingSafeEqual(a, b) && secret.length === expected.length
+  const a = crypto.createHash('sha256').update(secret).digest()
+  const b = crypto.createHash('sha256').update(expected).digest()
+  return crypto.timingSafeEqual(a, b)
 }
 
 export async function GET(req: NextRequest) {

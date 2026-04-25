@@ -104,6 +104,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'event_type invalide' }, { status: 400 })
     }
 
+    // Format UUID + bornage taille visitor_id — bloque l'injection PostgREST
+    // et la pollution massive avec des chaînes arbitraires.
+    const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    if (!uuidRe.test(variant_id) || typeof visitor_id !== 'string' || visitor_id.length > 100) {
+      return NextResponse.json({ error: 'Identifiants invalides' }, { status: 400 })
+    }
+
+    // Vérifier que la variante existe ET appartient à un test running.
+    // Sans ce check, n'importe qui pouvait spammer des conversions sur n'importe
+    // quelle variante connue (devinable via le HTML de la page publique).
+    const { data: variant } = await supabaseAdmin
+      .from('ab_variants')
+      .select('id, ab_tests!inner(status)')
+      .eq('id', variant_id)
+      .eq('ab_tests.status', 'running')
+      .maybeSingle()
+
+    if (!variant) {
+      return NextResponse.json({ error: 'Variante invalide' }, { status: 404 })
+    }
+
     // Éviter les doublons : un visiteur = un event view par variant
     if (event_type === 'view') {
       const { data: existing } = await supabaseAdmin

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { timingSafeEqual } from 'crypto'
 import { createClient } from '@supabase/supabase-js'
 import { sendEmail } from '@/lib/email'
 import {
@@ -31,10 +32,16 @@ function getEmailForDay(
   }
 }
 
+function safeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  return timingSafeEqual(Buffer.from(a), Buffer.from(b))
+}
+
 function isAuthorized(req: NextRequest): boolean {
   const cronSecret = process.env.CRON_SECRET
   if (!cronSecret) return false
-  return req.headers.get('authorization') === `Bearer ${cronSecret}`
+  const header = req.headers.get('authorization') ?? ''
+  return safeCompare(header, `Bearer ${cronSecret}`)
 }
 
 export async function GET(req: NextRequest) {

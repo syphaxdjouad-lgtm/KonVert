@@ -59,25 +59,20 @@ export async function POST(req: NextRequest) {
 
     let result: { id: number; url: string }
 
-    if (page.published_url) {
-      // Extraire l'ID WordPress depuis l'URL stockée
-      const match = page.published_url.match(/\?p=(\d+)$|\/(\d+)\/?$/)
-      const existingId = match ? parseInt(match[1] || match[2], 10) : 0
+    // ID WordPress stocké dans published_id — plus fiable que reparser l'URL.
+    const existingId = page.published_id ?? 0
 
-      if (existingId) {
-        await client.updatePage(existingId, page.title, trackedHtml)
-        result = { id: existingId, url: page.published_url }
-      } else {
-        result = await client.createPage(page.title, trackedHtml)
-      }
+    if (existingId) {
+      await client.updatePage(existingId, page.title, trackedHtml)
+      result = { id: existingId, url: page.published_url || '' }
     } else {
       result = await client.createPage(page.title, trackedHtml)
     }
 
-    // Mettre à jour la page en DB
+    // Mettre à jour la page en DB (URL + ID natif)
     await supabase
       .from('pages')
-      .update({ published_url: result.url, status: 'published' })
+      .update({ published_url: result.url, published_id: result.id, status: 'published' })
       .eq('id', page_id)
 
     return NextResponse.json({

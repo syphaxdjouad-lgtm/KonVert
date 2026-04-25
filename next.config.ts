@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from '@sentry/nextjs'
 
-const securityHeaders = [
+// Headers communs à toutes les routes (sauf CSP, qui varie selon la zone)
+const commonHeaders = [
   // Empêche l'embedding dans des iframes (clickjacking)
   { key: 'X-Frame-Options', value: 'DENY' },
   // Empêche le MIME sniffing
@@ -10,39 +11,65 @@ const securityHeaders = [
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   // Désactive les APIs navigateur non utilisées
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-  // Force HTTPS pendant 1 an (activer uniquement en prod — Vercel gère déjà le HTTPS)
+  // Force HTTPS pendant 1 an (Vercel gère déjà le HTTPS)
   { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
-  // Content Security Policy
-  {
-    key: 'Content-Security-Policy',
-    value: [
-      "default-src 'self'",
-      // Scripts : Stripe, inline (shadcn/next), unsafe-eval pour GrapesJS builder
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://client.crisp.chat",
-      // Styles : inline + Google Fonts CSS
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      // Images : data URIs, blob (GrapesJS), et tous les CDN produits e-commerce
-      "img-src 'self' data: blob: https:",
-      // Polices : Google Fonts (templates) + local
-      "font-src 'self' data: https://fonts.gstatic.com",
-      // Connexions API
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://client.crisp.chat wss://client.relay.crisp.chat",
-      // Iframes Stripe (checkout embedded)
-      "frame-src https://js.stripe.com https://hooks.stripe.com https://game.crisp.chat",
-      // Workers (Next.js)
-      "worker-src 'self' blob:",
-    ].join('; '),
-  },
+]
+
+const cspBase = {
+  styleSrc: "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  imgSrc: "img-src 'self' data: blob: https:",
+  fontSrc: "font-src 'self' data: https://fonts.gstatic.com",
+  connectSrc:
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://client.crisp.chat wss://client.relay.crisp.chat",
+  frameSrc: 'frame-src https://js.stripe.com https://hooks.stripe.com https://game.crisp.chat',
+  workerSrc: "worker-src 'self' blob:",
+}
+
+// CSP stricte : pas d'unsafe-eval. Appliquée partout sauf builder GrapesJS.
+const strictCsp = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://js.stripe.com https://client.crisp.chat",
+  cspBase.styleSrc,
+  cspBase.imgSrc,
+  cspBase.fontSrc,
+  cspBase.connectSrc,
+  cspBase.frameSrc,
+  cspBase.workerSrc,
+].join('; ')
+
+// CSP relaxée : autorise unsafe-eval (requis par GrapesJS).
+// Limitée aux routes builder uniquement.
+const builderCsp = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://client.crisp.chat",
+  cspBase.styleSrc,
+  cspBase.imgSrc,
+  cspBase.fontSrc,
+  cspBase.connectSrc,
+  cspBase.frameSrc,
+  cspBase.workerSrc,
+].join('; ')
+
+const strictHeaders = [
+  ...commonHeaders,
+  { key: 'Content-Security-Policy', value: strictCsp },
+]
+
+const builderHeaders = [
+  ...commonHeaders,
+  { key: 'Content-Security-Policy', value: builderCsp },
 ]
 
 const nextConfig: NextConfig = {
   compress: true,
   async headers() {
     return [
-      {
-        source: '/(.*)',
-        headers: securityHeaders,
-      },
+      // Builder GrapesJS — unsafe-eval requis (priorité d'évaluation : la 1re entrée matchante gagne)
+      { source: '/dashboard/new/:path*', headers: builderHeaders },
+      { source: '/dashboard/pages/:path*', headers: builderHeaders },
+      { source: '/test-builder/:path*', headers: builderHeaders },
+      // Reste de l'app : CSP stricte sans unsafe-eval
+      { source: '/(.*)', headers: strictHeaders },
     ]
   },
   images: {

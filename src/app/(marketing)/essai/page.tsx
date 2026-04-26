@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowRight, Loader2, Link2, Pencil, Sparkles } from 'lucide-react'
+import { Turnstile } from '@/components/Turnstile'
 
 type Step = 'email' | 'product' | 'generating'
 type InputMode = 'url' | 'manual'
@@ -39,6 +40,10 @@ function EssaiContent() {
 
   const [error, setError] = useState<string | null>(null)
   const [loadingText, setLoadingText] = useState('Analyse du produit...')
+  // Captcha — vide tant que Turnstile n'a pas validé. En dev sans clé, le composant
+  // appelle onToken('') immédiatement et le serveur bypass aussi.
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const captchaRequired = !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
   // ── Étape 1 : email ──────────────────────────────────────────────────────
   function handleEmailSubmit(e: React.FormEvent) {
@@ -64,6 +69,10 @@ function EssaiContent() {
       setError('Entre le nom du produit.')
       return
     }
+    if (captchaRequired && !captchaToken) {
+      setError('Patiente quelques secondes — vérification anti-bot en cours.')
+      return
+    }
 
     setStep('generating')
 
@@ -81,7 +90,11 @@ function EssaiContent() {
     }, 1800)
 
     try {
-      const body: Record<string, unknown> = { email, name: name || undefined }
+      const body: Record<string, unknown> = {
+        email,
+        name: name || undefined,
+        turnstileToken: captchaToken ?? '',
+      }
 
       if (inputMode === 'url') {
         body.url = url.trim()
@@ -389,9 +402,17 @@ function EssaiContent() {
                 <p className="text-sm" style={{ color: '#f87171' }}>{error}</p>
               )}
 
+              {/* Captcha anti-bot — invisible si l'env var n'est pas posée */}
+              <Turnstile
+                onToken={setCaptchaToken}
+                onError={() => setCaptchaToken(null)}
+                onExpire={() => setCaptchaToken(null)}
+              />
+
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 font-bold py-3.5 rounded-xl transition-all"
+                disabled={captchaRequired && !captchaToken}
+                className="w-full flex items-center justify-center gap-2 font-bold py-3.5 rounded-xl transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{
                   background: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
                   color: '#fff',

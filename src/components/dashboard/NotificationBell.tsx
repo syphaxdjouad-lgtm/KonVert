@@ -72,21 +72,51 @@ function NotifIcon({ type }: { type: Notification['type'] }) {
   )
 }
 
+// Polling intervals — adaptés selon que le dropdown est ouvert ou non.
+const POLL_OPEN_MS   = 30_000
+const POLL_CLOSED_MS = 120_000
+
 export default function NotificationBell() {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [readIds, setReadIds] = useState<string[]>([])
+  const [loading, setLoading] = useState(true)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Fetch notifications au mount
-  useEffect(() => {
-    fetch('/api/notifications')
-      .then(r => r.ok ? r.json() : { notifications: [] })
-      .then(data => setNotifications(data.notifications ?? []))
-      .catch(() => {})
+  async function fetchNotifications(signal?: AbortSignal) {
+    try {
+      const res = await fetch('/api/notifications', { signal, cache: 'no-store' })
+      if (!res.ok) return
+      const data = await res.json()
+      setNotifications(data.notifications ?? [])
+    } catch {
+      // ignore (abort, réseau, etc.)
+    }
+  }
 
+  // Fetch initial + chargement readIds
+  useEffect(() => {
+    const controller = new AbortController()
+    fetchNotifications(controller.signal).finally(() => setLoading(false))
     setReadIds(getReadIds())
+    return () => controller.abort()
+  }, [])
+
+  // Polling adaptatif (plus rapide quand le dropdown est ouvert)
+  useEffect(() => {
+    const interval = open ? POLL_OPEN_MS : POLL_CLOSED_MS
+    const id = setInterval(() => fetchNotifications(), interval)
+    return () => clearInterval(id)
+  }, [open])
+
+  // Refetch quand l'onglet redevient visible (l'user revient sur la page après pause)
+  useEffect(() => {
+    function handleVisibility() {
+      if (document.visibilityState === 'visible') fetchNotifications()
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
   }, [])
 
   // Fermer au clic dehors
@@ -153,15 +183,26 @@ export default function NotificationBell() {
           <span
             style={{
               position: 'absolute',
-              top: 4,
-              right: 4,
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
+              top: -2,
+              right: -2,
+              minWidth: 16,
+              height: 16,
+              padding: '0 4px',
+              borderRadius: 8,
               background: '#ef4444',
               border: '1.5px solid #fff',
+              color: '#fff',
+              fontSize: 10,
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              lineHeight: 1,
             }}
-          />
+            aria-label={`${unreadCount} notification${unreadCount > 1 ? 's' : ''} non lue${unreadCount > 1 ? 's' : ''}`}
+          >
+            {unreadCount > 9 ? '9+' : unreadCount}
+          </span>
         )}
       </button>
 
@@ -230,7 +271,32 @@ export default function NotificationBell() {
 
           {/* Liste */}
           <div style={{ maxHeight: 384, overflowY: 'auto' }}>
-            {notifications.length === 0 ? (
+            {loading ? (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '36px 16px',
+                  gap: 8,
+                  color: '#a0a0b8',
+                }}
+              >
+                <div
+                  style={{
+                    width: 24,
+                    height: 24,
+                    border: '2px solid #E4E2EE',
+                    borderTopColor: '#7c3aed',
+                    borderRadius: '50%',
+                    animation: 'kvspin 0.8s linear infinite',
+                  }}
+                />
+                <span style={{ fontSize: 12 }}>Chargement…</span>
+                <style>{`@keyframes kvspin{to{transform:rotate(360deg)}}`}</style>
+              </div>
+            ) : notifications.length === 0 ? (
               /* État vide */
               <div
                 style={{

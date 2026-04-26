@@ -5,6 +5,7 @@ import { scrapeProduct, cleanProduct } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import { templateEtecBlue } from '@/lib/templates/etec-blue'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
+import { verifyTurnstile } from '@/lib/security/turnstile'
 import type { ScrapedProduct } from '@/types'
 
 // Service role — la table public_previews n'est plus exposée via la clé anon (RLS lock)
@@ -19,10 +20,18 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}))
 
-    const { email, name, url, product: productInput } = body
+    const { email, name, url, product: productInput, turnstileToken } = body
 
     if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Email invalide' }, { status: 400 })
+    }
+
+    // Captcha — bloque les bots avant la facture Anthropic. Bypass automatique
+    // si TURNSTILE_SECRET_KEY n'est pas configurée (dev local / preview).
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null
+    const captcha = await verifyTurnstile(turnstileToken, ip)
+    if (!captcha.ok) {
+      return NextResponse.json({ error: captcha.error || 'Captcha invalide' }, { status: 400 })
     }
 
     // Rate limiting : 1 génération par email actif (preview non-expirée)

@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Eye, MousePointerClick, TrendingUp, BarChart2, ArrowUpRight } from 'lucide-react'
+import AnalyticsCharts, { type DailyPoint } from '@/components/dashboard/AnalyticsCharts'
 
 export default async function AnalyticsPage() {
   const supabase = await createClient()
@@ -21,17 +22,48 @@ export default async function AnalyticsPage() {
   const avgCtr      = totalViews > 0 ? ((totalClicks / totalViews) * 100).toFixed(1) : '0'
   const bestPage    = list[0] || null
 
-  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-  const { data: scrollEvents } = await supabase
-    .from('analytics_events')
-    .select('page_id, event_type')
-    .gte('created_at', since)
-    .in('event_type', ['scroll_25', 'scroll_50', 'scroll_75', 'scroll_100'])
+  // Events 30 jours pour : scroll-bar (table) + courbes timeseries.
+  // On filtre sur les pages de l'user (RLS s'en charge déjà, mais double sécurité).
+  const since30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  const since7  = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  const pageIds = list.map(p => p.id)
 
+  const { data: events } = pageIds.length > 0
+    ? await supabase
+        .from('analytics_events')
+        .select('page_id, event_type, created_at')
+        .in('page_id', pageIds)
+        .gte('created_at', since30.toISOString())
+    : { data: [] }
+
+  // Scroll-bar : ne garder que les 7 derniers jours (cohérent avec l'ancien comportement)
   const scrollByPage: Record<string, Record<string, number>> = {}
-  for (const ev of scrollEvents || []) {
+  for (const ev of events || []) {
+    if (new Date(ev.created_at) < since7) continue
+    if (!ev.event_type.startsWith('scroll_')) continue
     if (!scrollByPage[ev.page_id]) scrollByPage[ev.page_id] = {}
     scrollByPage[ev.page_id][ev.event_type] = (scrollByPage[ev.page_id][ev.event_type] || 0) + 1
+  }
+
+  // Agrégat journalier (vues + clics) sur 30 jours pour le chart.
+  // On pré-remplit chaque jour à 0 pour avoir une courbe continue, même les jours sans event.
+  const daily: DailyPoint[] = []
+  const dayMap: Record<string, DailyPoint> = {}
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date()
+    d.setHours(0, 0, 0, 0)
+    d.setDate(d.getDate() - i)
+    const key = d.toISOString().slice(0, 10)
+    const point: DailyPoint = { date: key, views: 0, clicks: 0 }
+    daily.push(point)
+    dayMap[key] = point
+  }
+  for (const ev of events || []) {
+    const key = ev.created_at.slice(0, 10)
+    const point = dayMap[key]
+    if (!point) continue
+    if (ev.event_type === 'view')      point.views++
+    else if (ev.event_type === 'cta_click') point.clicks++
   }
 
   return (
@@ -40,7 +72,9 @@ export default async function AnalyticsPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-black" style={{ color: '#111' }}>Analytics</h1>
-        <p className="text-sm mt-1" style={{ color: '#6b7280' }}>Performance de tes pages publiées · 7 derniers jours</p>
+        <p className="text-sm mt-1" style={{ color: '#6b7280' }}>
+          Performance de tes pages publiées
+        </p>
       </div>
 
       {/* Stats globales */}
@@ -92,6 +126,9 @@ export default async function AnalyticsPage() {
           </div>
         ))}
       </div>
+
+      {/* Chart timeseries vues/clics */}
+      {list.length > 0 && <AnalyticsCharts daily={daily} />}
 
       {/* Tableau pages */}
       {list.length === 0 ? (

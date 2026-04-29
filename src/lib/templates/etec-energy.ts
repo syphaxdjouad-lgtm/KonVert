@@ -135,7 +135,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
     </div>`).join('')
 
   return `<!DOCTYPE html>
-<html lang="fr">
+<html lang="${data.language || 'fr'}">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>

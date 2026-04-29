@@ -19,7 +19,12 @@ function safeImageUrl(url: string): boolean {
   return typeof url === 'string' && /^https?:\/\//i.test(url)
 }
 
+// Whitelist des codes ISO acceptés pour <html lang> — bloque toute injection
+// par data.language (qui transite via le body de la requête utilisateur).
+const ALLOWED_LANGS = new Set(['fr', 'en', 'es', 'de', 'it', 'pt', 'nl', 'ar'])
+
 function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
+  const lang = typeof d.language === 'string' && ALLOWED_LANGS.has(d.language) ? d.language : 'fr'
   return {
     headline:       escapeHtml(d.headline ?? ''),
     subtitle:       escapeHtml(d.subtitle ?? ''),
@@ -34,6 +39,7 @@ function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     price:          d.price ? escapeHtml(d.price) : d.price,
     original_price: d.original_price ? escapeHtml(d.original_price) : d.original_price,
     images:         (d.images ?? []).filter(safeImageUrl),
+    language:       lang,
   }
 }
 
@@ -158,6 +164,9 @@ export async function generateLandingPage(
   if (product.images?.length > 0) {
     data.images = product.images
   }
+
+  // Propager la langue vers les templates (utilisée pour <html lang="...">).
+  data.language = language
 
   // Sanitization globale — protège tous les templates (42) d'un coup contre
   // une injection HTML/JS via le contenu scrapé ou un drift de Claude.

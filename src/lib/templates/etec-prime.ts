@@ -196,7 +196,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   ]).map(b => `<li class="hero-benefit">${ICON_CHECK} ${b}</li>`).join('')
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${data.language || 'fr'}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

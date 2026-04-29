@@ -140,7 +140,7 @@ export function templateEtecPet(data: LandingPageData): string {
   const priceSave = Math.round((1 - parseFloat(price.replace(/[^0-9.]/g,'')) / parseFloat(originalPrice.replace(/[^0-9.]/g,'')||'1')) * 100)
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${data.language || 'fr'}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">

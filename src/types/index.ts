@@ -91,6 +91,9 @@ export interface LandingPageData {
   price?: string
   original_price?: string
   images?: string[]
+  // ISO code (fr, en, es…) utilisé pour <html lang="..."> dans les templates.
+  // Sans ça, une page EN/ES/AR garde lang="fr" → mauvais signal SEO + a11y.
+  language?: string
 }
 
 // ─── A/B TESTING ─────────────────────────────────────────────────────────────

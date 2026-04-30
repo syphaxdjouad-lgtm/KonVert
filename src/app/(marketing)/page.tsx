@@ -233,16 +233,16 @@ function Slide1() {
             className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5"
             style={{ animation: 'slideUp .7s cubic-bezier(.16,1,.3,1) both' }}
           >
-            Tes produits méritent des pages{' '}
+            Colle ton lien AliExpress.{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              qui vendent vraiment.
+              Ta page est prête en 30 secondes.
             </span>
           </h1>
           <p
             className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0"
             style={{ animation: 'slideUp .7s .1s cubic-bezier(.16,1,.3,1) both' }}
           >
-            Tu perds de l'argent à chaque visiteur qui repart sans acheter. KONVERT génère ta page produit optimisée en 30 secondes — prête à coller sur ta boutique.
+            L&apos;IA génère ton titre, tes bénéfices, ta FAQ et ton CTA — optimisés SEO et mobile. Prêt à coller sur Shopify.
           </p>
           <div
             className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
@@ -253,7 +253,7 @@ function Slide1() {
               className="btn-shimmer btn-ripple inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg"
               onClick={addRipple}
             >
-              Génère ta première page — gratuit <ArrowRight className="w-4 h-4" />
+              Essaie avec ton produit — gratuit <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/signup"
@@ -1461,20 +1461,20 @@ const STEPS = [
   {
     num: '01',
     Icon: LinkSimple,
-    title: 'Collez une URL',
-    desc: 'AliExpress, Amazon, Alibaba — n\'importe quel produit. Collez l\'URL dans KONVERT.',
+    title: 'Colle ton lien produit',
+    desc: 'AliExpress, Amazon, Alibaba. Tu colles l\'URL — KONVERT scrape tout automatiquement.',
   },
   {
     num: '02',
     Icon: Sparkle,
-    title: 'L\'IA génère le copy',
-    desc: 'Notre IA analyse le produit et crée le titre, accroche, bénéfices, FAQ et CTA en 30 secondes.',
+    title: 'L\'IA rédige en 30 secondes',
+    desc: 'Titre accrocheur, bénéfices, FAQ, CTA — tout généré et optimisé pour convertir.',
   },
   {
     num: '03',
     Icon: TrendUp,
-    title: 'Publiez & convertissez',
-    desc: 'Choisissez un template, personnalisez les couleurs, publiez sur votre boutique. C\'est tout.',
+    title: 'Publie sur Shopify en 1 clic',
+    desc: 'Choisis un template, connecte ta boutique, publie. Pas de dev, pas d\'attente.',
   },
 ]
 
@@ -1494,10 +1494,10 @@ function HowItWorks() {
               Comment ça marche
             </div>
             <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-4">
-              Simple comme un copier-coller.
+              Un lien AliExpress. Une page qui vend.
             </h2>
             <p className="reveal delay-2 text-lg text-white/60 max-w-xl mx-auto">
-              Colle l&apos;URL de ton produit, choisis un template, publie. Ta page est prête à vendre en moins d&apos;une minute.
+              Personne d&apos;autre ne fait ça. Tu colles un lien — l&apos;IA scrape, rédige, structure. Ta page est prête en 30 secondes.
             </p>
           </div>
 
@@ -2220,10 +2220,10 @@ function BuilderSection() {
           {/* Left */}
           <div>
             <h2 className="reveal text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight mb-6 leading-tight">
-              Ta page produit en 30 secondes. Pas en 3 jours.
+              Fini les pages qui font fuir tes clients.
             </h2>
             <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed mb-10">
-              Pas besoin de dev, de designer ou d&apos;agence. Tu colles l&apos;URL du produit, tu choisis un template, tu personnalises en quelques clics. La page est prête à convertir — aujourd&apos;hui, pas la semaine prochaine.
+              Zéro dev, zéro designer. Tu colles ton lien AliExpress, tu choisis un template, tu personnalises en 2 clics. Ta page convertit — aujourd&apos;hui.
             </p>
             <Link href="/demo" className="reveal delay-2 inline-flex items-center gap-4 group">
               <span className="font-bold text-gray-900 text-sm">Créer des pages optimisées</span>
@@ -3148,13 +3148,13 @@ function FinalCTA() {
         <h2
           className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-5"
         >
-          Ton prochain visiteur mérite une page qui vend.
+          Colle un lien. Vois ta page en 30 secondes.
         </h2>
 
         <p
           className="reveal delay-2 text-lg text-white/60 mb-10 max-w-xl mx-auto"
         >
-          Colle l&apos;URL de ton produit et vois KONVERT générer ta landing page en 30 secondes. Gratuit, sans carte bancaire.
+          AliExpress, Amazon, Alibaba — peu importe. L&apos;IA génère ta page de vente complète. Gratuit, sans carte bancaire.
         </p>
 
         <div
@@ -3164,7 +3164,7 @@ function FinalCTA() {
             type="url"
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}
-            placeholder="Collez une URL AliExpress, Amazon..."
+            placeholder="https://fr.aliexpress.com/item/ton-produit..."
             className="flex-1 px-5 py-3.5 rounded-full text-sm font-medium outline-none transition-all"
             style={{
               background: 'rgba(255,255,255,0.08)',

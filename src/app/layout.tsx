@@ -2,6 +2,11 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Space_Grotesk } from 'next/font/google'
 import CrispChat from '@/components/CrispChat'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
+import { PostHogProvider } from '@/providers/PostHogProvider'
+import { PostHogPageView } from '@/components/PostHogPageView'
+import { Suspense } from 'react'
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['400','500','600','700'], variable: '--font-space-grotesk' })
 
@@ -58,7 +63,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className="h-full antialiased">
-      <body className={`min-h-full flex flex-col ${spaceGrotesk.variable}`}>{children}<CrispChat /></body>
+      <body className={`min-h-full flex flex-col ${spaceGrotesk.variable}`}>
+          <PostHogProvider>
+            <Suspense>
+              <PostHogPageView />
+            </Suspense>
+            {children}
+            <CrispChat />
+          </PostHogProvider>
+          <Analytics />
+          <SpeedInsights />
+        </body>
     </html>
   );
 }

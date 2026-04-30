@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import NotificationBell from '@/components/dashboard/NotificationBell'
+import { identifyUser, resetUser } from '@/lib/analytics'
 
 const NAV_ITEMS = [
   { href: '/dashboard',           icon: LayoutDashboard, label: 'Vue d\'ensemble' },
@@ -43,7 +44,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     setMobileMenuOpen(false)
   }, [pathname])
 
-  // Récupérer l'initiale de l'utilisateur
+  // Récupérer l'initiale et identifier l'utilisateur dans PostHog
   useEffect(() => {
     const supabase = createClient()
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -51,12 +52,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       const name = user.user_metadata?.full_name || user.user_metadata?.name || user.email || ''
       const initial = name.charAt(0).toUpperCase()
       if (initial) setUserInitial(initial)
+      identifyUser(user.id, {
+        email: user.email,
+        created_at: user.created_at,
+      })
     })
   }, [])
 
   async function handleLogout() {
     const supabase = createClient()
     await supabase.auth.signOut()
+    resetUser()
     router.push('/login')
   }
 

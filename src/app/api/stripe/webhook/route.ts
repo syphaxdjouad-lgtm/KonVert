@@ -2,8 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { stripe } from '@/lib/stripe'
 import { createClient } from '@supabase/supabase-js'
+import { PostHog } from 'posthog-node'
 import type Stripe from 'stripe'
 import type { PlanType } from '@/types'
+
+const ph = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+  host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com',
+})
 
 // Stripe a déplacé `invoice.subscription` dans `invoice.parent.subscription_details.subscription`
 // au fil des versions de l'API. On lit les deux pour rester compatible sans `any`.
@@ -57,6 +62,16 @@ export async function POST(req: NextRequest) {
         if (!userId || !plan) break
 
         await activateSubscription(userId, plan, session.customer as string, session.subscription as string)
+
+        ph.capture({
+          distinctId: userId,
+          event: 'subscription_started',
+          properties: {
+            plan,
+            amount: (session.amount_total ?? 0) / 100,
+            currency: session.currency,
+          },
+        })
         break
       }
 
@@ -68,8 +83,6 @@ export async function POST(req: NextRequest) {
         const priceId = sub.items.data?.[0]?.price?.id
         const plan = getPlanFromPrice(priceId)
         if (!plan) {
-          // PriceId non mappé → Sentry pour qu'on l'ajoute au mapping plutôt
-          // que de laisser silencieusement passer un upgrade non honoré.
           Sentry.captureMessage('[stripe/webhook] Unknown priceId', {
             level: 'warning',
             extra: { priceId, subscriptionId: sub.id, userId },
@@ -77,6 +90,12 @@ export async function POST(req: NextRequest) {
           break
         }
         await updateSubscription(userId, plan, sub.status, extractPeriodEnd(sub))
+
+        ph.capture({
+          distinctId: userId,
+          event: 'subscription_updated',
+          properties: { plan, status: sub.status },
+        })
         break
       }
 
@@ -85,7 +104,6 @@ export async function POST(req: NextRequest) {
         const userId = sub.metadata?.supabase_user_id
         if (!userId) break
 
-        // Downgrade vers starter à l'expiration
         await supabaseAdmin
           .from('subscriptions')
           .update({ status: 'canceled', plan: 'starter' })
@@ -95,6 +113,12 @@ export async function POST(req: NextRequest) {
           .from('users')
           .update({ plan: 'starter' })
           .eq('id', userId)
+
+        ph.capture({
+          distinctId: userId,
+          event: 'subscription_cancelled',
+          properties: { previous_plan: sub.metadata?.plan },
+        })
         break
       }
 
@@ -107,6 +131,15 @@ export async function POST(req: NextRequest) {
           .from('subscriptions')
           .update({ status: 'past_due' })
           .eq('stripe_subscription_id', subId)
+
+        const customerId = typeof invoice.customer === 'string' ? invoice.customer : invoice.customer?.id
+        if (customerId) {
+          ph.capture({
+            distinctId: customerId,
+            event: 'payment_failed',
+            properties: { amount: (invoice.amount_due ?? 0) / 100 },
+          })
+        }
         break
       }
 
@@ -115,7 +148,6 @@ export async function POST(req: NextRequest) {
         const subId = extractSubscriptionId(invoice)
         if (!subId) break
 
-        // Réinitialiser le quota mensuel au renouvellement
         const { data: sub } = await supabaseAdmin
           .from('subscriptions')
           .select('user_id')
@@ -127,11 +159,18 @@ export async function POST(req: NextRequest) {
             .from('users')
             .update({ pages_used_this_month: 0, quota_reset_at: new Date().toISOString() })
             .eq('id', sub.user_id)
+
+          ph.capture({
+            distinctId: sub.user_id,
+            event: 'subscription_renewed',
+            properties: { amount: (invoice.amount_paid ?? 0) / 100 },
+          })
         }
         break
       }
     }
 
+    await ph.shutdown()
     return NextResponse.json({ received: true })
   } catch (err) {
     console.error('[webhook] Erreur traitement:', err)

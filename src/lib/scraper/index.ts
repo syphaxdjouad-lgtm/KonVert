@@ -34,9 +34,9 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
     }
   }
 
-  // Fallback Apify si les 2 tentatives natives échouent
-  console.warn(`[scraper] Fallback Apify pour ${platform}`)
-  return await scrapeViaApify(url)
+  // Fallback Firecrawl si les 2 tentatives natives échouent
+  console.warn(`[scraper] Fallback Firecrawl pour ${platform}`)
+  return await scrapeViaFirecrawl(url)
 }
 
 // ─── Helpers Puppeteer ───────────────────────────────────────────────────────
@@ -276,44 +276,59 @@ async function scrapeGeneric(url: string): Promise<ScrapedProduct> {
   }
 }
 
-// ─── Fallback Apify ───────────────────────────────────────────────────────────
+// ─── Fallback Firecrawl ───────────────────────────────────────────────────────
 
-async function scrapeViaApify(url: string): Promise<ScrapedProduct> {
-  const apiKey = process.env.APIFY_API_KEY
-  if (!apiKey) throw new Error('APIFY_API_KEY manquant et scraper natif échoué')
+async function scrapeViaFirecrawl(url: string): Promise<ScrapedProduct> {
+  const apiKey = process.env.FIRECRAWL_API_KEY
+  if (!apiKey) throw new Error('FIRECRAWL_API_KEY manquant et scraper natif échoué')
 
-  const platform = detectPlatform(url)
-  const actorId =
-    platform === 'amazon'
-      ? 'apify/amazon-product-scraper'
-      : 'apify/aliexpress-scraper'
-
-  const res = await fetch(`https://api.apify.com/v2/acts/${actorId}/run-sync-get-dataset-items`, {
+  const res = await fetch('https://api.firecrawl.dev/v1/scrape', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({ startUrls: [{ url }], maxItems: 1 }),
-    signal: AbortSignal.timeout(60000),
+    body: JSON.stringify({
+      url,
+      formats: ['json'],
+      proxy: 'stealth',
+      waitFor: 3000,
+      jsonOptions: {
+        prompt: 'Extract the product information from this e-commerce page.',
+        schema: {
+          type: 'object',
+          properties: {
+            title:          { type: 'string' },
+            description:    { type: 'string' },
+            price:          { type: 'string' },
+            original_price: { type: 'string' },
+            images:         { type: 'array', items: { type: 'string' } },
+            rating:         { type: 'number' },
+            reviews_count:  { type: 'number' },
+          },
+        },
+      },
+    }),
+    signal: AbortSignal.timeout(45000),
   })
 
-  if (!res.ok) throw new Error(`Apify erreur ${res.status}`)
+  if (!res.ok) throw new Error(`Firecrawl erreur ${res.status}`)
 
-  const items = await res.json()
-  const item = items[0]
-  if (!item) throw new Error('Apify — aucun résultat')
+  const body = await res.json()
+  const item = body?.data?.json
+
+  if (!item?.title) throw new Error('Firecrawl — titre introuvable')
 
   return {
-    title: item.title || item.name || '',
-    description: item.description || item.about || '',
-    images: item.images || (item.thumbnailUrl ? [item.thumbnailUrl] : []),
-    price: item.price?.toString() || null,
-    original_price: item.originalPrice?.toString() || null,
-    variants: item.variants || [],
-    rating: item.stars || item.rating || null,
-    reviews_count: item.reviewsCount || null,
-    source_url: url,
+    title:          item.title || '',
+    description:    item.description || '',
+    images:         Array.isArray(item.images) ? item.images.slice(0, 8) : [],
+    price:          item.price?.toString() || null,
+    original_price: item.original_price?.toString() || null,
+    variants:       [],
+    rating:         item.rating || null,
+    reviews_count:  item.reviews_count || null,
+    source_url:     url,
   }
 }
 

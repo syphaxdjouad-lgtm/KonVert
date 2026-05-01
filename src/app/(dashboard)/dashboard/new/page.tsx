@@ -258,7 +258,7 @@ function NewPageInner() {
     setPublishError(null)
     setPublishSuccess(null)
     try {
-      const endpoint = store.platform === 'youcan' ? '/api/youcan/push' : '/api/shopify/push'
+      const endpoint = store.platform === 'youcan' ? '/api/youcan/push' : store.platform === 'woocommerce' ? '/api/woocommerce/push' : '/api/shopify/push'
       const res  = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

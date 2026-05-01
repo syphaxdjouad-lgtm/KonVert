@@ -1,12 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Plus, Users, FileText, Store, ExternalLink, Palette, Mail, Zap, ChevronDown, ChevronUp } from 'lucide-react'
+import { Plus, Users, FileText, Store, ExternalLink, Palette, Mail, Zap, ChevronDown, ChevronUp, Lock } from 'lucide-react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 export default function AgencyPage() {
   const [workspaces, setWorkspaces] = useState<any[]>([])
   const [loading, setLoading]       = useState(true)
+  const [plan, setPlan]             = useState<string>('starter')
   const [showForm, setShowForm]     = useState(false)
   const [creating, setCreating]     = useState(false)
   const [error, setError]           = useState<string | null>(null)
@@ -14,7 +16,16 @@ export default function AgencyPage() {
     name: '', client_name: '', client_email: '', brand_name: '', brand_color: '#7c3aed',
   })
 
-  useEffect(() => { loadWorkspaces() }, [])
+  useEffect(() => {
+    loadWorkspaces()
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return
+      supabase.from('users').select('plan').eq('id', user.id).single().then(({ data }) => {
+        if (data?.plan) setPlan(data.plan)
+      })
+    })
+  }, [])
 
   async function loadWorkspaces() {
     const res  = await fetch('/api/workspaces')
@@ -39,6 +50,27 @@ export default function AgencyPage() {
     setForm({ name: '', client_name: '', client_email: '', brand_name: '', brand_color: '#7c3aed' })
     loadWorkspaces()
     setCreating(false)
+  }
+
+  if (!loading && plan !== 'agency') {
+    return (
+      <div className="p-8 max-w-lg mx-auto text-center py-24">
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(124,58,237,0.08)' }}>
+          <Lock className="w-8 h-8" style={{ color: '#7c3aed' }} />
+        </div>
+        <h2 className="text-2xl font-black mb-3" style={{ color: '#111' }}>Fonctionnalité Agency</h2>
+        <p className="text-sm mb-8 max-w-xs mx-auto" style={{ color: '#6b7280' }}>
+          Les workspaces clients et le mode white-label sont réservés au plan Agency.
+        </p>
+        <Link
+          href="/pricing"
+          className="inline-flex items-center gap-2 text-white font-bold text-sm py-3 px-6 rounded-xl transition-all hover:opacity-90"
+          style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 4px 14px rgba(124,58,237,0.35)' }}
+        >
+          Passer au plan Agency — 199€/mois
+        </Link>
+      </div>
+    )
   }
 
   return (

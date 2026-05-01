@@ -71,6 +71,9 @@ export async function GET(req: NextRequest) {
     const daysPassed = Math.floor((now.getTime() - trialStart.getTime()) / (1000 * 60 * 60 * 24))
     const emailsSent: number[] = user.trial_emails_sent ?? []
 
+    // -1 = désabonné via /unsubscribe
+    if (emailsSent.includes(-1)) continue
+
     // Trouver quel email doit être envoyé aujourd'hui
     const dayToSend = TRIAL_DAYS.find(
       (d) => d <= daysPassed && !emailsSent.includes(d)

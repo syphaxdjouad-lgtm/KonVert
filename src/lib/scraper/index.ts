@@ -12,276 +12,29 @@ export function detectPlatform(url: string): SupportedPlatform {
 }
 
 // ─── Scraper principal ───────────────────────────────────────────────────────
+// Firecrawl est le scraper primaire (stealth proxy, compatible serverless Vercel).
+// Le scraper natif fetch() est le fallback léger si Firecrawl échoue.
 
 export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
-  const platform = detectPlatform(url)
-
-  // Tente le scraper natif 2 fois avant de tomber sur Apify
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      switch (platform) {
-        case 'aliexpress': return await scrapeAliExpress(url)
-        case 'amazon':     return await scrapeAmazon(url)
-        case 'alibaba':    return await scrapeAlibaba(url)
-        default:           return await scrapeGeneric(url)
-      }
-    } catch (err) {
-      console.warn(`[scraper] Tentative ${attempt}/2 échouée sur ${platform}:`, (err as Error).message)
-      if (attempt < 2) {
-        // Pause 2s entre les tentatives
-        await new Promise(r => setTimeout(r, 2000))
-      }
-    }
-  }
-
-  // Fallback Firecrawl si les 2 tentatives natives échouent
-  console.warn(`[scraper] Fallback Firecrawl pour ${platform}`)
-  return await scrapeViaFirecrawl(url)
-}
-
-// ─── Helpers Puppeteer ───────────────────────────────────────────────────────
-
-async function getBrowser() {
-  const puppeteer = await import('puppeteer')
-  return puppeteer.default.launch({
-    headless: true,
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-blink-features=AutomationControlled',
-      '--disable-infobars',
-      '--window-size=1280,720',
-    ],
-  })
-}
-
-async function getPage(browser: Awaited<ReturnType<typeof getBrowser>>) {
-  const page = await browser.newPage()
-  await page.setUserAgent(
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-  )
-  await page.setViewport({ width: 1280, height: 720 })
-  // Masquer Puppeteer
-  await page.evaluateOnNewDocument(() => {
-    Object.defineProperty(navigator, 'webdriver', { get: () => false })
-  })
-  return page
-}
-
-// ─── AliExpress ──────────────────────────────────────────────────────────────
-
-async function scrapeAliExpress(url: string): Promise<ScrapedProduct> {
-  const browser = await getBrowser()
-  try {
-    const page = await getPage(browser)
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 })
-
-    // AliExpress charge les données dans window.runParams
-    const data = await page.evaluate(() => {
-      const rp = (window as any).runParams
-      const product = rp?.data?.productInfoComponent || rp?.data?.skuComponent
-      const title = document.querySelector('h1')?.textContent?.trim() || ''
-      const images: string[] = []
-
-      // Récupérer les images du slider
-      document.querySelectorAll('.slider-img img, .magnifier-image').forEach((img) => {
-        const src = (img as HTMLImageElement).src
-        if (src && !src.includes('placeholder') && !images.includes(src)) {
-          images.push(src.split('_')[0]) // version HD sans suffix
-        }
-      })
-
-      // Prix
-      const priceEl = document.querySelector('.product-price-value, .uniform-banner-box-price')
-      const price = priceEl?.textContent?.trim() || null
-
-      // Description
-      const descEl = document.querySelector('.product-description, #product-description')
-      const description = descEl?.textContent?.trim().slice(0, 500) || ''
-
-      return { title, images: images.slice(0, 8), price, description }
-    })
-
-    if (!data.title) throw new Error('Titre AliExpress introuvable — anti-bot actif')
-
-    return {
-      title: data.title,
-      description: data.description,
-      images: data.images,
-      price: data.price,
-      original_price: null,
-      variants: [],
-      rating: null,
-      reviews_count: null,
-      source_url: url,
-    }
-  } finally {
-    await browser.close()
-  }
-}
-
-// ─── Amazon ──────────────────────────────────────────────────────────────────
-
-async function scrapeAmazon(url: string): Promise<ScrapedProduct> {
-  const browser = await getBrowser()
-  try {
-    const page = await getPage(browser)
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 })
-
-    const data = await page.evaluate(() => {
-      const title =
-        (document.querySelector('#productTitle') as HTMLElement)?.innerText?.trim() || ''
-
-      const price =
-        document
-          .querySelector('.a-price .a-offscreen, #priceblock_ourprice')
-          ?.textContent?.trim() || null
-
-      const originalPrice =
-        document
-          .querySelector('.a-price.a-text-price .a-offscreen, #priceblock_saleprice')
-          ?.textContent?.trim() || null
-
-      const ratingEl = document.querySelector('#acrPopover')
-      const rating = ratingEl
-        ? parseFloat(ratingEl.getAttribute('title')?.split(' ')[0] || '0')
-        : null
-
-      const reviewsEl = document.querySelector('#acrCustomerReviewText')
-      const reviews_count = reviewsEl
-        ? parseInt(reviewsEl.textContent?.replace(/[^0-9]/g, '') || '0', 10)
-        : null
-
-      const images: string[] = []
-      document.querySelectorAll('#altImages img, #imageBlock img').forEach((img) => {
-        const src =
-          (img as HTMLImageElement).src?.replace(/\._[A-Z0-9_,]+_\./, '._AC_SL1500_.') || ''
-        if (src.includes('amazon') && !images.includes(src)) images.push(src)
-      })
-
-      const description =
-        (document.querySelector('#feature-bullets') as HTMLElement)?.innerText?.trim().slice(
-          0,
-          500
-        ) || ''
-
-      // Variantes
-      const variants: { name: string; values: string[] }[] = []
-      document.querySelectorAll('.variation-select').forEach((select) => {
-        const name = select.previousElementSibling?.textContent?.trim() || ''
-        const values = Array.from(select.querySelectorAll('option'))
-          .map((o) => o.textContent?.trim() || '')
-          .filter(Boolean)
-        if (name && values.length) variants.push({ name, values })
-      })
-
-      return { title, price, original_price: originalPrice, images: images.slice(0, 8), description, rating, reviews_count, variants }
-    })
-
-    if (!data.title) throw new Error('Titre Amazon introuvable — anti-bot actif')
-
-    return { ...data, source_url: url }
-  } finally {
-    await browser.close()
-  }
-}
-
-// ─── Alibaba ─────────────────────────────────────────────────────────────────
-
-async function scrapeAlibaba(url: string): Promise<ScrapedProduct> {
-  const browser = await getBrowser()
-  try {
-    const page = await getPage(browser)
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 })
-
-    const data = await page.evaluate(() => {
-      const title = document.querySelector('h1')?.textContent?.trim() || ''
-
-      const priceEl = document.querySelector('.price, .product-price')
-      const price = priceEl?.textContent?.trim() || null
-
-      const images: string[] = []
-      document.querySelectorAll('.slider-img img, .detail-gallery-img img').forEach((img) => {
-        const src = (img as HTMLImageElement).src
-        if (src && !images.includes(src)) images.push(src)
-      })
-
-      const description =
-        (document.querySelector('.product-desc') as HTMLElement)?.innerText?.trim().slice(
-          0,
-          500
-        ) || ''
-
-      return { title, price, images: images.slice(0, 8), description }
-    })
-
-    if (!data.title) throw new Error('Titre Alibaba introuvable')
-
-    return {
-      title: data.title,
-      description: data.description,
-      images: data.images,
-      price: data.price,
-      original_price: null,
-      variants: [],
-      rating: null,
-      reviews_count: null,
-      source_url: url,
-    }
-  } finally {
-    await browser.close()
-  }
-}
-
-// ─── Scraper générique (HTML basique) ────────────────────────────────────────
-
-async function scrapeGeneric(url: string): Promise<ScrapedProduct> {
-  const browser = await getBrowser()
-  try {
-    const page = await getPage(browser)
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 })
-
-    const data = await page.evaluate(() => {
-      const title =
-        document.querySelector('h1')?.textContent?.trim() ||
-        document.title
-
-      const images: string[] = []
-      document.querySelectorAll('img').forEach((img) => {
-        const src = img.src
-        if (src && img.naturalWidth > 200 && !images.includes(src)) images.push(src)
-      })
-
-      const description =
-        (document.querySelector('meta[name="description"]') as HTMLMetaElement)?.content ||
-        document.querySelector('p')?.textContent?.trim() ||
-        ''
-
-      return { title, images: images.slice(0, 6), description }
-    })
-
-    return {
-      title: data.title,
-      description: data.description,
-      images: data.images,
-      price: null,
-      original_price: null,
-      variants: [],
-      rating: null,
-      reviews_count: null,
-      source_url: url,
-    }
-  } finally {
-    await browser.close()
-  }
-}
-
-// ─── Fallback Firecrawl ───────────────────────────────────────────────────────
-
-async function scrapeViaFirecrawl(url: string): Promise<ScrapedProduct> {
   const apiKey = process.env.FIRECRAWL_API_KEY
-  if (!apiKey) throw new Error('FIRECRAWL_API_KEY manquant et scraper natif échoué')
 
+  if (apiKey) {
+    try {
+      return await scrapeViaFirecrawl(url, apiKey)
+    } catch (err) {
+      console.warn('[scraper] Firecrawl échoué, fallback natif:', (err as Error).message)
+    }
+  } else {
+    console.warn('[scraper] FIRECRAWL_API_KEY absent — fallback natif uniquement')
+  }
+
+  // Fallback : fetch() natif (HTML basique, sans JS)
+  return await scrapeViaFetch(url)
+}
+
+// ─── Firecrawl (primary) ─────────────────────────────────────────────────────
+
+async function scrapeViaFirecrawl(url: string, apiKey: string): Promise<ScrapedProduct> {
   const res = await fetch('https://api.firecrawl.dev/v1/scrape', {
     method: 'POST',
     headers: {
@@ -294,7 +47,7 @@ async function scrapeViaFirecrawl(url: string): Promise<ScrapedProduct> {
       proxy: 'stealth',
       waitFor: 3000,
       jsonOptions: {
-        prompt: 'Extract the product information from this e-commerce page.',
+        prompt: 'Extract the product information from this e-commerce page: title, description, price, original_price (if on sale), image URLs, rating, reviews count.',
         schema: {
           type: 'object',
           properties: {
@@ -328,6 +81,49 @@ async function scrapeViaFirecrawl(url: string): Promise<ScrapedProduct> {
     variants:       [],
     rating:         item.rating || null,
     reviews_count:  item.reviews_count || null,
+    source_url:     url,
+  }
+}
+
+// ─── Fallback fetch natif (sans JS, meta tags uniquement) ────────────────────
+
+async function scrapeViaFetch(url: string): Promise<ScrapedProduct> {
+  const res = await fetch(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.8',
+    },
+    signal: AbortSignal.timeout(15000),
+  })
+
+  if (!res.ok) throw new Error(`Fetch natif erreur ${res.status}`)
+
+  const html = await res.text()
+
+  const getMetaContent = (name: string): string => {
+    const match = html.match(new RegExp(`<meta[^>]+(?:name|property)=["']${name}["'][^>]+content=["']([^"']+)["']`, 'i'))
+      || html.match(new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:name|property)=["']${name}["']`, 'i'))
+    return match?.[1] || ''
+  }
+
+  const titleMatch = html.match(/<h1[^>]*>([^<]+)<\/h1>/i) || html.match(/<title>([^<]+)<\/title>/i)
+  const title = titleMatch?.[1]?.trim() || getMetaContent('og:title') || ''
+
+  if (!title) throw new Error('Titre introuvable via fetch natif')
+
+  const description = getMetaContent('og:description') || getMetaContent('description')
+  const image = getMetaContent('og:image')
+  const price = getMetaContent('product:price:amount') || getMetaContent('og:price:amount') || null
+
+  return {
+    title:          title.slice(0, 200),
+    description:    description.slice(0, 1000),
+    images:         image ? [image] : [],
+    price,
+    original_price: null,
+    variants:       [],
+    rating:         null,
+    reviews_count:  null,
     source_url:     url,
   }
 }

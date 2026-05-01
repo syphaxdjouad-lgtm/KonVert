@@ -6,9 +6,13 @@ import { PostHog } from 'posthog-node'
 import type Stripe from 'stripe'
 import type { PlanType } from '@/types'
 
-const ph = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-  host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com',
-})
+function getPostHog() {
+  const key = process.env.NEXT_PUBLIC_POSTHOG_KEY
+  if (!key) return null
+  return new PostHog(key, {
+    host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com',
+  })
+}
 
 // Stripe a déplacé `invoice.subscription` dans `invoice.parent.subscription_details.subscription`
 // au fil des versions de l'API. On lit les deux pour rester compatible sans `any`.
@@ -50,6 +54,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Signature invalide' }, { status: 400 })
   }
 
+  const ph = getPostHog()
+
   try {
     switch (event.type) {
 
@@ -63,7 +69,7 @@ export async function POST(req: NextRequest) {
 
         await activateSubscription(userId, plan, session.customer as string, session.subscription as string)
 
-        ph.capture({
+        ph?.capture({
           distinctId: userId,
           event: 'subscription_started',
           properties: {
@@ -91,7 +97,7 @@ export async function POST(req: NextRequest) {
         }
         await updateSubscription(userId, plan, sub.status, extractPeriodEnd(sub))
 
-        ph.capture({
+        ph?.capture({
           distinctId: userId,
           event: 'subscription_updated',
           properties: { plan, status: sub.status },
@@ -114,7 +120,7 @@ export async function POST(req: NextRequest) {
           .update({ plan: 'starter' })
           .eq('id', userId)
 
-        ph.capture({
+        ph?.capture({
           distinctId: userId,
           event: 'subscription_cancelled',
           properties: { previous_plan: sub.metadata?.plan },
@@ -134,7 +140,7 @@ export async function POST(req: NextRequest) {
 
         const customerId = typeof invoice.customer === 'string' ? invoice.customer : invoice.customer?.id
         if (customerId) {
-          ph.capture({
+          ph?.capture({
             distinctId: customerId,
             event: 'payment_failed',
             properties: { amount: (invoice.amount_due ?? 0) / 100 },
@@ -160,7 +166,7 @@ export async function POST(req: NextRequest) {
             .update({ pages_used_this_month: 0, quota_reset_at: new Date().toISOString() })
             .eq('id', sub.user_id)
 
-          ph.capture({
+          ph?.capture({
             distinctId: sub.user_id,
             event: 'subscription_renewed',
             properties: { amount: (invoice.amount_paid ?? 0) / 100 },
@@ -170,7 +176,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    await ph.shutdown()
+    if (ph) await ph.shutdown()
     return NextResponse.json({ received: true })
   } catch (err) {
     console.error('[webhook] Erreur traitement:', err)

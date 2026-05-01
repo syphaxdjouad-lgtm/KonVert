@@ -71,14 +71,16 @@ function ConfirmModal({
 
 /* ── Contenu principal ──────────────────────────────────────────────────── */
 function StoresContent() {
-  const [stores, setStores]         = useState<any[]>([])
-  const [loading, setLoading]       = useState(true)
-  const [wooForm, setWooForm]       = useState(false)
-  const [wooData, setWooData]       = useState({ store_url: '', consumer_key: '', consumer_secret: '' })
-  const [connecting, setConnecting] = useState(false)
-  const [error, setError]           = useState<string | null>(null)
-  const searchParams                = useSearchParams()
-  const justConnected               = searchParams.get('connected')
+  const [stores, setStores]               = useState<any[]>([])
+  const [loading, setLoading]             = useState(true)
+  const [wooForm, setWooForm]             = useState(false)
+  const [wooData, setWooData]             = useState({ store_url: '', consumer_key: '', consumer_secret: '' })
+  const [youcanForm, setYoucanForm]       = useState(false)
+  const [youcanToken, setYoucanToken]     = useState('')
+  const [connecting, setConnecting]       = useState(false)
+  const [error, setError]                 = useState<string | null>(null)
+  const searchParams                      = useSearchParams()
+  const justConnected                     = searchParams.get('connected')
 
   // State pour la modale de suppression
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null)
@@ -91,6 +93,28 @@ function StoresContent() {
     const { data } = await supabase.from('stores').select('*').order('created_at', { ascending: false })
     setStores(data || [])
     setLoading(false)
+  }
+
+  async function connectYouCan(e: React.FormEvent) {
+    e.preventDefault()
+    setConnecting(true)
+    setError(null)
+    try {
+      const res  = await fetch('/api/youcan/connect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ api_token: youcanToken }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error)
+      setYoucanForm(false)
+      setYoucanToken('')
+      loadStores()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur')
+    } finally {
+      setConnecting(false)
+    }
   }
 
   async function connectWoo(e: React.FormEvent) {
@@ -143,7 +167,7 @@ function StoresContent() {
         <div>
           <h1 className="text-2xl font-black" style={{ color: '#111' }}>Mes stores</h1>
           <p className="text-sm mt-1" style={{ color: '#6b7280' }}>
-            {stores.length > 0 ? `${stores.length} boutique${stores.length > 1 ? 's' : ''} connectée${stores.length > 1 ? 's' : ''}` : 'Connecte tes boutiques Shopify ou WooCommerce'}
+            {stores.length > 0 ? `${stores.length} boutique${stores.length > 1 ? 's' : ''} connectée${stores.length > 1 ? 's' : ''}` : 'Connecte tes boutiques Shopify, WooCommerce ou YouCan'}
           </p>
         </div>
       </div>
@@ -165,8 +189,8 @@ function StoresContent() {
             <div key={i} className="h-24 rounded-2xl animate-pulse" style={{ background: '#f3f4f6' }} />
           ))}
         </div>
-      ) : stores.length === 0 && !wooForm ? (
-        <EmptyStores onAddWoo={() => setWooForm(true)} />
+      ) : stores.length === 0 && !wooForm && !youcanForm ? (
+        <EmptyStores onAddWoo={() => setWooForm(true)} onAddYouCan={() => setYoucanForm(true)} />
       ) : (
         <>
           <div className="space-y-3 mb-6">
@@ -176,8 +200,8 @@ function StoresContent() {
           </div>
 
           {/* Boutons ajouter */}
-          {!wooForm && (
-            <div className="grid grid-cols-2 gap-3">
+          {!wooForm && !youcanForm && (
+            <div className="grid grid-cols-3 gap-3">
               <Link
                 href="/api/shopify/install"
                 className="flex items-center justify-center gap-2 rounded-2xl p-4 text-sm font-bold transition-all hover:scale-105"
@@ -192,9 +216,72 @@ function StoresContent() {
               >
                 <Plus className="w-4 h-4" /> Ajouter WooCommerce
               </button>
+              <button
+                onClick={() => setYoucanForm(true)}
+                className="flex items-center justify-center gap-2 rounded-2xl p-4 text-sm font-bold transition-all hover:scale-105"
+                style={{ border: '2px dashed rgba(249,115,22,0.3)', background: 'rgba(249,115,22,0.04)', color: '#f97316' }}
+              >
+                <Plus className="w-4 h-4" /> Ajouter YouCan
+              </button>
             </div>
           )}
         </>
+      )}
+
+      {/* Formulaire YouCan */}
+      {youcanForm && (
+        <form onSubmit={connectYouCan} className="rounded-2xl p-6 space-y-4" style={{ background: '#fff', border: '1px solid #e5e7eb' }}>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'rgba(249,115,22,0.08)' }}>
+              <Link2 className="w-4 h-4" style={{ color: '#f97316' }} />
+            </div>
+            <div>
+              <h3 className="font-black" style={{ color: '#111' }}>Connecter YouCan</h3>
+              <p className="text-xs" style={{ color: '#9ca3af' }}>YouCan Admin → Paramètres → API → Générer un token</p>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold mb-1.5" style={{ color: '#374151' }}>Token API</label>
+            <input
+              type="password"
+              required
+              placeholder="Colle ton token API YouCan ici"
+              value={youcanToken}
+              onChange={e => setYoucanToken(e.target.value)}
+              className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none transition-colors"
+              style={{ border: '1px solid #e5e7eb', background: '#fafafa' }}
+              onFocus={e => (e.target.style.borderColor = '#f97316')}
+              onBlur={e => (e.target.style.borderColor = '#e5e7eb')}
+            />
+          </div>
+
+          {error && (
+            <div className="flex items-start gap-2 rounded-xl p-3 text-sm" style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.2)', color: '#dc2626' }}>
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              {error}
+            </div>
+          )}
+
+          <div className="flex gap-2 pt-1">
+            <button
+              type="button"
+              onClick={() => { setYoucanForm(false); setError(null) }}
+              className="flex-1 font-bold py-2.5 rounded-xl text-sm transition-colors"
+              style={{ border: '1px solid #e5e7eb', color: '#374151', background: '#fff' }}
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              disabled={connecting}
+              className="flex-1 text-white font-bold py-2.5 rounded-xl text-sm transition-all"
+              style={{ background: connecting ? '#fed7aa' : 'linear-gradient(135deg, #f97316, #ea580c)' }}
+            >
+              {connecting ? 'Connexion...' : 'Connecter'}
+            </button>
+          </div>
+        </form>
       )}
 
       {/* Formulaire WooCommerce */}
@@ -263,12 +350,18 @@ function StoresContent() {
 }
 
 function StoreCard({ store, onDelete }: { store: any; onDelete: () => void }) {
-  const isShopify = store.platform === 'shopify'
+  const isShopify  = store.platform === 'shopify'
+  const isYouCan   = store.platform === 'youcan'
+  const color      = isShopify ? '#16a34a' : isYouCan ? '#f97316' : '#7c3aed'
+  const bgColor    = isShopify ? 'rgba(22,163,74,0.08)' : isYouCan ? 'rgba(249,115,22,0.08)' : 'rgba(124,58,237,0.08)'
+  const badgeBg    = isShopify ? 'rgba(22,163,74,0.1)' : isYouCan ? 'rgba(249,115,22,0.1)' : 'rgba(124,58,237,0.1)'
+  const label      = isShopify ? 'Shopify' : isYouCan ? 'YouCan' : 'WooCommerce'
+
   return (
     <div className="rounded-2xl p-5 flex items-center justify-between transition-colors hover:shadow-sm" style={{ background: '#fff', border: '1px solid #e5e7eb' }}>
       <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: isShopify ? 'rgba(22,163,74,0.08)' : 'rgba(124,58,237,0.08)' }}>
-          <Store className="w-5 h-5" style={{ color: isShopify ? '#16a34a' : '#7c3aed' }} />
+        <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: bgColor }}>
+          <Store className="w-5 h-5" style={{ color }} />
         </div>
         <div>
           <div className="font-black text-sm" style={{ color: '#111' }}>{store.name}</div>
@@ -276,11 +369,8 @@ function StoreCard({ store, onDelete }: { store: any; onDelete: () => void }) {
             <ExternalLink className="w-3 h-3" />
             {store.store_url}
           </div>
-          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full mt-1.5 inline-block" style={{
-            background: isShopify ? 'rgba(22,163,74,0.1)' : 'rgba(124,58,237,0.1)',
-            color: isShopify ? '#16a34a' : '#7c3aed',
-          }}>
-            {isShopify ? 'Shopify' : 'WooCommerce'}
+          <span className="text-[11px] font-bold px-2 py-0.5 rounded-full mt-1.5 inline-block" style={{ background: badgeBg, color }}>
+            {label}
           </span>
         </div>
       </div>
@@ -303,7 +393,7 @@ function StoreCard({ store, onDelete }: { store: any; onDelete: () => void }) {
   )
 }
 
-function EmptyStores({ onAddWoo }: { onAddWoo: () => void }) {
+function EmptyStores({ onAddWoo, onAddYouCan }: { onAddWoo: () => void; onAddYouCan: () => void }) {
   return (
     <div className="text-center py-20 rounded-2xl" style={{ border: '2px dashed #e5e7eb', background: '#fff' }}>
       <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(124,58,237,0.08)' }}>
@@ -313,7 +403,7 @@ function EmptyStores({ onAddWoo }: { onAddWoo: () => void }) {
       <p className="text-sm mb-8 max-w-xs mx-auto" style={{ color: '#6b7280' }}>
         Connecte ta boutique pour publier tes pages directement depuis le dashboard
       </p>
-      <div className="flex gap-3 justify-center">
+      <div className="flex gap-3 justify-center flex-wrap">
         <Link
           href="/api/shopify/install"
           className="inline-flex items-center gap-2 text-white font-bold text-sm py-2.5 px-5 rounded-xl transition-all hover:opacity-90"
@@ -327,6 +417,13 @@ function EmptyStores({ onAddWoo }: { onAddWoo: () => void }) {
           style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 4px 14px rgba(124,58,237,0.3)' }}
         >
           <Plus className="w-4 h-4" /> WooCommerce
+        </button>
+        <button
+          onClick={onAddYouCan}
+          className="inline-flex items-center gap-2 text-white font-bold text-sm py-2.5 px-5 rounded-xl transition-all hover:opacity-90"
+          style={{ background: 'linear-gradient(135deg, #f97316, #ea580c)', boxShadow: '0 4px 14px rgba(249,115,22,0.3)' }}
+        >
+          <Plus className="w-4 h-4" /> YouCan
         </button>
       </div>
     </div>

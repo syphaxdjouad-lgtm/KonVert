@@ -7,7 +7,7 @@ import { TEMPLATES } from '@/lib/templates'
 import {
   Link2, Pencil, Loader2, ArrowLeft, ArrowRight, Check,
   Upload, Palette, Sparkles,
-  Zap, X, ChevronRight
+  Zap, X, ChevronRight, Send, ChevronDown, CheckCircle2, AlertCircle,
 } from 'lucide-react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -76,6 +76,7 @@ const TONES = [
 const PLATFORMS = [
   { id: 'shopify',      label: 'Shopify',         icon: '🟢' },
   { id: 'woocommerce',  label: 'WooCommerce',      icon: '🟣' },
+  { id: 'youcan',       label: 'YouCan',           icon: '🟠' },
   { id: 'standalone',   label: 'Page standalone',  icon: '🔗' },
 ]
 
@@ -193,6 +194,13 @@ function NewPageInner() {
   const [error,       setError]       = useState<string | null>(null)
   const [saving,      setSaving]      = useState(false)
 
+  // Publication vers store
+  const [stores,         setStores]         = useState<any[]>([])
+  const [publishOpen,    setPublishOpen]     = useState(false)
+  const [publishing,     setPublishing]      = useState<string | null>(null)
+  const [publishSuccess, setPublishSuccess]  = useState<string | null>(null)
+  const [publishError,   setPublishError]    = useState<string | null>(null)
+
   // ── Chargement d'une page existante ──
   useEffect(() => {
     const id = searchParams.get('page_id')
@@ -234,6 +242,38 @@ function NewPageInner() {
       })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // ── Chargement stores ──
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.from('stores').select('id, name, platform, store_url').then(({ data }) => {
+      setStores(data || [])
+    })
+  }, [])
+
+  // ── Publication vers store ──
+  async function publishToStore(store: any) {
+    if (!pageId) return
+    setPublishing(store.id)
+    setPublishError(null)
+    setPublishSuccess(null)
+    try {
+      const endpoint = store.platform === 'youcan' ? '/api/youcan/push' : '/api/shopify/push'
+      const res  = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ store_id: store.id, page_id: pageId }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error)
+      setPublishSuccess(store.name)
+      setPublishOpen(false)
+    } catch (err) {
+      setPublishError(err instanceof Error ? err.message : 'Erreur publication')
+    } finally {
+      setPublishing(null)
+    }
+  }
 
   // ── Gestion upload photos produit ──
   function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -413,6 +453,52 @@ function NewPageInner() {
                 </button>
               ))}
             </div>
+
+            {/* Bouton Publier */}
+            {stores.length > 0 && pageId && (
+              <div className="relative">
+                <button
+                  onClick={() => setPublishOpen(o => !o)}
+                  className="flex items-center gap-1.5 text-[12px] font-bold px-3 py-1.5 rounded-lg transition-all"
+                  style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', color: '#fff' }}
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  Publier
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+                {publishOpen && (
+                  <div
+                    className="absolute top-9 right-0 rounded-xl overflow-hidden z-50 min-w-[200px]"
+                    style={{ background: '#fff', border: '1px solid #e5e7eb', boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}
+                  >
+                    <div className="px-3 py-2 text-[11px] font-bold uppercase tracking-wide" style={{ color: '#9ca3af', borderBottom: '1px solid #f3f4f6' }}>
+                      Choisir un store
+                    </div>
+                    {stores.map(store => {
+                      const isShopify = store.platform === 'shopify'
+                      const isYouCan  = store.platform === 'youcan'
+                      const color     = isShopify ? '#16a34a' : isYouCan ? '#f97316' : '#7c3aed'
+                      const icon      = isShopify ? '🟢' : isYouCan ? '🟠' : '🟣'
+                      return (
+                        <button
+                          key={store.id}
+                          onClick={() => publishToStore(store)}
+                          disabled={!!publishing}
+                          className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 disabled:opacity-50"
+                        >
+                          <span>{icon}</span>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-[13px] font-bold truncate" style={{ color: '#111' }}>{store.name}</div>
+                            <div className="text-[11px] font-semibold capitalize" style={{ color }}>{store.platform}</div>
+                          </div>
+                          {publishing === store.id && <Loader2 className="w-3.5 h-3.5 animate-spin" style={{ color }} />}
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex-1 overflow-hidden">
@@ -429,6 +515,27 @@ function NewPageInner() {
             Sauvegarde...
           </div>
         )}
+        {publishSuccess && (
+          <div
+            className="fixed bottom-4 right-4 flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold"
+            style={{ background: 'rgba(22,163,74,0.1)', border: '1px solid rgba(22,163,74,0.3)', color: '#166534' }}
+            onClick={() => setPublishSuccess(null)}
+          >
+            <CheckCircle2 className="w-4 h-4" />
+            Publié sur {publishSuccess} !
+          </div>
+        )}
+        {publishError && (
+          <div
+            className="fixed bottom-4 right-4 flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold"
+            style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.2)', color: '#dc2626' }}
+            onClick={() => setPublishError(null)}
+          >
+            <AlertCircle className="w-4 h-4" />
+            {publishError}
+          </div>
+        )}
+        {publishOpen && <div className="fixed inset-0 z-40" onClick={() => setPublishOpen(false)} />}
       </div>
     )
   }

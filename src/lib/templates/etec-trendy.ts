@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/2220316/pexels-photo-2220316.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/2220316/pexels-photo-2220316.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const TRENDY_THEME: SectionTheme = {
+  primary:    '#319da0',
+  accent:     '#eff7f7',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecTrendy(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -217,6 +238,15 @@ body{font-family:'Rubik',sans-serif;background:#fff;color:#222;}
     </div>
   </div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, TRENDY_THEME)}
+${renderStorySection(data, TRENDY_THEME)}
+${renderComparisonSection(data, TRENDY_THEME)}
+${renderTestimonialsSection(data, TRENDY_THEME)}
+${renderBonusesSection(data, TRENDY_THEME)}
+${renderGuaranteeSection(data, TRENDY_THEME)}
 
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#f3f3f3;">

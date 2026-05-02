@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/2162938/pexels-photo-2162938.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/3094035/pexels-photo-3094035.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/2162938/pexels-photo-2162938.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/3094035/pexels-photo-3094035.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const POTERIE_THEME: SectionTheme = {
+  primary:    '#a0522d',
+  accent:     '#f7f1ee',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fbf8f4',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecPoterie(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -72,5 +93,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#A0
 ${data.price ? `<p style="font-size:48px;font-weight:700;color:#F5EEE6;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#FBF8F4;color:#A0522D;border:none;border-radius:20px;padding:18px 52px;font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Commander maintenant'}</button>
 <p style="font-size:12px;color:rgba(251,248,244,0.4);margin-top:20px;">Fait main · Emballage soigné · Retour gratuit</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, POTERIE_THEME)}
+${renderStorySection(data, POTERIE_THEME)}
+${renderComparisonSection(data, POTERIE_THEME)}
+${renderTestimonialsSection(data, POTERIE_THEME)}
+${renderBonusesSection(data, POTERIE_THEME)}
+${renderGuaranteeSection(data, POTERIE_THEME)}
+
+</body></html>`
 }

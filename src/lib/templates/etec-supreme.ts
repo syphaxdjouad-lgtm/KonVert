@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const SUPREME_THEME: SectionTheme = {
+  primary:    '#fe0100',
+  accent:     'rgba(255,255,255,0.06)',
+  text:       '#ffffff',
+  textMuted:  'rgba(255,255,255,0.6)',
+  bg:         '#000',
+  bgAlt:      'rgba(255,255,255,0.04)',
+  border:     'rgba(255,255,255,0.10)',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '12px',
+}
 
 export function templateEtecSupreme(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -72,5 +93,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#FE
 ${data.price ? `<p style="font-family:'Inconsolata',monospace;font-size:56px;font-weight:900;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#000;color:#fff;border:none;padding:18px 52px;font-family:'Inconsolata',monospace;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;">${data.cta || 'Cop now'}</button>
 <p style="font-family:'Inconsolata',monospace;font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;">Limited edition · Express shipping · Free returns</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, SUPREME_THEME)}
+${renderStorySection(data, SUPREME_THEME)}
+${renderComparisonSection(data, SUPREME_THEME)}
+${renderTestimonialsSection(data, SUPREME_THEME)}
+${renderBonusesSection(data, SUPREME_THEME)}
+${renderGuaranteeSection(data, SUPREME_THEME)}
+
+</body></html>`
 }

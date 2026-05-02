@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3735149/pexels-photo-3735149.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/3993398/pexels-photo-3993398.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/3735149/pexels-photo-3735149.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/3993398/pexels-photo-3993398.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const COSMETIX_THEME: SectionTheme = {
+  primary:    '#334fb4',
+  accent:     '#eff1f9',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fefcfa',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecCosmetix(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -213,6 +234,15 @@ body{font-family:'DM Sans',sans-serif;background:#FEFCFA;color:#121212;}
     </div>
   </div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, COSMETIX_THEME)}
+${renderStorySection(data, COSMETIX_THEME)}
+${renderComparisonSection(data, COSMETIX_THEME)}
+${renderTestimonialsSection(data, COSMETIX_THEME)}
+${renderBonusesSection(data, COSMETIX_THEME)}
+${renderGuaranteeSection(data, COSMETIX_THEME)}
 
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#F6F3EF;">

@@ -1,5 +1,14 @@
 import type { LandingPageData } from '@/types'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
   'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=800&q=80',
@@ -69,6 +78,18 @@ const REVIEWS = [
   { name: 'James K.',   rating: 5, text: 'Setup took 30 seconds. Bluetooth is rock solid — no dropouts at the gym. My previous pair cut out constantly.' },
   { name: 'Priya S.',   rating: 5, text: 'I\'m a tech reviewer and this is genuinely impressive for the price point. Competitors charge 2x for less.' },
 ]
+
+const GADGET_THEME: SectionTheme = {
+  primary:    '#0066cc',
+  accent:     '#ebf3fb',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecGadget(data: LandingPageData): string {
   const img = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
@@ -517,6 +538,15 @@ window.addEventListener('scroll', () => {
   document.querySelector('.nav').style.boxShadow = window.scrollY > 10 ? '0 2px 20px rgba(0,0,0,0.08)' : 'none';
 });
 </script>
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, GADGET_THEME)}
+${renderStorySection(data, GADGET_THEME)}
+${renderComparisonSection(data, GADGET_THEME)}
+${renderTestimonialsSection(data, GADGET_THEME)}
+${renderBonusesSection(data, GADGET_THEME)}
+${renderGuaranteeSection(data, GADGET_THEME)}
+
 </body>
 </html>`
 }

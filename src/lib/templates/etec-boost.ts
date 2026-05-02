@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3683074/pexels-photo-3683074.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/3683056/pexels-photo-3683056.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/3683074/pexels-photo-3683074.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/3683056/pexels-photo-3683056.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const BOOST_THEME: SectionTheme = {
+  primary:    '#ff2277',
+  accent:     '#ffedf4',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecBoost(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -73,5 +94,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:lin
 ${data.price ? `<p style="font-size:52px;font-weight:800;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#fff;color:#FF2277;border:none;border-radius:14px;padding:18px 52px;font-family:'Poppins',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Je commande maintenant'}</button>
 <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:20px;">Satisfait ou remboursé · Livraison offerte · Paiement sécurisé</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, BOOST_THEME)}
+${renderStorySection(data, BOOST_THEME)}
+${renderComparisonSection(data, BOOST_THEME)}
+${renderTestimonialsSection(data, BOOST_THEME)}
+${renderBonusesSection(data, BOOST_THEME)}
+${renderGuaranteeSection(data, BOOST_THEME)}
+
+</body></html>`
 }

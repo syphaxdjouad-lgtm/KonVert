@@ -1,5 +1,14 @@
 import type { LandingPageData } from '@/types'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80',
   'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&q=80',
@@ -60,6 +69,18 @@ const REVIEWS_DATA = [
   { name: 'Sophie R.',   rating: 5, text: 'I\'ve been searching for this style for years. Slow living, timeless design. This is exactly it. Worth every cent.' },
   { name: 'Lucas M.',    rating: 5, text: 'The grain of the wood is stunning in real life. Photos don\'t do it justice. This is true craftsmanship.' },
 ]
+
+const CASA_THEME: SectionTheme = {
+  primary:    '#b5541b',
+  accent:     '#f9f1ed',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecCasa(data: LandingPageData): string {
   const img = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
@@ -513,6 +534,15 @@ window.addEventListener('scroll', () => {
   document.querySelector('.nav').style.boxShadow = window.scrollY > 10 ? '0 2px 16px rgba(28,21,16,0.08)' : 'none';
 });
 </script>
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, CASA_THEME)}
+${renderStorySection(data, CASA_THEME)}
+${renderComparisonSection(data, CASA_THEME)}
+${renderTestimonialsSection(data, CASA_THEME)}
+${renderBonusesSection(data, CASA_THEME)}
+${renderGuaranteeSection(data, CASA_THEME)}
+
 </body>
 </html>`
 }

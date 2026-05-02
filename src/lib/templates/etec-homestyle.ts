@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/1648776/pexels-photo-1648776.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/2079249/pexels-photo-2079249.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const HOMESTYLE_THEME: SectionTheme = {
+  primary:    '#8b6914',
+  accent:     '#f6f3ec',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#faf7f2',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecHomestyle(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -201,6 +222,15 @@ body{font-family:'DM Sans',sans-serif;background:#FAF7F2;color:#2C2420;}
     </div>
   </div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, HOMESTYLE_THEME)}
+${renderStorySection(data, HOMESTYLE_THEME)}
+${renderComparisonSection(data, HOMESTYLE_THEME)}
+${renderTestimonialsSection(data, HOMESTYLE_THEME)}
+${renderBonusesSection(data, HOMESTYLE_THEME)}
+${renderGuaranteeSection(data, HOMESTYLE_THEME)}
 
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#F0EBE3;">

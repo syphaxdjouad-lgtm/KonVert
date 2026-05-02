@@ -1,5 +1,14 @@
 import type { LandingPageData } from '@/types'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 // ─── FALLBACK IMAGES — menswear premium ───────────────────────────────────────
 
 const FALLBACK_IMGS = [
@@ -76,6 +85,18 @@ const RELATED_PRODUCTS = [
   { name: 'Technical Cargo Pant',   price: '$115', orig: '$149', badge: null,           rating: '4.7', reviews: '87'  },
   { name: 'Brushed Fleece Hoodie',  price: '$89',  orig: '$119', badge: 'New Arrivals', rating: '4.9', reviews: '312' },
 ]
+
+const SHOPZ_THEME: SectionTheme = {
+  primary:    '#1a5c30',
+  accent:     '#edf2ee',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecShopz(data: LandingPageData): string {
   const img    = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
@@ -616,6 +637,15 @@ export function templateEtecShopz(data: LandingPageData): string {
     }, { threshold: 0.3 });
     var rp = document.querySelector('.reviews-right'); if (rp) io.observe(rp);
   </script>
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, SHOPZ_THEME)}
+${renderStorySection(data, SHOPZ_THEME)}
+${renderComparisonSection(data, SHOPZ_THEME)}
+${renderTestimonialsSection(data, SHOPZ_THEME)}
+${renderBonusesSection(data, SHOPZ_THEME)}
+${renderGuaranteeSection(data, SHOPZ_THEME)}
+
 </body>
 </html>`
 }

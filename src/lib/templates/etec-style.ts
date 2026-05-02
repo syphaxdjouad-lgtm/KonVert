@@ -1,5 +1,14 @@
 import type { LandingPageData } from '@/types'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 // ─── FALLBACK IMAGES — fashion/personal styling ───────────────────────────────
 
 const FALLBACK_IMGS = [
@@ -56,6 +65,18 @@ const ICON_CHAT       = `<svg width="22" height="22" viewBox="0 0 24 24" fill="n
 const ICON_WARDROBE   = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="7" y1="9" x2="7" y2="9.01"/><line x1="17" y1="9" x2="17" y2="9.01"/></svg>`
 
 // ─── MAIN TEMPLATE FUNCTION ───────────────────────────────────────────────────
+
+const STYLE_THEME: SectionTheme = {
+  primary:    '#c9b49a',
+  accent:     '#fbf9f7',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecStyle(data: LandingPageData): string {
   const img = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
@@ -1097,6 +1118,15 @@ export function templateEtecStyle(data: LandingPageData): string {
       })
     })
   </script>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, STYLE_THEME)}
+${renderStorySection(data, STYLE_THEME)}
+${renderComparisonSection(data, STYLE_THEME)}
+${renderTestimonialsSection(data, STYLE_THEME)}
+${renderBonusesSection(data, STYLE_THEME)}
+${renderGuaranteeSection(data, STYLE_THEME)}
 
 </body>
 </html>`

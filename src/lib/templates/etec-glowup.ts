@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/3373716/pexels-photo-3373716.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/3373716/pexels-photo-3373716.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const GLOWUP_THEME: SectionTheme = {
+  primary:    '#d4508b',
+  accent:     '#fcf1f6',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fff9fb',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecGlowup(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -72,5 +93,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#D4
 ${data.price ? `<p style="font-size:52px;font-weight:700;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#fff;color:#D4508B;border:none;border-radius:20px;padding:18px 52px;font-family:'Work Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Je craque maintenant'}</button>
 <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:20px;">Livraison offerte · Satisfaite ou remboursée · Paiement sécurisé</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, GLOWUP_THEME)}
+${renderStorySection(data, GLOWUP_THEME)}
+${renderComparisonSection(data, GLOWUP_THEME)}
+${renderTestimonialsSection(data, GLOWUP_THEME)}
+${renderBonusesSection(data, GLOWUP_THEME)}
+${renderGuaranteeSection(data, GLOWUP_THEME)}
+
+</body></html>`
 }

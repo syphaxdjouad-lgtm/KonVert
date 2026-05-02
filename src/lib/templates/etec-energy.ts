@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
   'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80',
@@ -18,6 +27,18 @@ const C = {
   text:        '#111111',
   muted:       '#666666',
   border:      '#E0E0E0',
+}
+
+const ENERGY_THEME: SectionTheme = {
+  primary:    '#e63000',
+  accent:     '#fdeeeb',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
 }
 
 export function templateEtecEnergy(data: LandingPageData): string {
@@ -351,6 +372,15 @@ export function templateEtecEnergy(data: LandingPageData): string {
     </div>
   </div>
 </div>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, ENERGY_THEME)}
+${renderStorySection(data, ENERGY_THEME)}
+${renderComparisonSection(data, ENERGY_THEME)}
+${renderTestimonialsSection(data, ENERGY_THEME)}
+${renderBonusesSection(data, ENERGY_THEME)}
+${renderGuaranteeSection(data, ENERGY_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:2px solid ${C.border};">

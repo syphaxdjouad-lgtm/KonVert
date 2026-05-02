@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=80',
   'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80',
@@ -18,6 +27,18 @@ const C = {
   text:        '#1C0A0E',
   muted:       '#9B6E7E',
   border:      '#F2D6E0',
+}
+
+const ROSE_THEME: SectionTheme = {
+  primary:    '#d63370',
+  accent:     '#fceff4',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
 }
 
 export function templateEtecRose(data: LandingPageData): string {
@@ -330,6 +351,15 @@ export function templateEtecRose(data: LandingPageData): string {
     </div>
   </div>
 </div>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, ROSE_THEME)}
+${renderStorySection(data, ROSE_THEME)}
+${renderComparisonSection(data, ROSE_THEME)}
+${renderTestimonialsSection(data, ROSE_THEME)}
+${renderBonusesSection(data, ROSE_THEME)}
+${renderGuaranteeSection(data, ROSE_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:1px solid ${C.border};">

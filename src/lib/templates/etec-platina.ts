@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1232931/pexels-photo-1232931.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/1232931/pexels-photo-1232931.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const PLATINA_THEME: SectionTheme = {
+  primary:    '#b8860b',
+  accent:     '#f9f5eb',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fdfdfb',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecPlatina(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -72,5 +93,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#B8
 ${data.price ? `<p style="font-size:48px;font-weight:600;color:#B8860B;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button class="pl-btn" style="font-size:14px;padding:18px 52px;">${data.cta || 'Offrir ce bijou'}</button>
 <p style="font-size:12px;color:rgba(253,253,251,0.3);margin-top:20px;">Écrin offert · Certificat d'authenticité · Retour gratuit</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, PLATINA_THEME)}
+${renderStorySection(data, PLATINA_THEME)}
+${renderComparisonSection(data, PLATINA_THEME)}
+${renderTestimonialsSection(data, PLATINA_THEME)}
+${renderBonusesSection(data, PLATINA_THEME)}
+${renderGuaranteeSection(data, PLATINA_THEME)}
+
+</body></html>`
 }

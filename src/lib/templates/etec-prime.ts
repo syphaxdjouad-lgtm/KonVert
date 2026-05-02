@@ -1,5 +1,14 @@
 import type { LandingPageData } from '@/types'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 // ─── FALLBACK IMAGES — health / supplements premium ───────────────────────────
 
 const FALLBACK_IMGS = [
@@ -87,6 +96,18 @@ const RESULTS_STATS = [
   { value: '91%', label: 'would recommend to a friend' },
   { value: '4.9★', label: 'average rating from 12,000+ reviews' },
 ]
+
+const PRIME_THEME: SectionTheme = {
+  primary:    '#2d7a22',
+  accent:     '#eef4ed',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecPrime(data: LandingPageData): string {
   const img  = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
@@ -632,6 +653,15 @@ export function templateEtecPrime(data: LandingPageData): string {
     </div>
   </div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, PRIME_THEME)}
+${renderStorySection(data, PRIME_THEME)}
+${renderComparisonSection(data, PRIME_THEME)}
+${renderTestimonialsSection(data, PRIME_THEME)}
+${renderBonusesSection(data, PRIME_THEME)}
+${renderGuaranteeSection(data, PRIME_THEME)}
 
 <!-- FAQ -->
 <section class="faq-section">

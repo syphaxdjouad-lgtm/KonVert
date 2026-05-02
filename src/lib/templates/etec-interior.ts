@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const INTERIOR_THEME: SectionTheme = {
+  primary:    '#5b7553',
+  accent:     '#f2f4f1',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#faf9f6',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecInterior(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -72,5 +93,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#5B
 ${data.price ? `<p style="font-size:48px;font-weight:700;color:#E8EDE4;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#FAF9F6;color:#5B7553;border:none;border-radius:8px;padding:18px 52px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Commander maintenant'}</button>
 <p style="font-size:12px;color:rgba(250,249,246,0.3);margin-top:20px;">Bois massif · Livraison soignée · Retour gratuit</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, INTERIOR_THEME)}
+${renderStorySection(data, INTERIOR_THEME)}
+${renderComparisonSection(data, INTERIOR_THEME)}
+${renderTestimonialsSection(data, INTERIOR_THEME)}
+${renderBonusesSection(data, INTERIOR_THEME)}
+${renderGuaranteeSection(data, INTERIOR_THEME)}
+
+</body></html>`
 }

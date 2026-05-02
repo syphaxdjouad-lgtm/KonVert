@@ -1,5 +1,14 @@
 import type { LandingPageData } from '@/types'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=800&q=80',
   'https://images.unsplash.com/photo-1601821765780-754fa98637c1?w=800&q=80',
@@ -18,6 +27,18 @@ const C = {
   muted:       '#7A6A4E',
   border:      '#2A2010',
   divider:     'rgba(212,168,83,0.20)',
+}
+
+const GOLD_THEME: SectionTheme = {
+  primary:    '#d4a853',
+  accent:     '#fcf8f1',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
 }
 
 export function templateEtecGold(data: LandingPageData): string {
@@ -355,6 +376,15 @@ export function templateEtecGold(data: LandingPageData): string {
     </div>
   </div>
 </div>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, GOLD_THEME)}
+${renderStorySection(data, GOLD_THEME)}
+${renderComparisonSection(data, GOLD_THEME)}
+${renderTestimonialsSection(data, GOLD_THEME)}
+${renderBonusesSection(data, GOLD_THEME)}
+${renderGuaranteeSection(data, GOLD_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:96px 0;border-top:1px solid ${C.divider};">

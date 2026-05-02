@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/3394666/pexels-photo-3394666.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/4226896/pexels-photo-4226896.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const SOLO_THEME: SectionTheme = {
+  primary:    '#334fb4',
+  accent:     '#eff1f9',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecSolo(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -205,6 +226,15 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
     </div>
   </div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, SOLO_THEME)}
+${renderStorySection(data, SOLO_THEME)}
+${renderComparisonSection(data, SOLO_THEME)}
+${renderTestimonialsSection(data, SOLO_THEME)}
+${renderBonusesSection(data, SOLO_THEME)}
+${renderGuaranteeSection(data, SOLO_THEME)}
 
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#fff;">

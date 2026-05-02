@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/2735970/pexels-photo-2735970.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const JEWEL_THEME: SectionTheme = {
+  primary:    '#a37249',
+  accent:     'rgba(255,255,255,0.06)',
+  text:       '#ffffff',
+  textMuted:  'rgba(255,255,255,0.6)',
+  bg:         '#000',
+  bgAlt:      'rgba(255,255,255,0.04)',
+  border:     'rgba(255,255,255,0.10)',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '12px',
+}
 
 export function templateEtecJewel(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -204,6 +225,15 @@ body{font-family:'Poppins',sans-serif;background:#000;color:#e3e3e3;}
     </div>
   </div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, JEWEL_THEME)}
+${renderStorySection(data, JEWEL_THEME)}
+${renderComparisonSection(data, JEWEL_THEME)}
+${renderTestimonialsSection(data, JEWEL_THEME)}
+${renderBonusesSection(data, JEWEL_THEME)}
+${renderGuaranteeSection(data, JEWEL_THEME)}
 
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#0A0A0A;">

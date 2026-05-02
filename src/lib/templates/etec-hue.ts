@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1762851/pexels-photo-1762851.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/2693212/pexels-photo-2693212.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/1762851/pexels-photo-1762851.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/2693212/pexels-photo-2693212.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const HUE_THEME: SectionTheme = {
+  primary:    '#ff6b35',
+  accent:     '#fff3ef',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fffef9',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecHue(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -72,5 +93,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#FF
 ${data.price ? `<p style="font-size:48px;font-weight:700;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#fff;color:#FF6B35;border:none;border-radius:16px;padding:18px 52px;font-family:'Sora',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Commander maintenant'}</button>
 <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:20px;">Livraison offerte · Retour gratuit · Paiement sécurisé</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, HUE_THEME)}
+${renderStorySection(data, HUE_THEME)}
+${renderComparisonSection(data, HUE_THEME)}
+${renderTestimonialsSection(data, HUE_THEME)}
+${renderBonusesSection(data, HUE_THEME)}
+${renderGuaranteeSection(data, HUE_THEME)}
+
+</body></html>`
 }

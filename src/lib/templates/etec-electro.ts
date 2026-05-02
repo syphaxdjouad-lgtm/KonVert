@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3490348/pexels-photo-3490348.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/3490348/pexels-photo-3490348.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const ELECTRO_THEME: SectionTheme = {
+  primary:    '#00b4d8',
+  accent:     '#ebf9fc',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#f0fdfa',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecElectro(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -72,5 +93,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:lin
 ${data.price ? `<p style="font-family:'Rajdhani',sans-serif;font-size:52px;font-weight:700;color:#00B4D8;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button class="ec-btn" style="font-size:15px;padding:18px 52px;">${data.cta || 'Booster ma perf'}</button>
 <p style="font-size:12px;color:rgba(240,253,250,0.3);margin-top:20px;">Formule clean · Livraison express · Satisfait ou remboursé</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, ELECTRO_THEME)}
+${renderStorySection(data, ELECTRO_THEME)}
+${renderComparisonSection(data, ELECTRO_THEME)}
+${renderTestimonialsSection(data, ELECTRO_THEME)}
+${renderBonusesSection(data, ELECTRO_THEME)}
+${renderGuaranteeSection(data, ELECTRO_THEME)}
+
+</body></html>`
 }

@@ -1,5 +1,14 @@
 import type { LandingPageData } from '@/types'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80',
   'https://images.unsplash.com/photo-1601758003122-53c40e686a19?w=800&q=80',
@@ -60,6 +69,18 @@ const REVIEWS_DATA = [
 ]
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL']
+
+const PET_THEME: SectionTheme = {
+  primary:    '#f0a500',
+  accent:     '#fef8eb',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecPet(data: LandingPageData): string {
   const img = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
@@ -536,6 +557,15 @@ window.addEventListener('scroll', () => {
   document.querySelector('.nav').style.boxShadow = window.scrollY > 10 ? '0 2px 16px rgba(30,18,6,0.08)' : 'none';
 });
 </script>
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, PET_THEME)}
+${renderStorySection(data, PET_THEME)}
+${renderComparisonSection(data, PET_THEME)}
+${renderTestimonialsSection(data, PET_THEME)}
+${renderBonusesSection(data, PET_THEME)}
+${renderGuaranteeSection(data, PET_THEME)}
+
 </body>
 </html>`
 }

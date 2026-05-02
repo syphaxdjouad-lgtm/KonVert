@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80',
   'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=800&q=80',
@@ -18,6 +27,18 @@ const C = {
   text:        '#1B3A2D',
   muted:       '#5A7A65',
   border:      '#C8E6C9',
+}
+
+const SAGE_THEME: SectionTheme = {
+  primary:    '#4caf50',
+  accent:     '#f1f9f1',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
 }
 
 export function templateEtecSage(data: LandingPageData): string {
@@ -337,6 +358,15 @@ export function templateEtecSage(data: LandingPageData): string {
     </div>
   </div>
 </div>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, SAGE_THEME)}
+${renderStorySection(data, SAGE_THEME)}
+${renderComparisonSection(data, SAGE_THEME)}
+${renderTestimonialsSection(data, SAGE_THEME)}
+${renderBonusesSection(data, SAGE_THEME)}
+${renderGuaranteeSection(data, SAGE_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:1px solid ${C.border};">

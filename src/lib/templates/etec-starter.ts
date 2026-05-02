@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const STARTER_THEME: SectionTheme = {
+  primary:    '#4f46e5',
+  accent:     '#f1f0fd',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecStarter(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -72,5 +93,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#4F
 ${data.price ? `<p style="font-size:48px;font-weight:700;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#fff;color:#4F46E5;border:none;border-radius:12px;padding:18px 52px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Commander maintenant'}</button>
 <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;">Livraison offerte · Retour gratuit · Paiement sécurisé</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, STARTER_THEME)}
+${renderStorySection(data, STARTER_THEME)}
+${renderComparisonSection(data, STARTER_THEME)}
+${renderTestimonialsSection(data, STARTER_THEME)}
+${renderBonusesSection(data, STARTER_THEME)}
+${renderGuaranteeSection(data, STARTER_THEME)}
+
+</body></html>`
 }

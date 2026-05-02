@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/2220316/pexels-photo-2220316.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/2220316/pexels-photo-2220316.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const STREETZ_THEME: SectionTheme = {
+  primary:    '#e11d48',
+  accent:     '#fdedf0',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#f8f8f8',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecStreetz(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -72,5 +93,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#E1
 ${data.price ? `<p style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#fff;color:#E11D48;border:none;padding:18px 52px;font-family:'Barlow',sans-serif;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;">${data.cta || 'Cop maintenant'}</button>
 <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;">Édition limitée · Livraison express · Échanges gratuits</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, STREETZ_THEME)}
+${renderStorySection(data, STREETZ_THEME)}
+${renderComparisonSection(data, STREETZ_THEME)}
+${renderTestimonialsSection(data, STREETZ_THEME)}
+${renderBonusesSection(data, STREETZ_THEME)}
+${renderGuaranteeSection(data, STREETZ_THEME)}
+
+</body></html>`
 }

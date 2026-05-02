@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/4526407/pexels-photo-4526407.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/4526414/pexels-photo-4526414.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/4526407/pexels-photo-4526407.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/3945667/pexels-photo-3945667.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const TECHCASE_THEME: SectionTheme = {
+  primary:    '#1a1a2e',
+  accent:     '#ededee',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecTechcase(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -207,6 +228,15 @@ body{font-family:'Jost',sans-serif;background:#fff;color:#000;}
     </div>
   </div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, TECHCASE_THEME)}
+${renderStorySection(data, TECHCASE_THEME)}
+${renderComparisonSection(data, TECHCASE_THEME)}
+${renderTestimonialsSection(data, TECHCASE_THEME)}
+${renderBonusesSection(data, TECHCASE_THEME)}
+${renderGuaranteeSection(data, TECHCASE_THEME)}
 
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#F5F5F5;">

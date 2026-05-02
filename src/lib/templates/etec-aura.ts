@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80',
   'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
@@ -20,6 +29,18 @@ const C = {
   muted:       '#6B5B8A',
   border:      '#D5C8F0',
   gold:        '#C9A84C',
+}
+
+const AURA_THEME: SectionTheme = {
+  primary:    '#e8deff',
+  accent:     '#fdfcff',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
 }
 
 export function templateEtecAura(data: LandingPageData): string {
@@ -293,6 +314,15 @@ export function templateEtecAura(data: LandingPageData): string {
     <div class="grid3-au" style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px;">${reviewsHTML}</div>
   </div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, AURA_THEME)}
+${renderStorySection(data, AURA_THEME)}
+${renderComparisonSection(data, AURA_THEME)}
+${renderTestimonialsSection(data, AURA_THEME)}
+${renderBonusesSection(data, AURA_THEME)}
+${renderGuaranteeSection(data, AURA_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:96px 0;border-top:1px solid ${C.border};">

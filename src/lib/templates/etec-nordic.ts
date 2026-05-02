@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80',
   'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80',
@@ -25,6 +34,18 @@ function starsNd(n: number): string {
   return [1,2,3,4,5].map(i =>
     `<span style="color:${i <= n ? C.accentWarm : C.border};font-size:13px;">★</span>`
   ).join('')
+}
+
+const NORDIC_THEME: SectionTheme = {
+  primary:    '#8b7355',
+  accent:     '#f6f4f1',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
 }
 
 export function templateEtecNordic(data: LandingPageData): string {
@@ -261,6 +282,15 @@ export function templateEtecNordic(data: LandingPageData): string {
   </div>
   <div class="rev-grid-nd" style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;max-width:1100px;margin:0 auto;">${reviewsHTML}</div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, NORDIC_THEME)}
+${renderStorySection(data, NORDIC_THEME)}
+${renderComparisonSection(data, NORDIC_THEME)}
+${renderTestimonialsSection(data, NORDIC_THEME)}
+${renderBonusesSection(data, NORDIC_THEME)}
+${renderGuaranteeSection(data, NORDIC_THEME)}
 
 <!-- FAQ -->
 <section class="section-pad-nd" style="padding:96px 64px;background:${C.bgAlt};">

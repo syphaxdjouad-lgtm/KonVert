@@ -1,5 +1,14 @@
 import type { LandingPageData } from '@/types'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80',
   'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=800&q=80',
@@ -27,6 +36,18 @@ function starBadge(price: string, bg: string): string {
     <div style="position:absolute;top:14px;right:14px;width:58px;height:58px;background:${bg};clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);display:flex;align-items:center;justify-content:center;z-index:2;">
       <span style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;color:#fff;text-align:center;line-height:1.1;padding-top:6px;">${price}€</span>
     </div>`
+}
+
+const BEAUTY_THEME: SectionTheme = {
+  primary:    '#7c5cbf',
+  accent:     '#f5f2fa',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
 }
 
 export function templateEtecBeauty(data: LandingPageData): string {
@@ -577,6 +598,15 @@ ${data.faq && data.faq.length > 0 ? `
 
   </div>
 </footer>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, BEAUTY_THEME)}
+${renderStorySection(data, BEAUTY_THEME)}
+${renderComparisonSection(data, BEAUTY_THEME)}
+${renderTestimonialsSection(data, BEAUTY_THEME)}
+${renderBonusesSection(data, BEAUTY_THEME)}
+${renderGuaranteeSection(data, BEAUTY_THEME)}
 
 </body>
 </html>`

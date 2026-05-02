@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/2065195/pexels-photo-2065195.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/2065195/pexels-photo-2065195.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const ELLA_THEME: SectionTheme = {
+  primary:    '#c77dba',
+  accent:     '#fbf5f9',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fdf8fc',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecElla(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -51,5 +72,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#C7
 ${data.price ? `<p style="font-size:52px;font-weight:700;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#fff;color:#C77DBA;border:none;border-radius:50px;padding:18px 52px;font-family:'Quicksand',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Shopper maintenant'}</button>
 <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:20px;">Livraison offerte · Retour gratuit · Paiement sécurisé</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, ELLA_THEME)}
+${renderStorySection(data, ELLA_THEME)}
+${renderComparisonSection(data, ELLA_THEME)}
+${renderTestimonialsSection(data, ELLA_THEME)}
+${renderBonusesSection(data, ELLA_THEME)}
+${renderGuaranteeSection(data, ELLA_THEME)}
+
+</body></html>`
 }

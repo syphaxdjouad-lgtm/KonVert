@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/2584269/pexels-photo-2584269.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/3622614/pexels-photo-3622614.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/2584269/pexels-photo-2584269.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/3622614/pexels-photo-3622614.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const OUTFIT_THEME: SectionTheme = {
+  primary:    '#b5854b',
+  accent:     '#f9f5f1',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fffdf8',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecOutfit(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -73,5 +94,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#B5
 ${data.price ? `<p style="font-size:48px;font-weight:700;color:#B5854B;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button class="of-btn" style="background:#B5854B;font-size:15px;padding:18px 52px;">${data.cta || 'Commander maintenant'}</button>
 <p style="font-size:12px;color:rgba(255,253,248,0.3);margin-top:20px;">Coton bio · Livraison offerte · Échanges gratuits</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, OUTFIT_THEME)}
+${renderStorySection(data, OUTFIT_THEME)}
+${renderComparisonSection(data, OUTFIT_THEME)}
+${renderTestimonialsSection(data, OUTFIT_THEME)}
+${renderBonusesSection(data, OUTFIT_THEME)}
+${renderGuaranteeSection(data, OUTFIT_THEME)}
+
+</body></html>`
 }

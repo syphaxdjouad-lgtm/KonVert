@@ -1,5 +1,14 @@
 import type { LandingPageData } from '@/types'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 // ─── FALLBACK IMAGES ──────────────────────────────────────────────────────────
 
 const FALLBACK_IMGS = [
@@ -116,6 +125,18 @@ function calcDiscount(price: string, orig: string): number {
 }
 
 // ─── TEMPLATE ─────────────────────────────────────────────────────────────────
+
+const PULSE_THEME: SectionTheme = {
+  primary:    '#00d4ff',
+  accent:     '#ebfcff',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecPulse(data: LandingPageData): string {
   const benefits = data.benefits ?? []
@@ -1357,6 +1378,15 @@ button{font-family:inherit}
     </div>
   </div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, PULSE_THEME)}
+${renderStorySection(data, PULSE_THEME)}
+${renderComparisonSection(data, PULSE_THEME)}
+${renderTestimonialsSection(data, PULSE_THEME)}
+${renderBonusesSection(data, PULSE_THEME)}
+${renderGuaranteeSection(data, PULSE_THEME)}
 
 <!-- FAQ ACCORDION -->
 <section class="fpls-faq-section" aria-label="Questions fréquentes">

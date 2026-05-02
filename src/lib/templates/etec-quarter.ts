@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3965545/pexels-photo-3965545.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/3965548/pexels-photo-3965548.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/3965545/pexels-photo-3965545.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/3965548/pexels-photo-3965548.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const QUARTER_THEME: SectionTheme = {
+  primary:    '#1a1a2e',
+  accent:     '#ededee',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecQuarter(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -71,5 +92,14 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#12
 ${data.price ? `<p style="font-size:52px;font-weight:800;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#fff;color:#121212;border:none;padding:18px 52px;font-family:'Manrope',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Commander'}</button>
 <p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:20px;">Livraison offerte · Retour gratuit · Paiement sécurisé</p>
-</div></section></body></html>`
+</div></section>
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, QUARTER_THEME)}
+${renderStorySection(data, QUARTER_THEME)}
+${renderComparisonSection(data, QUARTER_THEME)}
+${renderTestimonialsSection(data, QUARTER_THEME)}
+${renderBonusesSection(data, QUARTER_THEME)}
+${renderGuaranteeSection(data, QUARTER_THEME)}
+
+</body></html>`
 }

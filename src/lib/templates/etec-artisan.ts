@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/4210373/pexels-photo-4210373.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.pexels.com/photos/4210374/pexels-photo-4210374.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -9,6 +18,18 @@ const IMGS = [
 ]
 const BEFORE_IMG = 'https://images.pexels.com/photos/4210373/pexels-photo-4210373.jpeg?auto=compress&cs=tinysrgb&w=600'
 const AFTER_IMG  = 'https://images.pexels.com/photos/3737599/pexels-photo-3737599.jpeg?auto=compress&cs=tinysrgb&w=600'
+
+const ARTISAN_THEME: SectionTheme = {
+  primary:    '#ff871d',
+  accent:     '#fff5ed',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#fbf3ed',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
+}
 
 export function templateEtecArtisan(data: LandingPageData): string {
   const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
@@ -200,6 +221,15 @@ body{font-family:'Jost',sans-serif;background:#FBF3ED;color:#111;}
     </div>
   </div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, ARTISAN_THEME)}
+${renderStorySection(data, ARTISAN_THEME)}
+${renderComparisonSection(data, ARTISAN_THEME)}
+${renderTestimonialsSection(data, ARTISAN_THEME)}
+${renderBonusesSection(data, ARTISAN_THEME)}
+${renderGuaranteeSection(data, ARTISAN_THEME)}
 
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#F5EDE4;">

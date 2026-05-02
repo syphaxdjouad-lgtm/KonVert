@@ -1,6 +1,15 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80',
   'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80',
@@ -17,6 +26,18 @@ const C = {
   text:        '#F0EAD6',
   muted:       '#8A8070',
   border:      '#2A2420',
+}
+
+const LUXE_THEME: SectionTheme = {
+  primary:    '#c9a84c',
+  accent:     '#fbf8f1',
+  text:       '#1a1a2e',
+  textMuted:  '#6E6E73',
+  bg:         '#ffffff',
+  bgAlt:      '#F5F5F7',
+  border:     '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius:     '16px',
 }
 
 export function templateEtecLuxe(data: LandingPageData): string {
@@ -287,6 +308,15 @@ export function templateEtecLuxe(data: LandingPageData): string {
     </div>
   </div>
 </section>
+
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderSocialProofBar(data, LUXE_THEME)}
+${renderStorySection(data, LUXE_THEME)}
+${renderComparisonSection(data, LUXE_THEME)}
+${renderTestimonialsSection(data, LUXE_THEME)}
+${renderBonusesSection(data, LUXE_THEME)}
+${renderGuaranteeSection(data, LUXE_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════ -->
 <section style="background:${C.bgAlt};padding:96px 0;border-top:1px solid ${C.border};">

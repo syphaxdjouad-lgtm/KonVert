@@ -95,41 +95,139 @@ export interface LandingPageData {
   // Sans ça, une page EN/ES/AR garde lang="fr" → mauvais signal SEO + a11y.
   language?: string
 
-  // Sections enrichies — toutes optionnelles pour rester compatibles avec
-  // les templates existants qui ne les consomment pas encore.
+  // ─── Sections enrichies (DTC 2026) — toutes optionnelles côté types pour
+  // ne pas casser les templates existants. Le LLM est instruit de TOUTES les
+  // remplir à chaque génération.
+
+  // Hero — petits badges sous le headline (Made in, Cruelty-free, Free shipping…)
+  hero_badges?: string[]
+
+  // PAS — Problème → Agitation → Solution → Transformation
   story?: {
     problem: string
     agitation: string
     solution: string
     transformation: string
   }
-  testimonials?: {
-    name: string
-    rating: number
-    text: string
-    variant?: string
+
+  // "Pour qui c'est ?" — 3 profils ICP cibles
+  target_audience?: {
+    profile: string
+    pain: string
   }[]
+
+  // Mécanisme unique : ce qui rend ce produit différent des autres + preuve
+  unique_mechanism?: {
+    name: string
+    description: string
+    proof: string
+  }
+
+  // 6 features détaillées avec icône emoji
+  features?: {
+    icon: string
+    title: string
+    description: string
+  }[]
+
+  // Comment ça marche — 4 étapes simples
+  how_it_works?: {
+    step: number
+    title: string
+    description: string
+  }[]
+
+  // Avant / Après — transformations concrètes (texte uniquement)
+  before_after?: {
+    before: string
+    after: string
+  }[]
+
+  // Comparatif "Sans / Avec" le produit (4 vs 4)
   comparison?: {
     without_title: string
     without: string[]
     with_title: string
     with: string[]
   }
-  guarantee?: {
-    title: string
-    description: string
-    duration: string
+
+  // Comparatif vs 2 concurrents principaux sur 5 critères
+  competitor_comparison?: {
+    criteria: string[]
+    us: { name: string; values: string[] }
+    them: { name: string; values: string[] }[]
   }
+
+  // Stats de social proof
   social_proof?: {
     customers: string
     rating: string
     sold: string
   }
+
+  // Mentions médias / certifications / partenaires
+  press_mentions?: string[]
+
+  // 3 témoignages clients
+  testimonials?: {
+    name: string
+    rating: number
+    text: string
+    variant?: string
+    location?: string
+  }[]
+
+  // Mot du fondateur — humanise la marque
+  founder_note?: {
+    name: string
+    role: string
+    message: string
+  }
+
+  // Garantie principale
+  guarantee?: {
+    title: string
+    description: string
+    duration: string
+  }
+
+  // Triple réassurance (livraison, retour, support)
+  risk_reversal?: {
+    icon: string
+    title: string
+    description: string
+  }[]
+
+  // Bonus inclus
   bonuses?: {
     title: string
     description: string
     value: string
   }[]
+
+  // Récap valeur perçue : produit + bonus = X, vous payez Y
+  value_stack?: {
+    items: { label: string; value: string }[]
+    total: string
+    you_pay: string
+    savings: string
+  }
+
+  // 5 objections détaillées (différent de FAQ — plus émotionnel)
+  objections?: {
+    objection: string
+    response: string
+  }[]
+
+  // Invitation communauté / Instagram / TikTok
+  community_callout?: {
+    title: string
+    description: string
+    cta: string
+  }
+
+  // Copy de fermeture — paragraphe final avant le dernier CTA
+  final_pitch?: string
 }
 
 // ─── A/B TESTING ─────────────────────────────────────────────────────────────

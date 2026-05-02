@@ -35,6 +35,28 @@ function clampRating(n: unknown): number {
   return Math.min(5, Math.max(1, Math.round(v * 10) / 10))
 }
 
+// Normalise un prix en string numérique pur ("29.99", "1499", "0.99").
+// Les templates font tous parseFloat(price)/+price → un prix qui contient
+// "€", "29,99", "29.99€" etc. produit NaN et casse le rendu (€NaN affiché,
+// calculs de réduction NaN, etc.). On force ici un format universel.
+export function normalizePrice(p: string | number | null | undefined): string | undefined {
+  if (p == null || p === '') return undefined
+  const cleaned = String(p)
+    .replace(/[^\d,.\-]/g, '') // retire €, $, £, espaces, lettres…
+    .replace(/,/g, '.')        // virgule décimale → point
+    .replace(/^\.+/, '')       // retire les points en début
+    .trim()
+  if (!cleaned) return undefined
+  // Si plusieurs points (ex: "1.299.99"), garde le dernier comme décimal
+  const parts = cleaned.split('.')
+  const normalized = parts.length > 1
+    ? parts.slice(0, -1).join('') + '.' + parts[parts.length - 1]
+    : cleaned
+  const n = parseFloat(normalized)
+  if (!Number.isFinite(n) || n < 0) return undefined
+  return String(n)
+}
+
 function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
   const lang = typeof d.language === 'string' && ALLOWED_LANGS.has(d.language) ? d.language : 'fr'
 
@@ -49,8 +71,8 @@ function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     cta:            escapeHtml(d.cta ?? ''),
     urgency:        escapeHtml(d.urgency ?? ''),
     product_name:   escapeHtml(d.product_name ?? ''),
-    price:          d.price ? escapeHtml(d.price) : d.price,
-    original_price: d.original_price ? escapeHtml(d.original_price) : d.original_price,
+    price:          normalizePrice(d.price),
+    original_price: normalizePrice(d.original_price),
     images:         (d.images ?? []).filter(safeImageUrl),
     language:       lang,
   }

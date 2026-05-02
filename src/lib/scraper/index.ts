@@ -140,6 +140,25 @@ async function scrapeViaFetch(url: string): Promise<ScrapedProduct> {
 
 // ─── Nettoyage données ────────────────────────────────────────────────────────
 
+// Normalise un prix scrapé (peut contenir €, $, virgule décimale, espaces…)
+// vers une string numérique pure utilisable par parseFloat() côté templates.
+function cleanPrice(p: string | null | undefined): string | null {
+  if (!p) return null
+  const cleaned = String(p)
+    .replace(/[^\d,.\-]/g, '')
+    .replace(/,/g, '.')
+    .replace(/^\.+/, '')
+    .trim()
+  if (!cleaned) return null
+  const parts = cleaned.split('.')
+  const normalized = parts.length > 1
+    ? parts.slice(0, -1).join('') + '.' + parts[parts.length - 1]
+    : cleaned
+  const n = parseFloat(normalized)
+  if (!Number.isFinite(n) || n < 0) return null
+  return String(n)
+}
+
 export function cleanProduct(product: ScrapedProduct): ScrapedProduct {
   // Filtre les URLs d'images : exclut les loaders/placeholders (150x150.gif,
   // pixels de tracking, icônes) qui sont typiques d'une page bloquée.
@@ -163,8 +182,8 @@ export function cleanProduct(product: ScrapedProduct): ScrapedProduct {
     title: product.title.replace(/\s+/g, ' ').trim().slice(0, 200),
     description: product.description.replace(/\s+/g, ' ').trim().slice(0, 1000),
     images: cleanImages,
-    price: product.price?.replace(/\s+/g, ' ').trim() || null,
-    original_price: product.original_price?.replace(/\s+/g, ' ').trim() || null,
+    price: cleanPrice(product.price),
+    original_price: cleanPrice(product.original_price),
   }
 }
 

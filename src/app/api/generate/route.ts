@@ -69,8 +69,10 @@ export async function POST(req: NextRequest) {
         )
       }
     } else {
-      // Produit fourni directement ou mock
-      product = body.product ?? MOCK_PRODUCT
+      // Produit fourni directement (saisie manuelle wizard) ou mock.
+      // On passe par cleanProduct pour normaliser le prix saisi à la main
+      // (peut contenir "€", virgule, espaces) — sinon les templates affichent €NaN.
+      product = body.product ? cleanProduct(body.product) : MOCK_PRODUCT
     }
 
     if (!product.title) {

@@ -1,5 +1,26 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
+
+const NOIR_THEME: SectionTheme = {
+  primary:    '#C8FF00',
+  accent:     'rgba(200,255,0,0.10)',
+  text:       '#ffffff',
+  textMuted:  '#8A8A8A',
+  bg:         '#000000',
+  bgAlt:      '#0a0a0a',
+  border:     'rgba(255,255,255,0.06)',
+  fontFamily: "'Space Grotesk',sans-serif",
+  radius:     '8px',
+}
 
 // Casque audio premium — direction Apple Store / Bose / Sony
 // Palette : #000 fond unique, #FFFFFF accent principal, #C8FF00 accent secondaire sobre
@@ -272,34 +293,13 @@ body{font-family:'Space Grotesk',sans-serif;background:#000000;color:#ffffff;}
   </div>
 </section>
 
-<!-- AVIS CLIENTS — cartes translucides, zéro border solide -->
-<section style="padding:80px 24px;background:#000000;">
-  <div style="max-width:1080px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C8FF00;text-transform:uppercase;margin-bottom:10px;">Retours clients</p>
-    <h2 style="font-size:48px;font-weight:700;color:#ffffff;margin-bottom:48px;letter-spacing:-0.025em;">Avis vérifiés</h2>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" class="noir-reviews-grid">
-      ${[
-        { name: 'Alex R.', text: `Le ${data.product_name} est une bête. Qualité de build incroyable, les finitions sont au top. Aucun regret.`, stars: 5 },
-        { name: 'Mathieu P.', text: `J'ai comparé avec d'autres produits. Celui-ci les surpasse largement. Parfait pour un usage intensif.`, stars: 5 },
-        { name: 'Kevin D.', text: `Livraison ultra rapide, emballage soigné. Le produit est exactement comme décrit. Je recommande.`, stars: 5 },
-      ].map(r => `
-      <div class="noir-review-card">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
-          <!-- Avatar initiale -->
-          <div style="width:38px;height:38px;border-radius:4px;background:rgba(255,255,255,0.08);color:#ffffff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;">${r.name[0]}</div>
-          <div>
-            <p style="font-size:14px;font-weight:600;color:#ffffff;margin-bottom:5px;">${r.name}</p>
-            <div style="color:#C8FF00;font-size:11px;letter-spacing:3px;">${'★'.repeat(r.stars)}</div>
-          </div>
-        </div>
-        <p style="font-size:13px;color:#8A8A8A;line-height:1.75;margin-bottom:18px;">"${r.text}"</p>
-        <div style="display:inline-flex;align-items:center;gap:6px;">
-          <span style="font-size:10px;color:#C8FF00;font-weight:700;letter-spacing:0.08em;">✓ ACHAT VÉRIFIÉ</span>
-        </div>
-      </div>`).join('')}
-    </div>
-  </div>
-</section>
+<!-- SECTIONS DYNAMIQUES — story / social_proof / comparison / testimonials / bonuses / guarantee -->
+${renderSocialProofBar(data, NOIR_THEME)}
+${renderStorySection(data, NOIR_THEME)}
+${renderComparisonSection(data, NOIR_THEME)}
+${renderTestimonialsSection(data, NOIR_THEME)}
+${renderBonusesSection(data, NOIR_THEME)}
+${renderGuaranteeSection(data, NOIR_THEME)}
 
 <!-- FAQ ACCORDION -->
 <section style="padding:80px 24px;background:#000000;">

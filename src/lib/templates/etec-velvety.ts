@@ -1,5 +1,14 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
 
 // ─── FALLBACK IMAGES — skincare botanique Unsplash ───────────────────────────
 
@@ -24,6 +33,18 @@ const C = {
   muted:       '#5C7A65',
   border:      '#C5D9C7',
   gold:        '#C9A84C',
+}
+
+const VELVETY_THEME: SectionTheme = {
+  primary:    C.accentDark,
+  accent:     C.accentLight,
+  text:       C.text,
+  textMuted:  C.muted,
+  bg:         C.bg,
+  bgAlt:      C.bgAlt,
+  border:     C.border,
+  fontFamily: "'DM Sans',sans-serif",
+  radius:     '20px',
 }
 
 // ─── INLINE SVG DECORATIONS ──────────────────────────────────────────────────
@@ -526,6 +547,17 @@ export function templateEtecVelvety(data: LandingPageData): string {
 
   </div>
 </section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SECTIONS DYNAMIQUES — story / comparison / testimonials / bonuses / guarantee
+════════════════════════════════════════════════════════════════════════════ -->
+${renderSocialProofBar(data, VELVETY_THEME)}
+${renderStorySection(data, VELVETY_THEME)}
+${renderComparisonSection(data, VELVETY_THEME)}
+${renderTestimonialsSection(data, VELVETY_THEME)}
+${renderBonusesSection(data, VELVETY_THEME)}
+${renderGuaranteeSection(data, VELVETY_THEME)}
 
 
 <!-- ═══════════════════════════════════════════════════════════════════════════

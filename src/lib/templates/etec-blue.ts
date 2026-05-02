@@ -1,5 +1,26 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import {
+  renderStorySection,
+  renderSocialProofBar,
+  renderTestimonialsSection,
+  renderComparisonSection,
+  renderBonusesSection,
+  renderGuaranteeSection,
+  type SectionTheme,
+} from './sections'
+
+const BLUE_THEME: SectionTheme = {
+  primary: '#0055D4',
+  accent: '#EEF3FF',
+  text: '#1D1D1F',
+  textMuted: '#6E6E73',
+  bg: '#fff',
+  bgAlt: '#F5F5F7',
+  border: '#E8E8ED',
+  fontFamily: "'Inter',sans-serif",
+  radius: '16px',
+}
 
 const IMGS = [
   'https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -192,34 +213,17 @@ body{font-family:'Inter',sans-serif;background:#FAFAFA;color:#1D1D1F;}
   </div>
 </section>
 
-<!-- AVIS CLIENTS -->
-<section style="padding:80px 24px;background:#fff;">
-  <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#6E6E73;text-align:center;text-transform:uppercase;margin-bottom:8px;">Avis clients</p>
-    <h2 style="font-size:32px;font-weight:800;color:#1D1D1F;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">Ce qu'ils en pensent</h2>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="blue-reviews-grid">
-      ${[
-        { name: 'Marie T.', text: `Exactement ce que je cherchais. Qualité irréprochable, livraison rapide. Je recommande les yeux fermés !`, date: 'Il y a 3 jours' },
-        { name: 'Lucas B.', text: `Franchement impressionné. Le ${data.product_name} dépasse mes attentes. La qualité est là, le design aussi.`, date: 'Il y a 1 semaine' },
-        { name: 'Sophie M.', text: `Acheté pour offrir. La personne l'adore ! Emballage soigné, produit impeccable. Parfait.`, date: 'Il y a 2 semaines' },
-      ].map(r => `
-      <div style="background:#FAFAFA;border-radius:16px;padding:28px 24px;border:1px solid #F0F0F5;">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-          <div style="width:40px;height:40px;border-radius:50%;background:#0055D4;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;">${r.name[0]}</div>
-          <div>
-            <p style="font-size:14px;font-weight:700;color:#1D1D1F;">${r.name}</p>
-            <p style="font-size:11px;color:#6E6E73;">${r.date}</p>
-          </div>
-        </div>
-        <div style="color:#0055D4;font-size:14px;letter-spacing:2px;margin-bottom:12px;">★★★★★</div>
-        <p style="font-size:14px;color:#444;line-height:1.7;">"${r.text}"</p>
-        <div style="margin-top:16px;display:inline-flex;align-items:center;gap:6px;background:#EEF3FF;padding:4px 10px;border-radius:100px;">
-          <span style="font-size:11px;color:#0055D4;font-weight:600;">✓ Achat vérifié</span>
-        </div>
-      </div>`).join('')}
-    </div>
-  </div>
-</section>
+${renderSocialProofBar(data, BLUE_THEME)}
+
+${renderStorySection(data, BLUE_THEME)}
+
+${renderComparisonSection(data, BLUE_THEME)}
+
+${renderTestimonialsSection(data, BLUE_THEME)}
+
+${renderBonusesSection(data, BLUE_THEME)}
+
+${renderGuaranteeSection(data, BLUE_THEME)}
 
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#F5F5F7;">

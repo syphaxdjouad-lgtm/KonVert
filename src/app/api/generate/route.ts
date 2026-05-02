@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generateLandingPage, GENERATION_MODEL } from '@/lib/anthropic/generate'
-import { scrapeProduct, cleanProduct } from '@/lib/scraper'
+import { scrapeProduct, cleanProduct, looksHallucinated } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import { createClient } from '@/lib/supabase/server'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
@@ -43,8 +43,31 @@ export async function POST(req: NextRequest) {
       if (!check.ok) {
         return NextResponse.json({ error: check.error }, { status: check.status })
       }
-      const raw = await scrapeProduct(check.parsed.toString())
-      product = cleanProduct(raw)
+      try {
+        const raw = await scrapeProduct(check.parsed.toString())
+        product = cleanProduct(raw)
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'erreur inconnue'
+        console.warn('[/api/generate] scraping échoué:', msg)
+        return NextResponse.json(
+          { error: 'Le scraping a échoué pour cette URL. Vérifie le lien ou utilise la saisie manuelle.' },
+          { status: 422 }
+        )
+      }
+
+      // Anti-hallucination : si Firecrawl a inventé des données génériques
+      // ("Women Summer Dress" + image 150x150.gif), on rejette plutôt que
+      // de polluer la génération DeepSeek et l'éditeur.
+      const check2 = looksHallucinated(product)
+      if (check2.fake) {
+        console.warn('[/api/generate] données hallucinées:', check2.reason)
+        return NextResponse.json(
+          {
+            error: `Cette URL n'a pas pu être scrapée correctement (${check2.reason}). AliExpress et Amazon bloquent souvent les scrapers — utilise la saisie manuelle pour ce produit.`,
+          },
+          { status: 422 }
+        )
+      }
     } else {
       // Produit fourni directement ou mock
       product = body.product ?? MOCK_PRODUCT

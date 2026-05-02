@@ -94,6 +94,42 @@ export interface LandingPageData {
   // ISO code (fr, en, es…) utilisé pour <html lang="..."> dans les templates.
   // Sans ça, une page EN/ES/AR garde lang="fr" → mauvais signal SEO + a11y.
   language?: string
+
+  // Sections enrichies — toutes optionnelles pour rester compatibles avec
+  // les templates existants qui ne les consomment pas encore.
+  story?: {
+    problem: string
+    agitation: string
+    solution: string
+    transformation: string
+  }
+  testimonials?: {
+    name: string
+    rating: number
+    text: string
+    variant?: string
+  }[]
+  comparison?: {
+    without_title: string
+    without: string[]
+    with_title: string
+    with: string[]
+  }
+  guarantee?: {
+    title: string
+    description: string
+    duration: string
+  }
+  social_proof?: {
+    customers: string
+    rating: string
+    sold: string
+  }
+  bonuses?: {
+    title: string
+    description: string
+    value: string
+  }[]
 }
 
 // ─── A/B TESTING ─────────────────────────────────────────────────────────────

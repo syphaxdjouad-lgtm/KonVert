@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateLandingPage } from '@/lib/anthropic/generate'
+import { generateLandingPage, GENERATION_MODEL } from '@/lib/anthropic/generate'
 import { scrapeProduct, cleanProduct } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import { createClient } from '@/lib/supabase/server'
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
       success: true,
       data: landingPage,
       meta: {
-        model: 'claude-haiku-4-5-20251001',
+        model: GENERATION_MODEL,
         product_source: body.url ? 'scraped' : body.product ? 'provided' : 'mock',
       },
     })

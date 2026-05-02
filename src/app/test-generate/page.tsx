@@ -98,7 +98,7 @@ export default function TestGeneratePage() {
                 Généré en {duration}ms
               </span>
               <span className="bg-purple-50 text-purple-700 border border-purple-200 px-3 py-1 rounded-full font-semibold">
-                claude-haiku-4-5
+                deepseek-chat
               </span>
             </div>
 

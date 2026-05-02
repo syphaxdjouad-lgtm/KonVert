@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Email invalide' }, { status: 400 })
     }
 
-    // Captcha — bloque les bots avant la facture Anthropic. Bypass automatique
+    // Captcha — bloque les bots avant la facture LLM. Bypass automatique
     // si TURNSTILE_SECRET_KEY n'est pas configurée (dev local / preview).
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null
     const captcha = await verifyTurnstile(turnstileToken, ip)

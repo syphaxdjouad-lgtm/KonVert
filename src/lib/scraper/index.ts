@@ -72,17 +72,29 @@ async function scrapeViaFirecrawl(url: string, apiKey: string): Promise<ScrapedP
     },
     body: JSON.stringify({
       url,
-      // On demande à la fois 'json' (extraction LLM structurée) ET 'html' :
-      // si l'extraction LLM retourne title vide (page lente / CAPTCHA / structure
-      // inattendue), on parse l'HTML brut nous-mêmes via JSON-LD/og: en fallback.
-      formats: ['json', 'html'],
+      // On demande json + html + markdown :
+      // - json   : extraction LLM structurée (idéal cas standard)
+      // - html   : on parse JSON-LD/og:title nous-mêmes si LLM échoue
+      // - markdown : dernier fallback, souvent contient le titre/prix en clair
+      //              quand le DOM est obfusqué (AliExpress / Amazon)
+      formats: ['json', 'html', 'markdown'],
       proxy: 'stealth',
-      // 8s : AliExpress et Amazon chargent la fiche produit en JS, 3s ne suffit
-      // souvent pas — résultat : Firecrawl scrape la page de splash sans title.
-      waitFor: 8000,
+      // 12s : AliExpress sert une page de splash, le DOM produit n'apparaît
+      // qu'après le geo-redirect + cookie consent + chargement JS. 8s ne
+      // suffisait pas pour les URLs avec gatewayAdapt=glo2fra.
+      waitFor: 12000,
+      // Actions : on attend qu'un élément ressemblant à un titre produit
+      // apparaisse avant le scrape. Si timeout sur l'action, Firecrawl scrape
+      // quand même ce qu'il a (pas de blocage).
+      actions: [
+        { type: 'wait', milliseconds: 3000 },
+      ],
       // Mobile UA : moins de chance de tomber sur un mur de cookies / CAPTCHA
       // qui dégrade le rendering. Firecrawl simule l'UA via "mobile" flag.
       mobile: true,
+      // On bloque les ressources lourdes/inutiles (analytics, ads) pour aller plus vite
+      blockAds: true,
+      removeBase64Images: true,
       jsonOptions: {
         prompt: `Extract the REAL product information visible on this exact e-commerce page.
 
@@ -121,9 +133,11 @@ Return: title, description, price, original_price (if discount visible), images 
   const body = await res.json()
   const item = body?.data?.json
   const html = body?.data?.html as string | undefined
+  const markdown = body?.data?.markdown as string | undefined
 
-  // 1. Cas idéal : LLM extraction OK avec title
-  if (item?.title) {
+  // 1. Cas idéal : LLM extraction OK avec title NON-générique
+  // (un title qui matche le nom du domaine = "Aliexpress", "Amazon" → page bloquée)
+  if (item?.title && !isGenericDomainTitle(item.title)) {
     return {
       title:          item.title || '',
       description:    item.description || '',
@@ -137,18 +151,90 @@ Return: title, description, price, original_price (if discount visible), images 
     }
   }
 
-  // 2. Fallback : LLM a retourné title vide → on parse l'HTML brut récupéré
-  // par Firecrawl (JSON-LD prioritaire, og:title ensuite). C'est plus fiable
-  // que le LLM quand la page a une structure inhabituelle ou charge lentement.
+  // 2. Fallback : LLM a retourné title vide ou domaine → on parse l'HTML brut.
+  // JSON-LD prioritaire (Amazon/Shopify l'exposent), puis og:title.
   if (html) {
     const fromHtml = parseProductFromHtml(html)
-    if (fromHtml?.title) {
-      console.log('[scraper] Firecrawl JSON vide → fallback HTML parsing OK')
+    if (fromHtml?.title && !isGenericDomainTitle(fromHtml.title)) {
+      console.log('[scraper] Firecrawl JSON insuffisant → HTML parsing OK')
       return { ...fromHtml, source_url: url }
     }
   }
 
-  throw new Error('Firecrawl — titre introuvable (LLM extraction vide + HTML sans schema/og:title)')
+  // 3. Dernier fallback : parser le markdown généré par Firecrawl.
+  // Quand le DOM est obfusqué et que JSON-LD est absent, le markdown contient
+  // souvent le titre du produit comme premier h1 et les prix en clair.
+  if (markdown) {
+    const fromMd = parseProductFromMarkdown(markdown)
+    if (fromMd?.title && !isGenericDomainTitle(fromMd.title)) {
+      console.log('[scraper] Firecrawl JSON+HTML insuffisants → markdown parsing OK')
+      return { ...fromMd, source_url: url }
+    }
+  }
+
+  // Diagnostic explicite pour aider le user à comprendre
+  const reason = item?.title && isGenericDomainTitle(item.title)
+    ? `page bloquée par anti-bot (titre extrait = "${item.title}", générique du domaine)`
+    : 'aucun titre exploitable trouvé (LLM + HTML + markdown vides)'
+  throw new Error(`Firecrawl — ${reason}`)
+}
+
+// Détecte si un titre est juste le nom du domaine (= page bloquée).
+// Liste tirée des hosts whitelist : si Firecrawl extrait juste "Aliexpress"
+// au lieu du titre du produit, c'est que la page de splash a été scrapée.
+const GENERIC_DOMAIN_TITLES = new Set([
+  'aliexpress', 'aliexpress.com', 'ali express',
+  'amazon', 'amazon.com', 'amazon.fr', 'amazon.de', 'amazon.co.uk',
+  'alibaba', 'alibaba.com',
+  'shopify', 'etsy', 'ebay', 'ebay.com',
+  'cdiscount', 'fnac', 'temu',
+  'home', 'homepage', 'index',
+])
+
+function isGenericDomainTitle(title: string): boolean {
+  const normalized = title.trim().toLowerCase()
+  if (GENERIC_DOMAIN_TITLES.has(normalized)) return true
+  // Titres trop courts (1-2 mots vagues) : suspect
+  if (normalized.length < 6 && !/\d/.test(normalized)) return true
+  return false
+}
+
+// Parser markdown : extrait le 1er h1 comme titre, et tente de trouver un prix.
+function parseProductFromMarkdown(md: string): Omit<ScrapedProduct, 'source_url'> | null {
+  // Premier h1 (# Titre) ou h2 (## Titre) du markdown
+  const h1Match = md.match(/^#\s+(.+)$/m) || md.match(/^##\s+(.+)$/m)
+  const title = h1Match?.[1]?.trim().replace(/[*_`]/g, '') || ''
+  if (!title) return null
+
+  // Recherche de prix : patterns courants €/$/£ avec montant
+  const priceMatch = md.match(/(?:€|EUR|\$|USD|£|GBP)\s*(\d+[.,]?\d*)/) || md.match(/(\d+[.,]?\d*)\s*(?:€|EUR|\$|USD|£|GBP)/)
+  const price = priceMatch?.[1]?.replace(',', '.') ?? null
+
+  // Description : 1er paragraphe non-titre, non-image
+  const paragraphs = md.split('\n\n').filter(p => {
+    const t = p.trim()
+    return t && !t.startsWith('#') && !t.startsWith('![') && !t.startsWith('|') && t.length > 20
+  })
+  const description = paragraphs[0]?.replace(/[*_`]/g, '').trim().slice(0, 500) || ''
+
+  // Images : URLs trouvées dans markdown ![alt](url) ou en HTML inline
+  const imageRegex = /!\[[^\]]*\]\(([^)]+)\)/g
+  const images: string[] = []
+  let m: RegExpExecArray | null
+  while ((m = imageRegex.exec(md)) !== null) {
+    if (m[1].startsWith('http')) images.push(m[1])
+  }
+
+  return {
+    title:          title.slice(0, 200),
+    description,
+    images:         images.slice(0, 8),
+    price,
+    original_price: null,
+    variants:       [],
+    rating:         null,
+    reviews_count:  null,
+  }
 }
 
 // Parser HTML mutualisé : JSON-LD prioritaire, sinon og:title + h1.

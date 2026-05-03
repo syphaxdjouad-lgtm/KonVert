@@ -29,9 +29,9 @@ export async function GET(req: NextRequest) {
 
   if (apiKey) {
     try {
-      // Endpoint Firecrawl /v1/team — ne consomme pas de crédit, vérifie la clé
+      // Endpoint Firecrawl /v1/credit-usage — vérifie la clé et donne le quota restant
       const t0 = Date.now()
-      const res = await fetch('https://api.firecrawl.dev/v1/team', {
+      const res = await fetch('https://api.firecrawl.dev/v1/credit-usage', {
         headers: { 'Authorization': `Bearer ${apiKey}` },
         signal: AbortSignal.timeout(8000),
       })
@@ -40,9 +40,9 @@ export async function GET(req: NextRequest) {
       result.firecrawl_ping_ms = Date.now() - t0
       if (res.ok) {
         const body = await res.json().catch(() => null)
-        result.firecrawl_team = body
+        result.firecrawl_credits = body
       } else {
-        result.firecrawl_error = await res.text().catch(() => null)
+        result.firecrawl_error = (await res.text().catch(() => '')).slice(0, 300)
       }
     } catch (err) {
       result.firecrawl_ping_error = err instanceof Error ? err.message : String(err)

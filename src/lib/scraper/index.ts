@@ -15,21 +15,50 @@ export function detectPlatform(url: string): SupportedPlatform {
 // Firecrawl est le scraper primaire (stealth proxy, compatible serverless Vercel).
 // Le scraper natif fetch() est le fallback léger si Firecrawl échoue.
 
+export class ScrapeError extends Error {
+  constructor(
+    message: string,
+    public detail: { firecrawl?: string; fetch?: string; jsonld?: string },
+  ) {
+    super(message)
+    this.name = 'ScrapeError'
+  }
+}
+
 export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
   const apiKey = process.env.FIRECRAWL_API_KEY
+  const errors: { firecrawl?: string; fetch?: string; jsonld?: string } = {}
 
   if (apiKey) {
     try {
-      return await scrapeViaFirecrawl(url, apiKey)
+      const product = await scrapeViaFirecrawl(url, apiKey)
+      console.log('[scraper] ✓ Firecrawl OK:', { title: product.title, images: product.images.length })
+      return product
     } catch (err) {
-      console.warn('[scraper] Firecrawl échoué, fallback natif:', (err as Error).message)
+      const msg = (err as Error).message
+      errors.firecrawl = msg
+      console.warn('[scraper] ✗ Firecrawl échoué:', msg)
     }
   } else {
-    console.warn('[scraper] FIRECRAWL_API_KEY absent — fallback natif uniquement')
+    errors.firecrawl = 'FIRECRAWL_API_KEY absent'
+    console.warn('[scraper] ✗ FIRECRAWL_API_KEY absent en env')
   }
 
-  // Fallback : fetch() natif (HTML basique, sans JS)
-  return await scrapeViaFetch(url)
+  // Fallback : fetch() natif + parsing HTML (JSON-LD prioritaire, meta-tags ensuite)
+  try {
+    const product = await scrapeViaFetch(url)
+    console.log('[scraper] ✓ fetch+JSON-LD OK:', { title: product.title, images: product.images.length })
+    return product
+  } catch (err) {
+    const msg = (err as Error).message
+    errors.fetch = msg
+    console.warn('[scraper] ✗ fetch natif échoué:', msg)
+  }
+
+  throw new ScrapeError(
+    `Scraping impossible — toutes les méthodes ont échoué`,
+    errors,
+  )
 }
 
 // ─── Firecrawl (primary) ─────────────────────────────────────────────────────
@@ -95,21 +124,32 @@ Return: title, description, price, original_price (if discount visible), images 
   }
 }
 
-// ─── Fallback fetch natif (sans JS, meta tags uniquement) ────────────────────
+// ─── Fallback fetch natif (sans JS, JSON-LD prioritaire + meta tags) ─────────
 
 async function scrapeViaFetch(url: string): Promise<ScrapedProduct> {
   const res = await fetch(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.8',
+      // UA Chrome desktop récent — moins de chances d'être servi un bot-page
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+      'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+      'Cache-Control': 'no-cache',
     },
     signal: AbortSignal.timeout(15000),
+    redirect: 'follow',
   })
 
-  if (!res.ok) throw new Error(`Fetch natif erreur ${res.status}`)
+  if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
 
   const html = await res.text()
 
+  // 1. Tentative JSON-LD (Amazon, AliExpress, Shopify, Etsy l'exposent)
+  const jsonLd = extractJsonLdProduct(html)
+  if (jsonLd && jsonLd.title) {
+    return { ...jsonLd, source_url: url }
+  }
+
+  // 2. Fallback meta-tags Open Graph
   const getMetaContent = (name: string): string => {
     const match = html.match(new RegExp(`<meta[^>]+(?:name|property)=["']${name}["'][^>]+content=["']([^"']+)["']`, 'i'))
       || html.match(new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:name|property)=["']${name}["']`, 'i'))
@@ -119,7 +159,7 @@ async function scrapeViaFetch(url: string): Promise<ScrapedProduct> {
   const titleMatch = html.match(/<h1[^>]*>([^<]+)<\/h1>/i) || html.match(/<title>([^<]+)<\/title>/i)
   const title = titleMatch?.[1]?.trim() || getMetaContent('og:title') || ''
 
-  if (!title) throw new Error('Titre introuvable via fetch natif')
+  if (!title) throw new Error('Aucun titre trouvé (page bloquée ou structure non reconnue)')
 
   const description = getMetaContent('og:description') || getMetaContent('description')
   const image = getMetaContent('og:image')
@@ -136,6 +176,105 @@ async function scrapeViaFetch(url: string): Promise<ScrapedProduct> {
     reviews_count:  null,
     source_url:     url,
   }
+}
+
+// ─── JSON-LD parser (schema.org Product) ─────────────────────────────────────
+// Amazon, AliExpress, Shopify, Etsy, eBay, Cdiscount exposent presque toujours
+// les infos produit dans <script type="application/ld+json"> au format Product.
+
+function extractJsonLdProduct(html: string): Omit<ScrapedProduct, 'source_url'> | null {
+  const matches = [...html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)]
+  if (matches.length === 0) return null
+
+  for (const m of matches) {
+    try {
+      const raw = m[1].trim()
+      if (!raw) continue
+      const parsed = JSON.parse(raw)
+      const products = flattenJsonLd(parsed)
+      const product = products.find(p => isProductLike(p))
+      if (!product) continue
+
+      const title = String(product.name || product.title || '').trim()
+      if (!title) continue
+
+      const description = String(product.description || '').trim()
+
+      // Images : peut être string, array de string, ou array d'objets ImageObject
+      const imagesRaw = product.image || product.images || []
+      const images: string[] = []
+      const collectImage = (v: unknown) => {
+        if (typeof v === 'string') images.push(v)
+        else if (v && typeof v === 'object' && 'url' in (v as Record<string, unknown>)) {
+          images.push(String((v as Record<string, unknown>).url))
+        }
+      }
+      if (Array.isArray(imagesRaw)) imagesRaw.forEach(collectImage)
+      else collectImage(imagesRaw)
+
+      // Prix : product.offers peut être un Offer, une AggregateOffer, ou un array
+      const offers = product.offers
+      let price: string | null = null
+      let originalPrice: string | null = null
+      const extractPrice = (o: unknown): string | null => {
+        if (!o || typeof o !== 'object') return null
+        const obj = o as Record<string, unknown>
+        const p = obj.price ?? obj.lowPrice
+        return p != null ? String(p) : null
+      }
+      if (Array.isArray(offers)) {
+        price = extractPrice(offers[0])
+      } else if (offers) {
+        price = extractPrice(offers)
+        const obj = offers as Record<string, unknown>
+        if (obj.highPrice && obj.highPrice !== obj.price) {
+          originalPrice = String(obj.highPrice)
+        }
+      }
+
+      // Note + reviews
+      const aggregateRating = product.aggregateRating as Record<string, unknown> | undefined
+      const rating = aggregateRating?.ratingValue ? Number(aggregateRating.ratingValue) : null
+      const reviewsCount = aggregateRating?.reviewCount
+        ? Number(aggregateRating.reviewCount)
+        : aggregateRating?.ratingCount
+        ? Number(aggregateRating.ratingCount)
+        : null
+
+      return {
+        title:          title.slice(0, 200),
+        description:    description.slice(0, 1000),
+        images:         images.slice(0, 8),
+        price,
+        original_price: originalPrice,
+        variants:       [],
+        rating:         Number.isFinite(rating) ? rating : null,
+        reviews_count:  Number.isFinite(reviewsCount) ? reviewsCount : null,
+      }
+    } catch {
+      // JSON malformé ou non-Product → on continue avec le bloc suivant
+      continue
+    }
+  }
+
+  return null
+}
+
+// JSON-LD peut être un Product direct, un @graph contenant un Product, ou un array.
+function flattenJsonLd(node: unknown): Record<string, unknown>[] {
+  if (!node) return []
+  if (Array.isArray(node)) return node.flatMap(flattenJsonLd)
+  if (typeof node !== 'object') return []
+  const obj = node as Record<string, unknown>
+  if (Array.isArray(obj['@graph'])) return flattenJsonLd(obj['@graph'])
+  return [obj]
+}
+
+function isProductLike(obj: Record<string, unknown>): boolean {
+  const type = obj['@type']
+  if (!type) return false
+  const types = Array.isArray(type) ? type : [type]
+  return types.some(t => typeof t === 'string' && /^product/i.test(t))
 }
 
 // ─── Nettoyage données ────────────────────────────────────────────────────────

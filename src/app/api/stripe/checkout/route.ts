@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe, STRIPE_PRICES } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/server'
-import type { PlanType } from '@/types'
+
+type PaidPlan = 'starter' | 'pro' | 'agency'
 
 // POST /api/stripe/checkout
 // Body: { plan: 'starter' | 'pro' | 'agency' }
 export async function POST(req: NextRequest) {
   try {
-    const { plan } = await req.json() as { plan: PlanType }
+    const { plan } = await req.json() as { plan: PaidPlan }
 
     if (!['starter', 'pro', 'agency'].includes(plan)) {
       return NextResponse.json({ error: 'Plan invalide' }, { status: 400 })

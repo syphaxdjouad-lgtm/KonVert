@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { scrapeProduct, cleanProduct } from '@/lib/scraper'
+import { scrapeProduct, cleanProduct, ScrapeError } from '@/lib/scraper'
 import { createClient } from '@/lib/supabase/server'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
 
@@ -46,8 +46,15 @@ export async function POST(req: NextRequest) {
     })
   } catch (err) {
     console.error('[/api/scrape]', err)
+    const msg = err instanceof Error ? err.message : 'Erreur inconnue'
+    const detail = err instanceof ScrapeError ? err.detail : undefined
     return NextResponse.json(
-      { error: 'Erreur lors du scraping. Vérifie l\'URL et réessaie.' },
+      {
+        error: detail
+          ? `Scraping échoué : ${msg}. Détail : Firecrawl ${detail.firecrawl ? `→ ${detail.firecrawl}` : 'OK'} | fetch ${detail.fetch ? `→ ${detail.fetch}` : 'OK'}.`
+          : `Scraping échoué : ${msg}`,
+        debug: detail,
+      },
       { status: 500 }
     )
   }

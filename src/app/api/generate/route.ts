@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { generateLandingPage, GENERATION_MODEL } from '@/lib/anthropic/generate'
-import { scrapeProduct, cleanProduct, looksHallucinated } from '@/lib/scraper'
+import { scrapeProduct, cleanProduct, looksHallucinated, ScrapeError } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import { createClient } from '@/lib/supabase/server'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
 import type { ScrapedProduct } from '@/types'
+
+// Vercel Pro 60s — DeepSeek prend 18-22s + scraping Firecrawl jusqu'à 45s
+export const maxDuration = 60
 
 export async function POST(req: NextRequest) {
   try {
@@ -36,11 +39,21 @@ export async function POST(req: NextRequest) {
     }
 
     let product: ScrapedProduct
+    // Helper : rollback quota si la génération échoue après l'incrément.
+    // Sans ça, un timeout DeepSeek consomme 1 page sans rien produire.
+    const rollbackQuota = async () => {
+      try {
+        await supabase.rpc('decrement_quota', { p_user_id: user.id })
+      } catch (rbErr) {
+        console.error('[/api/generate] decrement_quota échoué:', rbErr)
+      }
+    }
 
     if (body.url) {
       // Mode scraping réel depuis une URL — anti-SSRF via whitelist e-commerce
       const check = validateScrapeUrl(body.url)
       if (!check.ok) {
+        await rollbackQuota()
         return NextResponse.json({ error: check.error }, { status: check.status })
       }
       try {
@@ -48,9 +61,16 @@ export async function POST(req: NextRequest) {
         product = cleanProduct(raw)
       } catch (err) {
         const msg = err instanceof Error ? err.message : 'erreur inconnue'
-        console.warn('[/api/generate] scraping échoué:', msg)
+        const detail = err instanceof ScrapeError ? err.detail : undefined
+        console.warn('[/api/generate] scraping échoué:', msg, detail)
+        await rollbackQuota()
+        // On surface le détail technique pour aider à debugger côté user
+        // (ex: "Firecrawl 401 unauthorized" → clé API expirée ; "fetch HTTP 503" → site bloque)
+        const userMsg = detail
+          ? `Scraping échoué : ${msg}. Détail : Firecrawl ${detail.firecrawl ? `→ ${detail.firecrawl}` : 'OK'} | fetch ${detail.fetch ? `→ ${detail.fetch}` : 'OK'}. Utilise la saisie manuelle.`
+          : `Scraping échoué (${msg}). Utilise la saisie manuelle.`
         return NextResponse.json(
-          { error: 'Le scraping a échoué pour cette URL. Vérifie le lien ou utilise la saisie manuelle.' },
+          { error: userMsg, debug: detail },
           { status: 422 }
         )
       }
@@ -61,6 +81,7 @@ export async function POST(req: NextRequest) {
       const check2 = looksHallucinated(product)
       if (check2.fake) {
         console.warn('[/api/generate] données hallucinées:', check2.reason)
+        await rollbackQuota()
         return NextResponse.json(
           {
             error: `Cette URL n'a pas pu être scrapée correctement (${check2.reason}). AliExpress et Amazon bloquent souvent les scrapers — utilise la saisie manuelle pour ce produit.`,
@@ -76,16 +97,24 @@ export async function POST(req: NextRequest) {
     }
 
     if (!product.title) {
+      await rollbackQuota()
       return NextResponse.json(
         { error: 'Données produit invalides' },
         { status: 400 }
       )
     }
 
-    const landingPage = await generateLandingPage(product, {
-      language: body.language,
-      tone: body.tone,
-    })
+    let landingPage
+    try {
+      landingPage = await generateLandingPage(product, {
+        language: body.language,
+        tone: body.tone,
+      })
+    } catch (genErr) {
+      // Rollback : DeepSeek timeout ou JSON invalide → ne pas brûler le quota.
+      await rollbackQuota()
+      throw genErr
+    }
 
     return NextResponse.json({
       success: true,

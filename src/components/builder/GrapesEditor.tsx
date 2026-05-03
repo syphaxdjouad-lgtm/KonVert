@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import 'grapesjs/dist/css/grapes.min.css'
 import Leadmeter from '@/components/dashboard/Leadmeter'
 
 interface Props {
@@ -27,8 +28,7 @@ export default function GrapesEditor({ html, onSave }: Props) {
     let editor: any
 
     const init = async () => {
-      const gjs       = await import('grapesjs')
-      const gjsPreset = await import('grapesjs-preset-webpage')
+      const gjs = await import('grapesjs')
 
       if (gjsRef.current) {
         gjsRef.current.destroy()
@@ -43,12 +43,9 @@ export default function GrapesEditor({ html, onSave }: Props) {
         width: 'auto',
         storageManager: false,
         undoManager: {} as any,
-        plugins: [gjsPreset.default],
-        pluginsOpts: {
-          [gjsPreset.default as any]: {
-            blocks: ['link-block', 'quote', 'text-basic'],
-          },
-        },
+        // Pas de plugins : on veut un canvas pur, sans panels parasites.
+        // Notre toolbar custom (device switcher + Export + Save) gère tout.
+        plugins: [],
         canvas: { styles: [], scripts: [] },
         deviceManager: {
           devices: [
@@ -57,26 +54,13 @@ export default function GrapesEditor({ html, onSave }: Props) {
             { name: 'Mobile',  width: '390px', widthMedia: '480px' },
           ],
         },
+        // On désactive tous les panels par défaut de GrapesJS (gauche/droite/top)
         panels: { defaults: [] },
-        styleManager: {
-          sectors: [
-            {
-              name: 'Typographie',
-              open: false,
-              properties: ['font-family','font-size','font-weight','letter-spacing','color','text-align','line-height'],
-            },
-            {
-              name: 'Espacement',
-              open: false,
-              properties: ['margin','padding'],
-            },
-            {
-              name: 'Apparence',
-              open: false,
-              properties: ['background-color','border-radius','border','opacity'],
-            },
-          ],
-        },
+        blockManager: { appendTo: '#__gjs_unused', blocks: [] } as any,
+        layerManager: { appendTo: '#__gjs_unused' } as any,
+        selectorManager: { appendTo: '#__gjs_unused' } as any,
+        traitManager: { appendTo: '#__gjs_unused' } as any,
+        styleManager: { appendTo: '#__gjs_unused', sectors: [] } as any,
       })
 
       gjsRef.current = editor
@@ -209,11 +193,10 @@ export default function GrapesEditor({ html, onSave }: Props) {
       <div className="flex flex-1 overflow-hidden">
 
         {/* Canvas GrapesJS */}
-        <div className="flex-1 overflow-hidden relative">
+        <div className="flex-1 overflow-hidden relative bg-white">
           <div
             ref={editorRef}
-            className="absolute inset-0"
-            style={{ transition: 'width .3s' }}
+            className="absolute inset-0 gjs-konvert-root"
           />
         </div>
 
@@ -221,6 +204,40 @@ export default function GrapesEditor({ html, onSave }: Props) {
         <Leadmeter html={liveHtml} />
 
       </div>
+
+      {/* Container caché pour neutraliser tous les managers GrapesJS qu'on ne veut pas afficher */}
+      <div id="__gjs_unused" style={{ display: 'none' }} />
+
+      {/* Override CSS GrapesJS — canvas plein écran, pas de panels parasites */}
+      <style jsx global>{`
+        .gjs-konvert-root .gjs-editor {
+          background: #ffffff !important;
+        }
+        .gjs-konvert-root .gjs-cv-canvas {
+          width: 100% !important;
+          left: 0 !important;
+          top: 0 !important;
+          height: 100% !important;
+          background: #f5f4fa !important;
+        }
+        .gjs-konvert-root .gjs-pn-panels,
+        .gjs-konvert-root .gjs-pn-views,
+        .gjs-konvert-root .gjs-pn-views-container,
+        .gjs-konvert-root .gjs-pn-options,
+        .gjs-konvert-root .gjs-pn-devices-c,
+        .gjs-konvert-root .gjs-pn-commands {
+          display: none !important;
+        }
+        .gjs-konvert-root .gjs-frame-wrapper {
+          padding: 16px !important;
+        }
+        .gjs-konvert-root .gjs-frame {
+          border: 1px solid #e5e7eb !important;
+          border-radius: 8px !important;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+          background: #ffffff !important;
+        }
+      `}</style>
     </div>
   )
 }

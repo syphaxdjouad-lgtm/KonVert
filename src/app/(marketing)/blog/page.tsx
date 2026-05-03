@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { allArticles, getAllCategories } from '@/lib/blog'
 import { generateBreadcrumbJsonLd } from '@/lib/blog/jsonld'
 import { generateMetadata as genMeta } from '@/lib/metadata'
+import { safeJsonLd } from '@/lib/security/json-ld'
 import BlogListClient from './BlogListClient'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
@@ -65,11 +66,11 @@ export default function BlogPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(blogJsonLd) }}
       />
       <BlogListClient articles={allArticles} categories={categories} />
     </>

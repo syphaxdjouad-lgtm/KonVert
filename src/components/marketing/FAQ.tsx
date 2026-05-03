@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Plus, Minus } from 'lucide-react'
+import { safeJsonLd } from '@/lib/security/json-ld'
 
 const FAQ_ITEMS = [
   {
@@ -60,7 +61,7 @@ export default function FAQ() {
     <section className="py-20 bg-white">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
 
       <div className="max-w-3xl mx-auto px-5 sm:px-8">

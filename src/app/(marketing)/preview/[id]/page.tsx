@@ -159,27 +159,25 @@ export default function PreviewPage() {
       </div>
 
       {/* ── Preview iframe ──────────────────────────────────────────────── */}
+      {/* Sandbox stricte :
+         - allow-scripts : l'HTML généré peut exécuter du JS (animations, swiper…)
+         - allow-popups + allow-popups-to-escape-sandbox : laisse le CTA "Voir
+           plus" ouvrir la home konvert.app dans un nouvel onglet sans casser
+           la sandbox.
+         - PAS de allow-same-origin : combiné avec allow-scripts ça permettrait
+           à l'HTML de retirer la sandbox (bypass connu MDN). On le garde retiré
+           pour isoler complètement le HTML user-généré du contexte konvert.app. */}
       <div className="relative">
-        {/* Overlay de blocage sur les interactions */}
-        <div
-          className="absolute inset-0 z-10"
-          style={{ cursor: 'not-allowed' }}
-          onClick={(e) => {
-            e.preventDefault()
-            router.push('/pricing')
-          }}
-        />
-
         <iframe
           srcDoc={data.html_content}
-          className="w-full"
+          className="w-full block"
           style={{
-            height: '100vh',
+            height: 'calc(100vh - 100px)',
             border: 'none',
-            pointerEvents: 'none',
           }}
           title={`Preview — ${data.product_title}`}
-          sandbox="allow-scripts"
+          sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+          referrerPolicy="no-referrer"
         />
       </div>
 

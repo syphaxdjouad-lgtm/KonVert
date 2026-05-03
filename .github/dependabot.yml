@@ -1,0 +1,40 @@
+# Dependabot — alertes auto sur dépendances vulnérables
+# Docs : https://docs.github.com/en/code-security/dependabot
+
+version: 2
+updates:
+
+  # ── npm (Next.js, libs front+back) ──────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "Europe/Paris"
+    open-pull-requests-limit: 5
+    # On groupe les mises à jour mineures + patch dans une seule PR par semaine
+    # pour éviter de spammer le repo. Les majors restent séparées.
+    groups:
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    labels:
+      - "dependencies"
+      - "automated"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore(dev)"
+      include: "scope"
+
+  # ── GitHub Actions (workflows CI) ───────────────────────────────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(ci)"

@@ -127,6 +127,8 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Erreur inconnue'
     console.error('[/api/generate]', message)
+    const Sentry = await import('@sentry/nextjs').catch(() => null)
+    Sentry?.captureException(err, { tags: { route: 'api/generate' } })
 
     // JSON parse error = Claude a retourné du texte invalide
     if (message.includes('JSON') || message.includes('parse')) {

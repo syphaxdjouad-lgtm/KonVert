@@ -11,6 +11,48 @@ export function detectPlatform(url: string): SupportedPlatform {
   return 'unknown'
 }
 
+// ─── Normalisation URL : retire les query params de tracking ─────────────────
+// AliExpress et Amazon ajoutent énormément de params (spm, scm_id, pap_npi,
+// gatewayAdapt, url=..., tag, ref, ascsubtag…) qui peuvent transformer une
+// URL produit en URL de redirection/tracking et casser le scraping.
+// On garde uniquement ce qui identifie le produit.
+
+export function normalizeProductUrl(input: string): string {
+  try {
+    const u = new URL(input)
+    const host = u.hostname.toLowerCase()
+
+    // AliExpress : URL canonique = /item/[productId].html — on jette tout le
+    // reste. Les params spm/scm_id/pap_npi/gatewayAdapt/url= servent au
+    // tracking et peuvent rediriger vers une page de chargement vide.
+    if (host.endsWith('aliexpress.com') || host.endsWith('aliexpress.us')) {
+      // Extrait l'ID produit du path /item/[id].html ou /i/[id].html
+      const idMatch = u.pathname.match(/\/(?:item|i)\/(\d+)\.html/)
+      if (idMatch) {
+        return `https://${u.hostname}/item/${idMatch[1]}.html`
+      }
+      // Fallback : on retire juste les params lourds, on garde le path
+      u.search = ''
+      return u.toString()
+    }
+
+    // Amazon : URL canonique = /dp/[ASIN] — on jette tag, ref, ascsubtag, etc.
+    if (host.includes('amazon.')) {
+      const asinMatch = u.pathname.match(/\/(?:dp|gp\/product|product)\/([A-Z0-9]{10})/)
+      if (asinMatch) {
+        return `https://${u.hostname}/dp/${asinMatch[1]}`
+      }
+      u.search = ''
+      return u.toString()
+    }
+
+    // Autres plateformes : on garde tel quel (Shopify, Etsy, eBay l'utilisent légitimement)
+    return input
+  } catch {
+    return input
+  }
+}
+
 // ─── Scraper principal ───────────────────────────────────────────────────────
 // Firecrawl est le scraper primaire (stealth proxy, compatible serverless Vercel).
 // Le scraper natif fetch() est le fallback léger si Firecrawl échoue.
@@ -26,12 +68,19 @@ export class ScrapeError extends Error {
 }
 
 export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
+  // Normalise l'URL : retire les params de tracking AliExpress/Amazon qui
+  // peuvent transformer une URL produit en URL de redirection vide.
+  const cleanUrl = normalizeProductUrl(url)
+  if (cleanUrl !== url) {
+    console.log('[scraper] URL normalisée:', { from: url.slice(0, 80) + '…', to: cleanUrl })
+  }
+
   const apiKey = process.env.FIRECRAWL_API_KEY
   const errors: { firecrawl?: string; fetch?: string; jsonld?: string } = {}
 
   if (apiKey) {
     try {
-      const product = await scrapeViaFirecrawl(url, apiKey)
+      const product = await scrapeViaFirecrawl(cleanUrl, apiKey)
       console.log('[scraper] ✓ Firecrawl OK:', { title: product.title, images: product.images.length })
       return product
     } catch (err) {
@@ -46,7 +95,7 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
 
   // Fallback : fetch() natif + parsing HTML (JSON-LD prioritaire, meta-tags ensuite)
   try {
-    const product = await scrapeViaFetch(url)
+    const product = await scrapeViaFetch(cleanUrl)
     console.log('[scraper] ✓ fetch+JSON-LD OK:', { title: product.title, images: product.images.length })
     return product
   } catch (err) {
@@ -178,16 +227,23 @@ Return: title, description, price, original_price (if discount visible), images 
   throw new Error(`Firecrawl — ${reason}`)
 }
 
-// Détecte si un titre est juste le nom du domaine (= page bloquée).
-// Liste tirée des hosts whitelist : si Firecrawl extrait juste "Aliexpress"
-// au lieu du titre du produit, c'est que la page de splash a été scrapée.
+// Détecte si un titre est juste le nom du domaine (= page bloquée) OU un
+// placeholder générique LLM ("Product Title", "Sample Product"…).
+// Si oui, on rejette et on tombe sur le fallback HTML/markdown qui parse
+// les vraies données depuis le DOM (og:title, JSON-LD).
 const GENERIC_DOMAIN_TITLES = new Set([
+  // Noms de domaines (page de splash)
   'aliexpress', 'aliexpress.com', 'ali express',
   'amazon', 'amazon.com', 'amazon.fr', 'amazon.de', 'amazon.co.uk',
   'alibaba', 'alibaba.com',
   'shopify', 'etsy', 'ebay', 'ebay.com',
   'cdiscount', 'fnac', 'temu',
   'home', 'homepage', 'index',
+  // Placeholders LLM (Firecrawl hallucine quand l'extraction échoue)
+  'product title', 'product name', 'product', 'untitled', 'untitled product',
+  'sample product', 'sample product title', 'default product', 'example product',
+  'demo product', 'unnamed product', 'no title', 'item name', 'product description',
+  'women summer dress', 'men t-shirt', 'women dress', 'men shirt',
 ])
 
 function isGenericDomainTitle(title: string): boolean {
@@ -239,23 +295,36 @@ function parseProductFromMarkdown(md: string): Omit<ScrapedProduct, 'source_url'
 // Parser HTML mutualisé : JSON-LD prioritaire, sinon og:title + h1.
 // Utilisé à la fois par scrapeViaFirecrawl (fallback HTML) et scrapeViaFetch.
 function parseProductFromHtml(html: string): Omit<ScrapedProduct, 'source_url'> | null {
-  // 1. JSON-LD schema.org
+  // 1. JSON-LD schema.org (Amazon, Shopify, Etsy l'exposent presque toujours)
   const jsonLd = extractJsonLdProduct(html)
   if (jsonLd && jsonLd.title) return jsonLd
 
-  // 2. og:title + og:image + og:description
+  // 2. Priorité og:title > h1 > <title>.
+  // og:title est curated par le site pour le partage social → c'est le titre
+  // le plus fiable. Sur AliExpress, le h1 est souvent vide en SSR (rendu JS),
+  // alors que og:title contient le vrai nom du produit.
   const getMeta = (name: string): string => {
     const m = html.match(new RegExp(`<meta[^>]+(?:name|property)=["']${name}["'][^>]+content=["']([^"']+)["']`, 'i'))
       || html.match(new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:name|property)=["']${name}["']`, 'i'))
     return m?.[1] || ''
   }
 
-  const titleMatch = html.match(/<h1[^>]*>([^<]+)<\/h1>/i) || html.match(/<title>([^<]+)<\/title>/i)
-  const title = titleMatch?.[1]?.trim() || getMeta('og:title') || ''
+  const ogTitle = getMeta('og:title')
+  const h1Match = html.match(/<h1[^>]*>([^<]+)<\/h1>/i)
+  const titleTagMatch = html.match(/<title>([^<]+)<\/title>/i)
+  const rawTitle = ogTitle || h1Match?.[1]?.trim() || titleTagMatch?.[1]?.trim() || ''
+  if (!rawTitle) return null
+
+  // Nettoyage des suffixes type " - AliExpress 66" / " | Amazon.com" / " - Etsy"
+  const title = rawTitle
+    .replace(/\s*[-–|]\s*(AliExpress|Amazon[.\w]*|Etsy|eBay|Shopify|Alibaba|Cdiscount|Fnac|Temu)(\s+\d+)?\s*$/i, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+
   if (!title) return null
 
   const description = getMeta('og:description') || getMeta('description')
-  const image = getMeta('og:image')
+  const image = getMeta('og:image:secure_url') || getMeta('og:image')
   const price = getMeta('product:price:amount') || getMeta('og:price:amount') || null
 
   return {

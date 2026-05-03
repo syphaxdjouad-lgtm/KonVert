@@ -50,8 +50,8 @@ export const track = {
   newPageWizardCompleted: () =>
     posthog.capture('new_page_wizard_completed'),
 
-  pagePublished: () =>
-    posthog.capture('page_published'),
+  pagePublished: (platform?: 'shopify' | 'woocommerce' | 'youcan') =>
+    posthog.capture('page_published', { platform }),
 
   pageEdited: () =>
     posthog.capture('page_edited'),
@@ -59,8 +59,17 @@ export const track = {
   pageDeleted: () =>
     posthog.capture('page_deleted'),
 
-  storeConnected: (type: 'shopify' | 'woocommerce') =>
+  storeConnected: (type: 'shopify' | 'woocommerce' | 'youcan') =>
     posthog.capture('store_connected', { store_type: type }),
+
+  generateStarted: (source: 'public' | 'dashboard') =>
+    posthog.capture('generate_started', { source }),
+
+  generateCompleted: (source: 'public' | 'dashboard', durationMs: number) =>
+    posthog.capture('generate_completed', { source, duration_ms: durationMs }),
+
+  generateFailed: (source: 'public' | 'dashboard', reason: string) =>
+    posthog.capture('generate_failed', { source, reason: reason.slice(0, 200) }),
 
   // ── Retention ────────────────────────────────────────
   subscriptionCancelled: (reason?: string) =>

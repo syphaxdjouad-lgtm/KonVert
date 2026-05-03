@@ -12,6 +12,7 @@ import {
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import type { LandingPageData } from '@/types'
+import { track } from '@/lib/analytics'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _Palette = Palette
@@ -201,6 +202,11 @@ function NewPageInner() {
   const [publishSuccess, setPublishSuccess]  = useState<string | null>(null)
   const [publishError,   setPublishError]    = useState<string | null>(null)
 
+  // ── Tracking début wizard (1 seule fois par mount) ──
+  useEffect(() => {
+    track.newPageWizardStarted()
+  }, [])
+
   // ── Chargement d'une page existante ──
   useEffect(() => {
     const id = searchParams.get('page_id')
@@ -268,6 +274,7 @@ function NewPageInner() {
       if (!res.ok) throw new Error(json.error)
       setPublishSuccess(store.name)
       setPublishOpen(false)
+      track.pagePublished(store.platform as 'shopify' | 'woocommerce' | 'youcan')
     } catch (err) {
       setPublishError(err instanceof Error ? err.message : 'Erreur publication')
     } finally {
@@ -275,18 +282,40 @@ function NewPageInner() {
     }
   }
 
+  // ── Upload helper Supabase Storage ──
+  // Toutes les photos passent par /api/upload qui pousse sur le bucket
+  // pages-images et renvoie une URL publique. On ne stocke JAMAIS de base64
+  // côté client (cf bug #3 audit : crash DB sur 3-4 photos).
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+
+  async function uploadOne(file: File, kind: 'product' | 'before' | 'after'): Promise<string | null> {
+    const fd = new FormData()
+    fd.append('file', file)
+    fd.append('kind', kind)
+    const res = await fetch('/api/upload', { method: 'POST', body: fd })
+    const json = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(json.error || 'Upload échoué')
+    return json.url ?? null
+  }
+
   // ── Gestion upload photos produit ──
-  function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files || [])
-    files.forEach(file => {
-      const reader = new FileReader()
-      reader.onload = (ev) => {
-        if (ev.target?.result) {
-          setUploadedPhotos(prev => [...prev, ev.target!.result as string])
-        }
+    if (files.length === 0) return
+    setUploading(true)
+    setUploadError(null)
+    try {
+      for (const file of files) {
+        const url = await uploadOne(file, 'product')
+        if (url) setUploadedPhotos(prev => [...prev, url])
       }
-      reader.readAsDataURL(file)
-    })
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : 'Erreur upload')
+    } finally {
+      setUploading(false)
+      e.target.value = '' // permet de réuploader le même fichier
+    }
   }
 
   function removePhoto(index: number) {
@@ -294,15 +323,12 @@ function NewPageInner() {
   }
 
   // ── Gestion upload vidéos UGC ──
-  function handleVideoUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files || [])
-    files.forEach(file => {
-      const reader = new FileReader()
-      reader.onload = (ev) => {
-        if (ev.target?.result) setUgcVideos(prev => [...prev, ev.target!.result as string])
-      }
-      reader.readAsDataURL(file)
-    })
+  // Vidéos désactivées : trop lourdes pour le base64, et le storage Supabase
+  // n'est pas dimensionné pour des MP4 multi-MB côté MVP. L'utilisateur peut
+  // toujours coller des liens YouTube/TikTok via l'onglet "Liens externes".
+  // (cf bug #4 audit lancement)
+  function handleVideoUpload(_e: React.ChangeEvent<HTMLInputElement>) {
+    setUploadError('L\'upload vidéo est temporairement indisponible — utilise l\'onglet "Liens externes" (YouTube, TikTok…)')
   }
 
   // ── Langue label helper ──
@@ -313,8 +339,12 @@ function NewPageInner() {
 
   // ── Génération ──
   async function generate() {
+    if (mode !== 'wizard') return // garde-fou anti double-clic
     setMode('generating')
     setError(null)
+    track.newPageWizardCompleted()
+    track.generateStarted('dashboard')
+    const startedAt = Date.now()
     try {
       const body = inputMode === 'url'
         ? {
@@ -351,14 +381,54 @@ function NewPageInner() {
       if (uploadedPhotos.length > 0) {
         data.images = [...uploadedPhotos, ...(data.images || [])]
       }
+      track.generateCompleted('dashboard', Date.now() - startedAt)
+      track.pageGenerated('dashboard')
       setLandingData(data)
-      setTitle(data.product_name || 'Nouvelle page')
+      const pageTitle = data.product_name || 'Nouvelle page'
+      setTitle(pageTitle)
 
       const { renderTemplate } = await import('@/lib/templates')
-      setHtml(renderTemplate(selectedStyle, data))
+      const generatedHtml = renderTemplate(selectedStyle, data)
+      setHtml(generatedHtml)
       setMode('editor')
+
+      // Autosave silencieux : si pas encore de pageId (nouvelle page),
+      // on crée la draft en DB tout de suite. Sans ça, le bouton Publier
+      // est caché tant que l'user n'a pas cliqué Save manuellement —
+      // énorme friction à la conversion (cf bug #10 audit lancement).
+      if (!pageId) {
+        try {
+          const supabase = createClient()
+          const { data: { user } } = await supabase.auth.getUser()
+          if (user) {
+            const { data: inserted, error: insertErr } = await supabase
+              .from('pages')
+              .insert({
+                user_id:      user.id,
+                title:        pageTitle,
+                product_url:  inputMode === 'url' ? url : null,
+                html_content: generatedHtml,
+                json_content: data,
+                template_id:  selectedStyle,
+                status:       'draft',
+              })
+              .select('id')
+              .single()
+            if (!insertErr && inserted?.id) {
+              setPageId(inserted.id)
+              // Met à jour l'URL pour que F5 recharge bien la page
+              window.history.replaceState(null, '', `/dashboard/new?page_id=${inserted.id}`)
+            }
+          }
+        } catch (autosaveErr) {
+          // Non bloquant : l'user pourra toujours Save manuellement
+          console.warn('[autosave]', autosaveErr)
+        }
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur')
+      const reason = err instanceof Error ? err.message : 'Erreur'
+      track.generateFailed('dashboard', reason)
+      setError(reason)
       setMode('wizard')
     }
   }
@@ -622,7 +692,7 @@ function NewPageInner() {
             {/* Toggle */}
             <div className="flex gap-3 mb-6">
               {[
-                { id: 'url',    label: 'URL produit',    icon: Link2,  desc: 'Colle un lien AliExpress, Amazon, Alibaba...' },
+                { id: 'url',    label: 'URL produit',    icon: Link2,  desc: 'AliExpress, Amazon, Shopify, Etsy, eBay…' },
                 { id: 'manual', label: 'Saisie manuelle', icon: Pencil, desc: 'Entre les infos du produit à la main'          },
               ].map(({ id, label, icon: Icon, desc }) => (
                 <button
@@ -650,11 +720,11 @@ function NewPageInner() {
                   type="url"
                   value={url}
                   onChange={e => setUrl(e.target.value)}
-                  placeholder="https://aliexpress.com/item/... ou amazon.fr/dp/..."
+                  placeholder="https://aliexpress.com/item/... ou ton-store.myshopify.com/products/..."
                   className="w-full border rounded-xl px-4 py-3 text-[13px] outline-none transition-all"
                   style={{ borderColor: url ? '#7c3aed' : '#E3E3E8', background: '#fff', color: '#1a1a2e' }}
                 />
-                <p className="text-[12px] mt-1.5" style={{ color: '#8b8b9e' }}>Compatible AliExpress, Amazon, Alibaba, Shopify, Etsy et plus</p>
+                <p className="text-[12px] mt-1.5" style={{ color: '#8b8b9e' }}>Compatible AliExpress, Amazon, Alibaba, Shopify (.myshopify.com), Etsy, eBay, Cdiscount, Fnac, Temu</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -855,12 +925,19 @@ function NewPageInner() {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={e => {
+                    onChange={async e => {
                       const f = e.target.files?.[0]
-                      if (f) {
-                        const r = new FileReader()
-                        r.onload = ev => { if (ev.target?.result) setBeforePhotos([ev.target.result as string]) }
-                        r.readAsDataURL(f)
+                      e.target.value = ''
+                      if (!f) return
+                      setUploading(true)
+                      setUploadError(null)
+                      try {
+                        const url = await uploadOne(f, 'before')
+                        if (url) setBeforePhotos([url])
+                      } catch (err) {
+                        setUploadError(err instanceof Error ? err.message : 'Erreur upload')
+                      } finally {
+                        setUploading(false)
                       }
                     }}
                   />
@@ -891,12 +968,19 @@ function NewPageInner() {
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    onChange={e => {
+                    onChange={async e => {
                       const f = e.target.files?.[0]
-                      if (f) {
-                        const r = new FileReader()
-                        r.onload = ev => { if (ev.target?.result) setAfterPhotos([ev.target.result as string]) }
-                        r.readAsDataURL(f)
+                      e.target.value = ''
+                      if (!f) return
+                      setUploading(true)
+                      setUploadError(null)
+                      try {
+                        const url = await uploadOne(f, 'after')
+                        if (url) setAfterPhotos([url])
+                      } catch (err) {
+                        setUploadError(err instanceof Error ? err.message : 'Erreur upload')
+                      } finally {
+                        setUploading(false)
                       }
                     }}
                   />
@@ -1094,7 +1178,8 @@ function NewPageInner() {
 
             <button
               onClick={generate}
-              className="w-full font-bold py-4 rounded-xl text-[14px] transition-all flex items-center justify-center gap-2"
+              disabled={mode !== 'wizard'}
+              className="w-full font-bold py-4 rounded-xl text-[14px] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
               style={{
                 background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
                 color: '#fff',
@@ -1104,7 +1189,7 @@ function NewPageInner() {
               <Sparkles className="w-4 h-4" />
               Générer ma page avec l'IA
             </button>
-            <p className="text-center text-[12px] mt-2" style={{ color: '#8b8b9e' }}>Résultat en moins de 30 secondes</p>
+            <p className="text-center text-[12px] mt-2" style={{ color: '#8b8b9e' }}>L'IA travaille — patiente 30 à 60 secondes</p>
           </div>
         )}
 

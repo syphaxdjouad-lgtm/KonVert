@@ -27,7 +27,7 @@ function safeImageUrl(url: string): boolean {
   return typeof url === 'string' && /^https?:\/\//i.test(url)
 }
 
-const ALLOWED_LANGS = new Set(['fr', 'en', 'es', 'de', 'it', 'pt', 'nl', 'ar'])
+const ALLOWED_LANGS = new Set(['fr', 'en', 'es', 'de', 'it', 'pt', 'nl', 'ar', 'zh'])
 
 function clampRating(n: unknown): number {
   const v = typeof n === 'number' ? n : Number(n)
@@ -142,6 +142,7 @@ const LANGUAGE_NAMES: Record<string, string> = {
   pt: 'português',
   nl: 'Nederlands',
   ar: 'العربية',
+  zh: '中文',
 }
 
 const TONE_INSTRUCTIONS: Record<string, string> = {
@@ -292,23 +293,35 @@ export async function generateLandingPage(
     ? 'utilise le prix barré comme ancrage et mentionne l\'économie réalisée'
     : 'évoque un stock limité ou une fin de promotion proche, sans mentir'
 
-  const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: GENERATION_MODEL,
-      max_tokens: 4000,
-      // Mode JSON natif — DeepSeek garantit un JSON parsable et évite le markdown.
-      response_format: { type: 'json_object' },
-      messages: [
-        { role: 'system', content: buildSystemPrompt(language) },
-        { role: 'user', content: buildUserPrompt(product, tone, priceLine) },
-      ],
-    }),
-  })
+  // Retry 1x sur 429 / 5xx — DeepSeek peut être flaky en pic
+  // Timeout 50s (au-dessous de Vercel maxDuration 60s) pour laisser une marge
+  const callDeepSeek = async (): Promise<Response> => {
+    return fetch('https://api.deepseek.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: GENERATION_MODEL,
+        max_tokens: 4000,
+        // Mode JSON natif — DeepSeek garantit un JSON parsable et évite le markdown.
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: buildSystemPrompt(language) },
+          { role: 'user', content: buildUserPrompt(product, tone, priceLine) },
+        ],
+      }),
+      signal: AbortSignal.timeout(50000),
+    })
+  }
+
+  let res = await callDeepSeek()
+  if (!res.ok && (res.status === 429 || res.status >= 500)) {
+    // Backoff 800ms puis retry une seule fois
+    await new Promise(r => setTimeout(r, 800))
+    res = await callDeepSeek()
+  }
 
   if (!res.ok) {
     const errText = await res.text().catch(() => '')

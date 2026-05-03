@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowRight, Link2, Pencil, Sparkles } from 'lucide-react'
 import { Turnstile } from '@/components/Turnstile'
+import { track } from '@/lib/analytics'
 
 type Step = 'email' | 'product' | 'generating'
 type InputMode = 'url' | 'manual'
@@ -220,6 +221,9 @@ function EssaiContent() {
 
     setStep('generating')
     setLoadingText(t.loadingTexts[0])
+    track.essaiEmailCaptured()
+    track.generateStarted('public')
+    const startedAt = Date.now()
 
     let i = 0
     const interval = setInterval(() => {
@@ -269,13 +273,17 @@ function EssaiContent() {
           router.push(`/preview/${data.preview_id}`)
           return
         }
+        track.generateFailed('public', data.error || `HTTP ${res.status}`)
         setStep('product')
         setError(data.error || t.errGeneric)
         return
       }
 
+      track.generateCompleted('public', Date.now() - startedAt)
+      track.pageGenerated('public')
       router.push(`/preview/${data.preview_id}`)
-    } catch {
+    } catch (err) {
+      track.generateFailed('public', err instanceof Error ? err.message : 'network')
       clearInterval(interval)
       setStep('product')
       setError(t.errNetwork)

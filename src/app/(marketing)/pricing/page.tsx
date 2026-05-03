@@ -154,7 +154,12 @@ function PricingContent() {
       })
       const json = await res.json()
       if (!res.ok) {
-        if (res.status === 401) { router.push('/login'); return }
+        if (res.status === 401) {
+          // Pas de session : on envoie d'abord vers /essai (point d'entrée ouvert),
+          // puis l'user reviendra sur /pricing connecté pour finaliser le checkout.
+          router.push(`/essai?upgrade=${encodeURIComponent(plan)}`)
+          return
+        }
         throw new Error(json.error)
       }
       window.location.href = json.url

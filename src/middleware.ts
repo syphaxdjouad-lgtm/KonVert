@@ -58,7 +58,9 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
+  // Exclut assets statiques (images, fonts, JSON, manifest, ico) pour éviter
+  // un appel Supabase getUser() inutile à chaque request d'asset.
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|woff|woff2|ttf|otf|json|ico|txt|xml|webmanifest|map)$).*)',
   ],
 }

@@ -110,14 +110,16 @@ export async function POST(req: NextRequest) {
         const userId = sub.metadata?.supabase_user_id
         if (!userId) break
 
+        // Downgrade vers 'free' (1 page/mois) — pas 'starter' qui est PAYANT.
+        // Reset quota pour éviter de garder un quota Pro/Agency consommé.
         await supabaseAdmin
           .from('subscriptions')
-          .update({ status: 'canceled', plan: 'starter' })
+          .update({ status: 'canceled', plan: 'free' })
           .eq('user_id', userId)
 
         await supabaseAdmin
           .from('users')
-          .update({ plan: 'starter' })
+          .update({ plan: 'free', pages_used_this_month: 0 })
           .eq('id', userId)
 
         ph?.capture({
@@ -138,10 +140,17 @@ export async function POST(req: NextRequest) {
           .update({ status: 'past_due' })
           .eq('stripe_subscription_id', subId)
 
-        const customerId = typeof invoice.customer === 'string' ? invoice.customer : invoice.customer?.id
-        if (customerId) {
+        // distinctId = UUID Supabase (cohérent avec les autres events) plutôt
+        // que le stripe_customer_id, sinon PostHog crée un profil orphelin.
+        const { data: sub } = await supabaseAdmin
+          .from('subscriptions')
+          .select('user_id')
+          .eq('stripe_subscription_id', subId)
+          .single()
+
+        if (sub?.user_id) {
           ph?.capture({
-            distinctId: customerId,
+            distinctId: sub.user_id,
             event: 'payment_failed',
             properties: { amount: (invoice.amount_due ?? 0) / 100 },
           })
@@ -180,7 +189,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true })
   } catch (err) {
     console.error('[webhook] Erreur traitement:', err)
-    return NextResponse.json({ error: 'Erreur traitement' }, { status: 500 })
+    const Sentry = await import('@sentry/nextjs').catch(() => null)
+    Sentry?.captureException(err, { tags: { route: 'api/stripe/webhook' } })
+    // On retourne 200 pour empêcher Stripe de rejouer indéfiniment ;
+    // l'erreur est tracée Sentry → on l'investiguera après coup.
+    return NextResponse.json({ received: true, error: 'logged' })
   }
 }
 

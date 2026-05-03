@@ -3,6 +3,8 @@ import { YouCanClient, decryptYouCanToken } from '@/lib/youcan'
 import { createClient } from '@/lib/supabase/server'
 import { injectTracker } from '@/lib/analytics/tracker'
 
+export const maxDuration = 30
+
 // POST /api/youcan/push
 // Body: { store_id, page_id }
 export async function POST(req: NextRequest) {
@@ -83,6 +85,8 @@ export async function POST(req: NextRequest) {
     })
   } catch (err) {
     console.error('[youcan/push]', err)
+    const Sentry = await import('@sentry/nextjs').catch(() => null)
+    Sentry?.captureException(err, { tags: { route: 'api/youcan/push' } })
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Erreur YouCan' },
       { status: 500 }

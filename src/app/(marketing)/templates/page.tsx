@@ -1773,7 +1773,7 @@ function TemplateModal({ t, onClose }: { t: typeof TEMPLATES[0]; onClose: () => 
         </div>
         <div className="flex items-center gap-3">
           <a
-            href="/signup"
+            href="/essai"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-sm font-bold transition-opacity hover:opacity-90"
             style={{ background: t.accent }}
           >
@@ -1960,7 +1960,7 @@ export default function TemplatesPage() {
             Accédez aux {TEMPLATES.length} templates, aux mises à jour futures et aux nouveaux designs dès leur sortie.
           </p>
           <a
-            href="/signup"
+            href="/essai"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-white transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5"
             style={{ background: '#5B47F5' }}
           >

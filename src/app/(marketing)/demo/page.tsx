@@ -407,7 +407,7 @@ export default function DemoPage() {
                 <p className="text-xs font-bold text-[#5B47F5] mb-1">Démo simulée</p>
                 <p className="text-xs text-gray-600">
                   Cette démo illustre le type de page générée par KONVERT. En version complète, la vraie URL produit est scrapée et le copy est entièrement personnalisé.
-                  {' '}<Link href="/signup" className="text-[#5B47F5] font-bold hover:underline">Créez un compte gratuit →</Link>
+                  {' '}<Link href="/essai" className="text-[#5B47F5] font-bold hover:underline">Essaie avec ton produit →</Link>
                 </p>
               </div>
             </div>
@@ -418,7 +418,7 @@ export default function DemoPage() {
               <p className="text-sm mb-6" style={{ color: '#8b8baa' }}>Connexion Shopify ou WooCommerce en 1 clic. 1 page gratuite pour tester.</p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
-                  href="/signup"
+                  href="/essai"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold text-sm"
                   style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
                 >

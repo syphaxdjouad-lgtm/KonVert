@@ -19,7 +19,7 @@ export default async function DashboardPage() {
   const profile   = profileRes.data
   const pages     = pagesRes.data   || []
   const stores    = storesRes.data  || []
-  const plan      = profile?.plan || 'starter'
+  const plan      = profile?.plan || 'free'
   const limits    = PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS]
   const used      = profile?.pages_used_this_month || 0
   const pct       = Math.min(Math.round((used / limits.pages) * 100), 100)

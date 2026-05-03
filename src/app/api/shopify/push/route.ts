@@ -3,6 +3,8 @@ import { ShopifyClient, decryptToken } from '@/lib/shopify'
 import { createClient } from '@/lib/supabase/server'
 import { injectTracker } from '@/lib/analytics/tracker'
 
+export const maxDuration = 30
+
 // POST /api/shopify/push
 // Body: { store_id, page_id } — publie une page KONVERT dans le store Shopify
 export async function POST(req: NextRequest) {
@@ -80,6 +82,8 @@ export async function POST(req: NextRequest) {
     })
   } catch (err) {
     console.error('[shopify/push]', err)
+    const Sentry = await import('@sentry/nextjs').catch(() => null)
+    Sentry?.captureException(err, { tags: { route: 'api/shopify/push' } })
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Erreur Shopify' },
       { status: 500 }

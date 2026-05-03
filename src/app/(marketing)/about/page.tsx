@@ -451,7 +451,7 @@ export default function AboutPage() {
           </p>
           <div className="reveal delay-2 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href="/signup"
+              href="/essai"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold"
               style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
             >

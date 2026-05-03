@@ -77,6 +77,8 @@ function StoresContent() {
   const [wooData, setWooData]             = useState({ store_url: '', consumer_key: '', consumer_secret: '' })
   const [youcanForm, setYoucanForm]       = useState(false)
   const [youcanToken, setYoucanToken]     = useState('')
+  const [shopifyForm, setShopifyForm]     = useState(false)
+  const [shopifyDomain, setShopifyDomain] = useState('')
   const [connecting, setConnecting]       = useState(false)
   const [error, setError]                 = useState<string | null>(null)
   const searchParams                      = useSearchParams()
@@ -90,7 +92,13 @@ function StoresContent() {
 
   async function loadStores() {
     const supabase = createClient()
-    const { data } = await supabase.from('stores').select('*').order('created_at', { ascending: false })
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) { window.location.href = '/login'; return }
+    const { data } = await supabase
+      .from('stores')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
     setStores(data || [])
     setLoading(false)
   }
@@ -115,6 +123,24 @@ function StoresContent() {
     } finally {
       setConnecting(false)
     }
+  }
+
+  function startShopifyInstall(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    let raw = shopifyDomain.trim().toLowerCase()
+    raw = raw.replace(/^https?:\/\//, '').replace(/\/.*$/, '')
+    if (!raw) {
+      setError('Entre le sous-domaine de ta boutique Shopify.')
+      return
+    }
+    // Normalise : "maboutique" → "maboutique.myshopify.com"
+    if (!raw.includes('.')) raw = `${raw}.myshopify.com`
+    if (!/^[a-z0-9][a-z0-9-]*\.myshopify\.com$/.test(raw)) {
+      setError('Format invalide. Utilise ton sous-domaine .myshopify.com (ex : maboutique.myshopify.com).')
+      return
+    }
+    window.location.href = `/api/shopify/install?shop=${encodeURIComponent(raw)}`
   }
 
   async function connectWoo(e: React.FormEvent) {
@@ -143,8 +169,14 @@ function StoresContent() {
     if (!deleteTarget) return
     setDeleting(true)
     const supabase = createClient()
-    await supabase.from('stores').delete().eq('id', deleteTarget.id)
-    setStores(stores.filter(s => s.id !== deleteTarget.id))
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) { setDeleting(false); return }
+    const { error: delErr } = await supabase
+      .from('stores')
+      .delete()
+      .eq('id', deleteTarget.id)
+      .eq('user_id', user.id)
+    if (!delErr) setStores(stores.filter(s => s.id !== deleteTarget.id))
     setDeleteTarget(null)
     setDeleting(false)
   }
@@ -190,7 +222,11 @@ function StoresContent() {
           ))}
         </div>
       ) : stores.length === 0 && !wooForm && !youcanForm ? (
-        <EmptyStores onAddWoo={() => setWooForm(true)} onAddYouCan={() => setYoucanForm(true)} />
+        <EmptyStores
+          onAddShopify={() => setShopifyForm(true)}
+          onAddWoo={() => setWooForm(true)}
+          onAddYouCan={() => setYoucanForm(true)}
+        />
       ) : (
         <>
           <div className="space-y-3 mb-6">
@@ -200,15 +236,15 @@ function StoresContent() {
           </div>
 
           {/* Boutons ajouter */}
-          {!wooForm && !youcanForm && (
+          {!wooForm && !youcanForm && !shopifyForm && (
             <div className="grid grid-cols-3 gap-3">
-              <Link
-                href="/api/shopify/install"
+              <button
+                onClick={() => setShopifyForm(true)}
                 className="flex items-center justify-center gap-2 rounded-2xl p-4 text-sm font-bold transition-all hover:scale-105"
                 style={{ border: '2px dashed rgba(22,163,74,0.3)', background: 'rgba(22,163,74,0.04)', color: '#16a34a' }}
               >
                 <Plus className="w-4 h-4" /> Ajouter Shopify
-              </Link>
+              </button>
               <button
                 onClick={() => setWooForm(true)}
                 className="flex items-center justify-center gap-2 rounded-2xl p-4 text-sm font-bold transition-all hover:scale-105"
@@ -226,6 +262,65 @@ function StoresContent() {
             </div>
           )}
         </>
+      )}
+
+      {/* Formulaire Shopify */}
+      {shopifyForm && (
+        <form onSubmit={startShopifyInstall} className="rounded-2xl p-6 space-y-4" style={{ background: '#fff', border: '1px solid #e5e7eb' }}>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'rgba(22,163,74,0.08)' }}>
+              <Link2 className="w-4 h-4" style={{ color: '#16a34a' }} />
+            </div>
+            <div>
+              <h3 className="font-black" style={{ color: '#111' }}>Connecter Shopify</h3>
+              <p className="text-xs" style={{ color: '#9ca3af' }}>Entre le sous-domaine .myshopify.com de ta boutique</p>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold mb-1.5" style={{ color: '#374151' }}>Sous-domaine</label>
+            <input
+              type="text"
+              required
+              autoFocus
+              placeholder="maboutique.myshopify.com"
+              value={shopifyDomain}
+              onChange={e => setShopifyDomain(e.target.value)}
+              className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none transition-colors"
+              style={{ border: '1px solid #e5e7eb', background: '#fafafa' }}
+              onFocus={e => (e.target.style.borderColor = '#16a34a')}
+              onBlur={e => (e.target.style.borderColor = '#e5e7eb')}
+            />
+            <p className="text-[11px] mt-1.5" style={{ color: '#9ca3af' }}>
+              Tu seras redirigé vers Shopify pour autoriser KONVERT.
+            </p>
+          </div>
+
+          {error && (
+            <div className="flex items-start gap-2 rounded-xl p-3 text-sm" style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.2)', color: '#dc2626' }}>
+              <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              {error}
+            </div>
+          )}
+
+          <div className="flex gap-2 pt-1">
+            <button
+              type="button"
+              onClick={() => { setShopifyForm(false); setShopifyDomain(''); setError(null) }}
+              className="flex-1 font-bold py-2.5 rounded-xl text-sm transition-colors"
+              style={{ border: '1px solid #e5e7eb', color: '#374151', background: '#fff' }}
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              className="flex-1 text-white font-bold py-2.5 rounded-xl text-sm transition-all"
+              style={{ background: 'linear-gradient(135deg, #16a34a, #15803d)' }}
+            >
+              Continuer vers Shopify
+            </button>
+          </div>
+        </form>
       )}
 
       {/* Formulaire YouCan */}
@@ -393,7 +488,7 @@ function StoreCard({ store, onDelete }: { store: any; onDelete: () => void }) {
   )
 }
 
-function EmptyStores({ onAddWoo, onAddYouCan }: { onAddWoo: () => void; onAddYouCan: () => void }) {
+function EmptyStores({ onAddShopify, onAddWoo, onAddYouCan }: { onAddShopify: () => void; onAddWoo: () => void; onAddYouCan: () => void }) {
   return (
     <div className="text-center py-20 rounded-2xl" style={{ border: '2px dashed #e5e7eb', background: '#fff' }}>
       <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(124,58,237,0.08)' }}>
@@ -404,13 +499,13 @@ function EmptyStores({ onAddWoo, onAddYouCan }: { onAddWoo: () => void; onAddYou
         Connecte ta boutique pour publier tes pages directement depuis le dashboard
       </p>
       <div className="flex gap-3 justify-center flex-wrap">
-        <Link
-          href="/api/shopify/install"
+        <button
+          onClick={onAddShopify}
           className="inline-flex items-center gap-2 text-white font-bold text-sm py-2.5 px-5 rounded-xl transition-all hover:opacity-90"
           style={{ background: 'linear-gradient(135deg, #16a34a, #15803d)', boxShadow: '0 4px 14px rgba(22,163,74,0.3)' }}
         >
           <Plus className="w-4 h-4" /> Shopify
-        </Link>
+        </button>
         <button
           onClick={onAddWoo}
           className="inline-flex items-center gap-2 text-white font-bold text-sm py-2.5 px-5 rounded-xl transition-all hover:opacity-90"

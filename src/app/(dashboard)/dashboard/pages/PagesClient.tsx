@@ -332,13 +332,33 @@ function PageRow({ page, last }: { page: Page; last: boolean }) {
       </div>
 
       <div className="flex items-center justify-end gap-1">
-        <Link
-          href={`/dashboard/pages/${page.id}/ab-test`}
-          className="p-2 rounded-lg transition-colors text-gray-400 hover:text-purple-600 hover:bg-purple-50"
-          title="A/B Test"
-        >
-          <FlaskConical className="w-4 h-4" />
-        </Link>
+        {page.status === 'published' && page.published_url && (
+          <a
+            href={page.published_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 rounded-lg transition-colors text-gray-400 hover:text-purple-600 hover:bg-purple-50"
+            title="Voir la page publiée"
+          >
+            <Eye className="w-4 h-4" />
+          </a>
+        )}
+        {page.status === 'published' ? (
+          <Link
+            href={`/dashboard/pages/${page.id}/ab-test`}
+            className="p-2 rounded-lg transition-colors text-gray-400 hover:text-purple-600 hover:bg-purple-50"
+            title="A/B Test"
+          >
+            <FlaskConical className="w-4 h-4" />
+          </Link>
+        ) : (
+          <span
+            className="p-2 rounded-lg text-gray-300 cursor-not-allowed"
+            title="A/B Test disponible une fois la page publiée"
+          >
+            <FlaskConical className="w-4 h-4" />
+          </span>
+        )}
         <Link
           href={`/dashboard/new?page_id=${page.id}`}
           className="p-2 rounded-lg transition-colors"

@@ -8,6 +8,9 @@ import { validateScrapeUrl } from '@/lib/security/url-allow'
 import { verifyTurnstile } from '@/lib/security/turnstile'
 import type { ScrapedProduct } from '@/types'
 
+// Vercel Pro 60s — DeepSeek + scraping peuvent dépasser 30s
+export const maxDuration = 60
+
 // Service role — la table public_previews n'est plus exposée via la clé anon (RLS lock)
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -143,6 +146,8 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Erreur inconnue'
     console.error('[generate/public]', message)
+    const Sentry = await import('@sentry/nextjs').catch(() => null)
+    Sentry?.captureException(err, { tags: { route: 'api/generate/public' } })
 
     if (message.includes('JSON') || message.includes('parse')) {
       return NextResponse.json(

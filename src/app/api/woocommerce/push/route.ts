@@ -3,6 +3,8 @@ import { WooCommerceClient, decryptCredentials } from '@/lib/woocommerce'
 import { createClient } from '@/lib/supabase/server'
 import { injectTracker } from '@/lib/analytics/tracker'
 
+export const maxDuration = 30
+
 // POST /api/woocommerce/push
 // Body: { store_id, page_id }
 export async function POST(req: NextRequest) {
@@ -81,6 +83,8 @@ export async function POST(req: NextRequest) {
     })
   } catch (err) {
     console.error('[woocommerce/push]', err)
+    const Sentry = await import('@sentry/nextjs').catch(() => null)
+    Sentry?.captureException(err, { tags: { route: 'api/woocommerce/push' } })
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Erreur WooCommerce' },
       { status: 500 }

@@ -6,8 +6,14 @@
 // Whitelist exacte des hosts e-commerce supportés.
 // Pas de includes() ni endsWith() — sinon "amazon.attacker.com" passerait.
 const ALLOWED_HOSTS = new Set([
+  // AliExpress
   'aliexpress.com', 'fr.aliexpress.com', 'www.aliexpress.com',
-  'alibaba.com', 'www.alibaba.com',
+  'es.aliexpress.com', 'pt.aliexpress.com', 'de.aliexpress.com',
+  'it.aliexpress.com', 'nl.aliexpress.com', 'ru.aliexpress.com',
+  'aliexpress.us', 'www.aliexpress.us',
+  // Alibaba
+  'alibaba.com', 'www.alibaba.com', 'french.alibaba.com',
+  // Amazon (toutes régions courantes)
   'amazon.com', 'www.amazon.com',
   'amazon.fr', 'www.amazon.fr',
   'amazon.co.uk', 'www.amazon.co.uk',
@@ -15,7 +21,31 @@ const ALLOWED_HOSTS = new Set([
   'amazon.es', 'www.amazon.es',
   'amazon.it', 'www.amazon.it',
   'amazon.ca', 'www.amazon.ca',
+  'amazon.com.be', 'www.amazon.com.be',
+  'amazon.nl', 'www.amazon.nl',
+  'amazon.pl', 'www.amazon.pl',
+  // Etsy
+  'etsy.com', 'www.etsy.com',
+  // eBay
+  'ebay.com', 'www.ebay.com',
+  'ebay.fr', 'www.ebay.fr',
+  'ebay.co.uk', 'www.ebay.co.uk',
+  'ebay.de', 'www.ebay.de',
+  'ebay.it', 'www.ebay.it',
+  'ebay.es', 'www.ebay.es',
+  // Cdiscount + Fnac (FR)
+  'cdiscount.com', 'www.cdiscount.com',
+  'fnac.com', 'www.fnac.com',
+  // Temu (gros pour dropshipping 2026)
+  'temu.com', 'www.temu.com',
 ])
+
+// Hosts dont les sous-domaines sont autorisés (suffixes contrôlés).
+// Vérification stricte par endsWith précédé d'un point pour éviter
+// "myshopify.com.attacker.com".
+const ALLOWED_SUFFIXES = [
+  '.myshopify.com',   // Shopify : mystore.myshopify.com
+]
 
 // IPs privées, métadonnées cloud (AWS/GCP), loopback, link-local.
 const BLOCKED_PATTERNS = [
@@ -50,8 +80,13 @@ export function validateScrapeUrl(input: unknown): UrlValidationResult {
     return { ok: false, status: 403, error: 'URL non autorisée' }
   }
 
-  if (!ALLOWED_HOSTS.has(host)) {
-    return { ok: false, status: 403, error: 'Domaine non supporté. Utilisez AliExpress, Amazon ou Alibaba.' }
+  const hostMatchesSuffix = ALLOWED_SUFFIXES.some(s => host.endsWith(s))
+  if (!ALLOWED_HOSTS.has(host) && !hostMatchesSuffix) {
+    return {
+      ok: false,
+      status: 403,
+      error: 'Domaine non supporté. Utilise AliExpress, Amazon, Alibaba, Shopify, Etsy, eBay, Cdiscount, Fnac ou Temu.',
+    }
   }
 
   return { ok: true, parsed }

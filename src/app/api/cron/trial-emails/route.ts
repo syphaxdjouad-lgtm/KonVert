@@ -47,8 +47,9 @@ export async function GET(req: NextRequest) {
   let sent = 0
   let errors = 0
 
-  // Récupérer tous les users en trial (plan = null ou trial, pas encore abonnés)
-  // On suppose que trial_started_at et trial_emails_sent existent dans la table users
+  // Récupérer tous les users en trial — UNIQUEMENT les non-payants.
+  // Filtre 'free' / null : 'starter' est un plan PAYANT (39€/mois), il ne doit
+  // PAS recevoir d'email "ton trial expire" — sinon spam des abonnés Starter.
   // SQL migration à lancer une fois dans Supabase:
   // ALTER TABLE users ADD COLUMN IF NOT EXISTS trial_started_at timestamptz DEFAULT now();
   // ALTER TABLE users ADD COLUMN IF NOT EXISTS trial_emails_sent integer[] DEFAULT '{}';
@@ -56,7 +57,7 @@ export async function GET(req: NextRequest) {
     .from('users')
     .select('id, email, name, trial_started_at, trial_emails_sent, plan')
     .not('trial_started_at', 'is', null)
-    .in('plan', ['starter', null])  // pas encore payant ou sur plan starter trial
+    .or('plan.is.null,plan.eq.free')
     .limit(500)
 
   if (error) {

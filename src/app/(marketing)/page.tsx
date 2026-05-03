@@ -256,12 +256,12 @@ function Slide1() {
               Essaie avec ton produit — gratuit <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              href="/signup"
+              href="/demo"
               className="btn-ripple inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm text-white transition-all hover:bg-white/10"
               style={{ border: '1.5px solid rgba(255,255,255,0.25)' }}
               onClick={addRipple}
             >
-              Créer un compte
+              Voir la démo
             </Link>
           </div>
 
@@ -3176,7 +3176,7 @@ function FinalCTA() {
             onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.15)' }}
           />
           <Link
-            href={`/dashboard${urlInput ? `?url=${encodeURIComponent(urlInput)}` : ''}`}
+            href={`/essai${urlInput ? `?url=${encodeURIComponent(urlInput)}` : ''}`}
             className="btn-shimmer inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg flex-shrink-0"
           >
             Générer ma page <ArrowRight className="w-4 h-4" />

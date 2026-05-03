@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Loader2, ArrowRight, Zap, Star, TrendingUp, MousePointerClick } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function LoginPage() {
   const [email, setEmail]       = useState('')
@@ -83,9 +84,13 @@ export default function LoginPage() {
                     const { error } = await supabase.auth.resetPasswordForEmail(email, {
                       redirectTo: `${window.location.origin}/dashboard/settings`,
                     })
-                    if (error) setError(error.message)
-                    else setError(null)
-                    alert('Un email de réinitialisation a été envoyé.')
+                    if (error) {
+                      setError(error.message)
+                      toast.error('Impossible d\'envoyer le lien de réinitialisation.')
+                    } else {
+                      setError(null)
+                      toast.success('Email de réinitialisation envoyé. Vérifie ta boîte mail.')
+                    }
                   }}
                   className="text-[12px] font-semibold transition-colors"
                   style={{ color: 'rgba(167,139,250,0.6)' }}

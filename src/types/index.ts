@@ -1,8 +1,11 @@
 // ─── PLANS ───────────────────────────────────────────────────────────────────
 
-export type PlanType = 'starter' | 'pro' | 'agency'
+// 'free' = compte sans abonnement (tunnel "1 page gratuite", abonnement annulé,
+// trial expiré). Quota 1 page/mois pour rester cohérent avec le tunnel public.
+export type PlanType = 'free' | 'starter' | 'pro' | 'agency'
 
 export const PLAN_LIMITS: Record<PlanType, { pages: number; stores: number; whiteLabel: boolean }> = {
+  free:    { pages: 1,    stores: 0,  whiteLabel: false },
   starter: { pages: 75,   stores: 2,  whiteLabel: false },
   pro:     { pages: 300,  stores: 7,  whiteLabel: false },
   agency:  { pages: 9999, stores: 99, whiteLabel: true  },

@@ -29,18 +29,28 @@ export async function GET(req: NextRequest) {
 
   if (apiKey) {
     try {
-      // Endpoint Firecrawl /v1/credit-usage — vérifie la clé et donne le quota restant
+      // Vrai test : scrape minimal de example.com (1 credit, mais fiable).
+      // L'API Firecrawl n'expose pas d'endpoint quota gratuit avec une clé
+      // utilisateur — un vrai scrape valide à la fois la clé et la connectivité.
       const t0 = Date.now()
-      const res = await fetch('https://api.firecrawl.dev/v1/credit-usage', {
-        headers: { 'Authorization': `Bearer ${apiKey}` },
-        signal: AbortSignal.timeout(8000),
+      const res = await fetch('https://api.firecrawl.dev/v1/scrape', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          url: 'https://example.com',
+          formats: ['markdown'],
+        }),
+        signal: AbortSignal.timeout(15000),
       })
       result.firecrawl_ping_status = res.status
       result.firecrawl_ping_ok = res.ok
       result.firecrawl_ping_ms = Date.now() - t0
       if (res.ok) {
         const body = await res.json().catch(() => null)
-        result.firecrawl_credits = body
+        result.firecrawl_test_scrape_success = !!body?.data?.markdown
       } else {
         result.firecrawl_error = (await res.text().catch(() => '')).slice(0, 300)
       }

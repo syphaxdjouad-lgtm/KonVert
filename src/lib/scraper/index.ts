@@ -79,16 +79,12 @@ async function scrapeViaFirecrawl(url: string, apiKey: string): Promise<ScrapedP
       //              quand le DOM est obfusqué (AliExpress / Amazon)
       formats: ['json', 'html', 'markdown'],
       proxy: 'stealth',
-      // 12s : AliExpress sert une page de splash, le DOM produit n'apparaît
-      // qu'après le geo-redirect + cookie consent + chargement JS. 8s ne
-      // suffisait pas pour les URLs avec gatewayAdapt=glo2fra.
-      waitFor: 12000,
-      // Actions : on attend qu'un élément ressemblant à un titre produit
-      // apparaisse avant le scrape. Si timeout sur l'action, Firecrawl scrape
-      // quand même ce qu'il a (pas de blocage).
-      actions: [
-        { type: 'wait', milliseconds: 3000 },
-      ],
+      // 10s : AliExpress sert une page de splash, le DOM produit n'apparaît
+      // qu'après le geo-redirect + cookie consent + chargement JS. On reste
+      // sous 10s pour laisser ~20s à DeepSeek dans /api/generate (limite 60s
+      // Vercel Pro). Si AliExpress charge plus lentement, on aura la version
+      // partielle qu'on parse via HTML/markdown fallback.
+      waitFor: 10000,
       // Mobile UA : moins de chance de tomber sur un mur de cookies / CAPTCHA
       // qui dégrade le rendering. Firecrawl simule l'UA via "mobile" flag.
       mobile: true,
@@ -122,7 +118,10 @@ Return: title, description, price, original_price (if discount visible), images 
         },
       },
     }),
-    signal: AbortSignal.timeout(55000),
+    // 35s timeout : on ne veut PAS dépasser pour laisser ~20s à DeepSeek.
+    // Si Firecrawl prend plus que ça, on abort et le user retombe sur saisie
+    // manuelle plutôt que de subir un timeout 504 Vercel après 60s.
+    signal: AbortSignal.timeout(35000),
   })
 
   if (!res.ok) {

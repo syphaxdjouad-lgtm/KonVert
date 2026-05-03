@@ -72,9 +72,17 @@ async function scrapeViaFirecrawl(url: string, apiKey: string): Promise<ScrapedP
     },
     body: JSON.stringify({
       url,
-      formats: ['json'],
+      // On demande à la fois 'json' (extraction LLM structurée) ET 'html' :
+      // si l'extraction LLM retourne title vide (page lente / CAPTCHA / structure
+      // inattendue), on parse l'HTML brut nous-mêmes via JSON-LD/og: en fallback.
+      formats: ['json', 'html'],
       proxy: 'stealth',
-      waitFor: 3000,
+      // 8s : AliExpress et Amazon chargent la fiche produit en JS, 3s ne suffit
+      // souvent pas — résultat : Firecrawl scrape la page de splash sans title.
+      waitFor: 8000,
+      // Mobile UA : moins de chance de tomber sur un mur de cookies / CAPTCHA
+      // qui dégrade le rendering. Firecrawl simule l'UA via "mobile" flag.
+      mobile: true,
       jsonOptions: {
         prompt: `Extract the REAL product information visible on this exact e-commerce page.
 
@@ -85,6 +93,7 @@ CRITICAL ANTI-HALLUCINATION RULES:
 - For images: only return REAL product images (high resolution from the product gallery). EXCLUDE icons, loaders (e.g. URLs containing "150x150", ".gif" loaders, "placeholder", "loading"), and tracking pixels.
 - For price: include the currency symbol exactly as shown on the page (€/£/$).
 - For rating: only the numeric rating actually displayed (e.g. 4.7), not invented.
+- The product title may be labeled "name", "productName", "productTitle", "title" or "h1" on the page — return whatever is the most prominent product name.
 
 Return: title, description, price, original_price (if discount visible), images (array of full URLs), rating, reviews_count.`,
         schema: {
@@ -101,26 +110,78 @@ Return: title, description, price, original_price (if discount visible), images 
         },
       },
     }),
-    signal: AbortSignal.timeout(45000),
+    signal: AbortSignal.timeout(55000),
   })
 
-  if (!res.ok) throw new Error(`Firecrawl erreur ${res.status}`)
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '')
+    throw new Error(`Firecrawl HTTP ${res.status} ${res.statusText}${txt ? ` — ${txt.slice(0, 200)}` : ''}`)
+  }
 
   const body = await res.json()
   const item = body?.data?.json
+  const html = body?.data?.html as string | undefined
 
-  if (!item?.title) throw new Error('Firecrawl — titre introuvable')
+  // 1. Cas idéal : LLM extraction OK avec title
+  if (item?.title) {
+    return {
+      title:          item.title || '',
+      description:    item.description || '',
+      images:         Array.isArray(item.images) ? item.images.slice(0, 8) : [],
+      price:          item.price?.toString() || null,
+      original_price: item.original_price?.toString() || null,
+      variants:       [],
+      rating:         item.rating || null,
+      reviews_count:  item.reviews_count || null,
+      source_url:     url,
+    }
+  }
+
+  // 2. Fallback : LLM a retourné title vide → on parse l'HTML brut récupéré
+  // par Firecrawl (JSON-LD prioritaire, og:title ensuite). C'est plus fiable
+  // que le LLM quand la page a une structure inhabituelle ou charge lentement.
+  if (html) {
+    const fromHtml = parseProductFromHtml(html)
+    if (fromHtml?.title) {
+      console.log('[scraper] Firecrawl JSON vide → fallback HTML parsing OK')
+      return { ...fromHtml, source_url: url }
+    }
+  }
+
+  throw new Error('Firecrawl — titre introuvable (LLM extraction vide + HTML sans schema/og:title)')
+}
+
+// Parser HTML mutualisé : JSON-LD prioritaire, sinon og:title + h1.
+// Utilisé à la fois par scrapeViaFirecrawl (fallback HTML) et scrapeViaFetch.
+function parseProductFromHtml(html: string): Omit<ScrapedProduct, 'source_url'> | null {
+  // 1. JSON-LD schema.org
+  const jsonLd = extractJsonLdProduct(html)
+  if (jsonLd && jsonLd.title) return jsonLd
+
+  // 2. og:title + og:image + og:description
+  const getMeta = (name: string): string => {
+    const m = html.match(new RegExp(`<meta[^>]+(?:name|property)=["']${name}["'][^>]+content=["']([^"']+)["']`, 'i'))
+      || html.match(new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:name|property)=["']${name}["']`, 'i'))
+    return m?.[1] || ''
+  }
+
+  const titleMatch = html.match(/<h1[^>]*>([^<]+)<\/h1>/i) || html.match(/<title>([^<]+)<\/title>/i)
+  const title = titleMatch?.[1]?.trim() || getMeta('og:title') || ''
+  if (!title) return null
+
+  const description = getMeta('og:description') || getMeta('description')
+  const image = getMeta('og:image')
+  const price = getMeta('product:price:amount') || getMeta('og:price:amount') || null
 
   return {
-    title:          item.title || '',
-    description:    item.description || '',
-    images:         Array.isArray(item.images) ? item.images.slice(0, 8) : [],
-    price:          item.price?.toString() || null,
-    original_price: item.original_price?.toString() || null,
+    title:          title.slice(0, 200),
+    description:    description.slice(0, 1000),
+    images:         image ? [image] : [],
+    price,
+    original_price: null,
     variants:       [],
-    rating:         item.rating || null,
-    reviews_count:  item.reviews_count || null,
-    source_url:     url,
+    rating:         null,
+    reviews_count:  null,
   }
 }
 
@@ -142,40 +203,9 @@ async function scrapeViaFetch(url: string): Promise<ScrapedProduct> {
   if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`)
 
   const html = await res.text()
-
-  // 1. Tentative JSON-LD (Amazon, AliExpress, Shopify, Etsy l'exposent)
-  const jsonLd = extractJsonLdProduct(html)
-  if (jsonLd && jsonLd.title) {
-    return { ...jsonLd, source_url: url }
-  }
-
-  // 2. Fallback meta-tags Open Graph
-  const getMetaContent = (name: string): string => {
-    const match = html.match(new RegExp(`<meta[^>]+(?:name|property)=["']${name}["'][^>]+content=["']([^"']+)["']`, 'i'))
-      || html.match(new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:name|property)=["']${name}["']`, 'i'))
-    return match?.[1] || ''
-  }
-
-  const titleMatch = html.match(/<h1[^>]*>([^<]+)<\/h1>/i) || html.match(/<title>([^<]+)<\/title>/i)
-  const title = titleMatch?.[1]?.trim() || getMetaContent('og:title') || ''
-
-  if (!title) throw new Error('Aucun titre trouvé (page bloquée ou structure non reconnue)')
-
-  const description = getMetaContent('og:description') || getMetaContent('description')
-  const image = getMetaContent('og:image')
-  const price = getMetaContent('product:price:amount') || getMetaContent('og:price:amount') || null
-
-  return {
-    title:          title.slice(0, 200),
-    description:    description.slice(0, 1000),
-    images:         image ? [image] : [],
-    price,
-    original_price: null,
-    variants:       [],
-    rating:         null,
-    reviews_count:  null,
-    source_url:     url,
-  }
+  const parsed = parseProductFromHtml(html)
+  if (!parsed) throw new Error('Aucun titre trouvé (page bloquée ou structure non reconnue)')
+  return { ...parsed, source_url: url }
 }
 
 // ─── JSON-LD parser (schema.org Product) ─────────────────────────────────────

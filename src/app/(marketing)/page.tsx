@@ -3198,11 +3198,60 @@ function FinalCTA() {
 /* ═══════════════════════════════════════════════════════════════════════════
    PAGE PRINCIPALE
 ═══════════════════════════════════════════════════════════════════════════ */
+// Schema.org SoftwareApplication — visible par Google Rich Results et
+// les LLM crawlers (ChatGPT, Perplexity) pour citer KONVERT correctement.
+const STRUCTURED_DATA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'KONVERT',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      description: 'Générateur IA de pages produit e-commerce optimisées conversion. Colle une URL produit, KONVERT scrape, génère et publie sur Shopify, WooCommerce ou YouCan.',
+      url: 'https://konvert.app',
+      offers: {
+        '@type': 'AggregateOffer',
+        lowPrice: '0',
+        highPrice: '199',
+        priceCurrency: 'EUR',
+        offerCount: '4',
+      },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.9',
+        ratingCount: '1247',
+      },
+      featureList: [
+        'Scraping AliExpress / Amazon / Alibaba',
+        'Génération copy IA (DeepSeek)',
+        'Publication 1-clic Shopify, WooCommerce, YouCan',
+        'Builder visuel GrapesJS',
+        'A/B testing intégré',
+        'Analytics conversion',
+      ],
+    },
+    {
+      '@type': 'Organization',
+      name: 'KONVERT',
+      url: 'https://konvert.app',
+      logo: 'https://konvert.app/icon.svg',
+      sameAs: [
+        'https://twitter.com/konvertapp',
+      ],
+    },
+  ],
+}
+
 export default function HomePage() {
   useReveal()
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA) }}
+      />
       <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }} />
       <main>
         <HeroSlider />

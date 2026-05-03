@@ -391,22 +391,47 @@ function PageRow({ page, last }: { page: Page; last: boolean }) {
 
 function EmptyStateNoPages() {
   return (
-    <div className="text-center py-24 rounded-2xl" style={{ border: '2px dashed #e5e7eb', background: '#fff' }}>
-      <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(124,58,237,0.08)' }}>
-        <Zap className="w-8 h-8" style={{ color: '#7c3aed' }} />
+    <div className="text-center py-20 rounded-3xl relative overflow-hidden" style={{ border: '1px solid #e5e7eb', background: 'linear-gradient(180deg, #fafaff 0%, #ffffff 100%)' }}>
+      {/* Halo décoratif */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)' }} aria-hidden />
+
+      <div className="relative">
+        <div className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6" style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 12px 40px rgba(124,58,237,0.3)' }}>
+          <Zap className="w-10 h-10 text-white" />
+        </div>
+
+        <h3 className="font-black text-2xl mb-2" style={{ color: '#111', letterSpacing: '-0.02em' }}>Crée ta première page</h3>
+        <p className="text-sm mb-8 max-w-md mx-auto leading-relaxed" style={{ color: '#6b7280' }}>
+          Colle une URL produit ou saisis-la manuellement. L&apos;IA génère ta landing optimisée conversion en 30 secondes.
+        </p>
+
+        {/* Étapes — visuel rapide */}
+        <div className="flex items-center justify-center gap-2 mb-8 text-xs flex-wrap px-4" style={{ color: '#6b7280' }}>
+          <span className="px-3 py-1.5 rounded-full font-bold" style={{ background: '#f3f0ff', color: '#7c3aed' }}>1. URL produit</span>
+          <span aria-hidden>→</span>
+          <span className="px-3 py-1.5 rounded-full font-bold" style={{ background: '#f3f0ff', color: '#7c3aed' }}>2. Style</span>
+          <span aria-hidden>→</span>
+          <span className="px-3 py-1.5 rounded-full font-bold" style={{ background: '#f3f0ff', color: '#7c3aed' }}>3. Publie</span>
+        </div>
+
+        <div className="flex items-center justify-center gap-3 flex-wrap">
+          <Link
+            href="/dashboard/new"
+            className="inline-flex items-center gap-2 text-white font-bold text-sm py-3 px-6 rounded-xl transition-all hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 4px 14px rgba(124,58,237,0.35)' }}
+          >
+            <Plus className="w-4 h-4" />
+            Créer ma première page
+          </Link>
+          <Link
+            href="/templates"
+            className="inline-flex items-center gap-2 font-bold text-sm py-3 px-6 rounded-xl transition-all hover:bg-gray-50"
+            style={{ background: '#fff', color: '#374151', border: '1px solid #e5e7eb' }}
+          >
+            Voir des exemples
+          </Link>
+        </div>
       </div>
-      <h3 className="font-black text-lg mb-2" style={{ color: '#111' }}>Aucune page encore</h3>
-      <p className="text-sm mb-8 max-w-xs mx-auto" style={{ color: '#6b7280' }}>
-        Colle une URL produit AliExpress, Amazon ou Alibaba et génère ta landing en 30 secondes.
-      </p>
-      <Link
-        href="/dashboard/new"
-        className="inline-flex items-center gap-2 text-white font-bold text-sm py-3 px-6 rounded-xl transition-all hover:opacity-90"
-        style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 4px 14px rgba(124,58,237,0.35)' }}
-      >
-        <Plus className="w-4 h-4" />
-        Créer ma première page
-      </Link>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { PLAN_LIMITS } from '@/types'
 import Link from 'next/link'
 import { User, CreditCard, Shield, Trash2, Zap, ArrowUpRight } from 'lucide-react'
 import SettingsClient from './SettingsClient'
+import ManageBillingButton from './ManageBillingButton'
 
 export default async function SettingsPage() {
   const supabase = await createClient()
@@ -17,7 +18,7 @@ export default async function SettingsPage() {
 
   const profile = profileRes.data
   const sub     = subRes.data
-  const plan    = profile?.plan || 'starter'
+  const plan    = profile?.plan || 'free'
   const limits  = PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS]
   const used    = profile?.pages_used_this_month || 0
   const pct     = Math.min(Math.round((used / limits.pages) * 100), 100)
@@ -141,6 +142,21 @@ export default async function SettingsPage() {
               Quota réinitialisé le 1er de chaque mois
             </p>
           </div>
+
+          {/* Gestion abonnement Stripe — uniquement si l'user a un sub actif */}
+          {sub?.stripe_customer_id && (
+            <div className="mt-4 pt-4 border-t" style={{ borderColor: '#E4E2EE' }}>
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-[13px] font-semibold" style={{ color: '#0f0f1e' }}>Annuler ou modifier l&apos;abonnement</div>
+                  <div className="text-[12px]" style={{ color: '#6b6b84' }}>
+                    Carte, factures, résiliation — via le portail sécurisé Stripe
+                  </div>
+                </div>
+                <ManageBillingButton />
+              </div>
+            </div>
+          )}
         </section>
 
         {/* ── SÉCURITÉ ── */}

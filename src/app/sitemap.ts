@@ -125,6 +125,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.2,
     },
+    {
+      url: `${APP_URL}/legal/cookies`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    },
+    {
+      url: `${APP_URL}/legal/rgpd`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    },
   ]
 
   const blogRoutes: MetadataRoute.Sitemap = allArticles.map((article) => ({

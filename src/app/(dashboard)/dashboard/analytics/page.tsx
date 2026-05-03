@@ -132,10 +132,21 @@ export default async function AnalyticsPage() {
 
       {/* Tableau pages */}
       {list.length === 0 ? (
-        <div className="text-center py-20 rounded-2xl" style={{ background: '#fff', border: '2px dashed #e5e7eb' }}>
-          <BarChart2 className="w-10 h-10 mx-auto mb-3" style={{ color: '#d1d5db' }} />
-          <p className="font-bold" style={{ color: '#374151' }}>Aucune page publiée pour l&apos;instant</p>
-          <p className="text-sm mt-1" style={{ color: '#9ca3af' }}>Publie une page sur Shopify ou WooCommerce pour voir les stats</p>
+        <div className="text-center py-20 rounded-2xl relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #fafaff 0%, #ffffff 100%)', border: '1px solid #e5e7eb' }}>
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 8px 28px rgba(124,58,237,0.25)' }}>
+            <BarChart2 className="w-8 h-8 text-white" />
+          </div>
+          <p className="font-black text-lg mb-1.5" style={{ color: '#111' }}>Tes stats arriveront ici</p>
+          <p className="text-sm mb-6 max-w-sm mx-auto" style={{ color: '#6b7280' }}>
+            Vues, clics, CTR et scroll-depth — automatiquement collectés dès qu&apos;une page est publiée et visitée.
+          </p>
+          <a
+            href="/dashboard/new"
+            className="inline-flex items-center gap-2 text-white font-bold text-sm py-2.5 px-5 rounded-xl transition-all hover:opacity-90"
+            style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 4px 14px rgba(124,58,237,0.3)' }}
+          >
+            Créer une page à publier
+          </a>
         </div>
       ) : (
         <div className="rounded-2xl overflow-hidden" style={{ background: '#fff', border: '1px solid #e5e7eb' }}>

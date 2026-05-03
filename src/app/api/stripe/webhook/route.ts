@@ -54,6 +54,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Signature invalide' }, { status: 400 })
   }
 
+  // Idempotence : Stripe peut rejouer un event après un timeout. Sans dédup,
+  // on doublonne les events PostHog et on incrémente subscriptions à tort.
+  // La table processed_stripe_events stocke event.id avec contrainte unique :
+  // un INSERT en doublon retourne une erreur 23505 → on skip.
+  const { error: dupErr } = await supabaseAdmin
+    .from('processed_stripe_events')
+    .insert({ event_id: event.id, event_type: event.type })
+
+  if (dupErr?.code === '23505') {
+    // Déjà traité — on retourne 200 pour que Stripe arrête de retry.
+    return NextResponse.json({ received: true, deduped: true })
+  }
+  if (dupErr) {
+    // Erreur autre que duplicate (table absente, RLS, etc.). On log mais on
+    // continue le traitement pour ne pas bloquer le webhook.
+    console.warn('[webhook] processed_stripe_events insert:', dupErr.message)
+  }
+
   const ph = getPostHog()
 
   try {

@@ -75,6 +75,10 @@ export async function GET(req: NextRequest) {
     const daysPassed = Math.floor((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24))
     const emailsSent: number[] = preview.emails_sent ?? []
 
+    // Sentinel -1 : utilisateur désinscrit via /unsubscribe → on n'envoie plus rien.
+    // Aligne le comportement sur cron/trial-emails (même convention RGPD).
+    if (emailsSent.includes(-1)) { skipped++; continue }
+
     // Trouver quel email envoyer aujourd'hui
     const dayToSend = PREVIEW_DAYS.find(
       (d) => d <= daysPassed && !emailsSent.includes(d)

@@ -199,7 +199,7 @@ function NewPageInner() {
   const [stores,         setStores]         = useState<any[]>([])
   const [publishOpen,    setPublishOpen]     = useState(false)
   const [publishing,     setPublishing]      = useState<string | null>(null)
-  const [publishSuccess, setPublishSuccess]  = useState<string | null>(null)
+  const [publishSuccess, setPublishSuccess]  = useState<{ name: string; url?: string } | null>(null)
   const [publishError,   setPublishError]    = useState<string | null>(null)
 
   // ── Tracking début wizard (1 seule fois par mount) ──
@@ -272,7 +272,9 @@ function NewPageInner() {
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error)
-      setPublishSuccess(store.name)
+      // L'API push renvoie data.url (Shopify/Woo/YouCan) — on l'expose dans
+      // le toast pour que l'user puisse cliquer "Voir la page publiée".
+      setPublishSuccess({ name: store.name, url: json.data?.url })
       setPublishOpen(false)
       track.pagePublished(store.platform as 'shopify' | 'woocommerce' | 'youcan')
     } catch (err) {
@@ -587,12 +589,35 @@ function NewPageInner() {
         )}
         {publishSuccess && (
           <div
-            className="fixed bottom-4 right-4 flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold"
-            style={{ background: 'rgba(22,163,74,0.1)', border: '1px solid rgba(22,163,74,0.3)', color: '#166534' }}
-            onClick={() => setPublishSuccess(null)}
+            className="fixed bottom-4 right-4 flex items-start gap-3 rounded-xl px-4 py-3 text-sm max-w-sm shadow-lg"
+            style={{ background: '#fff', border: '1px solid rgba(22,163,74,0.3)', color: '#166534' }}
           >
-            <CheckCircle2 className="w-4 h-4" />
-            Publié sur {publishSuccess} !
+            <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#16a34a' }} />
+            <div className="flex-1">
+              <div className="font-bold mb-0.5">Publié sur {publishSuccess.name} !</div>
+              {publishSuccess.url ? (
+                <a
+                  href={publishSuccess.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs font-semibold underline"
+                  style={{ color: '#16a34a' }}
+                >
+                  Voir la page publiée
+                  <ChevronRight className="w-3 h-3" />
+                </a>
+              ) : (
+                <span className="text-xs" style={{ color: '#6b7280' }}>Disponible dans ton admin store</span>
+              )}
+            </div>
+            <button
+              onClick={() => setPublishSuccess(null)}
+              className="flex-shrink-0 transition-opacity hover:opacity-70"
+              style={{ color: '#9ca3af' }}
+              aria-label="Fermer"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         )}
         {publishError && (

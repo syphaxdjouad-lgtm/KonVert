@@ -598,6 +598,15 @@ function NewPageInner() {
             {error}
           </div>
         )}
+        {partialWarning && (
+          <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-xl bg-amber-50 border border-amber-200 text-amber-900 rounded-xl px-4 py-3 text-sm shadow-lg flex items-start gap-2">
+            <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+            <span className="flex-1">{partialWarning}</span>
+            <button onClick={() => setPartialWarning(null)} className="text-amber-600 hover:text-amber-900" aria-label="Fermer">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
         {saving && (
           <div className="fixed bottom-4 right-4 bg-white border border-gray-200 rounded-xl p-3 text-sm flex items-center gap-2">
             <Loader2 className="w-4 h-4 animate-spin text-purple-600" />

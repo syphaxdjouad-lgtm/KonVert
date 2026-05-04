@@ -6,13 +6,9 @@ import { generateUnsubscribeToken } from './unsubscribe-token'
 
 function unsubscribeUrl(email: string): string {
   const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app').trim()
-  try {
-    const token = generateUnsubscribeToken(email)
-    const qs = new URLSearchParams({ email, token })
-    return `${appUrl}/api/email/unsubscribe?${qs.toString()}`
-  } catch {
-    return `${appUrl}/unsubscribe?email=${encodeURIComponent(email)}`
-  }
+  const token = generateUnsubscribeToken(email)
+  const qs = new URLSearchParams({ email, token })
+  return `${appUrl}/api/email/unsubscribe?${qs.toString()}`
 }
 
 function layout(content: string, recipientEmail: string) {

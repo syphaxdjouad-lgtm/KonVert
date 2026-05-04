@@ -27,16 +27,11 @@ async function unsubscribeEmail(email: string) {
 export async function POST(req: NextRequest) {
   try {
     const { email, token } = await req.json()
-    if (!email || typeof email !== 'string') {
-      return NextResponse.json({ error: 'Email requis' }, { status: 400 })
+    if (!email || typeof email !== 'string' || !token || typeof token !== 'string') {
+      return NextResponse.json({ error: 'Email et token requis' }, { status: 400 })
     }
-    // Si token fourni, on le vérifie. Sinon on accepte quand même mais le
-    // middleware applique 5 req/min/IP — un attaquant peut pas désabonner
-    // plus de 5 emails/min sans IP rotation.
-    if (token && typeof token === 'string') {
-      if (!verifyUnsubscribeToken(email, token)) {
-        return NextResponse.json({ error: 'Token invalide' }, { status: 403 })
-      }
+    if (!verifyUnsubscribeToken(email, token)) {
+      return NextResponse.json({ error: 'Token invalide' }, { status: 403 })
     }
     await unsubscribeEmail(email)
     return NextResponse.json({ unsubscribed: true })

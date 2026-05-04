@@ -8,6 +8,7 @@ import Link from 'next/link'
 function UnsubscribeContent() {
   const searchParams = useSearchParams()
   const emailParam   = searchParams.get('email') || ''
+  const tokenParam   = searchParams.get('token') || ''
   const okParam      = searchParams.get('ok') === '1'
 
   const [email,    setEmail]    = useState(emailParam)
@@ -17,13 +18,18 @@ function UnsubscribeContent() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email) return
+    if (!tokenParam) {
+      setStatus('error')
+      setMessage('Lien de désinscription invalide. Utilise le lien complet reçu dans ton email.')
+      return
+    }
     setStatus('loading')
 
     try {
       const res  = await fetch('/api/email/unsubscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, token: tokenParam }),
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Erreur')

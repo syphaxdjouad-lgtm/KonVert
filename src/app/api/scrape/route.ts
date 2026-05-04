@@ -40,6 +40,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       data: product,
+      // partial: true → l'extraction est incomplète, le front affiche un
+      // warning et propose à l'user de compléter manuellement avant génération.
+      partial: product.partial === true,
+      warning: product.scrape_warning,
       meta: {
         duration_ms: duration,
         platform: parsedUrl.hostname,

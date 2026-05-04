@@ -2,19 +2,18 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-
-const STORAGE_KEY = 'konvert-cookie-consent'
+import { CONSENT_KEY, setConsent } from '@/lib/consent'
 
 export default function CookieBanner() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY)
+    const stored = localStorage.getItem(CONSENT_KEY)
     if (!stored) setVisible(true)
   }, [])
 
   function handleChoice(accepted: boolean) {
-    localStorage.setItem(STORAGE_KEY, accepted ? 'accepted' : 'refused')
+    setConsent(accepted ? 'accepted' : 'refused')
     setVisible(false)
   }
 

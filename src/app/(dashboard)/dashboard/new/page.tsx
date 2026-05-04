@@ -193,6 +193,10 @@ function NewPageInner() {
   const [html,        setHtml]        = useState('')
   const [landingData, setLandingData] = useState<LandingPageData | null>(null)
   const [error,       setError]       = useState<string | null>(null)
+  // Warning non-bloquant : affiché quand le scrape a réussi en mode dégradé
+  // (titre OU images récupérées mais pas tout). L'user voit la page générée
+  // et un message lui suggère de relire/corriger.
+  const [partialWarning, setPartialWarning] = useState<string | null>(null)
   const [saving,      setSaving]      = useState(false)
 
   // Publication vers store

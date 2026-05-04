@@ -2,7 +2,21 @@
 // 5 emails sur 7 jours — objectif : convertir en plan payant
 // Déclencheur : génération d'une page gratuite sans compte
 
-function layout(content: string) {
+import { generateUnsubscribeToken } from './unsubscribe-token'
+
+function unsubscribeUrl(email: string): string {
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app').trim()
+  try {
+    const token = generateUnsubscribeToken(email)
+    const qs = new URLSearchParams({ email, token })
+    return `${appUrl}/api/email/unsubscribe?${qs.toString()}`
+  } catch {
+    return `${appUrl}/unsubscribe?email=${encodeURIComponent(email)}`
+  }
+}
+
+function layout(content: string, recipientEmail: string) {
+  const unsubUrl = unsubscribeUrl(recipientEmail)
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -31,7 +45,7 @@ function layout(content: string) {
         <tr><td style="padding-top:24px;text-align:center;">
           <p style="margin:0;font-size:12px;color:rgba(167,139,250,0.4);">
             Tu reçois cet email car tu as généré une page gratuite sur KONVERT.<br/>
-            <a href="https://konvert.app/unsubscribe" style="color:rgba(167,139,250,0.6);">Se désabonner</a>
+            <a href="${unsubUrl}" style="color:rgba(167,139,250,0.6);">Se désabonner</a>
           </p>
         </td></tr>
 
@@ -61,7 +75,7 @@ function badge(text: string) {
 }
 
 // ─── EMAIL J+0 — Livraison immédiate ─────────────────────────────────────────
-export function emailPreviewDelivery(name: string, previewUrl: string, productTitle: string) {
+export function emailPreviewDelivery(name: string, previewUrl: string, productTitle: string, email: string) {
   return {
     subject: `Voici ta page produit — ${productTitle}`,
     html: layout(`
@@ -82,12 +96,12 @@ export function emailPreviewDelivery(name: string, previewUrl: string, productTi
         ${btn('Voir ma page →', previewUrl)}
       </div>
       ${p(`<small style="color:rgba(167,139,250,0.5);">Ta page est sauvegardée pendant 7 jours.</small>`)}
-    `),
+    `, email),
   }
 }
 
 // ─── EMAIL J+1 — Valeur pédagogique ──────────────────────────────────────────
-export function emailPreviewDay1(name: string, previewUrl: string, productTitle: string) {
+export function emailPreviewDay1(name: string, previewUrl: string, productTitle: string, email: string) {
   return {
     subject: `Pourquoi cette page va mieux convertir que la tienne`,
     html: layout(`
@@ -113,12 +127,12 @@ export function emailPreviewDay1(name: string, previewUrl: string, productTitle:
       <div style="text-align:center;margin-top:28px;">
         ${btn('Publier cette page →', previewUrl)}
       </div>
-    `),
+    `, email),
   }
 }
 
 // ─── EMAIL J+3 — Social proof ─────────────────────────────────────────────────
-export function emailPreviewDay3(name: string, previewUrl: string, productTitle: string) {
+export function emailPreviewDay3(name: string, previewUrl: string, productTitle: string, email: string) {
   return {
     subject: `${name}, il a fait pareil que toi — voilà ce qui s'est passé`,
     html: layout(`
@@ -137,12 +151,12 @@ export function emailPreviewDay3(name: string, previewUrl: string, productTitle:
         ${btn('Activer mon compte Starter →', 'https://konvert.app/pricing')}
       </div>
       ${p(`<small style="color:rgba(167,139,250,0.5);">Ou <a href="${previewUrl}" style="color:#a78bfa;">revoir ma page d'abord</a>.</small>`)}
-    `),
+    `, email),
   }
 }
 
 // ─── EMAIL J+5 — Mathématiques de la douleur ─────────────────────────────────
-export function emailPreviewDay5(name: string, previewUrl: string) {
+export function emailPreviewDay5(name: string, previewUrl: string, email: string) {
   return {
     subject: `39€ vs ce que tu perds chaque semaine`,
     html: layout(`
@@ -166,12 +180,12 @@ export function emailPreviewDay5(name: string, previewUrl: string) {
         ${btn('Débloquer pour 39€/mois →', 'https://konvert.app/pricing')}
       </div>
       ${p(`<small style="color:rgba(167,139,250,0.5);">Ta page attend encore : <a href="${previewUrl}" style="color:#a78bfa;">la voir</a>.</small>`)}
-    `),
+    `, email),
   }
 }
 
 // ─── EMAIL J+7 — Dernière chance ──────────────────────────────────────────────
-export function emailPreviewDay7(name: string, previewUrl: string, productTitle: string) {
+export function emailPreviewDay7(name: string, previewUrl: string, productTitle: string, email: string) {
   return {
     subject: `On supprime ta page dans 24h`,
     html: layout(`
@@ -184,6 +198,6 @@ export function emailPreviewDay7(name: string, previewUrl: string, productTitle:
       </div>
 
       ${p(`<small style="color:rgba(167,139,250,0.5);">Ou <a href="${previewUrl}" style="color:#a78bfa;">revoir ma page une dernière fois</a>.</small>`)}
-    `),
+    `, email),
   }
 }

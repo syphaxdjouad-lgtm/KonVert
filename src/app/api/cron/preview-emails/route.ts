@@ -22,13 +22,14 @@ function getEmailForDay(
   day: PreviewDay,
   name: string,
   previewUrl: string,
-  productTitle: string
+  productTitle: string,
+  email: string
 ) {
   switch (day) {
-    case 1: return emailPreviewDay1(name, previewUrl, productTitle)
-    case 3: return emailPreviewDay3(name, previewUrl, productTitle)
-    case 5: return emailPreviewDay5(name, previewUrl)
-    case 7: return emailPreviewDay7(name, previewUrl, productTitle)
+    case 1: return emailPreviewDay1(name, previewUrl, productTitle, email)
+    case 3: return emailPreviewDay3(name, previewUrl, productTitle, email)
+    case 5: return emailPreviewDay5(name, previewUrl, email)
+    case 7: return emailPreviewDay7(name, previewUrl, productTitle, email)
   }
 }
 
@@ -89,7 +90,7 @@ export async function GET(req: NextRequest) {
     try {
       const name = preview.name || preview.email.split('@')[0]
       const previewUrl = `${appUrl}/preview/${preview.id}`
-      const { subject, html } = getEmailForDay(dayToSend as PreviewDay, name, previewUrl, preview.product_title)
+      const { subject, html } = getEmailForDay(dayToSend as PreviewDay, name, previewUrl, preview.product_title, preview.email)
 
       // Marquer AVANT d'envoyer pour éviter les doublons
       const { error: updateErr } = await supabaseAdmin

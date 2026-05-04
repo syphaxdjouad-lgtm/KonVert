@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KONVERT — Before/After Creatives</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #0a0a12; color: #fff; }
+
+  .page-header { text-align: center; padding: 60px 24px 40px; }
+  .page-header h1 { font-size: 32px; font-weight: 900; margin-bottom: 8px; }
+  .page-header p { color: #8b8b9e; font-size: 14px; }
+  .page-header .instructions { background: rgba(91,71,245,0.1); border: 1px solid rgba(91,71,245,0.25); border-radius: 12px; padding: 16px 24px; margin: 24px auto 0; max-width: 600px; text-align: left; font-size: 13px; color: #c4b5fd; }
+
+  /* ── CREATIVE CONTAINER ── */
+  .creative-section { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+  .creative-section h2 { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: #fff; }
+  .creative-section .niche { font-size: 12px; font-weight: 700; color: #7c6af7; background: rgba(91,71,245,0.15); padding: 4px 12px; border-radius: 6px; display: inline-block; margin-bottom: 20px; }
+
+  /* ── FORMAT 1 : CARRE 1080x1080 (Meta Feed) ── */
+  .square-creative {
+    width: 1080px; height: 1080px;
+    display: flex; position: relative; overflow: hidden;
+    border-radius: 16px; margin-bottom: 40px;
+    transform: scale(0.55); transform-origin: top left;
+    margin-right: -486px; margin-bottom: -440px;
+  }
+
+  /* BEFORE half */
+  .before-half {
+    width: 50%; height: 100%; background: #f2f2f5; position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .before-half .label-bar {
+    background: #e53e3e; color: #fff; font-weight: 800; font-size: 18px;
+    text-align: center; padding: 14px; letter-spacing: 2px;
+  }
+
+  /* AFTER half */
+  .after-half {
+    width: 50%; height: 100%; position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .after-half .label-bar {
+    background: #5B47F5; color: #fff; font-weight: 800; font-size: 18px;
+    text-align: center; padding: 14px; letter-spacing: 2px;
+  }
+
+  /* Center divider */
+  .center-vs {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 56px; height: 56px; background: #1a1a2e; border: 3px solid #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 16px; color: #fff; z-index: 10;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+
+  /* Bottom bar */
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(135deg, #1a1a2e, #0f0f1a);
+    padding: 24px 32px; display: flex; align-items: center; justify-content: space-between;
+    z-index: 5;
+  }
+  .bottom-bar .logo-text { font-weight: 900; font-size: 28px; color: #fff; letter-spacing: -1px; }
+  .bottom-bar .logo-text span { color: #5B47F5; }
+  .bottom-bar .tagline { font-size: 14px; color: #8b8b9e; font-weight: 600; }
+  .bottom-bar .cta-badge {
+    background: #5B47F5; color: #fff; font-weight: 800; font-size: 14px;
+    padding: 10px 24px; border-radius: 10px;
+  }
+
+  /* ── BEFORE : Ugly Shopify page mock ── */
+  .ugly-page { flex: 1; padding: 20px; overflow: hidden; }
+  .ugly-page .ugly-img { width: 100%; height: 260px; background: #d1d5db; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .ugly-page .ugly-img span { font-size: 60px; opacity: 0.3; }
+  .ugly-page .ugly-title { font-size: 18px; font-weight: 600; color: #374151; margin-bottom: 6px; }
+  .ugly-page .ugly-price { font-size: 16px; color: #6b7280; margin-bottom: 12px; }
+  .ugly-page .ugly-desc { font-size: 12px; color: #9ca3af; line-height: 1.5; margin-bottom: 16px; }
+  .ugly-page .ugly-btn { background: #e5e7eb; color: #9ca3af; font-size: 13px; padding: 10px 20px; border-radius: 4px; text-align: center; font-weight: 500; }
+  .ugly-page .ugly-line { height: 8px; background: #e5e7eb; border-radius: 4px; margin-bottom: 8px; }
+  .ugly-page .ugly-line.w60 { width: 60%; }
+  .ugly-page .ugly-line.w80 { width: 80%; }
+  .ugly-page .ugly-line.w40 { width: 40%; }
+  .ugly-page .ugly-stars { color: #d1d5db; font-size: 14px; margin-bottom: 8px; }
+  .ugly-page .ugly-problem { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #ef4444; margin-top: 8px; font-weight: 600; }
+
+  /* ── AFTER : KONVERT page mock ── */
+  .konvert-page { flex: 1; overflow: hidden; }
+
+  /* BEAUTY niche */
+  .konvert-beauty { background: linear-gradient(180deg, #fdf2f8, #fff); }
+  .konvert-beauty .kv-hero { background: linear-gradient(135deg, #ec4899, #f472b6); padding: 28px 20px; text-align: center; }
+  .konvert-beauty .kv-hero h3 { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px; line-height: 1.2; }
+  .konvert-beauty .kv-hero p { font-size: 12px; color: rgba(255,255,255,0.8); }
+  .konvert-beauty .kv-hero .kv-price { margin-top: 12px; }
+  .konvert-beauty .kv-hero .kv-price .now { font-size: 28px; font-weight: 900; color: #fff; }
+  .konvert-beauty .kv-hero .kv-price .was { font-size: 14px; color: rgba(255,255,255,0.5); text-decoration: line-through; margin-left: 8px; }
+  .konvert-beauty .kv-cta { margin: 12px 20px; background: #1a1a2e; color: #fff; text-align: center; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 14px; }
+
+  /* TECH niche */
+  .konvert-tech { background: #0f0f1a; }
+  .konvert-tech .kv-hero { background: linear-gradient(135deg, #1e1e3a, #2d1b69); padding: 28px 20px; text-align: center; }
+  .konvert-tech .kv-hero h3 { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px; line-height: 1.2; }
+  .konvert-tech .kv-hero p { font-size: 12px; color: rgba(255,255,255,0.6); }
+  .konvert-tech .kv-hero .kv-price .now { font-size: 28px; font-weight: 900; color: #7c6af7; }
+  .konvert-tech .kv-hero .kv-price .was { font-size: 14px; color: rgba(255,255,255,0.3); text-decoration: line-through; margin-left: 8px; }
+  .konvert-tech .kv-cta { margin: 12px 20px; background: #5B47F5; color: #fff; text-align: center; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 14px; }
+
+  /* FITNESS niche */
+  .konvert-fitness { background: linear-gradient(180deg, #0f172a, #1e293b); }
+  .konvert-fitness .kv-hero { background: linear-gradient(135deg, #f97316, #ea580c); padding: 28px 20px; text-align: center; }
+  .konvert-fitness .kv-hero h3 { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px; line-height: 1.2; }
+  .konvert-fitness .kv-hero p { font-size: 12px; color: rgba(255,255,255,0.8); }
+  .konvert-fitness .kv-hero .kv-price .now { font-size: 28px; font-weight: 900; color: #fff; }
+  .konvert-fitness .kv-hero .kv-price .was { font-size: 14px; color: rgba(255,255,255,0.5); text-decoration: line-through; margin-left: 8px; }
+  .konvert-fitness .kv-cta { margin: 12px 20px; background: #f97316; color: #fff; text-align: center; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 14px; }
+
+  /* FASHION niche */
+  .konvert-fashion { background: #faf8f5; }
+  .konvert-fashion .kv-hero { background: linear-gradient(135deg, #78716c, #57534e); padding: 28px 20px; text-align: center; }
+  .konvert-fashion .kv-hero h3 { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px; line-height: 1.2; }
+  .konvert-fashion .kv-hero p { font-size: 12px; color: rgba(255,255,255,0.7); }
+  .konvert-fashion .kv-hero .kv-price .now { font-size: 28px; font-weight: 900; color: #fff; }
+  .konvert-fashion .kv-hero .kv-price .was { font-size: 14px; color: rgba(255,255,255,0.4); text-decoration: line-through; margin-left: 8px; }
+  .konvert-fashion .kv-cta { margin: 12px 20px; background: #1a1a2e; color: #fff; text-align: center; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 14px; }
+
+  /* HOME niche */
+  .konvert-home { background: linear-gradient(180deg, #fefce8, #fff); }
+  .konvert-home .kv-hero { background: linear-gradient(135deg, #65a30d, #4d7c0f); padding: 28px 20px; text-align: center; }
+  .konvert-home .kv-hero h3 { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px; line-height: 1.2; }
+  .konvert-home .kv-hero p { font-size: 12px; color: rgba(255,255,255,0.8); }
+  .konvert-home .kv-hero .kv-price .now { font-size: 28px; font-weight: 900; color: #fff; }
+  .konvert-home .kv-hero .kv-price .was { font-size: 14px; color: rgba(255,255,255,0.4); text-decoration: line-through; margin-left: 8px; }
+  .konvert-home .kv-cta { margin: 12px 20px; background: #65a30d; color: #fff; text-align: center; padding: 14px; border-radius: 12px; font-weight: 800; font-size: 14px; }
+
+  /* Shared KONVERT sections */
+  .kv-badges { display: flex; gap: 6px; justify-content: center; margin: 12px 20px; flex-wrap: wrap; }
+  .kv-badge { font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 6px; }
+  .kv-benefits { padding: 12px 20px; }
+  .kv-benefit { display: flex; align-items: center; gap: 8px; padding: 8px 0; font-size: 12px; font-weight: 600; }
+  .kv-benefit .check { width: 20px; height: 20px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+  .kv-social { padding: 8px 20px; }
+  .kv-social .stars { color: #fbbf24; font-size: 14px; margin-bottom: 2px; }
+  .kv-social .review { font-size: 11px; font-style: italic; line-height: 1.4; }
+  .kv-social .reviewer { font-size: 10px; font-weight: 700; margin-top: 4px; }
+  .kv-urgency { margin: 8px 20px; padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; text-align: center; }
+
+  /* ── FORMAT 2 : STORY 1080x1920 ── */
+  .story-creative {
+    width: 1080px; height: 1920px; position: relative; overflow: hidden;
+    border-radius: 16px; margin-bottom: 40px;
+    transform: scale(0.35); transform-origin: top left;
+    margin-right: -700px; margin-bottom: -1200px;
+  }
+  .story-creative .story-top {
+    height: 50%; position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .story-creative .story-bottom {
+    height: 50%; position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .story-creative .story-label {
+    font-weight: 900; font-size: 32px; text-align: center; padding: 24px;
+    letter-spacing: 3px;
+  }
+  .story-creative .story-divider {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    background: #fff; padding: 8px 32px; border-radius: 99px; z-index: 10;
+    font-weight: 900; font-size: 20px; color: #1a1a2e;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+  .story-creative .story-bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 100%);
+    padding: 60px 32px 40px; text-align: center;
+  }
+  .story-creative .story-bottom-bar .logo-text { font-size: 36px; font-weight: 900; color: #fff; }
+  .story-creative .story-bottom-bar .logo-text span { color: #5B47F5; }
+  .story-creative .story-bottom-bar .tagline { font-size: 18px; color: #8b8b9e; margin-top: 6px; }
+  .story-creative .story-bottom-bar .cta-badge { display: inline-block; background: #5B47F5; color: #fff; font-weight: 800; font-size: 18px; padding: 14px 40px; border-radius: 14px; margin-top: 16px; }
+
+  .sep { height: 1px; background: #1e1e2e; margin: 20px 0; max-width: 1200px; margin-left: auto; margin-right: auto; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>KONVERT — Before/After Creatives</h1>
+  <p>5 niches x 2 formats (carre + story) = 10 visuels prets a screenshot</p>
+  <div class="instructions">
+    <strong>Comment utiliser :</strong><br>
+    1. Ouvre ce fichier dans Chrome<br>
+    2. Cmd+Shift+4 (Mac) pour capturer chaque visuel<br>
+    3. Utilise directement dans Meta Ads Manager, TikTok, Instagram
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NICHE 1 : BEAUTE / COSMETIQUE
+═══════════════════════════════════════════ -->
+<div class="creative-section">
+  <span class="niche">NICHE 1 — BEAUTE / COSMETIQUE</span>
+  <h2>Format Carre (1080x1080) — Meta Feed</h2>
+
+  <div class="square-creative">
+    <!-- BEFORE -->
+    <div class="before-half">
+      <div class="label-bar">AVANT</div>
+      <div class="ugly-page">
+        <div class="ugly-img"><span>img</span></div>
+        <div class="ugly-title">Serum Vitamine C 30ml</div>
+        <div class="ugly-price">24,99 EUR</div>
+        <div class="ugly-stars">* * * * * (0 avis)</div>
+        <div class="ugly-desc">Ce serum contient de la vitamine C pure concentree a 20%. Appliquer matin et soir sur peau propre. Convient a tous les types de peau. Fabrique en France.</div>
+        <div class="ugly-btn">Ajouter au panier</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Pas de benefices clients</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Aucune preuve sociale</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> CTA generique</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Zero urgence</div>
+      </div>
+    </div>
+
+    <!-- VS -->
+    <div class="center-vs">VS</div>
+
+    <!-- AFTER -->
+    <div class="after-half">
+      <div class="label-bar">APRES KONVERT</div>
+      <div class="konvert-page konvert-beauty">
+        <div class="kv-hero">
+          <h3>Revele l'eclat que ta peau merite</h3>
+          <p>Serum Vitamine C — Resultat visible en 14 jours</p>
+          <div class="kv-price"><span class="now">24,99</span><span class="was">39,99</span></div>
+        </div>
+        <div class="kv-cta">Commander maintenant — Livraison offerte</div>
+        <div class="kv-badges">
+          <span class="kv-badge" style="background:#fce7f3;color:#ec4899">Vegan</span>
+          <span class="kv-badge" style="background:#fce7f3;color:#ec4899">Teste dermatologiquement</span>
+          <span class="kv-badge" style="background:#fce7f3;color:#ec4899">Made in France</span>
+        </div>
+        <div class="kv-benefits">
+          <div class="kv-benefit"><div class="check" style="background:#fce7f3;color:#ec4899">+</div><span style="color:#374151">Reduit les taches brunes en 14 jours</span></div>
+          <div class="kv-benefit"><div class="check" style="background:#fce7f3;color:#ec4899">+</div><span style="color:#374151">Hydrate et protege contre les UV</span></div>
+          <div class="kv-benefit"><div class="check" style="background:#fce7f3;color:#ec4899">+</div><span style="color:#374151">Texture legere, absorption rapide</span></div>
+        </div>
+        <div class="kv-social">
+          <div class="stars">***** </div>
+          <div class="review" style="color:#6b7280">"Ma peau n'a jamais ete aussi lumineuse. Je rachete les yeux fermes."</div>
+          <div class="reviewer" style="color:#374151">— Sarah M., cliente verifiee</div>
+        </div>
+        <div class="kv-urgency" style="background:#fef2f2;color:#ef4444">Il ne reste que 12 unites en stock</div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="bottom-bar">
+      <div><div class="logo-text"><span>KONVERT</span></div><div class="tagline">Page generee en 30 secondes par IA</div></div>
+      <div class="cta-badge">Essai gratuit &rarr;</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NICHE 2 : TECH / GADGETS
+═══════════════════════════════════════════ -->
+<div class="creative-section">
+  <span class="niche">NICHE 2 — TECH / GADGETS</span>
+  <h2>Format Carre (1080x1080) — Meta Feed</h2>
+
+  <div class="square-creative">
+    <div class="before-half">
+      <div class="label-bar">AVANT</div>
+      <div class="ugly-page">
+        <div class="ugly-img"><span>img</span></div>
+        <div class="ugly-title">Ecouteurs Bluetooth Pro X</div>
+        <div class="ugly-price">59,99 EUR</div>
+        <div class="ugly-stars">* * * * * (0 avis)</div>
+        <div class="ugly-desc">Ecouteurs sans fil Bluetooth 5.3 avec reduction de bruit active. Autonomie 30h. Compatible iPhone et Android. Livraison sous 7 jours.</div>
+        <div class="ugly-btn">Ajouter au panier</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Description technique froide</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Pas de comparaison</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Design amateur</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Aucun argument de vente</div>
+      </div>
+    </div>
+    <div class="center-vs">VS</div>
+    <div class="after-half">
+      <div class="label-bar">APRES KONVERT</div>
+      <div class="konvert-page konvert-tech">
+        <div class="kv-hero">
+          <h3>Le son premium. Sans le prix premium.</h3>
+          <p>Ecouteurs Pro X — ANC, 30h d'autonomie, Bluetooth 5.3</p>
+          <div class="kv-price"><span class="now">59,99</span><span class="was">99,99</span></div>
+        </div>
+        <div class="kv-cta">Commander — Livraison Express 48h</div>
+        <div class="kv-badges">
+          <span class="kv-badge" style="background:rgba(124,106,247,0.15);color:#7c6af7">ANC Pro</span>
+          <span class="kv-badge" style="background:rgba(124,106,247,0.15);color:#7c6af7">30h batterie</span>
+          <span class="kv-badge" style="background:rgba(124,106,247,0.15);color:#7c6af7">IPX5</span>
+        </div>
+        <div class="kv-benefits">
+          <div class="kv-benefit"><div class="check" style="background:rgba(124,106,247,0.15);color:#7c6af7">+</div><span style="color:#c4c4d0">Reduction de bruit active — isole-toi du monde</span></div>
+          <div class="kv-benefit"><div class="check" style="background:rgba(124,106,247,0.15);color:#7c6af7">+</div><span style="color:#c4c4d0">30 heures d'autonomie — 1 semaine sans recharger</span></div>
+          <div class="kv-benefit"><div class="check" style="background:rgba(124,106,247,0.15);color:#7c6af7">+</div><span style="color:#c4c4d0">Connexion instantanee — Bluetooth 5.3 ultra stable</span></div>
+        </div>
+        <div class="kv-social">
+          <div class="stars">***** </div>
+          <div class="review" style="color:#8b8b9e">"Meilleur rapport qualite-prix que j'ai teste. Je les porte 8h par jour au bureau."</div>
+          <div class="reviewer" style="color:#c4c4d0">— Thomas D., acheteur verifie</div>
+        </div>
+        <div class="kv-urgency" style="background:rgba(239,68,68,0.1);color:#f87171">Offre -40% expire dans 2h14</div>
+      </div>
+    </div>
+    <div class="bottom-bar">
+      <div><div class="logo-text"><span>KONVERT</span></div><div class="tagline">Page generee en 30 secondes par IA</div></div>
+      <div class="cta-badge">Essai gratuit &rarr;</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NICHE 3 : FITNESS / SPORT
+═══════════════════════════════════════════ -->
+<div class="creative-section">
+  <span class="niche">NICHE 3 — FITNESS / SPORT</span>
+  <h2>Format Carre (1080x1080) — Meta Feed</h2>
+
+  <div class="square-creative">
+    <div class="before-half">
+      <div class="label-bar">AVANT</div>
+      <div class="ugly-page">
+        <div class="ugly-img"><span>img</span></div>
+        <div class="ugly-title">Bandes de Resistance Elastiques</div>
+        <div class="ugly-price">29,90 EUR</div>
+        <div class="ugly-stars">* * * * * (0 avis)</div>
+        <div class="ugly-desc">Set de 5 bandes de resistance en latex naturel. Differents niveaux de resistance. Ideal pour le fitness a la maison. Sac de transport inclus.</div>
+        <div class="ugly-btn">Ajouter au panier</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Titre sans emotion</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Pas de transformation promise</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Zero social proof</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> CTA invisible</div>
+      </div>
+    </div>
+    <div class="center-vs">VS</div>
+    <div class="after-half">
+      <div class="label-bar">APRES KONVERT</div>
+      <div class="konvert-page konvert-fitness">
+        <div class="kv-hero">
+          <h3>Transforme ton corps. Sans salle. Sans excuses.</h3>
+          <p>Pack 5 Bandes Pro — De debutant a avance</p>
+          <div class="kv-price"><span class="now">29,90</span><span class="was">49,90</span></div>
+        </div>
+        <div class="kv-cta">Commencer ma transformation &rarr;</div>
+        <div class="kv-badges">
+          <span class="kv-badge" style="background:rgba(249,115,22,0.15);color:#f97316">5 niveaux</span>
+          <span class="kv-badge" style="background:rgba(249,115,22,0.15);color:#f97316">Latex naturel</span>
+          <span class="kv-badge" style="background:rgba(249,115,22,0.15);color:#f97316">Guide inclus</span>
+        </div>
+        <div class="kv-benefits">
+          <div class="kv-benefit"><div class="check" style="background:rgba(249,115,22,0.15);color:#f97316">+</div><span style="color:#c4c4d0">200+ exercices possibles — full body</span></div>
+          <div class="kv-benefit"><div class="check" style="background:rgba(249,115,22,0.15);color:#f97316">+</div><span style="color:#c4c4d0">Resultats visibles en 21 jours</span></div>
+          <div class="kv-benefit"><div class="check" style="background:rgba(249,115,22,0.15);color:#f97316">+</div><span style="color:#c4c4d0">Utilise par 15 000+ sportifs</span></div>
+        </div>
+        <div class="kv-social">
+          <div class="stars">***** </div>
+          <div class="review" style="color:#8b8b9e">"Mieux que la salle. Je m'entraine chez moi en 20 min et les resultats sont la."</div>
+          <div class="reviewer" style="color:#c4c4d0">— Karim A., client verifie</div>
+        </div>
+        <div class="kv-urgency" style="background:rgba(249,115,22,0.1);color:#f97316">Guide d'entrainement OFFERT aujourd'hui seulement</div>
+      </div>
+    </div>
+    <div class="bottom-bar">
+      <div><div class="logo-text"><span>KONVERT</span></div><div class="tagline">Page generee en 30 secondes par IA</div></div>
+      <div class="cta-badge">Essai gratuit &rarr;</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NICHE 4 : MODE / FASHION
+═══════════════════════════════════════════ -->
+<div class="creative-section">
+  <span class="niche">NICHE 4 — MODE / FASHION</span>
+  <h2>Format Carre (1080x1080) — Meta Feed</h2>
+
+  <div class="square-creative">
+    <div class="before-half">
+      <div class="label-bar">AVANT</div>
+      <div class="ugly-page">
+        <div class="ugly-img"><span>img</span></div>
+        <div class="ugly-title">Sac a Main Cuir Noir</div>
+        <div class="ugly-price">89,00 EUR</div>
+        <div class="ugly-stars">* * * * * (0 avis)</div>
+        <div class="ugly-desc">Sac a main en cuir veritable. Dimensions : 30x25x12 cm. Bandouliere ajustable. Poche interieure zippee. Couleur : noir.</div>
+        <div class="ugly-btn">Ajouter au panier</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Description catalogue</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Aucun style de vie</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Pas d'exclusivite</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Design plat et ennuyeux</div>
+      </div>
+    </div>
+    <div class="center-vs">VS</div>
+    <div class="after-half">
+      <div class="label-bar">APRES KONVERT</div>
+      <div class="konvert-page konvert-fashion">
+        <div class="kv-hero">
+          <h3>L'accessoire qui change tout.</h3>
+          <p>Cuir veritable. Design intemporel. Fait pour durer.</p>
+          <div class="kv-price"><span class="now">89,00</span><span class="was">149,00</span></div>
+        </div>
+        <div class="kv-cta">Adopter le mien &rarr;</div>
+        <div class="kv-badges">
+          <span class="kv-badge" style="background:#f5f5f4;color:#57534e">Cuir veritable</span>
+          <span class="kv-badge" style="background:#f5f5f4;color:#57534e">Edition limitee</span>
+          <span class="kv-badge" style="background:#f5f5f4;color:#57534e">Garantie 2 ans</span>
+        </div>
+        <div class="kv-benefits">
+          <div class="kv-benefit"><div class="check" style="background:#f5f5f4;color:#57534e">+</div><span style="color:#374151">Cuir pleine fleur — se patine avec le temps</span></div>
+          <div class="kv-benefit"><div class="check" style="background:#f5f5f4;color:#57534e">+</div><span style="color:#374151">Design minimaliste — s'accorde avec toutes les tenues</span></div>
+          <div class="kv-benefit"><div class="check" style="background:#f5f5f4;color:#57534e">+</div><span style="color:#374151">Bandouliere amovible — porte-main ou epaule</span></div>
+        </div>
+        <div class="kv-social">
+          <div class="stars">***** </div>
+          <div class="review" style="color:#6b7280">"La qualite est incroyable pour ce prix. Je recois des compliments a chaque sortie."</div>
+          <div class="reviewer" style="color:#374151">— Leila B., cliente verifiee</div>
+        </div>
+        <div class="kv-urgency" style="background:#fef2f2;color:#ef4444">Plus que 8 pieces disponibles</div>
+      </div>
+    </div>
+    <div class="bottom-bar">
+      <div><div class="logo-text"><span>KONVERT</span></div><div class="tagline">Page generee en 30 secondes par IA</div></div>
+      <div class="cta-badge">Essai gratuit &rarr;</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NICHE 5 : MAISON / DECO
+═══════════════════════════════════════════ -->
+<div class="creative-section">
+  <span class="niche">NICHE 5 — MAISON / DECO</span>
+  <h2>Format Carre (1080x1080) — Meta Feed</h2>
+
+  <div class="square-creative">
+    <div class="before-half">
+      <div class="label-bar">AVANT</div>
+      <div class="ugly-page">
+        <div class="ugly-img"><span>img</span></div>
+        <div class="ugly-title">Lampe de Table LED Bois</div>
+        <div class="ugly-price">45,00 EUR</div>
+        <div class="ugly-stars">* * * * * (0 avis)</div>
+        <div class="ugly-desc">Lampe de table en bois massif avec eclairage LED. 3 niveaux de luminosite. Cable USB inclus. Hauteur : 35 cm. Poids : 800g.</div>
+        <div class="ugly-btn">Ajouter au panier</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Fiche technique ennuyeuse</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Pas d'ambiance</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Design par defaut Shopify</div>
+        <div class="ugly-problem"><span style="font-size:14px">X</span> Aucune mise en scene</div>
+      </div>
+    </div>
+    <div class="center-vs">VS</div>
+    <div class="after-half">
+      <div class="label-bar">APRES KONVERT</div>
+      <div class="konvert-page konvert-home">
+        <div class="kv-hero">
+          <h3>L'ambiance que ton interieur attendait.</h3>
+          <p>Lampe artisanale bois & LED — Chaleur naturelle</p>
+          <div class="kv-price"><span class="now">45,00</span><span class="was">69,00</span></div>
+        </div>
+        <div class="kv-cta">Transformer mon espace &rarr;</div>
+        <div class="kv-badges">
+          <span class="kv-badge" style="background:#ecfccb;color:#65a30d">Bois massif</span>
+          <span class="kv-badge" style="background:#ecfccb;color:#65a30d">LED eco</span>
+          <span class="kv-badge" style="background:#ecfccb;color:#65a30d">Artisanal</span>
+        </div>
+        <div class="kv-benefits">
+          <div class="kv-benefit"><div class="check" style="background:#ecfccb;color:#65a30d">+</div><span style="color:#374151">3 ambiances — cosy, lecture, intense</span></div>
+          <div class="kv-benefit"><div class="check" style="background:#ecfccb;color:#65a30d">+</div><span style="color:#374151">Bois massif — chaque piece est unique</span></div>
+          <div class="kv-benefit"><div class="check" style="background:#ecfccb;color:#65a30d">+</div><span style="color:#374151">LED longue duree — 50 000h sans changer</span></div>
+        </div>
+        <div class="kv-social">
+          <div class="stars">***** </div>
+          <div class="review" style="color:#6b7280">"Elle sublime mon salon. La lumiere est douce et chaleureuse. Qualite top."</div>
+          <div class="reviewer" style="color:#374151">— Nadia R., cliente verifiee</div>
+        </div>
+        <div class="kv-urgency" style="background:#fefce8;color:#a16207">Livraison offerte — aujourd'hui seulement</div>
+      </div>
+    </div>
+    <div class="bottom-bar">
+      <div><div class="logo-text"><span>KONVERT</span></div><div class="tagline">Page generee en 30 secondes par IA</div></div>
+      <div class="cta-badge">Essai gratuit &rarr;</div>
+    </div>
+  </div>
+</div>
+
+<div style="height: 80px"></div>
+
+</body>
+</html>

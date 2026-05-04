@@ -278,4 +278,9 @@ export interface ScrapedProduct {
   rating: number | null
   reviews_count: number | null
   source_url: string
+  // Dégradation gracieuse : true si l'extraction est incomplète mais qu'on
+  // a réussi à sortir au moins une donnée exploitable (titre OU images).
+  // Le front affiche alors un warning non-bloquant invitant à vérifier.
+  partial?: boolean
+  scrape_warning?: string
 }

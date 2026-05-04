@@ -78,15 +78,28 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
   const apiKey = process.env.FIRECRAWL_API_KEY
   const errors: { firecrawl?: string; fetch?: string; jsonld?: string } = {}
 
+  // On accumule les meilleures données partielles vues à chaque tentative.
+  // Si tout fail, au lieu de throw, on retourne ce qu'on a (titre OU images)
+  // pour que l'UI puisse pré-remplir le formulaire de saisie manuelle.
+  let bestPartial: ScrapedProduct | null = null
+  const score = (x: ScrapedProduct) =>
+    (x.title ? 1 : 0) + Math.min(x.images.length, 5) + (x.price ? 2 : 0)
+  const collectPartial = (p: ScrapedProduct | null | undefined) => {
+    if (!p) return
+    if (!bestPartial || score(p) > score(bestPartial)) bestPartial = p
+  }
+
   if (apiKey) {
     try {
-      const product = await scrapeViaFirecrawl(cleanUrl, apiKey, 10000)
+      // 1er essai : waitFor=8s + AbortSignal=22s (8s wait + 14s render budget)
+      const product = await scrapeViaFirecrawl(cleanUrl, apiKey, 8000)
       console.log('[scraper] ✓ Firecrawl OK:', { title: product.title, images: product.images.length })
       return product
     } catch (err) {
       const msg = (err as Error).message
       errors.firecrawl = msg
       console.warn('[scraper] ✗ Firecrawl 1er essai échoué:', msg)
+      collectPartial((err as { partial?: ScrapedProduct }).partial)
 
       // Retry avec waitFor plus long si la 1re tentative renvoie une page vide
       // (AliExpress lent à servir le DOM produit après le splash anti-bot).
@@ -95,14 +108,16 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
       const isEmptyPage = msg.includes('aucun titre exploitable') || msg.includes('page bloquée par anti-bot')
       if (isEmptyPage) {
         try {
-          console.log('[scraper] retry Firecrawl avec waitFor=15s')
-          const product = await scrapeViaFirecrawl(cleanUrl, apiKey, 15000)
+          // Retry : waitFor=14s + AbortSignal=28s (14s wait + 14s render budget)
+          console.log('[scraper] retry Firecrawl avec waitFor=14s')
+          const product = await scrapeViaFirecrawl(cleanUrl, apiKey, 14000)
           console.log('[scraper] ✓ Firecrawl retry OK:', { title: product.title, images: product.images.length })
           return product
         } catch (err2) {
           const msg2 = (err2 as Error).message
           errors.firecrawl = `${msg} | retry: ${msg2}`
           console.warn('[scraper] ✗ Firecrawl retry échoué:', msg2)
+          collectPartial((err2 as { partial?: ScrapedProduct }).partial)
         }
       }
     }
@@ -122,6 +137,27 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
     console.warn('[scraper] ✗ fetch natif échoué:', msg)
   }
 
+  // ── Dégradation gracieuse ─────────────────────────────────────────────
+  // Si on a sauvé au moins UNE donnée utile (titre OU 1+ image), on retourne
+  // un produit "partial" plutôt que de throw. L'UI peut alors générer la
+  // page avec ce qu'on a et inviter l'user à compléter dans l'éditeur.
+  if (bestPartial) {
+    const safe: ScrapedProduct = bestPartial
+    if (safe.title || safe.images.length > 0) {
+      console.log('[scraper] ⚠ retour dégradé (partial):', {
+        title: safe.title || '(vide)',
+        images: safe.images.length,
+        price: safe.price,
+      })
+      return {
+        ...safe,
+        partial: true,
+        scrape_warning: errors.firecrawl || errors.fetch || 'extraction incomplète',
+      }
+    }
+  }
+
+  // Vraiment rien d'exploitable → on throw, le front affiche "saisie manuelle"
   throw new ScrapeError(
     `Scraping impossible — toutes les méthodes ont échoué`,
     errors,
@@ -184,11 +220,10 @@ Return: title, description, price, original_price (if discount visible), images 
         },
       },
     }),
-    // 25s timeout : le 1er essai a 25s, le retry (waitFor=15s) en a 25s aussi,
-    // total 50s max — laisse 10s à DeepSeek dans /api/generate (60s budget).
-    // Si Firecrawl dépasse, on abort et le user retombe sur le fallback fetch
-    // puis sur la saisie manuelle.
-    signal: AbortSignal.timeout(25000),
+    // AbortSignal proportionnel au waitFor : on alloue waitFor + 14s de budget
+    // de render/extraction. 1er essai (waitFor=8s) → 22s, retry (waitFor=14s) → 28s.
+    // Total max 50s, sous /api/scrape (52s) et /api/generate (60s).
+    signal: AbortSignal.timeout(waitFor + 14000),
   })
 
   if (!res.ok) {
@@ -219,8 +254,9 @@ Return: title, description, price, original_price (if discount visible), images 
 
   // 2. Fallback : LLM a retourné title vide ou domaine → on parse l'HTML brut.
   // JSON-LD prioritaire (Amazon/Shopify l'exposent), puis og:title.
+  let fromHtml: Omit<ScrapedProduct, 'source_url'> | null = null
   if (html) {
-    const fromHtml = parseProductFromHtml(html)
+    fromHtml = parseProductFromHtml(html)
     if (fromHtml?.title && !isGenericDomainTitle(fromHtml.title)) {
       console.log('[scraper] Firecrawl JSON insuffisant → HTML parsing OK')
       return { ...fromHtml, source_url: url }
@@ -230,19 +266,39 @@ Return: title, description, price, original_price (if discount visible), images 
   // 3. Dernier fallback : parser le markdown généré par Firecrawl.
   // Quand le DOM est obfusqué et que JSON-LD est absent, le markdown contient
   // souvent le titre du produit comme premier h1 et les prix en clair.
+  let fromMd: Omit<ScrapedProduct, 'source_url'> | null = null
   if (markdown) {
-    const fromMd = parseProductFromMarkdown(markdown)
+    fromMd = parseProductFromMarkdown(markdown)
     if (fromMd?.title && !isGenericDomainTitle(fromMd.title)) {
       console.log('[scraper] Firecrawl JSON+HTML insuffisants → markdown parsing OK')
       return { ...fromMd, source_url: url }
     }
   }
 
+  // ── Préparation du fallback dégradé ────────────────────────────────────
+  // On agrège le meilleur de ce qu'on a vu (LLM + HTML + markdown), même si
+  // chaque source était insuffisante isolément. On l'attache à l'erreur pour
+  // que scrapeProduct puisse l'exposer en mode "partial" plutôt que tout perdre.
+  const partial: ScrapedProduct = {
+    title:          item?.title || fromHtml?.title || fromMd?.title || '',
+    description:    item?.description || fromHtml?.description || fromMd?.description || '',
+    images:         (Array.isArray(item?.images) && item.images.length ? item.images
+                      : (fromHtml?.images?.length ? fromHtml.images : (fromMd?.images || []))).slice(0, 8),
+    price:          item?.price?.toString() || fromHtml?.price || fromMd?.price || null,
+    original_price: item?.original_price?.toString() || fromHtml?.original_price || null,
+    variants:       [],
+    rating:         item?.rating || fromHtml?.rating || null,
+    reviews_count:  item?.reviews_count || fromHtml?.reviews_count || null,
+    source_url:     url,
+  }
+
   // Diagnostic explicite pour aider le user à comprendre
   const reason = item?.title && isGenericDomainTitle(item.title)
     ? `page bloquée par anti-bot (titre extrait = "${item.title}", générique du domaine)`
     : 'aucun titre exploitable trouvé (LLM + HTML + markdown vides)'
-  throw new Error(`Firecrawl — ${reason}`)
+  const err = new Error(`Firecrawl — ${reason}`) as Error & { partial?: ScrapedProduct }
+  err.partial = partial
+  throw err
 }
 
 // Détecte si un titre est juste le nom du domaine (= page bloquée) OU un

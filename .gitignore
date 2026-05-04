@@ -50,3 +50,6 @@ preview-noir.mjs
 
 # video subdir
 video/
+
+# supabase CLI cache
+supabase/.temp/

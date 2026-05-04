@@ -557,12 +557,12 @@ function Slide2() {
             <Palette className="w-3.5 h-3.5" />
             38+ templates premium
           </div>
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
             Tes visiteurs jugent ta page{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               en 3 secondes.
             </span>
-          </h1>
+          </h2>
           <p className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0">
             38+ templates premium — chaque design suit les tendances mondiales et est calibré pour déclencher l&apos;achat. Mode, Tech, Beauté, Luxe, Streetwear, Joaillerie et plus.
           </p>
@@ -707,12 +707,12 @@ function Slide3() {
             <ChartBar className="w-3.5 h-3.5" />
             Analytics temps réel
           </div>
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
             Sais-tu pourquoi tes clients{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               n&apos;achètent pas ?
             </span>
-          </h1>
+          </h2>
           <p className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0">
             CVR, ROAS, scroll depth en temps réel. Arrête de deviner — commence à optimiser avec des données qui parlent d&apos;elles-mêmes.
           </p>
@@ -838,12 +838,12 @@ function Slide4() {
             <LinkSimple className="w-3.5 h-3.5" />
             Connecté à votre stack
           </div>
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
             Prêt à coller sur ta boutique.{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               En 1 clic.
             </span>
-          </h1>
+          </h2>
           <p className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0">
             Shopify, WooCommerce, Klaviyo — KONVERT s&apos;intègre avec les outils que tu utilises déjà. Zéro développeur, zéro galère.
           </p>
@@ -896,12 +896,12 @@ function Slide5() {
             <Lightning className="w-3.5 h-3.5" />
             Pour les agences SMMA
           </div>
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
             Livre 10x plus de pages.{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Sans recruter.
             </span>
-          </h1>
+          </h2>
           <p className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0">
             Dashboard agence, white-label, rapports PDF automatiques. Scale ta livraison client sans ajouter une seule personne à ton équipe.
           </p>
@@ -1585,14 +1585,24 @@ function HowItWorks() {
             style={{ aspectRatio: '16/9' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-              title="KONVERT en action"
-              allow="autoplay; fullscreen"
-              allowFullScreen
-              className="absolute inset-0 w-full h-full"
-              style={{ border: 'none' }}
-            />
+            <div
+              className="absolute inset-0 w-full h-full flex flex-col items-center justify-center text-center p-8"
+              style={{ background: 'linear-gradient(135deg,#0a0a1a,#1a1233)' }}
+            >
+              <div className="text-white/90 text-xl sm:text-2xl font-bold mb-3">
+                Démo vidéo bientôt disponible
+              </div>
+              <p className="text-white/60 text-sm sm:text-base max-w-md mb-6">
+                En attendant, teste KONVERT sur ton vrai produit en 30 secondes.
+              </p>
+              <a
+                href="/essai"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold text-sm transition-transform hover:scale-105"
+                style={{ background: 'linear-gradient(135deg,#7c3aed,#6d28d9)' }}
+              >
+                Essayer maintenant — gratuit
+              </a>
+            </div>
             <button
               onClick={() => setVideoOpen(false)}
               className="absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center text-white"

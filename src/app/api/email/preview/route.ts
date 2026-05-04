@@ -38,19 +38,19 @@ export async function POST(req: NextRequest) {
 
     switch (step as PreviewStep) {
       case 0:
-        emailContent = emailPreviewDelivery(displayName, previewUrl, product_title)
+        emailContent = emailPreviewDelivery(displayName, previewUrl, product_title, email)
         break
       case 1:
-        emailContent = emailPreviewDay1(displayName, previewUrl, product_title)
+        emailContent = emailPreviewDay1(displayName, previewUrl, product_title, email)
         break
       case 3:
-        emailContent = emailPreviewDay3(displayName, previewUrl, product_title)
+        emailContent = emailPreviewDay3(displayName, previewUrl, product_title, email)
         break
       case 5:
-        emailContent = emailPreviewDay5(displayName, previewUrl)
+        emailContent = emailPreviewDay5(displayName, previewUrl, email)
         break
       case 7:
-        emailContent = emailPreviewDay7(displayName, previewUrl, product_title)
+        emailContent = emailPreviewDay7(displayName, previewUrl, product_title, email)
         break
       default:
         return NextResponse.json({ error: 'Step invalide' }, { status: 400 })

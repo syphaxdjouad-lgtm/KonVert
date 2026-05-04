@@ -16,6 +16,7 @@ const RATE_LIMITS: Record<string, { limit: number; windowMs: number }> = {
   '/api/contact':         { limit: 5,   windowMs: 60_000 },       // 5 req/min (anti-spam)
   '/api/invitations':     { limit: 10,  windowMs: 60_000 },       // 10 req/min (anti-brute-force)
   '/api/preview':         { limit: 30,  windowMs: 60_000 },       // 30 req/min
+  '/api/email/unsubscribe': { limit: 5, windowMs: 60_000 },        // 5 req/min (anti-bruteforce désabonnement)
 }
 
 function getClientIp(req: NextRequest): string {

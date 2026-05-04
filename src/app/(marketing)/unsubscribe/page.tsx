@@ -8,9 +8,10 @@ import Link from 'next/link'
 function UnsubscribeContent() {
   const searchParams = useSearchParams()
   const emailParam   = searchParams.get('email') || ''
+  const okParam      = searchParams.get('ok') === '1'
 
   const [email,    setEmail]    = useState(emailParam)
-  const [status,   setStatus]   = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [status,   setStatus]   = useState<'idle' | 'loading' | 'success' | 'error'>(okParam ? 'success' : 'idle')
   const [message,  setMessage]  = useState('')
 
   async function handleSubmit(e: React.FormEvent) {

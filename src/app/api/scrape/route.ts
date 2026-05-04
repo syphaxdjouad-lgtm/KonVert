@@ -26,9 +26,11 @@ export async function POST(req: NextRequest) {
 
     const start = Date.now()
 
-    // Timeout hard à 45s — évite que Vercel tue la fonction sans réponse propre
+    // Timeout hard à 52s — laisse une marge au retry Firecrawl (2 × 25s)
+    // tout en restant sous le maxDuration 55s qui tuerait la fonction sans
+    // réponse propre.
     const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error('Scraping timeout — le site met trop de temps à répondre')), 45000)
+      setTimeout(() => reject(new Error('Scraping timeout — le site met trop de temps à répondre')), 52000)
     )
 
     const raw = await Promise.race([scrapeProduct(url), timeout])

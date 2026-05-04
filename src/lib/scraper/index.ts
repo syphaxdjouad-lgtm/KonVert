@@ -80,13 +80,31 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
 
   if (apiKey) {
     try {
-      const product = await scrapeViaFirecrawl(cleanUrl, apiKey)
+      const product = await scrapeViaFirecrawl(cleanUrl, apiKey, 10000)
       console.log('[scraper] ✓ Firecrawl OK:', { title: product.title, images: product.images.length })
       return product
     } catch (err) {
       const msg = (err as Error).message
       errors.firecrawl = msg
-      console.warn('[scraper] ✗ Firecrawl échoué:', msg)
+      console.warn('[scraper] ✗ Firecrawl 1er essai échoué:', msg)
+
+      // Retry avec waitFor plus long si la 1re tentative renvoie une page vide
+      // (AliExpress lent à servir le DOM produit après le splash anti-bot).
+      // On ne retry que si l'erreur indique "aucun titre exploitable" (page rendue
+      // mais incomplète) — pas sur HTTP 4xx/5xx ni timeout réseau.
+      const isEmptyPage = msg.includes('aucun titre exploitable') || msg.includes('page bloquée par anti-bot')
+      if (isEmptyPage) {
+        try {
+          console.log('[scraper] retry Firecrawl avec waitFor=15s')
+          const product = await scrapeViaFirecrawl(cleanUrl, apiKey, 15000)
+          console.log('[scraper] ✓ Firecrawl retry OK:', { title: product.title, images: product.images.length })
+          return product
+        } catch (err2) {
+          const msg2 = (err2 as Error).message
+          errors.firecrawl = `${msg} | retry: ${msg2}`
+          console.warn('[scraper] ✗ Firecrawl retry échoué:', msg2)
+        }
+      }
     }
   } else {
     errors.firecrawl = 'FIRECRAWL_API_KEY absent'
@@ -112,7 +130,7 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
 
 // ─── Firecrawl (primary) ─────────────────────────────────────────────────────
 
-async function scrapeViaFirecrawl(url: string, apiKey: string): Promise<ScrapedProduct> {
+async function scrapeViaFirecrawl(url: string, apiKey: string, waitFor: number = 10000): Promise<ScrapedProduct> {
   const res = await fetch('https://api.firecrawl.dev/v1/scrape', {
     method: 'POST',
     headers: {
@@ -128,12 +146,11 @@ async function scrapeViaFirecrawl(url: string, apiKey: string): Promise<ScrapedP
       //              quand le DOM est obfusqué (AliExpress / Amazon)
       formats: ['json', 'html', 'markdown'],
       proxy: 'stealth',
-      // 10s : AliExpress sert une page de splash, le DOM produit n'apparaît
-      // qu'après le geo-redirect + cookie consent + chargement JS. On reste
-      // sous 10s pour laisser ~20s à DeepSeek dans /api/generate (limite 60s
-      // Vercel Pro). Si AliExpress charge plus lentement, on aura la version
-      // partielle qu'on parse via HTML/markdown fallback.
-      waitFor: 10000,
+      // waitFor paramétrable (default 10s, retry à 15s) : AliExpress sert une
+      // page de splash, le DOM produit n'apparaît qu'après le geo-redirect +
+      // cookie consent + chargement JS. On reste raisonnable pour laisser
+      // ~20s à DeepSeek dans /api/generate (limite 60s Vercel Pro).
+      waitFor,
       // Mobile UA : moins de chance de tomber sur un mur de cookies / CAPTCHA
       // qui dégrade le rendering. Firecrawl simule l'UA via "mobile" flag.
       mobile: true,
@@ -167,10 +184,11 @@ Return: title, description, price, original_price (if discount visible), images 
         },
       },
     }),
-    // 35s timeout : on ne veut PAS dépasser pour laisser ~20s à DeepSeek.
-    // Si Firecrawl prend plus que ça, on abort et le user retombe sur saisie
-    // manuelle plutôt que de subir un timeout 504 Vercel après 60s.
-    signal: AbortSignal.timeout(35000),
+    // 25s timeout : le 1er essai a 25s, le retry (waitFor=15s) en a 25s aussi,
+    // total 50s max — laisse 10s à DeepSeek dans /api/generate (60s budget).
+    // Si Firecrawl dépasse, on abort et le user retombe sur le fallback fetch
+    // puis sur la saisie manuelle.
+    signal: AbortSignal.timeout(25000),
   })
 
   if (!res.ok) {

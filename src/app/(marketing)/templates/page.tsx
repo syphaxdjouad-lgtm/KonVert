@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import {
   templateEtecBlue,
   templateEtecNoir,
@@ -1817,11 +1818,12 @@ function TemplateCard({ t, onOpen }: { t: typeof TEMPLATES[0]; onOpen: (t: typeo
     >
       {/* Preview */}
       <div className="relative" style={{ height: '240px', overflow: 'hidden', background: '#f3f3f3' }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={t.preview}
           alt={`Preview ${t.name}`}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.4s ease' }}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+          style={{ objectFit: 'cover', transition: 'transform 0.4s ease' }}
           className="group-hover:scale-105"
         />
         <div

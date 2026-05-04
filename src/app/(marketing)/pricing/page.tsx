@@ -172,26 +172,6 @@ function PricingContent() {
   return (
     <div className="min-h-screen bg-white">
 
-      {/* ── NAVBAR MINIMALE ────────────────────────────────────────────── */}
-      <nav className="border-b border-gray-100 bg-white sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="font-black text-xl text-gray-900" style={{ letterSpacing: '-0.03em' }}>
-            KON<span style={{ color: '#16a34a' }}>VERT</span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors">
-              Connexion
-            </Link>
-            <Link
-              href="/essai"
-              className="text-sm font-bold px-4 py-2.5 rounded-lg text-white bg-green-600 hover:bg-green-700 transition-colors"
-            >
-              1 page gratuite
-            </Link>
-          </div>
-        </div>
-      </nav>
-
       {/* ── HERO PRICING ─────────────────────────────────────────────────── */}
       <div className="bg-gray-50 border-b border-gray-100 py-16 px-6">
         <div className="max-w-2xl mx-auto text-center">

@@ -11,8 +11,8 @@ const commonHeaders = [
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   // Désactive les APIs navigateur non utilisées
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-  // Force HTTPS pendant 1 an (Vercel gère déjà le HTTPS)
-  { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+  // Force HTTPS pendant 1 an + preload (eligible HSTS Preload List)
+  { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' },
 ]
 
 const cspBase = {
@@ -20,7 +20,7 @@ const cspBase = {
   imgSrc: "img-src 'self' data: blob: https:",
   fontSrc: "font-src 'self' data: https://fonts.gstatic.com",
   connectSrc:
-    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://client.crisp.chat wss://client.relay.crisp.chat",
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://client.crisp.chat wss://client.relay.crisp.chat https://eu.i.posthog.com https://eu-assets.i.posthog.com https://us.i.posthog.com https://us-assets.i.posthog.com",
   frameSrc: 'frame-src https://js.stripe.com https://hooks.stripe.com https://game.crisp.chat',
   workerSrc: "worker-src 'self' blob:",
 }
@@ -28,7 +28,7 @@ const cspBase = {
 // CSP stricte : pas d'unsafe-eval. Appliquée partout sauf builder GrapesJS.
 const strictCsp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://js.stripe.com https://client.crisp.chat",
+  "script-src 'self' 'unsafe-inline' https://js.stripe.com https://client.crisp.chat https://eu-assets.i.posthog.com https://us-assets.i.posthog.com",
   cspBase.styleSrc,
   cspBase.imgSrc,
   cspBase.fontSrc,
@@ -41,7 +41,7 @@ const strictCsp = [
 // Limitée aux routes builder uniquement.
 const builderCsp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://client.crisp.chat",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://client.crisp.chat https://eu-assets.i.posthog.com https://us-assets.i.posthog.com",
   cspBase.styleSrc,
   cspBase.imgSrc,
   cspBase.fontSrc,
@@ -86,6 +86,9 @@ const nextConfig: NextConfig = {
       // Alibaba
       { protocol: 'https', hostname: '**.alibaba.com' },
       { protocol: 'https', hostname: '**.alibabaimg.com' },
+      // Unsplash (templates, blog, marketing)
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'plus.unsplash.com' },
     ],
   },
 };

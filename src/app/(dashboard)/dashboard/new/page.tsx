@@ -193,6 +193,10 @@ function NewPageInner() {
   const [html,        setHtml]        = useState('')
   const [landingData, setLandingData] = useState<LandingPageData | null>(null)
   const [error,       setError]       = useState<string | null>(null)
+  // Warning non-bloquant : affiché quand le scrape a réussi en mode dégradé
+  // (titre OU images récupérées mais pas tout). L'user voit la page générée
+  // et un message lui suggère de relire/corriger avant publication.
+  const [partialWarning, setPartialWarning] = useState<string | null>(null)
   const [saving,      setSaving]      = useState(false)
 
   // Publication vers store
@@ -378,6 +382,19 @@ function NewPageInner() {
       })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error)
+
+      // Mode dégradé : le scrape a marché mais incomplètement. On laisse
+      // passer la génération et on affiche un bandeau warning au-dessus de
+      // l'éditeur pour que l'user vérifie/complète avant de publier.
+      if (json.partial) {
+        setPartialWarning(
+          json.warning
+            ? `Scrape partiel : ${json.warning}. Vérifie le titre, le prix et les images avant de publier.`
+            : 'Scrape partiel — vérifie le titre, le prix et les images avant de publier.'
+        )
+      } else {
+        setPartialWarning(null)
+      }
 
       const data: LandingPageData = json.data
       if (uploadedPhotos.length > 0) {

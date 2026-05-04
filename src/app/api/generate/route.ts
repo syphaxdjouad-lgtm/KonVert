@@ -78,16 +78,27 @@ export async function POST(req: NextRequest) {
       // Anti-hallucination : si Firecrawl a inventé des données génériques
       // ("Women Summer Dress" + image 150x150.gif), on rejette plutôt que
       // de polluer la génération DeepSeek et l'éditeur.
-      const check2 = looksHallucinated(product)
-      if (check2.fake) {
-        console.warn('[/api/generate] données hallucinées:', check2.reason)
-        await rollbackQuota()
-        return NextResponse.json(
-          {
-            error: `Cette URL n'a pas pu être scrapée correctement (${check2.reason}). AliExpress et Amazon bloquent souvent les scrapers — utilise la saisie manuelle pour ce produit.`,
-          },
-          { status: 422 }
-        )
+      // EXCEPTION : si product.partial === true, on a déjà fait du best-effort
+      // côté scraper — on ne ré-applique pas ce filtre (qui rejetterait
+      // souvent un titre = nom de domaine légitimement parti en partial).
+      if (!product.partial) {
+        const check2 = looksHallucinated(product)
+        if (check2.fake) {
+          console.warn('[/api/generate] données hallucinées:', check2.reason)
+          await rollbackQuota()
+          return NextResponse.json(
+            {
+              error: `Cette URL n'a pas pu être scrapée correctement (${check2.reason}). AliExpress et Amazon bloquent souvent les scrapers — utilise la saisie manuelle pour ce produit.`,
+            },
+            { status: 422 }
+          )
+        }
+      } else {
+        console.log('[/api/generate] mode partial — génération avec données incomplètes:', {
+          title: product.title || '(vide)',
+          images: product.images.length,
+          warning: product.scrape_warning,
+        })
       }
     } else {
       // Produit fourni directement (saisie manuelle wizard) ou mock.
@@ -119,6 +130,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       data: landingPage,
+      // partial: true signale au front que le scrape était incomplet et que
+      // l'user devrait jeter un œil au résultat. Le wizard affiche un
+      // bandeau warning non-bloquant au-dessus de l'éditeur.
+      partial: product.partial === true,
+      warning: product.scrape_warning,
       meta: {
         model: GENERATION_MODEL,
         product_source: body.url ? 'scraped' : body.product ? 'provided' : 'mock',

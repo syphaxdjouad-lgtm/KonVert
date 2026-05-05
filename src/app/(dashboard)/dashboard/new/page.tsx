@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { TEMPLATES } from '@/lib/templates'
+import { TEMPLATES, PRODUCT_TYPE_LABELS, type ProductType } from '@/lib/templates'
+import { detectProductType } from '@/lib/templates/detect-product-type'
 import {
   Link2, Pencil, Loader2, ArrowLeft, ArrowRight, Check,
   Upload, Palette, Sparkles,
@@ -343,9 +344,27 @@ function NewPageInner() {
     return found ? `${found.flag} ${found.label}` : code
   }
 
+  // ── Validation URL ──
+  // On parse côté front pour éviter le throw "The string did not match the
+  // expected pattern" remonté brut par Safari quand l'URL est cassée.
+  function isValidHttpUrl(input: string): boolean {
+    try {
+      const u = new URL(input.trim())
+      return u.protocol === 'http:' || u.protocol === 'https:'
+    } catch {
+      return false
+    }
+  }
+
   // ── Génération ──
   async function generate() {
     if (mode !== 'wizard') return // garde-fou anti double-clic
+
+    if (inputMode === 'url' && !isValidHttpUrl(url)) {
+      setError('URL invalide. Colle un lien produit complet commençant par https:// (ex: https://www.aliexpress.com/item/...).')
+      return
+    }
+
     setMode('generating')
     setError(null)
     track.newPageWizardCompleted()
@@ -383,10 +402,28 @@ function NewPageInner() {
       const json = await res.json()
       if (!res.ok) throw new Error(json.error)
 
+      const data: LandingPageData = json.data
+
+      // Mismatch produit ↔ template : si le template sélectionné est "themed"
+      // (skincare, jewelry, tech…) et qu'on détecte un type différent dans le
+      // produit, on warn. Empêche de générer un blender sur velvety.
+      const tplMeta = TEMPLATES.find(t => t.id === selectedStyle)
+      const detected = detectProductType({
+        title: data.product_name,
+        description: `${data.headline || ''} ${data.subtitle || ''} ${(data.benefits || []).join(' ')}`,
+      })
+      const mismatch = !!(tplMeta?.themed && detected && detected !== tplMeta.productType)
+
       // Mode dégradé : le scrape a marché mais incomplètement. On laisse
       // passer la génération et on affiche un bandeau warning au-dessus de
       // l'éditeur pour que l'user vérifie/complète avant de publier.
-      if (json.partial) {
+      if (mismatch && tplMeta) {
+        const tplLabel = PRODUCT_TYPE_LABELS[tplMeta.productType]
+        const detectedLabel = PRODUCT_TYPE_LABELS[detected as ProductType]
+        setPartialWarning(
+          `Template incompatible : "${tplMeta.name}" est conçu pour ${tplLabel}, ton produit ressemble plutôt à ${detectedLabel}. Le rendu peut afficher du contenu hors-sujet — change de template (Blue, Solo, Starter, Hue, Ella sont universels).`
+        )
+      } else if (json.partial) {
         setPartialWarning(
           json.warning
             ? `Scrape partiel : ${json.warning}. Vérifie le titre, le prix et les images avant de publier.`
@@ -396,7 +433,6 @@ function NewPageInner() {
         setPartialWarning(null)
       }
 
-      const data: LandingPageData = json.data
       if (uploadedPhotos.length > 0) {
         data.images = [...uploadedPhotos, ...(data.images || [])]
       }
@@ -689,7 +725,7 @@ function NewPageInner() {
   // ── Wizard ──
   const STEP_LABELS = ['Source', 'Photos', 'Vidéos', 'Avant/Après', 'Style', 'Plateforme', 'Langue', 'Lancer']
   const canProceed  = step === 1
-    ? (inputMode === 'url' ? url.trim().length > 5 : manual.product_name.trim().length > 0)
+    ? (inputMode === 'url' ? isValidHttpUrl(url) : manual.product_name.trim().length > 0)
     : true
 
   const progressPct = ((step - 1) / 7) * 100
@@ -1079,7 +1115,11 @@ function NewPageInner() {
 
             <label className="block text-[13px] font-bold mb-3" style={{ color: '#1a1a2e' }}>Style visuel</label>
             <div className="space-y-2 mb-6">
-              {STYLES.map(s => (
+              {STYLES.map(s => {
+                const tpl = TEMPLATES.find(t => t.id === s.id)
+                const isUniversal = tpl?.productType === 'universal' || tpl?.themed === false
+                const productLabel = tpl ? PRODUCT_TYPE_LABELS[tpl.productType] : null
+                return (
                 <button
                   key={s.id}
                   onClick={() => setSelectedStyle(s.id)}
@@ -1091,10 +1131,16 @@ function NewPageInner() {
                 >
                   <span className="text-2xl">{s.emoji}</span>
                   <div className="flex-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
                       {s.id === 'etec-blue' && (
                         <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#fef3c7', color: '#d97706' }}>POPULAIRE</span>
+                      )}
+                      {productLabel && (
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={isUniversal
+                          ? { background: '#ecfdf5', color: '#047857' }
+                          : { background: '#f3e8ff', color: '#6d28d9' }
+                        }>{productLabel}</span>
                       )}
                     </div>
                     <p className="text-[12px]" style={{ color: '#8b8b9e' }}>{s.desc}</p>
@@ -1105,7 +1151,7 @@ function NewPageInner() {
                     </div>
                   )}
                 </button>
-              ))}
+              )})}
             </div>
 
             <label className="block text-[13px] font-bold mb-3" style={{ color: '#1a1a2e' }}>Ton du copywriting IA</label>

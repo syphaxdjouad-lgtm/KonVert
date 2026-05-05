@@ -80,10 +80,10 @@ const REVIEW_DIST = [
 ]
 
 const RELATED_PRODUCTS = [
-  { name: 'Classic Wool Overshirt', price: '$98',  orig: '$129', badge: 'New Arrivals', rating: '4.8', reviews: '143' },
-  { name: 'Ribbed Cotton Knit',     price: '$76',  orig: '$99',  badge: 'New Arrivals', rating: '4.9', reviews: '201' },
-  { name: 'Technical Cargo Pant',   price: '$115', orig: '$149', badge: null,           rating: '4.7', reviews: '87'  },
-  { name: 'Brushed Fleece Hoodie',  price: '$89',  orig: '$119', badge: 'New Arrivals', rating: '4.9', reviews: '312' },
+  { name: 'Essential Collection Vol.1', price: '$98',  orig: '$129', badge: 'New Arrivals', rating: '4.8', reviews: '143' },
+  { name: 'Essential Collection Vol.2', price: '$76',  orig: '$99',  badge: 'New Arrivals', rating: '4.9', reviews: '201' },
+  { name: 'Signature Edition',          price: '$115', orig: '$149', badge: null,           rating: '4.7', reviews: '87'  },
+  { name: 'Premium Bundle',             price: '$89',  orig: '$119', badge: 'New Arrivals', rating: '4.9', reviews: '312' },
 ]
 
 const SHOPZ_THEME: SectionTheme = {
@@ -102,19 +102,19 @@ export function templateEtecShopz(data: LandingPageData): string {
   const img    = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
   const relImg = (i: number) => RELATED_IMGS[i % RELATED_IMGS.length]
 
-  const productName   = data.product_name   || 'Premium Forest Crewneck Sweater'
-  const subtitle      = data.subtitle       || 'A clean, relaxed silhouette crafted from brushed cotton blend. Versatile enough for the office or weekend.'
+  const productName   = data.product_name   || 'Premium Product'
+  const subtitle      = data.subtitle       || 'A carefully crafted product designed for quality and everyday comfort.'
   const price         = data.price          || '$122'
   const originalPrice = data.original_price || '$156'
   const ctaText       = data.cta            || 'Add to Cart'
 
   const rawTestimonials = data.faq?.slice(0, 5) || []
   const testimonials = [
-    { author: rawTestimonials[0]?.question || 'James Gouse',       rating: 5, text: rawTestimonials[0]?.answer || 'A simple sweater but makes the user seem neat and beautiful, the material is soft and comfortable for all-day wear.' },
-    { author: rawTestimonials[1]?.question || 'Guy Hawkins',        rating: 5, text: rawTestimonials[1]?.answer || 'Nice colour, looks like an oversized shirt and the fitting is just right. Very happy with this purchase.' },
-    { author: rawTestimonials[2]?.question || 'Brooklyn Simmons',   rating: 5, text: rawTestimonials[2]?.answer || 'Love the material. It is so comfortable. I already bought two pieces in different colors.' },
-    { author: rawTestimonials[3]?.question || 'Courtney Henry',     rating: 5, text: rawTestimonials[3]?.answer || 'Wear this to office for working and like the design very much. Gets compliments every time.' },
-    { author: rawTestimonials[4]?.question || 'Cameron Williamson', rating: 5, text: rawTestimonials[4]?.answer || 'I love the material. It is so soft on my skin. Currently wearing this as my workwear staple.' },
+    { author: rawTestimonials[0]?.question || 'James Gouse',       rating: 5, text: rawTestimonials[0]?.answer || 'Exactly as described. High quality and very comfortable for all-day use.' },
+    { author: rawTestimonials[1]?.question || 'Guy Hawkins',        rating: 5, text: rawTestimonials[1]?.answer || 'Great product, the quality is excellent and it arrived quickly. Very happy with this purchase.' },
+    { author: rawTestimonials[2]?.question || 'Brooklyn Simmons',   rating: 5, text: rawTestimonials[2]?.answer || 'Love the quality. It is so well made. I already ordered two more for friends.' },
+    { author: rawTestimonials[3]?.question || 'Courtney Henry',     rating: 5, text: rawTestimonials[3]?.answer || 'Really pleased with this. The quality is top notch and gets compliments every time.' },
+    { author: rawTestimonials[4]?.question || 'Cameron Williamson', rating: 5, text: rawTestimonials[4]?.answer || 'Outstanding product. Does exactly what it promises and the build quality is superb.' },
   ]
 
   const thumbsHTML = Array.from({ length: 5 }, (_, i) => {
@@ -381,9 +381,9 @@ export function templateEtecShopz(data: LandingPageData): string {
     <a href="javascript:void(0)" onclick="event.preventDefault()" class="nav-logo">Shopz</a>
     <ul class="nav-links">
       <li><a href="javascript:void(0)" onclick="event.preventDefault()">Home</a></li>
-      <li><a href="javascript:void(0)" onclick="event.preventDefault()" class="active">Men</a></li>
-      <li><a href="javascript:void(0)" onclick="event.preventDefault()">Woman</a></li>
-      <li><a href="javascript:void(0)" onclick="event.preventDefault()">Kids</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()" class="active">Catalogue</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()">Nouveautés</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()">Promotions</a></li>
     </ul>
     <div class="nav-icons">
       <button class="nav-icon-btn">${ICON_SEARCH}</button>
@@ -396,8 +396,8 @@ export function templateEtecShopz(data: LandingPageData): string {
 
   <div class="breadcrumb">
     <a href="javascript:void(0)" onclick="event.preventDefault()">Home</a><span class="breadcrumb-sep">/</span>
-    <a href="javascript:void(0)" onclick="event.preventDefault()">Men</a><span class="breadcrumb-sep">/</span>
-    <a href="javascript:void(0)" onclick="event.preventDefault()">Tops</a><span class="breadcrumb-sep">/</span>
+    <a href="javascript:void(0)" onclick="event.preventDefault()">Catalogue</a><span class="breadcrumb-sep">/</span>
+    <a href="javascript:void(0)" onclick="event.preventDefault()">Produits</a><span class="breadcrumb-sep">/</span>
     <span class="breadcrumb-current">${productName}</span>
   </div>
 
@@ -464,13 +464,13 @@ export function templateEtecShopz(data: LandingPageData): string {
 
     <div id="panel-details" class="tab-panel details-panel">
       <h3>Product Details</h3>
-      <p>${data.benefits?.[0] || 'Crafted from a premium cotton-polyester blend for a soft, breathable feel. Features a relaxed silhouette with ribbed cuffs and hem.'}</p>
+      <p>${data.benefits?.[0] || 'Un produit premium conçu pour offrir qualité et confort au quotidien.'}</p>
       <ul>
-        <li>${data.benefits?.[1] || '65% Cotton, 35% Polyester blend'}</li>
-        <li>${data.benefits?.[2] || 'Relaxed fit — true to size'}</li>
-        <li>${data.benefits?.[3] || 'Machine washable at 30°C'}</li>
-        <li>${data.benefits?.[4] || 'Available in 3 colourways'}</li>
-        <li>${data.benefits?.[5] || 'Sustainably sourced materials'}</li>
+        <li>${data.benefits?.[1] || 'Matériaux de haute qualité'}</li>
+        <li>${data.benefits?.[2] || 'Confort optimal pour une utilisation quotidienne'}</li>
+        <li>${data.benefits?.[3] || 'Entretien facile'}</li>
+        <li>${data.benefits?.[4] || 'Disponible en plusieurs variantes'}</li>
+        <li>${data.benefits?.[5] || 'Matériaux responsables et durables'}</li>
       </ul>
     </div>
 
@@ -531,7 +531,7 @@ export function templateEtecShopz(data: LandingPageData): string {
     <div class="footer-top">
       <div>
         <p class="footer-brand-name">Shopz</p>
-        <p class="footer-brand-desc">Online brand clothing. Focuses on quality branded items and limited edition collections.</p>
+        <p class="footer-brand-desc">${data.subtitle || 'Produits premium sélectionnés pour leur qualité et leur exclusivité.'}</p>
       </div>
       <div>
         <p class="footer-col-title">About Us</p>

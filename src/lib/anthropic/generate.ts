@@ -248,6 +248,7 @@ DONNÉES PRODUIT :
 - Variantes : ${product.variants.map(v => `${v.name}: ${v.values.join(', ')}`).join(' | ') || 'aucune'}
 
 RÈGLES DE GÉNÉRATION :
+0. ANCRAGE PRODUIT — RÈGLE ABSOLUE : Tu ne peux PAS inventer une catégorie de produit. Le "product_name" que tu retournes doit décrire EXACTEMENT le produit fourni dans "Nom" ci-dessus (tu peux reformuler/raccourcir, pas changer la nature). Si "Nom" parle d'un blender, ne pas écrire un sérum. Si "Nom" parle d'une montre, ne pas écrire un parfum. Tous les contenus (story, benefits, testimonials, FAQ) doivent rester cohérents avec ce produit réel — interdit d'inventer des ingrédients, des matériaux ou des cas d'usage qui ne correspondent pas au produit.
 1. Le headline doit créer une IMAGE MENTALE FORTE et toucher un désir profond, pas décrire le produit
 2. Le storytelling (story) suit PAS : problème vécu → agitation émotionnelle → solution avec mécanisme → transformation
 3. Les 5 bénéfices : verbe d'action, orientés résultat/transformation, 15 mots max
@@ -345,7 +346,10 @@ export async function generateLandingPage(
     throw new Error('JSON invalide reçu de DeepSeek — réessaie')
   }
 
-  // Forcer prix depuis les données scrapées (le LLM peut dériver)
+  // Forcer prix + nom depuis les données scrapées (le LLM peut dériver et
+  // inventer un autre type de produit que le titre réel — cf bug "blender →
+  // skincare"). On garde le nom scrapé qui reflète la vraie nature du produit.
+  if (product.title) data.product_name = product.title
   if (product.price) data.price = product.price
   if (product.original_price) data.original_price = product.original_price
 

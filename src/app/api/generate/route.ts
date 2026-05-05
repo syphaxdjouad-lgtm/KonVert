@@ -107,11 +107,29 @@ export async function POST(req: NextRequest) {
       product = body.product ? cleanProduct(body.product) : MOCK_PRODUCT
     }
 
-    if (!product.title) {
+    // Garde-fou anti-hallucination : sans titre exploitable et/ou sans
+    // image, DeepSeek n'a rien à se mettre sous la dent → il se rabat sur
+    // les exemples du prompt et invente du contenu (cf bug "blender →
+    // skincare"). Mieux vaut basculer l'user en saisie manuelle.
+    const titleOk = !!product.title && product.title.trim().length >= 3
+    const imagesOk = !body.url || product.images.length >= 1
+    if (!titleOk || !imagesOk) {
       await rollbackQuota()
+      const reason = !titleOk
+        ? 'le titre n\'a pas pu être extrait'
+        : 'aucune image produit n\'a été récupérée'
       return NextResponse.json(
-        { error: 'Données produit invalides' },
-        { status: 400 }
+        {
+          error: `Scraping insuffisant — ${reason}. Bascule en saisie manuelle pour ce produit (URL souvent bloquée par anti-bot).`,
+          needsManualInput: true,
+          partialData: {
+            title: product.title || '',
+            description: product.description || '',
+            price: product.price || '',
+            images: product.images || [],
+          },
+        },
+        { status: 422 }
       )
     }
 

@@ -400,6 +400,27 @@ function NewPageInner() {
         body: JSON.stringify(body),
       })
       const json = await res.json()
+
+      // Scraping insuffisant (titre vide, 0 image) : on bascule l'user en
+      // saisie manuelle pré-remplie au lieu de lui balancer une erreur sèche.
+      if (!res.ok && res.status === 422 && json.needsManualInput) {
+        const partial = json.partialData || {}
+        setInputMode('manual')
+        setManual(prev => ({
+          ...prev,
+          product_name: partial.title || prev.product_name,
+          subtitle:     partial.description?.slice(0, 200) || prev.subtitle,
+          price:        partial.price || prev.price,
+        }))
+        if (Array.isArray(partial.images) && partial.images.length > 0) {
+          setUploadedPhotos(prev => [...partial.images, ...prev])
+        }
+        setStep(1)
+        setMode('wizard')
+        setError(json.error)
+        return
+      }
+
       if (!res.ok) throw new Error(json.error)
 
       const data: LandingPageData = json.data

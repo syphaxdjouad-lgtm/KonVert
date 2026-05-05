@@ -42,19 +42,19 @@ function stars(n: number) {
   return Array.from({length:5}, (_,i) => `<span style="color:${i<n?C.gold:'#D2D2D7'}">${ICON_STAR}</span>`).join('')
 }
 
-const SPECS = [
+const SPECS_FALLBACK = [
   { label: 'Battery Life',   value: '36h',     unit: 'continuous' },
   { label: 'Weight',         value: '28g',      unit: 'ultra-light' },
-  { label: 'Water Resist.',  value: 'IP68',     unit: 'certified'  },
-  { label: 'Connectivity',   value: 'BT 5.3',   unit: 'ultra-low latency' },
+  { label: 'Water Resist.',  value: 'Certified', unit: 'protection' },
+  { label: 'Connectivity',   value: 'BT',       unit: 'ultra-low latency' },
   { label: 'Charging',       value: '45min',    unit: 'to full charge' },
   { label: 'Warranty',       value: '2 years',  unit: 'worldwide' },
 ]
 
-const FEATURES = [
-  { icon: ICON_BOLT,   title: 'Unmatched Performance', desc: 'Next-gen chip delivers 40% more processing power with zero thermal throttling.' },
-  { icon: ICON_SHIELD, title: 'Built to Last',          desc: 'Military-grade durability. Tested to survive 1.5m drops, dust, and water.' },
-  { icon: ICON_TRUCK,  title: 'Precision Engineered',   desc: 'Sub-millimeter tolerances. Every component crafted for perfect fit and feel.' },
+const FEATURES_FALLBACK = [
+  { icon: ICON_BOLT,   title: 'Unmatched Performance', desc: 'Next-gen design delivers superior performance with optimal efficiency.' },
+  { icon: ICON_SHIELD, title: 'Built to Last',          desc: 'Military-grade durability. Tested to survive drops, dust, and water.' },
+  { icon: ICON_TRUCK,  title: 'Precision Engineered',   desc: 'Every component crafted for perfect fit and feel.' },
 ]
 
 const COLORS = [
@@ -72,11 +72,11 @@ const COMPARE = [
   { feature: 'Price',               ours: 'Best',   comp1: '+20%',  comp2: '+35%'  },
 ]
 
-const REVIEWS = [
+const REVIEWS_FALLBACK = [
   { name: 'Alex T.',    rating: 5, text: 'The battery life is absolutely insane. 3 days without charging on normal use. Never seen anything like it.' },
-  { name: 'Sarah M.',   rating: 5, text: 'I dropped it on concrete twice. Not a scratch. The build quality puts Apple to shame honestly.' },
-  { name: 'James K.',   rating: 5, text: 'Setup took 30 seconds. Bluetooth is rock solid — no dropouts at the gym. My previous pair cut out constantly.' },
-  { name: 'Priya S.',   rating: 5, text: 'I\'m a tech reviewer and this is genuinely impressive for the price point. Competitors charge 2x for less.' },
+  { name: 'Sarah M.',   rating: 5, text: 'I dropped it on concrete twice. Not a scratch. The build quality is exceptional.' },
+  { name: 'James K.',   rating: 5, text: 'Setup took 30 seconds. Connection is rock solid — no dropouts. My previous pair cut out constantly.' },
+  { name: 'Priya S.',   rating: 5, text: 'Genuinely impressive for the price point. Competitors charge 2x for less.' },
 ]
 
 const GADGET_THEME: SectionTheme = {
@@ -94,7 +94,7 @@ const GADGET_THEME: SectionTheme = {
 export function templateEtecGadget(data: LandingPageData): string {
   const img = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
 
-  const productName   = data.product_name   || 'ProTech X1 Ultra'
+  const productName   = data.product_name   || 'ProTech Ultra'
   const headline      = data.headline       || 'Technology that disappears. Performance that doesn\'t.'
   const subtitle      = data.subtitle       || 'The most advanced wearable tech we\'ve ever built. Engineered to the millimeter. Designed to last a decade.'
   const ctaText       = data.cta            || 'Order Now — Ships in 24h'
@@ -104,10 +104,10 @@ export function templateEtecGadget(data: LandingPageData): string {
 
   const benefitsRaw = data.benefits || []
   const benefitsList = [
-    benefitsRaw[0] || '36-hour battery — charge once, use all week',
-    benefitsRaw[1] || 'IP68 waterproof — swim, sweat, shower',
-    benefitsRaw[2] || 'Military-grade drop protection — tested to 1.5m',
-    benefitsRaw[3] || 'Bluetooth 5.3 — zero latency, zero dropouts',
+    benefitsRaw[0] || 'Exceptional battery life — charge less, use more',
+    benefitsRaw[1] || 'Waterproof & dustproof — built for any condition',
+    benefitsRaw[2] || 'Military-grade drop protection — tested to the extreme',
+    benefitsRaw[3] || 'Ultra-stable wireless connection — zero dropouts',
     benefitsRaw[4] || '2-year worldwide warranty included',
   ]
 
@@ -119,14 +119,17 @@ export function templateEtecGadget(data: LandingPageData): string {
     { question: 'How fast is shipping?',                answer: 'Express shipping in 1–3 business days. Order before 2pm for same-day dispatch.' },
   ]
 
-  const specsHTML = SPECS.map(s => `
+  const specsHTML = SPECS_FALLBACK.map(s => `
     <div class="spec-card">
       <div class="spec-value">${s.value}</div>
       <div class="spec-label">${s.label}</div>
       <div class="spec-unit">${s.unit}</div>
     </div>`).join('')
 
-  const featuresHTML = FEATURES.map(f => `
+  const gadgetFeatures = data.features && data.features.length > 0
+    ? data.features.slice(0, 3).map((f, i) => ({ icon: [ICON_BOLT, ICON_SHIELD, ICON_TRUCK][i % 3], title: f.title, desc: f.description }))
+    : FEATURES_FALLBACK
+  const featuresHTML = gadgetFeatures.map(f => `
     <div class="feature-card">
       <div class="feature-icon">${f.icon}</div>
       <h3 class="feature-title">${f.title}</h3>
@@ -141,7 +144,10 @@ export function templateEtecGadget(data: LandingPageData): string {
       <td class="compare-other">${r.comp2}</td>
     </tr>`).join('')
 
-  const reviewsHTML = REVIEWS.map((r, i) => `
+  const gadgetReviews = data.testimonials && data.testimonials.length > 0
+    ? data.testimonials.slice(0, 4).map(t => ({ name: t.name, rating: t.rating, text: t.text }))
+    : REVIEWS_FALLBACK
+  const reviewsHTML = gadgetReviews.map((r, i) => `
     <div class="review-card">
       <div class="review-head">
         <div class="review-av" style="background:${['#0066CC','#6E6E73','#00C7BE','#1D1D1F'][i%4]}">${r.name[0]}</div>
@@ -508,7 +514,7 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
     </div>
     <div class="footer-bottom">
       <span class="footer-copy">© ${new Date().getFullYear()} ${productName}. All rights reserved.</span>
-      <span class="footer-copy">IP68 · BT 5.3 · NSF Certified</span>
+      <span class="footer-copy">${data.hero_badges?.join(' · ') || 'Certified · Tested · Guaranteed'}</span>
     </div>
   </div>
 </footer>

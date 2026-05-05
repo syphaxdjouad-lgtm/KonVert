@@ -54,12 +54,12 @@ const ICON_ROTATE = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none"
 // ─── STATIC DATA ──────────────────────────────────────────────────────────────
 
 const SPECS = [
-  { icon: ICON_CHIP,   label: 'Processeur', value: 'Gen 3 AI',  desc: 'Puce neural intégrée' },
-  { icon: ICON_BOLT,   label: 'Autonomie',  value: '72h',       desc: 'Usage continu certifié' },
-  { icon: ICON_SHIELD, label: 'Protection', value: 'IP68',      desc: 'Eau & poussière' },
-  { icon: ICON_WIFI,   label: 'Connexion',  value: 'BT 5.4',    desc: 'Latence < 20ms' },
-  { icon: ICON_ZAP,    label: 'Charge',     value: '30 min',    desc: 'Charge complète rapide' },
-  { icon: ICON_ROTATE, label: 'Garantie',   value: '2 ans',     desc: 'Retours gratuits' },
+  { icon: ICON_CHIP,   label: 'Processeur', value: 'IA',       desc: 'Puce intelligente intégrée' },
+  { icon: ICON_BOLT,   label: 'Autonomie',  value: '72h',      desc: 'Usage continu certifié' },
+  { icon: ICON_SHIELD, label: 'Protection', value: '★★★',     desc: 'Eau & poussière certifié' },
+  { icon: ICON_WIFI,   label: 'Connexion',  value: 'BT',       desc: 'Latence ultra-faible' },
+  { icon: ICON_ZAP,    label: 'Charge',     value: '30 min',   desc: 'Charge complète rapide' },
+  { icon: ICON_ROTATE, label: 'Garantie',   value: '2 ans',    desc: 'Retours gratuits' },
 ]
 
 const FEATURES_TABS = [
@@ -67,46 +67,46 @@ const FEATURES_TABS = [
     id: 'performance',
     label: 'Performance',
     items: [
-      { title: 'Puce Neural Gen 3',      desc: 'Intelligence artificielle embarquée — traitement local, zéro latence, zéro données envoyées.' },
-      { title: 'Batterie Longue Durée',  desc: '72 heures d\'autonomie réelle. Charge en 30 minutes via USB-C. Compatible charge sans fil.' },
-      { title: 'Thermal Control',        desc: 'Système de dissipation thermique breveté. Performances maximales sans throttling même en usage intensif.' },
+      { title: 'Puce intelligente embarquée', desc: 'Intelligence artificielle intégrée — traitement local, zéro latence, zéro données envoyées.' },
+      { title: 'Batterie Longue Durée',       desc: '72 heures d\'autonomie réelle. Charge en 30 minutes via USB-C. Compatible charge sans fil.' },
+      { title: 'Thermal Control',             desc: 'Système de dissipation thermique breveté. Performances maximales sans throttling même en usage intensif.' },
     ],
   },
   {
     id: 'design',
     label: 'Design',
     items: [
-      { title: 'Aluminium Aerospace',    desc: 'Alliage 7075-T6 usiné CNC. Le même matériau que les coques de satellites.' },
-      { title: 'Verre Saphir',           desc: 'Indice de dureté 9/10 sur l\'échelle Mohs. Résistant aux rayures de clés et couteaux.' },
-      { title: 'Épaisseur 6.2mm',        desc: 'Le plus fin de sa catégorie. 28 grammes seulement — on oublie qu\'on le porte.' },
+      { title: 'Aluminium Aerospace',    desc: 'Alliage haut de gamme usiné CNC. Légèreté et robustesse combinées.' },
+      { title: 'Verre haute résistance', desc: 'Résistant aux rayures du quotidien. Solidité de qualité premium.' },
+      { title: 'Design ultra-mince',     desc: 'Le plus fin de sa catégorie. Poids plume — on oublie qu\'on le porte.' },
     ],
   },
   {
     id: 'connectivity',
     label: 'Connectivité',
     items: [
-      { title: 'Bluetooth 5.4 Ultra',    desc: 'Portée 100m en champ libre. Connexion instantanée multi-appareils. Zéro coupure au sport.' },
-      { title: 'App Ecosystem',          desc: 'Compatible iOS 15+ et Android 10+. Intégration native HomeKit, Google Home et Alexa.' },
-      { title: 'OTA Updates',            desc: 'Mises à jour automatiques over-the-air. Chaque update améliore les performances.' },
+      { title: 'Connexion sans fil ultra-stable', desc: 'Portée étendue en champ libre. Connexion instantanée multi-appareils. Zéro coupure.' },
+      { title: 'Compatibilité universelle',       desc: 'Compatible iOS 15+ et Android 10+. Intégration avec les principaux écosystèmes.' },
+      { title: 'OTA Updates',                     desc: 'Mises à jour automatiques over-the-air. Chaque update améliore les performances.' },
     ],
   },
 ]
 
 const COMPARE = [
-  { feature: 'Autonomie',          ours: '72h',         comp1: '36h',        comp2: '48h'         },
-  { feature: 'Certification eau',  ours: 'IP68',         comp1: 'IP54',       comp2: 'IP67'        },
-  { feature: 'Charge rapide',      ours: '30 min',       comp1: '2h',         comp2: '1h30'        },
-  { feature: 'Puce IA intégrée',   ours: true,           comp1: false,        comp2: false         },
-  { feature: 'Verre Saphir',       ours: true,           comp1: false,        comp2: true          },
-  { feature: 'Garantie',           ours: '2 ans',        comp1: '1 an',       comp2: '1 an'        },
-  { feature: 'Prix',               ours: 'Meilleur',     comp1: '+22%',       comp2: '+40%'        },
+  { feature: 'Autonomie',            ours: '72h',       comp1: '36h',     comp2: '48h'  },
+  { feature: 'Protection eau',       ours: 'Certifiée', comp1: 'Partielle', comp2: 'Standard' },
+  { feature: 'Charge rapide',        ours: '30 min',    comp1: '2h',      comp2: '1h30' },
+  { feature: 'Puce IA intégrée',     ours: true,        comp1: false,     comp2: false  },
+  { feature: 'Verre haute résistance', ours: true,      comp1: false,     comp2: true   },
+  { feature: 'Garantie',             ours: '2 ans',     comp1: '1 an',    comp2: '1 an' },
+  { feature: 'Prix',                 ours: 'Meilleur',  comp1: '+22%',    comp2: '+40%' },
 ]
 
 const REVIEWS = [
-  { name: 'Mehdi B.',   rating: 5, text: 'Je suis testeur tech depuis 8 ans. Ce produit m\'a sincèrement surpris — qualité de build digne du double du prix.' },
+  { name: 'Mehdi B.',   rating: 5, text: 'Ce produit m\'a sincèrement surpris — qualité de build digne du double du prix.' },
   { name: 'Laure D.',   rating: 5, text: 'Autonomie de 3 jours vérifiée. Je l\'ai testé en voyage sans chargeur. Bluffant pour ce tarif.' },
-  { name: 'Karim R.',   rating: 5, text: 'Le bluetooth ne coupe plus au sport. Problème résolu après des années de galère avec d\'autres marques.' },
-  { name: 'Sophie V.',  rating: 5, text: 'Design ultra soigné. Le verre saphir — j\'ai fait un test avec mes clés. Aucune trace. Qualité de horlogerie.' },
+  { name: 'Karim R.',   rating: 5, text: 'La connexion ne coupe plus. Problème résolu après des années de galère avec d\'autres marques.' },
+  { name: 'Sophie V.',  rating: 5, text: 'Design ultra soigné. Le verre haute résistance — aucune rayure après des semaines. Qualité premium.' },
 ]
 
 // ─── HELPER ───────────────────────────────────────────────────────────────────
@@ -155,11 +155,11 @@ export function templateEtecPulse(data: LandingPageData): string {
   const discount      = calcDiscount(price, originalPrice)
 
   const benefitsList = benefits.length > 0 ? benefits : [
-    'Puce Neural Gen 3 — IA embarquée, zéro latence',
+    'Puce IA embarquée — traitement local, zéro latence',
     '72h d\'autonomie — charge en 30 minutes',
-    'IP68 certifié — eau, poussière, chocs',
-    'Bluetooth 5.4 — connexion ultra-stable',
-    'Verre saphir — résistant aux rayures',
+    'Protection certifiée — eau, poussière, chocs',
+    'Connexion sans fil ultra-stable',
+    'Verre haute résistance — résistant aux rayures',
   ]
 
   const faqs = faq.length > 0 ? faq : [
@@ -1440,7 +1440,7 @@ ${renderGuaranteeSection(data, PULSE_THEME)}
     </div>
     <div class="fpls-footer-bottom">
       <span class="fpls-footer-copy">© ${new Date().getFullYear()} ${productName}. Tous droits réservés.</span>
-      <span class="fpls-footer-copy">IP68 · BT 5.4 · Puce Neural Gen 3</span>
+      <span class="fpls-footer-copy">${data.hero_badges?.join(' · ') || 'Certifié · Testé · Garanti'}</span>
     </div>
   </div>
 </footer>

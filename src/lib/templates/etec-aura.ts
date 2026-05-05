@@ -66,9 +66,9 @@ export function templateEtecAura(data: LandingPageData): string {
     </li>`).join('')
 
   const ritualSteps = [
-    { num: '01', title: data.benefits[0] || 'Morning Ritual',     desc: 'Begin your day with intention. Take your daily serving and set the tone for a vibrant, energised day.' },
-    { num: '02', title: data.benefits[1] || 'Feel the Difference', desc: "Our formula works with your body's natural rhythms. Notice lasting improvements in energy, mood and clarity." },
-    { num: '03', title: data.benefits[2] || 'Transform Your Life', desc: 'After 30 days, experience the full compound effect. Mind, body and soul in perfect, lasting harmony.' },
+    { num: '01', title: data.benefits[0] || data.how_it_works?.[0] || `Étape 1 — ${data.product_name}`, desc: data.features?.[0]?.description || `Intégrez ${data.product_name} dans votre routine quotidienne pour des résultats visibles.` },
+    { num: '02', title: data.benefits[1] || data.how_it_works?.[1] || 'Ressentez la différence', desc: data.features?.[1]?.description || `La formule de ${data.product_name} agit progressivement. Constatez des améliorations durables.` },
+    { num: '03', title: data.benefits[2] || data.how_it_works?.[2] || 'Transformez votre quotidien', desc: data.features?.[2]?.description || `Après 30 jours, profitez de tous les bénéfices de ${data.product_name} — un équilibre parfait et durable.` },
   ]
 
   const ritualHTML = ritualSteps.map(s => `
@@ -82,10 +82,10 @@ export function templateEtecAura(data: LandingPageData): string {
     </div>`).join('')
 
   const ingredients = [
-    { emoji: '🫐', name: 'Wild Blueberry',  desc: data.benefits[3] || 'Rich in antioxidants that protect cells and support cognitive clarity and memory.' },
-    { emoji: '🌿', name: 'Ashwagandha',     desc: data.benefits[4] || 'Adaptogenic root clinically proven to reduce cortisol and promote calm focus.' },
-    { emoji: '💧', name: 'Hyaluronic Acid', desc: 'Deep hydration at the cellular level, maintaining skin elasticity and radiance from within.' },
-    { emoji: '🌸', name: 'Rhodiola Rosea',  desc: 'Arctic root known to enhance mental stamina, resilience and performance under stress.' },
+    { emoji: '✦', name: data.features?.[0]?.title || data.benefits[3]?.split(' ').slice(0,3).join(' ') || 'Ingrédient clé 1', desc: data.benefits[3] || `${data.product_name} — composant actif sélectionné pour son efficacité.` },
+    { emoji: '✦', name: data.features?.[1]?.title || data.benefits[4]?.split(' ').slice(0,3).join(' ') || 'Ingrédient clé 2', desc: data.benefits[4] || `Composant actif qui soutient les effets durables de ${data.product_name}.` },
+    { emoji: '✦', name: data.features?.[2]?.title || data.unique_mechanism?.name || 'Complexe actif', desc: data.features?.[2]?.description || `Association synergique au cœur de la formule ${data.product_name}.` },
+    { emoji: '✦', name: data.features?.[3]?.title || 'Ingrédient clé 4', desc: data.features?.[3]?.description || `Composant essentiel pour des résultats visibles et durables.` },
   ]
 
   const ingredientsHTML = ingredients.map(ing => `
@@ -182,9 +182,9 @@ export function templateEtecAura(data: LandingPageData): string {
           <span style="width:6px;height:6px;border-radius:50%;background:${C.gold};display:inline-block;"></span>
           <span style="font-size:12px;color:rgba(232,222,255,.8);font-family:'DM Sans',sans-serif;letter-spacing:.04em;">Pure Wellness · Since 2020</span>
         </div>
-        <h1 class="h1-au" style="font-family:'Playfair Display',Georgia,serif;font-size:56px;font-weight:700;line-height:1.1;letter-spacing:-.025em;color:#FFFFFF;margin-bottom:12px;">Nourish Your<br/><em style="font-style:italic;color:${C.accentLight};">Mind, Body</em><br/>&amp; Soul</h1>
+        <h1 class="h1-au" style="font-family:'Playfair Display',Georgia,serif;font-size:56px;font-weight:700;line-height:1.1;letter-spacing:-.025em;color:#FFFFFF;margin-bottom:12px;">${data.headline || `Discover<br/><em style="font-style:italic;color:${C.accentLight};">${data.product_name}</em>`}</h1>
         <p style="font-family:'Playfair Display',Georgia,serif;font-size:17px;font-style:italic;color:rgba(232,222,255,.7);margin-bottom:10px;">${data.product_name}</p>
-        <p style="font-size:15px;color:rgba(232,222,255,.6);line-height:1.8;margin-bottom:36px;max-width:440px;font-family:'DM Sans',sans-serif;">${data.subtitle || 'A daily wellness ritual formulated with the purest natural ingredients to restore balance and elevate your everyday.'}</p>
+        <p style="font-size:15px;color:rgba(232,222,255,.6);line-height:1.8;margin-bottom:36px;max-width:440px;font-family:'DM Sans',sans-serif;">${data.subtitle || `${data.product_name} — une formulation d'exception pour votre quotidien.`}</p>
         <div style="display:flex;gap:14px;flex-wrap:wrap;">
           <a href="javascript:void(0)" onclick="event.preventDefault()" style="background:${C.accent};color:#fff;padding:16px 34px;border-radius:100px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;display:inline-block;transition:opacity .2s;" onmouseover="this.style.opacity='.87'" onmouseout="this.style.opacity='1'">${data.cta || 'Begin your ritual'}</a>
           <a href="javascript:void(0)" onclick="event.preventDefault()" style="background:transparent;color:${C.accentLight};padding:16px 32px;border-radius:100px;font-size:14px;font-family:'DM Sans',sans-serif;border:1px solid rgba(232,222,255,.28);display:inline-block;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(232,222,255,.6)'" onmouseout="this.style.borderColor='rgba(232,222,255,.28)'">Learn more</a>
@@ -207,7 +207,7 @@ export function templateEtecAura(data: LandingPageData): string {
 <!-- ═══ TRUST PILLS ════════════════════════════════════════════════════════ -->
 <section style="background:${C.card};border-bottom:1px solid ${C.border};padding:16px 0;">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
-    ${[['✓','Clinically Tested'],['🌿','100% Natural'],['💜','Cruelty Free'],['♻️','Eco Packaged']].map(([icon, label]) => `
+    ${([['✓', data.hero_badges?.[0] || 'Certifié'],['🌿', data.hero_badges?.[1] || 'Qualité Premium'],['💜', data.hero_badges?.[2] || 'Testé & Approuvé'],['♻️', data.hero_badges?.[3] || 'Éco Responsable']] as [string,string][]).map(([icon, label]) => `
     <div style="display:inline-flex;align-items:center;gap:8px;background:${C.accentLight};border-radius:100px;padding:8px 18px;">
       <span>${icon}</span><span style="font-size:13px;font-weight:500;color:${C.accent};font-family:'DM Sans',sans-serif;">${label}</span>
     </div>`).join('')}
@@ -237,7 +237,7 @@ export function templateEtecAura(data: LandingPageData): string {
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">${thumbsHTML}</div>
       </div>
       <div>
-        <span style="display:inline-block;background:${C.accentLight};color:${C.accent};font-size:11px;font-weight:600;padding:5px 14px;border-radius:100px;font-family:'DM Sans',sans-serif;letter-spacing:.06em;margin-bottom:16px;">Wellness · Supplements</span>
+        <span style="display:inline-block;background:${C.accentLight};color:${C.accent};font-size:11px;font-weight:600;padding:5px 14px;border-radius:100px;font-family:'DM Sans',sans-serif;letter-spacing:.06em;margin-bottom:16px;">${data.hero_badges?.[0] || data.unique_mechanism || 'Premium'}</span>
         <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:34px;font-weight:700;line-height:1.2;letter-spacing:-.02em;color:${C.text};margin-bottom:12px;">${data.product_name}</h1>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
           <span style="color:${C.gold};font-size:14px;letter-spacing:3px;">★★★★★</span>

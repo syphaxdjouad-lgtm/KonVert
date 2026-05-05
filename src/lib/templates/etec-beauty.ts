@@ -86,35 +86,35 @@ export function templateEtecBeauty(data: LandingPageData): string {
     {
       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${C.white}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
       bg: '#7C5CBF',
-      title: 'Best Hair Care',
-      desc: data.benefits[0] || `${data.product_name} est formulé pour nourrir, réparer et sublimer chaque fibre capillaire en profondeur.`,
+      title: data.features?.[0]?.title || data.unique_mechanism || 'Premium Quality',
+      desc: data.benefits[0] || `${data.product_name} est formulé pour des résultats visibles et durables.`,
     },
     {
       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${C.white}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
       bg: C.orange,
-      title: 'Sustainable',
-      desc: data.benefits[1] || 'Ingrédients 100% biologiques, emballages recyclables, production éthique. Un choix beauté responsable.',
+      title: data.features?.[1]?.title || 'Sustainable',
+      desc: data.benefits[1] || `${data.product_name} — un choix responsable et durable.`,
     },
     {
       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${C.white}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>`,
       bg: C.orange,
-      title: 'Advance Formula',
-      desc: data.benefits[2] || 'Notre formule brevetée combine kératine, acides aminés et extraits botaniques pour des résultats visibles dès la première utilisation.',
+      title: data.features?.[2]?.title || 'Advanced Formula',
+      desc: data.benefits[2] || `${data.product_name} — une formulation avancée pour des résultats visibles dès la première utilisation.`,
     },
     {
       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${C.white}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
       bg: '#2D7D46',
-      title: 'Transparency',
-      desc: data.benefits[3] || 'Composition 100% transparente, sans sulfates ni parabènes. Chaque ingrédient est listé avec sa provenance et son rôle.',
+      title: data.features?.[3]?.title || 'Transparency',
+      desc: data.benefits[3] || `Composition transparente. Chaque composant de ${data.product_name} est sélectionné avec soin.`,
     },
   ]
 
   // ── 4 produits cards grille 2x2 ───────────────────────────────────────────
   const productCards = [
-    { img: imgs[0], title: data.product_name, desc: data.subtitle || 'Soin capillaire premium', price: price, starBg: '#7C5CBF' },
-    { img: imgs[1], title: `${data.product_name} Pro`, desc: 'Traitement intensif réparateur', price: String(Math.round(parseFloat(price) * 1.3)), starBg: C.orange },
-    { img: imgs[2], title: `${data.product_name} Light`, desc: 'Formule quotidienne légère', price: String(Math.round(parseFloat(price) * 0.85)), starBg: C.orange },
-    { img: imgs[3], title: `${data.product_name} Night`, desc: 'Masque nuit régénérant', price: String(Math.round(parseFloat(price) * 1.15)), starBg: '#2D7D46' },
+    { img: imgs[0], title: data.product_name, desc: data.subtitle || data.benefits[0] || 'Version essentielle', price: price, starBg: '#7C5CBF' },
+    { img: imgs[1], title: `${data.product_name} Pro`, desc: data.benefits[1] || 'Version intensive', price: String(Math.round(parseFloat(price) * 1.3)), starBg: C.orange },
+    { img: imgs[2], title: `${data.product_name} Light`, desc: data.benefits[2] || 'Version quotidienne', price: String(Math.round(parseFloat(price) * 0.85)), starBg: C.orange },
+    { img: imgs[3], title: `${data.product_name} Night`, desc: data.benefits[3] || 'Version nuit', price: String(Math.round(parseFloat(price) * 1.15)), starBg: '#2D7D46' },
   ]
 
   // ── Témoignages ───────────────────────────────────────────────────────────
@@ -249,13 +249,13 @@ export function templateEtecBeauty(data: LandingPageData): string {
 
     <!-- Colonne texte -->
     <div class="hero-text" style="flex:1;padding-left:40px;padding-right:32px;z-index:2;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:18px;">Hair Care · Premium · Organic</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:18px;">${data.hero_badges?.[0] || data.unique_mechanism || 'Premium · Organic'}</p>
 
       <h1 class="hero-title" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:68px;font-weight:600;line-height:1.0;letter-spacing:-.02em;color:${C.text};margin-bottom:20px;">
         Ultra<br/>${data.product_name}
       </h1>
 
-      <p style="font-size:16px;color:${C.muted};line-height:1.75;max-width:420px;margin-bottom:36px;font-family:'DM Sans',sans-serif;">${data.subtitle || `Découvrez ${data.product_name}, la révolution capillaire qui nourrit, répare et sublime vos cheveux avec des ingrédients 100% organiques.`}</p>
+      <p style="font-size:16px;color:${C.muted};line-height:1.75;max-width:420px;margin-bottom:36px;font-family:'DM Sans',sans-serif;">${data.subtitle || `Découvrez ${data.product_name} — des résultats visibles, une formule d'exception.`}</p>
 
       <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
         <button class="btn-orange">
@@ -322,10 +322,10 @@ export function templateEtecBeauty(data: LandingPageData): string {
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
     <div class="stats-bar" style="display:flex;align-items:stretch;">
       ${[
-        { label: 'INGREDIENTS', value: '100% Organic' },
-        { label: 'MATERIAL', value: 'Beauty Grade' },
-        { label: 'FLAVOR', value: '9 Variations' },
-        { label: 'VOLUME', value: '100ml' },
+        { label: 'QUALITY', value: data.hero_badges?.[0] || 'Premium' },
+        { label: 'FORMULA', value: data.unique_mechanism || 'Certifié' },
+        { label: 'VARIANTS', value: data.hero_badges?.[1] || data.benefits[0]?.split(' ').slice(0,2).join(' ') || 'Multi-usage' },
+        { label: 'FORMAT', value: data.hero_badges?.[2] || 'Optimal' },
         { label: 'DELIVERY', value: 'Free' },
       ].map((s, i) => `
         <div style="flex:1;padding:28px 20px;border-right:${i < 4 ? '1px solid rgba(255,255,255,0.08)' : 'none'};text-align:center;">
@@ -401,7 +401,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
     <div style="text-align:center;margin-bottom:56px;">
       <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Collection</p>
       <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Our Products</h2>
-      <p style="color:${C.muted};font-size:16px;max-width:480px;margin:0 auto;font-family:'DM Sans',sans-serif;">Une gamme complète pour chaque type de cheveux et chaque besoin.</p>
+      <p style="color:${C.muted};font-size:16px;max-width:480px;margin:0 auto;font-family:'DM Sans',sans-serif;">${data.subtitle || `Une gamme complète autour de ${data.product_name}.`}</p>
     </div>
 
     <!-- Grille 2x2 -->
@@ -518,7 +518,7 @@ ${data.faq && data.faq.length > 0 ? `
       <!-- Texte gauche -->
       <div style="flex:1;">
         <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;color:${C.white};margin-bottom:10px;line-height:1.15;">Subscribe for Updates</h2>
-        <p style="font-size:14px;color:rgba(255,255,255,0.55);font-family:'DM Sans',sans-serif;line-height:1.75;max-width:380px;">Recevez les nouvelles formules, promotions exclusives et conseils beauté capillaires en avant-première.</p>
+        <p style="font-size:14px;color:rgba(255,255,255,0.55);font-family:'DM Sans',sans-serif;line-height:1.75;max-width:380px;">${data.final_pitch || `Recevez les nouveautés, promotions exclusives et conseils sur ${data.product_name} en avant-première.`}</p>
       </div>
 
       <!-- Formulaire droite -->
@@ -553,7 +553,7 @@ ${data.faq && data.faq.length > 0 ? `
       <!-- Brand colonne -->
       <div style="flex:1.4;min-width:200px;">
         <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:600;color:${C.white};display:block;margin-bottom:16px;">${data.product_name}</a>
-        <p style="font-size:13px;color:rgba(255,255,255,0.45);line-height:1.8;font-family:'DM Sans',sans-serif;margin-bottom:20px;max-width:240px;">Votre partenaire beauté capillaire premium depuis 2020. Formulé avec amour, livré avec soin.</p>
+        <p style="font-size:13px;color:rgba(255,255,255,0.45);line-height:1.8;font-family:'DM Sans',sans-serif;margin-bottom:20px;max-width:240px;">${data.final_pitch || `Votre partenaire ${data.product_name}. Formulé avec soin, livré avec amour.`}</p>
         <!-- Contact -->
         <p style="font-size:12px;color:rgba(255,255,255,0.4);font-family:'DM Sans',sans-serif;margin-bottom:6px;">hello@${data.product_name.toLowerCase().replace(/\s/g,'')}.com</p>
         <p style="font-size:12px;color:rgba(255,255,255,0.4);font-family:'DM Sans',sans-serif;margin-bottom:20px;">+33 1 23 45 67 89</p>

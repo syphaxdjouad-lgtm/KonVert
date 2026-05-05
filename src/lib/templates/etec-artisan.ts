@@ -92,7 +92,7 @@ body{font-family:'Jost',sans-serif;background:#FBF3ED;color:#111;}
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;">
     <span style="font-size:12px;color:#AAA;">Boutique</span>
     <span style="font-size:12px;color:#DDD;">›</span>
-    <span style="font-size:12px;color:#AAA;">Soins artisanaux</span>
+    <span style="font-size:12px;color:#AAA;">Collection</span>
     <span style="font-size:12px;color:#DDD;">›</span>
     <span style="font-size:12px;color:#111;font-weight:500;">${data.product_name}</span>
   </div>
@@ -113,7 +113,7 @@ body{font-family:'Jost',sans-serif;background:#FBF3ED;color:#111;}
     </div>
 
     <div style="width:45%;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;" class="ar-hero-info">
-      <p style="font-size:12px;font-weight:500;letter-spacing:0.1em;color:#FF871D;text-transform:uppercase;margin-bottom:12px;">Artisanal & Naturel</p>
+      <p style="font-size:12px;font-weight:500;letter-spacing:0.1em;color:#FF871D;text-transform:uppercase;margin-bottom:12px;">${data.hero_badges?.[0] || data.unique_mechanism || 'Premium & Naturel'}</p>
       <h1 style="font-family:'Crimson Text',serif;font-size:42px;font-weight:700;color:#111;line-height:1.15;margin-bottom:14px;">${data.headline}</h1>
       <p style="font-size:15px;color:#888;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 
@@ -166,16 +166,16 @@ body{font-family:'Jost',sans-serif;background:#FBF3ED;color:#111;}
   <div style="max-width:800px;margin:0 auto;">
     <div style="display:flex;border-bottom:1px solid #EDE6DC;margin-bottom:32px;">
       ${[
-        { label: 'Ingrédients', content: `<p style="font-size:14px;color:#888;line-height:1.8;">Huile d'olive bio, beurre de karité, huiles essentielles naturelles, argile, miel. Sans parabènes, sans sulfates, sans colorants artificiels. Formule végane et cruelty-free.</p>` },
-        { label: 'Utilisation', content: `<p style="font-size:14px;color:#888;line-height:1.8;">Mouillez le savon sous l'eau tiède. Faites mousser entre vos mains ou avec un gant. Appliquez sur le corps en massant. Rincez abondamment. Conservez au sec entre chaque utilisation.</p>` },
-        { label: 'Livraison', content: `<p style="font-size:14px;color:#888;line-height:1.8;">Livraison offerte dès 35€. Emballage kraft recyclable. Expédition sous 48h. Petite carte manuscrite incluse dans chaque commande. Livraison en France et Belgique.</p>` },
+        { label: 'Composition', content: `<p style="font-size:14px;color:#888;line-height:1.8;">${data.features?.[0]?.description || data.benefits.slice(0,3).join('. ') || `${data.product_name} — composition naturelle, sans additifs indésirables.`}</p>` },
+        { label: 'Utilisation', content: `<p style="font-size:14px;color:#888;line-height:1.8;">${data.features?.[1]?.description || data.how_it_works?.[0] || `Suivez les instructions d'utilisation de ${data.product_name} pour des résultats optimaux.`}</p>` },
+        { label: 'Livraison', content: `<p style="font-size:14px;color:#888;line-height:1.8;">Livraison offerte à partir d'un certain montant. Emballage recyclable. Expédition sous 48h. Livraison en France et Belgique.</p>` },
       ].map((t, i) => `
       <button onclick="(function(){document.querySelectorAll('.tp-ar').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tbtn-ar').forEach(function(b,j){b.style.borderBottom=j===${i}?'2px solid #FF871D':'2px solid transparent';b.style.color=j===${i}?'#111':'#AAA';b.style.marginBottom='-1px';});})()" class="tbtn-ar" style="padding:14px 24px;background:none;border:none;border-bottom:${i===0?'2px solid #FF871D':'2px solid transparent'};color:${i===0?'#111':'#AAA'};font-family:'Jost',sans-serif;font-size:13px;font-weight:500;cursor:pointer;margin-bottom:-1px;transition:all .2s;">${t.label}</button>`).join('')}
     </div>
     ${[
-      `<p style="font-size:14px;color:#888;line-height:1.8;">Huile d'olive bio, beurre de karité, huiles essentielles naturelles, argile, miel. Sans parabènes, sans sulfates, sans colorants artificiels. Formule végane et cruelty-free.</p>`,
-      `<p style="font-size:14px;color:#888;line-height:1.8;">Mouillez le savon sous l'eau tiède. Faites mousser entre vos mains ou avec un gant. Appliquez sur le corps en massant. Rincez abondamment. Conservez au sec entre chaque utilisation.</p>`,
-      `<p style="font-size:14px;color:#888;line-height:1.8;">Livraison offerte dès 35€. Emballage kraft recyclable. Expédition sous 48h. Petite carte manuscrite incluse dans chaque commande. Livraison en France et Belgique.</p>`,
+      `<p style="font-size:14px;color:#888;line-height:1.8;">${data.features?.[0]?.description || data.benefits.slice(0,3).join('. ') || `${data.product_name} — composition naturelle, sans additifs indésirables.`}</p>`,
+      `<p style="font-size:14px;color:#888;line-height:1.8;">${data.features?.[1]?.description || data.how_it_works?.[0] || `Suivez les instructions d'utilisation de ${data.product_name} pour des résultats optimaux.`}</p>`,
+      `<p style="font-size:14px;color:#888;line-height:1.8;">Livraison offerte à partir d'un certain montant. Emballage recyclable. Expédition sous 48h. Livraison en France et Belgique.</p>`,
     ].map((c, i) => `<div class="tp-ar" style="display:${i===0?'block':'none'};">${c}</div>`).join('')}
   </div>
 </section>
@@ -242,7 +242,7 @@ ${renderGuaranteeSection(data, ARTISAN_THEME)}
 <!-- CTA FINAL -->
 <section style="padding:100px 24px;background:#111;">
   <div style="max-width:700px;margin:0 auto;text-align:center;">
-    <p style="font-size:12px;font-weight:500;letter-spacing:0.1em;color:#FF871D;text-transform:uppercase;margin-bottom:16px;">Artisanal & Naturel</p>
+    <p style="font-size:12px;font-weight:500;letter-spacing:0.1em;color:#FF871D;text-transform:uppercase;margin-bottom:16px;">${data.hero_badges?.[0] || data.unique_mechanism || 'Premium & Naturel'}</p>
     <h2 style="font-family:'Crimson Text',serif;font-size:40px;font-weight:700;color:#FBF3ED;margin-bottom:16px;">${data.headline}</h2>
     <p style="font-size:15px;color:rgba(251,243,237,0.5);margin-bottom:36px;line-height:1.7;">${data.subtitle}</p>
     ${data.price ? `<p style="font-family:'Crimson Text',serif;font-size:48px;font-weight:700;color:#FF871D;margin-bottom:36px;">${data.price}€</p>` : ''}

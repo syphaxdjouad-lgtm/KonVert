@@ -70,21 +70,21 @@ export function templateEtecRose(data: LandingPageData): string {
   // ── Features alternées ──
   const featData = [
     {
-      label: 'Formule & Efficacité',
-      title: data.benefits[0] || `${data.product_name} — La science au service de la beauté`,
-      desc:  data.subtitle || `Chaque ingrédient de ${data.product_name} a été soigneusement sélectionné pour maximiser les résultats visibles dès les premières applications.`,
+      label: data.features?.[0]?.title || data.unique_mechanism || 'Formule',
+      title: data.benefits[0] || `${data.product_name} — Des résultats visibles`,
+      desc:  data.subtitle || `Chaque composant de ${data.product_name} a été soigneusement sélectionné pour maximiser les résultats visibles dès les premières utilisations.`,
       img:   imgs[0],
     },
     {
-      label: 'Texture & Sensorialité',
-      title: data.benefits[1] || 'Une texture qui fond sur la peau',
-      desc:  data.benefits[3] || `La formule légère et non grasse de ${data.product_name} s'absorbe instantanément, laissant la peau douce, lumineuse et parfaitement hydratée.`,
+      label: data.features?.[1]?.title || 'Texture & Confort',
+      title: data.benefits[1] || `${data.product_name} — Un confort immédiat`,
+      desc:  data.benefits[3] || `${data.product_name} s'intègre naturellement dans votre routine quotidienne pour des effets durables et perceptibles.`,
       img:   imgs[1],
     },
     {
-      label: 'Résultats durables',
-      title: data.benefits[2] || 'Des résultats visibles en 7 jours',
-      desc:  data.benefits[4] || `Cliniquement testé et approuvé par des dermatologues. ${data.product_name} améliore durablement le teint, l'éclat et la texture de votre peau.`,
+      label: data.features?.[2]?.title || 'Résultats',
+      title: data.benefits[2] || `${data.product_name} — Des résultats prouvés`,
+      desc:  data.benefits[4] || `Testé et validé. ${data.product_name} améliore durablement votre quotidien grâce à une formulation d'exception.`,
       img:   imgs[2],
     },
   ]
@@ -204,7 +204,7 @@ export function templateEtecRose(data: LandingPageData): string {
     <!-- Info droite -->
     <div>
       <!-- Label niche -->
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};margin-bottom:14px;">Beauté · Skincare · Premium</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};margin-bottom:14px;">${data.hero_badges?.[0] || data.unique_mechanism || 'Premium'}</p>
 
       <!-- H1 Cormorant Garamond -->
       <h1 class="h1-rose" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:42px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:${C.text};margin-bottom:10px;">${data.product_name}</h1>
@@ -294,7 +294,7 @@ export function templateEtecRose(data: LandingPageData): string {
     <div style="text-align:center;margin-bottom:64px;">
       <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'Inter',sans-serif;margin-bottom:14px;">Caractéristiques</p>
       <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;line-height:1.2;">${data.headline || data.product_name}</h2>
-      <p style="color:${C.muted};font-size:15px;max-width:520px;margin:0 auto;font-family:'Inter',sans-serif;line-height:1.75;">${data.subtitle || 'Une formule d\'exception pensée pour sublimer votre peau au quotidien.'}</p>
+      <p style="color:${C.muted};font-size:15px;max-width:520px;margin:0 auto;font-family:'Inter',sans-serif;line-height:1.75;">${data.subtitle || `Découvrez ce qui fait la différence avec ${data.product_name}.`}</p>
     </div>
     ${featuresHTML}
   </div>
@@ -306,7 +306,7 @@ export function templateEtecRose(data: LandingPageData): string {
     <div style="text-align:center;margin-bottom:52px;">
       <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'Inter',sans-serif;margin-bottom:14px;">Transformation</p>
       <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Avant · Après</h2>
-      <p style="color:${C.muted};font-size:15px;max-width:480px;margin:0 auto;font-family:'Inter',sans-serif;">Des milliers de femmes ont transformé leur peau avec ${data.product_name}. Voici leur vérité.</p>
+      <p style="color:${C.muted};font-size:15px;max-width:480px;margin:0 auto;font-family:'Inter',sans-serif;">${data.social_proof || `Des milliers de clients ont transformé leur quotidien avec ${data.product_name}. Voici leur vérité.`}</p>
     </div>
     <div class="ba3" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
       <!-- Avant -->
@@ -317,7 +317,7 @@ export function templateEtecRose(data: LandingPageData): string {
         </div>
         <div style="padding:22px;">
           <p style="font-size:15px;font-weight:600;color:${C.text};margin-bottom:8px;font-family:'Inter',sans-serif;">Avant notre produit</p>
-          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'Inter',sans-serif;">Teint terne, pores visibles, hydratation insuffisante. La peau manque d'éclat et de vitalité au quotidien.</p>
+          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'Inter',sans-serif;">${data.story?.problem || 'Avant : une routine inefficace, des résultats décevants et un manque de résultats visibles au quotidien.'}</p>
         </div>
       </div>
       <!-- Après -->
@@ -328,7 +328,7 @@ export function templateEtecRose(data: LandingPageData): string {
         </div>
         <div style="padding:22px;">
           <p style="font-size:15px;font-weight:600;color:${C.text};margin-bottom:8px;font-family:'Inter',sans-serif;">Après ${data.product_name}</p>
-          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'Inter',sans-serif;">Peau lumineuse, texture lissée, hydratation optimale. Un éclat naturel retrouvé dès les premières applications.</p>
+          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'Inter',sans-serif;">${data.story?.solution || `Après ${data.product_name} : des résultats visibles et durables dès les premières utilisations.`}</p>
         </div>
       </div>
     </div>

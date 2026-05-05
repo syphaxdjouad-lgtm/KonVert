@@ -57,7 +57,7 @@ function stars(count: number): string {
   ).join('')
 }
 
-const BADGE_BRANDS = ['Forbes', 'Vogue', 'Men\'s Health', 'Healthline', 'TIME']
+const BADGE_BRANDS_FALLBACK = ['Featured', 'Recognized', 'Award Winner', 'Certified', 'Trusted']
 
 const CERTIFICATIONS = [
   { icon: ICON_LEAF,    label: 'Vegan Certified'   },
@@ -66,35 +66,35 @@ const CERTIFICATIONS = [
   { icon: ICON_RECYCLE, label: 'Eco Packaging'     },
 ]
 
-const INGREDIENTS = [
-  { name: 'Ashwagandha KSM-66®', dose: '600mg', benefit: 'Reduce cortisol & manage stress', color: '#F3F0E8' },
-  { name: 'Magnesium Glycinate',  dose: '300mg', benefit: 'Deep sleep & muscle recovery',   color: '#EBF5E9' },
-  { name: 'Lion\'s Mane Extract', dose: '500mg', benefit: 'Focus, memory & brain health',   color: '#EEF2F8' },
-  { name: 'CoQ10 Ubiquinol',      dose: '100mg', benefit: 'Cellular energy & antioxidant',  color: '#FEF3EE' },
-  { name: 'Vitamin D3 + K2',      dose: '2000IU', benefit: 'Immune, bone & heart support',  color: '#FFF8E7' },
-  { name: 'Omega-3 EPA/DHA',      dose: '1000mg', benefit: 'Heart health & inflammation',   color: '#EDF4FF' },
+const INGREDIENTS_FALLBACK = [
+  { name: 'Ingrédient actif #1',  dose: '—', benefit: 'Soutien du bien-être général',       color: '#F3F0E8' },
+  { name: 'Ingrédient actif #2',  dose: '—', benefit: 'Récupération & équilibre optimal',   color: '#EBF5E9' },
+  { name: 'Ingrédient actif #3',  dose: '—', benefit: 'Concentration & vitalité cognitive', color: '#EEF2F8' },
+  { name: 'Ingrédient actif #4',  dose: '—', benefit: 'Énergie cellulaire & antioxydant',   color: '#FEF3EE' },
+  { name: 'Ingrédient actif #5',  dose: '—', benefit: 'Immunité, os & cœur',                color: '#FFF8E7' },
+  { name: 'Ingrédient actif #6',  dose: '—', benefit: 'Santé cardiovasculaire',             color: '#EDF4FF' },
 ]
 
-const HOW_IT_WORKS = [
-  { step: '01', title: 'Take 2 capsules daily',   desc: 'Best with your morning meal. No prep, no powder — just 2 capsules.' },
-  { step: '02', title: 'Your body absorbs',        desc: 'Bioavailable forms of each ingredient ensure maximum absorption rate.' },
-  { step: '03', title: 'Feel the difference',      desc: 'Most users notice improved energy & focus within the first 2 weeks.' },
+const HOW_IT_WORKS_FALLBACK = [
+  { step: '01', title: 'Utilisation quotidienne simple', desc: 'Intégrez facilement ce produit dans votre routine. Sans préparation complexe.' },
+  { step: '02', title: 'Absorption optimale',            desc: 'Formule biodisponible conçue pour maximiser l\'efficacité de chaque nutriment.' },
+  { step: '03', title: 'Ressentez la différence',        desc: 'La plupart des utilisateurs remarquent des améliorations dans les premières semaines.' },
 ]
 
-const BENEFITS_ICONS = [
-  { emoji: '⚡', label: 'All-Day Energy',   desc: 'No crash, no jitters — sustained vitality through your entire day.' },
-  { emoji: '🧠', label: 'Sharp Focus',      desc: 'Nootropic stack that clears brain fog and sharpens cognitive function.' },
-  { emoji: '😴', label: 'Deep Sleep',       desc: 'Adaptogenic blend that calms your nervous system for restorative rest.' },
-  { emoji: '💪', label: 'Faster Recovery',  desc: 'Anti-inflammatory nutrients that help your body rebuild after effort.' },
-  { emoji: '🛡️', label: 'Immune Support',   desc: 'Clinically dosed vitamins that strengthen your body\'s defense system.' },
-  { emoji: '🌱', label: '100% Clean',       desc: 'No fillers, no artificial colors, no hidden additives. Just pure nutrients.' },
+const BENEFITS_ICONS_FALLBACK = [
+  { emoji: '⚡', label: 'Énergie durable',  desc: 'Vitalité soutenue tout au long de la journée, sans crash ni effets indésirables.' },
+  { emoji: '🧠', label: 'Concentration',    desc: 'Clarté mentale et focus améliorés pour performer au quotidien.' },
+  { emoji: '😴', label: 'Sommeil profond',  desc: 'Formule apaisante pour un repos réparateur et une récupération optimale.' },
+  { emoji: '💪', label: 'Récupération',     desc: 'Nutriments qui aident le corps à se régénérer après l\'effort.' },
+  { emoji: '🛡️', label: 'Immunité',         desc: 'Renforcement naturel des défenses de l\'organisme.' },
+  { emoji: '🌱', label: '100% Pur',         desc: 'Aucun additif inutile. Uniquement des nutriments de qualité.' },
 ]
 
-const RESULTS_STATS = [
-  { value: '94%', label: 'reported more energy after 2 weeks' },
-  { value: '89%', label: 'noticed better focus within 14 days' },
-  { value: '91%', label: 'would recommend to a friend' },
-  { value: '4.9★', label: 'average rating from 12,000+ reviews' },
+const RESULTS_STATS_FALLBACK = [
+  { value: '94%', label: 'constatent des améliorations en 2 semaines' },
+  { value: '89%', label: 'notent une meilleure concentration sous 14 jours' },
+  { value: '91%', label: 'recommandent le produit à leurs proches' },
+  { value: '4.9★', label: 'note moyenne sur plus de 10 000 avis' },
 ]
 
 const PRIME_THEME: SectionTheme = {
@@ -157,7 +157,15 @@ export function templateEtecPrime(data: LandingPageData): string {
       <p class="review-text">"${r.text}"</p>
     </div>`).join('')
 
-  const ingredientsHTML = INGREDIENTS.map(ing => `
+  const ingredientsList = data.features && data.features.length > 0
+    ? data.features.slice(0, 6).map((f, i) => ({
+        name: f.title,
+        dose: '—',
+        benefit: f.description,
+        color: INGREDIENTS_FALLBACK[i % INGREDIENTS_FALLBACK.length].color,
+      }))
+    : INGREDIENTS_FALLBACK
+  const ingredientsHTML = ingredientsList.map(ing => `
     <div class="ingredient-card" style="background:${ing.color}">
       <div class="ingredient-top">
         <span class="ingredient-name">${ing.name}</span>
@@ -166,7 +174,14 @@ export function templateEtecPrime(data: LandingPageData): string {
       <p class="ingredient-benefit">${ICON_CHECK} ${ing.benefit}</p>
     </div>`).join('')
 
-  const benefitsHTML = BENEFITS_ICONS.map(b => `
+  const benefitsIconsList = data.benefits && data.benefits.length >= 6
+    ? data.benefits.slice(0, 6).map((b, i) => ({
+        emoji: BENEFITS_ICONS_FALLBACK[i % BENEFITS_ICONS_FALLBACK.length].emoji,
+        label: b.split(' — ')[0] || b,
+        desc:  b,
+      }))
+    : BENEFITS_ICONS_FALLBACK
+  const benefitsHTML = benefitsIconsList.map(b => `
     <div class="benefit-card">
       <span class="benefit-emoji">${b.emoji}</span>
       <h4 class="benefit-title">${b.label}</h4>
@@ -179,13 +194,24 @@ export function templateEtecPrime(data: LandingPageData): string {
       <span>${c.label}</span>
     </div>`).join('')
 
-  const statsHTML = RESULTS_STATS.map(s => `
+  const statsList = data.social_proof
+    ? [
+        { value: data.social_proof.customers || '94%', label: 'clients satisfaits' },
+        { value: data.social_proof.rating    || '4.9★', label: 'note moyenne vérifiée' },
+        { value: data.social_proof.sold      || '91%', label: 'recommandent le produit' },
+        { value: '30j',                                  label: 'garantie satisfait ou remboursé' },
+      ]
+    : RESULTS_STATS_FALLBACK
+  const statsHTML = statsList.map(s => `
     <div class="stat-item">
       <div class="stat-value">${s.value}</div>
       <div class="stat-label">${s.label}</div>
     </div>`).join('')
 
-  const stepsHTML = HOW_IT_WORKS.map(s => `
+  const stepsList = data.how_it_works && data.how_it_works.length > 0
+    ? data.how_it_works.slice(0, 3).map(s => ({ step: String(s.step).padStart(2,'0'), title: s.title, desc: s.description }))
+    : HOW_IT_WORKS_FALLBACK
+  const stepsHTML = stepsList.map(s => `
     <div class="step-item">
       <div class="step-num">${s.step}</div>
       <div class="step-body">
@@ -205,7 +231,8 @@ export function templateEtecPrime(data: LandingPageData): string {
       </div>
     </div>`).join('')
 
-  const mediaHTML = BADGE_BRANDS.map(b => `
+  const mediaBrands = data.press_mentions && data.press_mentions.length > 0 ? data.press_mentions : BADGE_BRANDS_FALLBACK
+  const mediaHTML = mediaBrands.map(b => `
     <div class="media-logo">${b}</div>`).join('')
 
   const benefitsListHTML = (benefits.length > 0 ? benefits : [
@@ -459,7 +486,7 @@ export function templateEtecPrime(data: LandingPageData): string {
 
 <!-- NAV -->
 <nav class="nav">
-  <div class="nav-logo">◆ Prime</div>
+  <div class="nav-logo">◆ ${productName.split(' ')[0]}</div>
   <div class="nav-links">
     <a class="nav-link" href="javascript:void(0)">Science</a>
     <a class="nav-link" href="javascript:void(0)">Ingredients</a>
@@ -558,7 +585,7 @@ export function templateEtecPrime(data: LandingPageData): string {
     </div>
     <div class="product-info">
       <h2 class="product-name">${productName}</h2>
-      <p class="product-tagline">Daily supplement · 60 capsules · 30-day supply</p>
+      <p class="product-tagline">${data.hero_badges?.join(' · ') || 'Supplément quotidien · Qualité premium'}</p>
       <div class="product-rating-row">
         <div class="product-stars">${stars(5)}</div>
         <span class="product-rating-text">4.9 (12,847 reviews)</span>
@@ -645,7 +672,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   <div class="guarantee-inner">
     <div class="guarantee-badge">🛡️</div>
     <h2 class="guarantee-title">30-Day Money-Back Guarantee</h2>
-    <p class="guarantee-text">Try Prime Formula for a full month. If you're not completely satisfied — for any reason — contact us and we'll refund every cent. No questions. No hassle. No fine print.</p>
+    <p class="guarantee-text">${data.guarantee?.description || `Essayez ${productName} pendant un mois complet. Si vous n'êtes pas entièrement satisfait — pour quelque raison que ce soit — nous vous remboursons intégralement. Sans condition.`}</p>
     <div class="guarantee-tags">
       <div class="guarantee-tag">${ICON_CHECK} Full refund</div>
       <div class="guarantee-tag">${ICON_CHECK} No return required</div>
@@ -678,7 +705,7 @@ ${renderGuaranteeSection(data, PRIME_THEME)}
 <section class="final-cta">
   <div class="final-inner">
     <h2 class="final-title">Ready to feel <span>extraordinary?</span></h2>
-    <p class="final-sub">Join 200,000+ people who made Prime Formula part of their daily routine. Your best self starts here.</p>
+    <p class="final-sub">${data.final_pitch || `Rejoignez des milliers de personnes qui ont fait de ${productName} leur routine quotidienne. Votre meilleur vous commence ici.`}</p>
     <a href="javascript:void(0)" class="final-btn">${ctaText}</a>
     <p class="final-note">Free shipping · 30-day guarantee · Cancel anytime</p>
   </div>
@@ -689,8 +716,8 @@ ${renderGuaranteeSection(data, PRIME_THEME)}
   <div class="footer-inner">
     <div class="footer-top">
       <div>
-        <div class="footer-brand">◆ Prime</div>
-        <p class="footer-tagline">Premium supplements crafted for people who refuse to settle for average.</p>
+        <div class="footer-brand">◆ ${productName.split(' ')[0]}</div>
+        <p class="footer-tagline">${data.subtitle || 'Qualité premium pour ceux qui refusent la médiocrité.'}</p>
       </div>
       <div>
         <div class="footer-col-title">Product</div>
@@ -715,7 +742,7 @@ ${renderGuaranteeSection(data, PRIME_THEME)}
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Prime Formula. All rights reserved.</span>
+      <span class="footer-copy">© ${new Date().getFullYear()} ${productName}. All rights reserved.</span>
       <div class="footer-certs">
         <span class="footer-cert">NSF Certified</span>
         <span class="footer-cert">GMP Facility</span>

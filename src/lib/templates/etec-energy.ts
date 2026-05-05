@@ -76,15 +76,15 @@ export function templateEtecEnergy(data: LandingPageData): string {
       img:   imgs[0],
     },
     {
-      label: 'Récupération & Endurance',
-      title: data.benefits[1] || 'RÉCUPÈRE PLUS VITE. VA PLUS LOIN.',
-      desc:  data.benefits[3] || `Notre formule unique accélère la récupération musculaire et repousse vos limites. Moins de douleurs, plus de sessions, des résultats qui s'accumulent.`,
+      label: 'Performance & Endurance',
+      title: data.benefits[1] || 'PROGRESSE PLUS VITE. VA PLUS LOIN.',
+      desc:  data.benefits[3] || `Notre formule unique repousse vos limites. Moins de douleurs, plus de sessions, des résultats qui s'accumulent.`,
       img:   imgs[1],
     },
     {
       label: 'Qualité & Certification',
       title: data.benefits[2] || 'QUALITÉ CERTIFIÉE. RÉSULTATS GARANTIS.',
-      desc:  data.benefits[4] || `Testé et certifié par des laboratoires indépendants. Aucun additif interdit. ${data.product_name} répond aux standards les plus exigeants de l'industrie du sport.`,
+      desc:  data.benefits[4] || `Testé et certifié par des laboratoires indépendants. Aucun additif interdit. ${data.product_name} répond aux standards les plus exigeants.`,
       img:   imgs[2],
     },
   ]
@@ -105,23 +105,26 @@ export function templateEtecEnergy(data: LandingPageData): string {
   }).join('')
 
   // ── Reviews sport ──
-  const reviewsData = [
+  const reviewsDataFallback = [
     {
-      text:  'J\'utilise ce produit depuis 8 semaines et les gains sont réels. Mes performances en salle ont augmenté de façon mesurable. Récupération plus rapide, meilleure concentration pendant l\'entraînement. Indispensable dans ma routine.',
+      text:  'J\'utilise ce produit depuis 8 semaines et les gains sont réels. Mes performances ont augmenté de façon mesurable. Indispensable dans ma routine.',
       name:  'Kevin M.',
       date:  'Il y a 3 jours',
     },
     {
-      text:  'En tant que compétiteur, j\'ai testé beaucoup de produits. Celui-ci se distingue clairement. Pas de crash énergétique, pas de goût artificiel. Les résultats parlent d\'eux-mêmes au bout de 3 semaines. Je commande pour 3 mois.',
+      text:  'J\'ai testé beaucoup de produits. Celui-ci se distingue clairement. Pas de crash, pas de goût artificiel. Les résultats parlent d\'eux-mêmes au bout de 3 semaines.',
       name:  'Jordan T.',
       date:  'Il y a 1 semaine',
     },
     {
-      text:  'Je cherchais quelque chose pour mes entraînements HIIT matinaux. Depuis que j\'utilise ce produit, mes séances sont plus intenses et ma récupération est nettement améliorée. Je sens une vraie différence. Livraison impeccable aussi.',
+      text:  'Mes séances sont plus intenses et ma progression est nettement meilleure. Je sens une vraie différence. Livraison impeccable aussi.',
       name:  'Sarah K.',
       date:  'Il y a 2 semaines',
     },
   ]
+  const reviewsData = data.testimonials && data.testimonials.length > 0
+    ? data.testimonials.slice(0, 3).map(t => ({ text: t.text, name: t.name, date: t.location || 'Achat vérifié' }))
+    : reviewsDataFallback
 
   const reviewsHTML = reviewsData.map(r => `
     <div style="background:${C.card};border:1px solid ${C.border};border-radius:8px;padding:26px;border-left:4px solid ${C.accent};">
@@ -207,7 +210,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
     <!-- Info droite (40%) ──────────────────────────────────────── -->
     <div>
       <!-- Label niche -->
-      <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.accent};margin-bottom:12px;font-family:'Barlow Condensed',sans-serif;">Sport · Fitness · Nutrition</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.accent};margin-bottom:12px;font-family:'Barlow Condensed',sans-serif;">${data.hero_badges?.slice(0,3).join(' · ') || data.product_name}</p>
 
       <!-- H1 Barlow Condensed UPPERCASE -->
       <h1 class="h1-energy" style="font-family:'Barlow Condensed',sans-serif;font-size:52px;font-weight:900;line-height:1;letter-spacing:-.01em;text-transform:uppercase;color:${C.text};margin-bottom:14px;">${data.product_name}</h1>
@@ -338,7 +341,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
         </div>
         <div style="padding:22px;border-top:2px solid ${C.border};">
           <p style="font-size:15px;font-weight:700;color:${C.text};margin-bottom:8px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.03em;">Avant notre produit</p>
-          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'Barlow',sans-serif;">Stagnation, récupération lente, performances plafonnées. Le corps peine à s'adapter et à progresser malgré les efforts.</p>
+          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'Barlow',sans-serif;">${data.story?.problem || 'Stagnation, progression lente, performances plafonnées. Difficile d\'avancer malgré les efforts.'}</p>
         </div>
       </div>
       <!-- Après -->
@@ -349,7 +352,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
         </div>
         <div style="padding:22px;border-top:2px solid ${C.border};">
           <p style="font-size:15px;font-weight:700;color:${C.text};margin-bottom:8px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.03em;">Après ${data.product_name}</p>
-          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'Barlow',sans-serif;">Performances décuplées, récupération accélérée, énergie durable. Les résultats s'accumulent semaine après semaine.</p>
+          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'Barlow',sans-serif;">${data.story?.transformation || 'Performances décuplées, progression accélérée, énergie durable. Les résultats s\'accumulent semaine après semaine.'}</p>
         </div>
       </div>
     </div>

@@ -70,21 +70,21 @@ export function templateEtecSage(data: LandingPageData): string {
   // ── Features alternées ──
   const featData = [
     {
-      label: 'Ingrédients & Origine',
-      title: data.benefits[0] || `${data.product_name} — 100% d'origine naturelle`,
-      desc:  data.subtitle || `Chaque ingrédient de ${data.product_name} est soigneusement sélectionné pour son origine biologique certifiée et son efficacité prouvée.`,
+      label: data.features?.[0]?.title || data.unique_mechanism || 'Composition',
+      title: data.benefits[0] || `${data.product_name} — Une sélection rigoureuse`,
+      desc:  data.subtitle || `Chaque composant de ${data.product_name} est soigneusement sélectionné pour son efficacité prouvée et sa qualité certifiée.`,
       img:   imgs[0],
     },
     {
-      label: 'Nutrition & Bien-être',
-      title: data.benefits[1] || 'Nourrit votre corps en profondeur',
-      desc:  data.benefits[3] || `Riche en nutriments essentiels et en antioxydants naturels, ${data.product_name} soutient votre vitalité au quotidien sans compromis.`,
+      label: data.features?.[1]?.title || 'Bénéfices',
+      title: data.benefits[1] || `${data.product_name} — Un soutien au quotidien`,
+      desc:  data.benefits[3] || `${data.product_name} accompagne votre vitalité au quotidien sans compromis sur la qualité.`,
       img:   imgs[1],
     },
     {
-      label: 'Éco-responsabilité',
-      title: data.benefits[2] || 'Bon pour vous, bon pour la planète',
-      desc:  data.benefits[4] || `Emballage 100% recyclable, production à faible empreinte carbone. Chaque achat de ${data.product_name} contribue à une agriculture durable.`,
+      label: data.features?.[2]?.title || 'Engagement',
+      title: data.benefits[2] || `${data.product_name} — Un choix responsable`,
+      desc:  data.benefits[4] || `Chaque achat de ${data.product_name} s'inscrit dans une démarche durable et respectueuse.`,
       img:   imgs[2],
     },
   ]
@@ -204,7 +204,7 @@ export function templateEtecSage(data: LandingPageData): string {
     <!-- Info droite -->
     <div>
       <!-- Label niche -->
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};margin-bottom:14px;font-family:'DM Sans',sans-serif;">Bio · Naturel · Bien-être</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};margin-bottom:14px;font-family:'DM Sans',sans-serif;">${data.hero_badges?.[0] || data.unique_mechanism || 'Premium'}</p>
 
       <!-- H1 DM Sans 800 -->
       <h1 class="h1-sage" style="font-family:'DM Sans',sans-serif;font-size:34px;font-weight:800;line-height:1.15;letter-spacing:-.02em;color:${C.text};margin-bottom:12px;">${data.product_name}</h1>
@@ -301,7 +301,7 @@ export function templateEtecSage(data: LandingPageData): string {
     <div style="text-align:center;margin-bottom:64px;">
       <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Caractéristiques</p>
       <h2 style="font-family:'DM Sans',sans-serif;font-size:32px;font-weight:800;letter-spacing:-.02em;color:${C.text};margin-bottom:14px;">${data.headline || data.product_name}</h2>
-      <p style="color:${C.muted};font-size:15px;max-width:520px;margin:0 auto;font-family:'DM Sans',sans-serif;line-height:1.75;">${data.subtitle || 'Découvrez ce qui fait la différence avec une approche naturelle et responsable.'}</p>
+      <p style="color:${C.muted};font-size:15px;max-width:520px;margin:0 auto;font-family:'DM Sans',sans-serif;line-height:1.75;">${data.subtitle || `Découvrez ce qui fait la différence avec ${data.product_name}.`}</p>
     </div>
     ${featuresHTML}
   </div>
@@ -324,7 +324,7 @@ export function templateEtecSage(data: LandingPageData): string {
         </div>
         <div style="padding:22px;">
           <p style="font-size:15px;font-weight:700;color:${C.text};margin-bottom:8px;font-family:'DM Sans',sans-serif;">Avant notre produit</p>
-          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'DM Sans',sans-serif;">Manque d'énergie, troubles digestifs, alimentation déséquilibrée. Le corps peine à trouver ses ressources naturelles.</p>
+          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'DM Sans',sans-serif;">${data.story?.problem || 'Avant : des résultats insuffisants, un quotidien sans énergie, un manque visible de bien-être.'}</p>
         </div>
       </div>
       <!-- Après -->
@@ -335,7 +335,7 @@ export function templateEtecSage(data: LandingPageData): string {
         </div>
         <div style="padding:22px;">
           <p style="font-size:15px;font-weight:700;color:${C.text};margin-bottom:8px;font-family:'DM Sans',sans-serif;">Après ${data.product_name}</p>
-          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'DM Sans',sans-serif;">Vitalité retrouvée, digestion apaisée, alimentation naturelle et savoureuse. Le bien-être de l'intérieur se voit de l'extérieur.</p>
+          <p style="font-size:14px;color:${C.muted};line-height:1.8;font-family:'DM Sans',sans-serif;">${data.story?.solution || `Après ${data.product_name} : vitalité retrouvée, résultats visibles, bien-être au quotidien.`}</p>
         </div>
       </div>
     </div>
@@ -388,7 +388,7 @@ ${renderGuaranteeSection(data, SAGE_THEME)}
   <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-block;background:#fff;color:${C.accent};padding:18px 52px;border-radius:100px;font-size:16px;font-weight:800;text-decoration:none;font-family:'DM Sans',sans-serif;letter-spacing:.01em;box-shadow:0 8px 32px rgba(0,0,0,0.2);transition:transform .2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
     ${data.cta || 'Commander maintenant'} →
   </a>
-  <p style="margin-top:22px;font-size:13px;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;">Paiement sécurisé · Livraison offerte · Retour 30 jours · 100% Bio garanti</p>
+  <p style="margin-top:22px;font-size:13px;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;">Paiement sécurisé · Livraison offerte · Retour 30 jours · Satisfait ou remboursé</p>
 </div>
 
 </body>

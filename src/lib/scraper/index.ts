@@ -91,8 +91,11 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
 
   if (apiKey) {
     try {
-      // 1er essai : waitFor=8s + AbortSignal=22s (8s wait + 14s render budget)
-      const product = await scrapeViaFirecrawl(cleanUrl, apiKey, 8000)
+      // 1er essai : mobile UA, waitFor=10s, AbortSignal=25s (10s wait + 15s render).
+      // Le mobile UA évite souvent le mur de cookies/CAPTCHA AliExpress.
+      const product = await scrapeViaFirecrawl(cleanUrl, apiKey, {
+        waitFor: 10000, abortMs: 25000, mobile: true,
+      })
       console.log('[scraper] ✓ Firecrawl OK:', { title: product.title, images: product.images.length })
       return product
     } catch (err) {
@@ -101,16 +104,21 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
       console.warn('[scraper] ✗ Firecrawl 1er essai échoué:', msg)
       collectPartial((err as { partial?: ScrapedProduct }).partial)
 
-      // Retry avec waitFor plus long si la 1re tentative renvoie une page vide
-      // (AliExpress lent à servir le DOM produit après le splash anti-bot).
-      // On ne retry que si l'erreur indique "aucun titre exploitable" (page rendue
-      // mais incomplète) — pas sur HTTP 4xx/5xx ni timeout réseau.
+      // Retry si :
+      //  - erreur de contenu (titre manquant) : page rendue mais incomplète
+      //  - timeout réseau : Firecrawl/AliExpress n'a juste pas eu le temps
+      // On switch en UA desktop (mobile=false) pour varier le rendering — certaines
+      // pages AliExpress mobile redirigent vers une PWA qui n'expose pas le titre.
+      // Budget retry réduit : waitFor=14s + AbortSignal=18s pour rester sous 43s
+      // total scraper (laisse 17s+ à DeepSeek dans /api/generate, limite 60s Vercel).
       const isEmptyPage = msg.includes('aucun titre exploitable') || msg.includes('page bloquée par anti-bot')
-      if (isEmptyPage) {
+      const isTimeout = msg.includes('aborted due to timeout') || msg.includes('AbortError')
+      if (isEmptyPage || isTimeout) {
         try {
-          // Retry : waitFor=14s + AbortSignal=28s (14s wait + 14s render budget)
-          console.log('[scraper] retry Firecrawl avec waitFor=14s')
-          const product = await scrapeViaFirecrawl(cleanUrl, apiKey, 14000)
+          console.log('[scraper] retry Firecrawl (waitFor=14s, desktop UA)')
+          const product = await scrapeViaFirecrawl(cleanUrl, apiKey, {
+            waitFor: 14000, abortMs: 18000, mobile: false,
+          })
           console.log('[scraper] ✓ Firecrawl retry OK:', { title: product.title, images: product.images.length })
           return product
         } catch (err2) {
@@ -166,7 +174,10 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
 
 // ─── Firecrawl (primary) ─────────────────────────────────────────────────────
 
-async function scrapeViaFirecrawl(url: string, apiKey: string, waitFor: number = 10000): Promise<ScrapedProduct> {
+type FirecrawlOpts = { waitFor: number; abortMs: number; mobile: boolean }
+
+async function scrapeViaFirecrawl(url: string, apiKey: string, opts: FirecrawlOpts): Promise<ScrapedProduct> {
+  const { waitFor, abortMs, mobile } = opts
   const res = await fetch('https://api.firecrawl.dev/v1/scrape', {
     method: 'POST',
     headers: {
@@ -182,15 +193,8 @@ async function scrapeViaFirecrawl(url: string, apiKey: string, waitFor: number =
       //              quand le DOM est obfusqué (AliExpress / Amazon)
       formats: ['json', 'html', 'markdown'],
       proxy: 'stealth',
-      // waitFor paramétrable (default 10s, retry à 15s) : AliExpress sert une
-      // page de splash, le DOM produit n'apparaît qu'après le geo-redirect +
-      // cookie consent + chargement JS. On reste raisonnable pour laisser
-      // ~20s à DeepSeek dans /api/generate (limite 60s Vercel Pro).
       waitFor,
-      // Mobile UA : moins de chance de tomber sur un mur de cookies / CAPTCHA
-      // qui dégrade le rendering. Firecrawl simule l'UA via "mobile" flag.
-      mobile: true,
-      // On bloque les ressources lourdes/inutiles (analytics, ads) pour aller plus vite
+      mobile,
       blockAds: true,
       removeBase64Images: true,
       jsonOptions: {
@@ -220,10 +224,9 @@ Return: title, description, price, original_price (if discount visible), images 
         },
       },
     }),
-    // AbortSignal proportionnel au waitFor : on alloue waitFor + 14s de budget
-    // de render/extraction. 1er essai (waitFor=8s) → 22s, retry (waitFor=14s) → 28s.
-    // Total max 50s, sous /api/scrape (52s) et /api/generate (60s).
-    signal: AbortSignal.timeout(waitFor + 14000),
+    // AbortSignal explicite via opts.abortMs (1er essai = 25s, retry = 18s).
+    // Total max 43s sur les 2 tentatives → laisse ≥17s à DeepSeek (60s Vercel).
+    signal: AbortSignal.timeout(abortMs),
   })
 
   if (!res.ok) {
@@ -279,8 +282,11 @@ Return: title, description, price, original_price (if discount visible), images 
   // On agrège le meilleur de ce qu'on a vu (LLM + HTML + markdown), même si
   // chaque source était insuffisante isolément. On l'attache à l'erreur pour
   // que scrapeProduct puisse l'exposer en mode "partial" plutôt que tout perdre.
+  // IMPORTANT : on filtre les titres génériques (nom du domaine = page splash)
+  // sur chaque source — sans ça, "Aliexpress" du LLM remontait jusqu'au wizard.
+  const safeTitle = (t?: string) => (t && !isGenericDomainTitle(t)) ? t : ''
   const partial: ScrapedProduct = {
-    title:          item?.title || fromHtml?.title || fromMd?.title || '',
+    title:          safeTitle(item?.title) || safeTitle(fromHtml?.title) || safeTitle(fromMd?.title) || '',
     description:    item?.description || fromHtml?.description || fromMd?.description || '',
     images:         (Array.isArray(item?.images) && item.images.length ? item.images
                       : (fromHtml?.images?.length ? fromHtml.images : (fromMd?.images || []))).slice(0, 8),
@@ -602,6 +608,9 @@ export function looksHallucinated(p: ScrapedProduct): { fake: boolean; reason?: 
   if (!title) return { fake: true, reason: 'titre vide' }
   if (title.length < 5) return { fake: true, reason: 'titre trop court' }
   if (HALLUCINATED_TITLES.has(title)) return { fake: true, reason: `titre générique "${p.title}"` }
+  // Défense en profondeur : si le titre est juste le nom du domaine (page splash
+  // anti-bot), on le rejette même si le partial path l'a laissé passer.
+  if (isGenericDomainTitle(p.title)) return { fake: true, reason: `titre = nom du domaine "${p.title}" (page anti-bot)` }
 
   // Si pas une seule image valide après nettoyage → page bloquée
   if (p.images.length === 0) return { fake: true, reason: 'aucune image produit valide' }

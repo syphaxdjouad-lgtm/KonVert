@@ -176,8 +176,27 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
 
 type FirecrawlOpts = { waitFor: number; abortMs: number; mobile: boolean }
 
+// Mapping URL → pays + langue pour le proxy géographique Firecrawl.
+// Sans ça, AliExpress sert sa page de splash "country selector" aux IPs
+// datacenter (Vercel cdg1, Firecrawl default). Avec une IP FR/DE/US, AliExpress
+// et Amazon servent directement la page produit localisée.
+function pickProxyLocation(url: string): { country: string; languages: string[] } {
+  const u = url.toLowerCase()
+  if (u.includes('amazon.de') || u.includes('amazon.nl') || u.includes('amazon.pl')) return { country: 'DE', languages: ['de-DE'] }
+  if (u.includes('amazon.es')) return { country: 'ES', languages: ['es-ES'] }
+  if (u.includes('amazon.it')) return { country: 'IT', languages: ['it-IT'] }
+  if (u.includes('amazon.co.uk')) return { country: 'GB', languages: ['en-GB'] }
+  if (u.includes('amazon.ca')) return { country: 'CA', languages: ['en-CA'] }
+  if (u.includes('amazon.com') && !u.includes('amazon.com.be')) return { country: 'US', languages: ['en-US'] }
+  // Tout le reste (AliExpress, amazon.fr, amazon.com.be, alibaba, etsy, ebay, cdiscount, fnac, temu, shopify)
+  // → IP FR par défaut. AliExpress avec IP FR sert la page produit en français
+  // sans passer par le splash "shipping country".
+  return { country: 'FR', languages: ['fr-FR'] }
+}
+
 async function scrapeViaFirecrawl(url: string, apiKey: string, opts: FirecrawlOpts): Promise<ScrapedProduct> {
   const { waitFor, abortMs, mobile } = opts
+  const location = pickProxyLocation(url)
   const res = await fetch('https://api.firecrawl.dev/v1/scrape', {
     method: 'POST',
     headers: {
@@ -193,6 +212,8 @@ async function scrapeViaFirecrawl(url: string, apiKey: string, opts: FirecrawlOp
       //              quand le DOM est obfusqué (AliExpress / Amazon)
       formats: ['json', 'html', 'markdown'],
       proxy: 'stealth',
+      // Proxy géographique : bypass le splash AliExpress + sert la page localisée
+      location,
       waitFor,
       mobile,
       blockAds: true,

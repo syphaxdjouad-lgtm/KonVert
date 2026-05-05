@@ -49,9 +49,9 @@ export function templateEtecGlow(data: LandingPageData): string {
     </div>`).join('')
 
   const ritualSteps = [
-    { step: '1', title: benefits[0] || 'Nettoyez', desc: 'Préparez votre peau avec un nettoyant doux' },
-    { step: '2', title: benefits[1] || 'Appliquez', desc: `Déposez ${data.product_name} en mouvements circulaires` },
-    { step: '3', title: benefits[2] || 'Rayonnez', desc: 'Profitez d\'un teint lumineux et éclatant' },
+    { step: '1', title: data.how_it_works?.[0]?.title || benefits[0] || 'Étape 1', desc: data.how_it_works?.[0]?.description || `Préparez-vous à utiliser ${data.product_name}` },
+    { step: '2', title: data.how_it_works?.[1]?.title || benefits[1] || 'Étape 2', desc: data.how_it_works?.[1]?.description || `Appliquez ${data.product_name} selon les instructions` },
+    { step: '3', title: data.how_it_works?.[2]?.title || benefits[2] || 'Étape 3', desc: data.how_it_works?.[2]?.description || `Profitez des résultats de ${data.product_name}` },
   ]
 
   return `<!DOCTYPE html>
@@ -93,7 +93,7 @@ body{font-family:'Nunito Sans',sans-serif;background:#FFF9F5;color:#111;}
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;">
     <span style="font-size:12px;color:#BBB;">Accueil</span>
     <span style="font-size:12px;color:#DDD;">›</span>
-    <span style="font-size:12px;color:#BBB;">Skincare</span>
+    <span style="font-size:12px;color:#BBB;">${data.hero_badges?.[0] || 'Produits'}</span>
     <span style="font-size:12px;color:#DDD;">›</span>
     <span style="font-size:12px;color:#111;font-weight:600;">${data.product_name}</span>
   </div>
@@ -121,7 +121,7 @@ body{font-family:'Nunito Sans',sans-serif;background:#FFF9F5;color:#111;}
         <span style="color:#EF4A65;font-size:14px;">★★★★★</span>
         <span style="font-size:12px;color:#BBB;">4.9/5 — 2 340 avis</span>
       </div>
-      <p style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#EF4A65;text-transform:uppercase;margin-bottom:10px;">Ritual Beauté</p>
+      <p style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#EF4A65;text-transform:uppercase;margin-bottom:10px;">${data.hero_badges?.[0] || data.product_name.split(' ')[0]}</p>
       <h1 style="font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:600;color:#111;line-height:1.12;letter-spacing:-0.02em;margin-bottom:16px;">${data.headline}</h1>
       <p style="font-size:15px;color:#888;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 
@@ -166,7 +166,7 @@ body{font-family:'Nunito Sans',sans-serif;background:#FFF9F5;color:#111;}
 <section style="padding:80px 24px;background:#fff;">
   <div style="max-width:1000px;margin:0 auto;">
     <p style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#EF4A65;text-align:center;text-transform:uppercase;margin-bottom:8px;">Votre routine</p>
-    <h2 style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:#111;text-align:center;letter-spacing:-0.02em;margin-bottom:56px;">3 étapes pour un éclat radieux</h2>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:#111;text-align:center;letter-spacing:-0.02em;margin-bottom:56px;">${data.how_it_works ? `${data.how_it_works.length} étapes simples` : `Comment utiliser ${data.product_name}`}</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="gl-ritual-grid">
       ${ritualSteps.map(s => `
       <div style="background:#FFF9F5;border-radius:20px;padding:36px 28px;text-align:center;">
@@ -202,11 +202,16 @@ body{font-family:'Nunito Sans',sans-serif;background:#FFF9F5;color:#111;}
     <p style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#EF4A65;text-align:center;text-transform:uppercase;margin-bottom:8px;">Avis vérifiés</p>
     <h2 style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:#111;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">Elles ont dit oui à ${data.product_name}</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="gl-reviews-grid">
-      ${[
-        { name: 'Amira L.', text: `Mon teint n'a jamais été aussi lumineux. Le ${data.product_name} est devenu mon indispensable. La texture est divine, ça sent incroyablement bon.`, date: '2 jours', badge: 'Peau sensible' },
-        { name: 'Charlotte D.', text: `Résultat visible dès la première semaine ! Ma peau est plus douce, plus lisse. Les imperfections s'estompent visiblement. J'adore.`, date: '6 jours', badge: 'Peau mixte' },
-        { name: 'Sarah K.', text: `Commandé en duo avec ma sœur. On est fan toutes les deux ! Le packaging est magnifique. Produit clean et efficace. Top.`, date: '12 jours', badge: 'Peau normale' },
-      ].map(r => `
+      ${(data.testimonials && data.testimonials.length >= 3 ? data.testimonials.slice(0,3).map((t, idx) => ({
+        name: t.name,
+        text: t.text,
+        date: `${idx * 4 + 2} jours`,
+        badge: t.variant || data.hero_badges?.[idx % (data.hero_badges?.length || 1)] || 'Achat vérifié',
+      })) : [
+        { name: 'Amira L.', text: `${data.product_name} est devenu mon indispensable. Les résultats sont incroyables, je ne peux plus m'en passer !`, date: '2 jours', badge: data.hero_badges?.[0] || 'Achat vérifié' },
+        { name: 'Charlotte D.', text: `Résultat visible dès la première semaine ! Produit de qualité, livraison rapide. J'adore.`, date: '6 jours', badge: data.hero_badges?.[1] || 'Achat vérifié' },
+        { name: 'Sarah K.', text: `Commandé en duo avec ma sœur. On est fan toutes les deux ! Le packaging est magnifique. Top.`, date: '12 jours', badge: data.hero_badges?.[2] || 'Achat vérifié' },
+      ]).map(r => `
       <div style="background:#FFF9F5;border-radius:20px;padding:28px 24px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
           <span style="color:#EF4A65;font-size:13px;letter-spacing:2px;">★★★★★</span>

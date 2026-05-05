@@ -49,15 +49,15 @@ export function templateEtecCosmetix(data: LandingPageData): string {
     </div>`).join('')
 
   const tabContents = [
-    { id: 'tab-cx-garantie', label: 'Garantie', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">Satisfait ou remboursé pendant 30 jours. Retournez le produit dans son emballage d'origine pour un remboursement intégral. Nos formules sont dermatologiquement testées et certifiées.</p>` },
-    { id: 'tab-cx-compo', label: 'Composition', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">Formule clean, sans parabènes, sans sulfates, sans silicones. Ingrédients d'origine naturelle soigneusement sélectionnés. Testé dermatologiquement. Convient aux peaux sensibles.</p>` },
+    { id: 'tab-cx-garantie', label: 'Garantie', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">${data.guarantee?.description || 'Satisfait ou remboursé pendant ' + (data.guarantee?.duration || '30 jours') + '. Retournez le produit dans son emballage d\'origine pour un remboursement intégral.'}</p>` },
+    { id: 'tab-cx-details', label: 'Détails', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">${data.benefits?.join(' · ') || 'Produit de qualité premium, conçu pour vous apporter satisfaction et résultats durables.'}</p>` },
     { id: 'tab-cx-livraison', label: 'Livraison', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">Livraison offerte dès 40€. Expédition sous 24h en jours ouvrés. Emballage recyclable et éco-responsable. Suivi en temps réel par email.</p>` },
   ]
 
   const ingredients = [
-    { name: benefits[0] || 'Acide Hyaluronique', desc: data.subtitle || 'Hydratation intense et durable' },
-    { name: benefits[1] || 'Vitamine C', desc: 'Éclat naturel et anti-oxydant' },
-    { name: benefits[2] || 'Niacinamide', desc: 'Pores resserrés, teint uniforme' },
+    { name: data.features?.[0]?.title || benefits[0] || 'Avantage 1', desc: data.features?.[0]?.description || data.subtitle || benefits[0] || '' },
+    { name: data.features?.[1]?.title || benefits[1] || 'Avantage 2', desc: data.features?.[1]?.description || benefits[1] || '' },
+    { name: data.features?.[2]?.title || benefits[2] || 'Avantage 3', desc: data.features?.[2]?.description || benefits[2] || '' },
   ]
 
   return `<!DOCTYPE html>
@@ -99,7 +99,7 @@ body{font-family:'DM Sans',sans-serif;background:#FEFCFA;color:#121212;}
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;">
     <span style="font-size:12px;color:#999;">Accueil</span>
     <span style="font-size:12px;color:#CCC;">—</span>
-    <span style="font-size:12px;color:#999;">Soins</span>
+    <span style="font-size:12px;color:#999;">${data.hero_badges?.[0] || 'Produits'}</span>
     <span style="font-size:12px;color:#CCC;">—</span>
     <span style="font-size:12px;color:#121212;font-weight:500;">${data.product_name}</span>
   </div>
@@ -123,7 +123,7 @@ body{font-family:'DM Sans',sans-serif;background:#FEFCFA;color:#121212;}
     <!-- INFO -->
     <div style="width:45%;padding:56px 48px;display:flex;flex-direction:column;justify-content:center;background:#FEFCFA;" class="cx-hero-info">
       ${savePct > 0 ? `<span style="display:inline-block;background:#334FB4;color:#fff;font-size:11px;font-weight:700;padding:5px 14px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:16px;width:fit-content;">-${savePct}%</span>` : ''}
-      <p style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.15em;color:#334FB4;text-transform:uppercase;margin-bottom:12px;">Collection Soins</p>
+      <p style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.15em;color:#334FB4;text-transform:uppercase;margin-bottom:12px;">${data.hero_badges?.[0] || 'Collection'}</p>
       <h1 style="font-family:'Playfair Display',serif;font-size:42px;font-weight:600;color:#121212;line-height:1.15;letter-spacing:-0.02em;margin-bottom:16px;">${data.headline}</h1>
       <p style="font-size:15px;color:#666;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 
@@ -216,9 +216,9 @@ body{font-family:'DM Sans',sans-serif;background:#FEFCFA;color:#121212;}
     <h2 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:600;color:#121212;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">Elles adorent ${data.product_name}</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="cx-reviews-grid">
       ${[
-        { name: 'Camille R.', text: `Ma peau n'a jamais été aussi lumineuse. Le ${data.product_name} a changé ma routine beauté. Texture divine, résultat visible en 2 semaines.`, date: 'Il y a 3 jours' },
-        { name: 'Léa M.', text: `Enfin un produit qui tient ses promesses. Peau douce, hydratée, zéro tiraillement. Je ne peux plus m'en passer !`, date: 'Il y a 1 semaine' },
-        { name: 'Inès D.', text: `Offert à ma mère, elle est conquise. Le packaging est magnifique, la formule ultra-douce. On recommande !`, date: 'Il y a 2 semaines' },
+        { name: data.testimonials?.[0]?.name || 'Camille R.', text: data.testimonials?.[0]?.text || `Le ${data.product_name} a dépassé toutes mes attentes. Résultat visible en 2 semaines, je ne peux plus m'en passer.`, date: 'Il y a 3 jours' },
+        { name: data.testimonials?.[1]?.name || 'Léa M.', text: data.testimonials?.[1]?.text || `Enfin un produit qui tient ses promesses. Qualité irréprochable, livraison rapide. Je ne peux plus m'en passer !`, date: 'Il y a 1 semaine' },
+        { name: data.testimonials?.[2]?.name || 'Inès D.', text: data.testimonials?.[2]?.text || `Offert à ma mère, elle est conquise. Le packaging est magnifique. On recommande à 100% !`, date: 'Il y a 2 semaines' },
       ].map(r => `
       <div style="background:#F6F3EF;padding:32px 28px;border:1px solid #E8E4DF;">
         <div style="color:#D4A853;font-size:13px;letter-spacing:3px;margin-bottom:16px;">★★★★★</div>

@@ -70,11 +70,11 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#D4
 </div></div></section>
 <section style="padding:80px 24px;background:#FFF0F5;"><div style="max-width:1000px;margin:0 auto;">
 <p style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#D4508B;text-align:center;text-transform:uppercase;margin-bottom:8px;">Résultats</p>
-<h2 style="font-family:'Marcellus',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:56px;">Votre routine beauté</h2>
+<h2 style="font-family:'Marcellus',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:56px;">${data.subtitle?.split('.')[0] || `Pourquoi choisir ${data.product_name}`}</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="gu-grid3">${[
-  { t: benefits[0]||'Éclat naturel', d: 'Révèle votre beauté naturelle avec des ingrédients premium' },
-  { t: benefits[1]||'Longue tenue', d: 'Une formule qui dure toute la journée sans retouche' },
-  { t: benefits[2]||'Peau protégée', d: 'Enrichi en actifs qui nourrissent et protègent votre peau' },
+  { t: data.features?.[0]?.title || benefits[0] || 'Qualité premium', d: data.features?.[0]?.description || 'Un produit conçu avec les meilleurs matériaux et ingrédients' },
+  { t: data.features?.[1]?.title || benefits[1] || 'Résultats durables', d: data.features?.[1]?.description || 'Des effets qui durent dans le temps, prouvés et mesurés' },
+  { t: data.features?.[2]?.title || benefits[2] || 'Facile à utiliser', d: data.features?.[2]?.description || 'Conçu pour s\'intégrer facilement dans votre quotidien' },
 ].map(s => `<div style="background:#FFF9FB;border-radius:20px;padding:36px 28px;text-align:center;"><h3 style="font-size:18px;font-weight:600;color:#2D2D2D;margin-bottom:10px;">${s.t}</h3><p style="font-size:14px;color:#999;line-height:1.7;">${s.d}</p></div>`).join('')}</div></div></section>
 <section style="padding:80px 24px;background:#FFF9FB;"><div style="max-width:1000px;margin:0 auto;">
 <h2 style="font-family:'Marcellus',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">Avant / Après</h2>
@@ -82,9 +82,9 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#D4
 <section style="padding:80px 24px;background:#FFF0F5;"><div style="max-width:1100px;margin:0 auto;">
 <h2 style="font-family:'Marcellus',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">Elles en parlent</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="gu-reviews">${[
-  { name:'Léa M.', text:`Le ${data.product_name} a transformé ma routine beauté. Mon teint est lumineux et le rendu est incroyable.`, date:'2 jours' },
-  { name:'Camille R.', text:'Je suis conquise ! La texture est divine et ça tient toute la journée. Mon must-have beauté.', date:'5 jours' },
-  { name:'Sofia T.', text:`Enfin un produit qui tient ses promesses. Ma peau n'a jamais été aussi belle. Merci !`, date:'1 semaine' },
+  { name: data.testimonials?.[0]?.name || 'Léa M.', text: data.testimonials?.[0]?.text || `Le ${data.product_name} a transformé mon quotidien. Les résultats sont incroyables, je ne peux plus m'en passer !`, date:'2 jours' },
+  { name: data.testimonials?.[1]?.name || 'Camille R.', text: data.testimonials?.[1]?.text || `Je suis conquise ! La qualité est au rendez-vous et ça fonctionne vraiment. Mon must-have.`, date:'5 jours' },
+  { name: data.testimonials?.[2]?.name || 'Sofia T.', text: data.testimonials?.[2]?.text || `Enfin un produit qui tient ses promesses. Je recommande à 100%.`, date:'1 semaine' },
 ].map(r => `<div style="background:#FFF9FB;border-radius:20px;padding:28px 24px;"><div style="color:#D4508B;font-size:13px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div><p style="font-size:14px;color:#555;line-height:1.75;margin-bottom:20px;">"${r.text}"</p><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#D4508B,#E8729E);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">${r.name[0]}</div><div><p style="font-size:13px;font-weight:600;color:#2D2D2D;">${r.name}</p><p style="font-size:11px;color:#BBB;">Il y a ${r.date}</p></div></div></div>`).join('')}</div></div></section>
 <section style="padding:80px 24px;background:#FFF9FB;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Marcellus',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">FAQ</h2><div style="background:#FFF0F5;border-radius:20px;padding:8px 32px;">${faqHtml}</div></div></section>
 <section style="padding:100px 24px;background:linear-gradient(135deg,#D4508B,#E8729E);"><div style="max-width:700px;margin:0 auto;text-align:center;">

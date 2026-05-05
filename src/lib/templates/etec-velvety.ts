@@ -93,8 +93,8 @@ export function templateEtecVelvety(data: LandingPageData): string {
   // ── PRODUCT CARDS (3 variantes) ──────────────────────────────────────────
   const productNames = [
     data.product_name,
-    `${data.product_name} — Nourishing Serum`,
-    `${data.product_name} — Revitalizing Mask`,
+    data.product_name,
+    data.product_name,
   ]
   const productPrices = [
     `€${price}`,
@@ -113,7 +113,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
         <img src="${imgs[i] || imgs[0]}" alt="${productNames[i]}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"/>
       </div>
       <div style="padding:20px 20px 22px;">
-        <p style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};margin-bottom:6px;font-family:'DM Sans',sans-serif;">Skincare · Organic</p>
+        <p style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};margin-bottom:6px;font-family:'DM Sans',sans-serif;">${data.hero_badges?.[0] || 'Collection'}</p>
         <h4 style="font-family:'Playfair Display',Georgia,serif;font-size:16px;font-weight:600;color:${C.text};margin-bottom:10px;line-height:1.3;">${productNames[i]}</h4>
         <div style="display:flex;align-items:center;justify-content:space-between;">
           <span style="font-size:18px;font-weight:700;color:${C.accent};font-family:'DM Sans',sans-serif;">${productPrices[i]}</span>
@@ -125,7 +125,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
 
   // ── ALL PRODUCTS GRID (4 items) ───────────────────────────────────────────
   const allProductsHTML = [0, 1, 2, 3].map(i => {
-    const pname = i === 0 ? data.product_name : i === 1 ? `${data.product_name} Serum` : i === 2 ? `${data.product_name} Toner` : `${data.product_name} Mask`
+    const pname = data.product_name
     const pprice = `€${(parseFloat(price) + (i * 4 - 3)).toFixed(2)}`
     const pratings = ['4.9', '4.7', '5.0', '4.8']
     return `
@@ -134,7 +134,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
         <img src="${imgs[i]}" alt="${pname}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'"/>
       </div>
       <div style="padding:16px 18px 18px;">
-        <p style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${C.muted};margin-bottom:4px;font-family:'DM Sans',sans-serif;">Organic Skincare</p>
+        <p style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${C.muted};margin-bottom:4px;font-family:'DM Sans',sans-serif;">${data.hero_badges?.[0] || 'Collection'}</p>
         <h4 style="font-family:'Playfair Display',Georgia,serif;font-size:15px;color:${C.text};margin-bottom:8px;line-height:1.3;">${pname}</h4>
         <div style="display:flex;align-items:center;justify-content:space-between;">
           <span style="font-size:17px;font-weight:700;color:${C.accent};font-family:'DM Sans',sans-serif;">${pprice}</span>
@@ -185,7 +185,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>${data.product_name} — Natural & Certified Organic Skincare</title>
+<title>${data.product_name}</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -305,8 +305,8 @@ export function templateEtecVelvety(data: LandingPageData): string {
         <!-- Trust micro row -->
         <div style="display:flex;flex-wrap:wrap;gap:20px;">
           ${[
-            [ico.leaf(15), '100% Organic'],
-            [ico.shield(15), 'Dermatologist tested'],
+            [ico.leaf(15), data.hero_badges?.[0] || 'Premium quality'],
+            [ico.shield(15), data.hero_badges?.[1] || 'Satisfaction guaranteed'],
             [ico.truck(15), 'Free shipping'],
           ].map(([icon, label]) => `
             <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.6);font-family:'DM Sans',sans-serif;">
@@ -335,7 +335,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
       <!-- Droite — texte + feature cards -->
       <div>
         <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Our Philosophy</p>
-        <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:600;line-height:1.2;letter-spacing:-.01em;color:${C.text};margin-bottom:24px;">Inspired by traditional knowledge and nature</h2>
+        <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:600;line-height:1.2;letter-spacing:-.01em;color:${C.text};margin-bottom:24px;">${data.story?.solution || data.headline || 'A product designed for you'}</h2>
         <p style="font-size:15px;color:${C.muted};line-height:1.8;margin-bottom:40px;font-family:'DM Sans',sans-serif;">
           Every formula we create begins with a deep respect for botanical traditions. We source our actives from the wild — adaptogens, cold-pressed oils, plant extracts — and let nature do what it has always done best.
         </p>
@@ -343,9 +343,9 @@ export function templateEtecVelvety(data: LandingPageData): string {
         <!-- Feature cards horizontales -->
         <div class="ngv" style="display:grid;grid-template-columns:1fr;gap:0;">
           ${[
-            { icon: ico.leaf(22), title: '100% Organic', desc: benefits[0] },
-            { icon: ico.shield(22), title: 'Fits your skin', desc: benefits[1] },
-            { icon: ico.flask(22), title: 'Easy to use', desc: benefits[2] },
+            { icon: ico.leaf(22), title: data.features?.[0]?.title || 'Premium Quality', desc: benefits[0] },
+            { icon: ico.shield(22), title: data.features?.[1]?.title || 'Proven Results', desc: benefits[1] },
+            { icon: ico.flask(22), title: data.features?.[2]?.title || 'Easy to use', desc: benefits[2] },
           ].map((feat, i) => `
             <div style="display:flex;gap:18px;padding:22px 0;border-bottom:${i < 2 ? `1px solid ${C.border}` : 'none'};">
               <div style="width:46px;height:46px;background:${C.accentLight};border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:${C.accent};">
@@ -373,7 +373,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
     <!-- Header -->
     <div style="text-align:center;margin-bottom:56px;">
       <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Our featured products</p>
-      <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:600;line-height:1.2;color:${C.text};max-width:560px;margin:0 auto;letter-spacing:-.01em;">Facial and skincare, natural and certified organic</h2>
+      <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:600;line-height:1.2;color:${C.text};max-width:560px;margin:0 auto;letter-spacing:-.01em;">${data.headline || 'Our featured products'}</h2>
     </div>
 
     <!-- Grid 3 colonnes -->
@@ -400,7 +400,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
       <!-- Colonne gauche -->
       <div>
         <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:16px;">Our Story</p>
-        <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:600;line-height:1.2;color:${C.text};margin-bottom:24px;letter-spacing:-.01em;">Velvety facial and skincare company</h2>
+        <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:600;line-height:1.2;color:${C.text};margin-bottom:24px;letter-spacing:-.01em;">${data.product_name.split(' ')[0]} — ${data.subtitle?.split(' ').slice(0,5).join(' ') || 'Our Story'}</h2>
         <p style="font-size:15px;color:${C.muted};line-height:1.85;margin-bottom:24px;font-family:'DM Sans',sans-serif;">
           ${data.subtitle || `We were born from a simple belief: the most effective skincare is the kind that works in harmony with your skin, not against it. Every product we craft starts with a botanical story — a plant, a root, a flower — and ends with a formula your skin will love.`}
         </p>
@@ -445,7 +445,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
     <!-- Header -->
     <div style="margin-bottom:40px;">
       <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:12px;">All products</p>
-      <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:36px;font-weight:600;color:${C.text};letter-spacing:-.01em;">Mild skincare &amp; facial routine</h2>
+      <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:36px;font-weight:600;color:${C.text};letter-spacing:-.01em;">${data.subtitle || 'Discover the collection'}</h2>
     </div>
 
     <!-- Filter tags -->
@@ -510,7 +510,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
         <!-- Slide 0 -->
         <div class="tsl-itemv" style="display:block;">
           <blockquote style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:400;font-style:italic;line-height:1.65;color:${C.text};margin-bottom:32px;max-width:720px;margin-left:auto;margin-right:auto;">
-            "I've been feeling pretty stressed with my skin lately, so I picked up a set of ${data.product_name} skincare. Oh my goodness! It was AMAZING. My skin felt so soft and moisturized!"
+            "${data.testimonials?.[0]?.text || `I picked up ${data.product_name} and I am absolutely amazed. The results exceeded all my expectations — I couldn't be happier!`}"
           </blockquote>
           <p style="font-size:14px;font-weight:600;color:${C.muted};font-family:'DM Sans',sans-serif;">— Sarah M. <span style="font-weight:400;color:${C.border}">&nbsp;·&nbsp;</span> <span style="font-weight:400;">Verified buyer</span></p>
         </div>
@@ -631,13 +631,13 @@ ${renderGuaranteeSection(data, VELVETY_THEME)}
 ════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:88px 32px;text-align:center;border-top:1px solid ${C.border};">
   <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Limited offer</p>
-  <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:44px;font-weight:600;color:${C.text};letter-spacing:-.02em;line-height:1.15;margin-bottom:16px;max-width:600px;margin-left:auto;margin-right:auto;">${data.headline || 'Begin your organic skincare ritual today'}</h2>
+  <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:44px;font-weight:600;color:${C.text};letter-spacing:-.02em;line-height:1.15;margin-bottom:16px;max-width:600px;margin-left:auto;margin-right:auto;">${data.headline || data.product_name}</h2>
   <p style="font-size:16px;color:${C.muted};margin-bottom:10px;max-width:460px;margin-left:auto;margin-right:auto;font-family:'DM Sans',sans-serif;line-height:1.75;">${data.subtitle || ''}</p>
   ${data.urgency ? `<p style="font-size:14px;font-weight:600;color:${C.accent};margin-bottom:36px;font-family:'DM Sans',sans-serif;">${data.urgency}</p>` : '<div style="margin-bottom:36px;"></div>'}
   <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-flex;align-items:center;gap:8px;background:${C.accentDark};color:#fff;padding:17px 48px;border-radius:100px;font-size:16px;font-weight:700;font-family:'DM Sans',sans-serif;box-shadow:0 8px 28px rgba(30,61,47,.25);transition:transform .2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
     ${data.cta || 'Shop the collection'} →
   </a>
-  <p style="margin-top:20px;font-size:13px;color:${C.muted};font-family:'DM Sans',sans-serif;">Free shipping · 30-day returns · Certified organic · Cruelty-free</p>
+  <p style="margin-top:20px;font-size:13px;color:${C.muted};font-family:'DM Sans',sans-serif;">Free shipping · 30-day returns · ${data.hero_badges?.[0] || 'Premium quality'} · ${data.hero_badges?.[1] || 'Satisfaction guaranteed'}</p>
 </section>
 
 
@@ -699,7 +699,7 @@ ${renderGuaranteeSection(data, VELVETY_THEME)}
     <!-- Copyright -->
     <div style="padding:24px 0;text-align:center;">
       <p style="font-size:12px;color:rgba(255,255,255,.25);font-family:'DM Sans',sans-serif;">
-        © ${new Date().getFullYear()} ${data.product_name.split(' ')[0]}. All rights reserved. Certified organic by ECOCERT. Cruelty-free.
+        © ${new Date().getFullYear()} ${data.product_name.split(' ')[0]}. All rights reserved.
       </p>
     </div>
 

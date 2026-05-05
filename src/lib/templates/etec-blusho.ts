@@ -103,16 +103,16 @@ export function templateEtecBlusho(data: LandingPageData): string {
     data.benefits?.[4] || 'Paraben Free',
   ]
 
-  const productName = data.product_name || 'Blusho Skincare'
+  const productName = data.product_name
 
   // produit cards — 6 entrées
   const productCards = [
-    { name: productName,                      img: imgs[0], price, orig: originalPrice, rating: 4.8, reviews: 89,  badge: 'SALE'  },
-    { name: `${productName} — Radiance Serum`,img: imgs[1], price: (parseFloat(price)+5).toFixed(2), orig:'', rating: 4.9, reviews: 134, badge: 'NEW'   },
-    { name: `${productName} — Glow Mask`,     img: imgs[2], price: (parseFloat(price)+8).toFixed(2), orig:'', rating: 4.7, reviews: 62,  badge: ''      },
-    { name: `${productName} — Eye Cream`,     img: imgs[3], price: (parseFloat(price)+3).toFixed(2), orig:'', rating: 4.6, reviews: 47,  badge: 'SALE'  },
-    { name: `${productName} — Toner Mist`,    img: imgs[0], price: (parseFloat(price)-2).toFixed(2), orig:'', rating: 4.8, reviews: 105, badge: ''      },
-    { name: `${productName} — Night Repair`,  img: imgs[1], price: (parseFloat(price)+12).toFixed(2),orig:'', rating: 5.0, reviews: 218, badge: 'NEW'   },
+    { name: productName, img: imgs[0], price, orig: originalPrice, rating: 4.8, reviews: 89,  badge: 'SALE' },
+    { name: productName, img: imgs[1], price: (parseFloat(price)+5).toFixed(2),  orig:'', rating: 4.9, reviews: 134, badge: 'NEW'  },
+    { name: productName, img: imgs[2], price: (parseFloat(price)+8).toFixed(2),  orig:'', rating: 4.7, reviews: 62,  badge: ''     },
+    { name: productName, img: imgs[3], price: (parseFloat(price)+3).toFixed(2),  orig:'', rating: 4.6, reviews: 47,  badge: 'SALE' },
+    { name: productName, img: imgs[0], price: (parseFloat(price)-2).toFixed(2),  orig:'', rating: 4.8, reviews: 105, badge: ''     },
+    { name: productName, img: imgs[1], price: (parseFloat(price)+12).toFixed(2), orig:'', rating: 5.0, reviews: 218, badge: 'NEW'  },
   ]
 
   const testimonials = [
@@ -126,7 +126,7 @@ export function templateEtecBlusho(data: LandingPageData): string {
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>${productName} — Beauty & Skincare</title>
+<title>${productName}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
@@ -406,7 +406,7 @@ export function templateEtecBlusho(data: LandingPageData): string {
 <!-- ══════════════════════════════════════════════════════════ -->
 <section class="herob" aria-label="Hero">
   <div class="hero-textb">
-    <span class="hero-badgeb">A Beauty &amp; Skin Care</span>
+    <span class="hero-badgeb">${data.hero_badges?.[0] || productName.split(' ')[0]}</span>
     <h1 class="hero-h1b">${data.headline || 'High Cosmetics<br/>Product For You'}</h1>
     <p class="hero-subtitleb">${data.subtitle || 'Discover our curated collection of premium skincare essentials crafted for your unique skin.'}</p>
     <a href="javascript:void(0)" onclick="event.preventDefault()" class="hero-ctab">${data.cta || 'See All Collection'} &rarr;</a>
@@ -454,13 +454,13 @@ export function templateEtecBlusho(data: LandingPageData): string {
     <a href="javascript:void(0)" onclick="event.preventDefault()" class="section-linkb">All Categories &rarr;</a>
   </div>
   <div class="cat-gridb">
-    ${[
-      { name: 'Beauty Glow', count: 48 },
-      { name: 'Body Lotion', count: 32 },
-      { name: 'Cosmetics',   count: 75 },
-      { name: 'Face Wash',   count: 29 },
-      { name: 'Hair Style',  count: 41 },
-    ].map((cat, i) => `
+    ${(data.features?.slice(0,5).map((f, i) => ({ name: f.title, count: [48,32,75,29,41][i] })) || [
+      { name: 'Best Sellers', count: 48 },
+      { name: 'New Arrivals', count: 32 },
+      { name: 'Collections', count: 75 },
+      { name: 'Bundles',     count: 29 },
+      { name: 'Accessories', count: 41 },
+    ]).map((cat, i) => `
     <div class="cat-cardb" role="button" tabindex="0" aria-label="${cat.name} category">
       <img class="cat-imgb" src="${CAT_IMGS[i]}" alt="${cat.name}" loading="lazy" width="100" height="100"/>
       <span class="cat-nameb">${cat.name}</span>
@@ -475,7 +475,7 @@ export function templateEtecBlusho(data: LandingPageData): string {
 <section class="brand-stmtb" aria-label="Brand statement">
   <div class="brand-stmt-innerb">
     <p class="brand-quoteb">
-      &ldquo;${productName} Is A Cosmetic Brand Dedicated To Beauty &#127807; Innovation, Offering High-Quality &#128142; Skin-Friendly Makeup And Skincare &#127800; Products&rdquo;
+      &ldquo;${productName} — ${data.subtitle || 'Premium quality, proven results. Designed for those who demand the best.'}&rdquo;
     </p>
     <p class="brand-quote-subbb">${data.subtitle || 'Premium formulas, visible results. Designed for every skin type.'}</p>
   </div>
@@ -546,9 +546,9 @@ export function templateEtecBlusho(data: LandingPageData): string {
     <!-- Tabs -->
     <div class="bs-tabsb" role="tablist" aria-label="Product categories">
       <button class="bs-tabb activebb" role="tab" aria-selected="true"  onclick="bsTabs(this,'all')">All</button>
-      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'skincare')">Skincare</button>
-      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'makeup')">Makeup</button>
-      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'hair')">Hair</button>
+      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'new')">New</button>
+      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'sale')">Sale</button>
+      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'top')">Top rated</button>
     </div>
     <div class="bs-gridb">
       ${productCards.slice(0, 4).map((p, i) => `
@@ -629,7 +629,7 @@ export function templateEtecBlusho(data: LandingPageData): string {
 <section class="newsletterb" aria-label="Newsletter signup">
   <div class="nl-innerb">
     <h2 class="nl-titleb">Subscribe &amp; Get 10% Off Your First Order</h2>
-    <p class="nl-subtitleb">Join 50,000+ beauty lovers and be the first to hear about new products, exclusive offers, and skincare tips.</p>
+    <p class="nl-subtitleb">Join 50,000+ satisfied customers and be the first to hear about new products, exclusive offers, and tips.</p>
     <form class="nl-formb" onsubmit="return false;" aria-label="Email subscription form">
       <input class="nl-inputb" type="email" placeholder="Enter your email address" aria-label="Email address" autocomplete="email"/>
       <button class="nl-btnb" type="submit">Subscribe</button>
@@ -646,7 +646,7 @@ export function templateEtecBlusho(data: LandingPageData): string {
     <!-- Col 1: Brand -->
     <div>
       <div class="footer-logob">blusho</div>
-      <p class="footer-taglineb">Your trusted beauty companion. Premium skincare crafted with nature's finest ingredients.</p>
+      <p class="footer-taglineb">${data.subtitle || 'Premium quality, trusted by thousands of satisfied customers worldwide.'}</p>
       <div class="footer-socialsb" aria-label="Social media links">
         <a href="javascript:void(0)" onclick="event.preventDefault()" class="footer-social-iconb" aria-label="Instagram">${ICON_INSTAGRAM}</a>
         <a href="javascript:void(0)" onclick="event.preventDefault()" class="footer-social-iconb" aria-label="TikTok">${ICON_TIKTOK}</a>
@@ -696,7 +696,7 @@ export function templateEtecBlusho(data: LandingPageData): string {
       </div>
     </div>
   </div>
-  <p class="footer-copyrightb">&copy; ${new Date().getFullYear()} ${productName}. All rights reserved. Crafted with care for your skin.</p>
+  <p class="footer-copyrightb">&copy; ${new Date().getFullYear()} ${productName}. All rights reserved.</p>
 </footer>
 
 <!-- ══════════════════════════════════════════════════════════ -->

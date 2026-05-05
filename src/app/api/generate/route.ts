@@ -64,13 +64,20 @@ export async function POST(req: NextRequest) {
         const detail = err instanceof ScrapeError ? err.detail : undefined
         console.warn('[/api/generate] scraping échoué:', msg, detail)
         await rollbackQuota()
-        // On surface le détail technique pour aider à debugger côté user
-        // (ex: "Firecrawl 401 unauthorized" → clé API expirée ; "fetch HTTP 503" → site bloque)
-        const userMsg = detail
-          ? `Scraping échoué : ${msg}. Détail : Firecrawl ${detail.firecrawl ? `→ ${detail.firecrawl}` : 'OK'} | fetch ${detail.fetch ? `→ ${detail.fetch}` : 'OK'}. Utilise la saisie manuelle.`
-          : `Scraping échoué (${msg}). Utilise la saisie manuelle.`
+        // Message court côté UI (le détail technique part en debug pour Sentry).
+        // Sur AliExpress/Amazon, c'est presque toujours un anti-bot ou un
+        // timeout > 22s — pas un bug de notre côté.
+        const isTimeout = /timeout|aborted/i.test(msg)
+        const userMsg = isTimeout
+          ? `Le site a été trop lent à répondre (anti-bot AliExpress/Amazon). Bascule en saisie manuelle — c'est plus rapide pour ce type d'URL.`
+          : `Scraping impossible (${msg.slice(0, 80)}). Bascule en saisie manuelle.`
         return NextResponse.json(
-          { error: userMsg, debug: detail },
+          {
+            error: userMsg,
+            needsManualInput: true,
+            partialData: { title: '', description: '', price: '', images: [] },
+            debug: detail,
+          },
           { status: 422 }
         )
       }

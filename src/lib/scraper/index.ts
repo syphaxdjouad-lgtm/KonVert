@@ -563,10 +563,18 @@ function cleanPrice(p: string | null | undefined): string | null {
 }
 
 export function cleanProduct(product: ScrapedProduct): ScrapedProduct {
+  // Defense-in-depth : la saisie manuelle du wizard envoie product_name /
+  // subtitle au lieu de title / description. On accepte les deux shapes pour
+  // ne jamais crasher sur `.replace` d'un undefined.
+  const p = product as ScrapedProduct & { product_name?: string; subtitle?: string; headline?: string }
+  const safeTitle = (p.title ?? p.product_name ?? '').toString()
+  const safeDescription = (p.description ?? p.subtitle ?? p.headline ?? '').toString()
+  const safeImages = Array.isArray(product.images) ? product.images : []
+
   // Filtre les URLs d'images : exclut les loaders/placeholders (150x150.gif,
   // pixels de tracking, icônes) qui sont typiques d'une page bloquée.
-  const cleanImages = product.images
-    .filter((img) => img.startsWith('http'))
+  const cleanImages = safeImages
+    .filter((img) => typeof img === 'string' && img.startsWith('http'))
     .filter((img) => {
       const lower = img.toLowerCase()
       if (lower.includes('150x150')) return false
@@ -582,11 +590,15 @@ export function cleanProduct(product: ScrapedProduct): ScrapedProduct {
 
   return {
     ...product,
-    title: product.title.replace(/\s+/g, ' ').trim().slice(0, 200),
-    description: product.description.replace(/\s+/g, ' ').trim().slice(0, 1000),
+    title: safeTitle.replace(/\s+/g, ' ').trim().slice(0, 200),
+    description: safeDescription.replace(/\s+/g, ' ').trim().slice(0, 1000),
     images: cleanImages,
     price: cleanPrice(product.price),
     original_price: cleanPrice(product.original_price),
+    variants: Array.isArray(product.variants) ? product.variants : [],
+    rating: typeof product.rating === 'number' ? product.rating : null,
+    reviews_count: typeof product.reviews_count === 'number' ? product.reviews_count : null,
+    source_url: product.source_url ?? '',
   }
 }
 

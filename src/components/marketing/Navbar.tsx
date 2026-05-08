@@ -23,24 +23,11 @@ const NAV = [
   { label: 'À propos', href: '/about' },
 ]
 
-// Pages avec hero dark → navbar transparente au départ
-const DARK_HERO_PAGES = ['/', '/features', '/agence', '/demo']
-
 export default function Navbar() {
   const [menuOpen,    setMenuOpen]    = useState(false)
-  const [scrolled,    setScrolled]    = useState(false)
   const [activeDD,    setActiveDD]    = useState<string | null>(null)
   const pathname = usePathname()
   const ddRef    = useRef<HTMLDivElement>(null)
-
-  const isDarkHero = DARK_HERO_PAGES.includes(pathname)
-  const isTransparent = isDarkHero && !scrolled
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   // Ferme dropdown si clic extérieur
   useEffect(() => {
@@ -53,10 +40,9 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  const navBg    = isTransparent ? 'bg-transparent' : 'bg-white/95 backdrop-blur-xl shadow-sm border-b border-gray-100'
-  const textCol  = isTransparent ? 'text-white/90 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-  const logoCls  = isTransparent ? 'text-white' : 'text-gray-900'
-  const subCls   = isTransparent ? 'text-white/60' : 'text-[#5B47F5]'
+  const navBg   = 'bg-white/95 backdrop-blur-xl shadow-sm border-b border-gray-100'
+  const textCol = 'text-gray-600 hover:text-gray-900'
+  const logoCls = 'text-gray-900'
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg}`}>
@@ -130,16 +116,14 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center gap-2 ml-auto flex-shrink-0">
           <Link
             href="/login"
-            className={`text-sm font-semibold px-4 py-2 rounded-lg transition-all whitespace-nowrap ${
-              isTransparent ? 'text-white/80 hover:text-white hover:bg-white/10' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-            }`}
+            className="text-sm font-semibold px-4 py-2 rounded-lg transition-all whitespace-nowrap text-gray-600 hover:text-gray-900 hover:bg-gray-50"
           >
             Se connecter
           </Link>
           <Link
             href="/demo"
             className="text-sm font-bold px-4 py-2 rounded-full transition-all whitespace-nowrap hover:opacity-90"
-            style={{ border: '1.5px solid', color: isTransparent ? '#a78bfa' : '#5B47F5', borderColor: isTransparent ? '#a78bfa' : '#5B47F5' }}
+            style={{ border: '1.5px solid', color: '#5B47F5', borderColor: '#5B47F5' }}
           >
             Voir la démo
           </Link>
@@ -157,7 +141,7 @@ export default function Navbar() {
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="lg:hidden ml-auto p-2 rounded-lg transition-colors"
-          style={{ color: isTransparent ? '#fff' : '#374151' }}
+          style={{ color: '#374151' }}
         >
           {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>

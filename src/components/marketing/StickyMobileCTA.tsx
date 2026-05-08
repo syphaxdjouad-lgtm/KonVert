@@ -6,7 +6,12 @@ import { usePathname } from 'next/navigation'
 export default function StickyMobileCTA() {
   const pathname = usePathname()
 
-  if (pathname === '/signup' || pathname?.startsWith('/dashboard')) return null
+  if (
+    pathname === '/signup' ||
+    pathname === '/essai' ||
+    pathname === '/login' ||
+    pathname?.startsWith('/dashboard')
+  ) return null
 
   return (
     <div

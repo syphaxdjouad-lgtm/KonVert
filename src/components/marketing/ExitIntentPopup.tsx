@@ -1,21 +1,24 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { X, CheckCircle } from 'lucide-react'
 
 const SESSION_KEY = 'konvert-exit-intent-shown'
+const EXCLUDED_PATHS = ['/essai', '/signup', '/login']
 
 export default function ExitIntentPopup() {
   const router = useRouter()
+  const pathname = usePathname()
   const [visible, setVisible] = useState(false)
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
 
   useEffect(() => {
-    // Desktop uniquement
+    // Desktop uniquement, exclut funnel & dashboard
     if (window.innerWidth < 768) return
     if (sessionStorage.getItem(SESSION_KEY)) return
+    if (EXCLUDED_PATHS.includes(pathname) || pathname?.startsWith('/dashboard')) return
 
     function handleMouseLeave(e: MouseEvent) {
       if (e.clientY <= 0) {
@@ -27,7 +30,7 @@ export default function ExitIntentPopup() {
 
     document.addEventListener('mouseleave', handleMouseLeave)
     return () => document.removeEventListener('mouseleave', handleMouseLeave)
-  }, [])
+  }, [pathname])
 
   function close() {
     setVisible(false)

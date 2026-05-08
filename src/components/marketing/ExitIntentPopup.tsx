@@ -80,28 +80,56 @@ export default function ExitIntentPopup() {
             <X className="w-4 h-4" />
           </button>
 
-          {/* Hero image — mockup landing page */}
-          <div className="w-full rounded-xl overflow-hidden mb-5" style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', padding: '20px 24px 0' }}>
-            <div className="rounded-t-lg overflow-hidden shadow-lg" style={{ background: '#fff' }}>
-              {/* Browser bar */}
-              <div className="flex items-center gap-1.5 px-3 py-2" style={{ background: '#f3f3f6' }}>
-                <div className="w-2 h-2 rounded-full" style={{ background: '#ff5f57' }} />
-                <div className="w-2 h-2 rounded-full" style={{ background: '#ffbd2e' }} />
-                <div className="w-2 h-2 rounded-full" style={{ background: '#28c840' }} />
-                <div className="flex-1 mx-2 h-4 rounded-md" style={{ background: '#e4e4e9' }} />
-              </div>
-              {/* Page content mockup */}
-              <div className="px-4 py-3 space-y-2">
-                <div className="flex gap-3">
-                  <div className="w-16 h-16 rounded-lg flex-shrink-0" style={{ background: 'linear-gradient(135deg, #e0d9ff, #c4b5fd)' }} />
-                  <div className="flex-1 space-y-1.5">
-                    <div className="h-3 rounded-full w-3/4" style={{ background: '#1a1a2e' }} />
-                    <div className="h-2 rounded-full w-full" style={{ background: '#e4e4e9' }} />
-                    <div className="h-2 rounded-full w-2/3" style={{ background: '#e4e4e9' }} />
-                  </div>
-                </div>
-                <div className="h-7 rounded-lg w-full" style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)' }} />
-              </div>
+          {/* Hero — logo KONVERT sur gradient */}
+          <div
+            className="relative w-full rounded-2xl overflow-hidden mb-6 flex items-center justify-center"
+            style={{
+              height: '160px',
+              background: 'linear-gradient(135deg, #4c3ce0 0%, #5B47F5 45%, #7c6af7 100%)',
+            }}
+          >
+            {/* blobs décoratifs */}
+            <div
+              className="absolute -top-10 -left-10 w-40 h-40 rounded-full opacity-40"
+              style={{ background: 'radial-gradient(circle, #b5f23d 0%, transparent 70%)', filter: 'blur(28px)' }}
+            />
+            <div
+              className="absolute -bottom-12 -right-8 w-44 h-44 rounded-full opacity-50"
+              style={{ background: 'radial-gradient(circle, #a78bfa 0%, transparent 70%)', filter: 'blur(32px)' }}
+            />
+            {/* grille subtile */}
+            <div
+              className="absolute inset-0 opacity-20"
+              style={{
+                backgroundImage:
+                  'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
+                backgroundSize: '24px 24px',
+              }}
+            />
+
+            {/* Logo + wordmark */}
+            <div className="relative flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 52 52" fill="none" aria-hidden="true" style={{ filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.25))' }}>
+                <rect width="52" height="52" rx="14" fill="#7c3aed" />
+                <rect x="14" y="12" width="6" height="28" rx="2" fill="white" />
+                <path d="M20 26 L35 13" stroke="white" strokeWidth="5.5" strokeLinecap="round" />
+                <path d="M20 26 L33 39" stroke="#b5f23d" strokeWidth="5.5" strokeLinecap="round" />
+                <polygon points="33,39 24,37 31,30" fill="#b5f23d" />
+              </svg>
+              <span
+                className="font-black text-white text-3xl tracking-tight leading-none"
+                style={{ letterSpacing: '-0.03em', fontFamily: 'Space Grotesk, sans-serif' }}
+              >
+                <span style={{ color: '#b5f23d' }}>K</span>ONVERT
+              </span>
+            </div>
+
+            {/* badge gratuit */}
+            <div
+              className="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+              style={{ background: '#b5f23d', color: '#1a1a2e' }}
+            >
+              Gratuit
             </div>
           </div>
 

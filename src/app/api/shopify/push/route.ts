@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { ShopifyClient, decryptToken } from '@/lib/shopify'
 import { createClient } from '@/lib/supabase/server'
 import { injectTracker } from '@/lib/analytics/tracker'
+import { getAppUrl } from '@/lib/env'
 
 export const maxDuration = 30
 
@@ -49,7 +50,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Injecter le script de tracking dans le HTML
-    const appUrl    = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const appUrl    = getAppUrl()
     const trackedHtml = injectTracker(page.html_content, page_id, appUrl)
 
     // Décrypter le token et pusher sur Shopify

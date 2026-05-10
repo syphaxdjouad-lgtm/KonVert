@@ -22,6 +22,20 @@ const RATE_LIMITS: Record<string, { limit: number; windowMs: number }> = {
   '/api/invitations':     { limit: 10,  windowMs: 60_000 },       // 10 req/min (anti-brute-force)
   '/api/preview':         { limit: 30,  windowMs: 60_000 },       // 30 req/min
   '/api/email/unsubscribe': { limit: 5, windowMs: 60_000 },        // 5 req/min (anti-bruteforce désabonnement)
+
+  // Audit Madara P1-04 : endpoints user-auth qui restaient sans rate limit.
+  // Le rate limit est par IP — un user authentifié reste limité à ces taux,
+  // ce qui empêche les attaques par script qui mobiliseraient la DB ou DeepSeek/Stripe.
+  '/api/upload':                   { limit: 20, windowMs: 60_000 },   // upload images dashboard
+  '/api/workspaces':               { limit: 30, windowMs: 60_000 },   // CRUD workspaces (rapports PDF jsPDF CPU-bound)
+  '/api/notifications':            { limit: 60, windowMs: 60_000 },   // poll notifications dashboard
+  '/api/shopify/push':             { limit: 10, windowMs: 60_000 },   // publish vers boutique
+  '/api/shopify/connect':          { limit: 10, windowMs: 60_000 },
+  '/api/shopify/callback':         { limit: 10, windowMs: 60_000 },
+  '/api/woocommerce/push':         { limit: 10, windowMs: 60_000 },
+  '/api/woocommerce/connect':      { limit: 10, windowMs: 60_000 },   // SSRF via fetch user-controlled
+  '/api/youcan/push':              { limit: 10, windowMs: 60_000 },
+  '/api/youcan/connect':           { limit: 10, windowMs: 60_000 },
 }
 
 function getClientIp(req: NextRequest): string {

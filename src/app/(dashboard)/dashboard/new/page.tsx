@@ -212,6 +212,77 @@ function NewPageInner() {
     track.newPageWizardStarted()
   }, [])
 
+  // ── Backup wizard dans localStorage ─────────────────────────────────
+  // F5 ou crash navigateur pendant le wizard = perte des inputs avant ce fix
+  // (audit Konan P1-3). On sauvegarde les champs des steps 1-7 à chaque change,
+  // expirable 24h. Pas le HTML résultant (lourd, déjà persisté côté DB via pageId).
+  const WIZARD_DRAFT_KEY = 'konvert-wizard-draft'
+  const WIZARD_DRAFT_TTL_MS = 24 * 60 * 60 * 1000
+
+  // Restore au mount — sauf si l'user load une page existante via ?page_id=
+  useEffect(() => {
+    if (searchParams.get('page_id')) return
+    try {
+      const raw = localStorage.getItem(WIZARD_DRAFT_KEY)
+      if (!raw) return
+      const draft = JSON.parse(raw) as { ts: number; data: Record<string, unknown> }
+      if (!draft.ts || Date.now() - draft.ts > WIZARD_DRAFT_TTL_MS) {
+        localStorage.removeItem(WIZARD_DRAFT_KEY)
+        return
+      }
+      const d = draft.data as {
+        step?: number; inputMode?: InputMode; url?: string; manual?: typeof manual
+        uploadedPhotos?: string[]; ugcVideos?: string[]; ugcLinks?: string[]
+        beforePhotos?: string[]; afterPhotos?: string[]
+        selectedStyle?: string; selectedTone?: string; platform?: string; resultLang?: string
+      }
+      if (typeof d.step === 'number' && d.step >= 1 && d.step <= 7) setStep(d.step)
+      if (d.inputMode) setInputMode(d.inputMode)
+      if (typeof d.url === 'string') setUrl(d.url)
+      if (d.manual) setManual(d.manual)
+      if (Array.isArray(d.uploadedPhotos)) setUploadedPhotos(d.uploadedPhotos)
+      if (Array.isArray(d.ugcVideos)) setUgcVideos(d.ugcVideos)
+      if (Array.isArray(d.ugcLinks)) setUgcLinks(d.ugcLinks)
+      if (Array.isArray(d.beforePhotos)) setBeforePhotos(d.beforePhotos)
+      if (Array.isArray(d.afterPhotos)) setAfterPhotos(d.afterPhotos)
+      if (d.selectedStyle) setSelectedStyle(d.selectedStyle)
+      if (d.selectedTone) setSelectedTone(d.selectedTone)
+      if (d.platform) setPlatform(d.platform)
+      if (d.resultLang) setResultLang(d.resultLang)
+    } catch {
+      // localStorage indisponible (private mode) ou JSON corrompu — on ignore
+      try { localStorage.removeItem(WIZARD_DRAFT_KEY) } catch { /* noop */ }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Save à chaque change de champ wizard, sauf en step 8 (résultat) / mode editor
+  useEffect(() => {
+    if (mode !== 'wizard') return
+    if (step >= 8) return
+    try {
+      const data = {
+        step, inputMode, url, manual,
+        uploadedPhotos, ugcVideos, ugcLinks,
+        beforePhotos, afterPhotos,
+        selectedStyle, selectedTone, platform, resultLang,
+      }
+      localStorage.setItem(WIZARD_DRAFT_KEY, JSON.stringify({ ts: Date.now(), data }))
+    } catch { /* quota dépassé / private mode — silencieux */ }
+  }, [
+    mode, step, inputMode, url, manual,
+    uploadedPhotos, ugcVideos, ugcLinks,
+    beforePhotos, afterPhotos,
+    selectedStyle, selectedTone, platform, resultLang,
+  ])
+
+  // Clear à la publication réussie (ou au changement de mode vers editor stable)
+  useEffect(() => {
+    if (mode === 'editor' && html) {
+      try { localStorage.removeItem(WIZARD_DRAFT_KEY) } catch { /* noop */ }
+    }
+  }, [mode, html])
+
   // ── Chargement d'une page existante ──
   useEffect(() => {
     const id = searchParams.get('page_id')

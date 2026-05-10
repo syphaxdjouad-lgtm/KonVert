@@ -36,16 +36,20 @@ export default function CookieBanner() {
           </Link>
         </p>
         <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Touch targets ≥ 44px sur mobile (WCAG 2.1 AA + Apple HIG).
+              min-h-[44px] obligatoire car px-4 py-2 + text-sm = ~36px en hauteur. */}
           <button
             onClick={() => handleChoice(false)}
-            className="px-4 py-2 text-sm font-semibold text-gray-500 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+            className="px-4 min-h-[44px] text-sm font-semibold text-gray-500 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5B47F5]"
+            aria-label="Refuser les cookies"
           >
             Refuser
           </button>
           <button
             onClick={() => handleChoice(true)}
-            className="px-5 py-2 text-sm font-bold text-white rounded-lg transition-colors"
+            className="px-5 min-h-[44px] text-sm font-bold text-white rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             style={{ background: '#5B47F5' }}
+            aria-label="Accepter les cookies"
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = '#4a38e0' }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = '#5B47F5' }}
           >

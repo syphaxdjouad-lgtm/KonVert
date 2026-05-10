@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { WooCommerceClient, encryptCredentials } from '@/lib/woocommerce'
 import { createClient } from '@/lib/supabase/server'
+import { isPrivateHost } from '@/lib/security/private-host'
 
 // POST /api/woocommerce/connect
 // Body: { store_url, consumer_key, consumer_secret }
@@ -24,13 +25,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'URL du store invalide' }, { status: 400 })
     }
 
-    // Protection SSRF — bloquer les IPs privees et localhost
-    const host = parsedUrl.hostname
-    const blockedPatterns = [
-      /^127\./, /^10\./, /^172\.(1[6-9]|2[0-9]|3[01])\./, /^192\.168\./,
-      /^169\.254\./, /^0\.0\.0\.0/, /^localhost$/i, /^\[::1\]$/,
-    ]
-    if (blockedPatterns.some(p => p.test(host))) {
+    // Protection SSRF — blocklist complète via helper partagé.
+    // Couvre IPv4 + IPv6 (::1, fe80::, fc00::/7, IPv4-mapped),
+    // metadata cloud (AWS/GCP), CGNAT, mDNS, etc. (cf audit Madara P1-01).
+    if (isPrivateHost(parsedUrl.hostname)) {
       return NextResponse.json({ error: 'URL du store invalide' }, { status: 400 })
     }
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe, getStripePrice, type BillingInterval } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/server'
+import { getAppUrl } from '@/lib/env'
 
 type PaidPlan = 'starter' | 'pro' | 'agency'
 
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest) {
       customerId = customer.id
     }
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const appUrl = getAppUrl()
 
     let priceId: string
     try {

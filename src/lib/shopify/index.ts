@@ -1,11 +1,20 @@
 import crypto from 'crypto'
+import { getAppUrl } from '@/lib/env'
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 export const SHOPIFY_API_KEY    = process.env.SHOPIFY_API_KEY    || ''
 export const SHOPIFY_API_SECRET = process.env.SHOPIFY_API_SECRET || ''
 export const SHOPIFY_SCOPES     = 'write_pages,read_pages,write_content,read_content'
-export const APP_URL            = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+// Lazy via getter pour ne pas évaluer getAppUrl() au module-load (qui throw
+// en prod si NEXT_PUBLIC_APP_URL absent — pendant "Collecting page data" Next
+// 16 le ferait planter, cf bug supabaseAdmin du commit 4NCdqrSi9).
+export function getShopifyAppUrl(): string {
+  return getAppUrl()
+}
+// Backward-compat — ne plus l'utiliser, préférer getShopifyAppUrl().
+// Sera retiré une fois tous les call sites migrés.
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
 // ─── OAuth helpers ────────────────────────────────────────────────────────────
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { YouCanClient, decryptYouCanToken } from '@/lib/youcan'
 import { createClient } from '@/lib/supabase/server'
 import { injectTracker } from '@/lib/analytics/tracker'
+import { getAppUrl } from '@/lib/env'
 
 export const maxDuration = 30
 
@@ -52,7 +53,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Injecter le tracker analytics
-    const appUrl      = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const appUrl      = getAppUrl()
     const trackedHtml = injectTracker(page.html_content, page_id, appUrl)
 
     // Push vers YouCan

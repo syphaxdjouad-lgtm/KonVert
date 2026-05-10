@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import * as Sentry from '@sentry/nextjs'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
 export async function POST(req: NextRequest) {
@@ -28,10 +29,20 @@ export async function POST(req: NextRequest) {
     })
 
     if (error) {
-      // Table might not exist yet — fallback to just logging
+      // L'email est PII — on ne le mettait PAS dans Sentry direct (scrubber le
+      // masque), mais un `console.log` brut allait dans Vercel logs en clair
+      // (audit Explore + Sasori P0-9). On capture l'event Sentry SANS le PII
+      // brut (le scrubber ferait le job côté Sentry mais autant être propre
+      // côté code aussi : on log juste un hash de l'email pour dédup analytics).
       console.error('[contact] DB insert error:', error.message)
-      // Still log the message so it's not lost
-      console.log('[contact] Message from:', email, '| Subject:', subject)
+      Sentry.captureMessage('[contact] DB insert failed — fallback log', {
+        level: 'warning',
+        extra: {
+          domain: email.split('@')[1] ?? 'unknown',
+          subject_len: subject.length,
+          message_len: message.length,
+        },
+      })
     }
 
     return NextResponse.json({ ok: true })

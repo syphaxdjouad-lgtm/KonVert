@@ -208,6 +208,11 @@ function EssaiContent() {
   // ── Étape 2 : produit + génération ───────────────────────────────────────
   async function handleGenerate(e: React.FormEvent) {
     e.preventDefault()
+    // Race condition guard : double-click sur "Générer" ouvrait 2 requêtes
+    // simultanées qui passaient toutes deux le SELECT initial → la 2e tombait
+    // ensuite sur la contrainte unique 23505 du DB et causait un 409
+    // déroutant pour l'user (cf audit Konan P1-1). On bloque en amont.
+    if (step === 'generating') return
     setError(null)
 
     if (inputMode === 'url' && !url.trim()) {

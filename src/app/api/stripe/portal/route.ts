@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
 import { createClient } from '@/lib/supabase/server'
+import { getAppUrl } from '@/lib/env'
 
 // POST /api/stripe/portal — ouvre le portail de gestion Stripe
 export async function POST(req: NextRequest) {
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Aucun abonnement trouvé' }, { status: 404 })
     }
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const appUrl = getAppUrl()
 
     const session = await stripe.billingPortal.sessions.create({
       customer:   sub.stripe_customer_id,

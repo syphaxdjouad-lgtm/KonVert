@@ -3,11 +3,13 @@ import "./globals.css";
 import { Space_Grotesk } from 'next/font/google'
 import { Toaster } from '@/components/ui/sonner'
 import CrispChat from '@/components/CrispChat'
+import Pixels from '@/components/tracking/Pixels'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { PostHogProvider } from '@/providers/PostHogProvider'
 import { PostHogPageView } from '@/components/PostHogPageView'
 import { Suspense } from 'react'
+import { organizationSchema, softwareApplicationSchema, jsonLd } from '@/lib/schema'
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['400','500','600','700'], variable: '--font-space-grotesk' })
 
@@ -64,6 +66,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className="h-full antialiased">
+      <head>
+        {/* Schema.org JSON-LD globaux : Organization + SoftwareApplication.
+            Indexés par Google AI Overviews, ChatGPT search, Perplexity. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLd(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLd(softwareApplicationSchema()) }}
+        />
+      </head>
       <body className={`min-h-full flex flex-col ${spaceGrotesk.variable}`}>
           <PostHogProvider>
             <Suspense>
@@ -73,6 +87,7 @@ export default function RootLayout({
             <CrispChat />
           </PostHogProvider>
           <Toaster richColors position="top-center" />
+          <Pixels />
           <Analytics />
           <SpeedInsights />
         </body>

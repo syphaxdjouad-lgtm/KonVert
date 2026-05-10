@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { ArrowRight, Link2, Pencil, Sparkles } from 'lucide-react'
 import { Turnstile } from '@/components/Turnstile'
 import { track } from '@/lib/analytics'
+import { pixels } from '@/lib/tracking/pixels'
 
 type Step = 'email' | 'product' | 'generating'
 type InputMode = 'url' | 'manual'
@@ -226,6 +227,10 @@ function EssaiContent() {
     setLoadingText(t.loadingTexts[0])
     track.essaiEmailCaptured()
     track.generateStarted('public')
+    // Pixels Meta + TikTok + Google : event Lead = email capturé sur tunnel
+    // gratuit. Valeur conservatrice 1€ pour permettre les modèles d'enchères
+    // value-based si activés (Meta Optimization for value).
+    pixels.lead({ content_name: inputMode === 'url' ? 'essai_url' : 'essai_manual', value: 1 })
     const startedAt = Date.now()
 
     let i = 0

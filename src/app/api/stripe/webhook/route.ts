@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { stripe, getPlanFromStripePrice } from '@/lib/stripe'
+import { sendConversion } from '@/lib/capi'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { PostHog } from 'posthog-node'
 import type Stripe from 'stripe'
@@ -83,15 +84,38 @@ export async function POST(req: NextRequest) {
 
         await activateSubscription(userId, plan, session.customer as string, session.subscription as string)
 
+        const value = (session.amount_total ?? 0) / 100
+        const currency = (session.currency ?? 'eur').toUpperCase()
+
         ph?.capture({
           distinctId: userId,
           event: 'subscription_started',
-          properties: {
-            plan,
-            amount: (session.amount_total ?? 0) / 100,
-            currency: session.currency,
-          },
+          properties: { plan, amount: value, currency },
         })
+
+        // CAPI server-side : event Purchase envoyé directement à Meta + TikTok
+        // depuis le webhook. Plus fiable que le pixel client (pas bloqué par
+        // adblockers, pas dépendant du retour user sur /success). event_id =
+        // session.id pour deduplication avec le pixel client si l'user revient
+        // sur /success avant que le webhook ne soit traité.
+        // Fire & forget : on n'attend pas, mais Sentry capture les erreurs.
+        sendConversion({
+          eventName: 'Purchase',
+          eventId: session.id,
+          eventSourceUrl: session.success_url ?? undefined,
+          userData: {
+            email: session.customer_details?.email ?? undefined,
+            externalId: userId,
+          },
+          customData: {
+            value,
+            currency,
+            contentName: plan,
+            contentIds: [plan],
+            contentType: 'product',
+          },
+        }).catch(() => { /* géré par Sentry dans sendConversion */ })
+
         break
       }
 

@@ -53,9 +53,9 @@ const TEAM_NEW: { Icon: LucideIcon; iconBg: string; iconColor: string; name: str
     Icon: Building2,
     iconBg: 'rgba(91,71,245,0.1)',
     iconColor: '#5B47F5',
-    name: 'KONVERT',
-    role: 'Fondé en 2024',
-    desc: "Né de la frustration de perdre des heures sur des pages médiocres. KONVERT est construit par une équipe passionnée par l'e-commerce et obsédée par les conversions.",
+    name: 'KONVERT × NEXARA',
+    role: 'Studio NEXARA · 2024',
+    desc: "KONVERT est l'un des produits du studio NEXARA, qui construit les outils SaaS que les e-commerçants et agences attendent. Une équipe obsédée par la conversion et l'automatisation, basée en France.",
   },
   {
     Icon: Bot,

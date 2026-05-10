@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
 import * as Sentry from '@sentry/nextjs'
 import { track } from '@/lib/analytics'
+import { pixels } from '@/lib/tracking/pixels'
+import { faqSchema, jsonLd } from '@/lib/schema'
 import { Check, ChevronDown, ArrowRight, Lock, CreditCard, ShieldCheck } from 'lucide-react'
 import { Suspense } from 'react'
 import Link from 'next/link'
@@ -139,6 +141,30 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   )
 }
 
+/* ─── FAQ CONTENT (réutilisé par UI + Schema FAQPage) ─────────────────── */
+const PRICING_FAQ = [
+  {
+    q: 'Puis-je changer de plan à tout moment ?',
+    a: 'Oui. Tu peux upgrader ou downgrader depuis ton dashboard à tout moment. Le changement prend effet immédiatement et le prorata est calculé automatiquement par Stripe.',
+  },
+  {
+    q: 'Comment fonctionne la facturation annuelle ?',
+    a: 'En choisissant le plan annuel, tu paies 12 mois en avance et bénéficies d\'une réduction de 25%. Une seule facture est émise au moment du paiement.',
+  },
+  {
+    q: 'Que se passe-t-il si je dépasse mon quota mensuel ?',
+    a: 'La génération est temporairement suspendue jusqu\'à la prochaine période de facturation. Tu peux upgrader ton plan à tout moment pour débloquer immédiatement plus de pages.',
+  },
+  {
+    q: 'Y a-t-il une période d\'essai gratuite ?',
+    a: 'Oui — tu peux générer 1 page produit gratuitement sans créer de compte. Aucune carte bancaire, résultat immédiat. Si la page te convainc, tu choisis un plan pour l\'utiliser sur ta boutique.',
+  },
+  {
+    q: 'Comment annuler mon abonnement ?',
+    a: 'Tu peux annuler depuis Paramètres → Abonnement dans ton dashboard, en quelques clics. L\'accès est maintenu jusqu\'à la fin de ta période payée.',
+  },
+]
+
 /* ─── PRICING CONTENT ───────────────────────────────────────────────────── */
 function PricingContent() {
   const [loading, setLoading]   = useState<string | null>(null)
@@ -153,10 +179,14 @@ function PricingContent() {
     // aussi le prix affiché → permet de mesurer si le toggle annuel pousse
     // mieux les Pro vs les Starter.
     const planMeta = PLANS.find(p => p.id === plan)
+    const value = planMeta ? (annual ? planMeta.priceAnnual : planMeta.priceMonthly) : 0
     if (planMeta) {
-      track.planSelected(plan as 'starter' | 'pro' | 'agency' | 'enterprise', annual ? planMeta.priceAnnual : planMeta.priceMonthly)
+      track.planSelected(plan as 'starter' | 'pro' | 'agency' | 'enterprise', value)
     }
     track.checkoutStarted(plan)
+    // Pixels InitiateCheckout : critique pour optimiser les campagnes Meta
+    // sur "ajout au panier équivalent". Valeur réelle = mensuel ou annuel selon toggle.
+    pixels.initiateCheckout({ plan, value, currency: 'EUR' })
     try {
       const res  = await fetch('/api/stripe/checkout', {
         method: 'POST',
@@ -190,6 +220,14 @@ function PricingContent() {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Schema.org FAQPage — pour rich snippet Google + AI Overviews
+          (questions en regex sont chargées avec PRICING_FAQ ci-dessus). */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLd(faqSchema(PRICING_FAQ.map((f) => ({ question: f.q, answer: f.a })))),
+        }}
+      />
 
       {/* ── HERO PRICING ─────────────────────────────────────────────────── */}
       <div className="bg-gray-50 border-b border-gray-100 py-16 px-6">
@@ -530,28 +568,7 @@ function PricingContent() {
           </h2>
 
           <div className="space-y-3">
-            {[
-              {
-                q: 'Puis-je changer de plan à tout moment ?',
-                a: 'Oui. Tu peux upgrader ou downgrader depuis ton dashboard à tout moment. Le changement prend effet immédiatement et le prorata est calculé automatiquement par Stripe.',
-              },
-              {
-                q: 'Comment fonctionne la facturation annuelle ?',
-                a: 'En choisissant le plan annuel, tu paies 12 mois en avance et bénéficies d\'une réduction de 25%. Une seule facture est émise au moment du paiement.',
-              },
-              {
-                q: 'Que se passe-t-il si je dépasse mon quota mensuel ?',
-                a: 'La génération est temporairement suspendue jusqu\'à la prochaine période de facturation. Tu peux upgrader ton plan à tout moment pour débloquer immédiatement plus de pages.',
-              },
-              {
-                q: 'Y a-t-il une période d\'essai gratuite ?',
-                a: 'Oui — tu peux générer 1 page produit gratuitement sans créer de compte. Aucune carte bancaire, résultat immédiat. Si la page te convainc, tu choisis un plan pour l\'utiliser sur ta boutique.',
-              },
-              {
-                q: 'Comment annuler mon abonnement ?',
-                a: 'Tu peux annuler depuis Paramètres → Abonnement dans ton dashboard, en quelques clics. L\'accès est maintenu jusqu\'à la fin de ta période payée.',
-              },
-            ].map(({ q, a }) => (
+            {PRICING_FAQ.map(({ q, a }) => (
               <FaqItem key={q} q={q} a={a} />
             ))}
           </div>

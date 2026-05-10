@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { Check, Lock, Sparkles, ArrowRight, Loader2 } from 'lucide-react'
 import { track } from '@/lib/analytics'
 import { readUtmCookie } from '@/lib/analytics/utm'
+import { pixels } from '@/lib/tracking/pixels'
 
 function SignupContent() {
   const [email, setEmail]           = useState('')
@@ -80,6 +81,10 @@ function SignupContent() {
     // tant qu'il n'est pas confirmé → on évite d'envoyer le welcome aux faux emails.
     const sessionCreated = !!data.session
     track.signupCompleted('email')
+    // Pixels CompleteRegistration : déclenché même si pending email confirm
+    // (l'event représente l'intention, pas l'activation). On peut affiner
+    // avec un event Activation séparé après 1ère page créée.
+    pixels.completeRegistration({ method: 'email', value: 0 })
     if (sessionCreated) {
       fetch('/api/email/welcome', {
         method: 'POST',

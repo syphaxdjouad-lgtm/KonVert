@@ -1,8 +1,25 @@
 import Stripe from 'stripe'
 import type { PlanType } from '@/types'
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-03-25.dahlia',
+// Lazy-init Stripe via Proxy — même pattern que supabaseAdmin (cf bug
+// Vercel build supabaseUrl required, commit 4NCdqrSi9). Sans ce wrapping,
+// `new Stripe(undefined!)` au module-load lève "Neither apiKey nor authenticator
+// provided" pendant les tests Vitest et les builds CI sans env var Stripe.
+let cachedStripe: Stripe | null = null
+function initStripe(): Stripe {
+  if (cachedStripe) return cachedStripe
+  const key = process.env.STRIPE_SECRET_KEY
+  if (!key) throw new Error('STRIPE_SECRET_KEY est requis. Vérifie les env vars Vercel.')
+  cachedStripe = new Stripe(key, { apiVersion: '2026-03-25.dahlia' })
+  return cachedStripe
+}
+
+export const stripe = new Proxy({} as Stripe, {
+  get(_target, prop) {
+    const instance = initStripe() as unknown as Record<string | symbol, unknown>
+    const value = instance[prop]
+    return typeof value === 'function' ? (value as (...args: unknown[]) => unknown).bind(instance) : value
+  },
 })
 
 type PaidPlan = Exclude<PlanType, 'free'>

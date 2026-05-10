@@ -66,5 +66,64 @@ jobs:
       - name: TypeScript check
         run: npx tsc --noEmit
 
+      - name: Unit tests (Vitest)
+        # Vitest tourne sur les fonctions pures de src/lib — pas besoin de DB
+        # ni d'env vars réelles. Les tests stripe/env utilisent vi.stubEnv.
+        run: npm test
+        env:
+          ENCRYPTION_KEY: ci-encryption-key-vitest
+
       - name: Build
         run: npm run build
+
+  # E2E smoke contre la prod déployée — tourne après push sur main pour valider
+  # que le déploiement Vercel sert bien la nouvelle version. Sur PR, skip car
+  # le commit n'est pas encore en prod.
+  e2e:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Wait for Vercel deploy (poll commit SHA)
+        # Le job déclenché par push tourne en parallèle du build Vercel —
+        # on attend que /api/health serve le bon commit avant les E2E.
+        run: |
+          target=$(git rev-parse --short HEAD)
+          for i in $(seq 1 20); do
+            current=$(curl -s https://konvert-ten.vercel.app/api/health | grep -oE '"commit":"[^"]+"' | cut -d'"' -f4)
+            echo "[$i/20] commit déployé = $current (target: $target)"
+            if [ "$current" = "$target" ]; then echo "OK"; exit 0; fi
+            sleep 30
+          done
+          echo "Timeout : Vercel n'a pas déployé $target en 10 min"
+          exit 1
+
+      - name: Run smoke E2E
+        run: npm run test:e2e
+        env:
+          PLAYWRIGHT_BASE_URL: https://konvert-ten.vercel.app
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

@@ -4,8 +4,9 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 
 /* ─────────────────────────────────────────────────────────────────
    HASH visitor_id → variante A ou B (déterministe)
+   Exporté pour les tests unit — pas d'usage hors de cette route.
 ───────────────────────────────────────────────────────────────── */
-function assignVariant(visitorId: string): 'A' | 'B' {
+export function assignVariant(visitorId: string): 'A' | 'B' {
   let hash = 0
   for (let i = 0; i < visitorId.length; i++) {
     hash = ((hash << 5) - hash) + visitorId.charCodeAt(i)

@@ -143,3 +143,52 @@ test('Schema.org JSON-LD présent sur homepage', async ({ page }) => {
   const firstLd = await page.locator('script[type="application/ld+json"]').first().textContent()
   expect(firstLd).toContain('"Organization"')
 })
+
+// ─── S4 — Launch week pages ─────────────────────────────────────────────
+
+test('/producthunt landing affiche coupon LAUNCH50 + offre 50%', async ({ page }) => {
+  await page.goto('/producthunt')
+  // Hero badge
+  await expect(page.getByText('BIENVENUE PRODUCTHUNT')).toBeVisible()
+  // Coupon visible et copiable
+  await expect(page.getByText('LAUNCH50').first()).toBeVisible()
+  // CTA principal vers /pricing avec coupon
+  const cta = page.getByRole('link', { name: /50.*off/i }).first()
+  await expect(cta).toBeVisible()
+  // Schema SaleEvent injecté
+  const ldScripts = await page.locator('script[type="application/ld+json"]').count()
+  expect(ldScripts).toBeGreaterThanOrEqual(1)
+})
+
+test('/launch-day affiche countdown ou mode LIVE', async ({ page }) => {
+  await page.goto('/launch-day')
+  // L'un OU l'autre doit être présent : countdown (avant launch) ou "LIVE" (pendant)
+  const heroText = await page.locator('h1').first().textContent()
+  expect(heroText).toMatch(/bientôt|LIVE/i)
+  // Le code coupon doit être visible quel que soit l'état
+  await expect(page.getByText('LAUNCH50').first()).toBeVisible()
+})
+
+test('/pricing?coupon=LAUNCH50 affiche le banner coupon', async ({ page }) => {
+  await page.goto('/pricing?coupon=LAUNCH50')
+  // Banner "Code LAUNCH50 sera appliqué" doit être visible
+  await expect(page.getByText(/sera appliqué/i)).toBeVisible()
+  await expect(page.getByText('LAUNCH50', { exact: false })).toBeVisible()
+})
+
+test('ProductHuntBanner s\'affiche depuis ?ref=ph et persiste après dismiss', async ({ page, context }) => {
+  // Force premier visit (pas de cookie _konvert_ph_seen)
+  await context.clearCookies()
+  await page.goto('/?ref=ph')
+  // Le banner doit apparaître après le délai 800ms — on attend visible
+  const banner = page.getByText(/Bienvenue depuis ProductHunt/i)
+  await expect(banner).toBeVisible({ timeout: 5000 })
+  // Dismiss via le bouton X
+  const closeBtn = page.getByRole('button', { name: /Fermer le bandeau ProductHunt/i })
+  await closeBtn.click()
+  await expect(banner).not.toBeVisible()
+  // Reload : le banner ne doit PAS réapparaître (cookie set)
+  await page.goto('/?ref=ph')
+  await page.waitForTimeout(1500) // au-delà du délai 800ms du banner
+  await expect(banner).not.toBeVisible()
+})

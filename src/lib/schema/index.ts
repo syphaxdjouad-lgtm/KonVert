@@ -149,3 +149,34 @@ export function productSchema(p: {
 export function jsonLd(schema: unknown): string {
   return JSON.stringify(schema).replace(/</g, '\\u003c')
 }
+
+// SaleEvent — ProductHunt launch day. Permet à Google AI Overviews et aux
+// crawlers Bing/Copilot de comprendre que c'est un événement promotionnel
+// avec date + offre — meilleure visibilité dans "what's launching today" type
+// queries.
+export function launchEventSchema() {
+  const launchDate = process.env.NEXT_PUBLIC_LAUNCH_DATE?.trim() || '2026-06-08T00:00:00Z'
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'SaleEvent',
+    name: 'KONVERT Launch — ProductHunt',
+    description: 'Launch officiel KONVERT sur ProductHunt avec 50 % de réduction sur le premier mois (code LAUNCH50, 100 premiers signups).',
+    startDate: launchDate,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+    location: {
+      '@type': 'VirtualLocation',
+      url: `${APP_URL}/producthunt`,
+    },
+    organizer: { '@id': `${APP_URL}/#organization` },
+    offers: {
+      '@type': 'Offer',
+      name: '50 % off premier mois — code LAUNCH50',
+      url: `${APP_URL}/producthunt`,
+      price: '0',
+      priceCurrency: 'EUR',
+      availability: 'https://schema.org/LimitedAvailability',
+      validFrom: launchDate,
+    },
+  } as const
+}

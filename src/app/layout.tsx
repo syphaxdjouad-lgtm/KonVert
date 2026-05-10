@@ -4,6 +4,7 @@ import { Space_Grotesk } from 'next/font/google'
 import { Toaster } from '@/components/ui/sonner'
 import CrispChat from '@/components/CrispChat'
 import Pixels from '@/components/tracking/Pixels'
+import ProductHuntBanner from '@/components/marketing/ProductHuntBanner'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { PostHogProvider } from '@/providers/PostHogProvider'
@@ -79,6 +80,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`min-h-full flex flex-col ${spaceGrotesk.variable}`}>
+          <ProductHuntBanner />
           <PostHogProvider>
             <Suspense>
               <PostHogPageView />

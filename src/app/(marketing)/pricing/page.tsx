@@ -172,6 +172,10 @@ function PricingContent() {
   const router                  = useRouter()
   const searchParams            = useSearchParams()
   const canceled                = searchParams.get('canceled')
+  // Coupon transmis via /pricing?coupon=LAUNCH50 (depuis /producthunt ou
+  // /launch-day) — passé tel quel à /api/stripe/checkout qui resout le
+  // promotion code Stripe et l'applique automatiquement.
+  const couponFromUrl           = searchParams.get('coupon')
 
   async function handleCheckout(plan: string) {
     setLoading(plan)
@@ -193,7 +197,12 @@ function PricingContent() {
         headers: { 'Content-Type': 'application/json' },
         // interval explicite : sans ce champ, l'API tombait par défaut sur le
         // price mensuel et le toggle "Annuel" ne servait à rien (perte revenu).
-        body: JSON.stringify({ plan, interval: annual ? 'annual' : 'monthly' }),
+        // coupon : auto-appliqué si /pricing?coupon=LAUNCH50 (lien depuis /producthunt).
+        body: JSON.stringify({
+          plan,
+          interval: annual ? 'annual' : 'monthly',
+          ...(couponFromUrl && { coupon: couponFromUrl }),
+        }),
       })
       const json = await res.json()
       if (!res.ok) {
@@ -281,6 +290,15 @@ function PricingContent() {
           {canceled && (
             <div className="mt-6 inline-block bg-yellow-50 border border-yellow-200 text-yellow-700 text-sm font-medium px-4 py-2.5 rounded-xl">
               Paiement annulé — tu peux réessayer quand tu veux
+            </div>
+          )}
+          {couponFromUrl && (
+            <div
+              className="mt-6 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold border"
+              style={{ background: 'rgba(91,71,245,0.08)', borderColor: 'rgba(91,71,245,0.25)', color: '#5B47F5' }}
+            >
+              <span className="text-base">🎁</span>
+              Code <code className="font-black px-2 py-0.5 rounded bg-white">{couponFromUrl.toUpperCase()}</code> sera appliqué au checkout
             </div>
           )}
         </div>

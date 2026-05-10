@@ -1,0 +1,253 @@
+'use client'
+
+import { useState, useEffect, Suspense } from 'react'
+import Link from 'next/link'
+import { ArrowRight, Check, Gift, Clock, Sparkles, Zap, Rocket } from 'lucide-react'
+import { toast } from 'sonner'
+import { track } from '@/lib/analytics'
+import { launchEventSchema, jsonLd } from '@/lib/schema'
+
+// Page de pré-launch — countdown vers J-Day. Permet de capter l'attention
+// pré-launch (newsletter, communautés, social) et collecter des waitlist
+// signups en attendant le go-live.
+//
+// La date de launch est paramétrable via NEXT_PUBLIC_LAUNCH_DATE (ISO 8601).
+// Fallback : 2026-06-08 00:00 UTC (J+28 du plan, supposant J0 = 2026-05-11).
+// Quand le launch est passé, la page bascule en mode "We're live!".
+
+const LAUNCH_DATE_DEFAULT = '2026-06-08T00:00:00Z'
+
+function getLaunchDate(): Date {
+  const raw = process.env.NEXT_PUBLIC_LAUNCH_DATE?.trim() || LAUNCH_DATE_DEFAULT
+  const d = new Date(raw)
+  return Number.isNaN(d.getTime()) ? new Date(LAUNCH_DATE_DEFAULT) : d
+}
+
+function useCountdown(target: Date) {
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [])
+  const diff = Math.max(0, target.getTime() - now)
+  const days = Math.floor(diff / 86400000)
+  const hours = Math.floor((diff % 86400000) / 3600000)
+  const mins = Math.floor((diff % 3600000) / 60000)
+  const secs = Math.floor((diff % 60000) / 1000)
+  return { diff, days, hours, mins, secs, isLive: diff <= 0 }
+}
+
+function CountdownCard({ value, label }: { value: number; label: string }) {
+  return (
+    <div className="flex flex-col items-center">
+      <div
+        className="rounded-2xl px-4 sm:px-6 py-4 sm:py-5 mb-2 min-w-[72px] sm:min-w-[100px] text-center"
+        style={{
+          background: 'linear-gradient(135deg, #5B47F5, #7c3aed)',
+          boxShadow: '0 8px 24px rgba(91,71,245,0.35)',
+        }}
+      >
+        <div className="text-3xl sm:text-5xl font-black text-white tabular-nums" style={{ letterSpacing: '-0.04em' }}>
+          {String(value).padStart(2, '0')}
+        </div>
+      </div>
+      <span className="text-xs uppercase tracking-widest text-gray-500 font-bold">{label}</span>
+    </div>
+  )
+}
+
+function LaunchDayContent() {
+  const { days, hours, mins, secs, isLive } = useCountdown(getLaunchDate())
+  const [email, setEmail] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [done, setDone] = useState(false)
+
+  useEffect(() => {
+    track.essaiStarted('launch-day')
+  }, [])
+
+  function copyCoupon() {
+    navigator.clipboard?.writeText('LAUNCH50').then(() => {
+      toast.success('Code LAUNCH50 copié !')
+    }).catch(() => {
+      toast.error('Code à copier manuellement : LAUNCH50')
+    })
+  }
+
+  async function handleNotify(e: React.FormEvent) {
+    e.preventDefault()
+    if (!email.includes('@')) {
+      toast.error('Email invalide')
+      return
+    }
+    setSubmitting(true)
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name: '', context: 'launch-day-notify' }),
+      })
+      const data = await res.json()
+      if (!res.ok && data.message !== 'already_registered') throw new Error(data.error || 'fail')
+      setDone(true)
+      toast.success(data.message === 'already_registered' ? 'Tu es déjà sur la liste !' : 'On te ping le jour J 🚀')
+    } catch {
+      toast.error('Erreur, réessaie')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col" style={{ background: 'radial-gradient(ellipse at top, #1a0533 0%, #0d0d1a 60%)' }}>
+      {/* Schema.org SaleEvent — détecté par AI Overviews + Bing Copilot */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(launchEventSchema()) }}
+      />
+
+      {/* Hero countdown */}
+      <section className="flex-1 flex items-center justify-center px-6 py-20">
+        <div className="max-w-3xl mx-auto text-center">
+
+          {/* Badge */}
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-8 border"
+            style={{ background: 'rgba(91,71,245,0.15)', borderColor: 'rgba(91,71,245,0.3)', color: '#a78bfa' }}
+          >
+            <Rocket className="w-3.5 h-3.5" />
+            {isLive ? 'C\'EST LE GRAND JOUR' : 'COMPTE À REBOURS LAUNCH'}
+          </div>
+
+          <h1 className="text-4xl md:text-6xl font-black text-white mb-5 leading-tight" style={{ letterSpacing: '-0.03em' }}>
+            {isLive ? (
+              <>On est <span style={{ background: 'linear-gradient(135deg,#a78bfa,#7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>LIVE</span></>
+            ) : (
+              <>KONVERT arrive <br /> <span style={{ background: 'linear-gradient(135deg,#a78bfa,#7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>très bientôt</span></>
+            )}
+          </h1>
+          <p className="text-lg max-w-xl mx-auto mb-10 leading-relaxed" style={{ color: 'rgba(196,181,253,0.65)' }}>
+            {isLive
+              ? 'Le launch officiel est en cours sur ProductHunt — viens nous soutenir et profite du code 50 % off.'
+              : 'Tes produits méritent des pages qui vendent. Le launch officiel arrive — sois prévenu en avant-première.'}
+          </p>
+
+          {/* COUNTDOWN */}
+          {!isLive && (
+            <div className="flex justify-center gap-3 sm:gap-4 mb-10">
+              <CountdownCard value={days} label="jours" />
+              <CountdownCard value={hours} label="heures" />
+              <CountdownCard value={mins} label="minutes" />
+              <CountdownCard value={secs} label="secondes" />
+            </div>
+          )}
+
+          {/* CTA principal — bascule selon isLive */}
+          {isLive ? (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+              <Link
+                href="/producthunt"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm text-white transition-all"
+                style={{ background: 'linear-gradient(135deg, #5B47F5, #7c3aed)', boxShadow: '0 4px 20px rgba(91,71,245,0.4)' }}
+              >
+                Voir l&apos;offre ProductHunt 50 % <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/essai"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm border-2 border-white/30 text-white hover:bg-white/5 transition-colors"
+              >
+                Essai gratuit <Sparkles className="w-4 h-4" />
+              </Link>
+            </div>
+          ) : done ? (
+            <div className="rounded-2xl p-6 max-w-md mx-auto" style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.25)' }}>
+              <div className="text-3xl mb-3">🎉</div>
+              <p className="font-bold text-white mb-1">Tu es sur la liste prioritaire</p>
+              <p className="text-sm" style={{ color: 'rgba(196,181,253,0.65)' }}>
+                On t&apos;envoie un mail le jour J avec un coupon spécial early-supporters.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleNotify} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="ton@email.com"
+                className="flex-1 rounded-xl px-5 py-4 text-sm outline-none transition-all"
+                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(139,92,246,0.3)', color: '#fff' }}
+                onFocus={e => (e.target.style.borderColor = '#7c3aed')}
+                onBlur={e => (e.target.style.borderColor = 'rgba(139,92,246,0.3)')}
+                aria-label="Ton email pour être prévenu du launch"
+              />
+              <button
+                type="submit"
+                disabled={submitting}
+                className="px-7 py-4 rounded-xl font-bold text-sm text-white transition-all flex items-center justify-center gap-2"
+                style={{ background: submitting ? 'rgba(124,58,237,0.5)' : 'linear-gradient(135deg, #7c3aed, #6d28d9)', boxShadow: '0 4px 20px rgba(124,58,237,0.4)' }}
+              >
+                {submitting ? 'Inscription…' : <>Préviens-moi <ArrowRight className="w-4 h-4" /></>}
+              </button>
+            </form>
+          )}
+
+          {/* Coupon teaser pour les early visiteurs */}
+          {!isLive && (
+            <div className="mt-12 inline-flex items-center gap-3 px-5 py-3 rounded-2xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(139,92,246,0.2)' }}>
+              <Gift className="w-4 h-4" style={{ color: '#a78bfa' }} />
+              <span className="text-sm" style={{ color: 'rgba(196,181,253,0.7)' }}>
+                Code launch <code className="font-black text-white px-2">LAUNCH50</code>
+              </span>
+              <button
+                onClick={copyCoupon}
+                className="text-xs font-bold px-3 py-1.5 rounded-lg transition-colors"
+                style={{ background: 'rgba(139,92,246,0.2)', color: '#a78bfa' }}
+                aria-label="Copier le code launch"
+              >
+                Copier
+              </button>
+            </div>
+          )}
+
+          <p className="mt-10 text-xs" style={{ color: 'rgba(167,139,250,0.4)' }}>
+            <Clock className="inline w-3 h-3 mr-1" />
+            Date launch : {getLaunchDate().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          </p>
+        </div>
+      </section>
+
+      {/* Bandeau bas — preview features */}
+      <section className="py-10 px-6 border-t" style={{ borderColor: 'rgba(139,92,246,0.15)' }}>
+        <div className="max-w-4xl mx-auto">
+          <p className="text-xs uppercase tracking-widest text-center font-bold mb-6" style={{ color: '#a78bfa' }}>
+            Ce qui arrive le jour J
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            {[
+              { icon: Zap, label: 'Génération 30s' },
+              { icon: Sparkles, label: '42+ templates' },
+              { icon: Rocket, label: 'A/B testing' },
+              { icon: Check, label: 'Shopify natif' },
+            ].map(({ icon: Icon, label }) => (
+              <div key={label} className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'rgba(91,71,245,0.15)' }}>
+                  <Icon className="w-5 h-5" style={{ color: '#a78bfa' }} />
+                </div>
+                <span className="text-xs font-semibold" style={{ color: 'rgba(196,181,253,0.7)' }}>{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+export default function LaunchDayPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen" style={{ background: '#0d0d1a' }} />}>
+      <LaunchDayContent />
+    </Suspense>
+  )
+}

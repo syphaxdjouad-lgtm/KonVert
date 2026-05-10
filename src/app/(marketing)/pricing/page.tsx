@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Check, Zap, ChevronDown, ArrowRight, Lock, CreditCard, ShieldCheck } from 'lucide-react'
+import { toast } from 'sonner'
+import * as Sentry from '@sentry/nextjs'
+import { Check, ChevronDown, ArrowRight, Lock, CreditCard, ShieldCheck } from 'lucide-react'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import TrustBadges from '@/components/marketing/TrustBadges'
@@ -150,7 +152,9 @@ function PricingContent() {
       const res  = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan }),
+        // interval explicite : sans ce champ, l'API tombait par défaut sur le
+        // price mensuel et le toggle "Annuel" ne servait à rien (perte revenu).
+        body: JSON.stringify({ plan, interval: annual ? 'annual' : 'monthly' }),
       })
       const json = await res.json()
       if (!res.ok) {
@@ -160,11 +164,17 @@ function PricingContent() {
           router.push(`/essai?upgrade=${encodeURIComponent(plan)}`)
           return
         }
-        throw new Error(json.error)
+        throw new Error(json.error || `Erreur ${res.status}`)
       }
       window.location.href = json.url
     } catch (err) {
-      console.error(err)
+      // Avant : silencieux — le user voyait le spinner disparaître sans message.
+      // Maintenant : toast visible + Sentry pour qu'on soit alerté en prod.
+      const message = err instanceof Error ? err.message : 'Erreur lors du paiement.'
+      toast.error(message, {
+        description: 'Réessaie ou contacte support@konvert.app si ça persiste.',
+      })
+      Sentry.captureException(err, { tags: { component: 'pricing/handleCheckout' }, extra: { plan, annual } })
       setLoading(null)
     }
   }

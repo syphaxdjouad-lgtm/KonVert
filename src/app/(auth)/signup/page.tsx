@@ -15,6 +15,11 @@ function SignupContent() {
   const [error, setError]           = useState<string | null>(null)
   const [tokenValid, setTokenValid] = useState<boolean | null>(null)
   const [tokenEmail, setTokenEmail] = useState<string | null>(null)
+  // Quand Supabase a "Confirm email" activé, signUp() renvoie data.session = null
+  // → on doit afficher un écran d'attente au lieu de pousser sur /dashboard avec
+  // une session inexistante (le user atterrissait sur dashboard, voyait l'écran
+  // une milliseconde, puis était kické vers /login → UX cassée + perte conversion).
+  const [pendingConfirm, setPendingConfirm] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
@@ -40,7 +45,7 @@ function SignupContent() {
     setError(null)
 
     const supabase = createClient()
-    const { error: authError } = await supabase.auth.signUp({
+    const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { name } },
@@ -61,14 +66,59 @@ function SignupContent() {
       })
     }
 
-    // Email de bienvenue J+0 (fire & forget — ne bloque pas la navigation)
-    fetch('/api/email/welcome', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, name }),
-    }).catch(() => {})
+    // Email de bienvenue J+0 — uniquement si la session est créée (compte direct).
+    // Si confirmation email activée, on ne peut pas savoir si l'email est réel
+    // tant qu'il n'est pas confirmé → on évite d'envoyer le welcome aux faux emails.
+    const sessionCreated = !!data.session
+    if (sessionCreated) {
+      fetch('/api/email/welcome', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name }),
+      }).catch(() => {})
+      router.push('/dashboard')
+      return
+    }
 
-    router.push('/dashboard')
+    // Pas de session → Supabase a envoyé un email de confirmation.
+    // On affiche l'écran d'attente au lieu de rediriger sur dashboard sans auth.
+    setPendingConfirm(true)
+    setLoading(false)
+  }
+
+  // Confirmation email envoyée — on bloque la navigation jusqu'à ce que l'user
+  // clique le lien magique reçu dans sa boîte. C'est l'écran qui manquait avant
+  // ce fix : on poussait sur /dashboard avec session=null, l'user voyait un flash
+  // puis était kické vers /login sans comprendre.
+  if (pendingConfirm) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4" style={{ background: '#0d0d1a' }}>
+        <div className="w-full max-w-md text-center">
+          <div className="mb-8">
+            <span className="font-black text-2xl tracking-tight" style={{ letterSpacing: '-0.03em' }}>
+              <span style={{ color: '#fff' }}>KON</span>
+              <span style={{ background: 'linear-gradient(135deg,#a78bfa,#7c3aed)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>VERT</span>
+            </span>
+          </div>
+          <div className="rounded-3xl p-8" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(139,92,246,0.2)' }}>
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ background: 'rgba(74,222,128,0.15)', border: '1px solid rgba(74,222,128,0.3)' }}>
+              <Check className="w-7 h-7" style={{ color: '#4ade80' }} />
+            </div>
+            <h1 className="text-2xl font-black text-white mb-2">Vérifie ta boîte email</h1>
+            <p className="text-sm mb-6" style={{ color: 'rgba(196,181,253,0.6)' }}>
+              On vient d&apos;envoyer un lien de confirmation à <span className="text-white font-semibold">{email}</span>.
+              Clique dessus pour activer ton compte et accéder au dashboard.
+            </p>
+            <p className="text-xs mb-2" style={{ color: 'rgba(167,139,250,0.5)' }}>
+              Pas reçu ? Vérifie tes spams ou{' '}
+              <button onClick={() => setPendingConfirm(false)} className="underline font-semibold" style={{ color: '#a78bfa' }}>
+                réessaie
+              </button>.
+            </p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   // Loading token validation

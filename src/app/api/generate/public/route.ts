@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { generateLandingPage } from '@/lib/anthropic/generate'
-import { scrapeProduct, cleanProduct } from '@/lib/scraper'
+import { scrapeProduct, cleanProduct, looksHallucinated } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import { templateEtecBlue } from '@/lib/templates/etec-blue'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
 import { verifyTurnstile } from '@/lib/security/turnstile'
+import { sanitizeDeep } from '@/lib/security/sanitize'
 import type { ScrapedProduct } from '@/types'
+
+// Limite anti-abus sur productInput manuel : DeepSeek se fait facturer au token,
+// 16 KB de "produit" couvre largement un titre + description + variants normaux
+// et bloque la prompt injection à 500 KB (cf audit Madara P1-02).
+const MAX_PRODUCT_INPUT_BYTES = 16 * 1024
 
 // Vercel Pro 60s — DeepSeek + scraping peuvent dépasser 30s
 export const maxDuration = 60
@@ -37,6 +43,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: captcha.error || 'Captcha invalide' }, { status: 400 })
     }
 
+    // Anti-resubscribe : si une preview de cet email contient la sentinelle -1
+    // dans emails_sent, l'utilisateur s'est explicitement désabonné via
+    // /api/email/unsubscribe. On refuse de regénérer pour ne pas relancer la
+    // séquence d'emails (sinon désabonnement contournable en attendant
+    // l'expiration de la preview).
+    const { data: unsubscribed } = await supabaseAdmin
+      .from('public_previews')
+      .select('id')
+      .eq('email', email.toLowerCase())
+      .contains('emails_sent', [-1])
+      .limit(1)
+      .maybeSingle()
+
+    if (unsubscribed) {
+      return NextResponse.json(
+        { error: 'Cet email s\'est désabonné. Contacte support@konvert.app pour réactiver.' },
+        { status: 410 }
+      )
+    }
+
     // Rate limiting : 1 génération par email actif (preview non-expirée)
     const { data: existing } = await supabaseAdmin
       .from('public_previews')
@@ -64,20 +90,57 @@ export async function POST(req: NextRequest) {
       const raw = await scrapeProduct(check.parsed.toString())
       product = cleanProduct(raw)
     } else if (productInput) {
-      product = productInput
+      // Garde-fou taille : un productInput >16KB est forcément un abus
+      // (titre + description normaux = quelques centaines d'octets max).
+      const inputSize = JSON.stringify(productInput).length
+      if (inputSize > MAX_PRODUCT_INPUT_BYTES) {
+        return NextResponse.json(
+          { error: 'Données produit trop volumineuses.' },
+          { status: 413 }
+        )
+      }
+      // cleanProduct escape <>"' dans title/description et filtre les URLs
+      // d'images qui ne sont pas http(s) — sans ça, productInput.title peut
+      // contenir <script> et finir réinjecté tel quel dans le HTML servi à
+      // /preview/[id] (template fait du string-concat sans escape).
+      product = cleanProduct(productInput as ScrapedProduct)
     } else {
       product = MOCK_PRODUCT
     }
 
-    if (!product.title) {
-      return NextResponse.json({ error: 'Données produit invalides' }, { status: 400 })
+    // Anti-hallucination + check minimum exploitable, alignés sur la route auth.
+    // Evite que DeepSeek génère du contenu pourri à partir d'un titre vide
+    // ou d'un payload purement adverse.
+    if (productInput || url) {
+      const hall = looksHallucinated(product)
+      if (hall.fake) {
+        return NextResponse.json(
+          { error: `Données produit invalides (${hall.reason}).` },
+          { status: 400 }
+        )
+      }
+    }
+
+    const titleOk = !!product.title && product.title.trim().length >= 3
+    const imagesOk = !url || product.images.length >= 1
+    if (!titleOk || !imagesOk) {
+      return NextResponse.json(
+        { error: 'Données produit invalides ou incomplètes.' },
+        { status: 400 }
+      )
     }
 
     // Génération IA
-    const landingPageData = await generateLandingPage(product, {
+    const rawLandingPageData = await generateLandingPage(product, {
       language: body.language || 'fr',
       tone: body.tone || 'persuasif',
     })
+
+    // Defense-in-depth contre une éventuelle prompt injection : DeepSeek peut
+    // recopier du HTML adverse depuis description/title même après cleanProduct
+    // (le LLM est libre de réécrire). On escape récursivement TOUTES les strings
+    // de l'output avant qu'elles n'atteignent le template ou la DB.
+    const landingPageData = sanitizeDeep(rawLandingPageData)
 
     // Rendu HTML avec le template blue (défaut pour la page gratuite)
     const html = templateEtecBlue(landingPageData)

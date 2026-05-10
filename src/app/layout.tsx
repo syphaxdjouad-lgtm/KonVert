@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Space_Grotesk } from 'next/font/google'
+import { Toaster } from '@/components/ui/sonner'
 import CrispChat from '@/components/CrispChat'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -71,6 +72,7 @@ export default function RootLayout({
             {children}
             <CrispChat />
           </PostHogProvider>
+          <Toaster richColors position="top-center" />
           <Analytics />
           <SpeedInsights />
         </body>

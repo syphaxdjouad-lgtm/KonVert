@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
-import { stripe } from '@/lib/stripe'
+import { stripe, getPlanFromStripePrice } from '@/lib/stripe'
 import { createClient } from '@supabase/supabase-js'
 import { PostHog } from 'posthog-node'
 import type Stripe from 'stripe'
@@ -263,11 +263,10 @@ async function updateSubscription(
 }
 
 function getPlanFromPrice(priceId?: string): PlanType | null {
-  if (!priceId) return null
-  const map: Record<string, PlanType> = {
-    [process.env.STRIPE_PRICE_STARTER!]: 'starter',
-    [process.env.STRIPE_PRICE_PRO!]:     'pro',
-    [process.env.STRIPE_PRICE_AGENCY!]:  'agency',
-  }
-  return map[priceId] || null
+  // Délègue à getPlanFromStripePrice qui couvre les 6 price IDs (3 plans × 2 intervalles).
+  // L'ancienne map ne reconnaissait que les prices mensuels — un user qui paie en
+  // annuel via le webhook recevait le warning "Unknown priceId" et son plan n'était
+  // jamais activé en base.
+  const result = getPlanFromStripePrice(priceId)
+  return result?.plan ?? null
 }

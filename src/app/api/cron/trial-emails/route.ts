@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { timingSafeEqual } from 'crypto'
 import { createClient } from '@supabase/supabase-js'
+import * as Sentry from '@sentry/nextjs'
 import { sendEmail } from '@/lib/email'
 import { emailDay1, emailDay3, emailDay7, emailDay10, emailDay12, emailDay13, emailDay14 } from '@/lib/email/templates'
+
+// Vercel Pro = 60s, Hobby = 10s. Sans cette ligne, Vercel coupait le cron
+// silencieusement à mi-batch (~10s) et les emails de la fin n'étaient jamais
+// envoyés — sans alerte. 60s couvre 500 users à ~100ms par envoi.
+export const maxDuration = 60
+export const runtime = 'nodejs'
 
 // Jours où on envoie un email de trial
 const TRIAL_DAYS = [1, 3, 7, 10, 12, 13, 14] as const
@@ -62,6 +69,7 @@ export async function GET(req: NextRequest) {
 
   if (error) {
     console.error('[cron/trial-emails] Supabase error:', error.message)
+    Sentry.captureException(error, { tags: { cron: 'trial-emails', phase: 'fetch' } })
     return NextResponse.json({ error: 'Erreur lors de la récupération des utilisateurs en trial.' }, { status: 500 })
   }
 
@@ -97,8 +105,22 @@ export async function GET(req: NextRequest) {
       sent++
     } catch (err) {
       console.error(`[cron/trial-emails] Erreur user ${user.id}:`, err)
+      Sentry.captureException(err, {
+        tags: { cron: 'trial-emails', phase: 'send' },
+        extra: { user_id: user.id, day: dayToSend },
+      })
       errors++
     }
+  }
+
+  // Si > 5% du batch a échoué, on remonte un message Sentry pour qu'on soit alerté.
+  // Au-dessous de ce seuil, c'est probablement des bounces individuels (email
+  // périmé, Resend rate limit transitoire) — pas un incident infra.
+  if (errors > 0 && errors / Math.max(1, users?.length ?? 1) > 0.05) {
+    Sentry.captureMessage('[cron/trial-emails] taux d\'erreur élevé', {
+      level: 'error',
+      extra: { sent, errors, checked: users?.length ?? 0 },
+    })
   }
 
   return NextResponse.json({ sent, errors, checked: users?.length ?? 0 })

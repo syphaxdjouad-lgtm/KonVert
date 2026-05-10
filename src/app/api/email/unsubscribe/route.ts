@@ -10,12 +10,19 @@ const supabaseAdmin = createClient(
 async function unsubscribeEmail(email: string) {
   const normalizedEmail = email.toLowerCase().trim()
 
+  // Sentinelle -1 sur emails_sent : c'est la convention que cron/preview-emails
+  // checke (route.ts:81). On NE TOUCHE PAS au champ converted — il sert à
+  // tracker les vraies conversions (signup post-preview), pas les désabonnements.
+  // Mettre converted=true ici (ancien comportement) faussait les futures stats
+  // de taux de conversion essai → signup.
   await supabaseAdmin
     .from('public_previews')
-    .update({ converted: true })
+    .update({ emails_sent: [-1] })
     .eq('email', normalizedEmail)
-    .eq('converted', false)
 
+  // Sentinelle -1 sur users.trial_emails_sent pour la séquence trial post-signup.
+  // Le row peut ne pas exister si l'user n'a jamais signup — UPDATE no-op silencieux,
+  // c'est OK : le check anti-resubscribe ci-dessous se base sur public_previews.
   await supabaseAdmin
     .from('users')
     .update({ trial_emails_sent: [-1] })

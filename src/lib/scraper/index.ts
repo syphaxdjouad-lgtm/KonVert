@@ -1,4 +1,5 @@
 import type { ScrapedProduct } from '@/types'
+import { escapeHtmlText, safeImageUrl } from '@/lib/security/sanitize'
 
 // ─── Détection de la plateforme ──────────────────────────────────────────────
 
@@ -571,10 +572,13 @@ export function cleanProduct(product: ScrapedProduct): ScrapedProduct {
   const safeDescription = (p.description ?? p.subtitle ?? p.headline ?? '').toString()
   const safeImages = Array.isArray(product.images) ? product.images : []
 
-  // Filtre les URLs d'images : exclut les loaders/placeholders (150x150.gif,
-  // pixels de tracking, icônes) qui sont typiques d'une page bloquée.
+  // Filtre + parsing strict des URLs d'images :
+  // - safeImageUrl rejette tout ce qui n'est pas http(s) (bloque javascript:, data:, etc.)
+  //   et tout ce qui contient des caractères qui briseraient l'attribut HTML
+  // - puis on exclut les loaders/placeholders typiques d'une page anti-bot.
   const cleanImages = safeImages
-    .filter((img) => typeof img === 'string' && img.startsWith('http'))
+    .map((img) => safeImageUrl(img))
+    .filter((img): img is string => img !== null)
     .filter((img) => {
       const lower = img.toLowerCase()
       if (lower.includes('150x150')) return false
@@ -582,16 +586,18 @@ export function cleanProduct(product: ScrapedProduct): ScrapedProduct {
       if (lower.includes('loading')) return false
       if (lower.includes('blank.gif')) return false
       if (lower.includes('pixel.gif')) return false
-      // Accepte .gif uniquement si l'URL ne ressemble pas à un loader/icon
       if (lower.endsWith('.gif') && (lower.includes('icon') || lower.includes('spinner'))) return false
       return true
     })
     .slice(0, 8)
 
+  // escapeHtmlText neutralise <>"' — les templates de landing page font du
+  // string-concat HTML pur (cf etec-blue.ts), donc tout caractère non-escape
+  // dans title/description ouvrirait un XSS stocké côté preview/[id].
   return {
     ...product,
-    title: safeTitle.replace(/\s+/g, ' ').trim().slice(0, 200),
-    description: safeDescription.replace(/\s+/g, ' ').trim().slice(0, 1000),
+    title: escapeHtmlText(safeTitle.replace(/\s+/g, ' ').trim().slice(0, 200)),
+    description: escapeHtmlText(safeDescription.replace(/\s+/g, ' ').trim().slice(0, 1000)),
     images: cleanImages,
     price: cleanPrice(product.price),
     original_price: cleanPrice(product.original_price),

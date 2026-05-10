@@ -41,11 +41,19 @@ export async function POST(req: NextRequest) {
     let product: ScrapedProduct
     // Helper : rollback quota si la génération échoue après l'incrément.
     // Sans ça, un timeout DeepSeek consomme 1 page sans rien produire.
+    // Si le rollback lui-même échoue, on remonte à Sentry — sans alerte, le
+    // quota du user reste perdu définitivement et il viendra réclamer au support.
     const rollbackQuota = async () => {
       try {
         await supabase.rpc('decrement_quota', { p_user_id: user.id })
       } catch (rbErr) {
         console.error('[/api/generate] decrement_quota échoué:', rbErr)
+        const Sentry = await import('@sentry/nextjs').catch(() => null)
+        Sentry?.captureException(rbErr, {
+          level: 'error',
+          tags: { route: 'api/generate', phase: 'rollback_quota' },
+          extra: { user_id: user.id },
+        })
       }
     }
 

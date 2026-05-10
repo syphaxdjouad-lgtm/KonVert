@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { timingSafeEqual } from 'crypto'
 import { createClient } from '@supabase/supabase-js'
+import * as Sentry from '@sentry/nextjs'
 import { sendEmail } from '@/lib/email'
 import {
   emailPreviewDay1,
@@ -8,6 +9,12 @@ import {
   emailPreviewDay5,
   emailPreviewDay7,
 } from '@/lib/email/preview-templates'
+
+// Vercel Pro = 60s. Sans maxDuration explicite, la fonction peut être coupée
+// à 10s (Hobby) en cas de downgrade plan, ce qui interromprait silencieusement
+// le batch d'envois et marquerait les emails comme "sent" sans qu'ils partent.
+export const maxDuration = 60
+export const runtime = 'nodejs'
 
 // Jours de la séquence preview (J+0 est envoyé immédiatement à la génération)
 const PREVIEW_DAYS = [1, 3, 5, 7] as const
@@ -66,6 +73,7 @@ export async function GET(req: NextRequest) {
 
   if (error) {
     console.error('[cron/preview-emails] Supabase error:', error.message)
+    Sentry.captureException(error, { tags: { cron: 'preview-emails', phase: 'fetch' } })
     return NextResponse.json({ error: 'Erreur Supabase' }, { status: 500 })
   }
 
@@ -110,12 +118,21 @@ export async function GET(req: NextRequest) {
       sent++
     } catch (err) {
       console.error(`[cron/preview-emails] Erreur preview ${preview.id}:`, err)
+      Sentry.captureException(err, {
+        tags: { cron: 'preview-emails', phase: 'send' },
+        extra: { preview_id: preview.id, day: dayToSend },
+      })
       errors++
     }
   }
 
-  // Nettoyage des previews expirées (suppression douce — optionnel)
-  // On laisse la data en base pour les stats
+  // Alerte Sentry au-delà de 5% d'erreurs sur le batch — voir trial-emails.
+  if (errors > 0 && errors / Math.max(1, previews?.length ?? 1) > 0.05) {
+    Sentry.captureMessage('[cron/preview-emails] taux d\'erreur élevé', {
+      level: 'error',
+      extra: { sent, errors, skipped, checked: previews?.length ?? 0 },
+    })
+  }
 
   return NextResponse.json({
     sent,

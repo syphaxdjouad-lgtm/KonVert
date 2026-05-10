@@ -1,22 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
+import crypto from 'crypto'
 import { scrapeProduct, cleanProduct, looksHallucinated, ScrapeError } from '@/lib/scraper'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
 
-// GET /api/scrape/diagnostic?secret=...
+// GET /api/scrape/diagnostic?url=https://...
+//   Header requis : `x-admin-secret: <ADMIN_SECRET>`
+//
 //   → ping Firecrawl API + check env
+//   → si ?url= fourni : lance un scrape complet et retourne le résultat brut
 //
-// GET /api/scrape/diagnostic?secret=...&url=https://...
-//   → ping + lance un scrape complet sur l'URL et retourne le résultat brut
-//     (utile pour debugger AliExpress/Amazon en prod sans passer par le wizard)
-//
-// Protégé par ADMIN_SECRET — réservé au debug.
+// Protégé par ADMIN_SECRET via header (timing-safe). On a retiré le secret
+// en query param : il était loggé par Vercel access logs, Sentry breadcrumbs,
+// proxies CDN — donc révélé à toute personne ayant accès aux logs.
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
 
+function isAdmin(req: NextRequest): boolean {
+  const provided = req.headers.get('x-admin-secret')
+  const expected = process.env.ADMIN_SECRET
+  if (!provided || !expected) return false
+  // Hash + timingSafeEqual : pas de leak de longueur via court-circuit du `===`.
+  const a = crypto.createHash('sha256').update(provided).digest()
+  const b = crypto.createHash('sha256').update(expected).digest()
+  return crypto.timingSafeEqual(a, b)
+}
+
 export async function GET(req: NextRequest) {
-  const secret = req.nextUrl.searchParams.get('secret')
-  if (!secret || secret !== process.env.ADMIN_SECRET) {
+  if (!isAdmin(req)) {
     return NextResponse.json({ error: 'forbidden' }, { status: 403 })
   }
 

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
 import * as Sentry from '@sentry/nextjs'
+import { track } from '@/lib/analytics'
 import { Check, ChevronDown, ArrowRight, Lock, CreditCard, ShieldCheck } from 'lucide-react'
 import { Suspense } from 'react'
 import Link from 'next/link'
@@ -148,6 +149,14 @@ function PricingContent() {
 
   async function handleCheckout(plan: string) {
     setLoading(plan)
+    // Tracking funnel : selectedPlan + checkoutStarted. planSelected capture
+    // aussi le prix affiché → permet de mesurer si le toggle annuel pousse
+    // mieux les Pro vs les Starter.
+    const planMeta = PLANS.find(p => p.id === plan)
+    if (planMeta) {
+      track.planSelected(plan as 'starter' | 'pro' | 'agency' | 'enterprise', annual ? planMeta.priceAnnual : planMeta.priceMonthly)
+    }
+    track.checkoutStarted(plan)
     try {
       const res  = await fetch('/api/stripe/checkout', {
         method: 'POST',

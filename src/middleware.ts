@@ -1,6 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 import { rateLimitAsync } from '@/lib/security/ratelimit'
+import { UTM_COOKIE, UTM_KEYS, encodeUtm, decodeUtm, type UtmData } from '@/lib/analytics/utm'
+
+// 90 jours en secondes — assez pour couvrir un cycle considération B2B normal
+// (e-commerçant qui voit la pub, attend la fin du mois pour upgrader, etc.).
+const UTM_COOKIE_MAX_AGE = 60 * 60 * 24 * 90
 
 // Routes avec rate limiting et leurs limites (requêtes / fenêtre)
 const RATE_LIMITS: Record<string, { limit: number; windowMs: number }> = {
@@ -25,6 +30,42 @@ function getClientIp(req: NextRequest): string {
     req.headers.get('x-real-ip') ||
     'unknown'
   )
+}
+
+// Capture first-touch UTM : on persiste les params au premier hit qui en porte,
+// et on NE remplace PAS si déjà présents (modèle attribution first-touch).
+// Si tu veux passer en last-touch, il suffit de retirer le `existing &&` ci-dessous.
+function captureUtm(request: NextRequest, response: NextResponse): NextResponse {
+  const params = request.nextUrl.searchParams
+  const incoming: UtmData = {}
+  let hasUtm = false
+  for (const key of UTM_KEYS) {
+    const v = params.get(key)
+    if (v) {
+      incoming[key] = v.slice(0, 200)  // cap par sécurité
+      hasUtm = true
+    }
+  }
+  if (!hasUtm) return response
+
+  const existing = decodeUtm(request.cookies.get(UTM_COOKIE)?.value)
+  if (existing && existing.ts) return response  // first-touch déjà capturé
+
+  const data: UtmData = {
+    ...incoming,
+    ts: Date.now(),
+    landing: request.nextUrl.pathname,
+    referrer: request.headers.get('referer') ?? undefined,
+  }
+
+  response.cookies.set(UTM_COOKIE, encodeUtm(data), {
+    maxAge: UTM_COOKIE_MAX_AGE,
+    path: '/',
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: false,  // doit être lisible côté client (signup, PostHog identify)
+  })
+  return response
 }
 
 export async function middleware(request: NextRequest) {
@@ -55,7 +96,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return await updateSession(request)
+  const response = await updateSession(request)
+  return captureUtm(request, response)
 }
 
 export const config = {

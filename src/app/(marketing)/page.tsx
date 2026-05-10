@@ -227,7 +227,7 @@ function Slide1() {
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
             <Sparkle className="w-3.5 h-3.5" />
-            Pages produit · Landing pages · SEO
+            Tes produits méritent des pages qui vendent
           </div>
           <h1
             className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5"

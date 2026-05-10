@@ -175,6 +175,9 @@ function EssaiContent() {
       setEmail(emailParam)
       setStep('product')
     }
+    // Tracking funnel : entrée du tunnel d'acquisition. On capture aussi le
+    // upgrade= si présent (l'user vient de /pricing → /essai pour upgrade).
+    track.essaiStarted(searchParams.get('upgrade') ?? undefined)
   }, [searchParams])
 
   function toggleLocale() {

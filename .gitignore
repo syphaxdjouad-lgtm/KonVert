@@ -55,4 +55,5 @@ video/
 supabase/.temp/
 
 # creatives bruts (sources design — pas de prod)
-marketing/
+# Ancré racine pour ne pas matcher src/components/marketing/
+/marketing/

@@ -68,8 +68,11 @@ export default function Footer() {
               </div>
               <span className="font-black text-lg text-white tracking-tight">Konvert</span>
             </Link>
+            <p className="text-sm font-semibold leading-snug mb-2" style={{ color: '#d0d0e8' }}>
+              Tes produits méritent des pages qui vendent.
+            </p>
             <p className="text-sm leading-relaxed mb-6" style={{ color: '#6b6b8a' }}>
-              Générez des landing pages haute conversion depuis n'importe quelle URL produit. En 30 secondes.
+              Génère ta fiche produit et ta landing page optimisées en 30 secondes — prêtes à coller sur Shopify ou WooCommerce.
             </p>
             <div className="flex items-center gap-3">
               {SOCIALS.map(({ icon: Icon, href, label }) => (

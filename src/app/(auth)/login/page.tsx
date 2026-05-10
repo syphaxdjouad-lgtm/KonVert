@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Loader2, ArrowRight, Zap, Star, TrendingUp, MousePointerClick } from 'lucide-react'
 import { toast } from 'sonner'
+import { track } from '@/lib/analytics'
 
 export default function LoginPage() {
   const [email, setEmail]       = useState('')
@@ -24,6 +25,7 @@ export default function LoginPage() {
       setError(error.message === 'Invalid login credentials' ? 'Email ou mot de passe incorrect' : error.message)
       setLoading(false)
     } else {
+      track.loginCompleted()
       router.push('/dashboard')
     }
   }

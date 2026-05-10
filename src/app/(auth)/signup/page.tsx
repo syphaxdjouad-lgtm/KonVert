@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Check, Lock, Sparkles, ArrowRight, Loader2 } from 'lucide-react'
+import { track } from '@/lib/analytics'
+import { readUtmCookie } from '@/lib/analytics/utm'
 
 function SignupContent() {
   const [email, setEmail]           = useState('')
@@ -26,6 +28,9 @@ function SignupContent() {
 
   // Valide le token au chargement
   useEffect(() => {
+    // Funnel : entrée tunnel signup. Capturé même si token invalide pour
+    // mesurer combien d'users tombent sur la waitlist faute d'invitation.
+    track.signupStarted()
     if (!token) { setTokenValid(false); return }
     setValidating(true)
     fetch(`/api/invitations/validate?token=${token}`)
@@ -45,10 +50,14 @@ function SignupContent() {
     setError(null)
 
     const supabase = createClient()
+    // Attribution : on injecte les UTM first-touch capturés par le middleware
+    // dans user_metadata. Devient lisible côté server pour les pixels CAPI
+    // (Meta + Google enhanced conversions) et les rapports BI.
+    const utm = readUtmCookie() ?? {}
     const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name } },
+      options: { data: { name, ...utm } },
     })
 
     if (authError) {
@@ -70,6 +79,7 @@ function SignupContent() {
     // Si confirmation email activée, on ne peut pas savoir si l'email est réel
     // tant qu'il n'est pas confirmé → on évite d'envoyer le welcome aux faux emails.
     const sessionCreated = !!data.session
+    track.signupCompleted('email')
     if (sessionCreated) {
       fetch('/api/email/welcome', {
         method: 'POST',

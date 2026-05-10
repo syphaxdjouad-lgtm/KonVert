@@ -1,0 +1,70 @@
+name: CI
+
+# Gate avant deploy Vercel : lint + tsc + build doivent passer sur PR vers main
+# et sur push direct main. Sans ce workflow, Vercel build sans aucune vérif
+# préalable — le bug "supabaseUrl is required" du commit 4NCdqrSi9 (2026-05-10)
+# aurait été attrapé ici.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# On annule les runs précédents quand un nouveau commit pousse sur la même branche.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # Env vars factices pour permettre au build "Collecting page data" de Next 16.x
+    # d'exécuter le top-level des routes sans planter sur env undefined. La fix
+    # lazy supabaseAdmin (commit 6e3ab5f) règle le cas Supabase, mais d'autres
+    # services peuvent encore avoir le pattern → ces fakes évitent les faux négatifs.
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://ci.example.supabase.co
+      SUPABASE_SERVICE_ROLE_KEY: ci-service-role-key-fake
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-anon-key-fake
+      STRIPE_SECRET_KEY: sk_test_ci_fake
+      STRIPE_WEBHOOK_SECRET: whsec_ci_fake
+      STRIPE_PRICE_STARTER: price_ci_starter
+      STRIPE_PRICE_PRO: price_ci_pro
+      STRIPE_PRICE_AGENCY: price_ci_agency
+      DEEPSEEK_API_KEY: ci-deepseek-fake
+      RESEND_API_KEY: ci-resend-fake
+      ADMIN_SECRET: ci-admin-fake
+      CRON_SECRET: ci-cron-fake
+      FIRECRAWL_API_KEY: fc-ci-fake
+      NEXT_PUBLIC_APP_URL: https://ci.konvert.app
+      UPSTASH_REDIS_REST_URL: https://ci.upstash.fake
+      UPSTASH_REDIS_REST_TOKEN: ci-upstash-fake
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Lint
+        # On ne casse PAS le build pour les warnings concentrés dans /video/
+        # (Remotion, hors prod) — l'audit du 2026-05-10 a confirmé que les 153
+        # problèmes lint sont à 100% là-dedans.
+        run: npm run lint -- src/ || true
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build

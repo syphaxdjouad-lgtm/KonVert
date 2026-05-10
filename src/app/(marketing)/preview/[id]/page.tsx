@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Lock, Sparkles, Clock, ArrowRight, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { track } from '@/lib/analytics'
 
 interface PreviewData {
   id: string
@@ -52,6 +53,7 @@ export default function PreviewPage() {
       .then(json => {
         if (json.error) { setError(json.error); return }
         setData(json)
+        track.previewViewed(id)
       })
       .catch(() => setError('Erreur réseau.'))
       .finally(() => setLoading(false))

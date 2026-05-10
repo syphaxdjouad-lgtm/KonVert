@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { generateLandingPage } from '@/lib/anthropic/generate'
 import { scrapeProduct, cleanProduct, looksHallucinated } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
@@ -16,12 +16,6 @@ const MAX_PRODUCT_INPUT_BYTES = 16 * 1024
 
 // Vercel Pro 60s — DeepSeek + scraping peuvent dépasser 30s
 export const maxDuration = 60
-
-// Service role — la table public_previews n'est plus exposée via la clé anon (RLS lock)
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
 
 // Génération publique — 1 page gratuite sans compte
 // Stocke la preview en base avec expiration 7 jours

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { timingSafeEqual } from 'crypto'
-import { createClient } from '@supabase/supabase-js'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import * as Sentry from '@sentry/nextjs'
 import { sendEmail } from '@/lib/email'
 import { emailDay1, emailDay3, emailDay7, emailDay10, emailDay12, emailDay13, emailDay14 } from '@/lib/email/templates'
@@ -15,10 +15,6 @@ export const runtime = 'nodejs'
 const TRIAL_DAYS = [1, 3, 7, 10, 12, 13, 14] as const
 type TrialDay = typeof TRIAL_DAYS[number]
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
 
 function getEmailForDay(day: TrialDay, name: string) {
   switch (day) {

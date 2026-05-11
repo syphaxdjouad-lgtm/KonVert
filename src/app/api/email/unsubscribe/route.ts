@@ -1,7 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { verifyUnsubscribeToken } from '@/lib/email/unsubscribe-token'
+import { rateLimitAsync } from '@/lib/security/ratelimit'
 
+async function checkRateLimit(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  const rl = await rateLimitAsync(`unsub:${ip}`, 10, 60_000)
+  if (rl.allowed) return null
+  return NextResponse.json(
+    { error: 'Trop de tentatives, réessaye dans quelques instants.' },
+    {
+      status: 429,
+      headers: { 'Retry-After': String(Math.max(1, Math.ceil(rl.retryAfterMs / 1000))) },
+    }
+  )
+}
 
 async function unsubscribeEmail(email: string) {
   const normalizedEmail = email.toLowerCase().trim()
@@ -29,6 +42,8 @@ async function unsubscribeEmail(email: string) {
 
 export async function POST(req: NextRequest) {
   try {
+    const limited = await checkRateLimit(req)
+    if (limited) return limited
     const { email, token } = await req.json()
     if (!email || typeof email !== 'string' || !token || typeof token !== 'string') {
       return NextResponse.json({ error: 'Email et token requis' }, { status: 400 })
@@ -48,6 +63,8 @@ export async function POST(req: NextRequest) {
 // Le token signé HMAC permet de désabonner directement sans formulaire.
 export async function GET(req: NextRequest) {
   try {
+    const limited = await checkRateLimit(req)
+    if (limited) return limited
     const url = new URL(req.url)
     const email = url.searchParams.get('email')
     const token = url.searchParams.get('token')

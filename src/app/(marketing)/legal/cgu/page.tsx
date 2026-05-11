@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: "Conditions Générales d'Utilisation — Konvert",
-  description: "CGU du service Konvert — konvert.app",
+  description: "CGU du service Konvert — konvertpilot.com",
 }
 
 export default function CGUPage() {
@@ -23,7 +23,7 @@ export default function CGUPage() {
           <P>
             Les présentes Conditions Générales d&apos;Utilisation (ci-après &quot;CGU&quot;) ont pour objet de définir
             les modalités et conditions d&apos;utilisation du service Konvert (ci-après &quot;le Service&quot;), accessible
-            à l&apos;adresse <strong>konvert.app</strong>, édité par Konvert SAS.
+            à l&apos;adresse <strong>konvertpilot.com</strong>, édité par Konvert SAS.
             En accédant au Service, l&apos;utilisateur accepte sans réserve les présentes CGU.
           </P>
 
@@ -45,7 +45,7 @@ export default function CGUPage() {
           <P>
             L&apos;utilisateur est responsable de la confidentialité de ses identifiants de connexion et de toutes les
             activités effectuées sous son compte. En cas d&apos;utilisation non autorisée, l&apos;utilisateur doit en
-            informer Konvert immédiatement à <A href="mailto:contact@konvert.app">contact@konvert.app</A>.
+            informer Konvert immédiatement à <A href="mailto:contact@konvertpilot.com">contact@konvertpilot.com</A>.
           </P>
 
           <H2>4. Utilisation acceptable</H2>
@@ -111,7 +111,7 @@ export default function CGUPage() {
 
           <H2>11. Contact</H2>
           <P last>
-            Pour toute question relative aux présentes CGU, contactez-nous à <A href="mailto:contact@konvert.app">contact@konvert.app</A>.
+            Pour toute question relative aux présentes CGU, contactez-nous à <A href="mailto:contact@konvertpilot.com">contact@konvertpilot.com</A>.
           </P>
 
           <Nav current="cgu" />

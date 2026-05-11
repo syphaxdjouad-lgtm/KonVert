@@ -5,7 +5,7 @@ import { generateMetadata as genMeta } from '@/lib/metadata'
 import { safeJsonLd } from '@/lib/security/json-ld'
 import BlogListClient from './BlogListClient'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
 /* ── Metadata ─────────────────────────────────────────────────────────────── */
 

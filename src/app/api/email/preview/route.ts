@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     }
 
     const displayName = name || email.split('@')[0]
-    const previewUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'}/preview/${preview_id}`
+    const previewUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'}/preview/${preview_id}`
 
     let emailContent: { subject: string; html: string }
 
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
       to: email,
       subject: emailContent.subject,
       html: emailContent.html,
-      from: 'KONVERT <hello@konvert.app>',
+      from: 'KONVERT <hello@konvertpilot.com>',
     })
 
     return NextResponse.json({ sent: true })

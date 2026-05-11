@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
 export default function robots(): MetadataRoute.Robots {
   return {

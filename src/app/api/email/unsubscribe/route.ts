@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Token invalide' }, { status: 403 })
     }
     await unsubscribeEmail(email)
-    const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app').trim()
+    const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com').trim()
     return NextResponse.redirect(`${appUrl}/unsubscribe?ok=1`, { status: 303 })
   } catch (err) {
     console.error('[email/unsubscribe GET]', err)

@@ -325,7 +325,7 @@ function Slide1() {
                 className="flex-1 rounded-md px-3 py-1 text-xs text-gray-400 font-mono"
                 style={{ background: '#ffffff', border: '1px solid #e2e8f0' }}
               >
-                konvert.app/p/nike-runner-pro
+                konvertpilot.com/p/nike-runner-pro
               </div>
             </div>
 
@@ -743,7 +743,7 @@ function Slide3() {
                 className="flex-1 rounded-md px-3 py-1 text-[11px] font-mono"
                 style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
-                app.konvert.app/analytics
+                app.konvertpilot.com/analytics
               </div>
               <div
                 className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold"
@@ -1323,7 +1323,7 @@ function ABTestingSection() {
                   <div className="w-2 h-2 rounded-full bg-yellow-500" />
                   <div className="w-2 h-2 rounded-full bg-green-500" />
                 </div>
-                <div className="flex-1 rounded px-2 py-0.5 text-xs text-white/30 font-mono" style={{ background: 'rgba(255,255,255,0.05)' }}>konvert.app/p/variant-b</div>
+                <div className="flex-1 rounded px-2 py-0.5 text-xs text-white/30 font-mono" style={{ background: 'rgba(255,255,255,0.05)' }}>konvertpilot.com/p/variant-b</div>
               </div>
               <div className="p-4" style={{ background: '#1a2535' }}>
                 <div className="h-20 rounded-lg mb-3" style={{ background: 'linear-gradient(135deg,#0d9488,#2dd4bf)' }} />
@@ -1352,7 +1352,7 @@ function ABTestingSection() {
                   <div className="w-2 h-2 rounded-full bg-yellow-400" />
                   <div className="w-2 h-2 rounded-full bg-green-400" />
                 </div>
-                <div className="flex-1 rounded px-2 py-0.5 text-xs text-gray-400 font-mono bg-white border border-gray-200">konvert.app/p/air-max-pro</div>
+                <div className="flex-1 rounded px-2 py-0.5 text-xs text-gray-400 font-mono bg-white border border-gray-200">konvertpilot.com/p/air-max-pro</div>
               </div>
               {/* Hero produit — image sneaker */}
               <div style={{ background: 'linear-gradient(135deg,#5B47F5 0%,#7c6af7 100%)', padding: '12px 16px', position: 'relative', overflow: 'hidden' }}>
@@ -1968,7 +1968,7 @@ function AIBuilderDemoSection() {
                   style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.3)', fontFamily: 'monospace' }}
                 >
                   <div className="w-2 h-2 rounded-full" style={{ background: 'rgba(255,255,255,0.15)' }} />
-                  konvert.app/p/phantom-watch-x
+                  konvertpilot.com/p/phantom-watch-x
                 </div>
                 <span
                   className="text-xs font-bold px-3 py-1.5 rounded-full flex-shrink-0"
@@ -2661,7 +2661,7 @@ function PublishSection() {
                 </div>
                 {/* Barre URL */}
                 <div className="px-3 py-2 flex items-center justify-between" style={{ background: '#f8f6ff' }}>
-                  <span className="text-gray-400 text-xs font-mono">konvert.app/p/running-pro</span>
+                  <span className="text-gray-400 text-xs font-mono">konvertpilot.com/p/running-pro</span>
                   <span
                     className="text-xs font-bold px-2 py-0.5 rounded-full"
                     style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981' }}
@@ -3219,7 +3219,7 @@ const STRUCTURED_DATA = {
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
       description: 'Générateur IA de pages produit e-commerce optimisées conversion. Colle une URL produit, KONVERT scrape, génère et publie sur Shopify, WooCommerce ou YouCan.',
-      url: 'https://konvert.app',
+      url: 'https://konvertpilot.com',
       offers: {
         '@type': 'AggregateOffer',
         lowPrice: '0',
@@ -3244,8 +3244,8 @@ const STRUCTURED_DATA = {
     {
       '@type': 'Organization',
       name: 'KONVERT',
-      url: 'https://konvert.app',
-      logo: 'https://konvert.app/icon.svg',
+      url: 'https://konvertpilot.com',
+      logo: 'https://konvertpilot.com/icon.svg',
       sameAs: [
         'https://twitter.com/konvertapp',
       ],

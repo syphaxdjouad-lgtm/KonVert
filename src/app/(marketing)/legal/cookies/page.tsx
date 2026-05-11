@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Politique de cookies — Konvert',
-  description: 'Politique de cookies du service Konvert — konvert.app',
+  description: 'Politique de cookies du service Konvert — konvertpilot.com',
 }
 
 export default function CookiesPage() {
@@ -119,7 +119,7 @@ export default function CookiesPage() {
           <H2>6. Contact</H2>
           <P last>
             Pour toute question concernant notre utilisation des cookies, contactez-nous à{' '}
-            <A href="mailto:privacy@konvert.app">privacy@konvert.app</A>.
+            <A href="mailto:privacy@konvertpilot.com">privacy@konvertpilot.com</A>.
           </P>
 
           <Nav current="cookies" />

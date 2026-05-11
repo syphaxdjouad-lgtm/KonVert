@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
 export function generateMetadata({
   title,

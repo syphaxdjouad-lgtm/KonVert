@@ -5,7 +5,7 @@
 import { generateUnsubscribeToken } from './unsubscribe-token'
 
 function unsubscribeUrl(email: string): string {
-  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app').trim()
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com').trim()
   const token = generateUnsubscribeToken(email)
   const qs = new URLSearchParams({ email, token })
   return `${appUrl}/api/email/unsubscribe?${qs.toString()}`
@@ -144,7 +144,7 @@ export function emailPreviewDay3(name: string, previewUrl: string, productTitle:
       ${p(`Ta page pour <strong style="color:#a78bfa;">${productTitle}</strong> t'attend encore. Mais on la garde seulement jusqu'à dans <strong style="color:#f59e0b;">4 jours</strong>.`)}
 
       <div style="text-align:center;margin-top:28px;">
-        ${btn('Activer mon compte Starter →', 'https://konvert.app/pricing')}
+        ${btn('Activer mon compte Starter →', 'https://konvertpilot.com/pricing')}
       </div>
       ${p(`<small style="color:rgba(167,139,250,0.5);">Ou <a href="${previewUrl}" style="color:#a78bfa;">revoir ma page d'abord</a>.</small>`)}
     `, email),
@@ -173,7 +173,7 @@ export function emailPreviewDay5(name: string, previewUrl: string, email: string
       </div>
 
       <div style="text-align:center;margin-top:24px;">
-        ${btn('Débloquer pour 39€/mois →', 'https://konvert.app/pricing')}
+        ${btn('Débloquer pour 39€/mois →', 'https://konvertpilot.com/pricing')}
       </div>
       ${p(`<small style="color:rgba(167,139,250,0.5);">Ta page attend encore : <a href="${previewUrl}" style="color:#a78bfa;">la voir</a>.</small>`)}
     `, email),
@@ -190,7 +190,7 @@ export function emailPreviewDay7(name: string, previewUrl: string, productTitle:
       ${p(`Si tu veux la garder et l'utiliser sur ta boutique, c'est maintenant ou jamais.`)}
 
       <div style="text-align:center;margin:28px 0;">
-        ${btn('Sauvegarder ma page →', 'https://konvert.app/pricing')}
+        ${btn('Sauvegarder ma page →', 'https://konvertpilot.com/pricing')}
       </div>
 
       ${p(`<small style="color:rgba(167,139,250,0.5);">Ou <a href="${previewUrl}" style="color:#a78bfa;">revoir ma page une dernière fois</a>.</small>`)}

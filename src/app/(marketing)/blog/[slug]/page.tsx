@@ -6,7 +6,7 @@ import { getArticleBySlug, getRelatedArticles, getAllSlugs } from '@/lib/blog'
 import { generateArticleJsonLd, generateBreadcrumbJsonLd, generateFaqJsonLd } from '@/lib/blog/jsonld'
 import { safeJsonLd } from '@/lib/security/json-ld'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
 /* ── Static params for SSG ────────────────────────────────────────────────── */
 

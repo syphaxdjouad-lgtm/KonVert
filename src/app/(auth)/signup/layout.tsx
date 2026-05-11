@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     description: 'Accès anticipé à KONVERT. Génère des pages qui convertissent pour ton dropshipping en 30 secondes.',
   },
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'}/signup`,
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'}/signup`,
   },
 }
 

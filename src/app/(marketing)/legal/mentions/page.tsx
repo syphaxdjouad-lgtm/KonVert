@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Mentions légales — Konvert',
-  description: 'Mentions légales du site konvert.app',
+  description: 'Mentions légales du site konvertpilot.com',
 }
 
 export default function MentionsLegalesPage() {
@@ -20,13 +20,13 @@ export default function MentionsLegalesPage() {
         <div className="max-w-3xl mx-auto px-5 sm:px-8">
 
           <H2>1. Éditeur du site</H2>
-          <P>Le site <strong>konvert.app</strong> est édité par :</P>
+          <P>Le site <strong>konvertpilot.com</strong> est édité par :</P>
           <ul className="text-gray-600 text-sm leading-relaxed mb-6 list-disc pl-5 space-y-1">
             <li><strong>Raison sociale :</strong> Konvert SAS</li>
             <li><strong>Forme juridique :</strong> Société par Actions Simplifiée (SAS)</li>
             <li><strong>Siège social :</strong> France</li>
             <li><strong>Capital social :</strong> 1 000 euros</li>
-            <li><strong>Email :</strong> <A href="mailto:contact@konvert.app">contact@konvert.app</A></li>
+            <li><strong>Email :</strong> <A href="mailto:contact@konvertpilot.com">contact@konvertpilot.com</A></li>
             <li><strong>Directeur de la publication :</strong> Le Président de Konvert SAS</li>
           </ul>
 
@@ -39,7 +39,7 @@ export default function MentionsLegalesPage() {
 
           <H2>3. Propriété intellectuelle</H2>
           <P>
-            L&apos;ensemble des éléments du site konvert.app (textes, images, logos, icônes, logiciels, base de données,
+            L&apos;ensemble des éléments du site konvertpilot.com (textes, images, logos, icônes, logiciels, base de données,
             structure, design, templates) est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.
           </P>
           <P>
@@ -53,7 +53,7 @@ export default function MentionsLegalesPage() {
             vous disposez d&apos;un droit d&apos;accès, de rectification, de suppression et de portabilité de vos données personnelles.
           </P>
           <P>
-            Pour exercer ces droits, contactez-nous à <A href="mailto:privacy@konvert.app">privacy@konvert.app</A>.
+            Pour exercer ces droits, contactez-nous à <A href="mailto:privacy@konvertpilot.com">privacy@konvertpilot.com</A>.
             Pour plus de détails, consultez notre <Link href="/legal/privacy" className="text-[#5B47F5] font-semibold hover:underline">politique de confidentialité</Link>.
           </P>
 

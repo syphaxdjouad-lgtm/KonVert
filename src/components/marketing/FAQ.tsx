@@ -133,7 +133,7 @@ export default function FAQ() {
         {/* CTA bas */}
         <p className="text-center text-sm text-gray-400 mt-8">
           Tu as une autre question ?{' '}
-          <a href="mailto:hello@konvert.app" className="text-[#5B47F5] font-semibold hover:underline">
+          <a href="mailto:hello@konvertpilot.com" className="text-[#5B47F5] font-semibold hover:underline">
             Écris-nous
           </a>
         </p>

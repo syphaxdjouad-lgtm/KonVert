@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
   }
 
   const now = new Date()
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
   let sent = 0
   let errors = 0
   let skipped = 0
@@ -108,7 +108,7 @@ export async function GET(req: NextRequest) {
         to: preview.email,
         subject,
         html,
-        from: 'KONVERT <hello@konvert.app>',
+        from: 'KONVERT <hello@konvertpilot.com>',
       })
 
       sent++

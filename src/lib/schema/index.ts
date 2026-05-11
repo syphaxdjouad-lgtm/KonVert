@@ -5,7 +5,7 @@
 // citer le site avec précision (tarifs, FAQ, offres). Avec Schema, on devient
 // réutilisable comme source.
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
 // Organization commune — référencée par les autres entités via @id.
 export const organizationSchema = {
@@ -19,7 +19,7 @@ export const organizationSchema = {
   contactPoint: [
     {
       '@type': 'ContactPoint',
-      email: 'support@konvert.app',
+      email: 'support@konvertpilot.com',
       contactType: 'customer support',
       availableLanguage: ['French', 'English', 'Arabic'],
     },

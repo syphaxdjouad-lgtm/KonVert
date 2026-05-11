@@ -3,7 +3,7 @@
  * Free, RGPD-friendly, pas de tracking utilisateur.
  *
  * Setup :
- * - dashboard.cloudflare.com → Turnstile → Add site → konvert.app
+ * - dashboard.cloudflare.com → Turnstile → Add site → konvertpilot.com
  * - Mode "Managed" recommandé
  * - Récupérer site_key (public) + secret_key (server)
  * - Variables Vercel :

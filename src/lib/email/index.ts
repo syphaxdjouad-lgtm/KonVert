@@ -13,7 +13,7 @@ export async function sendEmail({
   to,
   subject,
   html,
-  from = 'KONVERT <onboarding@konvert.app>',
+  from = 'KONVERT <onboarding@konvertpilot.com>',
 }: {
   to: string
   subject: string

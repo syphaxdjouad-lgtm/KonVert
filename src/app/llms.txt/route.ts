@@ -2,7 +2,7 @@
 // Claude, Bing Copilot, Google AI Overviews) à comprendre le site.
 // Spec : https://llmstxt.org
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
 const CONTENT = `# KONVERT
 
@@ -56,8 +56,8 @@ Next.js 16 + TypeScript + Tailwind CSS + Supabase (auth + DB + RLS + Storage) + 
 
 ## Contact
 
-- Support : support@konvert.app
-- Hello : hello@konvert.app
+- Support : support@konvertpilot.com
+- Hello : hello@konvertpilot.com
 `
 
 export async function GET() {

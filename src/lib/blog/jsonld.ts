@@ -1,6 +1,6 @@
 import { BlogArticle } from './types'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
 /** Generate JSON-LD BlogPosting schema for an article */
 export function generateArticleJsonLd(article: BlogArticle) {

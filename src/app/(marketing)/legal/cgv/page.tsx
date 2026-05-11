@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Conditions Générales de Vente — Konvert',
-  description: 'CGV du service Konvert — konvert.app',
+  description: 'CGV du service Konvert — konvertpilot.com',
 }
 
 export default function CGVPage() {
@@ -68,7 +68,7 @@ export default function CGVPage() {
 
           <h2 className="text-xl font-bold text-gray-900 mb-4">3. Souscription et paiement</h2>
           <p className="text-gray-600 leading-relaxed mb-3">
-            La souscription à un abonnement s&apos;effectue en ligne sur konvert.app. Le paiement est traité de
+            La souscription à un abonnement s&apos;effectue en ligne sur konvertpilot.com. Le paiement est traité de
             manière sécurisée par <strong>Stripe</strong>.
           </p>
           <p className="text-gray-600 leading-relaxed mb-3">Modes de paiement acceptés :</p>
@@ -97,7 +97,7 @@ export default function CGVPage() {
           <p className="text-gray-600 leading-relaxed mb-6">
             Toutefois, Konvert SAS propose une <strong>garantie satisfait ou remboursé de 14 jours</strong> à compter
             de la première souscription. Si le Client n&apos;est pas satisfait du Service, il peut demander un remboursement
-            intégral en contactant <a href="mailto:contact@konvert.app" className="text-[#5B47F5] font-semibold hover:underline">contact@konvert.app</a>.
+            intégral en contactant <a href="mailto:contact@konvertpilot.com" className="text-[#5B47F5] font-semibold hover:underline">contact@konvertpilot.com</a>.
           </p>
 
           <h2 className="text-xl font-bold text-gray-900 mb-4">6. Résiliation</h2>
@@ -126,7 +126,7 @@ export default function CGVPage() {
 
           <h2 className="text-xl font-bold text-gray-900 mb-4">9. Support client</h2>
           <p className="text-gray-600 leading-relaxed mb-6">
-            Le support est disponible par email à <a href="mailto:support@konvert.app" className="text-[#5B47F5] font-semibold hover:underline">support@konvert.app</a>.
+            Le support est disponible par email à <a href="mailto:support@konvertpilot.com" className="text-[#5B47F5] font-semibold hover:underline">support@konvertpilot.com</a>.
             Les délais de réponse varient selon la formule : sous 48h pour Starter, sous 24h pour Pro, et sous 4h pour Agency et Enterprise.
           </p>
 
@@ -140,7 +140,7 @@ export default function CGVPage() {
           <p className="text-gray-600 leading-relaxed mb-6">
             Conformément aux articles L611-1 et suivants du Code de la consommation, le Client consommateur peut
             recourir gratuitement à un médiateur de la consommation en cas de litige non résolu. Les coordonnées
-            du médiateur seront communiquées sur simple demande à <a href="mailto:contact@konvert.app" className="text-[#5B47F5] font-semibold hover:underline">contact@konvert.app</a>.
+            du médiateur seront communiquées sur simple demande à <a href="mailto:contact@konvertpilot.com" className="text-[#5B47F5] font-semibold hover:underline">contact@konvertpilot.com</a>.
           </p>
 
           <div className="mt-10 pt-8 border-t border-gray-100 flex flex-wrap gap-4 text-sm">

@@ -170,7 +170,7 @@ export default function LoginPage() {
                 <div className="w-2.5 h-2.5 rounded-full bg-green-400/50" />
               </div>
               <div className="flex-1 mx-3 py-1 px-3 rounded-md text-[11px] font-mono text-center" style={{ background: 'rgba(0,0,0,0.3)', color: 'rgba(167,139,250,0.6)' }}>
-                app.konvert.app/dashboard
+                app.konvertpilot.com/dashboard
               </div>
             </div>
             <img

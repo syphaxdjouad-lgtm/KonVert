@@ -150,7 +150,7 @@ export default function LeadEnrichmentDemo() {
                     border: '1px solid #e2e8f0',
                   }}
                 >
-                  app.konvert.app/leads
+                  app.konvertpilot.com/leads
                 </div>
               </div>
 

@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Politique de confidentialité — Konvert',
-  description: 'Politique de confidentialité et RGPD du service Konvert — konvert.app',
+  description: 'Politique de confidentialité et RGPD du service Konvert — konvertpilot.com',
 }
 
 export default function PrivacyPage() {
@@ -23,7 +23,7 @@ export default function PrivacyPage() {
           <P>
             Le responsable du traitement des données personnelles est <strong>Konvert SAS</strong>, dont le siège
             social est situé en France. Pour toute question relative à vos données personnelles :{' '}
-            <A href="mailto:privacy@konvert.app">privacy@konvert.app</A>.
+            <A href="mailto:privacy@konvertpilot.com">privacy@konvertpilot.com</A>.
           </P>
 
           <H2>2. Données collectées</H2>
@@ -126,7 +126,7 @@ export default function PrivacyPage() {
             <li><strong>Droit de retirer votre consentement :</strong> à tout moment pour les traitements basés sur le consentement</li>
           </ul>
           <P>
-            Pour exercer ces droits, envoyez un email à <A href="mailto:privacy@konvert.app">privacy@konvert.app</A> avec
+            Pour exercer ces droits, envoyez un email à <A href="mailto:privacy@konvertpilot.com">privacy@konvertpilot.com</A> avec
             une copie de votre pièce d&apos;identité. Nous répondrons sous 30 jours.
           </P>
           <P>

@@ -3,7 +3,7 @@
 // sur le produit (prix, features, intégrations, etc.) sans avoir à crawler
 // chaque page séparément.
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
 const CONTENT = `# KONVERT — documentation complète pour LLMs
 
@@ -139,9 +139,9 @@ KONVERT génère ta fiche produit et ta landing page e-commerce optimisées en 3
 
 ## Contact
 
-- Support technique : support@konvert.app
-- Commercial / partenariat : hello@konvert.app
-- Press : hello@konvert.app
+- Support technique : support@konvertpilot.com
+- Commercial / partenariat : hello@konvertpilot.com
+- Press : hello@konvertpilot.com
 `
 
 export async function GET() {

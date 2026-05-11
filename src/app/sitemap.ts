@@ -3,7 +3,7 @@ import { allArticles } from '@/lib/blog'
 
 // Trim défensif : si la var Vercel a un \n ou un espace en suffixe (déjà vu en prod),
 // le sitemap se retrouve avec des URLs cassées que Google ignore.
-const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app').trim()
+const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com').trim()
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [

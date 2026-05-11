@@ -220,7 +220,7 @@ function PricingContent() {
       // Maintenant : toast visible + Sentry pour qu'on soit alerté en prod.
       const message = err instanceof Error ? err.message : 'Erreur lors du paiement.'
       toast.error(message, {
-        description: 'Réessaie ou contacte support@konvert.app si ça persiste.',
+        description: 'Réessaie ou contacte support@konvertpilot.com si ça persiste.',
       })
       Sentry.captureException(err, { tags: { component: 'pricing/handleCheckout' }, extra: { plan, annual } })
       setLoading(null)
@@ -633,7 +633,7 @@ function PricingContent() {
             <Link href="/" className="hover:text-gray-700 transition-colors">Accueil</Link>
             <Link href="/legal/mentions" className="hover:text-gray-700 transition-colors">Mentions légales</Link>
             <Link href="/legal/privacy" className="hover:text-gray-700 transition-colors">Confidentialité</Link>
-            <a href="mailto:support@konvert.app" className="hover:text-gray-700 transition-colors">Support</a>
+            <a href="mailto:support@konvertpilot.com" className="hover:text-gray-700 transition-colors">Support</a>
           </div>
           <p className="text-xs text-gray-300">© 2026 KONVERT</p>
         </div>

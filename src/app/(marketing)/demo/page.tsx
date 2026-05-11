@@ -320,7 +320,7 @@ export default function DemoPage() {
                 </div>
                 <div className="flex-1 bg-white rounded-lg border border-gray-200 px-3 py-1.5 flex items-center gap-2">
                   <Shield className="w-3 h-3 text-emerald-500" />
-                  <span className="text-xs text-gray-400 font-mono truncate">konvert.app/preview/demo-{Date.now()}</span>
+                  <span className="text-xs text-gray-400 font-mono truncate">konvertpilot.com/preview/demo-{Date.now()}</span>
                 </div>
                 <span className="text-xs font-bold px-2 py-1 rounded-md" style={{ background: '#f3f0ff', color: '#5B47F5' }}>
                   Démo

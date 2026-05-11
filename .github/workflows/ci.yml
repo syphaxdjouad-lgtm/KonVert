@@ -40,7 +40,7 @@ jobs:
       ADMIN_SECRET: ci-admin-fake
       CRON_SECRET: ci-cron-fake
       FIRECRAWL_API_KEY: fc-ci-fake
-      NEXT_PUBLIC_APP_URL: https://ci.konvert.app
+      NEXT_PUBLIC_APP_URL: https://ci.konvertpilot.com
       UPSTASH_REDIS_REST_URL: https://ci.upstash.fake
       UPSTASH_REDIS_REST_TOKEN: ci-upstash-fake
 
@@ -107,7 +107,7 @@ jobs:
         run: |
           target=$(git rev-parse --short HEAD)
           for i in $(seq 1 20); do
-            current=$(curl -s https://konvert-ten.vercel.app/api/health | grep -oE '"commit":"[^"]+"' | cut -d'"' -f4)
+            current=$(curl -s https://konvertpilot.com/api/health | grep -oE '"commit":"[^"]+"' | cut -d'"' -f4)
             echo "[$i/20] commit déployé = $current (target: $target)"
             if [ "$current" = "$target" ]; then echo "OK"; exit 0; fi
             sleep 30
@@ -118,7 +118,7 @@ jobs:
       - name: Run smoke E2E
         run: npm run test:e2e
         env:
-          PLAYWRIGHT_BASE_URL: https://konvert-ten.vercel.app
+          PLAYWRIGHT_BASE_URL: https://konvertpilot.com
 
       - name: Upload Playwright report on failure
         if: failure()

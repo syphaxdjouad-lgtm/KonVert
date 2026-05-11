@@ -164,11 +164,11 @@ export default function PreviewPage() {
       {/* Sandbox stricte :
          - allow-scripts : l'HTML généré peut exécuter du JS (animations, swiper…)
          - allow-popups + allow-popups-to-escape-sandbox : laisse le CTA "Voir
-           plus" ouvrir la home konvert.app dans un nouvel onglet sans casser
+           plus" ouvrir la home konvertpilot.com dans un nouvel onglet sans casser
            la sandbox.
          - PAS de allow-same-origin : combiné avec allow-scripts ça permettrait
            à l'HTML de retirer la sandbox (bypass connu MDN). On le garde retiré
-           pour isoler complètement le HTML user-généré du contexte konvert.app. */}
+           pour isoler complètement le HTML user-généré du contexte konvertpilot.com. */}
       <div className="relative">
         <iframe
           srcDoc={data.html_content}

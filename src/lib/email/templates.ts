@@ -29,7 +29,7 @@ function layout(content: string) {
         <tr><td style="padding-top:24px;text-align:center;">
           <p style="margin:0;font-size:12px;color:rgba(167,139,250,0.4);">
             Tu reçois cet email car tu as créé un compte KONVERT.<br/>
-            <a href="https://konvert.app/dashboard/settings" style="color:rgba(167,139,250,0.6);">Se désabonner</a>
+            <a href="https://konvertpilot.com/dashboard/settings" style="color:rgba(167,139,250,0.6);">Se désabonner</a>
           </p>
         </td></tr>
 
@@ -74,7 +74,7 @@ export function emailWelcome(name: string) {
       </table>
 
       <div style="text-align:center;margin-top:28px;">
-        ${btn('Créer ma première page →', 'https://konvert.app/dashboard/new')}
+        ${btn('Créer ma première page →', 'https://konvertpilot.com/dashboard/new')}
       </div>
     `),
   }
@@ -105,7 +105,7 @@ export function emailDay1(name: string) {
 
       ${p(`La page est générée en moins d'une minute. Teste sur n'importe quel produit.`)}
       <div style="text-align:center;margin-top:28px;">
-        ${btn('Créer ma première page →', 'https://konvert.app/dashboard/new')}
+        ${btn('Créer ma première page →', 'https://konvertpilot.com/dashboard/new')}
       </div>
     `),
   }
@@ -120,7 +120,7 @@ export function emailDay3(name: string) {
       ${p(`Colle un lien produit AliExpress ou Amazon → KONVERT récupère le titre, les images, le prix et génère une landing page complète en moins de 60 secondes.`)}
       ${p(`Teste-le maintenant sur n'importe quel produit de ton catalogue.`)}
       <div style="text-align:center;margin-top:28px;">
-        ${btn('Essayer le scraper →', 'https://konvert.app/dashboard/new')}
+        ${btn('Essayer le scraper →', 'https://konvertpilot.com/dashboard/new')}
       </div>
     `),
   }
@@ -142,7 +142,7 @@ export function emailDay7(name: string) {
 
       ${p(`Si t'as des questions ou des blocages, réponds directement à cet email — je réponds personnellement.`)}
       <div style="text-align:center;margin-top:28px;">
-        ${btn('Voir mon dashboard →', 'https://konvert.app/dashboard')}
+        ${btn('Voir mon dashboard →', 'https://konvertpilot.com/dashboard')}
       </div>
     `),
   }
@@ -170,7 +170,7 @@ export function emailDay10(name: string) {
       </table>
 
       <div style="text-align:center;margin-top:28px;">
-        ${btn('Voir les plans →', 'https://konvert.app/pricing')}
+        ${btn('Voir les plans →', 'https://konvertpilot.com/pricing')}
       </div>
     `),
   }
@@ -191,7 +191,7 @@ export function emailDay12(name: string) {
       </div>
 
       <div style="text-align:center;margin-top:24px;">
-        ${btn('Voir mon dashboard →', 'https://konvert.app/dashboard')}
+        ${btn('Voir mon dashboard →', 'https://konvertpilot.com/dashboard')}
       </div>
       ${p(`<small style="color:rgba(167,139,250,0.5);">Questions ? Réponds directement à cet email.</small>`)}
     `),
@@ -212,7 +212,7 @@ export function emailDay13(name: string) {
       </div>
 
       <div style="text-align:center;margin-top:20px;">
-        ${btn('Profiter de l\'offre →', 'https://konvert.app/pricing')}
+        ${btn('Profiter de l\'offre →', 'https://konvertpilot.com/pricing')}
       </div>
     `),
   }
@@ -226,7 +226,7 @@ export function emailDay14(name: string) {
       ${p(`Tu utilises KONVERT depuis deux semaines. On aimerait avoir ton retour pour continuer à améliorer le produit.`)}
       ${p(`Si l'expérience a été positive, continue à convertir. Si quelque chose peut être amélioré, réponds à cet email — je lis tout personnellement.`)}
       <div style="text-align:center;margin-top:28px;">
-        ${btn('Voir mon dashboard →', 'https://konvert.app/dashboard')}
+        ${btn('Voir mon dashboard →', 'https://konvertpilot.com/dashboard')}
       </div>
       ${p(`<small style="color:rgba(167,139,250,0.5);">P.S. Si tu veux en discuter, réponds directement.</small>`)}
     `),

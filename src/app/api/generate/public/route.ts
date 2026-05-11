@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
 
     if (unsubscribed) {
       return NextResponse.json(
-        { error: 'Cet email s\'est désabonné. Contacte support@konvert.app pour réactiver.' },
+        { error: 'Cet email s\'est désabonné. Contacte support@konvertpilot.com pour réactiver.' },
         { status: 410 }
       )
     }

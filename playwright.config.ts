@@ -1,13 +1,13 @@
 import { defineConfig, devices } from '@playwright/test'
 
 // Smoke E2E — tournent contre l'URL prod par défaut (`PLAYWRIGHT_BASE_URL`).
-// En CI ou local sans cette var, fallback sur konvert-ten.vercel.app.
+// En CI ou local sans cette var, fallback sur konvertpilot.com.
 //
 // Pas d'instance dev locale automatique (`webServer`) — on teste la prod réelle.
 // Pour tester en local, lancer `npm run dev` dans un autre terminal puis
 // `PLAYWRIGHT_BASE_URL=http://localhost:3000 npx playwright test`.
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'https://konvert-ten.vercel.app'
+const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'https://konvertpilot.com'
 
 export default defineConfig({
   testDir: './e2e',

@@ -14,7 +14,7 @@ import { organizationSchema, softwareApplicationSchema, jsonLd } from '@/lib/sch
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['400','500','600','700'], variable: '--font-space-grotesk' })
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvert.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
 export const viewport: Viewport = {
   width: 'device-width',

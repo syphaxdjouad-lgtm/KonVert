@@ -72,9 +72,6 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
   // Normalise l'URL : retire les params de tracking AliExpress/Amazon qui
   // peuvent transformer une URL produit en URL de redirection vide.
   const cleanUrl = normalizeProductUrl(url)
-  if (cleanUrl !== url) {
-    console.log('[scraper] URL normalisée:', { from: url.slice(0, 80) + '…', to: cleanUrl })
-  }
 
   const apiKey = process.env.FIRECRAWL_API_KEY
   const errors: { firecrawl?: string; fetch?: string; jsonld?: string } = {}
@@ -97,12 +94,10 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
       const product = await scrapeViaFirecrawl(cleanUrl, apiKey, {
         waitFor: 10000, abortMs: 25000, mobile: true,
       })
-      console.log('[scraper] ✓ Firecrawl OK:', { title: product.title, images: product.images.length })
       return product
     } catch (err) {
       const msg = (err as Error).message
       errors.firecrawl = msg
-      console.warn('[scraper] ✗ Firecrawl 1er essai échoué:', msg)
       collectPartial((err as { partial?: ScrapedProduct }).partial)
 
       // Retry si :
@@ -116,34 +111,28 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
       const isTimeout = msg.includes('aborted due to timeout') || msg.includes('AbortError')
       if (isEmptyPage || isTimeout) {
         try {
-          console.log('[scraper] retry Firecrawl (waitFor=14s, desktop UA)')
           const product = await scrapeViaFirecrawl(cleanUrl, apiKey, {
             waitFor: 14000, abortMs: 18000, mobile: false,
           })
-          console.log('[scraper] ✓ Firecrawl retry OK:', { title: product.title, images: product.images.length })
           return product
         } catch (err2) {
           const msg2 = (err2 as Error).message
           errors.firecrawl = `${msg} | retry: ${msg2}`
-          console.warn('[scraper] ✗ Firecrawl retry échoué:', msg2)
           collectPartial((err2 as { partial?: ScrapedProduct }).partial)
         }
       }
     }
   } else {
     errors.firecrawl = 'FIRECRAWL_API_KEY absent'
-    console.warn('[scraper] ✗ FIRECRAWL_API_KEY absent en env')
   }
 
   // Fallback : fetch() natif + parsing HTML (JSON-LD prioritaire, meta-tags ensuite)
   try {
     const product = await scrapeViaFetch(cleanUrl)
-    console.log('[scraper] ✓ fetch+JSON-LD OK:', { title: product.title, images: product.images.length })
     return product
   } catch (err) {
     const msg = (err as Error).message
     errors.fetch = msg
-    console.warn('[scraper] ✗ fetch natif échoué:', msg)
   }
 
   // ── Dégradation gracieuse ─────────────────────────────────────────────
@@ -153,11 +142,6 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
   if (bestPartial) {
     const safe: ScrapedProduct = bestPartial
     if (safe.title || safe.images.length > 0) {
-      console.log('[scraper] ⚠ retour dégradé (partial):', {
-        title: safe.title || '(vide)',
-        images: safe.images.length,
-        price: safe.price,
-      })
       return {
         ...safe,
         partial: true,
@@ -262,7 +246,6 @@ Return: title, description, price, original_price (if discount visible), images 
   if (html) {
     fromHtml = parseProductFromHtml(html)
     if (fromHtml?.title && !isGenericDomainTitle(fromHtml.title)) {
-      console.log('[scraper] Firecrawl JSON insuffisant → HTML parsing OK')
       return { ...fromHtml, source_url: url }
     }
   }
@@ -274,7 +257,6 @@ Return: title, description, price, original_price (if discount visible), images 
   if (markdown) {
     fromMd = parseProductFromMarkdown(markdown)
     if (fromMd?.title && !isGenericDomainTitle(fromMd.title)) {
-      console.log('[scraper] Firecrawl JSON+HTML insuffisants → markdown parsing OK')
       return { ...fromMd, source_url: url }
     }
   }

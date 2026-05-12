@@ -340,6 +340,10 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+
+          <p className="reveal mt-12 text-center text-xs text-gray-400">
+            KONVERT est édité par <span className="font-semibold text-gray-500">LUNAnCO</span>, studio du groupe NEXARA. Pour toute question légale ou commerciale, passe par notre <Link href="/contact" className="underline hover:text-[#5B47F5]">formulaire de contact</Link>.
+          </p>
         </div>
       </section>
 

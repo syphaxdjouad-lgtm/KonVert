@@ -265,30 +265,11 @@ function Slide1() {
             </Link>
           </div>
 
-          {/* ── TRUSTPILOT + 3 badges ──────────────────────────────── */}
+          {/* ── Trust signals (réels uniquement) ───────────────────── */}
           <div
             className="mt-6 flex flex-col items-center lg:items-start gap-2.5"
             style={{ animation: 'slideUp .7s .35s cubic-bezier(.16,1,.3,1) both' }}
           >
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <rect width="24" height="24" rx="4" fill="#00B67A"/>
-                  <path d="M12 16.5L7.5 19l1.2-5.1L5 10.5l5.2-.4L12 5l1.8 5.1 5.2.4-3.7 3.4 1.2 5.1z" fill="white"/>
-                </svg>
-                <span className="text-xs font-black" style={{ color: '#00B67A' }}>Trustpilot</span>
-              </div>
-              <div className="flex items-center gap-0.5">
-                {[1,2,3,4,5].map(i => (
-                  <svg key={i} width="14" height="14" viewBox="0 0 24 24">
-                    <rect width="24" height="24" rx="3" fill="#00B67A"/>
-                    <path d="M12 16.5L7.5 19l1.2-5.1L5 10.5l5.2-.4L12 5l1.8 5.1 5.2.4-3.7 3.4 1.2 5.1z" fill="white"/>
-                  </svg>
-                ))}
-              </div>
-              <span className="text-sm font-bold text-white">4.9</span>
-              <span className="text-sm text-white/35">· 127 avis</span>
-            </div>
             <div className="flex items-center gap-4 flex-wrap">
               {[
                 { dot: '#96BF48', label: 'Shopify Partner' },

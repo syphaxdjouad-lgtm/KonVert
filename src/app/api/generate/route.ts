@@ -108,12 +108,6 @@ export async function POST(req: NextRequest) {
             { status: 422 }
           )
         }
-      } else {
-        console.log('[/api/generate] mode partial — génération avec données incomplètes:', {
-          title: product.title || '(vide)',
-          images: product.images.length,
-          warning: product.scrape_warning,
-        })
       }
     } else {
       // Produit fourni directement (saisie manuelle wizard) ou mock.

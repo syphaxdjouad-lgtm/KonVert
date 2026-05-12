@@ -150,8 +150,7 @@ export default function TestBuilderPage() {
           <BuilderLoader
             html={html}
             onSave={(savedHtml) => {
-              console.log('Sauvegardé — longueur HTML:', savedHtml.length)
-              alert('Sauvegardé ! (voir console pour le HTML)')
+              alert(`Sauvegardé (${savedHtml.length} caractères)`)
             }}
           />
         )}

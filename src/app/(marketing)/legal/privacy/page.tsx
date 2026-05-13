@@ -12,7 +12,7 @@ export default function PrivacyPage() {
       <section className="pt-32 pb-14" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">Politique de confidentialité</h1>
-          <p className="text-sm" style={{ color: '#8b8baa' }}>Dernière mise à jour : 22 avril 2026 — Conforme RGPD</p>
+          <p className="text-sm" style={{ color: '#8b8baa' }}>Dernière mise à jour : 13 mai 2026 — Conforme RGPD (UE & UK GDPR)</p>
         </div>
       </section>
 
@@ -21,9 +21,10 @@ export default function PrivacyPage() {
 
           <H2 first>1. Responsable du traitement</H2>
           <P>
-            Le responsable du traitement des données personnelles est <strong>Konvert SAS</strong>, dont le siège
-            social est situé en France. Pour toute question relative à vos données personnelles :{' '}
-            <A href="mailto:privacy@konvertpilot.com">privacy@konvertpilot.com</A>.
+            Le responsable du traitement des données personnelles est <strong>Luna Corporation LTD</strong>,
+            société de droit anglais immatriculée sous le numéro 16526908, dont le siège social est situé
+            71-75 Shelton Street, Covent Garden, London WC2H 9JQ, United Kingdom. Pour toute question relative
+            à vos données personnelles : <A href="mailto:privacy@konvertpilot.com">privacy@konvertpilot.com</A>.
           </P>
 
           <H2>2. Données collectées</H2>
@@ -130,9 +131,14 @@ export default function PrivacyPage() {
             une copie de votre pièce d&apos;identité. Nous répondrons sous 30 jours.
           </P>
           <P>
-            Vous avez également le droit d&apos;introduire une réclamation auprès de la <strong>CNIL</strong> (Commission
-            Nationale de l&apos;Informatique et des Libertés) : <strong>cnil.fr</strong>.
+            Vous avez également le droit d&apos;introduire une réclamation auprès de l&apos;autorité de protection des
+            données compétente :
           </P>
+          <ul className="text-sm text-gray-600 leading-relaxed mb-4 list-disc pl-5 space-y-1">
+            <li>En France : <strong>CNIL</strong> (Commission Nationale de l&apos;Informatique et des Libertés) — <strong>cnil.fr</strong></li>
+            <li>Au Royaume-Uni : <strong>ICO</strong> (Information Commissioner&apos;s Office) — <strong>ico.org.uk</strong></li>
+            <li>Dans les autres États membres de l&apos;UE : l&apos;autorité de contrôle de votre pays de résidence</li>
+          </ul>
 
           <H2>6. Sécurité des données</H2>
           <P>Nous mettons en place les mesures suivantes pour protéger vos données :</P>

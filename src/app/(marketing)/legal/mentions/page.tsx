@@ -12,7 +12,7 @@ export default function MentionsLegalesPage() {
       <section className="pt-32 pb-14" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">Mentions légales</h1>
-          <p className="text-sm" style={{ color: '#8b8baa' }}>Dernière mise à jour : 22 avril 2026</p>
+          <p className="text-sm" style={{ color: '#8b8baa' }}>Dernière mise à jour : 13 mai 2026</p>
         </div>
       </section>
 
@@ -22,12 +22,12 @@ export default function MentionsLegalesPage() {
           <H2>1. Éditeur du site</H2>
           <P>Le site <strong>konvertpilot.com</strong> est édité par :</P>
           <ul className="text-gray-600 text-sm leading-relaxed mb-6 list-disc pl-5 space-y-1">
-            <li><strong>Raison sociale :</strong> Konvert SAS</li>
-            <li><strong>Forme juridique :</strong> Société par Actions Simplifiée (SAS)</li>
-            <li><strong>Siège social :</strong> France</li>
-            <li><strong>Capital social :</strong> 1 000 euros</li>
+            <li><strong>Raison sociale :</strong> Luna Corporation LTD</li>
+            <li><strong>Forme juridique :</strong> Private Limited Company (UK)</li>
+            <li><strong>Companies House number :</strong> 16526908</li>
+            <li><strong>Siège social :</strong> 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ, United Kingdom</li>
             <li><strong>Email :</strong> <A href="mailto:contact@konvertpilot.com">contact@konvertpilot.com</A></li>
-            <li><strong>Directeur de la publication :</strong> Le Président de Konvert SAS</li>
+            <li><strong>Directeur de la publication :</strong> Le dirigeant de Luna Corporation LTD</li>
           </ul>
 
           <H2>2. Hébergement</H2>
@@ -44,7 +44,7 @@ export default function MentionsLegalesPage() {
           </P>
           <P>
             Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie des éléments du site,
-            quel que soit le moyen ou le procédé utilisé, est interdite sans autorisation écrite préalable de Konvert SAS.
+            quel que soit le moyen ou le procédé utilisé, est interdite sans autorisation écrite préalable de Luna Corporation LTD.
           </P>
 
           <H2>4. Données personnelles</H2>
@@ -65,25 +65,26 @@ export default function MentionsLegalesPage() {
 
           <H2>6. Responsabilité</H2>
           <P>
-            Konvert SAS s&apos;efforce de fournir des informations aussi précises que possible sur le site.
+            Luna Corporation LTD s&apos;efforce de fournir des informations aussi précises que possible sur le site.
             Toutefois, elle ne pourra être tenue responsable des omissions, des inexactitudes ou des carences
             dans la mise à jour de ces informations.
           </P>
           <P>
-            Konvert SAS ne saurait être tenue responsable des dommages directs ou indirects causés au matériel
+            Luna Corporation LTD ne saurait être tenue responsable des dommages directs ou indirects causés au matériel
             de l&apos;utilisateur lors de l&apos;accès au site.
           </P>
 
           <H2>7. Liens hypertextes</H2>
           <P>
-            Le site peut contenir des liens hypertextes vers d&apos;autres sites internet. Konvert SAS n&apos;exerce aucun
+            Le site peut contenir des liens hypertextes vers d&apos;autres sites internet. Luna Corporation LTD n&apos;exerce aucun
             contrôle sur ces sites et décline toute responsabilité quant à leur contenu.
           </P>
 
           <H2>8. Droit applicable</H2>
           <P last>
-            Les présentes mentions légales sont soumises au droit français. En cas de litige, les tribunaux français
-            seront seuls compétents.
+            Les présentes mentions légales sont soumises au droit anglais. Pour les utilisateurs consommateurs résidant
+            dans l&apos;Union européenne, les dispositions impératives de la loi de leur pays de résidence demeurent
+            applicables conformément au Règlement (CE) n°593/2008 (Rome I).
           </P>
 
           <Nav current="mentions" />

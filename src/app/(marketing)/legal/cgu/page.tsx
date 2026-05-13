@@ -12,7 +12,7 @@ export default function CGUPage() {
       <section className="pt-32 pb-14" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">Conditions Générales d&apos;Utilisation</h1>
-          <p className="text-sm" style={{ color: '#8b8baa' }}>Dernière mise à jour : 22 avril 2026</p>
+          <p className="text-sm" style={{ color: '#8b8baa' }}>Dernière mise à jour : 13 mai 2026</p>
         </div>
       </section>
 
@@ -23,7 +23,9 @@ export default function CGUPage() {
           <P>
             Les présentes Conditions Générales d&apos;Utilisation (ci-après &quot;CGU&quot;) ont pour objet de définir
             les modalités et conditions d&apos;utilisation du service Konvert (ci-après &quot;le Service&quot;), accessible
-            à l&apos;adresse <strong>konvertpilot.com</strong>, édité par Konvert SAS.
+            à l&apos;adresse <strong>konvertpilot.com</strong>, édité par <strong>Luna Corporation LTD</strong>,
+            société de droit anglais immatriculée sous le numéro 16526908, dont le siège social est situé
+            71-75 Shelton Street, Covent Garden, London WC2H 9JQ, United Kingdom.
             En accédant au Service, l&apos;utilisateur accepte sans réserve les présentes CGU.
           </P>
 
@@ -60,29 +62,29 @@ export default function CGUPage() {
 
           <H2>5. Propriété intellectuelle</H2>
           <P>
-            Le Service, ses fonctionnalités, son code source, ses templates et son design sont la propriété exclusive de Konvert SAS.
+            Le Service, ses fonctionnalités, son code source, ses templates et son design sont la propriété exclusive de Luna Corporation LTD.
           </P>
           <P>
             Les pages générées par l&apos;utilisateur via le Service restent la propriété de l&apos;utilisateur.
-            Konvert SAS n&apos;acquiert aucun droit sur le contenu produit par les utilisateurs. Cependant, l&apos;utilisateur
+            Luna Corporation LTD n&apos;acquiert aucun droit sur le contenu produit par les utilisateurs. Cependant, l&apos;utilisateur
             accorde à Konvert une licence limitée pour afficher, stocker et traiter ce contenu dans le cadre du fonctionnement du Service.
           </P>
 
           <H2>6. Disponibilité du Service</H2>
           <P>
-            Konvert SAS s&apos;efforce de maintenir le Service accessible 24h/24 et 7j/7. Toutefois, le Service peut être
+            Luna Corporation LTD s&apos;efforce de maintenir le Service accessible 24h/24 et 7j/7. Toutefois, le Service peut être
             temporairement interrompu pour des raisons de maintenance, de mise à jour ou en cas de force majeure.
-            Konvert SAS ne garantit pas une disponibilité ininterrompue et ne saurait être tenue responsable des
+            Luna Corporation LTD ne garantit pas une disponibilité ininterrompue et ne saurait être tenue responsable des
             interruptions de service.
           </P>
 
           <H2>7. Limitation de responsabilité</H2>
           <P>
-            Le Service est fourni &quot;en l&apos;état&quot;. Konvert SAS ne garantit pas que le Service sera exempt d&apos;erreurs
+            Le Service est fourni &quot;en l&apos;état&quot;. Luna Corporation LTD ne garantit pas que le Service sera exempt d&apos;erreurs
             ou que les résultats obtenus seront conformes aux attentes de l&apos;utilisateur.
           </P>
           <P>
-            En aucun cas, Konvert SAS ne pourra être tenue responsable des dommages indirects, pertes de profits,
+            En aucun cas, Luna Corporation LTD ne pourra être tenue responsable des dommages indirects, pertes de profits,
             pertes de données ou interruptions d&apos;activité résultant de l&apos;utilisation ou de l&apos;impossibilité d&apos;utiliser le Service.
           </P>
 
@@ -91,22 +93,24 @@ export default function CGUPage() {
             L&apos;utilisateur peut supprimer son compte à tout moment depuis les paramètres de son tableau de bord.
           </P>
           <P>
-            Konvert SAS se réserve le droit de suspendre ou de supprimer tout compte en cas de violation des présentes CGU,
+            Luna Corporation LTD se réserve le droit de suspendre ou de supprimer tout compte en cas de violation des présentes CGU,
             sans préavis ni indemnité. En cas de résiliation, l&apos;utilisateur conserve ses données pendant 30 jours,
             après quoi elles seront définitivement supprimées.
           </P>
 
           <H2>9. Modification des CGU</H2>
           <P>
-            Konvert SAS se réserve le droit de modifier les présentes CGU à tout moment. Les utilisateurs seront informés
+            Luna Corporation LTD se réserve le droit de modifier les présentes CGU à tout moment. Les utilisateurs seront informés
             par email ou par notification dans le Service. La poursuite de l&apos;utilisation du Service après modification
             vaut acceptation des nouvelles CGU.
           </P>
 
           <H2>10. Droit applicable et juridiction</H2>
           <P>
-            Les présentes CGU sont soumises au droit français. Tout litige relatif à leur interprétation ou à leur exécution
-            sera soumis aux tribunaux compétents de Paris, France.
+            Les présentes CGU sont soumises au droit anglais. Pour les utilisateurs consommateurs résidant dans l&apos;Union
+            européenne, les dispositions impératives de la loi de leur pays de résidence demeurent applicables conformément
+            au Règlement (CE) n°593/2008 (Rome I). En cas de litige, une solution amiable sera recherchée avant toute
+            action judiciaire.
           </P>
 
           <H2>11. Contact</H2>

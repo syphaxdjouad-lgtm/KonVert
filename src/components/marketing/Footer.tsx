@@ -130,7 +130,7 @@ export default function Footer() {
         {/* Divider */}
         <div className="mt-6 pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: '#ffffff0a' }}>
           <p className="text-xs" style={{ color: '#4a4a66' }}>
-            © 2026 KONVERT SAS. Tous droits réservés.
+            © 2026 KONVERT · Édité par Luna Corporation LTD (UK). Tous droits réservés.
           </p>
           <p className="text-xs" style={{ color: '#4a4a66' }}>
             Propulsé par{' '}

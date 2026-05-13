@@ -12,7 +12,7 @@ export default function CGVPage() {
       <section className="pt-32 pb-14" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl font-black text-white mb-4">Conditions Générales de Vente</h1>
-          <p className="text-sm" style={{ color: '#8b8baa' }}>Dernière mise à jour : 22 avril 2026</p>
+          <p className="text-sm" style={{ color: '#8b8baa' }}>Dernière mise à jour : 13 mai 2026</p>
         </div>
       </section>
 
@@ -22,8 +22,10 @@ export default function CGVPage() {
           <h2 className="text-xl font-bold text-gray-900 mt-0 mb-4">1. Objet</h2>
           <p className="text-gray-600 leading-relaxed mb-6">
             Les présentes Conditions Générales de Vente (ci-après &quot;CGV&quot;) régissent les relations contractuelles
-            entre Konvert SAS et tout utilisateur souscrivant à un abonnement payant au service Konvert
-            (ci-après &quot;le Client&quot;).
+            entre <strong>Luna Corporation LTD</strong>, société de droit anglais immatriculée sous le numéro 16526908,
+            dont le siège social est situé 71-75 Shelton Street, Covent Garden, London WC2H 9JQ, United Kingdom
+            (ci-après &quot;Luna Corporation LTD&quot;), exploitant le service Konvert (ci-après &quot;le Service&quot;),
+            et tout utilisateur souscrivant à un abonnement payant (ci-après &quot;le Client&quot;).
           </p>
 
           <h2 className="text-xl font-bold text-gray-900 mb-4">2. Offres et tarifs</h2>
@@ -62,7 +64,7 @@ export default function CGVPage() {
             </table>
           </div>
           <p className="text-gray-600 leading-relaxed mb-6">
-            Les tarifs sont exprimés en euros, toutes taxes comprises (TTC). Konvert SAS se réserve le droit de modifier
+            Les tarifs sont exprimés en euros, toutes taxes comprises (TTC). Luna Corporation LTD se réserve le droit de modifier
             ses tarifs à tout moment. Toute modification sera notifiée au Client au moins 30 jours avant son application.
           </p>
 
@@ -95,7 +97,7 @@ export default function CGVPage() {
             commencé avec l&apos;accord du consommateur.
           </p>
           <p className="text-gray-600 leading-relaxed mb-6">
-            Toutefois, Konvert SAS propose une <strong>garantie satisfait ou remboursé de 14 jours</strong> à compter
+            Toutefois, Luna Corporation LTD propose une <strong>garantie satisfait ou remboursé de 14 jours</strong> à compter
             de la première souscription. Si le Client n&apos;est pas satisfait du Service, il peut demander un remboursement
             intégral en contactant <a href="mailto:contact@konvertpilot.com" className="text-[#5B47F5] font-semibold hover:underline">contact@konvertpilot.com</a>.
           </p>
@@ -113,8 +115,8 @@ export default function CGVPage() {
 
           <h2 className="text-xl font-bold text-gray-900 mb-4">7. Responsabilité</h2>
           <p className="text-gray-600 leading-relaxed mb-6">
-            La responsabilité de Konvert SAS au titre des présentes CGV est limitée au montant des sommes effectivement
-            versées par le Client au cours des 12 derniers mois. Konvert SAS ne saurait être tenue responsable des
+            La responsabilité de Luna Corporation LTD au titre des présentes CGV est limitée au montant des sommes effectivement
+            versées par le Client au cours des 12 derniers mois. Luna Corporation LTD ne saurait être tenue responsable des
             dommages indirects, pertes de chiffre d&apos;affaires ou pertes de données.
           </p>
 
@@ -132,8 +134,16 @@ export default function CGVPage() {
 
           <h2 className="text-xl font-bold text-gray-900 mb-4">10. Droit applicable</h2>
           <p className="text-gray-600 leading-relaxed mb-6">
-            Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera recherchée
-            en priorité. À défaut, les tribunaux compétents de Paris seront saisis.
+            Les présentes CGV sont soumises au droit anglais. Toutefois, conformément à l&apos;article 6 du Règlement
+            (CE) n°593/2008 (Rome I), le Client consommateur ayant sa résidence habituelle dans un État membre de
+            l&apos;Union européenne bénéficie de la protection que lui accordent les dispositions impératives de la
+            loi de son pays de résidence.
+          </p>
+          <p className="text-gray-600 leading-relaxed mb-6">
+            En cas de litige, une solution amiable sera recherchée en priorité. À défaut, le Client consommateur
+            résidant dans l&apos;Union européenne peut saisir les tribunaux de son pays de résidence ou ceux de Luna
+            Corporation LTD (Angleterre et Pays de Galles). Pour les Clients professionnels, les tribunaux d&apos;Angleterre
+            et du Pays de Galles seront seuls compétents.
           </p>
 
           <h2 className="text-xl font-bold text-gray-900 mb-4">11. Médiation</h2>

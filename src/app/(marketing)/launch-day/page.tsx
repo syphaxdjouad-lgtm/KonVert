@@ -12,10 +12,10 @@ import { launchEventSchema, jsonLd } from '@/lib/schema'
 // signups en attendant le go-live.
 //
 // La date de launch est paramétrable via NEXT_PUBLIC_LAUNCH_DATE (ISO 8601).
-// Fallback : 2026-06-08 00:00 UTC (J+28 du plan, supposant J0 = 2026-05-11).
+// Fallback : 2026-05-20 09:00 Paris (CEST = UTC+2) — ProductHunt + multi-canal.
 // Quand le launch est passé, la page bascule en mode "We're live!".
 
-const LAUNCH_DATE_DEFAULT = '2026-06-08T00:00:00Z'
+const LAUNCH_DATE_DEFAULT = '2026-05-20T07:00:00Z'
 
 function getLaunchDate(): Date {
   const raw = process.env.NEXT_PUBLIC_LAUNCH_DATE?.trim() || LAUNCH_DATE_DEFAULT

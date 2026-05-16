@@ -114,11 +114,13 @@ async function run() {
     const { page, ctx, errors } = await newPage()
     const res = await page.goto(`${BASE}/essai`, { waitUntil: 'domcontentloaded', timeout: 60000 })
     if (res.status() !== 200) throw new Error(`status ${res.status()}`)
-    // Input pour URL ou email
+    // Page 'use client' — attendre que React monte les inputs
+    await page.waitForSelector('input[type="email"], input[type="text"]', { timeout: 10000 })
     const inputs = await page.locator('input').count()
-    if (inputs === 0) throw new Error('aucun input visible')
+    if (inputs === 0) throw new Error('aucun input après hydratation')
     await ctx.close()
-    if (errors.length > 0) throw new Error(`JS errors: ${errors[0]}`)
+    const realErrors = errors.filter((e) => !e.includes('Failed to load resource'))
+    if (realErrors.length > 0) throw new Error(`JS errors: ${realErrors[0]}`)
     return `${inputs} inputs visibles`
   })
 

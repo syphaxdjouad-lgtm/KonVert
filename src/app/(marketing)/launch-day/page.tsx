@@ -24,11 +24,14 @@ function getLaunchDate(): Date {
 }
 
 function useCountdown(target: Date) {
-  const [now, setNow] = useState(() => Date.now())
+  // SSR et 1er render client doivent retourner la même valeur, sinon React #418.
+  // On initialise à target.getTime() (diff=0) puis on bascule sur Date.now() au mount.
+  const [now, setNow] = useState(() => target.getTime())
   useEffect(() => {
+    setNow(Date.now())
     const id = setInterval(() => setNow(Date.now()), 1000)
     return () => clearInterval(id)
-  }, [])
+  }, [target])
   const diff = Math.max(0, target.getTime() - now)
   const days = Math.floor(diff / 86400000)
   const hours = Math.floor((diff % 86400000) / 3600000)

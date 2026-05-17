@@ -20,7 +20,7 @@ const cspBase = {
   imgSrc: "img-src 'self' data: blob: https:",
   fontSrc: "font-src 'self' data: https://fonts.gstatic.com",
   connectSrc:
-    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://client.crisp.chat wss://client.relay.crisp.chat https://eu.i.posthog.com https://eu-assets.i.posthog.com https://us.i.posthog.com https://us-assets.i.posthog.com",
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://client.crisp.chat wss://client.relay.crisp.chat https://eu.i.posthog.com https://eu-assets.i.posthog.com https://us.i.posthog.com https://us-assets.i.posthog.com https://va.vercel-scripts.com https://vitals.vercel-insights.com",
   frameSrc: 'frame-src https://js.stripe.com https://hooks.stripe.com https://game.crisp.chat',
   workerSrc: "worker-src 'self' blob:",
 }
@@ -28,7 +28,7 @@ const cspBase = {
 // CSP stricte : pas d'unsafe-eval. Appliquée partout sauf builder GrapesJS.
 const strictCsp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://js.stripe.com https://client.crisp.chat https://eu-assets.i.posthog.com https://us-assets.i.posthog.com",
+  "script-src 'self' 'unsafe-inline' https://js.stripe.com https://client.crisp.chat https://eu-assets.i.posthog.com https://us-assets.i.posthog.com https://va.vercel-scripts.com",
   cspBase.styleSrc,
   cspBase.imgSrc,
   cspBase.fontSrc,
@@ -41,7 +41,7 @@ const strictCsp = [
 // Limitée aux routes builder uniquement.
 const builderCsp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://client.crisp.chat https://eu-assets.i.posthog.com https://us-assets.i.posthog.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://client.crisp.chat https://eu-assets.i.posthog.com https://us-assets.i.posthog.com https://va.vercel-scripts.com",
   cspBase.styleSrc,
   cspBase.imgSrc,
   cspBase.fontSrc,
@@ -109,6 +109,7 @@ export default withSentryConfig(nextConfig, {
     deleteSourcemapsAfterUpload: true,  // supprimer du bundle déployé
   },
 
-  // Réduire le bruit de build
-  automaticVercelMonitors: false,
+  // Note : `automaticVercelMonitors` était ici mais Sentry l'a déplacé sous
+  // `webpack.automaticVercelMonitors` (non-supporté Turbopack). On le retire
+  // pour ne pas spammer le log dev — false par défaut de toute façon.
 })

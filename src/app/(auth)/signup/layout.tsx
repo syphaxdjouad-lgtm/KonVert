@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Rejoindre la bêta — KONVERT',
-  description: 'Inscris-toi à la bêta KONVERT et génère ta première landing page e-commerce haute conversion en 30 secondes. Places limitées.',
+  title: 'Créer mon compte — KONVERT',
+  description: 'Crée ton compte KONVERT et génère des landing pages e-commerce haute conversion en 30 secondes. Sans engagement, satisfait ou remboursé 30 jours.',
   openGraph: {
-    title: 'Rejoins la bêta KONVERT — Landing pages e-commerce IA',
-    description: 'Accès anticipé à KONVERT. Génère des pages qui convertissent pour ton dropshipping en 30 secondes.',
+    title: 'Créer mon compte KONVERT — Landing pages e-commerce IA',
+    description: 'Génère des pages produit qui convertissent en 30 secondes. Starter à 39€/mois, satisfait ou remboursé.',
   },
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'}/signup`,

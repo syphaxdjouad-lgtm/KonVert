@@ -26,21 +26,24 @@ function SignupContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
+  // Plan pré-sélectionné depuis /pricing — déclenche relance checkout après signup
+  const planParam = searchParams.get('plan')
+  const intervalParam = searchParams.get('interval')
+  const couponParam = searchParams.get('coupon')
 
-  // Valide le token au chargement
+  // Valide le token au chargement (optionnel : signup ouvert à tous depuis launch)
   useEffect(() => {
-    // Funnel : entrée tunnel signup. Capturé même si token invalide pour
-    // mesurer combien d'users tombent sur la waitlist faute d'invitation.
     track.signupStarted()
-    if (!token) { setTokenValid(false); return }
+    if (!token) { setTokenValid(true); return }
     setValidating(true)
     fetch(`/api/invitations/validate?token=${token}`)
       .then(r => r.json())
       .then(data => {
-        setTokenValid(data.valid)
+        // Token invalide → on laisse quand même passer (signup ouvert)
+        setTokenValid(true)
         if (data.email) { setTokenEmail(data.email); setEmail(data.email) }
       })
-      .catch(() => setTokenValid(false))
+      .catch(() => setTokenValid(true))
       .finally(() => setValidating(false))
   }, [token])
 
@@ -55,10 +58,27 @@ function SignupContent() {
     // dans user_metadata. Devient lisible côté server pour les pixels CAPI
     // (Meta + Google enhanced conversions) et les rapports BI.
     const utm = readUtmCookie() ?? {}
+
+    // Si "Confirm email" Supabase est activé, data.session sera null après signUp
+    // et l'auto-checkout Stripe ne peut pas se déclencher. On redirige donc le
+    // magic link vers /pricing avec un flag autocheckout — la page pricing détecte
+    // ce flag au mount + session valide et relance handleCheckout automatiquement.
+    const planValid = planParam && ['starter', 'pro', 'agency'].includes(planParam)
+    const origin = typeof window !== 'undefined' ? window.location.origin : ''
+    const redirectParams = new URLSearchParams()
+    if (planValid) {
+      redirectParams.set('autocheckout', planParam!)
+      redirectParams.set('interval', intervalParam === 'annual' ? 'annual' : 'monthly')
+      if (couponParam) redirectParams.set('coupon', couponParam)
+    }
+    const emailRedirectTo = planValid
+      ? `${origin}/pricing?${redirectParams.toString()}`
+      : `${origin}/dashboard`
+
     const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { name, ...utm } },
+      options: { data: { name, ...utm }, emailRedirectTo },
     })
 
     if (authError) {
@@ -91,6 +111,30 @@ function SignupContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name }),
       }).catch(() => {})
+
+      // Plan pré-sélectionné depuis /pricing → on relance le checkout Stripe
+      // directement plutôt que de renvoyer l'user sur /dashboard puis /pricing.
+      if (planParam && ['starter', 'pro', 'agency'].includes(planParam)) {
+        try {
+          const checkoutRes = await fetch('/api/stripe/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              plan: planParam,
+              interval: intervalParam === 'annual' ? 'annual' : 'monthly',
+              ...(couponParam && { coupon: couponParam }),
+            }),
+          })
+          const checkoutJson = await checkoutRes.json()
+          if (checkoutRes.ok && checkoutJson.url) {
+            window.location.href = checkoutJson.url
+            return
+          }
+        } catch {
+          // Fallback dashboard si Stripe down — user peut relancer depuis /pricing
+        }
+      }
+
       router.push('/dashboard')
       return
     }
@@ -418,15 +462,24 @@ function SignupContent() {
             </span>
           </div>
 
-          {/* Badge invitation */}
-          <div className="flex items-center justify-center gap-2 mb-6 px-4 py-2.5 rounded-2xl" style={{ background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.3)' }}>
-            <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#16a34a' }}>
-              <Check className="w-3 h-3 text-white" />
+          {/* Badge contextuel : plan sélectionné OU invitation OU bienvenue */}
+          {planParam && ['starter', 'pro', 'agency'].includes(planParam) ? (
+            <div className="flex items-center justify-center gap-2 mb-6 px-4 py-2.5 rounded-2xl" style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(139,92,246,0.35)' }}>
+              <Sparkles className="w-4 h-4" style={{ color: '#a78bfa' }} />
+              <span className="text-sm font-semibold" style={{ color: '#c4b5fd' }}>
+                Plan <span className="capitalize">{planParam}</span> sélectionné — checkout après création
+              </span>
             </div>
-            <span className="text-sm font-semibold" style={{ color: '#4ade80' }}>
-              Invitation valide — Bienvenue dans la bêta
-            </span>
-          </div>
+          ) : tokenEmail ? (
+            <div className="flex items-center justify-center gap-2 mb-6 px-4 py-2.5 rounded-2xl" style={{ background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.3)' }}>
+              <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#16a34a' }}>
+                <Check className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm font-semibold" style={{ color: '#4ade80' }}>
+                Invitation valide — Bienvenue
+              </span>
+            </div>
+          ) : null}
 
           <form onSubmit={handleSignup} className="rounded-3xl p-6 space-y-4" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(139,92,246,0.2)' }}>
             <div>

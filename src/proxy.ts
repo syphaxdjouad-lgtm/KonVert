@@ -82,7 +82,7 @@ function captureUtm(request: NextRequest, response: NextResponse): NextResponse 
   return response
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Appliquer le rate limiting sur les routes concernées

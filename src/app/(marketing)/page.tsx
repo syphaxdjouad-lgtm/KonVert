@@ -557,7 +557,7 @@ function Slide2() {
 
         {/* Grille 2×2 de mini mockups */}
         <div className="grid grid-cols-2 gap-3 mt-4 lg:mt-0">
-          {TEMPLATE_CARDS.map((t) => (
+          {TEMPLATE_CARDS.map((t, cardIdx) => (
             <div
               key={t.name}
               className="float-anim relative rounded-2xl overflow-hidden"
@@ -648,13 +648,19 @@ function Slide2() {
                 </div>
               </div>
 
-              {/* Badge métrique flottant */}
+              {/* Badge métrique flottant — durée déterministe par index pour
+                  éviter Math.random() au render (hydration mismatch SSR/CSR).
+                  Longhands séparées pour ne pas mixer animation + animationDelay
+                  (warning React "conflicting property"). */}
               <div
                 className="absolute bottom-2.5 right-2.5 flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] font-black text-white shadow-lg"
                 style={{
                   background: t.badge.color,
                   boxShadow: `0 4px 14px ${t.badge.color}66`,
-                  animation: `float-card ${3 + Math.random()}s ease-in-out infinite`,
+                  animationName: 'float-card',
+                  animationDuration: `${3.4 + cardIdx * 0.2}s`,
+                  animationTimingFunction: 'ease-in-out',
+                  animationIterationCount: 'infinite',
                   animationDelay: t.delay,
                 }}
               >

@@ -166,6 +166,9 @@ function EssaiContent() {
   const [url, setUrl] = useState('')
   const [productName, setProductName] = useState('')
   const [productDesc, setProductDesc] = useState('')
+  // URL image produit optionnelle (saisie manuelle). Si vide, l'API utilise
+  // une image placeholder Unsplash pour ne pas bloquer la génération.
+  const [productImage, setProductImage] = useState('')
 
   // Détection locale + pré-remplissage email — combiné dans le même effet
   // pour éviter une race entre les deux setStates initiaux.
@@ -257,12 +260,15 @@ function EssaiContent() {
       if (inputMode === 'url') {
         body.url = url.trim()
       } else {
+        // Validation URL image côté client : on n'envoie que si http(s) valide,
+        // sinon l'API rejette (cleanProduct filtre les non-http(s)).
+        const imageOk = productImage.trim() && /^https?:\/\//.test(productImage.trim())
         body.product = {
           title: productName.trim(),
           description: productDesc.trim() || productName.trim(),
           price: null,
           original_price: null,
-          images: [],
+          images: imageOk ? [productImage.trim()] : [],
           variants: [],
           rating: null,
           reviews_count: null,
@@ -288,6 +294,12 @@ function EssaiContent() {
         }
         track.generateFailed('public', data.error || `HTTP ${res.status}`)
         setStep('product')
+        // Si le scraper a explicitement échoué, on bascule l'user vers la
+        // saisie manuelle automatiquement — moins de friction que de lui
+        // demander de cliquer sur l'onglet.
+        if (data.code === 'SCRAPER_BLOCKED') {
+          setInputMode('manual')
+        }
         setError(data.error || t.errGeneric)
         return
       }
@@ -569,6 +581,31 @@ function EssaiContent() {
                         color: '#fff',
                       }}
                     />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(196,181,253,0.8)' }}>
+                      {locale === 'fr' ? 'URL image produit' : 'Product image URL'}{' '}
+                      <span style={{ color: 'rgba(167,139,250,0.4)' }}>
+                        {locale === 'fr' ? '(optionnel)' : '(optional)'}
+                      </span>
+                    </label>
+                    <input
+                      type="url"
+                      value={productImage}
+                      onChange={e => setProductImage(e.target.value)}
+                      placeholder="https://..."
+                      className="w-full rounded-xl px-4 py-3 text-sm outline-none"
+                      style={{
+                        background: 'rgba(255,255,255,0.05)',
+                        border: '1px solid rgba(139,92,246,0.2)',
+                        color: '#fff',
+                      }}
+                    />
+                    <p className="text-xs mt-1.5" style={{ color: 'rgba(167,139,250,0.5)' }}>
+                      {locale === 'fr'
+                        ? 'Si vide, on utilise une image placeholder — tu pourras la remplacer ensuite.'
+                        : 'If empty, a placeholder is used — you can replace it later.'}
+                    </p>
                   </div>
                 </div>
               )}

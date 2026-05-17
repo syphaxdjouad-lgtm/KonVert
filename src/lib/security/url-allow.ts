@@ -45,6 +45,12 @@ const ALLOWED_HOSTS = new Set([
 // "myshopify.com.attacker.com".
 const ALLOWED_SUFFIXES = [
   '.myshopify.com',   // Shopify : mystore.myshopify.com
+  '.shopify.com',     // Shopify : assets / pages annexes
+  '.bigcartel.com',   // BigCartel
+  '.tictail.com',     // Tictail (héritage)
+  '.squarespace.com', // Squarespace stores
+  '.bigcommerce.com', // BigCommerce
+  '.wixsite.com',     // Wix stores
 ]
 
 // IPs privées, métadonnées cloud (AWS/GCP), loopback, link-local.

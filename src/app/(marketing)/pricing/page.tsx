@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
 import * as Sentry from '@sentry/nextjs'
@@ -176,6 +176,13 @@ function PricingContent() {
   // /launch-day) — passé tel quel à /api/stripe/checkout qui resout le
   // promotion code Stripe et l'applique automatiquement.
   const couponFromUrl           = searchParams.get('coupon')
+  // autocheckout : flag posé par le emailRedirectTo de signup. Quand l'user
+  // confirme son email, Supabase le redirige ici avec ce param + une session
+  // valide → on relance handleCheckout automatiquement pour reprendre le funnel
+  // là où il s'est arrêté avant la confirmation email.
+  const autoCheckoutPlan        = searchParams.get('autocheckout')
+  const autoCheckoutInterval    = searchParams.get('interval')
+  const autoFiredRef            = useRef(false)
 
   async function handleCheckout(plan: string) {
     setLoading(plan)
@@ -207,9 +214,14 @@ function PricingContent() {
       const json = await res.json()
       if (!res.ok) {
         if (res.status === 401) {
-          // Pas de session : on envoie d'abord vers /essai (point d'entrée ouvert),
-          // puis l'user reviendra sur /pricing connecté pour finaliser le checkout.
-          router.push(`/essai?upgrade=${encodeURIComponent(plan)}`)
+          // Pas de session : on envoie sur /signup avec le plan/interval pré-sélectionné.
+          // Après création de compte, signup relance automatiquement le checkout Stripe.
+          const params = new URLSearchParams({
+            plan,
+            interval: annual ? 'annual' : 'monthly',
+            ...(couponFromUrl && { coupon: couponFromUrl }),
+          })
+          router.push(`/signup?${params.toString()}`)
           return
         }
         throw new Error(json.error || `Erreur ${res.status}`)
@@ -226,6 +238,23 @@ function PricingContent() {
       setLoading(null)
     }
   }
+
+  // Auto-resume checkout après confirmation email Supabase.
+  // Le signup pose emailRedirectTo=/pricing?autocheckout=PLAN&interval=INT&coupon=X
+  // → quand l'user clique le magic link, il atterrit ici avec une session valide
+  // → on relance handleCheckout pour finaliser le funnel sans re-cliquer.
+  // autoFiredRef évite la double-exécution en cas de re-render React.
+  useEffect(() => {
+    if (autoFiredRef.current) return
+    if (!autoCheckoutPlan || !['starter', 'pro', 'agency'].includes(autoCheckoutPlan)) return
+    autoFiredRef.current = true
+    if (autoCheckoutInterval === 'annual') setAnnual(true)
+    // Petit délai pour que les pixels d'init aient le temps de charger.
+    setTimeout(() => handleCheckout(autoCheckoutPlan), 200)
+  // handleCheckout est stable (pas de deps capturées critiques) — on évite de
+  // l'ajouter en dep pour ne pas retrigger.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoCheckoutPlan, autoCheckoutInterval])
 
   return (
     <div className="min-h-screen bg-white">
@@ -290,6 +319,15 @@ function PricingContent() {
           {canceled && (
             <div className="mt-6 inline-block bg-yellow-50 border border-yellow-200 text-yellow-700 text-sm font-medium px-4 py-2.5 rounded-xl">
               Paiement annulé — tu peux réessayer quand tu veux
+            </div>
+          )}
+          {autoCheckoutPlan && (
+            <div className="mt-6 inline-flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm font-semibold px-4 py-2.5 rounded-xl">
+              <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              Compte confirmé — redirection vers le paiement <span className="capitalize">{autoCheckoutPlan}</span>...
             </div>
           )}
           {couponFromUrl && (

@@ -98,16 +98,27 @@ export async function POST(req: NextRequest) {
       // contenir <script> et finir réinjecté tel quel dans le HTML servi à
       // /preview/[id] (template fait du string-concat sans escape).
       product = cleanProduct(productInput as ScrapedProduct)
+      // Fallback image générique si la saisie manuelle n'a pas fourni d'URL
+      // image. Le template + le LLM ont besoin d'au moins une image pour
+      // produire un visuel cohérent — l'user pourra remplacer dans l'éditeur.
+      if (!product.images || product.images.length === 0) {
+        product.images = [
+          'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
+        ]
+      }
     } else {
       product = MOCK_PRODUCT
     }
 
-    // Anti-hallucination + check minimum exploitable, alignés sur la route auth.
-    // Evite que DeepSeek génère du contenu pourri à partir d'un titre vide
-    // ou d'un payload purement adverse.
+    // Anti-hallucination — check titre uniquement (les images sont gérées
+    // par le fallback ci-dessus + le check imagesOk en aval pour les URLs).
+    // Évite que DeepSeek génère du contenu pourri à partir d'un titre vide
+    // ou d'un payload purement adverse, sans bloquer la saisie manuelle.
     if (productInput || url) {
       const hall = looksHallucinated(product)
-      if (hall.fake) {
+      // Si la seule raison est "aucune image" et qu'on est en mode saisie
+      // manuelle, on l'a déjà mitigée avec le fallback : on ignore.
+      if (hall.fake && !(productInput && hall.reason === 'aucune image produit valide')) {
         return NextResponse.json(
           { error: `Données produit invalides (${hall.reason}).` },
           { status: 400 }
@@ -116,7 +127,7 @@ export async function POST(req: NextRequest) {
     }
 
     const titleOk = !!product.title && product.title.trim().length >= 3
-    const imagesOk = !url || product.images.length >= 1
+    const imagesOk = product.images.length >= 1
     if (!titleOk || !imagesOk) {
       return NextResponse.json(
         { error: 'Données produit invalides ou incomplètes.' },
@@ -213,8 +224,21 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Scraping bloqué (anti-bot / cloudflare / toutes méthodes ratées) :
+    // message actionnable pour que l'user comprenne et bascule sur la
+    // saisie manuelle plutôt que de réessayer en boucle.
+    if (message.includes('Scraping impossible') || message.includes('toutes les méthodes')) {
+      return NextResponse.json(
+        {
+          error: 'Ce site bloque les robots (Cloudflare/anti-bot). Essaie une URL AliExpress, Etsy ou Shopify, ou bascule en "Saisie manuelle".',
+          code: 'SCRAPER_BLOCKED',
+        },
+        { status: 502 }
+      )
+    }
+
     return NextResponse.json(
-      { error: 'Une erreur est survenue lors de la génération. Réessaie.' },
+      { error: 'Une erreur est survenue lors de la génération. Réessaie ou utilise la saisie manuelle.' },
       { status: 500 }
     )
   }

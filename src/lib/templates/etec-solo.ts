@@ -32,7 +32,7 @@ const SOLO_THEME: SectionTheme = {
 }
 
 export function templateEtecSolo(data: LandingPageData): string {
-  const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
+  const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)

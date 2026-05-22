@@ -32,7 +32,7 @@ const ELLA_THEME: SectionTheme = {
 }
 
 export function templateEtecElla(data: LandingPageData): string {
-  const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
+  const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
   const faqHtml = data.faq.map((f, i) => `<div style="border-bottom:1px solid #F0E4F0;overflow:hidden;"><button onclick="(function(){var c=document.getElementById('faq-el-${i}');var open=c.style.maxHeight!=='0px'&&c.style.maxHeight!=='';c.style.maxHeight=open?'0px':'500px';c.style.paddingTop=open?'0':'12px';document.getElementById('arr-el-${i}').textContent=open?'+':'−';})()" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:20px 0;background:none;border:none;cursor:pointer;text-align:left;"><span style="font-family:'Quicksand',sans-serif;font-size:15px;font-weight:600;color:#2D2D2D;">${f.question}</span><span id="arr-el-${i}" style="font-size:20px;color:#C77DBA;flex-shrink:0;margin-left:16px;">+</span></button><div id="faq-el-${i}" style="max-height:0;overflow:hidden;transition:max-height .35s ease,padding-top .35s ease;padding-top:0;"><p style="font-family:'Quicksand',sans-serif;font-size:14px;color:#999;line-height:1.8;padding-bottom:20px;margin:0;">${f.answer}</p></div></div>`).join('')

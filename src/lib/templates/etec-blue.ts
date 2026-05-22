@@ -32,7 +32,7 @@ const BEFORE_IMG = 'https://images.pexels.com/photos/1571939/pexels-photo-157193
 const AFTER_IMG  = 'https://images.pexels.com/photos/2803158/pexels-photo-2803158.jpeg?auto=compress&cs=tinysrgb&w=600'
 
 export function templateEtecBlue(data: LandingPageData): string {
-  const imgs = (data.images?.filter(Boolean).length ?? 0) >= 4 ? data.images! : IMGS
+  const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)

@@ -51,8 +51,9 @@ const BEAUTY_THEME: SectionTheme = {
 }
 
 export function templateEtecBeauty(data: LandingPageData): string {
-  const imgs = (data.images && data.images.filter(Boolean).length >= 4)
-    ? data.images.slice(0, 4)
+  const _real = data.images?.filter(Boolean) ?? [];
+  const imgs = _real.length >= 1
+    ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length])
     : FALLBACK_IMGS
 
   const mainImg    = imgs[0]

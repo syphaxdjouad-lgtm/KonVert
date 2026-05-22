@@ -24,7 +24,10 @@ async function main() {
   }
 
   console.log(`\n🔍 Test scraping : ${url}\n`)
-  console.log(`FIRECRAWL_API_KEY : ${process.env.FIRECRAWL_API_KEY ? '✓ présent' : '✗ ABSENT'}\n`)
+  console.log(`FIRECRAWL_API_KEY    : ${process.env.FIRECRAWL_API_KEY ? '✓ présent' : '✗ ABSENT'}`)
+  console.log(`SCRAPINGBEE_API_KEY  : ${process.env.SCRAPINGBEE_API_KEY ? '✓ présent' : '✗ ABSENT'}`)
+  console.log(`BRIGHTDATA_API_TOKEN : ${process.env.BRIGHTDATA_API_TOKEN ? '✓ présent' : '✗ ABSENT'}`)
+  console.log(`BRIGHTDATA_ZONE      : ${process.env.BRIGHTDATA_ZONE || '✗ ABSENT'}\n`)
 
   const t0 = Date.now()
   try {

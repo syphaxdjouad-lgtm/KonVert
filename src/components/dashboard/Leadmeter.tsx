@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { TrendingUp, Zap, Eye, Shield, Sparkles } from 'lucide-react'
+import { TrendingUp, Zap, Eye, Shield, Sparkles, Check } from 'lucide-react'
 
 /* ─────────────────────────────────────────────
-   TYPES
+   TYPES — identiques à Leadmeter.tsx (drop-in)
 ───────────────────────────────────────────── */
 interface Criterion {
   id: string
@@ -26,6 +26,7 @@ interface Metrics {
 
 /* ─────────────────────────────────────────────
    ANALYSE HTML → CRITÈRES + MÉTRIQUES
+   (inchangée — même logique métier)
 ───────────────────────────────────────────── */
 function analyzeHtml(html: string): { criteria: Criterion[]; metrics: Metrics } {
   const parser = new DOMParser()
@@ -105,7 +106,7 @@ function analyzeHtml(html: string): { criteria: Criterion[]; metrics: Metrics } 
 }
 
 /* ─────────────────────────────────────────────
-   SCORE PUBLIC (utilisé par GrapesEditor)
+   SCORE PUBLIC (drop-in compatible)
 ───────────────────────────────────────────── */
 export function computeLeadmeterScore(html: string) {
   if (typeof window === 'undefined') return { score: 0, criteria: [] as Criterion[] }
@@ -115,116 +116,114 @@ export function computeLeadmeterScore(html: string) {
 }
 
 /* ─────────────────────────────────────────────
-   COUNT-UP NUMBER
+   PALETTE LIGHT — tokens sémantiques
+   Accent violet Konvert : #7C3AED (violet-600)
+   Success sobre : #059669 (emerald-600)
+   Warning sobre : #D97706 (amber-600)
+   Danger sobre  : #DC2626 (red-600)
+───────────────────────────────────────────── */
+function getScorePalette(score: number) {
+  if (score >= 71) return {
+    accentHex:  '#059669',                         // emerald-600
+    accentLight: 'rgba(5, 150, 105, 0.08)',        // fond pill
+    accentBorder: 'rgba(5, 150, 105, 0.20)',
+    label: 'BON',
+    labelClass: 'text-emerald-700 bg-emerald-50 border-emerald-200',
+    ringColor: '#059669',
+    ringTrack: '#d1fae5',                           // emerald-100
+  }
+  if (score >= 41) return {
+    accentHex:  '#D97706',
+    accentLight: 'rgba(217, 119, 6, 0.07)',
+    accentBorder: 'rgba(217, 119, 6, 0.20)',
+    label: 'MOYEN',
+    labelClass: 'text-amber-700 bg-amber-50 border-amber-200',
+    ringColor: '#D97706',
+    ringTrack: '#fef3c7',
+  }
+  return {
+    accentHex:  '#DC2626',
+    accentLight: 'rgba(220, 38, 38, 0.07)',
+    accentBorder: 'rgba(220, 38, 38, 0.18)',
+    label: 'FAIBLE',
+    labelClass: 'text-red-700 bg-red-50 border-red-200',
+    ringColor: '#DC2626',
+    ringTrack: '#fee2e2',
+  }
+}
+
+/* ─────────────────────────────────────────────
+   COUNT-UP — inchangé, juste réutilisé
 ───────────────────────────────────────────── */
 function CountUp({ value, decimals = 0, suffix = '' }: { value: number; decimals?: number; suffix?: string }) {
   const mv = useMotionValue(0)
-  const spring = useSpring(mv, { stiffness: 80, damping: 18 })
-  const display = useTransform(spring, latest => {
-    return latest.toFixed(decimals) + suffix
-  })
+  const springV = useSpring(mv, { stiffness: 80, damping: 18 })
+  const display = useTransform(springV, latest => latest.toFixed(decimals) + suffix)
   const [text, setText] = useState('0' + suffix)
-
   useEffect(() => { mv.set(value) }, [value, mv])
   useEffect(() => display.on('change', v => setText(v)), [display])
-
   return <>{text}</>
 }
 
 /* ─────────────────────────────────────────────
-   GAUGE CIRCULAIRE
+   SCORE RING — SVG natif style Apple Health
+   Fond blanc, pas de glow, stroke propre
 ───────────────────────────────────────────── */
-function CircularGauge({ score, color, glow }: { score: number; color: string; glow: string }) {
-  const size = 168
-  const stroke = 10
+function ScoreRing({ score, ringColor, ringTrack }: { score: number; ringColor: string; ringTrack: string }) {
+  const size = 152
+  const stroke = 9
   const radius = (size - stroke) / 2
   const circumference = 2 * Math.PI * radius
-  const progress = circumference - (score / 100) * circumference
 
   const progressMV = useMotionValue(circumference)
-  const progressSpring = useSpring(progressMV, { stiffness: 60, damping: 20 })
+  const progressSpring = useSpring(progressMV, { stiffness: 55, damping: 22 })
+  useEffect(() => { progressMV.set(circumference - (score / 100) * circumference) }, [score, progressMV, circumference])
 
-  useEffect(() => { progressMV.set(progress) }, [progress, progressMV])
+  const scoreLabel = score >= 90 ? 'EXCELLENT' : score >= 71 ? 'BON' : score >= 41 ? 'MOYEN' : 'FAIBLE'
 
   return (
     <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
-      {/* Halo glow */}
-      <div
-        className="absolute inset-0 rounded-full blur-2xl opacity-40"
-        style={{ background: `radial-gradient(circle, ${color}, transparent 70%)` }}
-      />
-
-      <svg width={size} height={size} className="-rotate-90 relative">
-        <defs>
-          <linearGradient id="lm-gauge-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={color} stopOpacity="0.5" />
-            <stop offset="100%" stopColor={color} />
-          </linearGradient>
-          <filter id="lm-gauge-glow">
-            <feGaussianBlur stdDeviation="3" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
+      <svg width={size} height={size} className="-rotate-90">
         {/* Track */}
         <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke="rgba(255,255,255,0.06)"
+          cx={size / 2} cy={size / 2} r={radius}
+          stroke={ringTrack}
           strokeWidth={stroke}
           fill="none"
         />
-
-        {/* Tick marks */}
-        {Array.from({ length: 40 }).map((_, i) => {
-          const angle = (i / 40) * 360
-          const isActive = i / 40 < score / 100
-          const x1 = size / 2 + (radius - stroke / 2 - 2) * Math.cos((angle * Math.PI) / 180)
-          const y1 = size / 2 + (radius - stroke / 2 - 2) * Math.sin((angle * Math.PI) / 180)
-          const x2 = size / 2 + (radius + stroke / 2 + 2) * Math.cos((angle * Math.PI) / 180)
-          const y2 = size / 2 + (radius + stroke / 2 + 2) * Math.sin((angle * Math.PI) / 180)
-          return (
-            <line
-              key={i}
-              x1={x1} y1={y1} x2={x2} y2={y2}
-              stroke={isActive ? color : 'rgba(255,255,255,0.04)'}
-              strokeWidth="1"
-              style={{ transition: 'stroke 0.4s' }}
-            />
-          )
-        })}
-
-        {/* Progress arc */}
+        {/* Progress */}
         <motion.circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke="url(#lm-gauge-grad)"
+          cx={size / 2} cy={size / 2} r={radius}
+          stroke={ringColor}
           strokeWidth={stroke}
           fill="none"
           strokeLinecap="round"
           strokeDasharray={circumference}
-          style={{ strokeDashoffset: progressSpring, filter: `drop-shadow(0 0 6px ${glow})` }}
+          style={{ strokeDashoffset: progressSpring }}
         />
       </svg>
-
       {/* Centre */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="text-[44px] font-black leading-none tabular-nums" style={{ color, textShadow: `0 0 20px ${glow}` }}>
+        <div className="text-[38px] font-black leading-none tabular-nums text-slate-900">
           <CountUp value={score} />
         </div>
-        <div className="text-[9px] font-bold tracking-[0.2em] text-white/40 mt-1">SCORE / 100</div>
+        <div className="text-[8px] font-semibold tracking-[0.18em] text-slate-400 mt-0.5 uppercase">
+          / 100
+        </div>
+        <div
+          className="text-[8px] font-bold tracking-widest mt-1 px-1.5 py-0.5 rounded"
+          style={{ color: ringColor, background: ringTrack }}
+        >
+          {scoreLabel}
+        </div>
       </div>
     </div>
   )
 }
 
 /* ─────────────────────────────────────────────
-   MINI TUILE KPI
+   KPI TILE — grille 2x2, style Linear dashboard
+   Fond off-white, pas de glow, border slate subtil
 ───────────────────────────────────────────── */
 function KpiTile({
   icon: Icon,
@@ -232,35 +231,25 @@ function KpiTile({
   value,
   suffix,
   decimals = 0,
-  color,
-  glow,
+  valueColor,
 }: {
-  icon: React.ComponentType<{ size?: number; className?: string }>
+  icon: React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>
   label: string
   value: number
   suffix?: string
   decimals?: number
-  color: string
-  glow: string
+  valueColor?: string
 }) {
   return (
-    <div
-      className="relative rounded-xl p-2.5 overflow-hidden"
-      style={{
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))',
-        border: '1px solid rgba(255,255,255,0.06)',
-        backdropFilter: 'blur(10px)',
-      }}
-    >
-      <div
-        className="absolute -top-4 -right-4 w-12 h-12 rounded-full blur-2xl opacity-30"
-        style={{ background: color }}
-      />
-      <div className="flex items-center gap-1 mb-1 relative">
-        <Icon size={9} className="opacity-60" />
-        <span className="text-[8px] font-bold tracking-wider text-white/50 uppercase">{label}</span>
+    <div className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 flex flex-col gap-1.5">
+      <div className="flex items-center gap-1.5">
+        <Icon size={11} className="text-slate-400" />
+        <span className="text-[9px] font-semibold text-slate-400 tracking-[0.12em] uppercase">{label}</span>
       </div>
-      <div className="text-sm font-black tabular-nums relative" style={{ color, textShadow: `0 0 8px ${glow}` }}>
+      <div
+        className="text-base font-black tabular-nums leading-none"
+        style={{ color: valueColor ?? '#0f172a' }}
+      >
         <CountUp value={value} decimals={decimals} suffix={suffix ?? ''} />
       </div>
     </div>
@@ -268,7 +257,7 @@ function KpiTile({
 }
 
 /* ─────────────────────────────────────────────
-   COMPOSANT PRINCIPAL
+   COMPOSANT PRINCIPAL — Props identiques (drop-in)
 ───────────────────────────────────────────── */
 interface Props {
   html: string
@@ -288,13 +277,10 @@ export default function Leadmeter({ html }: Props) {
     return { score, criteria, metrics }
   }, [html])
 
-  // Palette néon
-  const color = score >= 71 ? '#10f5a8' : score >= 41 ? '#ffb547' : '#ff5470'
-  const glow  = score >= 71 ? 'rgba(16,245,168,0.55)' : score >= 41 ? 'rgba(255,181,71,0.55)' : 'rgba(255,84,112,0.55)'
-  const label = score >= 90 ? 'EXCELLENT' : score >= 71 ? 'BON' : score >= 41 ? 'MOYEN' : 'FAIBLE'
+  const palette = getScorePalette(score)
 
-  // Métriques business dérivées
-  const conversionRate = +(0.5 + (score / 100) * 4).toFixed(1) // 0.5% → 4.5%
+  // Métriques business dérivées (logique inchangée)
+  const conversionRate = +(0.5 + (score / 100) * 4).toFixed(1)
   const trustScore = Math.min(100, Math.round(
     (criteria.find(c => c.id === 'proof')?.passed ? 30 : 0) +
     (criteria.find(c => c.id === 'guarantee')?.passed ? 20 : 0) +
@@ -304,182 +290,204 @@ export default function Leadmeter({ html }: Props) {
   const readTime = Math.max(1, Math.round(metrics.words / 200))
   const monthlyRevenue = metrics.priceDetected
     ? Math.round((metrics.priceDetected * 1000 * conversionRate) / 100)
-    : Math.round(score * 47) // fallback : score × 47 €
+    : Math.round(score * 47)
 
   const passed = criteria.filter(c => c.passed)
   const suggestions = criteria.filter(c => !c.passed).slice(0, 3)
 
+  // Violet Konvert — accent fixe pour labels + pills de points
+  const VIOLET = '#7C3AED'
+  const VIOLET_LIGHT = 'rgba(124, 58, 237, 0.07)'
+  const VIOLET_BORDER = 'rgba(124, 58, 237, 0.18)'
+
   return (
     <div
-      className="flex flex-col h-full overflow-y-auto relative"
+      className="flex flex-col h-full overflow-y-auto bg-[#FAFAFA]"
       style={{
         minWidth: 228,
         maxWidth: 228,
-        background: 'radial-gradient(ellipse at top, #1a1033 0%, #0a0a14 60%, #050508 100%)',
-        borderLeft: '1px solid rgba(139,92,246,0.15)',
+        borderLeft: '1px solid #e2e8f0',
       }}
     >
-      {/* Grille de fond futuriste */}
-      <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
-          backgroundSize: '20px 20px',
-        }}
-      />
-
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 relative">
-        <div className="flex items-center gap-1.5">
+      {/* ── HEADER ── */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white">
+        <div className="flex items-center gap-2">
+          {/* Dot vivant — violet fixe Konvert */}
           <motion.div
             className="w-1.5 h-1.5 rounded-full"
-            style={{ background: color, boxShadow: `0 0 8px ${glow}` }}
-            animate={{ opacity: [1, 0.3, 1] }}
-            transition={{ duration: 1.6, repeat: Infinity }}
+            style={{ background: VIOLET }}
+            animate={{ opacity: [1, 0.35, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
           />
-          <span className="text-[10px] font-black text-white/70 tracking-[0.2em] uppercase">Leadmeter</span>
+          <span className="text-[10px] font-bold text-slate-600 tracking-[0.16em] uppercase">
+            Leadmeter
+          </span>
         </div>
+        {/* Badge statut score */}
         <span
-          className="text-[9px] font-black px-2 py-0.5 rounded-md tracking-wider"
-          style={{
-            background: `linear-gradient(135deg, ${color}25, ${color}10)`,
-            color,
-            border: `1px solid ${color}40`,
-          }}
+          className={`text-[9px] font-bold px-2 py-0.5 rounded-md border tracking-wider ${palette.labelClass}`}
         >
-          {label}
+          {palette.label}
         </span>
       </div>
 
-      <div className="flex flex-col gap-4 p-4 relative">
-        {/* Gauge centrale */}
+      <div className="flex flex-col gap-4 p-4">
+
+        {/* ── SCORE RING ── */}
         <div className="flex justify-center pt-1">
-          <CircularGauge score={score} color={color} glow={glow} />
+          <ScoreRing score={score} ringColor={palette.ringColor} ringTrack={palette.ringTrack} />
         </div>
 
-        {/* KPIs business */}
+        {/* ── KPIs 2×2 ── */}
         <div className="grid grid-cols-2 gap-2">
-          <KpiTile icon={TrendingUp} label="Conv. est." value={conversionRate} decimals={1} suffix="%" color={color} glow={glow} />
-          <KpiTile icon={Zap} label="CA / mois" value={monthlyRevenue} suffix={` ${metrics.currency}`} color={color} glow={glow} />
-          <KpiTile icon={Eye} label="Lecture" value={readTime} suffix=" min" color="#a78bfa" glow="rgba(167,139,250,0.5)" />
-          <KpiTile icon={Shield} label="Trust" value={trustScore} suffix="/100" color="#22d3ee" glow="rgba(34,211,238,0.5)" />
+          <KpiTile
+            icon={TrendingUp}
+            label="Conv. est."
+            value={conversionRate}
+            decimals={1}
+            suffix="%"
+            valueColor={palette.accentHex}
+          />
+          <KpiTile
+            icon={Zap}
+            label="CA / mois"
+            value={monthlyRevenue}
+            suffix={` ${metrics.currency}`}
+            valueColor={palette.accentHex}
+          />
+          <KpiTile
+            icon={Eye}
+            label="Lecture"
+            value={readTime}
+            suffix=" min"
+            valueColor="#7C3AED"
+          />
+          <KpiTile
+            icon={Shield}
+            label="Trust"
+            value={trustScore}
+            suffix="/100"
+            valueColor="#7C3AED"
+          />
         </div>
 
-        {/* Equalizer critères */}
+        {/* ── SÉPARATEUR ── */}
+        <div className="h-px bg-slate-200" />
+
+        {/* ── CRITÈRES — barre de progression globale + compteur ── */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[9px] font-black text-white/40 tracking-[0.2em] uppercase">
+            <span className="text-[9px] font-semibold text-slate-400 tracking-[0.14em] uppercase">
               Critères
             </span>
-            <span className="text-[9px] font-black tabular-nums" style={{ color }}>
-              {passed.length}/{criteria.length}
+            <span
+              className="text-[9px] font-bold tabular-nums px-1.5 py-0.5 rounded"
+              style={{ color: VIOLET, background: VIOLET_LIGHT }}
+            >
+              {passed.length} / {criteria.length}
             </span>
           </div>
-          <div className="flex items-end gap-1 h-8">
-            {criteria.map((c, i) => (
-              <motion.div
-                key={c.id}
-                initial={{ height: '20%' }}
-                animate={{ height: c.passed ? `${60 + ((i * 13) % 40)}%` : '15%' }}
-                transition={{ duration: 0.5, delay: i * 0.04 }}
-                className="flex-1 rounded-sm"
-                title={`${c.label} (+${c.points}pts)`}
-                style={{
-                  background: c.passed
-                    ? `linear-gradient(180deg, ${color}, ${color}60)`
-                    : 'rgba(255,255,255,0.05)',
-                  boxShadow: c.passed ? `0 0 6px ${glow}` : 'none',
-                }}
-              />
-            ))}
+
+          {/* Progress bar globale — Linear style */}
+          <div className="h-1 rounded-full bg-slate-200 overflow-hidden">
+            <motion.div
+              className="h-full rounded-full"
+              style={{ background: VIOLET }}
+              initial={{ width: 0 }}
+              animate={{ width: `${(passed.length / Math.max(criteria.length, 1)) * 100}%` }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
+            />
           </div>
         </div>
 
-        {/* Checklist */}
-        <div className="flex flex-col gap-1.5">
-          {criteria.map(c => (
-            <div
+        {/* ── CHECKLIST CRITÈRES ── */}
+        <div className="flex flex-col gap-1">
+          {criteria.map((c, i) => (
+            <motion.div
               key={c.id}
-              className="flex items-center gap-2 px-2 py-1.5 rounded-md transition-all"
-              style={{
-                background: c.passed ? 'rgba(255,255,255,0.02)' : 'transparent',
-              }}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.035, duration: 0.25 }}
+              className={`flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors ${
+                c.passed ? 'bg-white border border-slate-200' : 'bg-transparent'
+              }`}
             >
+              {/* Check circle */}
               <div
-                className="w-3.5 h-3.5 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{
-                  background: c.passed ? color : 'transparent',
-                  border: c.passed ? 'none' : '1.5px solid rgba(255,255,255,0.15)',
-                  boxShadow: c.passed ? `0 0 6px ${glow}` : 'none',
-                }}
+                className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
+                style={
+                  c.passed
+                    ? { background: palette.ringColor, border: 'none' }
+                    : { background: 'transparent', border: '1.5px solid #cbd5e1' }
+                }
               >
-                {c.passed && (
-                  <svg width="7" height="7" viewBox="0 0 8 8" fill="none">
-                    <path d="M1.5 4L3 5.5L6.5 2" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
+                {c.passed && <Check size={8} className="text-white" strokeWidth={3} />}
               </div>
+
+              {/* Label */}
               <span
-                className="text-[11px] font-semibold leading-none flex-1 truncate"
-                style={{ color: c.passed ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.3)' }}
+                className={`text-[11px] font-medium leading-none flex-1 truncate ${
+                  c.passed ? 'text-slate-700' : 'text-slate-400'
+                }`}
               >
                 {c.label}
               </span>
+
+              {/* Points pill */}
               <span
-                className="text-[9px] font-black tabular-nums"
-                style={{ color: c.passed ? color : 'rgba(255,255,255,0.2)' }}
+                className="text-[9px] font-bold tabular-nums px-1.5 py-0.5 rounded"
+                style={
+                  c.passed
+                    ? { color: palette.accentHex, background: palette.accentLight }
+                    : { color: '#94a3b8', background: '#f1f5f9' }
+                }
               >
                 +{c.points}
               </span>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* Suggestions */}
+        {/* ── BOOST RAPIDE — suggestions ── */}
         {suggestions.length > 0 && (
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-1.5">
-              <Sparkles size={10} style={{ color }} />
-              <span className="text-[9px] font-black text-white/40 tracking-[0.2em] uppercase">
+              <Sparkles size={10} style={{ color: VIOLET }} />
+              <span className="text-[9px] font-semibold text-slate-400 tracking-[0.14em] uppercase">
                 Boost rapide
               </span>
             </div>
             {suggestions.map(s => (
               <div
                 key={s.id}
-                className="flex items-start gap-2 px-2.5 py-2 rounded-lg"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))',
-                  border: '1px solid rgba(255,255,255,0.05)',
-                }}
+                className="flex items-start gap-2 px-2.5 py-2 rounded-lg bg-white border border-slate-200"
               >
                 <div
                   className="w-1 h-1 rounded-full mt-1.5 flex-shrink-0"
-                  style={{ background: color, boxShadow: `0 0 4px ${glow}` }}
+                  style={{ background: VIOLET }}
                 />
-                <span className="text-[10px] text-white/55 leading-snug">{s.hint}</span>
+                <span className="text-[10px] text-slate-500 leading-snug">{s.hint}</span>
               </div>
             ))}
           </div>
         )}
 
-        {/* Score parfait */}
+        {/* ── SCORE PARFAIT ── */}
         {score === 100 && (
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="text-center py-3 rounded-xl text-[11px] font-black tracking-wider"
+            className="text-center py-3 rounded-xl text-[11px] font-bold tracking-wider border"
             style={{
-              background: `linear-gradient(135deg, ${color}20, ${color}05)`,
-              border: `1px solid ${color}40`,
-              color,
-              textShadow: `0 0 10px ${glow}`,
+              color: palette.accentHex,
+              background: palette.accentLight,
+              borderColor: palette.accentBorder,
             }}
           >
-            ⚡ PAGE PARFAITE
+            Page optimisee au maximum
           </motion.div>
         )}
+
       </div>
     </div>
   )

@@ -59,3 +59,6 @@ supabase/.temp/
 # creatives bruts (sources design — pas de prod)
 # Ancré racine pour ne pas matcher src/components/marketing/
 /marketing/
+
+# screenshots temporaires dev
+/.tmp-screenshots/

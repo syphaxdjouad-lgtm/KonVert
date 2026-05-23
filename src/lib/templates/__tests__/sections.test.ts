@@ -1,5 +1,6 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import { DEFAULT_ORDER, renderRichSections, type SectionKey } from '../sections'
+import * as sections from '../sections'
 import { mockLandingDataFull } from '../__fixtures__/mock-landing-data-full'
 import { mockLandingDataPartial } from '../__fixtures__/mock-landing-data-partial'
 import type { LandingPageData } from '@/types'
@@ -116,5 +117,31 @@ describe('renderRichSections — feature flag', () => {
     delete process.env.KONVERT_RICH_SECTIONS
     const html = renderRichSections(mockLandingDataFull)
     expect(html.length).toBeGreaterThan(100)
+  })
+})
+
+describe('Backward compatibility aliases (V1 names)', () => {
+  it('exporte renderStorySection qui pointe vers renderStoryV2', () => {
+    expect(sections.renderStorySection).toBe(sections.renderStoryV2)
+  })
+
+  it('exporte renderSocialProofBar qui pointe vers renderSocialProofBarV2', () => {
+    expect(sections.renderSocialProofBar).toBe(sections.renderSocialProofBarV2)
+  })
+
+  it('exporte renderTestimonialsSection qui pointe vers renderTestimonialsV2', () => {
+    expect(sections.renderTestimonialsSection).toBe(sections.renderTestimonialsV2)
+  })
+
+  it('exporte renderComparisonSection qui pointe vers renderComparisonV2', () => {
+    expect(sections.renderComparisonSection).toBe(sections.renderComparisonV2)
+  })
+
+  it('exporte renderBonusesSection qui pointe vers renderBonusesV2', () => {
+    expect(sections.renderBonusesSection).toBe(sections.renderBonusesV2)
+  })
+
+  it('exporte renderGuaranteeSection qui pointe vers renderGuaranteeV2', () => {
+    expect(sections.renderGuaranteeSection).toBe(sections.renderGuaranteeV2)
   })
 })

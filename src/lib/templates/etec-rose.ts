@@ -302,7 +302,7 @@ export function templateEtecRose(data: LandingPageData): string {
     <div style="text-align:center;margin-bottom:52px;">
       <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'Inter',sans-serif;margin-bottom:14px;">Transformation</p>
       <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Avant · Après</h2>
-      <p style="color:${C.muted};font-size:15px;max-width:480px;margin:0 auto;font-family:'Inter',sans-serif;">${data.social_proof || `Des milliers de clients ont transformé leur quotidien avec ${data.product_name}. Voici leur vérité.`}</p>
+      <p style="color:${C.muted};font-size:15px;max-width:480px;margin:0 auto;font-family:'Inter',sans-serif;">Des milliers de clients ont transformé leur quotidien avec ${data.product_name}. Voici leur vérité.</p>
     </div>
     <div class="ba3" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
       <!-- Avant -->

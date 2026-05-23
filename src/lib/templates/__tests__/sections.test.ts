@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, afterEach } from 'vitest'
 import { DEFAULT_ORDER, renderRichSections, type SectionKey } from '../sections'
 import { mockLandingDataFull } from '../__fixtures__/mock-landing-data-full'
 import { mockLandingDataPartial } from '../__fixtures__/mock-landing-data-partial'
@@ -91,5 +91,30 @@ describe('renderRichSections', () => {
     // Sections absentes : NE doivent pas générer de HTML "vide" ou "undefined"
     expect(html).not.toContain('undefined')
     expect(html).not.toContain('[object Object]')
+  })
+})
+
+describe('renderRichSections — feature flag', () => {
+  const originalEnv = process.env.KONVERT_RICH_SECTIONS
+
+  afterEach(() => {
+    process.env.KONVERT_RICH_SECTIONS = originalEnv
+  })
+
+  it('retourne "" quand KONVERT_RICH_SECTIONS=false (rollback)', () => {
+    process.env.KONVERT_RICH_SECTIONS = 'false'
+    expect(renderRichSections(mockLandingDataFull)).toBe('')
+  })
+
+  it('rend normalement quand KONVERT_RICH_SECTIONS=true', () => {
+    process.env.KONVERT_RICH_SECTIONS = 'true'
+    const html = renderRichSections(mockLandingDataFull)
+    expect(html.length).toBeGreaterThan(100)
+  })
+
+  it('rend normalement quand KONVERT_RICH_SECTIONS est undefined (défaut)', () => {
+    delete process.env.KONVERT_RICH_SECTIONS
+    const html = renderRichSections(mockLandingDataFull)
+    expect(html.length).toBeGreaterThan(100)
   })
 })

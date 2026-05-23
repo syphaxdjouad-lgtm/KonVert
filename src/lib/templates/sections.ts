@@ -8,6 +8,54 @@
 
 import type { LandingPageData } from '@/types'
 
+// ─── Section keys & ordre canonique ──────────────────────────────────────────
+// Liste exhaustive des sections rendues par renderRichSections, dans l'ordre
+// psychologique e-com DTC validé en brainstorming (spec § 3.2).
+// `hero_badges` n'est PAS dans cette liste — il reste dans le hero du template.
+
+export type SectionKey =
+  | 'social_proof_bar'
+  | 'story'
+  | 'target_audience'
+  | 'features'
+  | 'unique_mechanism'
+  | 'how_it_works'
+  | 'before_after'
+  | 'comparison'
+  | 'competitor_comparison'
+  | 'testimonials'
+  | 'press_mentions'
+  | 'founder_note'
+  | 'value_stack'
+  | 'bonuses'
+  | 'guarantee'
+  | 'risk_reversal'
+  | 'objections'
+  | 'community_callout'
+  | 'final_pitch'
+
+export const DEFAULT_ORDER: SectionKey[] = [
+  'social_proof_bar',
+  'story',
+  'target_audience',
+  'features',
+  'unique_mechanism',
+  'how_it_works',
+  'before_after',
+  'comparison',
+  'competitor_comparison',
+  'testimonials',
+  'press_mentions',
+  'founder_note',
+  'value_stack',
+  'bonuses',
+  'guarantee',
+  'risk_reversal',
+  'objections',
+  'community_callout',
+  'final_pitch',
+]
+
 export interface SectionTheme {
   primary: string         // #0055D4 (Blue), #000 (Noir)…
   accent: string          // #EEF3FF (Blue light), #1a1a1a (Noir card)…

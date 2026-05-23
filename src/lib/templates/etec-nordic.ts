@@ -2,12 +2,7 @@ import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -285,12 +280,7 @@ export function templateEtecNordic(data: LandingPageData): string {
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, NORDIC_THEME)}
-${renderStorySection(data, NORDIC_THEME)}
-${renderComparisonSection(data, NORDIC_THEME)}
-${renderTestimonialsSection(data, NORDIC_THEME)}
-${renderBonusesSection(data, NORDIC_THEME)}
-${renderGuaranteeSection(data, NORDIC_THEME)}
+${renderRichSections(data, NORDIC_THEME)}
 
 <!-- FAQ -->
 <section class="section-pad-nd" style="padding:96px 64px;background:${C.bgAlt};">

@@ -2,12 +2,7 @@ import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -362,12 +357,7 @@ export function templateEtecSage(data: LandingPageData): string {
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, SAGE_THEME)}
-${renderStorySection(data, SAGE_THEME)}
-${renderComparisonSection(data, SAGE_THEME)}
-${renderTestimonialsSection(data, SAGE_THEME)}
-${renderBonusesSection(data, SAGE_THEME)}
-${renderGuaranteeSection(data, SAGE_THEME)}
+${renderRichSections(data, SAGE_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:1px solid ${C.border};">

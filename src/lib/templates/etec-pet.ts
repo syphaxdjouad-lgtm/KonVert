@@ -1,12 +1,7 @@
 import type { LandingPageData } from '@/types'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -559,12 +554,7 @@ window.addEventListener('scroll', () => {
 </script>
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, PET_THEME)}
-${renderStorySection(data, PET_THEME)}
-${renderComparisonSection(data, PET_THEME)}
-${renderTestimonialsSection(data, PET_THEME)}
-${renderBonusesSection(data, PET_THEME)}
-${renderGuaranteeSection(data, PET_THEME)}
+${renderRichSections(data, PET_THEME)}
 
 </body>
 </html>`

@@ -2,12 +2,7 @@ import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -379,12 +374,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, ENERGY_THEME)}
-${renderStorySection(data, ENERGY_THEME)}
-${renderComparisonSection(data, ENERGY_THEME)}
-${renderTestimonialsSection(data, ENERGY_THEME)}
-${renderBonusesSection(data, ENERGY_THEME)}
-${renderGuaranteeSection(data, ENERGY_THEME)}
+${renderRichSections(data, ENERGY_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:2px solid ${C.border};">

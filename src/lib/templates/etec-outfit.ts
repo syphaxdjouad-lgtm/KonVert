@@ -2,12 +2,7 @@ import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const IMGS = [
@@ -96,12 +91,7 @@ ${data.price ? `<p style="font-size:48px;font-weight:700;color:#B5854B;margin-bo
 <p style="font-size:12px;color:rgba(255,253,248,0.3);margin-top:20px;">Coton bio · Livraison offerte · Échanges gratuits</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, OUTFIT_THEME)}
-${renderStorySection(data, OUTFIT_THEME)}
-${renderComparisonSection(data, OUTFIT_THEME)}
-${renderTestimonialsSection(data, OUTFIT_THEME)}
-${renderBonusesSection(data, OUTFIT_THEME)}
-${renderGuaranteeSection(data, OUTFIT_THEME)}
+${renderRichSections(data, OUTFIT_THEME)}
 
 </body></html>`
 }

@@ -1,12 +1,7 @@
 import type { LandingPageData } from '@/types'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 // ─── FALLBACK IMAGES ──────────────────────────────────────────────────────────
@@ -1381,12 +1376,7 @@ button{font-family:inherit}
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, PULSE_THEME)}
-${renderStorySection(data, PULSE_THEME)}
-${renderComparisonSection(data, PULSE_THEME)}
-${renderTestimonialsSection(data, PULSE_THEME)}
-${renderBonusesSection(data, PULSE_THEME)}
-${renderGuaranteeSection(data, PULSE_THEME)}
+${renderRichSections(data, PULSE_THEME)}
 
 <!-- FAQ ACCORDION -->
 <section class="fpls-faq-section" aria-label="Questions fréquentes">

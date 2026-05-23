@@ -2,12 +2,7 @@ import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const IMGS = [
@@ -95,12 +90,7 @@ ${data.price ? `<p style="font-size:48px;font-weight:700;color:#334FB4;margin-bo
 <p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:20px;">Satisfaction garantie · Support dédié · Paiement sécurisé</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, AGENCY_THEME)}
-${renderStorySection(data, AGENCY_THEME)}
-${renderComparisonSection(data, AGENCY_THEME)}
-${renderTestimonialsSection(data, AGENCY_THEME)}
-${renderBonusesSection(data, AGENCY_THEME)}
-${renderGuaranteeSection(data, AGENCY_THEME)}
+${renderRichSections(data, AGENCY_THEME)}
 
 </body></html>`
 }

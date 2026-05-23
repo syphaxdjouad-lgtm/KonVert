@@ -2,12 +2,7 @@ import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -312,12 +307,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, LUXE_THEME)}
-${renderStorySection(data, LUXE_THEME)}
-${renderComparisonSection(data, LUXE_THEME)}
-${renderTestimonialsSection(data, LUXE_THEME)}
-${renderBonusesSection(data, LUXE_THEME)}
-${renderGuaranteeSection(data, LUXE_THEME)}
+${renderRichSections(data, LUXE_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════ -->
 <section style="background:${C.bgAlt};padding:96px 0;border-top:1px solid ${C.border};">

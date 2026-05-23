@@ -1,12 +1,7 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 
@@ -553,12 +548,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
 <!-- ═══════════════════════════════════════════════════════════════════════════
      SECTIONS DYNAMIQUES — story / comparison / testimonials / bonuses / guarantee
 ════════════════════════════════════════════════════════════════════════════ -->
-${renderSocialProofBar(data, VELVETY_THEME)}
-${renderStorySection(data, VELVETY_THEME)}
-${renderComparisonSection(data, VELVETY_THEME)}
-${renderTestimonialsSection(data, VELVETY_THEME)}
-${renderBonusesSection(data, VELVETY_THEME)}
-${renderGuaranteeSection(data, VELVETY_THEME)}
+${renderRichSections(data, VELVETY_THEME)}
 
 
 <!-- ═══════════════════════════════════════════════════════════════════════════

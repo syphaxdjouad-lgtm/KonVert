@@ -1,12 +1,7 @@
 import type { LandingPageData } from '@/types'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 // ─── FALLBACK IMAGES — fashion/personal styling ───────────────────────────────
@@ -1121,12 +1116,7 @@ export function templateEtecStyle(data: LandingPageData): string {
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, STYLE_THEME)}
-${renderStorySection(data, STYLE_THEME)}
-${renderComparisonSection(data, STYLE_THEME)}
-${renderTestimonialsSection(data, STYLE_THEME)}
-${renderBonusesSection(data, STYLE_THEME)}
-${renderGuaranteeSection(data, STYLE_THEME)}
+${renderRichSections(data, STYLE_THEME)}
 
 </body>
 </html>`

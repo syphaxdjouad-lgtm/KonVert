@@ -1,12 +1,7 @@
 import type { LandingPageData } from '@/types'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 // ─── FALLBACK IMAGES — cosmetics / skincare Unsplash ─────────────────────────
@@ -756,12 +751,7 @@ export function templateEtecBlusho(data: LandingPageData): string {
 </script>
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, BLUSHO_THEME)}
-${renderStorySection(data, BLUSHO_THEME)}
-${renderComparisonSection(data, BLUSHO_THEME)}
-${renderTestimonialsSection(data, BLUSHO_THEME)}
-${renderBonusesSection(data, BLUSHO_THEME)}
-${renderGuaranteeSection(data, BLUSHO_THEME)}
+${renderRichSections(data, BLUSHO_THEME)}
 
 </body>
 </html>`

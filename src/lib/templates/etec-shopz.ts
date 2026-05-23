@@ -1,12 +1,7 @@
 import type { LandingPageData } from '@/types'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 // ─── FALLBACK IMAGES — menswear premium ───────────────────────────────────────
@@ -639,12 +634,7 @@ export function templateEtecShopz(data: LandingPageData): string {
   </script>
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, SHOPZ_THEME)}
-${renderStorySection(data, SHOPZ_THEME)}
-${renderComparisonSection(data, SHOPZ_THEME)}
-${renderTestimonialsSection(data, SHOPZ_THEME)}
-${renderBonusesSection(data, SHOPZ_THEME)}
-${renderGuaranteeSection(data, SHOPZ_THEME)}
+${renderRichSections(data, SHOPZ_THEME)}
 
 </body>
 </html>`

@@ -2,12 +2,7 @@ import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const IMGS = [
@@ -228,12 +223,7 @@ body{font-family:'Poppins',sans-serif;background:#000;color:#e3e3e3;}
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, JEWEL_THEME)}
-${renderStorySection(data, JEWEL_THEME)}
-${renderComparisonSection(data, JEWEL_THEME)}
-${renderTestimonialsSection(data, JEWEL_THEME)}
-${renderBonusesSection(data, JEWEL_THEME)}
-${renderGuaranteeSection(data, JEWEL_THEME)}
+${renderRichSections(data, JEWEL_THEME)}
 
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#0A0A0A;">

@@ -1,12 +1,7 @@
 import type { LandingPageData } from '@/types'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -380,12 +375,7 @@ export function templateEtecGold(data: LandingPageData): string {
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, GOLD_THEME)}
-${renderStorySection(data, GOLD_THEME)}
-${renderComparisonSection(data, GOLD_THEME)}
-${renderTestimonialsSection(data, GOLD_THEME)}
-${renderBonusesSection(data, GOLD_THEME)}
-${renderGuaranteeSection(data, GOLD_THEME)}
+${renderRichSections(data, GOLD_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:96px 0;border-top:1px solid ${C.divider};">

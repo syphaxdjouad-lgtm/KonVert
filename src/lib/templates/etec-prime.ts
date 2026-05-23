@@ -1,12 +1,7 @@
 import type { LandingPageData } from '@/types'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 // ─── FALLBACK IMAGES — health / supplements premium ───────────────────────────
@@ -683,12 +678,7 @@ export function templateEtecPrime(data: LandingPageData): string {
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, PRIME_THEME)}
-${renderStorySection(data, PRIME_THEME)}
-${renderComparisonSection(data, PRIME_THEME)}
-${renderTestimonialsSection(data, PRIME_THEME)}
-${renderBonusesSection(data, PRIME_THEME)}
-${renderGuaranteeSection(data, PRIME_THEME)}
+${renderRichSections(data, PRIME_THEME)}
 
 <!-- FAQ -->
 <section class="faq-section">

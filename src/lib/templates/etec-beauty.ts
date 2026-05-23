@@ -1,12 +1,7 @@
 import type { LandingPageData } from '@/types'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -602,12 +597,7 @@ ${data.faq && data.faq.length > 0 ? `
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, BEAUTY_THEME)}
-${renderStorySection(data, BEAUTY_THEME)}
-${renderComparisonSection(data, BEAUTY_THEME)}
-${renderTestimonialsSection(data, BEAUTY_THEME)}
-${renderBonusesSection(data, BEAUTY_THEME)}
-${renderGuaranteeSection(data, BEAUTY_THEME)}
+${renderRichSections(data, BEAUTY_THEME)}
 
 </body>
 </html>`

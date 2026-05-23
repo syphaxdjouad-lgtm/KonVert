@@ -2,12 +2,7 @@ import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -318,12 +313,7 @@ export function templateEtecAura(data: LandingPageData): string {
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, AURA_THEME)}
-${renderStorySection(data, AURA_THEME)}
-${renderComparisonSection(data, AURA_THEME)}
-${renderTestimonialsSection(data, AURA_THEME)}
-${renderBonusesSection(data, AURA_THEME)}
-${renderGuaranteeSection(data, AURA_THEME)}
+${renderRichSections(data, AURA_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:96px 0;border-top:1px solid ${C.border};">

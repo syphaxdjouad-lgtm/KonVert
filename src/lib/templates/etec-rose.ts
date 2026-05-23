@@ -2,12 +2,7 @@ import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -355,12 +350,7 @@ export function templateEtecRose(data: LandingPageData): string {
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, ROSE_THEME)}
-${renderStorySection(data, ROSE_THEME)}
-${renderComparisonSection(data, ROSE_THEME)}
-${renderTestimonialsSection(data, ROSE_THEME)}
-${renderBonusesSection(data, ROSE_THEME)}
-${renderGuaranteeSection(data, ROSE_THEME)}
+${renderRichSections(data, ROSE_THEME)}
 
 <!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:1px solid ${C.border};">

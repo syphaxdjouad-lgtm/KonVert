@@ -1,12 +1,7 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 
@@ -294,12 +289,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#000000;color:#ffffff;}
 </section>
 
 <!-- SECTIONS DYNAMIQUES — story / social_proof / comparison / testimonials / bonuses / guarantee -->
-${renderSocialProofBar(data, NOIR_THEME)}
-${renderStorySection(data, NOIR_THEME)}
-${renderComparisonSection(data, NOIR_THEME)}
-${renderTestimonialsSection(data, NOIR_THEME)}
-${renderBonusesSection(data, NOIR_THEME)}
-${renderGuaranteeSection(data, NOIR_THEME)}
+${renderRichSections(data, NOIR_THEME)}
 
 <!-- FAQ ACCORDION -->
 <section style="padding:80px 24px;background:#000000;">

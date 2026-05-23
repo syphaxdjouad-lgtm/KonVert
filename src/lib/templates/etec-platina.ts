@@ -2,12 +2,7 @@ import type { LandingPageData } from '@/types'
 import { ico } from './icons'
 
 import {
-  renderStorySection,
-  renderSocialProofBar,
-  renderTestimonialsSection,
-  renderComparisonSection,
-  renderBonusesSection,
-  renderGuaranteeSection,
+  renderRichSections,
   type SectionTheme,
 } from './sections'
 const IMGS = [
@@ -95,12 +90,7 @@ ${data.price ? `<p style="font-size:48px;font-weight:600;color:#B8860B;margin-bo
 <p style="font-size:12px;color:rgba(253,253,251,0.3);margin-top:20px;">Écrin offert · Certificat d'authenticité · Retour gratuit</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderSocialProofBar(data, PLATINA_THEME)}
-${renderStorySection(data, PLATINA_THEME)}
-${renderComparisonSection(data, PLATINA_THEME)}
-${renderTestimonialsSection(data, PLATINA_THEME)}
-${renderBonusesSection(data, PLATINA_THEME)}
-${renderGuaranteeSection(data, PLATINA_THEME)}
+${renderRichSections(data, PLATINA_THEME)}
 
 </body></html>`
 }

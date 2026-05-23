@@ -995,3 +995,55 @@ ${mq('fp', `.fp-wrap{padding:60px 20px!important;}`)}
   </div>
 </section>`
 }
+
+// ─── Section renderers map ──────────────────────────────────────────────────
+// Map qui associe chaque SectionKey à son renderer V2. Utilisée par
+// renderRichSections pour itérer dans l'ordre voulu.
+
+type SectionRenderer = (d: LandingPageData, t: SectionTheme) => string
+
+const SECTION_RENDERERS: Record<SectionKey, SectionRenderer> = {
+  social_proof_bar:      renderSocialProofBarV2,
+  story:                 renderStoryV2,
+  target_audience:       renderTargetAudience,
+  features:              renderFeatures,
+  unique_mechanism:      renderUniqueMechanism,
+  how_it_works:          renderHowItWorks,
+  before_after:          renderBeforeAfter,
+  comparison:            renderComparisonV2,
+  competitor_comparison: renderCompetitorComparison,
+  testimonials:          renderTestimonialsV2,
+  press_mentions:        renderPressMentions,
+  founder_note:          renderFounderNote,
+  value_stack:           renderValueStack,
+  bonuses:               renderBonusesV2,
+  guarantee:             renderGuaranteeV2,
+  risk_reversal:         renderRiskReversal,
+  objections:            renderObjections,
+  community_callout:     renderCommunityCallout,
+  final_pitch:           renderFinalPitch,
+}
+
+// ─── renderRichSections — l'API publique ────────────────────────────────────
+// Rend les 19 sections riches dans l'ordre voulu, en skippant celles dont la
+// data est absente. Si KONVERT_RICH_SECTIONS=false (rollback prod), retourne
+// '' (aucune section).
+
+export function renderRichSections(
+  data: LandingPageData,
+  theme: SectionTheme = DEFAULT_THEME,
+  order?: SectionKey[],
+): string {
+  // Feature flag rollback (spec § 3.6)
+  if (process.env.KONVERT_RICH_SECTIONS === 'false') return ''
+
+  const keys = order ?? DEFAULT_ORDER
+  return keys
+    .map(key => {
+      const renderer = SECTION_RENDERERS[key]
+      if (!renderer) return '' // clé inconnue → skip silencieux
+      return renderer(data, theme)
+    })
+    .filter(html => html.trim().length > 0)
+    .join('\n')
+}

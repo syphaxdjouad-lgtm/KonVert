@@ -6,8 +6,8 @@ import { createClient } from '@/lib/supabase/server'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
 import type { ScrapedProduct } from '@/types'
 
-// Vercel Pro 60s — DeepSeek prend 18-22s + scraping Firecrawl jusqu'à 45s
-export const maxDuration = 60
+// Vercel Pro + Fluid Compute = 90s — Bright Data AliExpress 50-65s + DeepSeek 18-22s
+export const maxDuration = 90
 
 export async function POST(req: NextRequest) {
   try {

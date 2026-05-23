@@ -14,8 +14,8 @@ import type { ScrapedProduct } from '@/types'
 // et bloque la prompt injection à 500 KB (cf audit Madara P1-02).
 const MAX_PRODUCT_INPUT_BYTES = 16 * 1024
 
-// Vercel Pro 60s — DeepSeek + scraping peuvent dépasser 30s
-export const maxDuration = 60
+// Vercel Pro + Fluid Compute = 90s — Bright Data AliExpress 50-65s + DeepSeek 18-22s
+export const maxDuration = 90
 
 // Génération publique — 1 page gratuite sans compte
 // Stocke la preview en base avec expiration 7 jours

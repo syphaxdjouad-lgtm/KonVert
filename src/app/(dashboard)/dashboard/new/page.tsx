@@ -442,28 +442,85 @@ function NewPageInner() {
     track.generateStarted('dashboard')
     const startedAt = Date.now()
     try {
-      const body = inputMode === 'url'
-        ? {
-            url,
+      // Mode URL : on split le flow en 2 appels (scrape → generate) pour ne pas
+      // dépasser le maxDuration Vercel sur AliExpress (Bright Data ~50-65s).
+      // Si on appelait /api/generate avec body.url, il chaînait scrape+generate
+      // dans la même Lambda → timeout 90s parfois dépassé.
+      let body: Record<string, unknown>
+      if (inputMode === 'url') {
+        // Phase 1 — scrape isolé (jusqu'à 85s côté serveur)
+        const scrapeRes = await fetch('/api/scrape', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url }),
+        })
+        const scrapeJson = await scrapeRes.json()
+
+        if (!scrapeRes.ok) {
+          // Erreur scrape (401, 403, 500…) → bascule manuel avec message clair
+          setInputMode('manual')
+          setStep(1)
+          setMode('wizard')
+          setError(scrapeJson.error || 'Impossible de scraper cette URL — utilise la saisie manuelle.')
+          return
+        }
+
+        const scraped = scrapeJson.data as {
+          title?: string
+          description?: string
+          price?: string | null
+          original_price?: string | null
+          images?: string[]
+          rating?: number | null
+          reviews_count?: number | null
+        }
+
+        // Validation : sans titre OU sans image, DeepSeek va halluciner.
+        // On bascule l'user en saisie manuelle pré-remplie comme avant.
+        const titleOk  = !!scraped.title && scraped.title.trim().length >= 3
+        const imagesOk = Array.isArray(scraped.images) && scraped.images.length >= 1
+        if (!titleOk || !imagesOk) {
+          setInputMode('manual')
+          setManual(prev => ({
+            ...prev,
+            product_name: scraped.title || prev.product_name,
+            subtitle:     scraped.description?.slice(0, 200) || prev.subtitle,
+            price:        scraped.price || prev.price,
+          }))
+          if (Array.isArray(scraped.images) && scraped.images.length > 0) {
+            setUploadedPhotos(prev => [...scraped.images!, ...prev])
+          }
+          setStep(1)
+          setMode('wizard')
+          setError(scrapeJson.warning || `Scraping insuffisant — ${!titleOk ? 'le titre n\'a pas pu être extrait' : 'aucune image produit récupérée'}. Complète manuellement.`)
+          return
+        }
+
+        // Phase 2 — generate avec le product déjà scrapé.
+        // /api/generate accepte body.product (skip scrape côté serveur).
+        body = {
+          product: { ...scraped, tone: selectedTone },
+          style: selectedStyle,
+          ugcVideos: ugcVideos.length > 0 ? '[vidéos uploadées]' : ugcLinks.filter(l => l.trim()),
+          beforeAfter: beforePhotos.length > 0 && afterPhotos.length > 0,
+          language: resultLang,
+          tone: selectedTone,
+        }
+      } else {
+        body = {
+          product: {
+            ...manual,
+            benefits: [],
+            faq: [],
+            urgency: '',
+            images: uploadedPhotos,
             tone: selectedTone,
-            style: selectedStyle,
-            ugcVideos: ugcVideos.length > 0 ? '[vidéos uploadées]' : ugcLinks.filter(l => l.trim()),
-            beforeAfter: beforePhotos.length > 0 && afterPhotos.length > 0,
-            language: resultLang,
-          }
-        : {
-            product: {
-              ...manual,
-              benefits: [],
-              faq: [],
-              urgency: '',
-              images: uploadedPhotos,
-              tone: selectedTone,
-            },
-            ugcVideos: ugcVideos.length > 0 ? '[vidéos uploadées]' : ugcLinks.filter(l => l.trim()),
-            beforeAfter: beforePhotos.length > 0 && afterPhotos.length > 0,
-            language: resultLang,
-          }
+          },
+          ugcVideos: ugcVideos.length > 0 ? '[vidéos uploadées]' : ugcLinks.filter(l => l.trim()),
+          beforeAfter: beforePhotos.length > 0 && afterPhotos.length > 0,
+          language: resultLang,
+        }
+      }
 
       const res  = await fetch('/api/generate', {
         method: 'POST',

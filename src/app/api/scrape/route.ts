@@ -3,8 +3,8 @@ import { scrapeProduct, cleanProduct, ScrapeError } from '@/lib/scraper'
 import { createClient } from '@/lib/supabase/server'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
 
-// Vercel Pro permet jusqu'à 60s — on garde 55s pour les scrapes lourds
-export const maxDuration = 55
+// Vercel Pro + Fluid Compute = 90s — Bright Data AliExpress peut prendre 50-65s
+export const maxDuration = 90
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,11 +26,10 @@ export async function POST(req: NextRequest) {
 
     const start = Date.now()
 
-    // Timeout hard à 52s — laisse une marge au retry Firecrawl (2 × 25s)
-    // tout en restant sous le maxDuration 55s qui tuerait la fonction sans
-    // réponse propre.
+    // Timeout hard à 85s — laisse une marge à Bright Data (38s) + Firecrawl (22s)
+    // + ScrapingBee (35s) en cascade, tout en restant sous maxDuration 90s.
     const timeout = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error('Scraping timeout — le site met trop de temps à répondre')), 52000)
+      setTimeout(() => reject(new Error('Scraping timeout — le site met trop de temps à répondre')), 85000)
     )
 
     const raw = await Promise.race([scrapeProduct(url), timeout])

@@ -173,3 +173,56 @@ describe('renderUniqueMechanism — enrichissement image chantier B', () => {
     expect(renderUniqueMechanism(dataNoMechanism as typeof mockLandingDataFull, DEFAULT_THEME)).toBe('')
   })
 })
+
+describe('Feature flag KONVERT_GALLERY', () => {
+  const originalEnv = process.env.KONVERT_GALLERY
+
+  afterEach(() => {
+    process.env.KONVERT_GALLERY = originalEnv
+  })
+
+  it('KONVERT_GALLERY=false : renderHeroThumbs retourne ""', () => {
+    process.env.KONVERT_GALLERY = 'false'
+    expect(renderHeroThumbs(
+      ['1.jpg', '2.jpg', '3.jpg'],
+      DEFAULT_THEME,
+      'kvt-hero-img-test',
+    )).toBe('')
+  })
+
+  it('KONVERT_GALLERY=false : renderGallery retourne ""', () => {
+    process.env.KONVERT_GALLERY = 'false'
+    expect(renderGallery(mockLandingDataFull, DEFAULT_THEME)).toBe('')
+  })
+
+  it('KONVERT_GALLERY=false : renderUniqueMechanism ne contient pas l\'image', () => {
+    process.env.KONVERT_GALLERY = 'false'
+    const html = renderUniqueMechanism(mockLandingDataFull, DEFAULT_THEME)
+    expect(html).toContain('<section')
+    expect(html).not.toContain(`src="${mockLandingDataFull.images![4]}"`)
+  })
+
+  it('KONVERT_GALLERY=true : renderHeroThumbs rend normalement', () => {
+    process.env.KONVERT_GALLERY = 'true'
+    const html = renderHeroThumbs(
+      ['1.jpg', '2.jpg', '3.jpg'],
+      DEFAULT_THEME,
+      'kvt-hero-img-test',
+    )
+    expect(html).toContain('kvt-thumb')
+  })
+
+  it('KONVERT_GALLERY undefined (defaut) : tout rend normalement', () => {
+    delete process.env.KONVERT_GALLERY
+    const heroHtml = renderHeroThumbs(
+      ['1.jpg', '2.jpg', '3.jpg'],
+      DEFAULT_THEME,
+      'kvt-hero-img-test',
+    )
+    const galleryHtml = renderGallery(mockLandingDataFull, DEFAULT_THEME)
+    const mechanismHtml = renderUniqueMechanism(mockLandingDataFull, DEFAULT_THEME)
+    expect(heroHtml.length).toBeGreaterThan(50)
+    expect(galleryHtml.length).toBeGreaterThan(50)
+    expect(mechanismHtml).toContain(`src="${mockLandingDataFull.images![4]}"`)
+  })
+})

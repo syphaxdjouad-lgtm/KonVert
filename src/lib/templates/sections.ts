@@ -825,6 +825,53 @@ ${mq('fp', `.fp-wrap{padding:60px 20px!important;}`)}
 </section>`
 }
 
+// ─── renderGallery (chantier B) ─────────────────────────────────────────────
+// Section dédiée appelée par renderRichSections à la position 5 (après features).
+// Affichée uniquement si images.length >= 8 (grid 2x2 = 4 cases, après 4 du hero).
+// Feature flag KONVERT_GALLERY=false → return ''.
+
+const GALLERY_LABEL: Record<string, string> = {
+  fr: 'Voir le produit en détail',
+  en: 'See it in detail',
+  es: 'Ver el producto en detalle',
+  de: 'Im Detail ansehen',
+  it: 'Vedere in dettaglio',
+}
+
+export function renderGallery(
+  d: LandingPageData,
+  t: SectionTheme = DEFAULT_THEME,
+): string {
+  if (process.env.KONVERT_GALLERY === 'false') return ''
+  const images = (d.images ?? []).filter(Boolean)
+  if (images.length < 8) return ''
+
+  const galleryImages = images.slice(4, 8)
+  const label = GALLERY_LABEL[d.language ?? 'fr'] ?? GALLERY_LABEL.fr
+  const productName = d.product_name ?? 'Product'
+
+  return `
+<section class="kvt-gallery" style="padding:80px 24px;background:${t.bg};font-family:${t.fontFamily};">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p style="text-align:center;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:${t.textMuted};margin:0 0 32px 0;">${label}</p>
+    <div class="kvt-gallery-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      ${galleryImages.map((src, i) => `
+        <div style="aspect-ratio:1;overflow:hidden;border-radius:${t.radius};background:${t.bgAlt};">
+          <img src="${src}" alt="${productName} — vue ${i + 5}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+      `).join('')}
+    </div>
+  </div>
+  <style>
+    @media (max-width: 768px) {
+      .kvt-gallery { padding:60px 20px !important; }
+      .kvt-gallery-grid { grid-template-columns:1fr !important; }
+    }
+  </style>
+</section>
+`.trim()
+}
+
 // ─── renderHeroThumbs (chantier B) ──────────────────────────────────────────
 // Helper hero appelé directement par les 42 templates etec-*.ts dans leur
 // HTML hero, juste après leur <img> principal. Rend 2-4 thumbnails cliquables
@@ -891,7 +938,7 @@ const SECTION_RENDERERS: Record<SectionKey, SectionRenderer> = {
   story:                 renderStoryV2,
   target_audience:       renderTargetAudience,
   features:              renderFeatures,
-  gallery:               () => '', // placeholder remplacé en Task 4 par renderGallery
+  gallery:               renderGallery,
   unique_mechanism:      renderUniqueMechanism,
   how_it_works:          renderHowItWorks,
   before_after:          renderBeforeAfter,

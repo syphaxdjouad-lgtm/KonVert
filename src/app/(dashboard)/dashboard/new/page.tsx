@@ -19,6 +19,7 @@ import { track } from '@/lib/analytics'
 const _Palette = Palette
 
 const BuilderLoader = dynamic(() => import('@/components/builder/BuilderLoader'), { ssr: false })
+const EditorRoot    = dynamic(() => import('@/components/editor/EditorRoot'),     { ssr: false })
 
 type Mode = 'wizard' | 'generating' | 'editor'
 type InputMode = 'url' | 'manual'
@@ -816,7 +817,24 @@ function NewPageInner() {
           </div>
         </div>
         <div className="flex-1 overflow-hidden">
-          <BuilderLoader html={html} onSave={savePage} />
+          {process.env.NEXT_PUBLIC_KONVERT_NEW_EDITOR === 'true' ? (
+            <EditorRoot
+              jsonContent={
+                landingData
+                  ? { ...landingData, _template_slug: selectedStyle }
+                  : undefined
+              }
+              defaultTemplateId={selectedStyle}
+              onSave={async (savedHtml) => {
+                // savePage gere son propre assemblage du json_content.
+                // Le jsonForDb du nouvel editeur sera utilise en C2+.
+                await savePage(savedHtml)
+              }}
+              saving={saving}
+            />
+          ) : (
+            <BuilderLoader html={html} onSave={savePage} />
+          )}
         </div>
         {error && (
           <div className="fixed bottom-4 right-4 bg-red-50 border border-red-200 text-red-700 rounded-xl p-3 text-sm">

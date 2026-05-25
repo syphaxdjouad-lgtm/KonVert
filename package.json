@@ -13,7 +13,8 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
-    "refactor:rich-sections": "tsx scripts/refactor-templates-rich-sections.ts"
+    "refactor:rich-sections": "tsx scripts/refactor-templates-rich-sections.ts",
+    "refactor:hero-gallery": "tsx scripts/refactor-templates-hero-gallery.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",

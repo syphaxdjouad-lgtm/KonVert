@@ -2,6 +2,7 @@ import type { LandingPageData } from '@/types'
 
 import {
   renderRichSections,
+  renderHeroThumbs,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -372,7 +373,8 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
     <a href="javascript:void(0)" class="hero-cta">${ctaText}</a>
   </div>
   <div class="hero-right">
-    <img src="${img(0)}" alt="${productName}" class="hero-img">
+    <img id="kvt-hero-img-etec-pet" src="${img(0)}" alt="${productName}" class="hero-img">
+    ${renderHeroThumbs(data.images ?? [], PET_THEME, 'kvt-hero-img-etec-pet')}
     <div class="hero-chip">
       <div class="hero-chip-emoji">🐾</div>
       <div class="hero-chip-text">12,000+</div>

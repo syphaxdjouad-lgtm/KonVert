@@ -2,6 +2,7 @@ import type { LandingPageData } from '@/types'
 
 import {
   renderRichSections,
+  renderHeroThumbs,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -381,6 +382,7 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
   </div>
   <div class="hero-right">
     <img class="hero-img" src="${img(0)}" alt="${productName}" id="hero-main-img">
+    ${renderHeroThumbs(data.images ?? [], GADGET_THEME, 'hero-main-img')}
     <div class="hero-chip">
       <div class="hero-chip-price">$${price.replace(/[^0-9.]/g,'')}</div>
       <div class="hero-chip-orig">$${originalPrice.replace(/[^0-9.]/g,'')}</div>

@@ -2,6 +2,7 @@ import type { LandingPageData } from '@/types'
 
 import {
   renderRichSections,
+  renderHeroThumbs,
   type SectionTheme,
 } from './sections'
 // ─── FALLBACK IMAGES — menswear premium ───────────────────────────────────────
@@ -400,6 +401,7 @@ export function templateEtecShopz(data: LandingPageData): string {
     <div class="product-gallery">
       <div class="gallery-main">
         <img id="gallery-main-img" src="${img(0)}" alt="${productName}" loading="eager">
+        ${renderHeroThumbs(data.images ?? [], SHOPZ_THEME, 'gallery-main-img')}
       </div>
       <div class="gallery-thumbs">${thumbsHTML}</div>
     </div>

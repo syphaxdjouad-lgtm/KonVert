@@ -7,6 +7,7 @@
 // migration est transparente pour les appelants (route /api/generate, etc.).
 
 import type { ScrapedProduct, LandingPageData } from '@/types'
+import { cleanProductName, sanitizeTitleFallback } from './product-name'
 
 // ─── Sanitization ───────────────────────────────────────────────────────────
 
@@ -521,6 +522,15 @@ export async function generateLandingPage(
     })
   }
 
+  // Mini-call dédié au nettoyage + traduction du nom produit, lancé en
+  // parallèle de l'appel principal → zéro latence ajoutée (le mini-call
+  // est ~10x plus rapide que l'appel principal, donc résolu avant le main).
+  // Évite que le titre AliExpress brut ("HXAO hauts courts sans manche petit
+  // haut tank top femme bralette sport yoga fitness coton respirant") se
+  // retrouve tel quel comme product_name dans la landing rendue.
+  const cleanNamePromise = cleanProductName(product.title, language, apiKey)
+    .catch(() => ({ name: sanitizeTitleFallback(product.title), category: '' }))
+
   let res = await callDeepSeek()
   if (!res.ok && (res.status === 429 || res.status >= 500)) {
     // Backoff 800ms puis retry une seule fois
@@ -550,10 +560,16 @@ export async function generateLandingPage(
     throw new Error('JSON invalide reçu de DeepSeek — réessaie')
   }
 
-  // Forcer prix + nom depuis les données scrapées (le LLM peut dériver et
-  // inventer un autre type de produit que le titre réel — cf bug "blender →
-  // skincare"). On garde le nom scrapé qui reflète la vraie nature du produit.
-  if (product.title) data.product_name = product.title
+  // Forcer le nom produit depuis le mini-call dédié : version propre (sans
+  // stuffing AliExpress), traduite dans la langue cible, et ancrée sur le
+  // titre brut (garde-fou anti-dérive sémantique côté product-name.ts).
+  // Le clean name override la sortie du LLM principal qui peut dériver, et
+  // garantit qu'on ne ré-injecte pas non plus le titre brut tel quel.
+  const cleanResult = await cleanNamePromise
+  if (cleanResult.name) data.product_name = cleanResult.name
+
+  // Prix : on garde les valeurs scrapées (chiffres, pas de problème de langue
+  // ni de dérive). Le LLM peut occasionnellement les inventer.
   if (product.price) data.price = product.price
   if (product.original_price) data.original_price = product.original_price
 

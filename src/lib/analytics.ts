@@ -71,6 +71,24 @@ export const track = {
   generateFailed: (source: 'public' | 'dashboard', reason: string) =>
     posthog.capture('generate_failed', { source, reason: reason.slice(0, 200) }),
 
+  // Qualité du nettoyage de titre (mini-call DeepSeek). Permet de suivre :
+  // - Le taux de fallback (used_llm = false → mini-call a échoué)
+  // - La distribution des product_type détectés
+  // - L'usage par langue
+  // - Les catégories les plus fréquentes (utile pour prioriser nouveaux templates)
+  productNameCleaned: (props: {
+    language: string
+    product_type: string | null
+    category: string | null
+    used_llm: boolean
+  }) =>
+    posthog.capture('product_name_cleaned', {
+      language: props.language,
+      product_type: props.product_type,
+      category: props.category,
+      used_llm: props.used_llm,
+    }),
+
   // ── Retention ────────────────────────────────────────
   subscriptionCancelled: (reason?: string) =>
     posthog.capture('subscription_cancelled', { reason }),

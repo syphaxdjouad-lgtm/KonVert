@@ -76,6 +76,8 @@ function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     original_price: normalizePrice(d.original_price),
     images:         (d.images ?? []).filter(safeImageUrl),
     language:       lang,
+    category:       d.category ? escapeHtml(d.category) : undefined,
+    product_type:   d.product_type ? escapeHtml(d.product_type) : undefined,
   }
 
   if (d.story) {
@@ -529,7 +531,11 @@ export async function generateLandingPage(
   // haut tank top femme bralette sport yoga fitness coton respirant") se
   // retrouve tel quel comme product_name dans la landing rendue.
   const cleanNamePromise = cleanProductName(product.title, language, apiKey)
-    .catch(() => ({ name: sanitizeTitleFallback(product.title), category: '' }))
+    .catch(() => ({
+      name: sanitizeTitleFallback(product.title),
+      category: '',
+      product_type: null as null,
+    }))
 
   let res = await callDeepSeek()
   if (!res.ok && (res.status === 429 || res.status >= 500)) {
@@ -567,6 +573,8 @@ export async function generateLandingPage(
   // garantit qu'on ne ré-injecte pas non plus le titre brut tel quel.
   const cleanResult = await cleanNamePromise
   if (cleanResult.name) data.product_name = cleanResult.name
+  if (cleanResult.category) data.category = cleanResult.category
+  if (cleanResult.product_type) data.product_type = cleanResult.product_type
 
   // Prix : on garde les valeurs scrapées (chiffres, pas de problème de langue
   // ni de dérive). Le LLM peut occasionnellement les inventer.

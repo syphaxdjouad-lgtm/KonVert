@@ -1,3 +1,5 @@
+import type { ProductType } from '@/lib/templates'
+
 // Nettoyage et traduction du nom produit avant génération de la landing.
 //
 // Les titres scrapés (surtout AliExpress) sont du SEO stuffing dégueulasse :
@@ -47,11 +49,17 @@ const STUFFING_PATTERNS = [
 export interface CleanedProductName {
   name: string
   category: string
+  product_type: ProductType | null
 }
+
+const VALID_PRODUCT_TYPES: ProductType[] = [
+  'skincare', 'beauty', 'wellness', 'tech', 'jewelry',
+  'home', 'fashion', 'pet', 'luxury', 'universal',
+]
 
 // Fallback déterministe — appelé uniquement si le mini-call LLM échoue.
 // Garde l'intégrité du produit (on ne devine pas, on nettoie juste).
-export function sanitizeTitleFallback(rawTitle: string): string {
+export function sanitizeTitleFallback(rawTitle: string | null | undefined): string {
   if (!rawTitle || typeof rawTitle !== 'string') return 'Produit'
 
   let s = rawTitle.trim()
@@ -97,7 +105,7 @@ export async function cleanProductName(
   apiKey: string
 ): Promise<CleanedProductName> {
   if (!rawTitle || rawTitle.trim().length < 3) {
-    return { name: sanitizeTitleFallback(rawTitle), category: '' }
+    return { name: sanitizeTitleFallback(rawTitle), category: '', product_type: null }
   }
 
   const langName = LANGUAGE_NAMES[language] || 'français'
@@ -114,13 +122,24 @@ Tu reçois un titre brut souvent pollué par :
 Tu produis :
 1. "name" : un NOM COMMERCIAL court, 3 à 7 mots maximum, qui décrit clairement la NATURE RÉELLE du produit. Tu peux garder le code marque si court (≤4 lettres) et placé en suffixe. Pas de keyword stuffing, pas de listes, pas de tirets/pipes/séparateurs.
 2. "category" : 1 à 3 mots décrivant la CATÉGORIE produit générique (ex: "Lingerie", "Soin visage", "Cuisine", "Outils jardin", "Bijoux", "Mode femme", "Tech audio").
+3. "product_type" : tu choisis EXACTEMENT UNE valeur dans cette liste fermée — c'est le type de template recommandé :
+   - "skincare" : sérums, crèmes visage, soins peau, anti-âge, masques
+   - "beauty" : maquillage, rouge à lèvres, parfum, soin cheveux
+   - "wellness" : compléments alimentaires, vitamines, protéines, sport/fitness
+   - "tech" : électronique, gadgets, audio, smartphones, accessoires high-tech
+   - "jewelry" : bijoux, colliers, bracelets, bagues, montres bijou
+   - "home" : meubles, déco, cuisine, ustensiles, linge de maison
+   - "fashion" : vêtements, chaussures, sacs, lingerie, accessoires mode
+   - "pet" : produits pour animaux de compagnie
+   - "luxury" : produits luxe haut de gamme (uniquement si nature luxe explicite)
+   - "universal" : si vraiment hors de ces catégories ou indéterminé
 
 RÈGLE ABSOLUE : tu ne CHANGES PAS la nature du produit. Si l'input parle d'un soutien-gorge, l'output décrit un soutien-gorge — pas un t-shirt, pas un parfum. Si tu doutes de ce qu'est l'objet, garde les mots-clés les plus spécifiques du titre original.
 
-IMPORTANT : "name" et "category" doivent être rédigés en ${langName}. Si le titre brut est dans une autre langue, tu traduis vers ${langName}.
+IMPORTANT : "name" et "category" doivent être rédigés en ${langName}. Si le titre brut est dans une autre langue, tu traduis vers ${langName}. "product_type" est TOUJOURS en anglais (c'est un enum technique).
 
 Tu réponds UNIQUEMENT avec ce JSON (sans markdown, sans commentaire) :
-{ "name": "string", "category": "string" }`
+{ "name": "string", "category": "string", "product_type": "string" }`
 
   const userPrompt = `Titre brut à nettoyer :
 """
@@ -153,7 +172,7 @@ Reformule en nom commercial propre + catégorie générique.`
     })
 
     if (!res.ok) {
-      return { name: sanitizeTitleFallback(rawTitle), category: '' }
+      return { name: sanitizeTitleFallback(rawTitle), category: '', product_type: null }
     }
 
     const json = await res.json() as { choices?: { message?: { content?: string } }[] }
@@ -164,22 +183,36 @@ Reformule en nom commercial propre + catégorie générique.`
       .replace(/```\s*$/i, '')
       .trim()
 
-    const parsed = JSON.parse(cleaned) as { name?: unknown; category?: unknown }
+    const parsed = JSON.parse(cleaned) as {
+      name?: unknown
+      category?: unknown
+      product_type?: unknown
+    }
     const name = typeof parsed.name === 'string' ? parsed.name.trim() : ''
     const category = typeof parsed.category === 'string' ? parsed.category.trim() : ''
+
+    // product_type doit appartenir à l'enum fermé ProductType. Si le LLM
+    // sort autre chose ("clothing", "vetement", "FASHION"), on tente une
+    // normalisation puis fallback null si vraiment inconnu (= pas de warning).
+    const rawType = typeof parsed.product_type === 'string'
+      ? parsed.product_type.trim().toLowerCase()
+      : ''
+    const product_type: ProductType | null = VALID_PRODUCT_TYPES.includes(rawType as ProductType)
+      ? (rawType as ProductType)
+      : null
 
     // Garde-fou anti-dérive : si le LLM a sorti un nom complètement déconnecté
     // du titre (aucun mot-clé en commun ≥ 4 chars), on préfère le fallback.
     if (!name || name.length < 2 || !hasMinimalOverlap(rawTitle, name)) {
-      return { name: sanitizeTitleFallback(rawTitle), category }
+      return { name: sanitizeTitleFallback(rawTitle), category, product_type }
     }
 
     // Coupe défensive — le LLM peut occasionnellement dépasser
     const safeName = name.length > 80 ? name.slice(0, 80).trim() : name
 
-    return { name: safeName, category }
+    return { name: safeName, category, product_type }
   } catch {
-    return { name: sanitizeTitleFallback(rawTitle), category: '' }
+    return { name: sanitizeTitleFallback(rawTitle), category: '', product_type: null }
   }
 }
 

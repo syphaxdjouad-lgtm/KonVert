@@ -98,6 +98,16 @@ export interface LandingPageData {
   // Sans ça, une page EN/ES/AR garde lang="fr" → mauvais signal SEO + a11y.
   language?: string
 
+  // Catégorie produit générique en langue cible (ex: "Lingerie", "Soin visage").
+  // Produite par le mini-call de cleaning du titre — sert au label friendly
+  // dans le warning template incompatible côté UI.
+  category?: string
+
+  // Type de template recommandé (enum strict ProductType). Produit par le
+  // mini-call (meilleur classifier que keyword matching). Le wizard l'utilise
+  // en priorité ; fallback détecteur keywords si null.
+  product_type?: string
+
   // ─── Sections enrichies (DTC 2026) — toutes optionnelles côté types pour
   // ne pas casser les templates existants. Le LLM est instruit de TOUTES les
   // remplir à chaque génération.

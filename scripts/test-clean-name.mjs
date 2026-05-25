@@ -58,7 +58,7 @@ for (const c of cases) {
     const ms = Date.now() - start
     console.log(`[${c.label}] ${ms}ms`)
     console.log(`  IN  : ${c.raw}`)
-    console.log(`  OUT : name="${result.name}" | category="${result.category}"`)
+    console.log(`  OUT : name="${result.name}" | category="${result.category}" | product_type=${result.product_type}`)
     console.log()
   } catch (err) {
     console.error(`[${c.label}] ERREUR :`, err.message)

@@ -556,11 +556,29 @@ function NewPageInner() {
       // Mismatch produit ↔ template : si le template sélectionné est "themed"
       // (skincare, jewelry, tech…) et qu'on détecte un type différent dans le
       // produit, on warn. Empêche de générer un blender sur velvety.
+      //
+      // Priorité 1 : data.product_type vient du mini-call DeepSeek (classifier
+      // sémantique multilingue, bien meilleur que keywords).
+      // Priorité 2 : fallback detectProductType keyword-based (compat anciennes
+      // pages générées sans le mini-call, ou en cas d'échec du mini-call).
       const tplMeta = TEMPLATES.find(t => t.id === selectedStyle)
-      const detected = detectProductType({
+      const llmType = (data.product_type && data.product_type !== 'universal')
+        ? (data.product_type as ProductType)
+        : null
+      const detected = llmType ?? detectProductType({
         title: data.product_name,
         description: `${data.headline || ''} ${data.subtitle || ''} ${(data.benefits || []).join(' ')}`,
       })
+
+      // PostHog : on track la qualité du cleaning pour suivre les drift en prod
+      // (ex: trop de fallback, mauvaises classifications, latence anormale).
+      track.productNameCleaned({
+        language: data.language || 'fr',
+        product_type: data.product_type || null,
+        category: data.category || null,
+        used_llm: !!data.product_type,
+      })
+
       const mismatch = !!(tplMeta?.themed && detected && detected !== tplMeta.productType)
 
       // Mode dégradé : le scrape a marché mais incomplètement. On laisse
@@ -568,7 +586,11 @@ function NewPageInner() {
       // l'éditeur pour que l'user vérifie/complète avant de publier.
       if (mismatch && tplMeta) {
         const tplLabel = PRODUCT_TYPE_LABELS[tplMeta.productType]
-        const detectedLabel = PRODUCT_TYPE_LABELS[detected as ProductType]
+        // On préfère le label friendly du LLM (data.category) s'il existe —
+        // ex: "Lingerie" est plus précis que "Mode · Vêtements" pour une bralette.
+        const detectedLabel = data.category && llmType
+          ? data.category
+          : PRODUCT_TYPE_LABELS[detected as ProductType]
         setPartialWarning(
           `Template incompatible : "${tplMeta.name}" est conçu pour ${tplLabel}, ton produit ressemble plutôt à ${detectedLabel}. Le rendu peut afficher du contenu hors-sujet — change de template (Blue, Solo, Starter, Hue, Ella sont universels).`
         )

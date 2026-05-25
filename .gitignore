@@ -62,3 +62,6 @@ supabase/.temp/
 
 # screenshots temporaires dev
 /.tmp-screenshots/
+
+# Brainstorming visual companion (mockups persistants)
+.superpowers/

@@ -28,6 +28,10 @@ export const mockLandingDataFull: LandingPageData = {
     'https://cdn.shopify.com/serum-2.jpg',
     'https://cdn.shopify.com/serum-3.jpg',
     'https://cdn.shopify.com/serum-4.jpg',
+    'https://cdn.shopify.com/serum-5.jpg',
+    'https://cdn.shopify.com/serum-6.jpg',
+    'https://cdn.shopify.com/serum-7.jpg',
+    'https://cdn.shopify.com/serum-8.jpg',
   ],
   language: 'fr',
 

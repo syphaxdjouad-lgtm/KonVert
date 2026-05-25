@@ -6,8 +6,8 @@ import { mockLandingDataPartial } from '../__fixtures__/mock-landing-data-partia
 import type { LandingPageData } from '@/types'
 
 describe('DEFAULT_ORDER', () => {
-  it('contient exactement 19 sections', () => {
-    expect(DEFAULT_ORDER).toHaveLength(19)
+  it('contient exactement 20 sections', () => {
+    expect(DEFAULT_ORDER).toHaveLength(20)
   })
 
   it('contient toutes les SectionKey attendues dans le bon ordre', () => {
@@ -16,6 +16,7 @@ describe('DEFAULT_ORDER', () => {
       'story',
       'target_audience',
       'features',
+      'gallery',
       'unique_mechanism',
       'how_it_works',
       'before_after',

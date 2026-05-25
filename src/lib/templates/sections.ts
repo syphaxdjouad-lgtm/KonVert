@@ -18,6 +18,7 @@ export type SectionKey =
   | 'story'
   | 'target_audience'
   | 'features'
+  | 'gallery'
   | 'unique_mechanism'
   | 'how_it_works'
   | 'before_after'
@@ -39,6 +40,7 @@ export const DEFAULT_ORDER: SectionKey[] = [
   'story',
   'target_audience',
   'features',
+  'gallery',
   'unique_mechanism',
   'how_it_works',
   'before_after',
@@ -834,6 +836,7 @@ const SECTION_RENDERERS: Record<SectionKey, SectionRenderer> = {
   story:                 renderStoryV2,
   target_audience:       renderTargetAudience,
   features:              renderFeatures,
+  gallery:               () => '', // placeholder remplacé en Task 4 par renderGallery
   unique_mechanism:      renderUniqueMechanism,
   how_it_works:          renderHowItWorks,
   before_after:          renderBeforeAfter,

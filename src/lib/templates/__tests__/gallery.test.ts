@@ -6,7 +6,6 @@ import {
   DEFAULT_THEME,
 } from '../sections'
 import { mockLandingDataFull } from '../__fixtures__/mock-landing-data-full'
-import { mockLandingDataPartial } from '../__fixtures__/mock-landing-data-partial'
 
 describe('renderHeroThumbs', () => {
   it('retourne "" si 0 image', () => {
@@ -82,7 +81,8 @@ describe('renderGallery', () => {
   })
 
   it('retourne "" si images undefined', () => {
-    const { images: _, ...dataNoImages } = mockLandingDataFull
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { images: _images, ...dataNoImages } = mockLandingDataFull
     expect(renderGallery(dataNoImages as typeof mockLandingDataFull, DEFAULT_THEME)).toBe('')
   })
 
@@ -136,7 +136,8 @@ describe('renderGallery', () => {
 
 describe('renderUniqueMechanism — enrichissement image chantier B', () => {
   it('regression : sans images, comportement chantier A (panneau preuve texte si proof)', () => {
-    const { images: _, ...dataNoImages } = mockLandingDataFull
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { images: _images, ...dataNoImages } = mockLandingDataFull
     const html = renderUniqueMechanism(dataNoImages as typeof mockLandingDataFull, DEFAULT_THEME)
     expect(html).toContain('<section')
     expect(html).not.toMatch(/<img[^>]*src=/)
@@ -169,7 +170,8 @@ describe('renderUniqueMechanism — enrichissement image chantier B', () => {
   })
 
   it('si data.unique_mechanism absent, retourne "" meme avec images', () => {
-    const { unique_mechanism: _, ...dataNoMechanism } = mockLandingDataFull
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { unique_mechanism: _um, ...dataNoMechanism } = mockLandingDataFull
     expect(renderUniqueMechanism(dataNoMechanism as typeof mockLandingDataFull, DEFAULT_THEME)).toBe('')
   })
 })

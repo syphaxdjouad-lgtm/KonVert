@@ -4,7 +4,102 @@ import {
   renderRichSections,
   type SectionTheme,
 } from './sections'
-// ─── FALLBACK IMAGES — fashion/personal styling ───────────────────────────────
+
+// ─── I18N LABELS ─────────────────────────────────────────────────────────────
+// Tous les textes structurels (nav, footer, labels boutons) traduits.
+// Utiliser t('key') pour récupérer la valeur selon data.language.
+
+const T: Record<string, Record<string, string>> = {
+  // Nav
+  nav_menu:         { fr: 'Menu',        en: 'Menu',       ar: 'القائمة',   es: 'Menú'       },
+  nav_home:         { fr: 'Accueil',     en: 'Home',       ar: 'الرئيسية',  es: 'Inicio'     },
+  nav_gallery:      { fr: 'Galerie',     en: 'Gallery',    ar: 'المعرض',    es: 'Galería'    },
+  nav_features:     { fr: 'Fonctions',   en: 'Features',   ar: 'المميزات',  es: 'Funciones'  },
+  nav_reviews:      { fr: 'Avis',        en: 'Reviews',    ar: 'آراء',      es: 'Reseñas'    },
+  nav_about:        { fr: 'À propos',    en: 'About',      ar: 'من نحن',    es: 'Nosotros'   },
+  nav_cta:          { fr: 'Nous contacter', en: 'Get in touch', ar: 'تواصل معنا', es: 'Contacto' },
+
+  // Hero left
+  hero_eyebrow:     { fr: 'Découvrez', en: 'Discover', ar: 'اكتشف', es: 'Descubre' },
+  hero_discover_with: { fr: 'avec', en: 'with', ar: 'مع', es: 'con' },
+  hero_book:        { fr: 'En savoir plus', en: 'Learn more', ar: 'اعرف أكثر', es: 'Saber más' },
+  hero_experts:     { fr: 'Nos experts', en: 'Our experts', ar: 'خبراؤنا', es: 'Nuestros expertos' },
+  hero_corner:      { fr: 'Commandez dès aujourd\'hui et profitez de votre produit.', en: 'Order today and enjoy your product.', ar: 'اطلب اليوم واستمتع بمنتجك.', es: 'Pide hoy y disfruta tu producto.' },
+
+  // Hero right
+  hero_members:     { fr: 'clients', en: 'customers', ar: 'عميل', es: 'clientes' },
+  services_title:   { fr: 'Ce que vous obtenez', en: 'What you get', ar: 'ما ستحصل عليه', es: 'Qué obtienes' },
+  services_tagline: { fr: 'Tout ce dont vous avez besoin, réuni en un seul produit.', en: 'Everything you need, in one product.', ar: 'كل ما تحتاجه في منتج واحد.', es: 'Todo lo que necesitas, en un producto.' },
+
+  // Services fallbacks (si data.benefits vide)
+  benefit_0:        { fr: 'Support continu', en: 'Ongoing support', ar: 'دعم مستمر', es: 'Soporte continuo' },
+  benefit_1:        { fr: 'Conseil expert',  en: 'Expert advice',   ar: 'نصيحة خبير', es: 'Consejo experto' },
+  benefit_2:        { fr: 'Assistance achat', en: 'Shopping assistance', ar: 'مساعدة في الشراء', es: 'Asistencia de compra' },
+  benefit_3:        { fr: 'Consultation personnalisée', en: 'Personalised consultation', ar: 'استشارة شخصية', es: 'Consulta personalizada' },
+  benefit_4:        { fr: 'Qualité premium', en: 'Premium quality', ar: 'جودة ممتازة', es: 'Calidad premium' },
+  benefit_5:        { fr: 'Résultats garantis', en: 'Guaranteed results', ar: 'نتائج مضمونة', es: 'Resultados garantizados' },
+
+  // Price badge
+  price_from:       { fr: 'à partir de', en: 'from', ar: 'من', es: 'desde' },
+  price_unit:       { fr: '/ unité', en: '/ unit', ar: '/ وحدة', es: '/ unidad' },
+
+  // Styles section
+  styles_eyebrow:   { fr: 'Explorer', en: 'Explore', ar: 'استكشف', es: 'Explorar' },
+  styles_title:     { fr: 'Nos produits', en: 'Our products', ar: 'منتجاتنا', es: 'Nuestros productos' },
+  styles_subtitle:  { fr: 'Une sélection pensée pour vous — qualité, praticité, style.', en: 'A selection designed for you — quality, practicality, style.', ar: 'تشكيلة مصممة لك — جودة وعملية وأناقة.', es: 'Una selección diseñada para ti — calidad, practicidad, estilo.' },
+  collage_badge:    { fr: 'Populaire', en: 'Popular', ar: 'الأكثر طلبًا', es: 'Popular' },
+  collage_card_title: { fr: 'Tendances produit', en: 'Product trends', ar: 'اتجاهات المنتج', es: 'Tendencias del producto' },
+  collage_overlay:  { fr: 'Voir les détails', en: 'View details', ar: 'عرض التفاصيل', es: 'Ver detalles' },
+
+  // Category labels (style-grid) — génériques, adaptables à tout produit
+  cat_0:            { fr: 'Qualité',    en: 'Quality',    ar: 'جودة',     es: 'Calidad'    },
+  cat_1:            { fr: 'Design',     en: 'Design',     ar: 'تصميم',    es: 'Diseño'     },
+  cat_2:            { fr: 'Confort',    en: 'Comfort',    ar: 'راحة',     es: 'Confort'    },
+  cat_3:            { fr: 'Durabilité', en: 'Durability', ar: 'متانة',    es: 'Durabilidad' },
+  cat_4:            { fr: 'Praticité',  en: 'Practical',  ar: 'عملية',    es: 'Practicidad' },
+  cat_5:            { fr: 'Tendance',   en: 'Trending',   ar: 'رائج',     es: 'Tendencia'  },
+  cat_6:            { fr: 'Premium',    en: 'Premium',    ar: 'فاخر',     es: 'Premium'    },
+  cat_7:            { fr: 'Populaire',  en: 'Popular',    ar: 'شائع',     es: 'Popular'    },
+  cat_8:            { fr: 'Exclusif',   en: 'Exclusive',  ar: 'حصري',     es: 'Exclusivo'  },
+  cat_9:            { fr: 'Bestseller', en: 'Bestseller', ar: 'الأكثر مبيعاً', es: 'Más vendido' },
+
+  // Quote section
+  quote_eyebrow:    { fr: 'Ce qu\'ils disent', en: 'What they say', ar: 'ما يقولونه', es: 'Lo que dicen' },
+  quote_fallback:   { fr: 'Ce produit a transformé mon quotidien. Je ne peux plus m\'en passer.', en: 'This product transformed my daily routine. I can\'t live without it.', ar: 'غيّر هذا المنتج حياتي اليومية. لا أستطيع العيش بدونه.', es: 'Este producto transformó mi rutina diaria. No puedo vivir sin él.' },
+
+  // Footer
+  footer_desc_fallback: { fr: 'Qualité et satisfaction, livrées chez vous.', en: 'Quality and satisfaction, delivered to you.', ar: 'الجودة والرضا، تُوصَل إليك.', es: 'Calidad y satisfacción, entregadas a ti.' },
+  footer_explore:   { fr: 'Explorer', en: 'Explore', ar: 'استكشف', es: 'Explorar' },
+  footer_products:  { fr: 'Produits', en: 'Products', ar: 'المنتجات', es: 'Productos' },
+  footer_reviews:   { fr: 'Avis clients', en: 'Reviews', ar: 'آراء العملاء', es: 'Reseñas' },
+  footer_faq:       { fr: 'FAQ', en: 'FAQ', ar: 'الأسئلة الشائعة', es: 'FAQ' },
+  footer_services:  { fr: 'Services', en: 'Services', ar: 'الخدمات', es: 'Servicios' },
+  footer_delivery:  { fr: 'Livraison', en: 'Delivery', ar: 'التوصيل', es: 'Entrega' },
+  footer_returns:   { fr: 'Retours', en: 'Returns', ar: 'الإرجاع', es: 'Devoluciones' },
+  footer_support:   { fr: 'Support client', en: 'Customer support', ar: 'دعم العملاء', es: 'Soporte al cliente' },
+  footer_guarantee: { fr: 'Garantie', en: 'Guarantee', ar: 'الضمان', es: 'Garantía' },
+  footer_contact:   { fr: 'Contact', en: 'Contact', ar: 'تواصل', es: 'Contacto' },
+  footer_order:     { fr: 'Commander', en: 'Order now', ar: 'اطلب الآن', es: 'Pedir ahora' },
+  footer_instagram: { fr: 'Instagram', en: 'Instagram', ar: 'إنستغرام', es: 'Instagram' },
+  footer_copyright: { fr: 'Tous droits réservés.', en: 'All rights reserved.', ar: 'جميع الحقوق محفوظة.', es: 'Todos los derechos reservados.' },
+  footer_privacy:   { fr: 'Politique de confidentialité', en: 'Privacy Policy', ar: 'سياسة الخصوصية', es: 'Política de privacidad' },
+  footer_terms:     { fr: 'Conditions d\'utilisation', en: 'Terms of Use', ar: 'شروط الاستخدام', es: 'Términos de uso' },
+  footer_cookies:   { fr: 'Cookies', en: 'Cookie Settings', ar: 'إعدادات الكوكيز', es: 'Ajustes de cookies' },
+
+  // Aria labels
+  aria_nav:         { fr: 'Navigation principale', en: 'Main navigation', ar: 'التنقل الرئيسي', es: 'Navegación principal' },
+  aria_hero:        { fr: 'Section principale', en: 'Main section', ar: 'القسم الرئيسي', es: 'Sección principal' },
+  aria_experts:     { fr: 'Notre équipe', en: 'Our team', ar: 'فريقنا', es: 'Nuestro equipo' },
+  aria_styles:      { fr: 'Nos catégories', en: 'Our categories', ar: 'فئاتنا', es: 'Nuestras categorías' },
+  aria_quote_nav:   { fr: 'Navigation avis', en: 'Reviews navigation', ar: 'التنقل بين الآراء', es: 'Navegación de reseñas' },
+  aria_prev:        { fr: 'Avis précédent', en: 'Previous review', ar: 'الرأي السابق', es: 'Reseña anterior' },
+  aria_next:        { fr: 'Avis suivant', en: 'Next review', ar: 'الرأي التالي', es: 'Siguiente reseña' },
+  aria_footer:      { fr: 'Pied de page', en: 'Footer', ar: 'تذييل الصفحة', es: 'Pie de página' },
+}
+
+// ─── FALLBACK IMAGES — neutres, produit générique ────────────────────────────
+// Conservées pour le cas où data.images est vide — images Unsplash lifestyle
+// qui fonctionnent pour tout type de produit (pas fashion-spécifique)
 
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80',
@@ -13,21 +108,6 @@ const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=800&q=80',
   'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800&q=80',
   'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80',
-]
-
-// ─── STYLE GRID AVATARS ───────────────────────────────────────────────────────
-
-const STYLE_AVATARS = [
-  { label: 'Fairy',       url: 'https://images.unsplash.com/photo-1617922001439-4a2e6562f328?w=120&q=80' },
-  { label: 'Retro',       url: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=120&q=80' },
-  { label: 'Reworked',    url: 'https://images.unsplash.com/photo-1519340241574-2cec6aef0c01?w=120&q=80' },
-  { label: 'Handmade',    url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80' },
-  { label: 'Indie',       url: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=120&q=80' },
-  { label: 'Techwear',   url: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=120&q=80' },
-  { label: 'Glam',        url: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=120&q=80' },
-  { label: 'Casual',      url: 'https://images.unsplash.com/photo-1488161628813-04466f872be2?w=120&q=80' },
-  { label: 'Elegant',     url: 'https://images.unsplash.com/photo-1512361436605-a484bdb34b5f?w=120&q=80' },
-  { label: 'Streetwear',  url: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=120&q=80' },
 ]
 
 // ─── COLOR TOKENS ─────────────────────────────────────────────────────────────
@@ -59,7 +139,7 @@ const ICON_SHOPPING   = `<svg width="22" height="22" viewBox="0 0 24 24" fill="n
 const ICON_CHAT       = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`
 const ICON_WARDROBE   = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="7" y1="9" x2="7" y2="9.01"/><line x1="17" y1="9" x2="17" y2="9.01"/></svg>`
 
-// ─── MAIN TEMPLATE FUNCTION ───────────────────────────────────────────────────
+// ─── STYLE THEME ──────────────────────────────────────────────────────────────
 
 const STYLE_THEME: SectionTheme = {
   primary:    '#c9b49a',
@@ -73,57 +153,126 @@ const STYLE_THEME: SectionTheme = {
   radius:     '16px',
 }
 
+// ─── MAIN TEMPLATE FUNCTION ───────────────────────────────────────────────────
+
 export function templateEtecStyle(data: LandingPageData): string {
+  const lang = data.language ?? 'fr'
+
+  // Résolution i18n : fallback fr si la langue n'a pas de traduction
+  const t = (key: string): string => T[key]?.[lang] ?? T[key]?.['fr'] ?? key
+
   const img = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
 
-  const brandName = data.product_name || 'Style Studio'
-  const ctaText   = data.cta         || 'Start journey'
+  const brandName = data.product_name || 'Studio'
+  const ctaText   = data.cta         || t('nav_cta')
   const price     = data.price       || null
 
+  // ── Social proof : nombre de clients depuis social_proof.customers ────────
+  const membersCount = data.social_proof?.customers ?? null
+
+  // ── Services : utilise data.benefits, fallbacks i18n génériques ───────────
   const rawBenefits = data.benefits?.slice(0, 6) || []
   const services = [
-    { icon: ICON_INFINITY,  label: rawBenefits[0] || 'Ongoing support'           },
-    { icon: ICON_USER,      label: rawBenefits[1] || 'Expert advice'              },
-    { icon: ICON_SHOPPING,  label: rawBenefits[2] || 'Shopping assistance'        },
-    { icon: ICON_CHAT,      label: rawBenefits[3] || 'Personalised consultation'  },
-    { icon: ICON_WARDROBE,  label: rawBenefits[4] || 'Wardrobe revitalization'    },
-    { icon: ICON_ARROW_NE,  label: rawBenefits[5] || 'Style transformation'       },
+    { icon: ICON_INFINITY,  label: rawBenefits[0] || t('benefit_0') },
+    { icon: ICON_USER,      label: rawBenefits[1] || t('benefit_1') },
+    { icon: ICON_SHOPPING,  label: rawBenefits[2] || t('benefit_2') },
+    { icon: ICON_CHAT,      label: rawBenefits[3] || t('benefit_3') },
+    { icon: ICON_WARDROBE,  label: rawBenefits[4] || t('benefit_4') },
+    { icon: ICON_ARROW_NE,  label: rawBenefits[5] || t('benefit_5') },
   ]
 
-  const testimonials = data.faq || []
-  const quote = testimonials[0]?.answer
-    || data.subtitle
-    || 'We believe that style is not just about clothing — it is about how you present yourself to the world.'
+  // ── Hero right headline : data.headline en priorité absolue ───────────────
+  // Fallback : unique_mechanism.name → story.solution → subtitle → i18n générique
+  const heroHeadline =
+    data.headline ||
+    data.unique_mechanism?.name ||
+    data.story?.solution ||
+    data.subtitle ||
+    t('styles_title')
 
-  // ── Style grid HTML ──────────────────────────────────────────────────────────
-  const styleGridHTML = STYLE_AVATARS.map(s => `
+  // ── Hero right desc : unique_mechanism.description → story.transformation → subtitle
+  const heroDesc =
+    data.unique_mechanism?.description ||
+    data.story?.transformation ||
+    data.subtitle ||
+    ''
+
+  // ── Press mentions : data.press_mentions en priorité ─────────────────────
+  const pressMentions = data.press_mentions?.slice(0, 4) ?? []
+
+  // ── Testimonials / quotes ─────────────────────────────────────────────────
+  // Priorité : data.testimonials → data.faq[0].answer → t('quote_fallback')
+  const allQuotes: string[] = []
+  if (data.testimonials && data.testimonials.length > 0) {
+    data.testimonials.slice(0, 3).forEach(t_ => allQuotes.push(t_.text))
+  } else if (data.faq && data.faq.length > 0) {
+    data.faq.slice(0, 3).forEach(f => allQuotes.push(f.answer))
+  }
+  if (allQuotes.length === 0) allQuotes.push(t('quote_fallback'))
+  const firstQuote = allQuotes[0]!
+
+  // ── Style grid HTML — labels i18n génériques ─────────────────────────────
+  // Les avatars Unsplash restent (visuels neutres). Les labels deviennent
+  // data.features[i].title si dispo, sinon i18n générique (Qualité, Design…).
+  const STYLE_AVATAR_URLS = [
+    'https://images.unsplash.com/photo-1617922001439-4a2e6562f328?w=120&q=80',
+    'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=120&q=80',
+    'https://images.unsplash.com/photo-1519340241574-2cec6aef0c01?w=120&q=80',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&q=80',
+    'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=120&q=80',
+    'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=120&q=80',
+    'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=120&q=80',
+    'https://images.unsplash.com/photo-1488161628813-04466f872be2?w=120&q=80',
+    'https://images.unsplash.com/photo-1512361436605-a484bdb34b5f?w=120&q=80',
+    'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=120&q=80',
+  ]
+  const styleGridHTML = STYLE_AVATAR_URLS.map((url, i) => {
+    const label = data.features?.[i]?.title || t(`cat_${i}`)
+    return `
         <div class="style-item">
-          <div class="style-avatar" style="background-image:url('${s.url}')"></div>
-          <span class="style-label">${s.label}</span>
-        </div>`).join('')
+          <div class="style-avatar" style="background-image:url('${url}')"></div>
+          <span class="style-label">${label}</span>
+        </div>`
+  }).join('')
 
-  // ── Services grid HTML ───────────────────────────────────────────────────────
+  // ── Services grid HTML ───────────────────────────────────────────────────
   const servicesHTML = services.map(s => `
               <div class="service-item">
                 <div class="service-icon">${s.icon}</div>
                 <span class="service-label">${s.label}</span>
               </div>`).join('')
 
-  // ── Price badge ──────────────────────────────────────────────────────────────
+  // ── Press mentions HTML (remplace PACO/BOSS/WM/CK) ───────────────────────
+  // Affiché seulement si des mentions existent dans la data.
+  const pressHTML = pressMentions.length > 0
+    ? `<div class="brand-logos" aria-label="Mentions presse">
+          ${pressMentions.map(m => `<span class="brand-logo-item">${m}</span>`).join('\n          ')}
+        </div>`
+    : ''
+
+  // ── Price badge ──────────────────────────────────────────────────────────
   const priceBadge = price ? `
       <div class="price-pill">
-        <span class="price-from">from</span>
-        <span class="price-amount">${price}€</span>
-        <span class="price-unit">/ session</span>
+        <span class="price-from">${t('price_from')}</span>
+        <span class="price-amount">${price}</span>
+        <span class="price-unit">${t('price_unit')}</span>
       </div>` : ''
 
+  // ── Members count HTML ───────────────────────────────────────────────────
+  const membersHTML = membersCount
+    ? `<div class="members-count"><strong>${membersCount}</strong> ${t('hero_members')}</div>`
+    : ''
+
+  // ── Footer brand desc ────────────────────────────────────────────────────
+  const footerDesc = data.subtitle || t('footer_desc_fallback')
+
   return `<!DOCTYPE html>
-<html lang="${data.language || 'fr'}" dir="${data.language === 'ar' ? 'rtl' : 'ltr'}">
+<html lang="${lang}" dir="${lang === 'ar' ? 'rtl' : 'ltr'}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${brandName}</title>
-  <meta name="description" content="${data.subtitle || 'Your personal styling studio — discover your unique style.'}">
+  <meta name="description" content="${data.subtitle || heroHeadline}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -479,7 +628,7 @@ export function templateEtecStyle(data: LandingPageData): string {
     .price-unit { font-size: 10px; opacity: 0.6; }
     ` : ''}
 
-    /* ── CHOOSE YOUR STYLE ── */
+    /* ── STYLES / CATEGORIES SECTION ── */
     .styles-section {
       background: ${C.white};
       padding: 80px 64px;
@@ -846,57 +995,57 @@ export function templateEtecStyle(data: LandingPageData): string {
 <body>
 
   <!-- ── NAVIGATION ── -->
-  <nav class="nav" role="navigation" aria-label="Navigation principale">
+  <nav class="nav" role="navigation" aria-label="${t('aria_nav')}">
     <div class="nav-left">
       <span aria-hidden="true">${ICON_SETTINGS}</span>
-      <span>Menu</span>
+      <span>${t('nav_menu')}</span>
     </div>
     <ul class="nav-links" role="list">
-      <li><a href="javascript:void(0)" onclick="event.preventDefault()" class="active">Home</a></li>
-      <li><a href="#styles">Lookbook</a></li>
-      <li><a href="#styles">Favorite</a></li>
-      <li><a href="#quote">Blog</a></li>
-      <li><a href="#footer">About</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()" class="active">${t('nav_home')}</a></li>
+      <li><a href="#styles">${t('nav_gallery')}</a></li>
+      <li><a href="#styles">${t('nav_features')}</a></li>
+      <li><a href="#quote">${t('nav_reviews')}</a></li>
+      <li><a href="#footer">${t('nav_about')}</a></li>
     </ul>
-    <a href="#contact" class="nav-cta">Get in touch</a>
+    <a href="#contact" class="nav-cta">${t('nav_cta')}</a>
   </nav>
 
   <!-- ── HERO SPLIT ── -->
-  <section class="hero" aria-label="Section principale">
+  <section class="hero" aria-label="${t('aria_hero')}">
 
     <!-- Left — beige image column -->
     <div class="hero-left">
       <img
         class="hero-left-img"
         src="${img(0)}"
-        alt="Personal styling — ${brandName}"
+        alt="${brandName}"
         loading="eager"
       >
       <div class="hero-left-bottom">
         <div class="hero-left-copy">
-          <p class="hero-left-eyebrow">Discover your style with</p>
-          <h1 class="hero-left-title">professional stylist.</h1>
-          <p class="hero-left-sub">${data.subtitle || 'Welcome to the ultimate destination for unlocking your unique style.'}</p>
+          <p class="hero-left-eyebrow">${t('hero_eyebrow')} ${brandName}</p>
+          <h1 class="hero-left-title">${data.product_name || brandName}</h1>
+          <p class="hero-left-sub">${data.subtitle || heroHeadline}</p>
           <div class="hero-btns">
             <a href="#styles" class="btn-pill-white">
               ${ctaText}
             </a>
             <a href="#contact" class="btn-text-link">
-              Book session ${ICON_ARROW_LONG_RIGHT}
+              ${t('hero_book')} ${ICON_ARROW_LONG_RIGHT}
             </a>
           </div>
         </div>
-        <div class="hero-experts" aria-label="Notre équipe d'experts">
+        <div class="hero-experts" aria-label="${t('aria_experts')}">
           <div class="hero-avatars" aria-hidden="true">
             <span style="background-image:url('${img(1)}')"></span>
             <span style="background-image:url('${img(2)}')"></span>
             <span style="background-image:url('${img(3)}')"></span>
           </div>
-          <span class="hero-experts-label">Our experts</span>
+          <span class="hero-experts-label">${t('hero_experts')}</span>
         </div>
       </div>
       <div class="hero-corner-note" aria-hidden="true">
-        <p>Book your initial consultation today and unlock your full style potential.</p>
+        <p>${t('hero_corner')}</p>
         <div class="hero-corner-arrow">${ICON_ARROW_NE}</div>
       </div>
     </div>
@@ -904,34 +1053,25 @@ export function templateEtecStyle(data: LandingPageData): string {
     <!-- Right — white content column -->
     <div class="hero-right">
       <div class="hero-right-top">
-        <h2 class="hero-right-headline">Are you ready to unlock the best version of yourself?</h2>
+        <h2 class="hero-right-headline">${heroHeadline}</h2>
 
-        <div class="brand-logos" aria-label="Marques partenaires">
-          <span class="brand-logo-item">paco</span>
-          <span class="brand-logo-item">BOSS</span>
-          <span class="brand-logo-item">WM</span>
-          <span class="brand-logo-item">CK</span>
-        </div>
+        ${pressHTML}
 
-        <p class="hero-right-desc">
-          ${data.headline || 'Discover your style with a professional stylist who understands your vision and brings it to life.'}
-        </p>
+        ${heroDesc ? `<p class="hero-right-desc">${heroDesc}</p>` : ''}
 
         ${priceBadge}
 
         <div class="hero-right-actions">
           <a href="#styles" class="btn-pill-dark">${ctaText}</a>
-          <div class="members-count">
-            <strong>34K+</strong> members
-          </div>
+          ${membersHTML}
         </div>
 
         <div class="hero-right-divider" role="separator"></div>
 
-        <p class="services-title">Services we offer</p>
-        <p class="services-tagline">Embrace the confidence that comes with knowing you look your best!</p>
+        <p class="services-title">${t('services_title')}</p>
+        <p class="services-tagline">${t('services_tagline')}</p>
 
-        <div class="services-grid" role="list" aria-label="Nos services">
+        <div class="services-grid" role="list" aria-label="${t('services_title')}">
           ${servicesHTML}
         </div>
       </div>
@@ -939,20 +1079,20 @@ export function templateEtecStyle(data: LandingPageData): string {
 
   </section>
 
-  <!-- ── CHOOSE YOUR STYLE ── -->
+  <!-- ── CATEGORIES / FEATURES ── -->
   <section class="styles-section fade-in" id="styles" aria-labelledby="styles-heading">
     <div class="styles-header">
       <div class="styles-header-left">
-        <p class="styles-eyebrow">Explore</p>
-        <h2 class="styles-title" id="styles-heading">Choose from the styles</h2>
-        <p class="styles-subtitle">Find the perfect outfit for a special occasion or refresh your everyday look — your style, your rules.</p>
+        <p class="styles-eyebrow">${t('styles_eyebrow')}</p>
+        <h2 class="styles-title" id="styles-heading">${data.product_name || t('styles_title')}</h2>
+        <p class="styles-subtitle">${data.subtitle || t('styles_subtitle')}</p>
       </div>
     </div>
 
     <div class="styles-content">
-      <!-- Style grid with circular avatars -->
+      <!-- Feature grid with circular avatars -->
       <div>
-        <div class="style-grid" role="list" aria-label="Styles disponibles">
+        <div class="style-grid" role="list" aria-label="${t('aria_styles')}">
           ${styleGridHTML}
         </div>
       </div>
@@ -960,21 +1100,21 @@ export function templateEtecStyle(data: LandingPageData): string {
       <!-- Collage right -->
       <div class="styles-collage" aria-hidden="true">
         <div class="collage-main">
-          <img src="${img(4)}" alt="Sportswear style" loading="lazy">
-          <span class="collage-badge">Sportswear</span>
+          <img src="${img(4)}" alt="${brandName}" loading="lazy">
+          <span class="collage-badge">${t('collage_badge')}</span>
         </div>
         <div class="collage-row">
           <div class="collage-card">
-            <img src="${img(1)}" alt="Upcoming session" loading="lazy">
+            <img src="${img(1)}" alt="${brandName}" loading="lazy">
             <div class="collage-card-info">
-              <p class="collage-card-date">24 July · 10:00 PM</p>
-              <p class="collage-card-title">Outfit trends of 2025</p>
+              <p class="collage-card-date">${brandName}</p>
+              <p class="collage-card-title">${t('collage_card_title')}</p>
             </div>
           </div>
           <div class="collage-round-wrap">
-            <img class="collage-round-img" src="${img(5)}" alt="Indie style" loading="lazy">
+            <img class="collage-round-img" src="${img(5)}" alt="${brandName}" loading="lazy">
             <div class="collage-round-overlay">
-              <span class="collage-round-label">Indie style</span>
+              <span class="collage-round-label">${data.product_name || t('collage_overlay')}</span>
               <div class="collage-round-btn" aria-hidden="true">${ICON_ARROW_NE}</div>
             </div>
           </div>
@@ -983,14 +1123,14 @@ export function templateEtecStyle(data: LandingPageData): string {
     </div>
   </section>
 
-  <!-- ── QUOTE ── -->
-  <section class="quote-section fade-in" id="quote" aria-label="Citation">
-    <p class="quote-eyebrow">Our philosophy</p>
+  <!-- ── QUOTE / TESTIMONIALS ── -->
+  <section class="quote-section fade-in" id="quote" aria-label="${t('quote_eyebrow')}">
+    <p class="quote-eyebrow">${t('quote_eyebrow')}</p>
     <blockquote class="quote-text" id="quote-text">
-      ${quote}
+      ${firstQuote}
     </blockquote>
-    <div class="quote-nav" role="group" aria-label="Navigation citations">
-      <button class="quote-nav-btn" aria-label="Citation précédente" onclick="prevQuote()">
+    <div class="quote-nav" role="group" aria-label="${t('aria_quote_nav')}">
+      <button class="quote-nav-btn" aria-label="${t('aria_prev')}" onclick="prevQuote()">
         ${ICON_ARROW_LEFT}
       </button>
       <div class="quote-dots" aria-hidden="true">
@@ -998,64 +1138,59 @@ export function templateEtecStyle(data: LandingPageData): string {
         <div class="quote-dot" data-index="1"></div>
         <div class="quote-dot" data-index="2"></div>
       </div>
-      <button class="quote-nav-btn" aria-label="Citation suivante" onclick="nextQuote()">
+      <button class="quote-nav-btn" aria-label="${t('aria_next')}" onclick="nextQuote()">
         ${ICON_ARROW_RIGHT}
       </button>
     </div>
   </section>
 
   <!-- ── FOOTER ── -->
-  <footer class="footer" id="footer" id="contact" aria-label="Pied de page">
+  <footer class="footer" id="footer" aria-label="${t('aria_footer')}">
     <div class="footer-top">
       <div class="footer-brand">
         <p class="footer-brand-name">${brandName}</p>
-        <p class="footer-brand-desc">Your personal styling studio — where confidence begins.</p>
+        <p class="footer-brand-desc">${footerDesc}</p>
       </div>
       <div>
-        <p class="footer-col-title">Explore</p>
+        <p class="footer-col-title">${t('footer_explore')}</p>
         <ul class="footer-links" role="list">
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Lookbook</a></li>
-          <li><a href="#styles">Styles</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Favorites</a></li>
-          <li><a href="#quote">Blog</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_products')}</a></li>
+          <li><a href="#styles">${t('nav_features')}</a></li>
+          <li><a href="#quote">${t('footer_reviews')}</a></li>
+          <li><a href="#footer">${t('footer_faq')}</a></li>
         </ul>
       </div>
       <div>
-        <p class="footer-col-title">Services</p>
+        <p class="footer-col-title">${t('footer_services')}</p>
         <ul class="footer-links" role="list">
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Personal Styling</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Wardrobe Edit</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Shopping Day</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Online Session</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_delivery')}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_returns')}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_support')}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_guarantee')}</a></li>
         </ul>
       </div>
-      <div>
-        <p class="footer-col-title">Contact</p>
+      <div id="contact">
+        <p class="footer-col-title">${t('footer_contact')}</p>
         <ul class="footer-links" role="list">
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Book a session</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Instagram</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">LinkedIn</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">hello@${brandName.toLowerCase().replace(/\s+/g, '')}.com</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_order')}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_instagram')}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_support')}</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p class="footer-copy">&copy; ${new Date().getFullYear()} ${brandName}. All rights reserved.</p>
+      <p class="footer-copy">&copy; ${new Date().getFullYear()} ${brandName}. ${t('footer_copyright')}</p>
       <ul class="footer-bottom-links" role="list">
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Privacy Policy</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Terms of Use</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Cookie Settings</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_privacy')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_terms')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_cookies')}</a></li>
       </ul>
     </div>
   </footer>
 
   <script>
     // ── QUOTE ROTATOR ─────────────────────────────────────────────────────────
-    const QUOTES = [
-      ${JSON.stringify(quote)},
-      "Style is a way to say who you are without having to speak.",
-      "Fashion is the armor to survive the reality of everyday life."
-    ]
+    const QUOTES = ${JSON.stringify(allQuotes)}
     let currentQuote = 0
 
     function updateQuote(index) {
@@ -1102,7 +1237,7 @@ export function templateEtecStyle(data: LandingPageData): string {
     }, { threshold: 0.12, rootMargin: '-40px' })
     fadeEls.forEach(function(el) { io.observe(el) })
 
-    // ── STYLE AVATAR ACTIVE STATE ─────────────────────────────────────────────
+    // ── FEATURE AVATAR ACTIVE STATE ───────────────────────────────────────────
     var styleItems = document.querySelectorAll('.style-item')
     styleItems.forEach(function(item) {
       item.addEventListener('click', function() {

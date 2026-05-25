@@ -180,14 +180,18 @@ export const TEMPLATES = [
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 
-// Overrides optionnels passés par l'éditeur React (chantier C1+).
-// sectionOrder  : ordre + visibilité custom des sections (C1).
-// visualSettings: tweaks visuels par instance (reserve C2).
-// globalStyles  : palette globale (reserve C5).
+/**
+ * Overrides passes a renderTemplate pour customiser le rendu.
+ *
+ * @field sectionOrder - Chantier C1 : ordre + visibility des sections riches.
+ *   Lu par renderRichSections via injection _sectionOrder dans data.
+ * @field visualSettings - RESERVE Chantier C2. Ignore en C1, warning dev si fourni.
+ * @field globalStyles - RESERVE Chantier C5. Ignore en C1, warning dev si fourni.
+ */
 export interface TemplateOverrides {
   sectionOrder?: SectionInstance[]
-  visualSettings?: VisualSettings  // ignoré en C1, supporté en C2
-  globalStyles?: GlobalStyles      // ignoré en C1, supporté en C5
+  visualSettings?: VisualSettings
+  globalStyles?: GlobalStyles
 }
 
 export function renderTemplate(templateId: string, data: LandingPageData, overrides?: TemplateOverrides): string {
@@ -197,6 +201,18 @@ export function renderTemplate(templateId: string, data: LandingPageData, overri
   const renderData: LandingPageData = overrides?.sectionOrder
     ? { ...data, _sectionOrder: overrides.sectionOrder } as LandingPageData
     : data
+
+  // Detection des overrides non encore supportes (C2/C5) — warning dev pour
+  // eviter les faux positifs silencieux ("ca marche pas mais pas d'erreur").
+  if (process.env.NODE_ENV !== 'production' && overrides) {
+    if (overrides.visualSettings && Object.keys(overrides.visualSettings).length > 0) {
+      console.warn('[renderTemplate] overrides.visualSettings est ignore en C1 (supporte en C2)')
+    }
+    if (overrides.globalStyles && Object.keys(overrides.globalStyles).length > 0) {
+      console.warn('[renderTemplate] overrides.globalStyles est ignore en C1 (supporte en C5)')
+    }
+  }
+
   switch (templateId) {
     case 'etec-blue':       return templateEtecBlue(renderData)
     case 'etec-noir':       return templateEtecNoir(renderData)

@@ -1,4 +1,5 @@
 import type { LandingPageData } from '@/types'
+import type { SectionInstance, VisualSettings, GlobalStyles } from '@/types/editor'
 
 export { templateEtecBlue }   from './etec-blue'
 export { templateEtecNoir }   from './etec-noir'
@@ -179,70 +180,86 @@ export const TEMPLATES = [
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 
-export function renderTemplate(templateId: string, data: LandingPageData): string {
+// Overrides optionnels passés par l'éditeur React (chantier C1+).
+// sectionOrder  : ordre + visibilité custom des sections (C1).
+// visualSettings: tweaks visuels par instance (reserve C2).
+// globalStyles  : palette globale (reserve C5).
+export interface TemplateOverrides {
+  sectionOrder?: SectionInstance[]
+  visualSettings?: VisualSettings  // ignoré en C1, supporté en C2
+  globalStyles?: GlobalStyles      // ignoré en C1, supporté en C5
+}
+
+export function renderTemplate(templateId: string, data: LandingPageData, overrides?: TemplateOverrides): string {
+  // C1 : injection de sectionOrder dans data via _sectionOrder (champ privé).
+  // renderRichSections lit ce champ et lui donne priorité sur DEFAULT_ORDER.
+  // Stratégie : évite de modifier la signature des 42+ fonctions template.
+  const renderData: LandingPageData = overrides?.sectionOrder
+    ? { ...data, _sectionOrder: overrides.sectionOrder } as LandingPageData
+    : data
   switch (templateId) {
-    case 'etec-blue':       return templateEtecBlue(data)
-    case 'etec-noir':       return templateEtecNoir(data)
-    case 'etec-rose':       return templateEtecRose(data)
-    case 'etec-sage':       return templateEtecSage(data)
-    case 'etec-gold':       return templateEtecGold(data)
-    case 'etec-energy':     return templateEtecEnergy(data)
-    case 'etec-beauty':     return templateEtecBeauty(data)
-    case 'etec-style':      return templateEtecStyle(data)
-    case 'etec-shopz':      return templateEtecShopz(data)
-    case 'etec-velvety':    return templateEtecVelvety(data)
-    case 'etec-prime':      return templateEtecPrime(data)
-    case 'etec-blusho':     return templateEtecBlusho(data)
-    case 'etec-casa':       return templateEtecCasa(data)
-    case 'etec-pet':        return templateEtecPet(data)
-    case 'etec-gadget':     return templateEtecGadget(data)
-    case 'etec-aura':       return templateEtecAura(data)
-    case 'etec-luxe':       return templateEtecLuxe(data)
-    case 'etec-pulse':      return templateEtecPulse(data)
-    case 'etec-nordic':     return templateEtecNordic(data)
-    case 'etec-cosmetix':   return templateEtecCosmetix(data)
-    case 'etec-trendy':     return templateEtecTrendy(data)
-    case 'etec-solo':       return templateEtecSolo(data)
-    case 'etec-prestige':   return templateEtecPrestige(data)
-    case 'etec-glow':       return templateEtecGlow(data)
-    case 'etec-homestyle':  return templateEtecHomestyle(data)
-    case 'etec-jewel':      return templateEtecJewel(data)
-    case 'etec-techcase':   return templateEtecTechcase(data)
-    case 'etec-artisan':    return templateEtecArtisan(data)
-    case 'etec-outfit':     return templateEtecOutfit(data)
-    case 'etec-ella':       return templateEtecElla(data)
-    case 'etec-starter':    return templateEtecStarter(data)
-    case 'etec-glowup':     return templateEtecGlowup(data)
-    case 'etec-hue':        return templateEtecHue(data)
-    case 'etec-interior':   return templateEtecInterior(data)
-    case 'etec-platina':    return templateEtecPlatina(data)
-    case 'etec-streetz':    return templateEtecStreetz(data)
-    case 'etec-poterie':    return templateEtecPoterie(data)
-    case 'etec-electro':    return templateEtecElectro(data)
-    case 'etec-agency':     return templateEtecAgency(data)
-    case 'etec-supreme':    return templateEtecSupreme(data)
-    case 'etec-quarter':    return templateEtecQuarter(data)
-    case 'etec-boost':      return templateEtecBoost(data)
+    case 'etec-blue':       return templateEtecBlue(renderData)
+    case 'etec-noir':       return templateEtecNoir(renderData)
+    case 'etec-rose':       return templateEtecRose(renderData)
+    case 'etec-sage':       return templateEtecSage(renderData)
+    case 'etec-gold':       return templateEtecGold(renderData)
+    case 'etec-energy':     return templateEtecEnergy(renderData)
+    case 'etec-beauty':     return templateEtecBeauty(renderData)
+    case 'etec-style':      return templateEtecStyle(renderData)
+    case 'etec-shopz':      return templateEtecShopz(renderData)
+    case 'etec-velvety':    return templateEtecVelvety(renderData)
+    case 'etec-prime':      return templateEtecPrime(renderData)
+    case 'etec-blusho':     return templateEtecBlusho(renderData)
+    case 'etec-casa':       return templateEtecCasa(renderData)
+    case 'etec-pet':        return templateEtecPet(renderData)
+    case 'etec-gadget':     return templateEtecGadget(renderData)
+    case 'etec-aura':       return templateEtecAura(renderData)
+    case 'etec-luxe':       return templateEtecLuxe(renderData)
+    case 'etec-pulse':      return templateEtecPulse(renderData)
+    case 'etec-nordic':     return templateEtecNordic(renderData)
+    case 'etec-cosmetix':   return templateEtecCosmetix(renderData)
+    case 'etec-trendy':     return templateEtecTrendy(renderData)
+    case 'etec-solo':       return templateEtecSolo(renderData)
+    case 'etec-prestige':   return templateEtecPrestige(renderData)
+    case 'etec-glow':       return templateEtecGlow(renderData)
+    case 'etec-homestyle':  return templateEtecHomestyle(renderData)
+    case 'etec-jewel':      return templateEtecJewel(renderData)
+    case 'etec-techcase':   return templateEtecTechcase(renderData)
+    case 'etec-artisan':    return templateEtecArtisan(renderData)
+    case 'etec-outfit':     return templateEtecOutfit(renderData)
+    case 'etec-ella':       return templateEtecElla(renderData)
+    case 'etec-starter':    return templateEtecStarter(renderData)
+    case 'etec-glowup':     return templateEtecGlowup(renderData)
+    case 'etec-hue':        return templateEtecHue(renderData)
+    case 'etec-interior':   return templateEtecInterior(renderData)
+    case 'etec-platina':    return templateEtecPlatina(renderData)
+    case 'etec-streetz':    return templateEtecStreetz(renderData)
+    case 'etec-poterie':    return templateEtecPoterie(renderData)
+    case 'etec-electro':    return templateEtecElectro(renderData)
+    case 'etec-agency':     return templateEtecAgency(renderData)
+    case 'etec-supreme':    return templateEtecSupreme(renderData)
+    case 'etec-quarter':    return templateEtecQuarter(renderData)
+    case 'etec-boost':      return templateEtecBoost(renderData)
     case 'minimal-dark':
     case 'gaming-zone':
-    case 'automotive-pro':  return templateEtecNoir(data)
+    case 'automotive-pro':  return templateEtecNoir(renderData)
     case 'clean-white':
     case 'mobile-first':
     case 'tech-gadget':
-    case 'travel-nomad':    return templateEtecBlue(data)
+    case 'travel-nomad':    return templateEtecBlue(renderData)
     case 'bold-sales':
     case 'bold-orange':
     case 'sportif-energie':
     case 'kids-colorful':
-    case 'foodie-gourmet':  return templateEtecEnergy(data)
+    case 'foodie-gourmet':  return templateEtecEnergy(renderData)
     case 'luxury':
     case 'luxe-noir':
-    case 'premium-glass':   return templateEtecGold(data)
+    case 'premium-glass':   return templateEtecGold(renderData)
     case 'shein-pro':
     case 'beauty-studio':
-    case 'pet-love':        return templateEtecRose(data)
+    case 'pet-love':        return templateEtecRose(renderData)
     case 'natural-organic':
-    case 'home-deco':       return templateEtecSage(data)
-    default:                return templateEtecBlue(data)
+    case 'home-deco':       return templateEtecSage(renderData)
+    default:                return templateEtecBlue(renderData)
   }
 }

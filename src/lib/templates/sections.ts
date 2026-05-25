@@ -7,6 +7,7 @@
 // Noir, Rose, etc.). Les couleurs sont CSS-friendly.
 
 import type { LandingPageData } from '@/types'
+import type { SectionInstance } from '@/types/editor'
 
 // ─── Section keys & ordre canonique ──────────────────────────────────────────
 // Liste exhaustive des sections rendues par renderRichSections, dans l'ordre
@@ -985,13 +986,41 @@ const SECTION_RENDERERS: Record<SectionKey, SectionRenderer> = {
 export function renderRichSections(
   data: LandingPageData,
   theme: SectionTheme = DEFAULT_THEME,
-  order?: SectionKey[],
+  order?: SectionKey[] | SectionInstance[],
 ): string {
   // Feature flag rollback (spec § 3.6)
   if (process.env.KONVERT_RICH_SECTIONS === 'false') return ''
 
-  const keys = order ?? DEFAULT_ORDER
-  return keys
+  // C1 : si data porte un _sectionOrder injecté par renderTemplate,
+  // il prend priorité sur le param order (évite de modifier les 42+ templates).
+  const dataSectionOrder = (data as LandingPageData & { _sectionOrder?: SectionInstance[] })._sectionOrder
+  if (dataSectionOrder) order = dataSectionOrder
+
+  // Cas 1 : pas d'order → DEFAULT_ORDER (comportement legacy chantier A)
+  if (!order) {
+    return DEFAULT_ORDER
+      .map(key => SECTION_RENDERERS[key]?.(data, theme) ?? '')
+      .filter(html => html.trim().length > 0)
+      .join('\n')
+  }
+
+  // Cas 2 : array vide → ""
+  if (order.length === 0) return ''
+
+  // Cas 3 : détecter SectionInstance[] vs SectionKey[]
+  const isInstanceArray =
+    typeof order[0] === 'object' && order[0] !== null && 'id' in (order[0] as object)
+
+  if (isInstanceArray) {
+    return (order as SectionInstance[])
+      .filter(s => s.visible)
+      .map(s => SECTION_RENDERERS[s.key]?.(data, theme) ?? '')
+      .filter(html => html.trim().length > 0)
+      .join('\n')
+  }
+
+  // Legacy : SectionKey[]
+  return (order as SectionKey[])
     .map(key => {
       const renderer = SECTION_RENDERERS[key]
       if (!renderer) return '' // clé inconnue → skip silencieux

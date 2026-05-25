@@ -88,12 +88,12 @@ describe('useEditorStore', () => {
       expect(s?.visible).toBe(true)
     })
 
-    it('ignore les ids inconnus (no-op)', () => {
+    it('ignore les ids inconnus (no-op strict reference equality)', () => {
       useEditorStore.setState({ sectionOrder: [...fakeSections] })
-      const before = JSON.stringify(useEditorStore.getState().sectionOrder)
+      const before = useEditorStore.getState().sectionOrder
       useEditorStore.getState().toggleVisible('unknown-id')
-      const after = JSON.stringify(useEditorStore.getState().sectionOrder)
-      expect(after).toBe(before)
+      const after = useEditorStore.getState().sectionOrder
+      expect(after).toBe(before) // reference equality, pas juste valeur
     })
   })
 

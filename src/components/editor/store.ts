@@ -67,11 +67,13 @@ export const useEditorStore = create<EditorStore>((set) => ({
     return { sectionOrder: order }
   }),
 
-  toggleVisible: (id) => set(state => ({
-    sectionOrder: state.sectionOrder.map(s =>
-      s.id === id ? { ...s, visible: !s.visible } : s
-    ),
-  })),
+  toggleVisible: (id) => set(state => {
+    const idx = state.sectionOrder.findIndex(s => s.id === id)
+    if (idx === -1) return state
+    const next = [...state.sectionOrder]
+    next[idx] = { ...next[idx], visible: !next[idx].visible }
+    return { sectionOrder: next }
+  }),
 
   removeSection: (id) => set(state => ({
     sectionOrder: state.sectionOrder.filter(s => s.id !== id),

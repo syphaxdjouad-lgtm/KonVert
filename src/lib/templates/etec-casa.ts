@@ -152,7 +152,7 @@ export function templateEtecCasa(data: LandingPageData): string {
   const priceSave = Math.round((1 - parseFloat(price.replace(/[^0-9.]/g,'')) / parseFloat(originalPrice.replace(/[^0-9.]/g,'')||'1')) * 100)
 
   return `<!DOCTYPE html>
-<html lang="${data.language || 'fr'}">
+<html lang="${data.language || 'fr'}" dir="${data.language === 'ar' ? 'rtl' : 'ltr'}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">

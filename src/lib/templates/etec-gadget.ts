@@ -174,7 +174,7 @@ export function templateEtecGadget(data: LandingPageData): string {
     </div>`).join('')
 
   return `<!DOCTYPE html>
-<html lang="${data.language || 'fr'}">
+<html lang="${data.language || 'fr'}" dir="${data.language === 'ar' ? 'rtl' : 'ltr'}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">

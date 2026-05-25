@@ -313,8 +313,11 @@ function NewPageInner() {
           })
           setLandingData(json)
           if (json.images?.length) setUploadedPhotos(json.images)
+          // Le slug du template est stocke dans json_content._template_slug
+          // (template_id en DB est un UUID FK qui reste null pour l'instant)
+          const slug = (json as { _template_slug?: string })._template_slug
+          if (slug) setSelectedStyle(slug)
         }
-        if (data.template_id) setSelectedStyle(data.template_id)
         if (data.title) setTitle(data.title)
         if (data.html_content) {
           setHtml(data.html_content)
@@ -627,6 +630,8 @@ function NewPageInner() {
           const supabase = createClient()
           const { data: { user } } = await supabase.auth.getUser()
           if (user) {
+            // template_id (uuid FK) reste null ; on stocke le slug dans json
+            const jsonWithSlug = { ...data, _template_slug: selectedStyle }
             const { data: inserted, error: insertErr } = await supabase
               .from('pages')
               .insert({
@@ -634,8 +639,7 @@ function NewPageInner() {
                 title:        pageTitle,
                 product_url:  inputMode === 'url' ? url : null,
                 html_content: generatedHtml,
-                json_content: data,
-                template_id:  selectedStyle,
+                json_content: jsonWithSlug,
                 status:       'draft',
               })
               .select('id')
@@ -644,6 +648,8 @@ function NewPageInner() {
               setPageId(inserted.id)
               // Met à jour l'URL pour que F5 recharge bien la page
               window.history.replaceState(null, '', `/dashboard/new?page_id=${inserted.id}`)
+            } else if (insertErr) {
+              console.warn('[autosave] insert failed', insertErr.message)
             }
           }
         } catch (autosaveErr) {
@@ -666,25 +672,37 @@ function NewPageInner() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Non authentifié')
 
+      // template_id est un UUID FK vers public.templates — on n'y met PAS
+      // le slug 'etec-blue' (sinon Postgres rejette). Le slug est conservé
+      // dans json_content._template_slug pour la réouverture (cf F5).
+      const jsonWithSlug = landingData
+        ? { ...landingData, _template_slug: selectedStyle }
+        : { _template_slug: selectedStyle }
+
       if (pageId) {
         // Mode édition — mise à jour de la page existante
-        await supabase.from('pages').update({
+        const { error: updateErr } = await supabase.from('pages').update({
           title:        title || 'Nouvelle page',
           html_content: savedHtml,
-          json_content: landingData,
-          template_id:  selectedStyle,
+          json_content: jsonWithSlug,
         }).eq('id', pageId)
+        if (updateErr) throw new Error(`Sauvegarde echouee : ${updateErr.message}`)
       } else {
-        // Nouvelle page
-        await supabase.from('pages').insert({
-          user_id:      user.id,
-          title:        title || 'Nouvelle page',
-          product_url:  inputMode === 'url' ? url : null,
-          html_content: savedHtml,
-          json_content: landingData,
-          template_id:  selectedStyle,
-          status:       'draft',
-        })
+        // Nouvelle page — on capture l'id pour pouvoir re-sauver
+        const { data: inserted, error: insertErr } = await supabase
+          .from('pages')
+          .insert({
+            user_id:      user.id,
+            title:        title || 'Nouvelle page',
+            product_url:  inputMode === 'url' ? url : null,
+            html_content: savedHtml,
+            json_content: jsonWithSlug,
+            status:       'draft',
+          })
+          .select('id')
+          .single()
+        if (insertErr) throw new Error(`Sauvegarde echouee : ${insertErr.message}`)
+        if (inserted?.id) setPageId(inserted.id)
       }
       router.push('/dashboard/pages')
     } catch (err) {

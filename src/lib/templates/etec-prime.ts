@@ -2,6 +2,7 @@ import type { LandingPageData } from '@/types'
 
 import {
   renderRichSections,
+  renderHeroThumbs,
   type SectionTheme,
 } from './sections'
 // ─── FALLBACK IMAGES — health / supplements premium ───────────────────────────
@@ -524,7 +525,8 @@ export function templateEtecPrime(data: LandingPageData): string {
     </div>
   </div>
   <div class="hero-right">
-    <img class="hero-img-main" src="${img(0)}" alt="${productName}">
+    <img id="kvt-hero-img-etec-prime" class="hero-img-main" src="${img(0)}" alt="${productName}">
+    ${renderHeroThumbs(data.images ?? [], PRIME_THEME, 'kvt-hero-img-etec-prime')}
     <div class="hero-overlay"></div>
     <div class="hero-float-badge">
       <div class="hero-float-title">CLINICAL DOSING</div>

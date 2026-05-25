@@ -2,6 +2,7 @@ import type { LandingPageData } from '@/types'
 
 import {
   renderRichSections,
+  renderHeroThumbs,
   type SectionTheme,
 } from './sections'
 const FALLBACK_IMGS = [
@@ -294,7 +295,8 @@ export function templateEtecBeauty(data: LandingPageData): string {
       </svg>
 
       <!-- Image produit -->
-      <img src="${mainImg}" alt="${data.product_name}" style="position:relative;z-index:2;width:280px;height:340px;object-fit:contain;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.18));"/>
+      <img id="kvt-hero-img-etec-beauty" src="${mainImg}" alt="${data.product_name}" style="position:relative;z-index:2;width:280px;height:340px;object-fit:contain;filter:drop-shadow(0 20px 40px rgba(0,0,0,0.18));"/>
+      ${renderHeroThumbs(_real ?? imgs ?? [], BEAUTY_THEME, 'kvt-hero-img-etec-beauty')}
     </div>
 
     <!-- Meta droite : DESIGN / SIZE / COLOR -->

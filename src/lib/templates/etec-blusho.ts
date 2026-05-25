@@ -4,7 +4,123 @@ import {
   renderRichSections,
   type SectionTheme,
 } from './sections'
+
+// ─── I18N ────────────────────────────────────────────────────────────────────
+
+const T: Record<string, Record<string, string>> = {
+  // Nav
+  nav_home:        { fr: 'Accueil',   en: 'Home',    ar: 'الرئيسية',   es: 'Inicio'    },
+  nav_shop:        { fr: 'Boutique',  en: 'Shop',    ar: 'المتجر',     es: 'Tienda'    },
+  nav_pages:       { fr: 'Pages',     en: 'Pages',   ar: 'الصفحات',    es: 'Páginas'   },
+  nav_features:    { fr: 'Fonctions', en: 'Features',ar: 'المميزات',   es: 'Funciones' },
+  nav_blog:        { fr: 'Blog',      en: 'Blog',    ar: 'المدونة',    es: 'Blog'      },
+  nav_contact:     { fr: 'Contact',   en: 'Contact', ar: 'تواصل',      es: 'Contacto'  },
+
+  // Aria / accessibility
+  aria_menu:       { fr: 'Menu',             en: 'Menu',              ar: 'القائمة',           es: 'Menú'             },
+  aria_search:     { fr: 'Rechercher',       en: 'Search',            ar: 'بحث',               es: 'Buscar'           },
+  aria_wishlist:   { fr: 'Liste de souhaits',en: 'Wishlist',          ar: 'قائمة الرغبات',    es: 'Lista de deseos'  },
+  aria_account:    { fr: 'Mon compte',       en: 'Account',           ar: 'حسابي',             es: 'Mi cuenta'        },
+  aria_cart:       { fr: 'Panier',           en: 'Cart',              ar: 'عربة التسوق',       es: 'Carrito'          },
+  aria_main_nav:   { fr: 'Navigation principale', en: 'Main navigation', ar: 'التنقل الرئيسي', es: 'Navegación principal' },
+
+  // Announce bar
+  ann_sale:        { fr: 'VENTE DU WEEK-END ! JUSQU\'À', en: 'WEEKEND SALE! GET UP TO', ar: 'تخفيضات نهاية الأسبوع! حتى', es: '¡VENTA DE FIN DE SEMANA! HASTA' },
+  ann_off:         { fr: 'DE RÉDUCTION',   en: 'OFF',             ar: 'خصم',         es: 'DE DESCUENTO'  },
+  ann_shipping:    { fr: 'LIVRAISON ET RETOURS GRATUITS', en: 'FREE SHIPPING AND RETURN POLICY', ar: 'الشحن والإرجاع مجاناً', es: 'ENVÍO Y DEVOLUCIONES GRATIS' },
+  ann_limited:     { fr: 'OFFRE LIMITÉE ! PROFITEZ-EN !', en: 'LIMITED TIME OFFER! HURRY UP!',   ar: 'عرض محدود! أسرع!',     es: '¡OFERTA LIMITADA! ¡DATE PRISA!' },
+  ann_opening:     { fr: 'OFFRES D\'OUVERTURE',            en: 'GRAND OPENING OFFERS',            ar: 'عروض الافتتاح',         es: 'OFERTAS DE INAUGURACIÓN'        },
+
+  // Hero
+  hero_fallback_headline: { fr: 'Cosmétiques Haut de Gamme Pour Vous', en: 'High Cosmetics<br/>Product For You', ar: 'مستحضرات فاخرة<br/>لك أنت', es: 'Cosmética Premium<br/>Para Ti' },
+  hero_fallback_subtitle: { fr: 'Découvrez notre collection de soins essentiels premium conçus pour votre peau unique.', en: 'Discover our curated collection of premium skincare essentials crafted for your unique skin.', ar: 'اكتشف مجموعتنا المختارة من أساسيات العناية الفاخرة المصممة لبشرتك الفريدة.', es: 'Descubre nuestra selección de esenciales de cuidado premium diseñados para tu piel única.' },
+  hero_fallback_cta:      { fr: 'Voir la Collection',      en: 'See All Collection', ar: 'تصفح المجموعة', es: 'Ver Colección' },
+  hero_happy_clients:     { fr: 'Clients Satisfaits',      en: 'Happy Clients',      ar: 'عملاء سعداء',   es: 'Clientes Felices' },
+
+  // Stats bar
+  stat_products:   { fr: 'Produits',      en: 'Products',      ar: 'المنتجات',    es: 'Productos'   },
+  stat_natural:    { fr: 'Naturel',       en: 'Natural',       ar: 'طبيعي',      es: 'Natural'     },
+  stat_clients:    { fr: 'Clients Heureux', en: 'Happy Clients', ar: 'عملاء سعداء', es: 'Clientes Felices' },
+
+  // Categories
+  cat_overline:    { fr: 'Favoris Populaires',  en: 'Top Search Favorites', ar: 'المفضلات الأكثر بحثاً', es: 'Favoritos Más Buscados' },
+  cat_title:       { fr: 'Acheter par Catégorie', en: 'Shop by Categories', ar: 'تسوق حسب الفئة',       es: 'Comprar por Categorías' },
+  cat_all_link:    { fr: 'Toutes les Catégories', en: 'All Categories',     ar: 'كل الفئات',            es: 'Todas las Categorías'  },
+  cat_products:    { fr: 'Produits',             en: 'Products',            ar: 'منتجات',               es: 'Productos'             },
+  // Category name fallbacks
+  cat_name_0:      { fr: 'Meilleures Ventes', en: 'Best Sellers', ar: 'الأكثر مبيعاً',   es: 'Más Vendidos'   },
+  cat_name_1:      { fr: 'Nouveautés',        en: 'New Arrivals', ar: 'الوصول الجديد',    es: 'Novedades'       },
+  cat_name_2:      { fr: 'Collections',       en: 'Collections',  ar: 'المجموعات',         es: 'Colecciones'     },
+  cat_name_3:      { fr: 'Coffrets',          en: 'Bundles',      ar: 'مجموعات الهدايا',  es: 'Packs'           },
+  cat_name_4:      { fr: 'Accessoires',       en: 'Accessories',  ar: 'الإكسسوارات',       es: 'Accesorios'      },
+
+  // Products section
+  products_title:  { fr: 'Explorer les Produits', en: 'Explore Products', ar: 'استكشف المنتجات', es: 'Explorar Productos' },
+  products_all:    { fr: 'Voir Tout',              en: 'View All',         ar: 'عرض الكل',        es: 'Ver Todo'           },
+  add_to_cart:     { fr: 'Ajouter au Panier',     en: 'Add to Cart',      ar: 'أضف إلى السلة',  es: 'Añadir al Carrito'  },
+
+  // Sale banner
+  sale_offer:      { fr: 'Offre limitée — ne ratez pas ça', en: 'Limited time offer — don\'t miss out', ar: 'عرض محدود — لا تفوتك الفرصة', es: 'Oferta limitada — no te la pierdas' },
+  sale_shop:       { fr: 'Acheter les Soldes',               en: 'Shop the Sale',                        ar: 'تسوق التخفيضات',                  es: 'Comprar Ofertas'                    },
+  sale_days:       { fr: 'Jours',   en: 'Days', ar: 'أيام', es: 'Días'  },
+  sale_hrs:        { fr: 'Heures',  en: 'Hrs',  ar: 'ساعة', es: 'Horas' },
+  sale_mns:        { fr: 'Mins',    en: 'Mns',  ar: 'دقيقة',es: 'Mins'  },
+  sale_secs:       { fr: 'Secs',    en: 'Secs', ar: 'ثانية',es: 'Segs'  },
+
+  // Best sellers
+  bs_overline:     { fr: 'Favoris Clients',    en: 'Customer Favorites', ar: 'مفضلات العملاء',    es: 'Favoritos Clientes'  },
+  bs_title:        { fr: 'Meilleures Ventes',  en: 'Best Sellers',       ar: 'الأكثر مبيعاً',     es: 'Más Vendidos'        },
+  bs_tab_all:      { fr: 'Tout',               en: 'All',                ar: 'الكل',              es: 'Todo'                },
+  bs_tab_new:      { fr: 'Nouveau',            en: 'New',                ar: 'جديد',              es: 'Nuevo'               },
+  bs_tab_sale:     { fr: 'Soldes',             en: 'Sale',               ar: 'تخفيضات',           es: 'Oferta'              },
+  bs_tab_top:      { fr: 'Mieux notés',        en: 'Top rated',          ar: 'الأعلى تقييماً',   es: 'Mejor valorado'      },
+  bs_reviews:      { fr: 'avis',               en: 'reviews',            ar: 'تقييمات',           es: 'reseñas'             },
+  bs_add_wishlist: { fr: 'Ajouter aux souhaits', en: 'Add to wishlist',  ar: 'أضف إلى المفضلة',  es: 'Añadir a favoritos'  },
+
+  // Testimonials
+  testi_overline:  { fr: 'Vraies Histoires',          en: 'Real Stories',              ar: 'قصص حقيقية',              es: 'Historias Reales'           },
+  testi_title:     { fr: 'Ce que disent nos Clients', en: 'What Our Clients Say',      ar: 'ما يقوله عملاؤنا',        es: 'Lo que dicen nuestros Clientes' },
+  testi_avg_label: { fr: 'avis vérifiés',             en: 'verified reviews',          ar: 'تقييم موثق',              es: 'reseñas verificadas'        },
+  testi_verified:  { fr: 'Achat Vérifié',             en: 'Verified Purchase',         ar: 'شراء موثق',               es: 'Compra Verificada'          },
+  // Fallback testimonials
+  testi_q0:        { fr: 'J\'adore absolument cette marque. Ma peau n\'a jamais été aussi hydratée et lumineuse. Je reçois des compliments chaque jour !', en: 'Absolutely love this brand. My skin has never felt so hydrated and glowy. I get compliments every single day!', ar: 'أنا أحب هذه العلامة التجارية تمامًا. لم تشعر بشرتي بالترطيب والإشراق كهذا من قبل. أتلقى المجاملات كل يوم!', es: '¡Me encanta esta marca. Mi piel nunca se ha sentido tan hidratada y radiante. ¡Recibo cumplidos todos los días!' },
+  testi_q1:        { fr: 'La qualité est exceptionnelle. Ingrédients propres, bel emballage, et ça marche vraiment. Chaque euro dépensé vaut le coup.', en: 'The quality is outstanding. Clean ingredients, beautiful packaging, and it actually works. Worth every penny.', ar: 'الجودة رائعة. مكونات نظيفة، تغليف جميل، وهو يعمل فعلاً. يستحق كل قرش.', es: 'La calidad es excepcional. Ingredientes limpios, envase precioso, y realmente funciona. Vale cada céntimo.' },
+  testi_q2:        { fr: 'J\'ai enfin trouvé une marque de soins en qui j\'ai 100% confiance. Le sérum a transformé ma peau en deux semaines. Je recommande vivement !', en: 'Finally found a skincare brand I trust 100%. The serum transformed my skin within two weeks. Highly recommend!', ar: 'وجدت أخيراً علامة تجارية للعناية بالبشرة أثق بها 100%. حوّل السيروم بشرتي في أسبوعين. أنصح به بشدة!', es: '¡Por fin encontré una marca de cuidado en la que confío 100%. El sérum transformó mi piel en dos semanas. ¡Muy recomendable!' },
+  testi_name0:     { fr: 'Sophie M.',   en: 'Sophie M.',   ar: 'سوفي م.',   es: 'Sophie M.'   },
+  testi_name1:     { fr: 'Amara K.',    en: 'Amara K.',    ar: 'أمارا ك.',  es: 'Amara K.'    },
+  testi_name2:     { fr: 'Isabelle R.', en: 'Isabelle R.', ar: 'إيزابيل ر.', es: 'Isabelle R.' },
+
+  // Newsletter
+  nl_title:        { fr: 'Abonnez-vous &amp; Obtenez 10% sur votre Première Commande', en: 'Subscribe &amp; Get 10% Off Your First Order', ar: 'اشترك واحصل على خصم 10% على طلبك الأول', es: 'Suscríbete y Obtén 10% de Descuento en tu Primer Pedido' },
+  nl_subtitle:     { fr: 'Rejoignez plus de 50 000 clients satisfaits et soyez le premier à connaître les nouveaux produits, offres exclusives et conseils.', en: 'Join 50,000+ satisfied customers and be the first to hear about new products, exclusive offers, and tips.', ar: 'انضم إلى أكثر من 50,000 عميل راضٍ وكن أول من يعلم بالمنتجات الجديدة والعروض الحصرية.', es: 'Únete a más de 50.000 clientes satisfechos y sé el primero en conocer nuevos productos, ofertas exclusivas y consejos.' },
+  nl_placeholder:  { fr: 'Entrez votre adresse email', en: 'Enter your email address', ar: 'أدخل بريدك الإلكتروني', es: 'Introduce tu correo electrónico' },
+  nl_btn:          { fr: 'S\'abonner',               en: 'Subscribe',                ar: 'اشترك',                  es: 'Suscribirse'                },
+  nl_note:         { fr: 'Pas de spam. Désabonnement à tout moment.', en: 'No spam. Unsubscribe anytime.', ar: 'لا إزعاج. ألغِ الاشتراك في أي وقت.', es: 'Sin spam. Cancela cuando quieras.' },
+  nl_aria:         { fr: 'Formulaire d\'abonnement email', en: 'Email subscription form', ar: 'نموذج الاشتراك بالبريد الإلكتروني', es: 'Formulario de suscripción por email' },
+
+  // Footer
+  footer_quick_links: { fr: 'Liens Rapides',  en: 'Quick Links', ar: 'روابط سريعة',   es: 'Enlaces Rápidos' },
+  footer_home:        { fr: 'Accueil',        en: 'Home',        ar: 'الرئيسية',      es: 'Inicio'          },
+  footer_about:       { fr: 'À propos',       en: 'About Us',    ar: 'من نحن',        es: 'Nosotros'        },
+  footer_shop:        { fr: 'Boutique',       en: 'Shop',        ar: 'المتجر',        es: 'Tienda'          },
+  footer_blog:        { fr: 'Blog',           en: 'Blog',        ar: 'المدونة',       es: 'Blog'            },
+  footer_contact:     { fr: 'Contact',        en: 'Contact',     ar: 'تواصل',         es: 'Contacto'        },
+  footer_help:        { fr: 'Aide',           en: 'Help',        ar: 'المساعدة',      es: 'Ayuda'           },
+  footer_faq:         { fr: 'FAQ',            en: 'FAQ',         ar: 'الأسئلة الشائعة', es: 'FAQ'           },
+  footer_shipping:    { fr: 'Livraison &amp; Retours', en: 'Shipping &amp; Returns', ar: 'الشحن والإرجاع', es: 'Envío &amp; Devoluciones' },
+  footer_track:       { fr: 'Suivre ma Commande', en: 'Track Order',     ar: 'تتبع الطلب',       es: 'Rastrear Pedido'     },
+  footer_privacy:     { fr: 'Confidentialité',    en: 'Privacy Policy',  ar: 'سياسة الخصوصية',  es: 'Política de Privacidad' },
+  footer_terms:       { fr: 'Conditions d\'utilisation', en: 'Terms of Service', ar: 'شروط الخدمة', es: 'Términos de Servicio' },
+  footer_copyright:   { fr: 'Tous droits réservés.', en: 'All rights reserved.', ar: 'جميع الحقوق محفوظة.', es: 'Todos los derechos reservados.' },
+  footer_tagline_fallback: { fr: 'Qualité premium, approuvée par des milliers de clients satisfaits à travers le monde.', en: 'Premium quality, trusted by thousands of satisfied customers worldwide.', ar: 'جودة فاخرة، يثق بها آلاف العملاء الراضين حول العالم.', es: 'Calidad premium, de confianza para miles de clientes satisfechos en todo el mundo.' },
+}
+
+function t(key: string, lang: string = 'fr'): string {
+  return T[key]?.[lang] ?? T[key]?.['fr'] ?? key
+}
+
 // ─── FALLBACK IMAGES — cosmetics / skincare Unsplash ─────────────────────────
+// Utilisées comme fallback si data.images est vide — ne pas supprimer
 
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=800&q=80',
@@ -13,9 +129,9 @@ const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1617897903246-719242758050?w=800&q=80',
 ]
 
-const HERO_IMG = 'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=900&q=80'
+const HERO_IMG_FALLBACK = 'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=900&q=80'
 
-const CAT_IMGS = [
+const CAT_IMGS_FALLBACK = [
   'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80',
   'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&q=80',
   'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400&q=80',
@@ -80,10 +196,19 @@ const BLUSHO_THEME: SectionTheme = {
 }
 
 export function templateEtecBlusho(data: LandingPageData): string {
-  const _real = data.images?.filter(Boolean) ?? [];
+  const lang = data.language ?? 'fr'
+  const _ = (key: string) => t(key, lang)
+
+  const _real = data.images?.filter(Boolean) ?? []
   const imgs = _real.length >= 1
     ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length])
     : FALLBACK_IMGS
+
+  // Hero image : priorité data.images[0], sinon fallback Unsplash
+  const heroImg = _real[0] || HERO_IMG_FALLBACK
+
+  // Cat images : priorité data.images rotatif, sinon fallback Unsplash par index
+  const catImg = (i: number) => _real[i] || CAT_IMGS_FALLBACK[i % CAT_IMGS_FALLBACK.length]
 
   const price         = data.price         || '29.90'
   const originalPrice = data.original_price || '59.90'
@@ -91,12 +216,19 @@ export function templateEtecBlusho(data: LandingPageData): string {
     ? Math.round((1 - parseFloat(price) / parseFloat(originalPrice)) * 100)
     : 50
 
+  const benefitFallbacks = [
+    _('cat_name_0'), // "Best Sellers" generic fallback
+    _('cat_name_1'),
+    _('cat_name_2'),
+    _('cat_name_3'),
+    _('cat_name_4'),
+  ]
   const benefits = [
-    data.benefits?.[0] || '100% Natural Ingredients',
-    data.benefits?.[1] || 'Dermatologist Tested',
-    data.benefits?.[2] || 'Cruelty Free',
-    data.benefits?.[3] || 'Vegan Formula',
-    data.benefits?.[4] || 'Paraben Free',
+    data.benefits?.[0] || benefitFallbacks[0],
+    data.benefits?.[1] || benefitFallbacks[1],
+    data.benefits?.[2] || benefitFallbacks[2],
+    data.benefits?.[3] || benefitFallbacks[3],
+    data.benefits?.[4] || benefitFallbacks[4],
   ]
 
   const productName = data.product_name
@@ -111,10 +243,23 @@ export function templateEtecBlusho(data: LandingPageData): string {
     { name: productName, img: imgs[1], price: (parseFloat(price)+12).toFixed(2), orig:'', rating: 5.0, reviews: 218, badge: 'NEW'  },
   ]
 
+  const testiData = data.testimonials?.slice(0, 3) ?? []
   const testimonials = [
-    { name: 'Sophie M.',   rating: 5, quote: 'Absolutely love this brand. My skin has never felt so hydrated and glowy. I get compliments every single day!' },
-    { name: 'Amara K.',    rating: 5, quote: 'The quality is outstanding. Clean ingredients, beautiful packaging, and it actually works. Worth every penny.' },
-    { name: 'Isabelle R.', rating: 5, quote: 'Finally found a skincare brand I trust 100%. The serum transformed my skin within two weeks. Highly recommend!' },
+    {
+      name:   testiData[0]?.name || _('testi_name0'),
+      rating: testiData[0]?.rating ?? 5,
+      quote:  testiData[0]?.text || _('testi_q0'),
+    },
+    {
+      name:   testiData[1]?.name || _('testi_name1'),
+      rating: testiData[1]?.rating ?? 5,
+      quote:  testiData[1]?.text || _('testi_q1'),
+    },
+    {
+      name:   testiData[2]?.name || _('testi_name2'),
+      rating: testiData[2]?.rating ?? 5,
+      quote:  testiData[2]?.text || _('testi_q2'),
+    },
   ]
 
   return `<!DOCTYPE html>
@@ -350,14 +495,14 @@ export function templateEtecBlusho(data: LandingPageData): string {
 <!-- ══════════════════════════════════════════════════════════ -->
 <div class="announce-barb" role="marquee" aria-live="off">
   <div class="announce-trackb">
-    <span class="announce-itemb">WEEKEND SALE! GET UP TO ${savePct}% OFF<span class="announce-sepb"> ✦</span></span>
-    <span class="announce-itemb">FREE SHIPPING AND RETURN POLICY<span class="announce-sepb"> ✦</span></span>
-    <span class="announce-itemb">LIMITED TIME OFFER! HURRY UP!<span class="announce-sepb"> ✦</span></span>
-    <span class="announce-itemb">GRAND OPENING OFFERS<span class="announce-sepb"> ✦</span></span>
-    <span class="announce-itemb">WEEKEND SALE! GET UP TO ${savePct}% OFF<span class="announce-sepb"> ✦</span></span>
-    <span class="announce-itemb">FREE SHIPPING AND RETURN POLICY<span class="announce-sepb"> ✦</span></span>
-    <span class="announce-itemb">LIMITED TIME OFFER! HURRY UP!<span class="announce-sepb"> ✦</span></span>
-    <span class="announce-itemb">GRAND OPENING OFFERS<span class="announce-sepb"> ✦</span></span>
+    <span class="announce-itemb">${_('ann_sale')} ${savePct}% ${_('ann_off')}<span class="announce-sepb"> ✦</span></span>
+    <span class="announce-itemb">${_('ann_shipping')}<span class="announce-sepb"> ✦</span></span>
+    <span class="announce-itemb">${_('ann_limited')}<span class="announce-sepb"> ✦</span></span>
+    <span class="announce-itemb">${_('ann_opening')}<span class="announce-sepb"> ✦</span></span>
+    <span class="announce-itemb">${_('ann_sale')} ${savePct}% ${_('ann_off')}<span class="announce-sepb"> ✦</span></span>
+    <span class="announce-itemb">${_('ann_shipping')}<span class="announce-sepb"> ✦</span></span>
+    <span class="announce-itemb">${_('ann_limited')}<span class="announce-sepb"> ✦</span></span>
+    <span class="announce-itemb">${_('ann_opening')}<span class="announce-sepb"> ✦</span></span>
   </div>
 </div>
 
@@ -368,28 +513,28 @@ export function templateEtecBlusho(data: LandingPageData): string {
   <div class="nav-innerb">
     <!-- Left -->
     <div class="nav-leftb">
-      <div class="hamburgerb" aria-label="Menu" role="button" tabindex="0">
+      <div class="hamburgerb" aria-label="${_('aria_menu')}" role="button" tabindex="0">
         <span></span><span></span><span></span>
       </div>
-      <a href="javascript:void(0)" onclick="event.preventDefault()" class="logob" aria-label="${productName} home">blusho</a>
+      <a href="javascript:void(0)" onclick="event.preventDefault()" class="logob" aria-label="${productName} home">${productName}</a>
     </div>
     <!-- Center nav -->
-    <nav aria-label="Main navigation">
+    <nav aria-label="${_('aria_main_nav')}">
       <ul class="nav-linksb">
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Home</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Shop</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Pages</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Features</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Blogs</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Contact</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('nav_home')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('nav_shop')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('nav_pages')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('nav_features')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('nav_blog')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('nav_contact')}</a></li>
       </ul>
     </nav>
     <!-- Right icons -->
     <div class="nav-rightb">
-      <button class="nav-iconb" aria-label="Search">${ICON_SEARCH}</button>
-      <button class="nav-iconb" aria-label="Wishlist">${ICON_HEART}</button>
-      <button class="nav-iconb" aria-label="Account">${ICON_USER}</button>
-      <button class="nav-iconb" aria-label="Cart, 2 items" style="position:relative;">
+      <button class="nav-iconb" aria-label="${_('aria_search')}">${ICON_SEARCH}</button>
+      <button class="nav-iconb" aria-label="${_('aria_wishlist')}">${ICON_HEART}</button>
+      <button class="nav-iconb" aria-label="${_('aria_account')}">${ICON_USER}</button>
+      <button class="nav-iconb" aria-label="${_('aria_cart')}" style="position:relative;">
         ${ICON_CART}
         <span class="cart-badgeb" aria-hidden="true">2</span>
       </button>
@@ -403,17 +548,17 @@ export function templateEtecBlusho(data: LandingPageData): string {
 <section class="herob" aria-label="Hero">
   <div class="hero-textb">
     <span class="hero-badgeb">${data.hero_badges?.[0] || productName.split(' ')[0]}</span>
-    <h1 class="hero-h1b">${data.headline || 'High Cosmetics<br/>Product For You'}</h1>
-    <p class="hero-subtitleb">${data.subtitle || 'Discover our curated collection of premium skincare essentials crafted for your unique skin.'}</p>
-    <a href="javascript:void(0)" onclick="event.preventDefault()" class="hero-ctab">${data.cta || 'See All Collection'} &rarr;</a>
+    <h1 class="hero-h1b">${data.headline || _('hero_fallback_headline')}</h1>
+    <p class="hero-subtitleb">${data.subtitle || _('hero_fallback_subtitle')}</p>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" class="hero-ctab">${data.cta || _('hero_fallback_cta')} &rarr;</a>
   </div>
   <div class="hero-imgb">
     <div class="hero-img-wrapb">
-      <img src="${HERO_IMG}" alt="${productName} hero model" loading="eager" width="520" height="650"/>
+      <img src="${heroImg}" alt="${productName} hero model" loading="eager" width="520" height="650"/>
     </div>
     <div class="hero-floatb" aria-hidden="true">
       <div class="hero-float-numbb">50K+</div>
-      <div class="hero-float-labelb">Happy Clients</div>
+      <div class="hero-float-labelb">${_('hero_happy_clients')}</div>
     </div>
   </div>
 </section>
@@ -425,15 +570,15 @@ export function templateEtecBlusho(data: LandingPageData): string {
   <div class="stats-innerb">
     <div class="statb">
       <span class="stat-numbb">2500+</span>
-      <span class="stat-labelb">Products</span>
+      <span class="stat-labelb">${_('stat_products')}</span>
     </div>
     <div class="statb">
       <span class="stat-numbb">100%</span>
-      <span class="stat-labelb">Natural</span>
+      <span class="stat-labelb">${_('stat_natural')}</span>
     </div>
     <div class="statb">
       <span class="stat-numbb">50K+</span>
-      <span class="stat-labelb">Happy Clients</span>
+      <span class="stat-labelb">${_('stat_clients')}</span>
     </div>
   </div>
 </div>
@@ -441,26 +586,26 @@ export function templateEtecBlusho(data: LandingPageData): string {
 <!-- ══════════════════════════════════════════════════════════ -->
 <!-- 5. SHOP BY CATEGORIES                                       -->
 <!-- ══════════════════════════════════════════════════════════ -->
-<section class="categoriesb" aria-label="Shop by categories">
+<section class="categoriesb" aria-label="${_('cat_title')}">
   <div class="section-headerb">
     <div class="section-tagsb">
-      <span class="section-overlineb">Top Search Favorites</span>
-      <h2 class="section-titleb">Shop by Categories</h2>
+      <span class="section-overlineb">${_('cat_overline')}</span>
+      <h2 class="section-titleb">${_('cat_title')}</h2>
     </div>
-    <a href="javascript:void(0)" onclick="event.preventDefault()" class="section-linkb">All Categories &rarr;</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" class="section-linkb">${_('cat_all_link')} &rarr;</a>
   </div>
   <div class="cat-gridb">
-    ${(data.features?.slice(0,5).map((f, i) => ({ name: f.title, count: [48,32,75,29,41][i] })) || [
-      { name: 'Best Sellers', count: 48 },
-      { name: 'New Arrivals', count: 32 },
-      { name: 'Collections', count: 75 },
-      { name: 'Bundles',     count: 29 },
-      { name: 'Accessories', count: 41 },
+    ${(data.features?.slice(0,5).map((f, i) => ({ name: f.title, count: [48,32,75,29,41][i] ?? 0 })) || [
+      { name: _('cat_name_0'), count: 48 },
+      { name: _('cat_name_1'), count: 32 },
+      { name: _('cat_name_2'), count: 75 },
+      { name: _('cat_name_3'), count: 29 },
+      { name: _('cat_name_4'), count: 41 },
     ]).map((cat, i) => `
-    <div class="cat-cardb" role="button" tabindex="0" aria-label="${cat.name} category">
-      <img class="cat-imgb" src="${CAT_IMGS[i]}" alt="${cat.name}" loading="lazy" width="100" height="100"/>
+    <div class="cat-cardb" role="button" tabindex="0" aria-label="${cat.name}">
+      <img class="cat-imgb" src="${catImg(i)}" alt="${cat.name}" loading="lazy" width="100" height="100"/>
       <span class="cat-nameb">${cat.name}</span>
-      <span class="cat-countb">${cat.count} Products</span>
+      <span class="cat-countb">${cat.count} ${_('cat_products')}</span>
     </div>`).join('')}
   </div>
 </section>
@@ -486,9 +631,9 @@ export function templateEtecBlusho(data: LandingPageData): string {
     <div class="products-colb">
       <div class="section-headerb" style="margin-bottom:0;">
         <div class="section-tagsb">
-          <h2 class="section-titleb">Explore Products</h2>
+          <h2 class="section-titleb">${_('products_title')}</h2>
         </div>
-        <a href="javascript:void(0)" onclick="event.preventDefault()" class="section-linkb">View All &rarr;</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()" class="section-linkb">${_('products_all')} &rarr;</a>
       </div>
       <div class="products-gridb">
         ${productCards.map(p => `
@@ -508,22 +653,22 @@ export function templateEtecBlusho(data: LandingPageData): string {
               <span>${p.rating} (${p.reviews})</span>
             </div>
           </div>
-          <button class="pcard-atcb" aria-label="Add ${p.name} to cart">Add to Cart</button>
+          <button class="pcard-atcb" aria-label="${_('add_to_cart')} ${p.name}">${_('add_to_cart')}</button>
         </article>`).join('')}
       </div>
     </div>
     <!-- Right: sale banner -->
     <aside class="sale-bannerb" aria-label="Sale promotion">
       <div class="sale-bigb">${savePct}%<br/>SALE!</div>
-      <p class="sale-sublabelb">Limited time offer &mdash; don't miss out</p>
+      <p class="sale-sublabelb">${_('sale_offer')}</p>
       <div class="sale-timerb" id="countdown-blusho" aria-live="polite">
-        <div class="timer-unitb"><span class="timer-numbb" id="cddb-d">00</span><span class="timer-labelb">Days</span></div>
-        <div class="timer-unitb"><span class="timer-numbb" id="cddb-h">00</span><span class="timer-labelb">Hrs</span></div>
-        <div class="timer-unitb"><span class="timer-numbb" id="cddb-m">00</span><span class="timer-labelb">Mns</span></div>
-        <div class="timer-unitb"><span class="timer-numbb" id="cddb-s">00</span><span class="timer-labelb">Secs</span></div>
+        <div class="timer-unitb"><span class="timer-numbb" id="cddb-d">00</span><span class="timer-labelb">${_('sale_days')}</span></div>
+        <div class="timer-unitb"><span class="timer-numbb" id="cddb-h">00</span><span class="timer-labelb">${_('sale_hrs')}</span></div>
+        <div class="timer-unitb"><span class="timer-numbb" id="cddb-m">00</span><span class="timer-labelb">${_('sale_mns')}</span></div>
+        <div class="timer-unitb"><span class="timer-numbb" id="cddb-s">00</span><span class="timer-labelb">${_('sale_secs')}</span></div>
       </div>
-      <img class="sale-imgb" src="${imgs[2]}" alt="Sale product" loading="lazy" width="320" height="320"/>
-      <a href="javascript:void(0)" onclick="event.preventDefault()" class="sale-ctab">Shop the Sale &rarr;</a>
+      <img class="sale-imgb" src="${imgs[2]}" alt="${productName}" loading="lazy" width="320" height="320"/>
+      <a href="javascript:void(0)" onclick="event.preventDefault()" class="sale-ctab">${_('sale_shop')} &rarr;</a>
     </aside>
   </div>
 </section>
@@ -535,16 +680,16 @@ export function templateEtecBlusho(data: LandingPageData): string {
   <div class="bs-innerb">
     <div class="section-headerb" style="margin-bottom:24px;">
       <div class="section-tagsb">
-        <span class="section-overlineb">Customer Favorites</span>
-        <h2 class="section-titleb">Best Sellers</h2>
+        <span class="section-overlineb">${_('bs_overline')}</span>
+        <h2 class="section-titleb">${_('bs_title')}</h2>
       </div>
     </div>
     <!-- Tabs -->
-    <div class="bs-tabsb" role="tablist" aria-label="Product categories">
-      <button class="bs-tabb activebb" role="tab" aria-selected="true"  onclick="bsTabs(this,'all')">All</button>
-      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'new')">New</button>
-      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'sale')">Sale</button>
-      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'top')">Top rated</button>
+    <div class="bs-tabsb" role="tablist" aria-label="${_('cat_title')}">
+      <button class="bs-tabb activebb" role="tab" aria-selected="true"  onclick="bsTabs(this,'all')">${_('bs_tab_all')}</button>
+      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'new')">${_('bs_tab_new')}</button>
+      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'sale')">${_('bs_tab_sale')}</button>
+      <button class="bs-tabb"          role="tab" aria-selected="false" onclick="bsTabs(this,'top')">${_('bs_tab_top')}</button>
     </div>
     <div class="bs-gridb">
       ${productCards.slice(0, 4).map((p, i) => `
@@ -552,7 +697,7 @@ export function templateEtecBlusho(data: LandingPageData): string {
         <div class="bscard-imgwrapb">
           <img src="${p.img}" alt="${p.name}" loading="lazy" width="320" height="426"/>
           ${p.badge ? `<span class="bscard-badgeb">${p.badge}</span>` : ''}
-          <button class="bscard-wishlistb" aria-label="Add ${p.name} to wishlist">${ICON_HEART}</button>
+          <button class="bscard-wishlistb" aria-label="${_('bs_add_wishlist')} ${p.name}">${ICON_HEART}</button>
         </div>
         <div class="bscard-bodyb">
           <p class="bscard-nameb">${p.name}</p>
@@ -562,7 +707,7 @@ export function templateEtecBlusho(data: LandingPageData): string {
           </div>
           <div class="bscard-ratingb">
             ${starsHtml(Math.floor(p.rating))}
-            <span>${p.reviews} reviews</span>
+            <span>${p.reviews} ${_('bs_reviews')}</span>
           </div>
         </div>
       </article>`).join('')}
@@ -591,27 +736,27 @@ export function templateEtecBlusho(data: LandingPageData): string {
   <div class="testi-innerb">
     <div class="section-headerb">
       <div class="section-tagsb">
-        <span class="section-overlineb">Real Stories</span>
-        <h2 class="section-titleb">What Our Clients Say</h2>
+        <span class="section-overlineb">${_('testi_overline')}</span>
+        <h2 class="section-titleb">${_('testi_title')}</h2>
       </div>
       <div>
         <div class="testi-ratingb">
           ${starsHtml(5)}
           <span class="testi-avg-scoreb">4.9/5</span>
         </div>
-        <span class="testi-avg-labelb">from 2,847 verified reviews</span>
+        <span class="testi-avg-labelb">2,847 ${_('testi_avg_label')}</span>
       </div>
     </div>
     <div class="testi-gridb">
-      ${testimonials.map(t => `
+      ${testimonials.map(tItem => `
       <div class="tcardb">
-        <div class="tcard-starb">${starsHtml(t.rating)}</div>
-        <p class="tcard-quoteb">&ldquo;${t.quote}&rdquo;</p>
+        <div class="tcard-starb">${starsHtml(tItem.rating)}</div>
+        <p class="tcard-quoteb">&ldquo;${tItem.quote}&rdquo;</p>
         <div class="tcard-authorb">
-          ${avatarCircle(t.name, 40)}
+          ${avatarCircle(tItem.name, 40)}
           <div>
-            <div class="tcard-nameb">${t.name}</div>
-            <div class="tcard-verifiedb">&#10003; Verified Purchase</div>
+            <div class="tcard-nameb">${tItem.name}</div>
+            <div class="tcard-verifiedb">&#10003; ${_('testi_verified')}</div>
           </div>
         </div>
       </div>`).join('')}
@@ -622,15 +767,15 @@ export function templateEtecBlusho(data: LandingPageData): string {
 <!-- ══════════════════════════════════════════════════════════ -->
 <!-- 11. NEWSLETTER                                              -->
 <!-- ══════════════════════════════════════════════════════════ -->
-<section class="newsletterb" aria-label="Newsletter signup">
+<section class="newsletterb" aria-label="${_('nl_aria')}">
   <div class="nl-innerb">
-    <h2 class="nl-titleb">Subscribe &amp; Get 10% Off Your First Order</h2>
-    <p class="nl-subtitleb">Join 50,000+ satisfied customers and be the first to hear about new products, exclusive offers, and tips.</p>
-    <form class="nl-formb" onsubmit="return false;" aria-label="Email subscription form">
-      <input class="nl-inputb" type="email" placeholder="Enter your email address" aria-label="Email address" autocomplete="email"/>
-      <button class="nl-btnb" type="submit">Subscribe</button>
+    <h2 class="nl-titleb">${_('nl_title')}</h2>
+    <p class="nl-subtitleb">${_('nl_subtitle')}</p>
+    <form class="nl-formb" onsubmit="return false;" aria-label="${_('nl_aria')}">
+      <input class="nl-inputb" type="email" placeholder="${_('nl_placeholder')}" aria-label="${_('nl_placeholder')}" autocomplete="email"/>
+      <button class="nl-btnb" type="submit">${_('nl_btn')}</button>
     </form>
-    <p class="nl-noteb">No spam. Unsubscribe anytime.</p>
+    <p class="nl-noteb">${_('nl_note')}</p>
   </div>
 </section>
 
@@ -641,8 +786,8 @@ export function templateEtecBlusho(data: LandingPageData): string {
   <div class="footer-gridbb">
     <!-- Col 1: Brand -->
     <div>
-      <div class="footer-logob">blusho</div>
-      <p class="footer-taglineb">${data.subtitle || 'Premium quality, trusted by thousands of satisfied customers worldwide.'}</p>
+      <div class="footer-logob">${productName}</div>
+      <p class="footer-taglineb">${data.subtitle || _('footer_tagline_fallback')}</p>
       <div class="footer-socialsb" aria-label="Social media links">
         <a href="javascript:void(0)" onclick="event.preventDefault()" class="footer-social-iconb" aria-label="Instagram">${ICON_INSTAGRAM}</a>
         <a href="javascript:void(0)" onclick="event.preventDefault()" class="footer-social-iconb" aria-label="TikTok">${ICON_TIKTOK}</a>
@@ -652,47 +797,35 @@ export function templateEtecBlusho(data: LandingPageData): string {
     </div>
     <!-- Col 2: Quick Links -->
     <div>
-      <p class="footer-col-titleb">Quick Links</p>
+      <p class="footer-col-titleb">${_('footer_quick_links')}</p>
       <ul class="footer-linksb">
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Home</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">About Us</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Shop</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Blog</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Contact</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('footer_home')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('footer_about')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('footer_shop')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('footer_blog')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('footer_contact')}</a></li>
       </ul>
     </div>
     <!-- Col 3: Help -->
     <div>
-      <p class="footer-col-titleb">Help</p>
+      <p class="footer-col-titleb">${_('footer_help')}</p>
       <ul class="footer-linksb">
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">FAQ</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Shipping &amp; Returns</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Track Order</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Privacy Policy</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">Terms of Service</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('footer_faq')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('footer_shipping')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('footer_track')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('footer_privacy')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${_('footer_terms')}</a></li>
       </ul>
     </div>
     <!-- Col 4: Contact -->
     <div>
-      <p class="footer-col-titleb">Contact</p>
-      <div class="footer-contact-itemb">
-        <span>&#9993;</span>
-        <span>hello@blusho.com</span>
-      </div>
-      <div class="footer-contact-itemb">
-        <span>&#9742;</span>
-        <span>+1 (800) 555-GLOW</span>
-      </div>
-      <div class="footer-contact-itemb">
-        <span>&#9679;</span>
-        <span>Mon–Fri, 9am–6pm EST</span>
-      </div>
+      <p class="footer-col-titleb">${_('footer_contact')}</p>
       <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
         ${benefits.slice(0, 3).map(b => `<span style="background:rgba(255,255,255,.08);border-radius:20px;padding:4px 12px;font-size:11px;color:rgba(255,255,255,.6);">${b}</span>`).join('')}
       </div>
     </div>
   </div>
-  <p class="footer-copyrightb">&copy; ${new Date().getFullYear()} ${productName}. All rights reserved.</p>
+  <p class="footer-copyrightb">&copy; ${new Date().getFullYear()} ${productName}. ${_('footer_copyright')}</p>
 </footer>
 
 <!-- ══════════════════════════════════════════════════════════ -->

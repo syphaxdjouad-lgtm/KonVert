@@ -76,6 +76,54 @@ describe('sections riches — rendu HTML sur 5 templates × 2 fixtures', () => {
     }
   })
 
+  describe('galerie hero + section gallery (chantier B)', () => {
+    for (const template of TEMPLATES) {
+      it(`${template} × full (8 images) — id kvt-hero-img, thumbs, section gallery présents`, () => {
+        const html = renderTemplate(template, mockLandingDataFull)
+        // Image hero a un id (kvt-hero-img-XXX ou existant comme mi1)
+        expect(
+          /\bid="(?:kvt-hero-img-|mi[\d-]+)/.test(html),
+          `[${template}] hero <img> doit avoir un id`,
+        ).toBe(true)
+        // Thumbs présents
+        expect(html, `[${template}] doit contenir kvt-thumb`).toContain('kvt-thumb')
+        // Section gallery présente (seuil 8 images)
+        expect(html, `[${template}] doit contenir kvt-gallery`).toContain('kvt-gallery')
+      })
+
+      it(`${template} × partial (1 image) — pas de thumbs ni section gallery`, () => {
+        const html = renderTemplate(template, mockLandingDataPartial)
+        // 1 image = renderHeroThumbs retourne '' donc pas de kvt-thumb
+        expect(html, `[${template}] ne doit pas contenir kvt-thumb`).not.toContain('kvt-thumb')
+        // 1 image < 8 = pas de section gallery
+        expect(html, `[${template}] ne doit pas contenir kvt-gallery`).not.toContain('kvt-gallery')
+      })
+    }
+  })
+
+  describe('feature flag KONVERT_GALLERY=false (rollback chantier B)', () => {
+    it('flag OFF retire bien galerie hero + section gallery (etec-blue)', () => {
+      const previous = process.env.KONVERT_GALLERY
+      try {
+        process.env.KONVERT_GALLERY = 'true'
+        const htmlOn = renderTemplate('etec-blue', mockLandingDataFull)
+        expect(htmlOn).toContain('kvt-thumb')
+        expect(htmlOn).toContain('kvt-gallery')
+
+        process.env.KONVERT_GALLERY = 'false'
+        const htmlOff = renderTemplate('etec-blue', mockLandingDataFull)
+        expect(htmlOff).not.toContain('kvt-thumb')
+        expect(htmlOff).not.toContain('kvt-gallery')
+      } finally {
+        if (previous === undefined) {
+          delete process.env.KONVERT_GALLERY
+        } else {
+          process.env.KONVERT_GALLERY = previous
+        }
+      }
+    })
+  })
+
   describe('feature flag KONVERT_RICH_SECTIONS=false (rollback)', () => {
     it('flag OFF retire bien les sections riches (comparatif ON vs OFF sur etec-blue)', () => {
       const previous = process.env.KONVERT_RICH_SECTIONS

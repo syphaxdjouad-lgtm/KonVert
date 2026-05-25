@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80',
@@ -199,7 +200,8 @@ export function templateEtecLuxe(data: LandingPageData): string {
     <div style="max-width:560px;margin:0 auto;position:relative;">
       <div style="position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.1) 0%,transparent 70%);pointer-events:none;"></div>
       <div style="aspect-ratio:4/3;overflow:hidden;border:1px solid ${C.border};box-shadow:0 0 80px rgba(201,168,76,.12),0 40px 100px rgba(0,0,0,.5);">
-        <img src="${imgs[0]}" alt="${data.product_name}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+        <img id="kvt-hero-img-etec-luxe" src="${imgs[0]}" alt="${data.product_name}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      ${renderHeroThumbs(_real ?? imgs ?? [], LUXE_THEME, 'kvt-hero-img-etec-luxe')}
       </div>
     </div>
   </div>

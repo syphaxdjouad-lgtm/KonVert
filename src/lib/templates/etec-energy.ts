@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80',
@@ -195,6 +196,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
     <div>
       <div style="background:${C.card};border-radius:8px;overflow:hidden;aspect-ratio:4/3;border:1px solid ${C.border};margin-bottom:10px;position:relative;">
         <img id="mi6" src="${imgs[0]}" alt="${data.product_name}" style="width:100%;height:100%;object-fit:cover;" />
+      ${renderHeroThumbs(_real ?? imgs ?? [], ENERGY_THEME, 'mi6')}
         <!-- Badge performance -->
         <div style="position:absolute;top:16px;right:16px;background:${C.accent};color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;padding:6px 14px;border-radius:4px;">#1 PERFORMANCE</div>
       </div>

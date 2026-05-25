@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -43,6 +44,7 @@ export function templateEtecElla(data: LandingPageData): string {
 <nav style="background:#FDF8FC;border-bottom:1px solid #F0E4F0;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#BBB;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#BBB;">Mode Femme</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#2D2D2D;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#FDF8FC;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="el-hero">
 <div style="width:55%;position:relative;overflow:hidden;border-radius:0 24px 24px 0;" class="el-img"><img id="mi-el" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], ELLA_THEME, 'mi-el')}
 ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#C77DBA;color:#fff;font-size:12px;font-weight:700;padding:8px 18px;border-radius:50px;">-${savePct}%</div>` : ''}
 <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">${imgs.slice(0,4).map((img, i) => `<div onclick="document.getElementById('mi-el').src='${img}';document.querySelectorAll('.th-el').forEach(function(t,j){t.style.outline=j===${i}?'2px solid #C77DBA':'2px solid transparent';t.style.opacity=j===${i}?'1':'.5';});" class="th-el" style="width:50px;height:50px;border-radius:50%;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?'#C77DBA':'transparent'};opacity:${i===0?1:.5};transition:all .2s;"><img src="${img}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('')}</div></div>
 <div style="width:45%;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;" class="el-info">

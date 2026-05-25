@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3735149/pexels-photo-3735149.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -107,6 +108,7 @@ body{font-family:'DM Sans',sans-serif;background:#FEFCFA;color:#121212;}
     <!-- IMAGE -->
     <div style="width:55%;position:relative;overflow:hidden;" class="cx-hero-img">
       <img id="mi-cx" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:500px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], COSMETIX_THEME, 'mi-cx')}
       <div style="position:absolute;bottom:24px;left:24px;display:flex;gap:6px;">
         ${imgs.slice(0,4).map((img, i) => `
         <div onclick="document.getElementById('mi-cx').src='${img}';document.querySelectorAll('.th-cx').forEach(function(t,j){t.style.border=j===${i}?'2px solid #121212':'2px solid transparent';t.style.opacity=j===${i}?'1':'.5';});" class="th-cx" style="width:48px;height:48px;overflow:hidden;cursor:pointer;border:2px solid ${i===0?'#121212':'transparent'};opacity:${i===0?1:.5};transition:all .2s;">

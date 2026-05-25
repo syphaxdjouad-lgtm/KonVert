@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80',
@@ -191,6 +192,7 @@ export function templateEtecSage(data: LandingPageData): string {
     <div>
       <div style="background:${C.card};border-radius:20px;overflow:hidden;aspect-ratio:1;border:1px solid ${C.border};margin-bottom:12px;box-shadow:0 4px 24px rgba(45,106,79,0.08);">
         <img id="mi4" src="${imgs[0]}" alt="${data.product_name}" style="width:100%;height:100%;object-fit:cover;" />
+      ${renderHeroThumbs(_real ?? imgs ?? [], SAGE_THEME, 'mi4')}
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
         ${thumbsHTML}

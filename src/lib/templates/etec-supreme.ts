@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -52,6 +53,7 @@ export function templateEtecSupreme(data: LandingPageData): string {
 <nav style="background:#000;border-bottom:1px solid #222;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-family:'Inconsolata',monospace;font-size:12px;color:#555;">Home</span><span style="font-size:12px;color:#333;">›</span><span style="font-family:'Inconsolata',monospace;font-size:12px;color:#555;">Drop</span><span style="font-size:12px;color:#333;">›</span><span style="font-family:'Inconsolata',monospace;font-size:12px;color:#fff;font-weight:700;">${data.product_name}</span></div></nav>
 <section style="background:#000;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="sp-hero">
 <div style="width:55%;position:relative;background:#111;overflow:hidden;" class="sp-hero-img"><img id="mi-sp" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], SUPREME_THEME, 'mi-sp')}
 ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#FE0100;color:#fff;font-family:'Inconsolata',monospace;font-size:12px;font-weight:700;padding:8px 18px;text-transform:uppercase;letter-spacing:0.06em;">-${savePct}%</div>` : ''}
 <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">${imgs.slice(0,4).map((img, i) => `<div onclick="document.getElementById('mi-sp').src='${img}';document.querySelectorAll('.th-sp').forEach(function(t,j){t.style.outline=j===${i}?'2px solid #FE0100':'2px solid transparent';t.style.opacity=j===${i}?'1':'.4';});" class="th-sp" style="width:52px;height:52px;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?'#FE0100':'transparent'};opacity:${i===0?1:.4};transition:all .2s;"><img src="${img}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('')}</div></div>
 <div style="width:45%;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;background:#000;" class="sp-hero-info">

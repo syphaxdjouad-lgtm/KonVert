@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -52,6 +53,7 @@ export function templateEtecGlowup(data: LandingPageData): string {
 <nav style="background:#FFF9FB;border-bottom:1px solid #FFE0EB;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#BBB;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#BBB;">Beauté</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#2D2D2D;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#FFF9FB;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="gu-hero">
 <div style="width:55%;position:relative;background:#FFF0F5;overflow:hidden;border-radius:0 20px 20px 0;" class="gu-hero-img"><img id="mi-gu" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], GLOWUP_THEME, 'mi-gu')}
 ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#D4508B;color:#fff;font-size:12px;font-weight:700;padding:8px 18px;border-radius:20px;">-${savePct}%</div>` : ''}
 <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">${imgs.slice(0,4).map((img, i) => `<div onclick="document.getElementById('mi-gu').src='${img}';document.querySelectorAll('.th-gu').forEach(function(t,j){t.style.outline=j===${i}?'2px solid #D4508B':'2px solid transparent';t.style.opacity=j===${i}?'1':'.5';});" class="th-gu" style="width:50px;height:50px;border-radius:50%;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?'#D4508B':'transparent'};opacity:${i===0?1:.5};transition:all .2s;"><img src="${img}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('')}</div></div>
 <div style="width:45%;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;" class="gu-hero-info">

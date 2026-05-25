@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/4526407/pexels-photo-4526407.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -102,6 +103,7 @@ body{font-family:'Jost',sans-serif;background:#fff;color:#000;}
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="tc-hero">
     <div style="width:56%;position:relative;background:#F5F5F5;overflow:hidden;" class="tc-hero-img">
       <img id="mi-tc" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], TECHCASE_THEME, 'mi-tc')}
       ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#000;color:#fff;font-size:13px;font-weight:500;padding:8px 16px;border-radius:8px;">-${savePct}%</div>` : ''}
       <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;background:rgba(255,255,255,0.95);padding:8px 12px;border-radius:10px;">
         ${imgs.slice(0,4).map((img, i) => `

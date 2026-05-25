@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3683074/pexels-photo-3683074.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -52,6 +53,7 @@ export function templateEtecBoost(data: LandingPageData): string {
 <nav style="background:#fff;border-bottom:1px solid #F0E0F0;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#BBB;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#BBB;">Wellness</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#1A1A2E;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#fff;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="bo-hero">
 <div style="width:55%;position:relative;background:#FFF0F5;overflow:hidden;border-radius:0 14px 14px 0;" class="bo-hero-img"><img id="mi-bo" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], BOOST_THEME, 'mi-bo')}
 ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:linear-gradient(135deg,#FF2277,#724CE9);color:#fff;font-size:12px;font-weight:700;padding:8px 20px;border-radius:14px;">-${savePct}%</div>` : ''}
 <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">${imgs.slice(0,4).map((img, i) => `<div onclick="document.getElementById('mi-bo').src='${img}';document.querySelectorAll('.th-bo').forEach(function(t,j){t.style.outline=j===${i}?'2px solid #FF2277':'2px solid transparent';t.style.opacity=j===${i}?'1':'.5';});" class="th-bo" style="width:52px;height:52px;border-radius:14px;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?'#FF2277':'transparent'};opacity:${i===0?1:.5};transition:all .2s;"><img src="${img}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('')}</div></div>
 <div style="width:45%;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;" class="bo-hero-info">

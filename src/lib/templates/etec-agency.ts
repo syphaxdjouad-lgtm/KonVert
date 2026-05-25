@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -52,6 +53,7 @@ export function templateEtecAgency(data: LandingPageData): string {
 <nav style="background:#fff;border-bottom:1px solid #E2E8F0;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#94A3B8;">Accueil</span><span style="font-size:12px;color:#CBD5E1;">›</span><span style="font-size:12px;color:#94A3B8;">Services</span><span style="font-size:12px;color:#CBD5E1;">›</span><span style="font-size:12px;color:#1E293B;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#fff;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="ag-hero">
 <div style="width:55%;position:relative;background:#F1F5F9;overflow:hidden;" class="ag-hero-img"><img id="mi-ag" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], AGENCY_THEME, 'mi-ag')}
 ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#334FB4;color:#fff;font-size:12px;font-weight:600;padding:7px 16px;">-${savePct}%</div>` : ''}
 <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">${imgs.slice(0,4).map((img, i) => `<div onclick="document.getElementById('mi-ag').src='${img}';document.querySelectorAll('.th-ag').forEach(function(t,j){t.style.outline=j===${i}?'2px solid #334FB4':'2px solid transparent';t.style.opacity=j===${i}?'1':'.5';});" class="th-ag" style="width:52px;height:52px;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?'#334FB4':'transparent'};opacity:${i===0?1:.5};transition:all .2s;"><img src="${img}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('')}</div></div>
 <div style="width:45%;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;" class="ag-hero-info">

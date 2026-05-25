@@ -3,6 +3,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 
 const NOIR_THEME: SectionTheme = {
@@ -159,6 +160,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#000000;color:#ffffff;}
 <section style="background:#000000;">
   <div style="position:relative;width:100%;height:600px;overflow:hidden;">
     <img id="mi2" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.55);transition:opacity .3s ease;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], NOIR_THEME, 'mi2')}
     <!-- Gradient vers #000 strict — pas de gris intermédiaire -->
     <div style="position:absolute;inset:0;background:linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.6) 70%, #000000 100%);pointer-events:none;"></div>
     <!-- Badge remise + titre centré -->

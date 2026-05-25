@@ -3,6 +3,7 @@ import type { LandingPageData } from '@/types'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=800&q=80',
@@ -298,6 +299,7 @@ export function templateEtecGold(data: LandingPageData): string {
     <div>
       <div style="background:${C.card};border-radius:4px;overflow:hidden;aspect-ratio:1;border:1px solid ${C.divider};margin-bottom:12px;">
         <img id="mi5" src="${imgs[0]}" alt="${data.product_name}" style="width:100%;height:100%;object-fit:cover;" />
+      ${renderHeroThumbs(_real ?? imgs ?? [], GOLD_THEME, 'mi5')}
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
         ${thumbsHTML}

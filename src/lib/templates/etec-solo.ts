@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -95,6 +96,7 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
     <!-- MEDIA -->
     <div style="width:55%;position:relative;background:#F3F3F3;overflow:hidden;" class="so-hero-media">
       <img id="mi-so" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], SOLO_THEME, 'mi-so')}
       ${savePct > 0 ? `<div style="position:absolute;top:24px;left:24px;background:#334FB4;color:#fff;font-size:12px;font-weight:700;padding:8px 18px;border-radius:2rem;letter-spacing:0.05em;">-${savePct}% OFFERT</div>` : ''}
       <!-- THUMBNAILS -->
       <div style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:10px;background:rgba(255,255,255,0.9);padding:8px 12px;border-radius:2rem;">

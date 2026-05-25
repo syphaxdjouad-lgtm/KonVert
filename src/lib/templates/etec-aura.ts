@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80',
@@ -188,7 +189,8 @@ export function templateEtecAura(data: LandingPageData): string {
       </div>
       <div class="hero-imgcol-au" style="display:flex;justify-content:center;position:relative;">
         <div style="width:100%;max-width:420px;aspect-ratio:4/5;border-radius:40% 60% 55% 45% / 50% 45% 55% 50%;overflow:hidden;box-shadow:0 28px 90px rgba(0,0,0,.38);">
-          <img src="${imgs[0]}" alt="${data.product_name}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+          <img id="kvt-hero-img-etec-aura" src="${imgs[0]}" alt="${data.product_name}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      ${renderHeroThumbs(_real ?? imgs ?? [], AURA_THEME, 'kvt-hero-img-etec-aura')}
         </div>
         <div style="position:absolute;bottom:24px;left:-10px;background:${C.card};border-radius:16px;padding:14px 18px;box-shadow:0 8px 36px rgba(44,27,105,.22);border:1px solid ${C.border};">
           <p style="font-size:10px;color:${C.muted};font-family:'DM Sans',sans-serif;margin-bottom:3px;letter-spacing:.05em;">TRUSTED BY</p>

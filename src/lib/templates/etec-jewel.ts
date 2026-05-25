@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1191531/pexels-photo-1191531.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -98,6 +99,7 @@ body{font-family:'Poppins',sans-serif;background:#000;color:#e3e3e3;}
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:660px;" class="jw-hero">
     <div style="width:55%;position:relative;overflow:hidden;" class="jw-hero-img">
       <img id="mi-jw" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:540px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], JEWEL_THEME, 'mi-jw')}
       ${savePct > 0 ? `<div style="position:absolute;top:20px;right:20px;background:#a37249;color:#fff;font-size:11px;font-weight:700;padding:8px 18px;letter-spacing:0.1em;">-${savePct}%</div>` : ''}
       <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">
         ${imgs.slice(0,4).map((img, i) => `

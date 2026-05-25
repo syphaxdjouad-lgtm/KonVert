@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -52,6 +53,7 @@ export function templateEtecStarter(data: LandingPageData): string {
 <nav style="background:#fff;border-bottom:1px solid #E5E7EB;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">Boutique</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#111;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#fff;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="st-hero">
 <div style="width:55%;position:relative;background:#F5F5FF;overflow:hidden;border-radius:0 12px 12px 0;" class="st-hero-img"><img id="mi-st" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], STARTER_THEME, 'mi-st')}
 ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#4F46E5;color:#fff;font-size:12px;font-weight:700;padding:8px 18px;border-radius:12px;">-${savePct}%</div>` : ''}
 <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">${imgs.slice(0,4).map((img, i) => `<div onclick="document.getElementById('mi-st').src='${img}';document.querySelectorAll('.th-st').forEach(function(t,j){t.style.outline=j===${i}?'2px solid #4F46E5':'2px solid transparent';t.style.opacity=j===${i}?'1':'.5';});" class="th-st" style="width:52px;height:52px;border-radius:12px;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?'#4F46E5':'transparent'};opacity:${i===0?1:.5};transition:all .2s;"><img src="${img}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('')}</div></div>
 <div style="width:45%;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;" class="st-hero-info">

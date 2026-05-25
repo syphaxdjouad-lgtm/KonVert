@@ -3,6 +3,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 
 // ─── FALLBACK IMAGES — skincare botanique Unsplash ───────────────────────────
@@ -258,7 +259,8 @@ export function templateEtecVelvety(data: LandingPageData): string {
       <!-- Colonne gauche — image produit -->
       <div>
         <div style="border-radius:20px;overflow:hidden;aspect-ratio:4/5;box-shadow:0 24px 64px rgba(0,0,0,.4);">
-          <img src="${imgs[0]}" alt="${data.product_name}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+          <img id="kvt-hero-img-etec-velvety" src="${imgs[0]}" alt="${data.product_name}" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+      ${renderHeroThumbs(_real ?? imgs ?? [], VELVETY_THEME, 'kvt-hero-img-etec-velvety')}
         </div>
       </div>
 

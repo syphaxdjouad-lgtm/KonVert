@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/2220316/pexels-photo-2220316.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -52,6 +53,7 @@ export function templateEtecStreetz(data: LandingPageData): string {
 <nav style="background:#F8F8F8;border-bottom:2px solid #111;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#999;">Home</span><span style="font-size:12px;color:#CCC;">›</span><span style="font-size:12px;color:#999;">Street</span><span style="font-size:12px;color:#CCC;">›</span><span style="font-size:12px;color:#111;font-weight:600;text-transform:uppercase;">${data.product_name}</span></div></nav>
 <section style="background:#F8F8F8;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="sz-hero">
 <div style="width:55%;position:relative;background:#E5E5E5;overflow:hidden;" class="sz-hero-img"><img id="mi-sz" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], STREETZ_THEME, 'mi-sz')}
 ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#E11D48;color:#fff;font-size:12px;font-weight:700;padding:8px 18px;text-transform:uppercase;letter-spacing:0.06em;">-${savePct}%</div>` : ''}
 <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">${imgs.slice(0,4).map((img, i) => `<div onclick="document.getElementById('mi-sz').src='${img}';document.querySelectorAll('.th-sz').forEach(function(t,j){t.style.outline=j===${i}?'2px solid #E11D48':'2px solid transparent';t.style.opacity=j===${i}?'1':'.5';});" class="th-sz" style="width:52px;height:52px;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?'#E11D48':'transparent'};opacity:${i===0?1:.5};transition:all .2s;"><img src="${img}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('')}</div></div>
 <div style="width:45%;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;" class="sz-hero-info">

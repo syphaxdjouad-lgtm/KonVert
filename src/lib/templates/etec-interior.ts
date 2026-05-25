@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -52,6 +53,7 @@ export function templateEtecInterior(data: LandingPageData): string {
 <nav style="background:#FAF9F6;border-bottom:1px solid #DDD8D0;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">Mobilier</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#2D2D2D;font-weight:500;">${data.product_name}</span></div></nav>
 <section style="background:#FAF9F6;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="in-hero">
 <div style="width:56%;position:relative;background:#EEF0E8;overflow:hidden;border-radius:0 8px 8px 0;" class="in-hero-img"><img id="mi-in" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], INTERIOR_THEME, 'mi-in')}
 ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#5B7553;color:#fff;font-size:12px;font-weight:600;padding:7px 16px;border-radius:8px;">-${savePct}%</div>` : ''}
 <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">${imgs.slice(0,4).map((img, i) => `<div onclick="document.getElementById('mi-in').src='${img}';document.querySelectorAll('.th-in').forEach(function(t,j){t.style.outline=j===${i}?'2px solid #5B7553':'2px solid transparent';t.style.opacity=j===${i}?'1':'.5';});" class="th-in" style="width:52px;height:52px;border-radius:8px;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?'#5B7553':'transparent'};opacity:${i===0?1:.5};transition:all .2s;"><img src="${img}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('')}</div></div>
 <div style="width:44%;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;" class="in-hero-info">

@@ -3,6 +3,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 
 const BLUE_THEME: SectionTheme = {
@@ -109,6 +110,7 @@ body{font-family:'Inter',sans-serif;background:#FAFAFA;color:#1D1D1F;}
     <!-- IMAGE COLUMN -->
     <div style="width:60%;position:relative;background:#F5F5F7;" class="blue-hero-img-col">
       <img id="mi1" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:0 24px 24px 0;min-height:480px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], BLUE_THEME, 'mi1')}
       <!-- Thumbnails overlay -->
       <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">
         ${imgs.slice(0,4).map((img, i) => `

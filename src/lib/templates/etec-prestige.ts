@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -100,6 +101,7 @@ body{font-family:'DM Sans',sans-serif;background:#FDFBF7;color:#2E2A39;}
     <!-- MEDIA -->
     <div style="width:55%;position:relative;overflow:hidden;" class="pr-hero-media">
       <img id="mi-pr" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], PRESTIGE_THEME, 'mi-pr')}
       ${savePct > 0 ? `<div style="position:absolute;top:24px;left:24px;background:#DD1D1D;color:#fff;font-size:11px;font-weight:700;padding:8px 18px;letter-spacing:0.1em;">-${savePct}%</div>` : ''}
       <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">
         ${imgs.slice(0,4).map((img, i) => `

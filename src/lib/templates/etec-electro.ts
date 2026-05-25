@@ -4,6 +4,7 @@ import { ico } from './icons'
 import {
   renderRichSections,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const IMGS = [
   'https://images.pexels.com/photos/3490348/pexels-photo-3490348.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -52,6 +53,7 @@ export function templateEtecElectro(data: LandingPageData): string {
 <nav style="background:#F0FDFA;border-bottom:1px solid #B2EBF2;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#94A3B8;">Accueil</span><span style="font-size:12px;color:#CBD5E1;">›</span><span style="font-size:12px;color:#94A3B8;">Nutrition</span><span style="font-size:12px;color:#CBD5E1;">›</span><span style="font-size:12px;color:#0F172A;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#F0FDFA;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="ec-hero">
 <div style="width:55%;position:relative;background:#E0F7FA;overflow:hidden;border-radius:0 10px 10px 0;" class="ec-hero-img"><img id="mi-ec" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
+      ${renderHeroThumbs(_real ?? imgs ?? [], ELECTRO_THEME, 'mi-ec')}
 ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:linear-gradient(135deg,#00B4D8,#0077B6);color:#fff;font-size:12px;font-weight:700;padding:8px 18px;border-radius:10px;">-${savePct}%</div>` : ''}
 <div style="position:absolute;bottom:20px;left:20px;display:flex;gap:8px;">${imgs.slice(0,4).map((img, i) => `<div onclick="document.getElementById('mi-ec').src='${img}';document.querySelectorAll('.th-ec').forEach(function(t,j){t.style.outline=j===${i}?'2px solid #00B4D8':'2px solid transparent';t.style.opacity=j===${i}?'1':'.5';});" class="th-ec" style="width:52px;height:52px;border-radius:10px;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?'#00B4D8':'transparent'};opacity:${i===0?1:.5};transition:all .2s;"><img src="${img}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;"></div>`).join('')}</div></div>
 <div style="width:45%;padding:52px 48px;display:flex;flex-direction:column;justify-content:center;" class="ec-hero-info">

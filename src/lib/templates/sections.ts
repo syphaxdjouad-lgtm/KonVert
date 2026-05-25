@@ -825,6 +825,61 @@ ${mq('fp', `.fp-wrap{padding:60px 20px!important;}`)}
 </section>`
 }
 
+// ─── renderHeroThumbs (chantier B) ──────────────────────────────────────────
+// Helper hero appelé directement par les 42 templates etec-*.ts dans leur
+// HTML hero, juste après leur <img> principal. Rend 2-4 thumbnails cliquables
+// + un <script> global qui swap le src de l'image principale via mainImgId.
+// Feature flag KONVERT_GALLERY=false → return ''.
+
+export function renderHeroThumbs(
+  images: string[],
+  theme: SectionTheme = DEFAULT_THEME,
+  mainImgId: string,
+): string {
+  if (process.env.KONVERT_GALLERY === 'false') return ''
+  const real = (images ?? []).filter(Boolean)
+  if (real.length < 2) return ''
+
+  const thumbs = real.slice(0, 4)
+  const thumbsHtml = thumbs.map((src, i) => `
+    <button
+      type="button"
+      class="kvt-thumb${i === 0 ? ' kvt-thumb-active' : ''}"
+      onclick="kvtSwapHero('${mainImgId}', '${src}', this)"
+      style="aspect-ratio:1;width:72px;padding:0;border:2px solid ${i === 0 ? theme.primary : 'transparent'};border-radius:${theme.radius};background:transparent;cursor:pointer;overflow:hidden;opacity:${i === 0 ? '1' : '0.7'};transition:opacity 0.15s ease, border-color 0.15s ease;"
+      onmouseover="this.style.opacity='1'"
+      onmouseout="this.style.opacity=this.classList.contains('kvt-thumb-active')?'1':'0.7'"
+      aria-label="Vue ${i + 1}"
+    >
+      <img src="${src}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy" />
+    </button>
+  `).join('')
+
+  return `
+<div class="kvt-hero-thumbs" style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+  ${thumbsHtml}
+</div>
+<script>
+(function(){
+  if (window.kvtSwapHero) return;
+  window.kvtSwapHero = function(id, src, el) {
+    var img = document.getElementById(id);
+    if (img) img.src = src;
+    var thumbs = el.parentElement.querySelectorAll('.kvt-thumb');
+    thumbs.forEach(function(t){
+      t.classList.remove('kvt-thumb-active');
+      t.style.borderColor = 'transparent';
+      t.style.opacity = '0.7';
+    });
+    el.classList.add('kvt-thumb-active');
+    el.style.borderColor = '${theme.primary}';
+    el.style.opacity = '1';
+  };
+})();
+</script>
+`.trim()
+}
+
 // ─── Section renderers map ──────────────────────────────────────────────────
 // Map qui associe chaque SectionKey à son renderer V2. Utilisée par
 // renderRichSections pour itérer dans l'ordre voulu.

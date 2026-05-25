@@ -5,9 +5,95 @@ import {
   renderHeroThumbs,
   type SectionTheme,
 } from './sections'
+
+// ─── I18N ────────────────────────────────────────────────────────────────────
+
+const T: Record<string, Record<string, string>> = {
+  promo_bar:            { fr: '🎁 Promo — Obtenez 25% de cashback sur votre première commande', en: '🎁 Promo — Get 25% Cash Back on your first order', ar: '🎁 عرض — احصل على استرداد 25% على طلبك الأول', es: '🎁 Promo — Obtén 25% de reembolso en tu primer pedido' },
+  nav_home:             { fr: 'Accueil', en: 'Home', ar: 'الرئيسية', es: 'Inicio' },
+  nav_catalogue:        { fr: 'Catalogue', en: 'Catalogue', ar: 'الكتالوج', es: 'Catálogo' },
+  nav_new:              { fr: 'Nouveautés', en: 'New Arrivals', ar: 'الوافدون الجدد', es: 'Novedades' },
+  nav_promo:            { fr: 'Promotions', en: 'Promotions', ar: 'العروض', es: 'Promociones' },
+  breadcrumb_products:  { fr: 'Produits', en: 'Products', ar: 'المنتجات', es: 'Productos' },
+  badge_sold:           { fr: 'ventes', en: 'Sold', ar: 'مباع', es: 'vendidos' },
+  badge_reviews:        { fr: 'avis', en: 'reviews', ar: 'تقييم', es: 'reseñas' },
+  label_color:          { fr: 'Couleur :', en: 'Color:', ar: 'اللون :', es: 'Color:' },
+  label_size:           { fr: 'Taille :', en: 'Size:', ar: 'المقاس :', es: 'Talla:' },
+  color_green:          { fr: 'Vert', en: 'Green', ar: 'أخضر', es: 'Verde' },
+  color_beige:          { fr: 'Beige sable', en: 'Sand Beige', ar: 'بيج رملي', es: 'Beige arena' },
+  color_grey:           { fr: 'Gris ardoise', en: 'Slate Grey', ar: 'رمادي أردوازي', es: 'Gris pizarra' },
+  size_xs:              { fr: 'XS', en: 'XS', ar: 'XS', es: 'XS' },
+  size_s:               { fr: 'S', en: 'S', ar: 'S', es: 'S' },
+  size_m:               { fr: 'M', en: 'M', ar: 'M', es: 'M' },
+  size_l:               { fr: 'L', en: 'L', ar: 'L', es: 'L' },
+  size_xl:              { fr: 'XL', en: 'XL', ar: 'XL', es: 'XL' },
+  size_xxl:             { fr: 'XXL', en: 'XXL', ar: 'XXL', es: 'XXL' },
+  size_xsmall:          { fr: 'Très petit', en: 'XSmall', ar: 'صغير جداً', es: 'XPequeño' },
+  size_small:           { fr: 'Petit', en: 'Small', ar: 'صغير', es: 'Pequeño' },
+  size_medium:          { fr: 'Moyen', en: 'Medium', ar: 'وسط', es: 'Mediano' },
+  size_large:           { fr: 'Grand', en: 'Large', ar: 'كبير', es: 'Grande' },
+  size_xlarge:          { fr: 'Très grand', en: 'XLarge', ar: 'كبير جداً', es: 'XGrande' },
+  size_xxlarge:         { fr: 'XXL', en: 'XXLarge', ar: 'XXL', es: 'XXGrande' },
+  btn_buy:              { fr: 'Acheter maintenant', en: 'Buy this Item', ar: 'اشترِ الآن', es: 'Comprar ahora' },
+  btn_chat:             { fr: 'Chat', en: 'Chat', ar: 'محادثة', es: 'Chat' },
+  btn_wishlist:         { fr: 'Favoris', en: 'Wishlist', ar: 'المفضلة', es: 'Favoritos' },
+  btn_share:            { fr: 'Partager', en: 'Share', ar: 'مشاركة', es: 'Compartir' },
+  btn_added_cart:       { fr: '✓ Ajouté au panier', en: '✓ Added to Cart', ar: '✓ تمت الإضافة', es: '✓ Añadido al carrito' },
+  btn_add_wishlist:     { fr: 'Ajouter aux favoris', en: 'Add to Wishlist', ar: 'أضف إلى المفضلة', es: 'Añadir a favoritos' },
+  tab_details:          { fr: 'Détails', en: 'Details', ar: 'التفاصيل', es: 'Detalles' },
+  tab_reviews:          { fr: 'Avis', en: 'Reviews', ar: 'التقييمات', es: 'Reseñas' },
+  tab_discussion:       { fr: 'Discussion', en: 'Discussion', ar: 'النقاش', es: 'Discusión' },
+  details_title:        { fr: 'Détails du produit', en: 'Product Details', ar: 'تفاصيل المنتج', es: 'Detalles del producto' },
+  detail_quality:       { fr: 'Matériaux de haute qualité', en: 'Premium quality materials', ar: 'مواد عالية الجودة', es: 'Materiales de alta calidad' },
+  detail_comfort:       { fr: 'Confort optimal pour une utilisation quotidienne', en: 'Optimal comfort for everyday use', ar: 'راحة مثلى للاستخدام اليومي', es: 'Comodidad óptima para uso diario' },
+  detail_care:          { fr: 'Entretien facile', en: 'Easy care', ar: 'سهل العناية', es: 'Fácil cuidado' },
+  detail_variants:      { fr: 'Disponible en plusieurs variantes', en: 'Available in multiple variants', ar: 'متوفر بعدة خيارات', es: 'Disponible en múltiples variantes' },
+  detail_sustainable:   { fr: 'Matériaux responsables et durables', en: 'Responsible and sustainable materials', ar: 'مواد مسؤولة ومستدامة', es: 'Materiales responsables y sostenibles' },
+  reviews_title:        { fr: 'Avis clients', en: 'Reviews', ar: 'التقييمات', es: 'Reseñas' },
+  reviews_showing:      { fr: 'Affichage de 5 sur 225 avis', en: 'Showing 5 from 225 reviews', ar: 'عرض 5 من 225 تقييم', es: 'Mostrando 5 de 225 reseñas' },
+  reviews_sort_latest:  { fr: 'Plus récents ↓', en: 'Latest ↓', ar: 'الأحدث ↓', es: 'Más recientes ↓' },
+  reviews_sort_top:     { fr: 'Mieux notés', en: 'Highest Rated', ar: 'الأعلى تقييماً', es: 'Mejor valorados' },
+  reviews_sort_helpful: { fr: 'Plus utiles', en: 'Most Helpful', ar: 'الأكثر فائدة', es: 'Más útiles' },
+  reviews_show_all:     { fr: 'Voir tous les avis', en: 'Show all reviews', ar: 'عرض جميع التقييمات', es: 'Ver todas las reseñas' },
+  review_reply:         { fr: 'Répondre', en: 'Reply', ar: 'رد', es: 'Responder' },
+  reviews_based_on:     { fr: 'Basé sur 225 avis', en: 'Based on 225 reviews', ar: 'بناءً على 225 تقييم', es: 'Basado en 225 reseñas' },
+  discussion_empty:     { fr: 'Aucune discussion pour l\'instant. Soyez le premier à démarrer une conversation.', en: 'No discussions yet. Be the first to start a conversation about this product.', ar: 'لا توجد نقاشات بعد. كن أول من يبدأ محادثة.', es: 'Sin discusiones aún. Sé el primero en iniciar una conversación.' },
+  related_title:        { fr: 'Vous pourriez aimer', en: 'You Might Like This Product', ar: 'قد يعجبك أيضاً', es: 'También te puede gustar' },
+  related_badge_new:    { fr: 'Nouveauté', en: 'New Arrivals', ar: 'وصل حديثاً', es: 'Novedades' },
+  footer_brand_desc:    { fr: 'Produits premium sélectionnés pour leur qualité et leur exclusivité.', en: 'Premium products selected for their quality and exclusivity.', ar: 'منتجات مميزة مختارة بعناية لجودتها وحصريتها.', es: 'Productos premium seleccionados por su calidad y exclusividad.' },
+  footer_about:         { fr: 'À propos', en: 'About Us', ar: 'من نحن', es: 'Sobre nosotros' },
+  footer_information:   { fr: 'Informations', en: 'Information', ar: 'معلومات', es: 'Información' },
+  footer_store_locator: { fr: 'Trouver un magasin', en: 'Store Locator', ar: 'أماكن المتاجر', es: 'Localizador de tiendas' },
+  footer_bulk:          { fr: 'Achat en gros', en: 'Bulk Purchase', ar: 'شراء بالجملة', es: 'Compra al por mayor' },
+  footer_alteration:    { fr: 'Service de retouche', en: 'Alteration Service', ar: 'خدمة التعديل', es: 'Servicio de modificaciones' },
+  footer_gift:          { fr: 'Livraison cadeau', en: 'Gift Delivery', ar: 'توصيل الهدايا', es: 'Entrega de regalos' },
+  footer_live:          { fr: 'Live Station', en: 'Live Station', ar: 'البث المباشر', es: 'Live Station' },
+  footer_help:          { fr: 'Aide', en: 'Help', ar: 'المساعدة', es: 'Ayuda' },
+  footer_faq:           { fr: 'FAQ', en: 'FAQ', ar: 'الأسئلة الشائعة', es: 'FAQ' },
+  footer_guide:         { fr: 'Guide d\'achat en ligne', en: 'Online Shopping Guide', ar: 'دليل التسوق عبر الإنترنت', es: 'Guía de compras online' },
+  footer_return:        { fr: 'Politique de retour', en: 'Return Policy', ar: 'سياسة الإرجاع', es: 'Política de devoluciones' },
+  footer_privacy:       { fr: 'Politique de confidentialité', en: 'Privacy Policy', ar: 'سياسة الخصوصية', es: 'Política de privacidad' },
+  footer_accessibility: { fr: 'Accessibilité', en: 'Accessibility', ar: 'إمكانية الوصول', es: 'Accesibilidad' },
+  footer_contact:       { fr: 'Nous contacter', en: 'Contact Us', ar: 'اتصل بنا', es: 'Contáctanos' },
+  footer_account:       { fr: 'Mon compte', en: 'Account', ar: 'حسابي', es: 'Cuenta' },
+  footer_membership:    { fr: 'Adhésion', en: 'Membership', ar: 'العضوية', es: 'Membresía' },
+  footer_profile:       { fr: 'Profil', en: 'Profile', ar: 'الملف الشخصي', es: 'Perfil' },
+  footer_coupons:       { fr: 'Coupons', en: 'Coupons', ar: 'كوبونات', es: 'Cupones' },
+  footer_social:        { fr: 'Réseaux sociaux', en: 'Social Media', ar: 'وسائل التواصل', es: 'Redes sociales' },
+  footer_copy:          { fr: '©Shopz 2026. Tous droits réservés.', en: '©Shopz 2026. All rights reserved.', ar: '©Shopz 2026. جميع الحقوق محفوظة.', es: '©Shopz 2026. Todos los derechos reservados.' },
+  footer_terms:         { fr: 'Conditions générales', en: 'Terms and Conditions', ar: 'الشروط والأحكام', es: 'Términos y condiciones' },
+  img_view:             { fr: 'Vue', en: 'View', ar: 'صورة', es: 'Vista' },
+  img_more:             { fr: '+4 autres', en: '+4 more', ar: '+4 المزيد', es: '+4 más' },
+  aria_stars:           { fr: 'étoiles', en: 'stars', ar: 'نجوم', es: 'estrellas' },
+}
+
+function t(key: string, lang: string = 'fr'): string {
+  return T[key]?.[lang] ?? T[key]?.['fr'] ?? key
+}
+
 // ─── FALLBACK IMAGES — menswear premium ───────────────────────────────────────
 
-const FALLBACK_IMGS = [
+const IMGS_FALLBACK = [
   'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=80',
   'https://images.unsplash.com/photo-1611911813383-67769b37a149?w=800&q=80',
   'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80',
@@ -16,7 +102,7 @@ const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1516826957135-700dedea698c?w=800&q=80',
 ]
 
-const RELATED_IMGS = [
+const RELATED_FALLBACK = [
   'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400&q=80',
   'https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=400&q=80',
   'https://images.unsplash.com/photo-1543076447-215ad9ba6923?w=400&q=80',
@@ -95,8 +181,9 @@ const SHOPZ_THEME: SectionTheme = {
 }
 
 export function templateEtecShopz(data: LandingPageData): string {
-  const img    = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
-  const relImg = (i: number) => RELATED_IMGS[i % RELATED_IMGS.length]
+  const lang   = data.language ?? 'fr'
+  const img    = (i: number) => data.images?.[i] || IMGS_FALLBACK[i % IMGS_FALLBACK.length]
+  const relImg = (i: number) => RELATED_FALLBACK[i % RELATED_FALLBACK.length]
 
   const productName   = data.product_name   || 'Premium Product'
   const subtitle      = data.subtitle       || 'A carefully crafted product designed for quality and everyday comfort.'
@@ -116,24 +203,24 @@ export function templateEtecShopz(data: LandingPageData): string {
   const thumbsHTML = Array.from({ length: 5 }, (_, i) => {
     const isLast = i === 4
     return `
-          <div class="gallery-thumb${i === 0 ? ' active' : ''}" data-idx="${i}" onclick="selectImg(${i})" role="button" tabindex="0" aria-label="Image ${i + 1}" onkeydown="if(event.key==='Enter')selectImg(${i})">
-            <img src="${img(i)}" alt="Vue ${i + 1}" loading="lazy">
-            ${isLast ? `<div class="thumb-more">+4 more</div>` : ''}
+          <div class="gallery-thumb${i === 0 ? ' active' : ''}" data-idx="${i}" onclick="selectImg(${i})" role="button" tabindex="0" aria-label="${t('img_view', lang)} ${i + 1}" onkeydown="if(event.key==='Enter')selectImg(${i})">
+            <img src="${img(i)}" alt="${t('img_view', lang)} ${i + 1}" loading="lazy">
+            ${isLast ? `<div class="thumb-more">${t('img_more', lang)}</div>` : ''}
           </div>`
   }).join('')
 
-  const reviewsHTML = testimonials.map((t, i) => `
+  const reviewsHTML = testimonials.map((rev, i) => `
           <div class="review-item">
             <div class="review-header">
-              ${avatarInitials(t.author, i)}
+              ${avatarInitials(rev.author, i)}
               <div class="review-meta">
-                <span class="review-author">${t.author}</span>
-                <div class="review-stars" aria-label="${t.rating} étoiles">${stars(t.rating)}</div>
+                <span class="review-author">${rev.author}</span>
+                <div class="review-stars" aria-label="${rev.rating} ${t('aria_stars', lang)}">${stars(rev.rating)}</div>
               </div>
             </div>
-            <p class="review-text">${t.text}</p>
+            <p class="review-text">${rev.text}</p>
             <div class="review-actions">
-              <button class="review-action-btn">Reply</button>
+              <button class="review-action-btn">${t('review_reply', lang)}</button>
               <button class="review-action-btn thumb-btn">${ICON_THUMB_UP} <span>${6 + i}</span></button>
               <button class="review-action-btn thumb-btn">${ICON_THUMB_DOWN} <span>0</span></button>
             </div>
@@ -150,12 +237,12 @@ export function templateEtecShopz(data: LandingPageData): string {
           <div class="related-card">
             <div class="related-img-wrap">
               <img src="${relImg(i)}" alt="${p.name}" loading="lazy">
-              ${p.badge ? `<span class="related-badge">${p.badge}</span>` : ''}
-              <button class="related-heart" aria-label="Ajouter aux favoris">${ICON_HEART}</button>
+              ${p.badge ? `<span class="related-badge">${t('related_badge_new', lang)}</span>` : ''}
+              <button class="related-heart" aria-label="${t('btn_add_wishlist', lang)}">${ICON_HEART}</button>
             </div>
             <div class="related-info">
               <p class="related-name">${p.name}</p>
-              <div class="related-stars">${stars(5)} <span class="related-stars-text">${p.rating} (${p.reviews} reviews)</span></div>
+              <div class="related-stars">${stars(5)} <span class="related-stars-text">${p.rating} (${p.reviews} ${t('badge_reviews', lang)})</span></div>
               <div class="related-pricing">
                 <span class="related-price">${p.price}</span>
                 <span class="related-orig">${p.orig}</span>
@@ -371,15 +458,15 @@ export function templateEtecShopz(data: LandingPageData): string {
 </head>
 <body>
 
-  <div class="promo-bar">&#127873; Promo &mdash; Get 25% Cash Back on your first order</div>
+  <div class="promo-bar">${t('promo_bar', lang)}</div>
 
   <nav class="nav">
     <a href="javascript:void(0)" onclick="event.preventDefault()" class="nav-logo">Shopz</a>
     <ul class="nav-links">
-      <li><a href="javascript:void(0)" onclick="event.preventDefault()">Home</a></li>
-      <li><a href="javascript:void(0)" onclick="event.preventDefault()" class="active">Catalogue</a></li>
-      <li><a href="javascript:void(0)" onclick="event.preventDefault()">Nouveautés</a></li>
-      <li><a href="javascript:void(0)" onclick="event.preventDefault()">Promotions</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('nav_home', lang)}</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()" class="active">${t('nav_catalogue', lang)}</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('nav_new', lang)}</a></li>
+      <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('nav_promo', lang)}</a></li>
     </ul>
     <div class="nav-icons">
       <button class="nav-icon-btn">${ICON_SEARCH}</button>
@@ -391,9 +478,9 @@ export function templateEtecShopz(data: LandingPageData): string {
   </nav>
 
   <div class="breadcrumb">
-    <a href="javascript:void(0)" onclick="event.preventDefault()">Home</a><span class="breadcrumb-sep">/</span>
-    <a href="javascript:void(0)" onclick="event.preventDefault()">Catalogue</a><span class="breadcrumb-sep">/</span>
-    <a href="javascript:void(0)" onclick="event.preventDefault()">Produits</a><span class="breadcrumb-sep">/</span>
+    <a href="javascript:void(0)" onclick="event.preventDefault()">${t('nav_home', lang)}</a><span class="breadcrumb-sep">/</span>
+    <a href="javascript:void(0)" onclick="event.preventDefault()">${t('nav_catalogue', lang)}</a><span class="breadcrumb-sep">/</span>
+    <a href="javascript:void(0)" onclick="event.preventDefault()">${t('breadcrumb_products', lang)}</a><span class="breadcrumb-sep">/</span>
     <span class="breadcrumb-current">${productName}</span>
   </div>
 
@@ -410,11 +497,11 @@ export function templateEtecShopz(data: LandingPageData): string {
       <h1 class="product-title">${productName}</h1>
       <p class="product-subtitle">${subtitle}</p>
       <div class="product-badges">
-        <span class="badge-sold">5K+ Sold</span>
+        <span class="badge-sold">5K+ ${t('badge_sold', lang)}</span>
         <div class="badge-rating">
           <span class="stars-inline">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
           <strong>4.9</strong>
-          <span style="color:${C.muted}">(225 reviews)</span>
+          <span style="color:${C.muted}">(225 ${t('badge_reviews', lang)})</span>
         </div>
       </div>
       <div class="divider"></div>
@@ -424,50 +511,50 @@ export function templateEtecShopz(data: LandingPageData): string {
         <span class="price-save">-22%</span>
       </div>
 
-      <p class="selector-label">Color: <span id="color-label">53 Green</span></p>
+      <p class="selector-label">${t('label_color', lang)} <span id="color-label">${t('color_green', lang)}</span></p>
       <div class="color-swatches">
-        <div class="color-swatch active" style="background:#1A5C30" onclick="selectColor(this,'53 Green')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selectColor(this,'53 Green')"></div>
-        <div class="color-swatch" style="background:#B8A898" onclick="selectColor(this,'Sand Beige')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selectColor(this,'Sand Beige')"></div>
-        <div class="color-swatch" style="background:#6B6B6B" onclick="selectColor(this,'Slate Grey')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selectColor(this,'Slate Grey')"></div>
+        <div class="color-swatch active" style="background:#1A5C30" onclick="selectColor(this,'${t('color_green', lang)}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selectColor(this,'${t('color_green', lang)}')"></div>
+        <div class="color-swatch" style="background:#B8A898" onclick="selectColor(this,'${t('color_beige', lang)}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selectColor(this,'${t('color_beige', lang)}')"></div>
+        <div class="color-swatch" style="background:#6B6B6B" onclick="selectColor(this,'${t('color_grey', lang)}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')selectColor(this,'${t('color_grey', lang)}')"></div>
       </div>
 
-      <p class="selector-label">Size: <span id="size-label">Small</span></p>
+      <p class="selector-label">${t('label_size', lang)} <span id="size-label">${t('size_small', lang)}</span></p>
       <div class="size-options">
-        <button class="size-btn" onclick="selectSize(this,'XSmall')">XS</button>
-        <button class="size-btn active" onclick="selectSize(this,'Small')">S</button>
-        <button class="size-btn" onclick="selectSize(this,'Medium')">M</button>
-        <button class="size-btn" onclick="selectSize(this,'Large')">L</button>
-        <button class="size-btn" onclick="selectSize(this,'XLarge')">XL</button>
-        <button class="size-btn" onclick="selectSize(this,'XXLarge')">XXL</button>
+        <button class="size-btn" onclick="selectSize(this,'${t('size_xsmall', lang)}')">${t('size_xs', lang)}</button>
+        <button class="size-btn active" onclick="selectSize(this,'${t('size_small', lang)}')">${t('size_s', lang)}</button>
+        <button class="size-btn" onclick="selectSize(this,'${t('size_medium', lang)}')">${t('size_m', lang)}</button>
+        <button class="size-btn" onclick="selectSize(this,'${t('size_large', lang)}')">${t('size_l', lang)}</button>
+        <button class="size-btn" onclick="selectSize(this,'${t('size_xlarge', lang)}')">${t('size_xl', lang)}</button>
+        <button class="size-btn" onclick="selectSize(this,'${t('size_xxlarge', lang)}')">${t('size_xxl', lang)}</button>
       </div>
 
       <button class="btn-cart" onclick="addToCart(this)">${ICON_PLUS} ${ctaText}</button>
-      <button class="btn-buy">Buy this Item</button>
+      <button class="btn-buy">${t('btn_buy', lang)}</button>
 
       <div class="product-actions">
-        <button class="action-btn">${ICON_CHAT}<span>Chat</span></button>
-        <button class="action-btn">${ICON_HEART}<span>Wishlist</span></button>
-        <button class="action-btn">${ICON_SHARE}<span>Share</span></button>
+        <button class="action-btn">${ICON_CHAT}<span>${t('btn_chat', lang)}</span></button>
+        <button class="action-btn">${ICON_HEART}<span>${t('btn_wishlist', lang)}</span></button>
+        <button class="action-btn">${ICON_SHARE}<span>${t('btn_share', lang)}</span></button>
       </div>
     </div>
   </section>
 
   <section class="tabs-section">
     <div class="tabs-header">
-      <button class="tab-btn" onclick="switchTab('details',this)">Details</button>
-      <button class="tab-btn active" onclick="switchTab('reviews',this)">Reviews</button>
-      <button class="tab-btn" onclick="switchTab('discussion',this)">Discussion</button>
+      <button class="tab-btn" onclick="switchTab('details',this)">${t('tab_details', lang)}</button>
+      <button class="tab-btn active" onclick="switchTab('reviews',this)">${t('tab_reviews', lang)}</button>
+      <button class="tab-btn" onclick="switchTab('discussion',this)">${t('tab_discussion', lang)}</button>
     </div>
 
     <div id="panel-details" class="tab-panel details-panel">
-      <h3>Product Details</h3>
-      <p>${data.benefits?.[0] || 'Un produit premium conçu pour offrir qualité et confort au quotidien.'}</p>
+      <h3>${t('details_title', lang)}</h3>
+      <p>${data.benefits?.[0] || t('detail_comfort', lang)}</p>
       <ul>
-        <li>${data.benefits?.[1] || 'Matériaux de haute qualité'}</li>
-        <li>${data.benefits?.[2] || 'Confort optimal pour une utilisation quotidienne'}</li>
-        <li>${data.benefits?.[3] || 'Entretien facile'}</li>
-        <li>${data.benefits?.[4] || 'Disponible en plusieurs variantes'}</li>
-        <li>${data.benefits?.[5] || 'Matériaux responsables et durables'}</li>
+        <li>${data.benefits?.[1] || t('detail_quality', lang)}</li>
+        <li>${data.benefits?.[2] || t('detail_comfort', lang)}</li>
+        <li>${data.benefits?.[3] || t('detail_care', lang)}</li>
+        <li>${data.benefits?.[4] || t('detail_variants', lang)}</li>
+        <li>${data.benefits?.[5] || t('detail_sustainable', lang)}</li>
       </ul>
     </div>
 
@@ -476,13 +563,13 @@ export function templateEtecShopz(data: LandingPageData): string {
         <div class="reviews-left">
           <div class="reviews-top-row">
             <div>
-              <p class="reviews-title">Reviews</p>
-              <p class="reviews-count">Showing 5 from 225 reviews</p>
+              <p class="reviews-title">${t('reviews_title', lang)}</p>
+              <p class="reviews-count">${t('reviews_showing', lang)}</p>
             </div>
             <select class="reviews-sort">
-              <option>Latest &#8595;</option>
-              <option>Highest Rated</option>
-              <option>Most Helpful</option>
+              <option>${t('reviews_sort_latest', lang)}</option>
+              <option>${t('reviews_sort_top', lang)}</option>
+              <option>${t('reviews_sort_helpful', lang)}</option>
             </select>
           </div>
           ${reviewsHTML}
@@ -494,14 +581,14 @@ export function templateEtecShopz(data: LandingPageData): string {
             <span class="page-sep">...</span>
             <button class="page-btn">28</button>
             <button class="page-btn arrow">${ICON_ARROW_RIGHT}</button>
-            <button class="page-show-all">Show all reviews</button>
+            <button class="page-show-all">${t('reviews_show_all', lang)}</button>
           </div>
         </div>
         <div class="reviews-right">
           <div class="rating-global">
             <div class="rating-score">4.9</div>
             <div class="rating-stars-big">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-            <p class="rating-total">Based on 225 reviews</p>
+            <p class="rating-total">${t('reviews_based_on', lang)}</p>
           </div>
           ${barsHTML}
         </div>
@@ -509,13 +596,13 @@ export function templateEtecShopz(data: LandingPageData): string {
     </div>
 
     <div id="panel-discussion" class="tab-panel discussion-panel">
-      No discussions yet. Be the first to start a conversation about this product.
+      ${t('discussion_empty', lang)}
     </div>
   </section>
 
   <section class="related-section">
     <div class="related-header">
-      <h2 class="related-title">You Might Like This Product</h2>
+      <h2 class="related-title">${t('related_title', lang)}</h2>
       <div class="related-nav">
         <button class="related-nav-btn">${ICON_ARROW_LEFT}</button>
         <button class="related-nav-btn">${ICON_ARROW_RIGHT}</button>
@@ -528,40 +615,40 @@ export function templateEtecShopz(data: LandingPageData): string {
     <div class="footer-top">
       <div>
         <p class="footer-brand-name">Shopz</p>
-        <p class="footer-brand-desc">${data.subtitle || 'Produits premium sélectionnés pour leur qualité et leur exclusivité.'}</p>
+        <p class="footer-brand-desc">${data.subtitle || t('footer_brand_desc', lang)}</p>
       </div>
       <div>
-        <p class="footer-col-title">About Us</p>
+        <p class="footer-col-title">${t('footer_about', lang)}</p>
         <ul class="footer-links">
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Information</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Store Locator</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Bulk Purchase</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Alteration Service</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Gift Delivery</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Live Station</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_information', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_store_locator', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_bulk', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_alteration', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_gift', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_live', lang)}</a></li>
         </ul>
       </div>
       <div>
-        <p class="footer-col-title">Help</p>
+        <p class="footer-col-title">${t('footer_help', lang)}</p>
         <ul class="footer-links">
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">FAQ</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Online Shopping Guide</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Return Policy</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Privacy Policy</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Accessibility</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Contact Us</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_faq', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_guide', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_return', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_privacy', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_accessibility', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_contact', lang)}</a></li>
         </ul>
       </div>
       <div>
-        <p class="footer-col-title">Account</p>
+        <p class="footer-col-title">${t('footer_account', lang)}</p>
         <ul class="footer-links">
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Membership</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Profile</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">Coupons</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_membership', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_profile', lang)}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_coupons', lang)}</a></li>
         </ul>
       </div>
       <div>
-        <p class="footer-col-title">Social Media</p>
+        <p class="footer-col-title">${t('footer_social', lang)}</p>
         <ul class="footer-links">
           <li><a href="javascript:void(0)" onclick="event.preventDefault()">${ICON_TWITTER} Twitter</a></li>
           <li><a href="javascript:void(0)" onclick="event.preventDefault()">${ICON_FACEBOOK} Facebook</a></li>
@@ -571,10 +658,10 @@ export function templateEtecShopz(data: LandingPageData): string {
       </div>
     </div>
     <div class="footer-bottom">
-      <p class="footer-copy">&copy;Shopz 2026. All rights reserved.</p>
+      <p class="footer-copy">${t('footer_copy', lang)}</p>
       <div class="footer-legal">
-        <a href="javascript:void(0)" onclick="event.preventDefault()">Privacy Policy</a>
-        <a href="javascript:void(0)" onclick="event.preventDefault()">Terms and Conditions</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_privacy', lang)}</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_terms', lang)}</a>
       </div>
     </div>
   </footer>
@@ -609,7 +696,7 @@ export function templateEtecShopz(data: LandingPageData): string {
     }
     function addToCart(btn) {
       var orig = btn.innerHTML;
-      btn.innerHTML = '&#10003; Added to Cart';
+      btn.innerHTML = '${t('btn_added_cart', lang)}';
       btn.style.background = '#144D27';
       setTimeout(function() { btn.innerHTML = orig; btn.style.background = '${C.green}'; }, 1800);
     }

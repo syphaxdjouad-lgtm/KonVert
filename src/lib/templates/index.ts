@@ -42,7 +42,8 @@ export { templateEtecElectro } from './etec-electro'
 export { templateEtecAgency } from './etec-agency'
 export { templateEtecSupreme } from './etec-supreme'
 export { templateEtecQuarter } from './etec-quarter'
-export { templateEtecBoost } from './etec-boost'
+export { templateEtecBoost }    from './etec-boost'
+export { templateEtecNatural } from './etec-natural'
 
 import { templateEtecBlue }   from './etec-blue'
 import { templateEtecNoir }   from './etec-noir'
@@ -85,7 +86,8 @@ import { templateEtecElectro } from './etec-electro'
 import { templateEtecAgency } from './etec-agency'
 import { templateEtecSupreme } from './etec-supreme'
 import { templateEtecQuarter } from './etec-quarter'
-import { templateEtecBoost } from './etec-boost'
+import { templateEtecBoost }    from './etec-boost'
+import { templateEtecNatural } from './etec-natural'
 
 // ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
 
@@ -176,6 +178,7 @@ export const TEMPLATES = [
   { id: 'etec-supreme',  name: 'Supreme',  category: 'dark'    as const, fn: templateEtecSupreme,  label: 'Exclusive · Monospace · Streetwear',   accent: '#FE0100', badge: 'Exclusif',       productType: 'fashion'   as ProductType, themed: true  },
   { id: 'etec-quarter',  name: 'Quarter',  category: 'luxury'  as const, fn: templateEtecQuarter,  label: 'Minimal Luxe · Épuré · Noir & Blanc',  accent: '#121212', badge: 'Nouveau',        productType: 'universal' as ProductType, themed: false },
   { id: 'etec-boost',    name: 'Boost',    category: 'beauty'  as const, fn: templateEtecBoost,    label: 'Conversion · Wellness · DTC Premium',  accent: '#FF2277', badge: 'Top conversion', productType: 'wellness'  as ProductType, themed: true  },
+  { id: 'etec-natural',  name: 'Natural',  category: 'organic' as const, fn: templateEtecNatural,  label: 'Eco · Premium · Allbirds-style minimaliste', accent: '#A8B5A0', badge: 'Nouveau',     productType: 'universal' as ProductType, themed: false },
 ]
 
 // ─── RENDER ───────────────────────────────────────────────────────────────────
@@ -256,6 +259,7 @@ export function renderTemplate(templateId: string, data: LandingPageData, overri
     case 'etec-supreme':    return templateEtecSupreme(renderData)
     case 'etec-quarter':    return templateEtecQuarter(renderData)
     case 'etec-boost':      return templateEtecBoost(renderData)
+    case 'etec-natural':   return templateEtecNatural(renderData)
     case 'minimal-dark':
     case 'gaming-zone':
     case 'automotive-pro':  return templateEtecNoir(renderData)

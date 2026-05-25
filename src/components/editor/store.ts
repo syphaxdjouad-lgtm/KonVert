@@ -1,6 +1,9 @@
 import { create } from 'zustand'
+import { v4 as uuidv4 } from 'uuid'
 import type { EditorState, SectionInstance, VisualSettings, GlobalStyles, PanelMode, Device } from '@/types/editor'
 import type { LandingPageData } from '@/types'
+import { DEFAULT_ORDER } from '@/lib/templates/sections'
+import type { SectionKey } from '@/lib/templates/sections'
 
 interface EditorActions {
   hydrate: (state: EditorState) => void
@@ -84,3 +87,76 @@ export const useEditorStore = create<EditorStore>((set) => ({
   setPanelMode: (mode) => set({ panelMode: mode }),
   setDevice: (device) => set({ device }),
 }))
+
+// ─── Migration helpers ──────────────────────────────────────────────────────
+// hydrateFromPage convertit un pages.json_content (legacy ou recent) en EditorState.
+// Gere 2 cas :
+// - Legacy (sans _editor_state) : genere sectionOrder depuis DEFAULT_ORDER
+//   avec visible=true pour les sections ayant de la data dans LandingPageData
+// - Recent (avec _editor_state) : preserve l'etat editeur complet
+
+interface PageJsonContent extends LandingPageData {
+  _template_slug?: string
+  _editor_state?: {
+    sectionOrder?: SectionInstance[]
+    visualSettings?: VisualSettings
+    globalStyles?: GlobalStyles
+  }
+}
+
+// Heuristique : la section est "remplie" si la data correspondante est presente.
+// hero_badges et price ne comptent pas (ils restent dans le hero des templates).
+function hasDataForSection(data: LandingPageData, key: SectionKey): boolean {
+  switch (key) {
+    case 'social_proof_bar':      return !!data.social_proof
+    case 'story':                 return !!data.story
+    case 'target_audience':       return Array.isArray(data.target_audience) && data.target_audience.length > 0
+    case 'features':              return Array.isArray(data.features) && data.features.length > 0
+    case 'gallery':               return Array.isArray(data.images) && data.images.length >= 8
+    case 'unique_mechanism':      return !!data.unique_mechanism
+    case 'how_it_works':          return Array.isArray(data.how_it_works) && data.how_it_works.length > 0
+    case 'before_after':          return Array.isArray(data.before_after) && data.before_after.length > 0
+    case 'comparison':            return !!data.comparison
+    case 'competitor_comparison': return !!data.competitor_comparison
+    case 'testimonials':          return Array.isArray(data.testimonials) && data.testimonials.length > 0
+    case 'press_mentions':        return Array.isArray(data.press_mentions) && data.press_mentions.length > 0
+    case 'founder_note':          return !!data.founder_note
+    case 'value_stack':           return !!data.value_stack
+    case 'bonuses':               return Array.isArray(data.bonuses) && data.bonuses.length > 0
+    case 'guarantee':             return !!data.guarantee
+    case 'risk_reversal':         return Array.isArray(data.risk_reversal) && data.risk_reversal.length > 0
+    case 'objections':            return Array.isArray(data.objections) && data.objections.length > 0
+    case 'community_callout':     return !!data.community_callout
+    case 'final_pitch':           return !!data.final_pitch
+    default:                      return false
+  }
+}
+
+export function hydrateFromPage(jsonContent: PageJsonContent): EditorState {
+  const templateId = jsonContent._template_slug || 'etec-blue'
+  const editorState = jsonContent._editor_state
+
+  // Page recente : preserve l'etat complet
+  if (editorState?.sectionOrder) {
+    return {
+      templateId,
+      landingData: jsonContent,
+      sectionOrder: editorState.sectionOrder,
+      visualSettings: editorState.visualSettings ?? {},
+      globalStyles: editorState.globalStyles ?? {},
+    }
+  }
+
+  // Legacy : genere sectionOrder depuis DEFAULT_ORDER, visible si data presente
+  return {
+    templateId,
+    landingData: jsonContent,
+    sectionOrder: DEFAULT_ORDER.map(key => ({
+      id: uuidv4(),
+      key,
+      visible: hasDataForSection(jsonContent, key),
+    })),
+    visualSettings: {},
+    globalStyles: {},
+  }
+}

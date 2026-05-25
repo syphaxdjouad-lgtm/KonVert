@@ -133,3 +133,43 @@ describe('renderGallery', () => {
     expect(html).toContain('See it in detail')
   })
 })
+
+describe('renderUniqueMechanism — enrichissement image chantier B', () => {
+  it('regression : sans images, comportement chantier A (panneau preuve texte si proof)', () => {
+    const { images: _, ...dataNoImages } = mockLandingDataFull
+    const html = renderUniqueMechanism(dataNoImages as typeof mockLandingDataFull, DEFAULT_THEME)
+    expect(html).toContain('<section')
+    expect(html).not.toMatch(/<img[^>]*src=/)
+  })
+
+  it('regression : avec <5 images, pas d\'image rendue (evite duplication hero)', () => {
+    const data = {
+      ...mockLandingDataFull,
+      images: ['1.jpg', '2.jpg', '3.jpg', '4.jpg'],
+    }
+    const html = renderUniqueMechanism(data, DEFAULT_THEME)
+    expect(html).toContain('<section')
+    expect(html).not.toContain('src="1.jpg"')
+    expect(html).not.toContain('src="4.jpg"')
+  })
+
+  it('avec >=5 images, rend l\'image[4] dans le panneau droit', () => {
+    const data = {
+      ...mockLandingDataFull,
+      images: ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg'],
+    }
+    const html = renderUniqueMechanism(data, DEFAULT_THEME)
+    expect(html).toContain('src="5.jpg"')
+  })
+
+  it('avec 8 images, utilise bien images[4] (pas images[0])', () => {
+    const html = renderUniqueMechanism(mockLandingDataFull, DEFAULT_THEME)
+    expect(html).toContain(`src="${mockLandingDataFull.images![4]}"`)
+    expect(html).not.toContain(`src="${mockLandingDataFull.images![0]}"`)
+  })
+
+  it('si data.unique_mechanism absent, retourne "" meme avec images', () => {
+    const { unique_mechanism: _, ...dataNoMechanism } = mockLandingDataFull
+    expect(renderUniqueMechanism(dataNoMechanism as typeof mockLandingDataFull, DEFAULT_THEME)).toBe('')
+  })
+})

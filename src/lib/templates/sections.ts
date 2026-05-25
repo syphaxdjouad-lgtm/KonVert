@@ -436,8 +436,36 @@ export function renderUniqueMechanism(d: LandingPageData, t: SectionTheme = DEFA
   const um = d.unique_mechanism
   if (!um.name && !um.description) return ''
 
+  // Chantier B : si on a une 5ème image (apres les 4 du hero) ET feature flag actif,
+  // on l'affiche dans le panneau droit. Sinon : panneau preuve texte (comportement chantier A).
+  const galleryEnabled = process.env.KONVERT_GALLERY !== 'false'
+  const images = (d.images ?? []).filter(Boolean)
+  const splitImage = galleryEnabled && images.length >= 5 ? images[4] : null
+
   const dnaIcon = `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="${t.primary}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c6.667-6 13.333 0 20-6"/><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/><path d="M10 2C9.229 4.548 9.366 6.936 10 9"/><path d="M2 9c6.667 6 13.333 0 20 6"/></svg>`
   const sparkIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${t.primary}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
+
+  const rightPanel = splitImage ? `
+      <div class="umch-proof" style="flex:0 0 380px;border-radius:${t.radius};overflow:hidden;background:${t.bgAlt};border:1px solid ${t.border};">
+        <div style="aspect-ratio:4/3;overflow:hidden;background:${t.bgAlt};">
+          <img src="${splitImage}" alt="${d.product_name ?? ''} — mécanisme" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+        ${um.proof ? `
+        <div style="padding:24px;display:flex;flex-direction:column;gap:12px;border-left:4px solid ${t.primary};">
+          <div style="display:flex;align-items:center;gap:12px;">
+            ${dnaIcon}
+            <p style="font-size:12px;font-weight:700;color:${t.textMuted};text-transform:uppercase;letter-spacing:0.1em;margin:0;">Preuve</p>
+          </div>
+          <p style="font-size:14px;color:${t.text};line-height:1.65;margin:0;">${um.proof}</p>
+        </div>` : ''}
+      </div>` : (um.proof ? `
+      <div class="umch-proof" style="flex:0 0 380px;background:${t.bgAlt};border:1px solid ${t.border};border-radius:${t.radius};padding:32px;display:flex;flex-direction:column;gap:16px;border-left:4px solid ${t.primary};">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+          ${dnaIcon}
+          <p style="font-size:12px;font-weight:700;color:${t.textMuted};text-transform:uppercase;letter-spacing:0.1em;margin:0;">Preuve</p>
+        </div>
+        <p style="font-size:15px;color:${t.text};line-height:1.65;margin:0;">${um.proof}</p>
+      </div>` : '')
 
   return `
 ${mq('umch', `.umch-grid{flex-direction:column!important;} .umch-proof{margin-top:24px!important;} .umch-wrap{padding:60px 20px!important;}`)}
@@ -453,14 +481,7 @@ ${mq('umch', `.umch-grid{flex-direction:column!important;} .umch-proof{margin-to
         </div>
         <p style="font-size:18px;color:${t.text};line-height:1.7;margin:0;">${um.description}</p>
       </div>
-      ${um.proof ? `
-      <div class="umch-proof" style="flex:0 0 380px;background:${t.bgAlt};border:1px solid ${t.border};border-radius:${t.radius};padding:32px;display:flex;flex-direction:column;gap:16px;border-left:4px solid ${t.primary};">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
-          ${dnaIcon}
-          <p style="font-size:12px;font-weight:700;color:${t.textMuted};text-transform:uppercase;letter-spacing:0.1em;margin:0;">Preuve</p>
-        </div>
-        <p style="font-size:15px;color:${t.text};line-height:1.65;margin:0;">${um.proof}</p>
-      </div>` : ''}
+      ${rightPanel}
     </div>
   </div>
 </section>`

@@ -230,11 +230,6 @@ export function templateEtecPulse(data: LandingPageData): string {
       <div class="fpls-faq-a" id="faq-a-${i}" style="display:none"><p>${f.answer}</p></div>
     </div>`).join('')
 
-  const thumbsHTML = Array.from({ length: Math.min(4, Math.max(images.length, 1)) }, (_, i) => `
-    <div class="fpls-thumb${i === 0 ? ' fpls-thumb-active' : ''}" onclick="selectImg(this,'${img(i)}')" role="button" tabindex="0">
-      <img src="${img(i)}" alt="Vue ${i + 1}" loading="lazy">
-    </div>`).join('')
-
   // ─── FINAL TEMPLATE ─────────────────────────────────────────────────────────
 
   return `<!DOCTYPE html>

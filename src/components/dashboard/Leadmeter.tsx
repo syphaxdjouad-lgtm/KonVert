@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { TrendingUp, Zap, Eye, Shield, Sparkles, Check } from 'lucide-react'
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { TrendingUp, Zap, Eye, Shield, Sparkles, Check, X, Minus, BarChart3 } from 'lucide-react'
 
 /* ─────────────────────────────────────────────
-   TYPES — identiques à Leadmeter.tsx (drop-in)
+   TYPES
 ───────────────────────────────────────────── */
 interface Criterion {
   id: string
@@ -26,7 +26,7 @@ interface Metrics {
 
 /* ─────────────────────────────────────────────
    ANALYSE HTML → CRITÈRES + MÉTRIQUES
-   (inchangée — même logique métier)
+   (inchangée — logique métier)
 ───────────────────────────────────────────── */
 function analyzeHtml(html: string): { criteria: Criterion[]; metrics: Metrics } {
   const parser = new DOMParser()
@@ -116,21 +116,17 @@ export function computeLeadmeterScore(html: string) {
 }
 
 /* ─────────────────────────────────────────────
-   PALETTE LIGHT — tokens sémantiques
-   Accent violet Konvert : #7C3AED (violet-600)
-   Success sobre : #059669 (emerald-600)
-   Warning sobre : #D97706 (amber-600)
-   Danger sobre  : #DC2626 (red-600)
+   PALETTE — tokens sémantiques
 ───────────────────────────────────────────── */
 function getScorePalette(score: number) {
   if (score >= 71) return {
-    accentHex:  '#059669',                         // emerald-600
-    accentLight: 'rgba(5, 150, 105, 0.08)',        // fond pill
+    accentHex:  '#059669',
+    accentLight: 'rgba(5, 150, 105, 0.08)',
     accentBorder: 'rgba(5, 150, 105, 0.20)',
     label: 'BON',
     labelClass: 'text-emerald-700 bg-emerald-50 border-emerald-200',
     ringColor: '#059669',
-    ringTrack: '#d1fae5',                           // emerald-100
+    ringTrack: '#d1fae5',
   }
   if (score >= 41) return {
     accentHex:  '#D97706',
@@ -153,7 +149,7 @@ function getScorePalette(score: number) {
 }
 
 /* ─────────────────────────────────────────────
-   COUNT-UP — inchangé, juste réutilisé
+   COUNT-UP
 ───────────────────────────────────────────── */
 function CountUp({ value, decimals = 0, suffix = '' }: { value: number; decimals?: number; suffix?: string }) {
   const mv = useMotionValue(0)
@@ -166,11 +162,10 @@ function CountUp({ value, decimals = 0, suffix = '' }: { value: number; decimals
 }
 
 /* ─────────────────────────────────────────────
-   SCORE RING — SVG natif style Apple Health
-   Fond blanc, pas de glow, stroke propre
+   SCORE RING (drawer)
 ───────────────────────────────────────────── */
 function ScoreRing({ score, ringColor, ringTrack }: { score: number; ringColor: string; ringTrack: string }) {
-  const size = 152
+  const size = 132
   const stroke = 9
   const radius = (size - stroke) / 2
   const circumference = 2 * Math.PI * radius
@@ -184,14 +179,12 @@ function ScoreRing({ score, ringColor, ringTrack }: { score: number; ringColor: 
   return (
     <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        {/* Track */}
         <circle
           cx={size / 2} cy={size / 2} r={radius}
           stroke={ringTrack}
           strokeWidth={stroke}
           fill="none"
         />
-        {/* Progress */}
         <motion.circle
           cx={size / 2} cy={size / 2} r={radius}
           stroke={ringColor}
@@ -202,9 +195,8 @@ function ScoreRing({ score, ringColor, ringTrack }: { score: number; ringColor: 
           style={{ strokeDashoffset: progressSpring }}
         />
       </svg>
-      {/* Centre */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="text-[38px] font-black leading-none tabular-nums text-slate-900">
+        <div className="text-[34px] font-black leading-none tabular-nums text-slate-900">
           <CountUp value={score} />
         </div>
         <div className="text-[8px] font-semibold tracking-[0.18em] text-slate-400 mt-0.5 uppercase">
@@ -222,8 +214,7 @@ function ScoreRing({ score, ringColor, ringTrack }: { score: number; ringColor: 
 }
 
 /* ─────────────────────────────────────────────
-   KPI TILE — grille 2x2, style Linear dashboard
-   Fond off-white, pas de glow, border slate subtil
+   KPI TILE
 ───────────────────────────────────────────── */
 function KpiTile({
   icon: Icon,
@@ -257,13 +248,66 @@ function KpiTile({
 }
 
 /* ─────────────────────────────────────────────
-   COMPOSANT PRINCIPAL — Props identiques (drop-in)
+   ÉTATS DE VUE + PERSISTANCE
+───────────────────────────────────────────── */
+type ViewState = 'drawer' | 'pill' | 'icon'
+const STORAGE_KEY = 'konvert:leadmeter:view'
+const VIOLET = '#7C3AED'
+const VIOLET_LIGHT = 'rgba(124, 58, 237, 0.07)'
+
+function loadView(): ViewState {
+  if (typeof window === 'undefined') return 'pill'
+  const v = window.localStorage.getItem(STORAGE_KEY)
+  return v === 'drawer' || v === 'pill' || v === 'icon' ? v : 'pill'
+}
+
+/* ─────────────────────────────────────────────
+   ICON BUTTON (header drawer + pill close)
+───────────────────────────────────────────── */
+function IconBtn({
+  onClick,
+  children,
+  title,
+}: {
+  onClick: (e: React.MouseEvent) => void
+  children: React.ReactNode
+  title: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={title}
+      className="w-6 h-6 rounded-md flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+    >
+      {children}
+    </button>
+  )
+}
+
+/* ─────────────────────────────────────────────
+   COMPOSANT PRINCIPAL
 ───────────────────────────────────────────── */
 interface Props {
   html: string
 }
 
 export default function Leadmeter({ html }: Props) {
+  const [view, setView] = useState<ViewState>('pill')
+  const mounted = useRef(false)
+
+  // Charge l'état persisté au premier mount (côté client)
+  useEffect(() => {
+    setView(loadView())
+    mounted.current = true
+  }, [])
+
+  // Persiste l'état
+  useEffect(() => {
+    if (!mounted.current) return
+    try { window.localStorage.setItem(STORAGE_KEY, view) } catch {}
+  }, [view])
+
   const { score, criteria, metrics } = useMemo(() => {
     if (!html || typeof window === 'undefined') {
       return {
@@ -279,7 +323,7 @@ export default function Leadmeter({ html }: Props) {
 
   const palette = getScorePalette(score)
 
-  // Métriques business dérivées (logique inchangée)
+  // Métriques business dérivées
   const conversionRate = +(0.5 + (score / 100) * 4).toFixed(1)
   const trustScore = Math.min(100, Math.round(
     (criteria.find(c => c.id === 'proof')?.passed ? 30 : 0) +
@@ -295,200 +339,273 @@ export default function Leadmeter({ html }: Props) {
   const passed = criteria.filter(c => c.passed)
   const suggestions = criteria.filter(c => !c.passed).slice(0, 3)
 
-  // Violet Konvert — accent fixe pour labels + pills de points
-  const VIOLET = '#7C3AED'
-  const VIOLET_LIGHT = 'rgba(124, 58, 237, 0.07)'
-  const VIOLET_BORDER = 'rgba(124, 58, 237, 0.18)'
-
   return (
-    <div
-      className="flex flex-col h-full overflow-y-auto bg-[#FAFAFA]"
-      style={{
-        minWidth: 228,
-        maxWidth: 228,
-        borderLeft: '1px solid #e2e8f0',
-      }}
-    >
-      {/* ── HEADER ── */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white">
-        <div className="flex items-center gap-2">
-          {/* Dot vivant — violet fixe Konvert */}
-          <motion.div
-            className="w-1.5 h-1.5 rounded-full"
-            style={{ background: VIOLET }}
-            animate={{ opacity: [1, 0.35, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          <span className="text-[10px] font-bold text-slate-600 tracking-[0.16em] uppercase">
-            Leadmeter
-          </span>
-        </div>
-        {/* Badge statut score */}
-        <span
-          className={`text-[9px] font-bold px-2 py-0.5 rounded-md border tracking-wider ${palette.labelClass}`}
+    <AnimatePresence mode="wait" initial={false}>
+      {/* ════════════════════════════════════════
+          VUE 1 — ICON (ultra-discret)
+      ════════════════════════════════════════ */}
+      {view === 'icon' && (
+        <motion.button
+          key="icon"
+          type="button"
+          onClick={() => setView('pill')}
+          title="Rouvrir le Leadmeter"
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.6 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+          className="absolute bottom-4 right-4 z-30 w-9 h-9 rounded-full bg-white border border-slate-200 shadow-sm hover:shadow-md flex items-center justify-center transition-shadow"
+          style={{ pointerEvents: 'auto' }}
         >
-          {palette.label}
-        </span>
-      </div>
-
-      <div className="flex flex-col gap-4 p-4">
-
-        {/* ── SCORE RING ── */}
-        <div className="flex justify-center pt-1">
-          <ScoreRing score={score} ringColor={palette.ringColor} ringTrack={palette.ringTrack} />
-        </div>
-
-        {/* ── KPIs 2×2 ── */}
-        <div className="grid grid-cols-2 gap-2">
-          <KpiTile
-            icon={TrendingUp}
-            label="Conv. est."
-            value={conversionRate}
-            decimals={1}
-            suffix="%"
-            valueColor={palette.accentHex}
+          <BarChart3 size={15} style={{ color: palette.accentHex }} />
+          <span
+            className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white"
+            style={{ background: palette.ringColor }}
           />
-          <KpiTile
-            icon={Zap}
-            label="CA / mois"
-            value={monthlyRevenue}
-            suffix={` ${metrics.currency}`}
-            valueColor={palette.accentHex}
-          />
-          <KpiTile
-            icon={Eye}
-            label="Lecture"
-            value={readTime}
-            suffix=" min"
-            valueColor="#7C3AED"
-          />
-          <KpiTile
-            icon={Shield}
-            label="Trust"
-            value={trustScore}
-            suffix="/100"
-            valueColor="#7C3AED"
-          />
-        </div>
+        </motion.button>
+      )}
 
-        {/* ── SÉPARATEUR ── */}
-        <div className="h-px bg-slate-200" />
-
-        {/* ── CRITÈRES — barre de progression globale + compteur ── */}
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[9px] font-semibold text-slate-400 tracking-[0.14em] uppercase">
-              Critères
+      {/* ════════════════════════════════════════
+          VUE 2 — PILL (compacte)
+      ════════════════════════════════════════ */}
+      {view === 'pill' && (
+        <motion.div
+          key="pill"
+          initial={{ opacity: 0, y: 12, scale: 0.92 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 12, scale: 0.92 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+          className="absolute bottom-4 right-4 z-30 flex items-stretch gap-px rounded-full bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+          style={{ pointerEvents: 'auto' }}
+        >
+          <button
+            type="button"
+            onClick={() => setView('drawer')}
+            className="flex items-center gap-2 pl-3 pr-3 py-2 hover:bg-slate-50 transition-colors"
+            title="Ouvrir le Leadmeter"
+          >
+            <motion.div
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ background: palette.ringColor }}
+              animate={{ opacity: [1, 0.35, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+            <span className="text-[15px] font-black tabular-nums text-slate-900 leading-none">
+              {score}
             </span>
             <span
-              className="text-[9px] font-bold tabular-nums px-1.5 py-0.5 rounded"
-              style={{ color: VIOLET, background: VIOLET_LIGHT }}
+              className="text-[9px] font-bold tracking-widest px-1.5 py-0.5 rounded"
+              style={{ color: palette.accentHex, background: palette.ringTrack }}
             >
-              {passed.length} / {criteria.length}
+              {palette.label}
             </span>
-          </div>
+          </button>
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); setView('icon') }}
+            title="Réduire en icône"
+            className="px-2 flex items-center justify-center text-slate-300 hover:text-slate-600 hover:bg-slate-50 transition-colors border-l border-slate-100"
+          >
+            <Minus size={12} />
+          </button>
+        </motion.div>
+      )}
 
-          {/* Progress bar globale — Linear style */}
-          <div className="h-1 rounded-full bg-slate-200 overflow-hidden">
-            <motion.div
-              className="h-full rounded-full"
-              style={{ background: VIOLET }}
-              initial={{ width: 0 }}
-              animate={{ width: `${(passed.length / Math.max(criteria.length, 1)) * 100}%` }}
-              transition={{ duration: 0.7, ease: 'easeOut' }}
-            />
-          </div>
-        </div>
-
-        {/* ── CHECKLIST CRITÈRES ── */}
-        <div className="flex flex-col gap-1">
-          {criteria.map((c, i) => (
-            <motion.div
-              key={c.id}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.035, duration: 0.25 }}
-              className={`flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors ${
-                c.passed ? 'bg-white border border-slate-200' : 'bg-transparent'
-              }`}
-            >
-              {/* Check circle */}
-              <div
-                className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
-                style={
-                  c.passed
-                    ? { background: palette.ringColor, border: 'none' }
-                    : { background: 'transparent', border: '1.5px solid #cbd5e1' }
-                }
-              >
-                {c.passed && <Check size={8} className="text-white" strokeWidth={3} />}
-              </div>
-
-              {/* Label */}
-              <span
-                className={`text-[11px] font-medium leading-none flex-1 truncate ${
-                  c.passed ? 'text-slate-700' : 'text-slate-400'
-                }`}
-              >
-                {c.label}
+      {/* ════════════════════════════════════════
+          VUE 3 — DRAWER (panneau complet)
+      ════════════════════════════════════════ */}
+      {view === 'drawer' && (
+        <motion.div
+          key="drawer"
+          initial={{ opacity: 0, x: 20, scale: 0.98 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          exit={{ opacity: 0, x: 20, scale: 0.98 }}
+          transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+          className="absolute bottom-4 right-4 top-4 z-30 w-[300px] rounded-2xl bg-white border border-slate-200 shadow-xl overflow-hidden flex flex-col"
+          style={{ pointerEvents: 'auto' }}
+        >
+          {/* ── HEADER ── */}
+          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-white flex-shrink-0">
+            <div className="flex items-center gap-2">
+              <motion.div
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: VIOLET }}
+                animate={{ opacity: [1, 0.35, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              <span className="text-[10px] font-bold text-slate-600 tracking-[0.16em] uppercase">
+                Leadmeter
               </span>
-
-              {/* Points pill */}
               <span
-                className="text-[9px] font-bold tabular-nums px-1.5 py-0.5 rounded"
-                style={
-                  c.passed
-                    ? { color: palette.accentHex, background: palette.accentLight }
-                    : { color: '#94a3b8', background: '#f1f5f9' }
-                }
+                className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md border tracking-wider ${palette.labelClass}`}
               >
-                +{c.points}
-              </span>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* ── BOOST RAPIDE — suggestions ── */}
-        {suggestions.length > 0 && (
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-1.5">
-              <Sparkles size={10} style={{ color: VIOLET }} />
-              <span className="text-[9px] font-semibold text-slate-400 tracking-[0.14em] uppercase">
-                Boost rapide
+                {palette.label}
               </span>
             </div>
-            {suggestions.map(s => (
-              <div
-                key={s.id}
-                className="flex items-start gap-2 px-2.5 py-2 rounded-lg bg-white border border-slate-200"
-              >
-                <div
-                  className="w-1 h-1 rounded-full mt-1.5 flex-shrink-0"
-                  style={{ background: VIOLET }}
-                />
-                <span className="text-[10px] text-slate-500 leading-snug">{s.hint}</span>
-              </div>
-            ))}
+            <div className="flex items-center gap-0.5">
+              <IconBtn onClick={() => setView('pill')} title="Réduire en pastille">
+                <Minus size={13} />
+              </IconBtn>
+              <IconBtn onClick={() => setView('icon')} title="Masquer (mode icône)">
+                <X size={13} />
+              </IconBtn>
+            </div>
           </div>
-        )}
 
-        {/* ── SCORE PARFAIT ── */}
-        {score === 100 && (
-          <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="text-center py-3 rounded-xl text-[11px] font-bold tracking-wider border"
-            style={{
-              color: palette.accentHex,
-              background: palette.accentLight,
-              borderColor: palette.accentBorder,
-            }}
-          >
-            Page optimisee au maximum
-          </motion.div>
-        )}
+          {/* ── CONTENU SCROLLABLE ── */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="flex flex-col gap-4 p-4">
 
-      </div>
-    </div>
+              {/* Score ring */}
+              <div className="flex justify-center pt-1">
+                <ScoreRing score={score} ringColor={palette.ringColor} ringTrack={palette.ringTrack} />
+              </div>
+
+              {/* KPIs 2x2 */}
+              <div className="grid grid-cols-2 gap-2">
+                <KpiTile
+                  icon={TrendingUp}
+                  label="Conv. est."
+                  value={conversionRate}
+                  decimals={1}
+                  suffix="%"
+                  valueColor={palette.accentHex}
+                />
+                <KpiTile
+                  icon={Zap}
+                  label="CA / mois"
+                  value={monthlyRevenue}
+                  suffix={` ${metrics.currency}`}
+                  valueColor={palette.accentHex}
+                />
+                <KpiTile
+                  icon={Eye}
+                  label="Lecture"
+                  value={readTime}
+                  suffix=" min"
+                  valueColor={VIOLET}
+                />
+                <KpiTile
+                  icon={Shield}
+                  label="Trust"
+                  value={trustScore}
+                  suffix="/100"
+                  valueColor={VIOLET}
+                />
+              </div>
+
+              <div className="h-px bg-slate-200" />
+
+              {/* Critères — progression */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[9px] font-semibold text-slate-400 tracking-[0.14em] uppercase">
+                    Critères
+                  </span>
+                  <span
+                    className="text-[9px] font-bold tabular-nums px-1.5 py-0.5 rounded"
+                    style={{ color: VIOLET, background: VIOLET_LIGHT }}
+                  >
+                    {passed.length} / {criteria.length}
+                  </span>
+                </div>
+                <div className="h-1 rounded-full bg-slate-200 overflow-hidden">
+                  <motion.div
+                    className="h-full rounded-full"
+                    style={{ background: VIOLET }}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(passed.length / Math.max(criteria.length, 1)) * 100}%` }}
+                    transition={{ duration: 0.7, ease: 'easeOut' }}
+                  />
+                </div>
+              </div>
+
+              {/* Checklist */}
+              <div className="flex flex-col gap-1">
+                {criteria.map((c, i) => (
+                  <motion.div
+                    key={c.id}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.025, duration: 0.2 }}
+                    className={`flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors ${
+                      c.passed ? 'bg-slate-50 border border-slate-200' : 'bg-transparent'
+                    }`}
+                  >
+                    <div
+                      className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all"
+                      style={
+                        c.passed
+                          ? { background: palette.ringColor, border: 'none' }
+                          : { background: 'transparent', border: '1.5px solid #cbd5e1' }
+                      }
+                    >
+                      {c.passed && <Check size={8} className="text-white" strokeWidth={3} />}
+                    </div>
+                    <span
+                      className={`text-[11px] font-medium leading-none flex-1 truncate ${
+                        c.passed ? 'text-slate-700' : 'text-slate-400'
+                      }`}
+                    >
+                      {c.label}
+                    </span>
+                    <span
+                      className="text-[9px] font-bold tabular-nums px-1.5 py-0.5 rounded"
+                      style={
+                        c.passed
+                          ? { color: palette.accentHex, background: palette.accentLight }
+                          : { color: '#94a3b8', background: '#f1f5f9' }
+                      }
+                    >
+                      +{c.points}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Boost rapide */}
+              {suggestions.length > 0 && (
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <Sparkles size={10} style={{ color: VIOLET }} />
+                    <span className="text-[9px] font-semibold text-slate-400 tracking-[0.14em] uppercase">
+                      Boost rapide
+                    </span>
+                  </div>
+                  {suggestions.map(s => (
+                    <div
+                      key={s.id}
+                      className="flex items-start gap-2 px-2.5 py-2 rounded-lg bg-white border border-slate-200"
+                    >
+                      <div
+                        className="w-1 h-1 rounded-full mt-1.5 flex-shrink-0"
+                        style={{ background: VIOLET }}
+                      />
+                      <span className="text-[10px] text-slate-500 leading-snug">{s.hint}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Score parfait */}
+              {score === 100 && (
+                <motion.div
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="text-center py-3 rounded-xl text-[11px] font-bold tracking-wider border"
+                  style={{
+                    color: palette.accentHex,
+                    background: palette.accentLight,
+                    borderColor: palette.accentBorder,
+                  }}
+                >
+                  Page optimisée au maximum
+                </motion.div>
+              )}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }

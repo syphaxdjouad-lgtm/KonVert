@@ -189,8 +189,8 @@ export default function GrapesEditor({ html, onSave }: Props) {
         </div>
       </div>
 
-      {/* ── Body : canvas + panel Leadmeter ── */}
-      <div className="flex flex-1 overflow-hidden">
+      {/* ── Body : canvas plein largeur + Leadmeter en overlay ── */}
+      <div className="flex flex-1 overflow-hidden relative">
 
         {/* Canvas GrapesJS */}
         <div className="flex-1 overflow-hidden relative bg-white">
@@ -200,7 +200,7 @@ export default function GrapesEditor({ html, onSave }: Props) {
           />
         </div>
 
-        {/* Panel Leadmeter */}
+        {/* Leadmeter — overlay flottant (pill / drawer / icon) */}
         <Leadmeter html={liveHtml} />
 
       </div>

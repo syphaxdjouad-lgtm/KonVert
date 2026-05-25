@@ -128,6 +128,116 @@ function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     }))
   }
 
+  // ─── Sections enrichies DTC 2026 (chantier A) ──────────────────────────────
+
+  if (Array.isArray(d.hero_badges)) {
+    out.hero_badges = d.hero_badges.map(escapeHtml).filter(Boolean)
+  }
+
+  if (Array.isArray(d.target_audience)) {
+    out.target_audience = d.target_audience.map(a => ({
+      profile: escapeHtml(a.profile ?? ''),
+      pain:    escapeHtml(a.pain ?? ''),
+    }))
+  }
+
+  if (d.unique_mechanism) {
+    out.unique_mechanism = {
+      name:        escapeHtml(d.unique_mechanism.name ?? ''),
+      description: escapeHtml(d.unique_mechanism.description ?? ''),
+      proof:       escapeHtml(d.unique_mechanism.proof ?? ''),
+    }
+  }
+
+  if (Array.isArray(d.features)) {
+    out.features = d.features.map(f => ({
+      icon:        escapeHtml(f.icon ?? '✨'),
+      title:       escapeHtml(f.title ?? ''),
+      description: escapeHtml(f.description ?? ''),
+    }))
+  }
+
+  if (Array.isArray(d.how_it_works)) {
+    out.how_it_works = d.how_it_works.map((s, i) => ({
+      step:        typeof s.step === 'number' ? s.step : i + 1,
+      title:       escapeHtml(s.title ?? ''),
+      description: escapeHtml(s.description ?? ''),
+    }))
+  }
+
+  if (Array.isArray(d.before_after)) {
+    out.before_after = d.before_after.map(ba => ({
+      before: escapeHtml(ba.before ?? ''),
+      after:  escapeHtml(ba.after ?? ''),
+    }))
+  }
+
+  if (d.competitor_comparison) {
+    const cc = d.competitor_comparison
+    out.competitor_comparison = {
+      criteria: (cc.criteria ?? []).map(escapeHtml),
+      us: {
+        name:   escapeHtml(cc.us?.name ?? ''),
+        values: (cc.us?.values ?? []).map(escapeHtml),
+      },
+      them: (cc.them ?? []).map(t => ({
+        name:   escapeHtml(t.name ?? ''),
+        values: (t.values ?? []).map(escapeHtml),
+      })),
+    }
+  }
+
+  if (Array.isArray(d.press_mentions)) {
+    out.press_mentions = d.press_mentions.map(escapeHtml).filter(Boolean)
+  }
+
+  if (d.founder_note) {
+    out.founder_note = {
+      name:    escapeHtml(d.founder_note.name ?? ''),
+      role:    escapeHtml(d.founder_note.role ?? ''),
+      message: escapeHtml(d.founder_note.message ?? ''),
+    }
+  }
+
+  if (d.value_stack) {
+    out.value_stack = {
+      items:   (d.value_stack.items ?? []).map(it => ({
+        label: escapeHtml(it.label ?? ''),
+        value: escapeHtml(it.value ?? ''),
+      })),
+      total:   escapeHtml(d.value_stack.total ?? ''),
+      you_pay: escapeHtml(d.value_stack.you_pay ?? ''),
+      savings: escapeHtml(d.value_stack.savings ?? ''),
+    }
+  }
+
+  if (Array.isArray(d.risk_reversal)) {
+    out.risk_reversal = d.risk_reversal.map(r => ({
+      icon:        escapeHtml(r.icon ?? '✓'),
+      title:       escapeHtml(r.title ?? ''),
+      description: escapeHtml(r.description ?? ''),
+    }))
+  }
+
+  if (Array.isArray(d.objections)) {
+    out.objections = d.objections.map(o => ({
+      objection: escapeHtml(o.objection ?? ''),
+      response:  escapeHtml(o.response ?? ''),
+    }))
+  }
+
+  if (d.community_callout) {
+    out.community_callout = {
+      title:       escapeHtml(d.community_callout.title ?? ''),
+      description: escapeHtml(d.community_callout.description ?? ''),
+      cta:         escapeHtml(d.community_callout.cta ?? ''),
+    }
+  }
+
+  if (typeof d.final_pitch === 'string') {
+    out.final_pitch = escapeHtml(d.final_pitch)
+  }
+
   return out
 }
 
@@ -184,25 +294,44 @@ Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
 {
   "headline": "string — accroche principale, max 12 mots, image mentale forte",
   "subtitle": "string — développe la promesse, max 20 mots",
+  "hero_badges": [
+    "string — badge court 1-3 mots (ex: 'Made in France', 'Cruelty-free', 'Livraison 48h', 'Cosmos Organic')",
+    "string", "string"
+  ],
   "story": {
     "problem": "string — situation douloureuse vécue par le client (1-2 phrases)",
     "agitation": "string — amplifie la frustration, ce qui se passe si rien ne change (1-2 phrases)",
     "solution": "string — comment le produit résout le problème, mécanisme (2-3 phrases)",
     "transformation": "string — la nouvelle réalité du client après usage (1-2 phrases)"
   },
-  "benefits": [
-    "string — bénéfice 1 (verbe d'action, transformation, max 15 mots)",
-    "string", "string", "string", "string"
+  "target_audience": [
+    { "profile": "ex: 'Les actives 30-45 ans'", "pain": "douleur principale en 1 phrase courte" },
+    { "profile": "string", "pain": "string" },
+    { "profile": "string", "pain": "string" }
   ],
-  "social_proof": {
-    "customers": "string — ex: '12 847 clients satisfaits' (chiffre réaliste, pas rond)",
-    "rating": "string — ex: '4.8/5 sur 2 341 avis vérifiés'",
-    "sold": "string — ex: '3 200+ commandes ce mois-ci'"
+  "features": [
+    { "icon": "emoji 1 caractère (ex: '🌿')", "title": "2-3 mots", "description": "1 phrase max 12 mots" },
+    { "icon": "string", "title": "string", "description": "string" },
+    { "icon": "string", "title": "string", "description": "string" },
+    { "icon": "string", "title": "string", "description": "string" },
+    { "icon": "string", "title": "string", "description": "string" },
+    { "icon": "string", "title": "string", "description": "string" }
+  ],
+  "unique_mechanism": {
+    "name": "string — nom court du mécanisme/technologie (ex: 'Bio-Stim Complex', 'TripleAction Formula')",
+    "description": "2-3 phrases : ce qui rend ce produit unique, le POURQUOI ça marche, ingrédient/technique différenciante",
+    "proof": "1 phrase de preuve concrète (étude, brevet, % d'efficacité, certification)"
   },
-  "testimonials": [
-    { "name": "Prénom + initiale", "rating": 5, "text": "2-3 phrases, détail concret, émotion vraie", "variant": "variante choisie si pertinent" },
-    { "name": "string", "rating": 5, "text": "string", "variant": "string" },
-    { "name": "string", "rating": 4, "text": "string", "variant": "string" }
+  "how_it_works": [
+    { "step": 1, "title": "string — 2-3 mots", "description": "1 phrase max 15 mots" },
+    { "step": 2, "title": "string", "description": "string" },
+    { "step": 3, "title": "string", "description": "string" },
+    { "step": 4, "title": "string", "description": "string" }
+  ],
+  "before_after": [
+    { "before": "ex: 'Peau terne, fatiguée, ridules visibles dès 6h'", "after": "ex: 'Peau éclatante, lissée, hydratée toute la journée'" },
+    { "before": "string", "after": "string" },
+    { "before": "string", "after": "string" }
   ],
   "comparison": {
     "without_title": "ex: 'Sans [produit]'",
@@ -210,16 +339,71 @@ Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
     "with_title": "ex: 'Avec [produit]'",
     "with": ["bénéfice 1", "bénéfice 2", "bénéfice 3", "bénéfice 4"]
   },
+  "competitor_comparison": {
+    "criteria": ["Prix", "Ingrédients naturels", "Résultats visibles", "Garantie", "Avis clients"],
+    "us": { "name": "Notre produit", "values": ["29€", "100%", "14 jours", "30 jours", "4.8/5"] },
+    "them": [
+      { "name": "Concurrent A (nom générique : 'Marque pharmacie')", "values": ["49€", "60%", "6 semaines", "14 jours", "3.9/5"] },
+      { "name": "Concurrent B (nom générique : 'Marque luxe')", "values": ["89€", "80%", "1 mois", "Aucune", "4.2/5"] }
+    ]
+  },
+  "social_proof": {
+    "customers": "string — ex: '12 847 clients satisfaits' (chiffre réaliste, pas rond)",
+    "rating": "string — ex: '4.8/5 sur 2 341 avis vérifiés'",
+    "sold": "string — ex: '3 200+ commandes ce mois-ci'"
+  },
+  "press_mentions": [
+    "string — nom de média réaliste (ex: 'Vogue', 'Marie Claire', 'Forbes', 'Le Figaro Madame')",
+    "string", "string", "string", "string"
+  ],
+  "testimonials": [
+    { "name": "Prénom + initiale", "rating": 5, "text": "2-3 phrases, détail concret, émotion vraie", "variant": "variante choisie si pertinent" },
+    { "name": "string", "rating": 5, "text": "string", "variant": "string" },
+    { "name": "string", "rating": 4, "text": "string", "variant": "string" }
+  ],
+  "founder_note": {
+    "name": "string — prénom + nom du fondateur (cohérent culture cible)",
+    "role": "string — ex: 'Fondatrice & CEO'",
+    "message": "3-4 phrases — pourquoi j'ai créé ce produit, mon histoire personnelle, ma promesse au client"
+  },
+  "value_stack": {
+    "items": [
+      { "label": "Produit principal", "value": "ex: '79€'" },
+      { "label": "Bonus 1", "value": "ex: '29€'" },
+      { "label": "Bonus 2", "value": "ex: '19€'" },
+      { "label": "Bonus 3", "value": "ex: '15€'" }
+    ],
+    "total": "ex: '142€'",
+    "you_pay": "ex: '49€'",
+    "savings": "ex: '93€ d'économie aujourd'hui'"
+  },
   "guarantee": {
     "title": "ex: 'Satisfait ou remboursé'",
     "description": "explication courte (1-2 phrases)",
     "duration": "ex: '30 jours'"
   },
+  "risk_reversal": [
+    { "icon": "🚚", "title": "Livraison rapide", "description": "ex: 'Expédié sous 24h, livré en 2-4 jours'" },
+    { "icon": "↩️", "title": "Retour facile", "description": "ex: 'Retour gratuit pendant 30 jours'" },
+    { "icon": "💬", "title": "Support 7/7", "description": "ex: 'Réponse en moins de 2h, par email ou chat'" }
+  ],
   "bonuses": [
     { "title": "bonus 1", "description": "courte description", "value": "ex: '29€'" },
     { "title": "string", "description": "string", "value": "string" },
     { "title": "string", "description": "string", "value": "string" }
   ],
+  "objections": [
+    { "objection": "objection émotionnelle (ex: 'J'ai déjà essayé 10 produits sans résultat')", "response": "réponse rassurante 2-3 phrases qui désamorce" },
+    { "objection": "string", "response": "string" },
+    { "objection": "string", "response": "string" },
+    { "objection": "string", "response": "string" },
+    { "objection": "string", "response": "string" }
+  ],
+  "community_callout": {
+    "title": "ex: 'Rejoignez 12 000+ membres sur Instagram'",
+    "description": "1 phrase qui invite à rejoindre la communauté",
+    "cta": "ex: '@marquename' ou 'Suivez-nous'"
+  },
   "faq": [
     { "question": "string", "answer": "réponse rassurante, 2-3 phrases max" },
     { "question": "string", "answer": "string" },
@@ -227,6 +411,7 @@ Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
     { "question": "string", "answer": "string" },
     { "question": "string", "answer": "string" }
   ],
+  "final_pitch": "string — paragraphe de fermeture émotionnel, 3-4 phrases, qui résume la transformation promise et invite à passer à l'action MAINTENANT",
   "cta": "verbe d'action + bénéfice, max 8 mots",
   "urgency": "urgence authentique courte, max 12 mots",
   "product_name": "nom commercial court du produit"
@@ -248,18 +433,35 @@ DONNÉES PRODUIT :
 - Variantes : ${product.variants.map(v => `${v.name}: ${v.values.join(', ')}`).join(' | ') || 'aucune'}
 
 RÈGLES DE GÉNÉRATION :
-0. ANCRAGE PRODUIT — RÈGLE ABSOLUE : Tu ne peux PAS inventer une catégorie de produit. Le "product_name" que tu retournes doit décrire EXACTEMENT le produit fourni dans "Nom" ci-dessus (tu peux reformuler/raccourcir, pas changer la nature). Si "Nom" parle d'un blender, ne pas écrire un sérum. Si "Nom" parle d'une montre, ne pas écrire un parfum. Tous les contenus (story, benefits, testimonials, FAQ) doivent rester cohérents avec ce produit réel — interdit d'inventer des ingrédients, des matériaux ou des cas d'usage qui ne correspondent pas au produit.
+0. ANCRAGE PRODUIT — RÈGLE ABSOLUE : Tu ne peux PAS inventer une catégorie de produit. Le "product_name" que tu retournes doit décrire EXACTEMENT le produit fourni dans "Nom" ci-dessus (tu peux reformuler/raccourcir, pas changer la nature). Si "Nom" parle d'un blender, ne pas écrire un sérum. Si "Nom" parle d'une montre, ne pas écrire un parfum. TOUS les contenus (story, benefits, testimonials, FAQ, features, mécanisme, comparatif concurrents, objections, fondateur, etc.) doivent rester cohérents avec ce produit réel — interdit d'inventer des ingrédients, des matériaux ou des cas d'usage qui ne correspondent pas au produit.
+
 1. Le headline doit créer une IMAGE MENTALE FORTE et toucher un désir profond, pas décrire le produit
-2. Le storytelling (story) suit PAS : problème vécu → agitation émotionnelle → solution avec mécanisme → transformation
-3. Les 5 bénéfices : verbe d'action, orientés résultat/transformation, 15 mots max
-4. Social proof : chiffres précis et crédibles (jamais ronds : 12 847 plutôt que 12 000)
-5. Témoignages : 3 prénoms cohérents avec la langue cible, détails concrets (pas générique), émotion vraie, lien avec une variante si pertinent
-6. Comparaison "Avec / Sans" : 4 points symétriques, bénéfices concrets vs frustrations réelles
-7. Garantie : rassure sans inventer (satisfait ou remboursé classique)
-8. 3 bonus à valeur perçue (guides, accessoires digitaux, support, accès communauté…)
-9. FAQ : VRAIES objections d'achat (livraison, garantie, compatibilité, durabilité, comment ça marche)
-10. CTA : verbe d'action + bénéfice immédiat
-11. Urgence : ${priceLine}
+2. hero_badges : 3 badges courts de confiance (origine, certification, livraison) cohérents avec le produit
+3. Le storytelling (story) suit PAS : problème vécu → agitation émotionnelle → solution avec mécanisme → transformation
+4. target_audience : 3 profils ICP distincts (âge/situation/besoin) avec leur douleur principale
+5. Les 5 bénéfices : verbe d'action, orientés résultat/transformation, 15 mots max
+6. features : 6 features concrètes avec icône emoji pertinente (matériau, technologie, ergonomie, garantie...)
+7. unique_mechanism : nomme la technologie/ingrédient/technique unique qui justifie POURQUOI ça marche, avec une preuve concrète
+8. how_it_works : 4 étapes claires (achat → utilisation → résultat) en mots du client
+9. before_after : 3 paires concrètes — état douloureux AVANT → état désirable APRÈS
+10. comparison : "Avec / Sans" 4 points symétriques, bénéfices concrets vs frustrations réelles
+11. competitor_comparison : 5 critères + nous + 2 concurrents GÉNÉRIQUES (pas de vraies marques, type "Marque pharmacie", "Marque luxe", "Marque drugstore") — toujours nous gagnant sur ≥3 critères sans tricher
+12. social_proof : chiffres précis et crédibles (jamais ronds : 12 847 plutôt que 12 000)
+13. press_mentions : 5 médias cohérents avec la langue/catégorie cible (jamais inventés)
+14. Témoignages : 3 prénoms cohérents avec la langue cible, détails concrets (pas générique), émotion vraie
+15. founder_note : prénom+nom de fondateur cohérent culture cible, message personnel et authentique (3-4 phrases)
+16. value_stack : produit + 3 bonus listés, total > prix final, économie chiffrée mise en avant
+17. Garantie : rassure sans inventer (satisfait ou remboursé classique)
+18. risk_reversal : 3 réassurances pratiques (livraison, retour, support) avec icônes emoji
+19. 3 bonus à valeur perçue (guides, accessoires digitaux, support, accès communauté…)
+20. objections : 5 objections d'achat ÉMOTIONNELLES (pas factuelles type FAQ) avec réponse qui désamorce
+21. community_callout : invite à suivre sur réseaux (Instagram/TikTok), titre engageant
+22. FAQ : 5 VRAIES objections factuelles (livraison, garantie, compatibilité, durabilité, comment ça marche)
+23. final_pitch : paragraphe de fermeture émotionnel qui résume la transformation et incite à l'action MAINTENANT
+24. CTA : verbe d'action + bénéfice immédiat
+25. Urgence : ${priceLine}
+
+CRITIQUE : Remplis TOUS les champs du schema JSON, même si tu dois inventer du contenu plausible. Les champs vides cassent le rendu de la landing.
 
 Renvoie UNIQUEMENT le JSON, rien d'autre.`
 }
@@ -305,7 +507,9 @@ export async function generateLandingPage(
       },
       body: JSON.stringify({
         model: GENERATION_MODEL,
-        max_tokens: 4000,
+        // 8000 tokens car le schema enrichi (19 sections chantier A + bonus)
+        // peut dépasser 4000 tokens en sortie sur les produits complexes.
+        max_tokens: 8000,
         // Mode JSON natif — DeepSeek garantit un JSON parsable et évite le markdown.
         response_format: { type: 'json_object' },
         messages: [

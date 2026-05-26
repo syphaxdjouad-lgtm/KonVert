@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Sac cuir vintage — Style Brutalist Mobile / Konvert V3</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       BRUTALIST — MOBILE 375px
+       ============================================================ */
+    :root {
+      --color-bg:         #F5F5F0;
+      --color-surface:    #FFFFFF;
+      --color-accent:     #FF6B35;
+      --color-text:       #000000;
+      --color-text-muted: #666666;
+      --color-border:     #000000;
+
+      --font-heading: "JetBrains Mono", "Courier New", monospace;
+      --font-body:    "JetBrains Mono", "Courier New", monospace;
+
+      --space-section: 64px;
+      --space-card:    20px;
+      --space-gap:     12px;
+
+      --radius-card:   0px;
+      --radius-button: 0px;
+      --radius-image:  0px;
+
+      --shadow-hover: 3px 3px 0 #000000;
+      --ease:         linear;
+      --duration:     150ms;
+
+      --max-w:  375px;
+      --gutter: 20px;
+      --border: 1px solid #000000;
+      --border-2: 2px solid #000000;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 13px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      max-width: 375px;
+      margin: 0 auto;
+    }
+
+    img { display: block; max-width: 100%; object-fit: cover; }
+    a { color: var(--color-text); text-decoration: none; }
+    a:hover { color: var(--color-accent); }
+
+    .wrapper {
+      padding: 0 var(--gutter);
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      padding-bottom: 10px;
+      border-bottom: var(--border);
+    }
+
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: var(--color-accent);
+      color: #FFFFFF;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 16px 20px;
+      border: 2px solid var(--color-accent);
+      cursor: pointer;
+      transition: box-shadow var(--duration) var(--ease);
+    }
+
+    .btn-primary:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: transparent;
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 14px 20px;
+      border: 2px solid var(--color-text);
+      cursor: pointer;
+      transition: background var(--duration) var(--ease), color var(--duration) var(--ease);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-text);
+      color: var(--color-bg);
+    }
+
+    .num {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-bg);
+      border-bottom: var(--border-2);
+    }
+
+    .nav-inner {
+      padding: 0 var(--gutter);
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-brand span { color: var(--color-accent); }
+
+    .nav-cta {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--color-text);
+      color: var(--color-bg);
+      padding: 7px 14px;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* // HERO — MOBILE STACK */
+    .hero {
+      background: var(--color-surface);
+      border-bottom: var(--border-2);
+    }
+
+    .hero-image-top {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      position: relative;
+      border-bottom: var(--border-2);
+      background: #EBEBEB;
+    }
+
+    .hero-image-top img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-image-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--color-text);
+      color: var(--color-bg);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 7px;
+    }
+
+    .hero-content {
+      padding: 28px var(--gutter);
+    }
+
+    .hero-tag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      border: var(--border);
+      display: inline-block;
+      padding: 3px 8px;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .hero-title .accent-char { color: var(--color-accent); }
+
+    .hero-tagline {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      font-style: italic;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .hero-rating {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      border: var(--border);
+      padding: 6px 12px;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .hero-price {
+      font-family: var(--font-heading);
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 4px;
+    }
+
+    .hero-price-note {
+      font-size: 10px;
+      color: var(--color-text-muted);
+      margin-bottom: 24px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .hero-features {
+      border-top: var(--border);
+    }
+
+    .hero-feature-item {
+      padding: 14px 0;
+      border-bottom: var(--border);
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    .hero-feature-label {
+      font-weight: 700;
+      color: var(--color-text);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    /* /* GALLERY */ — MOBILE SCROLL */
+    .gallery {
+      padding: var(--space-section) 0;
+      border-bottom: var(--border-2);
+    }
+
+    .gallery-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 0;
+      border-top: var(--border-2);
+      border-bottom: var(--border-2);
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .gallery-scroll::-webkit-scrollbar { display: none; }
+
+    .gallery-item {
+      flex: 0 0 260px;
+      position: relative;
+      border-right: var(--border);
+    }
+
+    .gallery-item:last-child { border-right: none; }
+
+    .gallery-item img {
+      width: 260px;
+      height: 320px;
+      object-fit: cover;
+    }
+
+    .gallery-item-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--color-surface);
+      border-top: var(--border);
+      padding: 8px 14px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .gallery-hint {
+      font-size: 10px;
+      color: var(--color-text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: right;
+      padding: 8px var(--gutter) 0;
+    }
+
+    /* ## WHY_WE_LOVE — MOBILE */
+    .why-we-love {
+      padding: var(--space-section) 0;
+      border-bottom: var(--border-2);
+      background: var(--color-surface);
+    }
+
+    .why-we-love h2 {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 32px;
+    }
+
+    .why-media {
+      border: var(--border-2);
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .why-media img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+    }
+
+    .why-media-tag {
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      background: var(--color-accent);
+      color: #FFF;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+    }
+
+    .why-item {
+      padding: 18px 0;
+      border-bottom: var(--border);
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 12px;
+    }
+
+    .why-item:first-child { border-top: var(--border); }
+
+    .why-item-index {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      padding-top: 1px;
+    }
+
+    .why-item-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+    }
+
+    .why-item-desc {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* ## THOUGHTFULLY_DESIGNED — MOBILE STACK */
+    .thoughtfully {
+      padding: var(--space-section) 0;
+      border-bottom: var(--border-2);
+    }
+
+    .thoughtfully-grid {
+      display: flex;
+      flex-direction: column;
+      border: var(--border-2);
+      margin-top: 28px;
+    }
+
+    .thoughtfully-item {
+      padding: 28px 24px;
+      border-bottom: var(--border);
+    }
+
+    .thoughtfully-item:last-child { border-bottom: none; }
+
+    .thoughtfully-prefix {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .thoughtfully-title {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .thoughtfully-desc {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+
+    .thoughtfully-arrow {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 16px;
+    }
+
+    /* ## BEST_FOR — MOBILE STACK */
+    .best-for {
+      padding: var(--space-section) 0;
+      border-bottom: var(--border-2);
+      background: var(--color-surface);
+    }
+
+    .best-for-grid {
+      display: flex;
+      flex-direction: column;
+      border-top: var(--border-2);
+      margin-top: 28px;
+    }
+
+    .best-for-item {
+      padding: 24px var(--gutter);
+      border-bottom: var(--border);
+    }
+
+    .best-for-item:last-child { border-bottom: var(--border-2); }
+
+    .best-for-avatar {
+      width: 40px;
+      height: 40px;
+      border: var(--border-2);
+      margin-bottom: 12px;
+      background: var(--color-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .best-for-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .best-for-desc {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* /* MATERIALS */ — MOBILE STACK */
+    .materials {
+      padding: var(--space-section) 0;
+      border-bottom: var(--border-2);
+    }
+
+    .materials-grid {
+      display: flex;
+      flex-direction: column;
+      border: var(--border-2);
+      margin-top: 28px;
+    }
+
+    .material-item {
+      padding: 28px 24px;
+      border-bottom: var(--border);
+    }
+
+    .material-item:last-child { border-bottom: none; }
+
+    .material-index {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+
+    .material-name {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .material-origin {
+      font-size: 10px;
+      color: var(--color-text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .material-desc {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+
+    .material-bar {
+      margin-top: 18px;
+      height: 2px;
+      background: var(--color-bg);
+      border: var(--border);
+      position: relative;
+    }
+
+    .material-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: var(--color-text);
+    }
+
+    .material-pct {
+      font-size: 10px;
+      font-weight: 700;
+      margin-top: 5px;
+      color: var(--color-text-muted);
+    }
+
+    /* ## COMPARE_VARIANTS — MOBILE TABLE */
+    .compare {
+      padding: var(--space-section) 0;
+      border-bottom: var(--border-2);
+      background: var(--color-surface);
+    }
+
+    .compare-scroll {
+      overflow-x: auto;
+      margin-top: 28px;
+      border: var(--border-2);
+    }
+
+    .compare-table {
+      width: 100%;
+      min-width: 520px;
+      border-collapse: collapse;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      border: var(--border);
+      padding: 12px 14px;
+      text-align: left;
+      font-family: var(--font-body);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .compare-table th {
+      background: var(--color-text);
+      color: var(--color-bg);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+
+    .compare-table td { color: var(--color-text-muted); }
+    .compare-table td:first-child { font-weight: 700; color: var(--color-text); }
+
+    .compare-swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border: var(--border);
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    .compare-price { font-weight: 800; color: var(--color-text); }
+
+    /* ## REVIEWS — MOBILE */
+    .reviews {
+      padding: var(--space-section) 0;
+      border-bottom: var(--border-2);
+    }
+
+    .reviews-score-block {
+      border: var(--border-2);
+      padding: 28px 24px;
+      margin-bottom: 20px;
+    }
+
+    .reviews-big-score {
+      font-family: var(--font-heading);
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .reviews-meta {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: 6px;
+    }
+
+    .reviews-bars { margin-top: 20px; }
+
+    .reviews-bar-row {
+      display: grid;
+      grid-template-columns: 56px 1fr 28px;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .reviews-bar-label { font-size: 10px; font-weight: 600; color: var(--color-text-muted); }
+
+    .reviews-bar-track {
+      height: 2px;
+      background: var(--color-bg);
+      border: var(--border);
+      position: relative;
+    }
+
+    .reviews-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: var(--color-text);
+    }
+
+    .reviews-bar-pct { font-size: 10px; color: var(--color-text-muted); text-align: right; }
+
+    .ai-summary-block {
+      border: var(--border-2);
+      padding: 24px;
+      background: var(--color-bg);
+      margin-bottom: 20px;
+    }
+
+    .ai-summary-tag {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      border: var(--border);
+      display: inline-block;
+      padding: 2px 7px;
+      margin-bottom: 16px;
+    }
+
+    .ai-summary-text {
+      font-size: 12px;
+      line-height: 1.8;
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+
+    .ai-summary-points {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ai-point {
+      display: flex;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--color-text);
+      align-items: flex-start;
+    }
+
+    .ai-point-arrow { color: var(--color-accent); font-weight: 700; flex-shrink: 0; }
+
+    .reviews-cards {
+      display: flex;
+      flex-direction: column;
+      border: var(--border-2);
+    }
+
+    .review-card {
+      padding: 20px;
+      border-bottom: var(--border);
+    }
+
+    .review-card:last-child { border-bottom: none; }
+
+    .review-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .review-author { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+    .review-score { font-size: 11px; font-weight: 600; color: var(--color-text-muted); }
+    .review-text { font-size: 12px; color: var(--color-text-muted); line-height: 1.7; font-style: italic; }
+
+    .review-verified {
+      margin-top: 12px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      border: var(--border);
+      display: inline-block;
+      padding: 2px 5px;
+    }
+
+    /* ## PRESS */
+    .press {
+      padding: var(--space-section) 0;
+      border-bottom: var(--border-2);
+      background: var(--color-text);
+      color: var(--color-bg);
+    }
+
+    .press .section-label {
+      color: rgba(255,255,255,0.4);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .press-logo-block {
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .press-logo-name {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 800;
+      font-style: italic;
+      letter-spacing: -0.02em;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .press-logo-tagline {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-top: 6px;
+    }
+
+    .press-quote-text {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .press-quote-source {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 14px;
+    }
+
+    /* ## CARE — MOBILE STACK */
+    .care {
+      padding: var(--space-section) 0;
+      border-bottom: var(--border-2);
+    }
+
+    .care-grid {
+      display: flex;
+      flex-direction: column;
+      border: var(--border-2);
+      margin-top: 28px;
+    }
+
+    .care-col {
+      padding: 28px 24px;
+      border-bottom: var(--border);
+    }
+
+    .care-col:last-child { border-bottom: none; }
+
+    .care-col-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 18px;
+    }
+
+    .care-item {
+      display: flex;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: var(--border);
+      font-size: 12px;
+    }
+
+    .care-item:last-child { border-bottom: none; }
+
+    .care-icon { font-size: 10px; font-weight: 700; color: var(--color-text-muted); flex-shrink: 0; width: 18px; padding-top: 1px; }
+    .care-text { color: var(--color-text-muted); line-height: 1.6; }
+
+    /* ?> FAQ — MOBILE */
+    .faq {
+      padding: var(--space-section) 0;
+      border-bottom: var(--border-2);
+      background: var(--color-surface);
+    }
+
+    .faq-list {
+      margin-top: 28px;
+      border: var(--border-2);
+    }
+
+    .faq-item { border-bottom: var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .faq-prefix {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-accent);
+      flex-shrink: 0;
+      font-family: var(--font-body);
+      padding-top: 1px;
+    }
+
+    .faq-q-text {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text);
+      flex: 1;
+      line-height: 1.5;
+    }
+
+    .faq-toggle {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--color-text-muted);
+      flex-shrink: 0;
+      transition: transform var(--duration) var(--ease);
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0 20px 16px 20px;
+      padding-left: calc(20px + 10px + 22px);
+    }
+
+    .faq-answer-comment {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    .faq-answer-comment::before {
+      content: "// ";
+      color: var(--color-accent);
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .faq-item.open .faq-answer { display: block; }
+    .faq-item.open .faq-toggle { transform: rotate(45deg); }
+
+    /* ## BRAND_MANIFESTO — MOBILE */
+    .manifesto {
+      padding: var(--space-section) 0;
+      border-bottom: var(--border-2);
+    }
+
+    .manifesto-headline {
+      font-family: var(--font-heading);
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+      margin-bottom: 40px;
+    }
+
+    .manifesto-headline .line-accent { color: var(--color-accent); }
+
+    .manifesto-pillars { border-top: var(--border-2); }
+
+    .manifesto-pillar {
+      padding: 20px 0;
+      border-bottom: var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .manifesto-pillar-key {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .manifesto-pillar-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--color-text);
+      color: var(--color-bg);
+      border-top: var(--border-2);
+    }
+
+    .footer-inner {
+      padding: 28px var(--gutter);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .footer-brand {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .footer-meta {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .footer-cta {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      border: 1px solid var(--color-accent);
+      padding: 10px 18px;
+      display: inline-block;
+      text-align: center;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-brand">KONVERT<span>.</span>DEV</div>
+      <button class="nav-cta">Panier</button>
+    </div>
+  </nav>
+
+  <!-- // HERO — MOBILE -->
+  <section class="hero">
+    <div class="hero-image-top">
+      <img
+        src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&auto=format&fit=crop"
+        alt="Sac en cuir vintage noir"
+        width="375"
+        height="280"
+      />
+      <div class="hero-image-badge">REF. CVN-001</div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-tag">// PRODUCT_PAGE_V3</div>
+      <h1 class="hero-title">Sac cuir<br><span class="accent-char">vintage.</span></h1>
+      <p class="hero-tagline">"Un cuir qui vit avec toi."</p>
+      <div class="hero-rating num">[4.6/5.0 — 1247 reviews]</div>
+      <div class="hero-price num">$79.00</div>
+      <div class="hero-price-note">EUR · TTC · Livraison offerte</div>
+      <div class="hero-actions">
+        <button class="btn-primary">Acheter maintenant &rarr;</button>
+        <button class="btn-secondary">Voir les variantes</button>
+      </div>
+      <div class="hero-features">
+        <div class="hero-feature-item">
+          <div class="hero-feature-label">01_ Cuir pleine fleur</div>
+          Tannage végétal, origine France
+        </div>
+        <div class="hero-feature-item">
+          <div class="hero-feature-label">02_ Doublure coton</div>
+          Poche intérieure zippée, 2 glissières
+        </div>
+        <div class="hero-feature-item">
+          <div class="hero-feature-label">03_ Ferrures laiton</div>
+          Boucles coulissantes &amp; D-rings
+        </div>
+        <div class="hero-feature-item">
+          <div class="hero-feature-label">04_ Bandoulière réglable</div>
+          45 cm &rarr; 125 cm, réglage continu
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- /* GALLERY */ -->
+  <section class="gallery">
+    <div class="wrapper">
+      <div class="section-label">/* GALLERY — 04 VIEWS */</div>
+    </div>
+    <div class="gallery-scroll">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&auto=format&fit=crop" alt="Vue face avant" width="260" height="320" />
+        <div class="gallery-item-label">01_ FACE</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&auto=format&fit=crop" alt="Vue de dos" width="260" height="320" />
+        <div class="gallery-item-label">02_ DOS</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&auto=format&fit=crop" alt="Détail coutures" width="260" height="320" />
+        <div class="gallery-item-label">03_ DETAIL</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&auto=format&fit=crop" alt="Sac porté lifestyle" width="260" height="320" />
+        <div class="gallery-item-label">04_ LIFESTYLE</div>
+      </div>
+    </div>
+    <div class="gallery-hint">SCROLL &rarr;</div>
+  </section>
+
+  <!-- ## WHY_WE_LOVE -->
+  <section class="why-we-love">
+    <div class="wrapper">
+      <div class="section-label">## WHY_WE_LOVE</div>
+      <div class="why-media">
+        <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&auto=format&fit=crop" alt="Sac cuir vintage" width="335" height="250" />
+        <div class="why-media-tag">STAFF PICK</div>
+      </div>
+      <h2 class="why-we-love h2">Ce qu'on ne trouve plus en boutique.</h2>
+      <div class="why-item">
+        <span class="why-item-index">01_</span>
+        <div>
+          <div class="why-item-title">Durabilité sans compromis</div>
+          <div class="why-item-desc">Fil de lin ciré sur machine à bras articulé. Résistance en traction : 40 kg.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-item-index">02_</span>
+        <div>
+          <div class="why-item-title">Cuir pleine fleur</div>
+          <div class="why-item-desc">Seule la première fleur du cuir. Griffures qui disparaissent d'elles-mêmes.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-item-index">03_</span>
+        <div>
+          <div class="why-item-title">Patine naturelle</div>
+          <div class="why-item-desc">Unique en 3-6 mois. Chaque sac devient singulier.</div>
+        </div>
+      </div>
+      <div class="why-item">
+        <span class="why-item-index">04_</span>
+        <div>
+          <div class="why-item-title">Fait pour durer 10 ans</div>
+          <div class="why-item-desc">Pièces remplacables. SAV inclus 2 ans.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ## THOUGHTFULLY_DESIGNED -->
+  <section class="thoughtfully">
+    <div class="wrapper">
+      <div class="section-label">## THOUGHTFULLY_DESIGNED</div>
+      <div class="thoughtfully-grid">
+        <div class="thoughtfully-item">
+          <div class="thoughtfully-prefix">>> FORM</div>
+          <div class="thoughtfully-title">Format universel</div>
+          <div class="thoughtfully-desc">28 × 20 × 10 cm. Poids à vide : 480 g.</div>
+          <span class="thoughtfully-arrow">&rarr;</span>
+        </div>
+        <div class="thoughtfully-item">
+          <div class="thoughtfully-prefix">>> FUNCTION</div>
+          <div class="thoughtfully-title">Accès rapide</div>
+          <div class="thoughtfully-desc">Glissière YKK n°5, fermeture en 1 geste. Poche avant magnétique.</div>
+          <span class="thoughtfully-arrow">&rarr;</span>
+        </div>
+        <div class="thoughtfully-item">
+          <div class="thoughtfully-prefix">>> FINISH</div>
+          <div class="thoughtfully-title">Bords parés à la main</div>
+          <div class="thoughtfully-desc">Teintés, lissés et cirés à l'antique. Pas de colle, pas de plastifié.</div>
+          <span class="thoughtfully-arrow">&rarr;</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ## BEST_FOR -->
+  <section class="best-for">
+    <div class="wrapper">
+      <div class="section-label">## BEST_FOR</div>
+      <div class="best-for-grid">
+        <div class="best-for-item">
+          <div class="best-for-avatar">USR</div>
+          <div class="best-for-label">La professionnelle mobile</div>
+          <div class="best-for-desc">Réunions, transports, déplacements. Laptop 13" + essentiels.</div>
+        </div>
+        <div class="best-for-item">
+          <div class="best-for-avatar">USR</div>
+          <div class="best-for-label">L'acheteur minimaliste</div>
+          <div class="best-for-desc">Un seul sac pour tout. Qualité sur quantité.</div>
+        </div>
+        <div class="best-for-item">
+          <div class="best-for-avatar">USR</div>
+          <div class="best-for-label">L'investisseur long terme</div>
+          <div class="best-for-desc">Pas de mode, pas de saison. Un objet qui prend de la valeur.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- /* MATERIALS */ -->
+  <section class="materials">
+    <div class="wrapper">
+      <div class="section-label">/* MATERIALS_BREAKDOWN */</div>
+      <div class="materials-grid">
+        <div class="material-item">
+          <div class="material-index num">COMPONENT_01</div>
+          <div class="material-name">Cuir Vachette</div>
+          <div class="material-origin">Tannerie Roux — Millau</div>
+          <div class="material-desc">Pleine fleur, 1.8 mm. Certification LWG Gold.</div>
+          <div class="material-bar"><div class="material-bar-fill" style="width:70%"></div></div>
+          <div class="material-pct num">70% — STRUCTURE</div>
+        </div>
+        <div class="material-item">
+          <div class="material-index num">COMPONENT_02</div>
+          <div class="material-name">Toile Coton</div>
+          <div class="material-origin">Manufacture Caulliez — Lille</div>
+          <div class="material-desc">Sergé 300 g/m², bio. Doublure et poche centrale.</div>
+          <div class="material-bar"><div class="material-bar-fill" style="width:20%"></div></div>
+          <div class="material-pct num">20% — DOUBLURE</div>
+        </div>
+        <div class="material-item">
+          <div class="material-index num">COMPONENT_03</div>
+          <div class="material-name">Laiton massif</div>
+          <div class="material-origin">Fonderie Labbe — Lyon</div>
+          <div class="material-desc">Poli à la main. Résistance : 120 kg traction.</div>
+          <div class="material-bar"><div class="material-bar-fill" style="width:10%"></div></div>
+          <div class="material-pct num">10% — FERRURES</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ## COMPARE_VARIANTS -->
+  <section class="compare">
+    <div class="wrapper">
+      <div class="section-label">## COMPARE_VARIANTS</div>
+      <div class="compare-scroll">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>VARIANTE</th>
+              <th>COULEUR</th>
+              <th>FINITION</th>
+              <th>STOCK</th>
+              <th>PRIX</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>CVN-001-N</td>
+              <td><span class="compare-swatch" style="background:#1A1A1A"></span>Noir</td>
+              <td>Lisse mate</td>
+              <td>14 unités</td>
+              <td class="compare-price num">$79.00</td>
+            </tr>
+            <tr>
+              <td>CVN-001-C</td>
+              <td><span class="compare-swatch" style="background:#9B6A3A"></span>Cognac</td>
+              <td>Grain naturel</td>
+              <td>7 unités</td>
+              <td class="compare-price num">$79.00</td>
+            </tr>
+            <tr>
+              <td>CVN-001-CA</td>
+              <td><span class="compare-swatch" style="background:#C9A96E"></span>Camel</td>
+              <td>Velours int.</td>
+              <td>Sur commande</td>
+              <td class="compare-price num">$84.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ## REVIEWS_AI_SUMMARY -->
+  <section class="reviews">
+    <div class="wrapper">
+      <div class="section-label">## REVIEWS_AI_SUMMARY</div>
+      <div class="reviews-score-block">
+        <div class="reviews-big-score num">4.6</div>
+        <div class="reviews-meta">[1247 avis vérifiés]</div>
+        <div class="reviews-bars">
+          <div class="reviews-bar-row">
+            <span class="reviews-bar-label">5 étoiles</span>
+            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:68%"></div></div>
+            <span class="reviews-bar-pct num">68%</span>
+          </div>
+          <div class="reviews-bar-row">
+            <span class="reviews-bar-label">4 étoiles</span>
+            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:22%"></div></div>
+            <span class="reviews-bar-pct num">22%</span>
+          </div>
+          <div class="reviews-bar-row">
+            <span class="reviews-bar-label">3 étoiles</span>
+            <div class="reviews-bar-track"><div class="reviews-bar-fill" style="width:7%"></div></div>
+            <span class="reviews-bar-pct num">7%</span>
+          </div>
+        </div>
+      </div>
+      <div class="ai-summary-block">
+        <div class="ai-summary-tag">AI_SUMMARY — GPT-4o</div>
+        <p class="ai-summary-text">Solidité du cuir et qualité des coutures plébiscitées. Rapport qualité/prix exceptionnel pour ce segment.</p>
+        <div class="ai-summary-points">
+          <div class="ai-point"><span class="ai-point-arrow">&rarr;</span><span>94% citent la solidité comme point fort</span></div>
+          <div class="ai-point"><span class="ai-point-arrow">&rarr;</span><span>"Patine qui s'améliore" revient 312 fois</span></div>
+          <div class="ai-point"><span class="ai-point-arrow">&rarr;</span><span>Seul bémol : délai Camel (12j)</span></div>
+        </div>
+      </div>
+      <div class="reviews-cards">
+        <div class="review-card">
+          <div class="review-card-meta">
+            <span class="review-author">Marie L.</span>
+            <span class="review-score num">[5.0/5.0]</span>
+          </div>
+          <p class="review-text">"Exactement ce que je cherchais depuis des années. Mon sac de travail pour la prochaine décennie."</p>
+          <div class="review-verified">VERIFIED_PURCHASE</div>
+        </div>
+        <div class="review-card">
+          <div class="review-card-meta">
+            <span class="review-author">Sophie R.</span>
+            <span class="review-score num">[4.0/5.0]</span>
+          </div>
+          <p class="review-text">"Qualité indéniable. Ferrure laiton magnifique. Odeur forte à réception, disparue après 3 jours."</p>
+          <div class="review-verified">VERIFIED_PURCHASE</div>
+        </div>
+        <div class="review-card">
+          <div class="review-card-meta">
+            <span class="review-author">Claire M.</span>
+            <span class="review-score num">[5.0/5.0]</span>
+          </div>
+          <p class="review-text">"8 mois avec le Cognac. Patine incroyable, chaque égratignure disparaît avec un peu de cire."</p>
+          <div class="review-verified">VERIFIED_PURCHASE</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ## PRESS_QUOTE -->
+  <section class="press">
+    <div class="wrapper">
+      <div class="section-label">## PRESS_QUOTE</div>
+      <div class="press-logo-block">
+        <div class="press-logo-name">Vogue</div>
+        <div class="press-logo-tagline">Paris Edition · Est. 1920</div>
+      </div>
+      <p class="press-quote-text">"Un renouveau de la maroquinerie artisanale francaise, a des prix qui n'ont rien d'artisanal."</p>
+      <div class="press-quote-source">— VOGUE PARIS · Accessoires de l'annee 2024</div>
+    </div>
+  </section>
+
+  <!-- ## CARE_INSTRUCTIONS -->
+  <section class="care">
+    <div class="wrapper">
+      <div class="section-label">## CARE_INSTRUCTIONS</div>
+      <div class="care-grid">
+        <div class="care-col">
+          <div class="care-col-title">&gt;&gt; A FAIRE</div>
+          <div class="care-item"><span class="care-icon">[+]</span><span class="care-text">Cire naturelle tous les 3 mois</span></div>
+          <div class="care-item"><span class="care-icon">[+]</span><span class="care-text">Essuyer immédiatement avec chiffon sec</span></div>
+          <div class="care-item"><span class="care-icon">[+]</span><span class="care-text">Stocker dans housse coton, à l'abri des UV</span></div>
+          <div class="care-item"><span class="care-icon">[+]</span><span class="care-text">Si mouillage : sécher à plat, température ambiante</span></div>
+        </div>
+        <div class="care-col">
+          <div class="care-col-title">&gt;&gt; A EVITER</div>
+          <div class="care-item"><span class="care-icon">[-]</span><span class="care-text">Aucun produit chimique ni solvant</span></div>
+          <div class="care-item"><span class="care-icon">[-]</span><span class="care-text">Pas d'exposition solaire prolongée</span></div>
+          <div class="care-item"><span class="care-icon">[-]</span><span class="care-text">Ne pas trop remplir</span></div>
+          <div class="care-item"><span class="care-icon">[-]</span><span class="care-text">Jamais en machine ni nettoyage à sec</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ?> FAQ -->
+  <section class="faq">
+    <div class="wrapper">
+      <div class="section-label">?&gt; FAQ — 05 QUESTIONS</div>
+      <div class="faq-list">
+        <div class="faq-item open">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="faq-prefix">?&gt;</span>
+            <span class="faq-q-text">Quels sont les délais de livraison ?</span>
+            <span class="faq-toggle">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="faq-answer-comment">Expédition sous 24h pour Noir et Cognac. Camel : 12 jours sur commande. France 2-3j, EU 3-5j.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="faq-prefix">?&gt;</span>
+            <span class="faq-q-text">Les retours sont-ils possibles ?</span>
+            <span class="faq-toggle">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="faq-answer-comment">30 jours sans question. Sac dans son état d'origine. Remboursement sous 5j ouvrés.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="faq-prefix">?&gt;</span>
+            <span class="faq-q-text">La patine abime-t-elle le cuir ?</span>
+            <span class="faq-toggle">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="faq-answer-comment">Non. Les micro-griffures disparaissent spontanément. La patine renforce l'imperméabilité.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="faq-prefix">?&gt;</span>
+            <span class="faq-q-text">Quelle est la garantie ?</span>
+            <span class="faq-toggle">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="faq-answer-comment">2 ans sur coutures, ferrures et doublure. Structure cuir garantie à vie contre défauts de fabrication.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span class="faq-prefix">?&gt;</span>
+            <span class="faq-q-text">Un laptop 13" rentre-t-il dedans ?</span>
+            <span class="faq-toggle">+</span>
+          </button>
+          <div class="faq-answer">
+            <p class="faq-answer-comment">Oui. 28 x 20 x 10 cm. MacBook Air 13" sans tension. 14" serré mais possible si fin. Pas prévu pour 15"+.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ## BRAND_MANIFESTO -->
+  <section class="manifesto">
+    <div class="wrapper">
+      <div class="section-label">## BRAND_MANIFESTO</div>
+      <h2 class="manifesto-headline">Built<br>to<br><span class="line-accent">last.</span></h2>
+      <div class="manifesto-pillars">
+        <div class="manifesto-pillar">
+          <span class="manifesto-pillar-key">## MATERIAL</span>
+          <span class="manifesto-pillar-value">Nous choisissons le cuir qui vivra le plus longtemps, pas le moins cher.</span>
+        </div>
+        <div class="manifesto-pillar">
+          <span class="manifesto-pillar-key">## CRAFT</span>
+          <span class="manifesto-pillar-value">Concu pour celles qui savent. Chaque piqure, chaque tranche — delibere.</span>
+        </div>
+        <div class="manifesto-pillar">
+          <span class="manifesto-pillar-key">## PRICE</span>
+          <span class="manifesto-pillar-value">79 euros. Parce que la qualite ne devrait pas etre reservee a l'elite.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">KONVERT.DEV</div>
+      <div class="footer-meta">Style: Brutalist / V3 / 2026</div>
+      <a href="#" class="footer-cta">Acheter maintenant &rarr;</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      item.classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>

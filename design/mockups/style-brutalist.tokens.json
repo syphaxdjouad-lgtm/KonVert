@@ -1,0 +1,289 @@
+{
+  "$schema": "https://design-tokens.org/schema/2024",
+  "$metadata": {
+    "style": "brutalist",
+    "version": "3.0.0",
+    "product": "konvert",
+    "created": "2026-05-26",
+    "author": "OBITO / NEXARA",
+    "description": "Brutalist design tokens — monospace, zero-radius, flat shadows, strict grid. Vibe: dev tool premium / Vercel / Linear / Railway."
+  },
+
+  "color": {
+    "bg": {
+      "$value": "#F5F5F0",
+      "$type": "color",
+      "$description": "Page background. Off-white (not pure) — creates hierarchy vs surface white without gradients."
+    },
+    "surface": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "Card and section surface. Pure white reserved for content zones."
+    },
+    "accent": {
+      "$value": "#FF6B35",
+      "$type": "color",
+      "$description": "Orange brule. CTAs, FAQ prefixes, AI summary arrows only. Max 4 usage types per page."
+    },
+    "text": {
+      "$value": "#000000",
+      "$type": "color",
+      "$description": "Pure black. All headings, body, borders."
+    },
+    "textMuted": {
+      "$value": "#666666",
+      "$type": "color",
+      "$description": "Secondary text, labels, meta information, descriptions."
+    },
+    "border": {
+      "$value": "#000000",
+      "$type": "color",
+      "$description": "All borders. Pure black — no rgba softening except on dark backgrounds."
+    },
+    "borderOnDark": {
+      "$value": "rgba(255, 255, 255, 0.15)",
+      "$type": "color",
+      "$description": "Border on dark (press quote section, black background). WCAG-safe on black."
+    },
+    "pressBackground": {
+      "$value": "#000000",
+      "$type": "color",
+      "$description": "Press quote section background. Inverted palette."
+    }
+  },
+
+  "font": {
+    "heading": {
+      "$value": "\"JetBrains Mono\", \"Courier New\", monospace",
+      "$type": "fontFamily",
+      "$description": "Monospace for all headings. Tabular-nums alignment, code aesthetic."
+    },
+    "body": {
+      "$value": "\"JetBrains Mono\", \"Courier New\", monospace",
+      "$type": "fontFamily",
+      "$description": "Same monospace for body — full system consistency. No mixed fonts."
+    },
+    "mono": {
+      "$value": "\"JetBrains Mono\", \"Courier New\", monospace",
+      "$type": "fontFamily",
+      "$description": "Explicit mono alias for code/numbers. Font-variant-numeric: tabular-nums enforced."
+    }
+  },
+
+  "fontWeight": {
+    "regular": { "$value": 400, "$type": "fontWeight" },
+    "medium": { "$value": 500, "$type": "fontWeight" },
+    "semibold": { "$value": 600, "$type": "fontWeight" },
+    "bold": { "$value": 700, "$type": "fontWeight" },
+    "extrabold": { "$value": 800, "$type": "fontWeight" }
+  },
+
+  "fontSize": {
+    "micro": { "$value": "10px", "$type": "dimension", "$description": "Badge labels, section micro-text" },
+    "label": { "$value": "11px", "$type": "dimension", "$description": "Section labels, legend text" },
+    "caption": { "$value": "12px", "$type": "dimension", "$description": "Meta, footer, verified badges" },
+    "body-sm": { "$value": "13px", "$type": "dimension", "$description": "Card descriptions, review text" },
+    "body": { "$value": "14px", "$type": "dimension", "$description": "Default body copy" },
+    "body-lg": { "$value": "15px", "$type": "dimension", "$description": "Hero tagline, pull quotes" },
+    "h4": { "$value": "18px", "$type": "dimension" },
+    "h3": { "$value": "20px", "$type": "dimension" },
+    "h2": { "$value": "22px", "$type": "dimension" },
+    "h1-fluid": { "$value": "clamp(36px, 4.5vw, 64px)", "$type": "dimension", "$description": "Hero headline, fluid responsive" },
+    "manifesto": { "$value": "clamp(40px, 5vw, 72px)", "$type": "dimension" },
+    "price": { "$value": "48px", "$type": "dimension", "$description": "Hero price. Tabular-nums mandatory." },
+    "score": { "$value": "80px", "$type": "dimension", "$description": "Review score big number" }
+  },
+
+  "letterSpacing": {
+    "tight": { "$value": "-0.04em", "$type": "letterSpacing", "$description": "Hero price, manifesto" },
+    "snug": { "$value": "-0.03em", "$type": "letterSpacing", "$description": "Hero title" },
+    "snug-sm": { "$value": "-0.02em", "$type": "letterSpacing", "$description": "Material names, press quote" },
+    "normal": { "$value": "0em", "$type": "letterSpacing" },
+    "wide": { "$value": "0.04em", "$type": "letterSpacing", "$description": "Body small labels" },
+    "wider": { "$value": "0.06em", "$type": "letterSpacing", "$description": "Buttons, nav CTA" },
+    "widest": { "$value": "0.12em", "$type": "letterSpacing", "$description": "Section labels, badges" }
+  },
+
+  "lineHeight": {
+    "none": { "$value": 1.0, "$type": "lineHeight", "$description": "Hero title, manifesto" },
+    "tight": { "$value": 1.05, "$type": "lineHeight" },
+    "snug": { "$value": 1.1, "$type": "lineHeight" },
+    "normal": { "$value": 1.15, "$type": "lineHeight" },
+    "relaxed": { "$value": 1.5, "$type": "lineHeight" },
+    "loose": { "$value": 1.6, "$type": "lineHeight", "$description": "Body default" },
+    "spacious": { "$value": 1.7, "$type": "lineHeight", "$description": "Descriptions, FAQ answers" },
+    "airy": { "$value": 1.8, "$type": "lineHeight", "$description": "AI summary text" }
+  },
+
+  "spacing": {
+    "1": { "$value": "4px", "$type": "dimension" },
+    "2": { "$value": "8px", "$type": "dimension" },
+    "3": { "$value": "12px", "$type": "dimension" },
+    "4": { "$value": "16px", "$type": "dimension" },
+    "5": { "$value": "20px", "$type": "dimension" },
+    "6": { "$value": "24px", "$type": "dimension", "$description": "Card padding (spec token)" },
+    "8": { "$value": "32px", "$type": "dimension" },
+    "10": { "$value": "40px", "$type": "dimension" },
+    "12": { "$value": "48px", "$type": "dimension" },
+    "16": { "$value": "64px", "$type": "dimension" },
+    "20": { "$value": "80px", "$type": "dimension" },
+    "24": { "$value": "96px", "$type": "dimension" },
+    "section": { "$value": "100px", "$type": "dimension", "$description": "Desktop section padding (spec token)" },
+    "section-mobile": { "$value": "64px", "$type": "dimension", "$description": "Mobile section padding" },
+    "gap": { "$value": "16px", "$type": "dimension", "$description": "Default grid gap (spec token)" },
+    "gutter": { "$value": "64px", "$type": "dimension", "$description": "Desktop side gutter" },
+    "gutter-mobile": { "$value": "20px", "$type": "dimension", "$description": "Mobile side gutter" }
+  },
+
+  "border": {
+    "width-1": { "$value": "1px", "$type": "dimension" },
+    "width-2": { "$value": "2px", "$type": "dimension" },
+    "style": { "$value": "solid", "$type": "string" },
+    "default": {
+      "$value": "1px solid #000000",
+      "$type": "border",
+      "$description": "Standard border — used on cards, dividers, table cells"
+    },
+    "strong": {
+      "$value": "2px solid #000000",
+      "$type": "border",
+      "$description": "Section borders, outer wrappers, nav bottom, footer top"
+    },
+    "on-dark": {
+      "$value": "1px solid rgba(255, 255, 255, 0.15)",
+      "$type": "border",
+      "$description": "Border on black backgrounds"
+    }
+  },
+
+  "radius": {
+    "card": { "$value": "0px", "$type": "dimension", "$description": "Zero radius. Always." },
+    "button": { "$value": "0px", "$type": "dimension" },
+    "image": { "$value": "0px", "$type": "dimension" },
+    "badge": { "$value": "0px", "$type": "dimension" }
+  },
+
+  "shadow": {
+    "card": {
+      "$value": "none",
+      "$type": "shadow",
+      "$description": "No shadow at rest. Flat design."
+    },
+    "hover": {
+      "$value": "4px 4px 0 #000000",
+      "$type": "shadow",
+      "$description": "Flat offset shadow on hover. Combined with translate(-2px, -2px) for mechanical lift effect."
+    },
+    "hover-mobile": {
+      "$value": "3px 3px 0 #000000",
+      "$type": "shadow",
+      "$description": "Mobile variant — slightly reduced"
+    }
+  },
+
+  "motion": {
+    "ease": {
+      "$value": "linear",
+      "$type": "cubicBezier",
+      "$description": "Linear easing — no smoothing. Dry, mechanical. Intentional contrast with soft styles."
+    },
+    "duration": {
+      "$value": "150ms",
+      "$type": "duration",
+      "$description": "All interactions: hover, toggle, transform. Spec value."
+    },
+    "duration-zero": {
+      "$value": "0ms",
+      "$type": "duration",
+      "$description": "FAQ answer toggle — instant display:none/block, no animation."
+    }
+  },
+
+  "layout": {
+    "maxWidth": { "$value": "1280px", "$type": "dimension" },
+    "breakpointMobile": { "$value": "375px", "$type": "dimension", "$description": "Mobile target width" },
+    "breakpointTablet": { "$value": "768px", "$type": "dimension" },
+    "breakpointDesktop": { "$value": "1024px", "$type": "dimension" },
+    "gridColumns-desktop": { "$value": 12, "$type": "number" },
+    "gridColumns-mobile": { "$value": 4, "$type": "number" }
+  },
+
+  "notation": {
+    "sectionHero": { "$value": "// HERO", "$type": "string", "$description": "JS single-line comment notation" },
+    "sectionGallery": { "$value": "/* GALLERY */", "$type": "string", "$description": "CSS multi-line comment notation" },
+    "sectionMarkdown": { "$value": "## SECTION_NAME", "$type": "string", "$description": "Markdown heading notation" },
+    "sectionFaq": { "$value": "?> FAQ", "$type": "string", "$description": "PHP opening tag notation for Q&A" },
+    "featurePrefix": { "$value": "01_ / 02_ / 03_ / 04_", "$type": "string", "$description": "Numbered feature labels" },
+    "arrowRight": { "$value": "→", "$type": "string" },
+    "arrowDouble": { "$value": ">>", "$type": "string", "$description": "Thoughtfully Designed prefix" },
+    "priceFormat": { "$value": "$XX.XX", "$type": "string", "$description": "Dollar prefix, two decimals, tabular-nums" },
+    "ratingFormat": { "$value": "[X.X/5.0 — YYYY reviews]", "$type": "string", "$description": "Bracket notation for ratings" },
+    "carePositive": { "$value": "[+]", "$type": "string", "$description": "Care do item prefix" },
+    "careNegative": { "$value": "[-]", "$type": "string", "$description": "Care avoid item prefix" },
+    "faqPrefix": { "$value": "?>", "$type": "string", "$description": "FAQ question prefix — PHP tag convention" },
+    "faqAnswerPrefix": { "$value": "// ", "$type": "string", "$description": "FAQ answer prefix — JS comment" }
+  },
+
+  "component": {
+    "button-primary": {
+      "background": { "$value": "{color.accent}", "$type": "color" },
+      "color": { "$value": "#FFFFFF", "$type": "color" },
+      "border": { "$value": "{border.strong}", "$type": "border" },
+      "borderColor": { "$value": "{color.accent}", "$type": "color" },
+      "padding": { "$value": "14px 28px", "$type": "dimension" },
+      "fontSize": { "$value": "13px", "$type": "dimension" },
+      "fontWeight": { "$value": 700, "$type": "fontWeight" },
+      "letterSpacing": { "$value": "{letterSpacing.wider}", "$type": "letterSpacing" },
+      "textTransform": { "$value": "uppercase", "$type": "string" },
+      "radius": { "$value": "{radius.button}", "$type": "dimension" },
+      "hover-shadow": { "$value": "{shadow.hover}", "$type": "shadow" },
+      "hover-transform": { "$value": "translate(-2px, -2px)", "$type": "string" }
+    },
+    "button-secondary": {
+      "background": { "$value": "transparent", "$type": "color" },
+      "color": { "$value": "{color.text}", "$type": "color" },
+      "border": { "$value": "{border.strong}", "$type": "border" },
+      "padding": { "$value": "14px 28px", "$type": "dimension" },
+      "fontSize": { "$value": "13px", "$type": "dimension" },
+      "fontWeight": { "$value": 600, "$type": "fontWeight" },
+      "hover-background": { "$value": "{color.text}", "$type": "color" },
+      "hover-color": { "$value": "{color.bg}", "$type": "color" }
+    },
+    "nav": {
+      "height": { "$value": "56px", "$type": "dimension" },
+      "height-mobile": { "$value": "48px", "$type": "dimension" },
+      "background": { "$value": "{color.bg}", "$type": "color" },
+      "borderBottom": { "$value": "{border.strong}", "$type": "border" },
+      "position": { "$value": "sticky", "$type": "string" },
+      "zIndex": { "$value": 100, "$type": "number" }
+    },
+    "card": {
+      "radius": { "$value": "{radius.card}", "$type": "dimension" },
+      "shadow": { "$value": "{shadow.card}", "$type": "shadow" },
+      "border": { "$value": "{border.default}", "$type": "border" },
+      "padding": { "$value": "{spacing.6}", "$type": "dimension" }
+    },
+    "faq": {
+      "prefix": { "$value": "?>", "$type": "string" },
+      "answerPrefix": { "$value": "// ", "$type": "string" },
+      "toggleDuration": { "$value": "{motion.duration}", "$type": "duration" }
+    },
+    "gallery-mobile": {
+      "mode": { "$value": "horizontal-scroll", "$type": "string" },
+      "itemWidth": { "$value": "260px", "$type": "dimension" },
+      "itemHeight": { "$value": "320px", "$type": "dimension" }
+    }
+  },
+
+  "antiPatterns": {
+    "_comment": "Decisions documented to prevent regression",
+    "noGradients": true,
+    "noRoundedCorners": true,
+    "noBorderRadius": true,
+    "noSoftShadows": true,
+    "noAlternatingSectionBackgrounds": true,
+    "noAccentInDecorativeElements": true,
+    "noPlayfulElements": true,
+    "noLinearEasingOverride": true
+  }
+}

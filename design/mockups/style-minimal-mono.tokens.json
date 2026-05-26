@@ -1,0 +1,486 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$meta": {
+    "name": "Minimal Mono",
+    "version": "1.0.0",
+    "product": "Konvert V3",
+    "description": "Style Minimal Mono — noir et blanc strict, Inter unique, hiérarchie par weight. Universel, silencieux, fonctionnel. Vibe MUJI x Apple N&B x Kinfolk.",
+    "created": "2026-05-26",
+    "author": "OBITO — NEXARA"
+  },
+
+  "color": {
+    "bg": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "Fond principal de page. Blanc pur — aucun off-white sur le background root."
+    },
+    "surface": {
+      "$value": "#FAFAFA",
+      "$type": "color",
+      "$description": "Surface des cards, panels et sections alternatives. Legerement off-white — differentiation subtile sans rupture visuelle."
+    },
+    "accent": {
+      "$value": "#000000",
+      "$type": "color",
+      "$description": "Couleur d'accent = noir pur. Boutons primaires, check marks, barres de progression, elements interactifs cles."
+    },
+    "text": {
+      "$value": "#000000",
+      "$type": "color",
+      "$description": "Texte principal. Noir pur. Ratio contraste WCAG AAA sur blanc (21:1)."
+    },
+    "textMuted": {
+      "$value": "#737373",
+      "$type": "color",
+      "$description": "Texte secondaire, descriptions, labels. Gris neutre moyen. Ratio WCAG AA sur blanc (#FFF) : ~4.81:1."
+    },
+    "border": {
+      "$value": "#E5E5E5",
+      "$type": "color",
+      "$description": "Borders, dividers, tracks de barres, separateurs. Gris tres clair — structure sans peser. Jamais utilisé comme fond de section."
+    },
+    "manifesto": {
+      "bg": {
+        "$value": "#000000",
+        "$type": "color",
+        "$description": "Fond de la section manifesto — seule section inversée du design."
+      },
+      "text": {
+        "$value": "#FFFFFF",
+        "$type": "color",
+        "$description": "Texte principal manifesto sur fond noir."
+      },
+      "textMuted": {
+        "$value": "rgba(255, 255, 255, 0.55)",
+        "$type": "color",
+        "$description": "Corps de texte manifesto — en retrait, ton factuel."
+      },
+      "eyebrow": {
+        "$value": "rgba(255, 255, 255, 0.4)",
+        "$type": "color",
+        "$description": "Eyebrow manifesto sur fond noir."
+      },
+      "borderLink": {
+        "$value": "rgba(255, 255, 255, 0.2)",
+        "$type": "color",
+        "$description": "Border-bottom du lien ghost manifesto."
+      }
+    }
+  },
+
+  "typography": {
+    "fontFamily": {
+      "heading": {
+        "$value": "\"Inter\", system-ui, sans-serif",
+        "$type": "fontFamily",
+        "$description": "Police titres. Inter uniquement — pas de deuxieme famille. L'uniformité est le principe du style."
+      },
+      "body": {
+        "$value": "\"Inter\", system-ui, sans-serif",
+        "$type": "fontFamily",
+        "$description": "Police corps. Meme famille que heading — discipline volontaire."
+      }
+    },
+    "fontWeight": {
+      "light": {
+        "$value": 300,
+        "$type": "fontWeight",
+        "$description": "Grands titres H1 et H2. Contre-intuitif : la légèreté sur grande taille = elegance. Jamais utilise sur les petits textes."
+      },
+      "regular": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "Body, descriptions, contenu courant."
+      },
+      "medium": {
+        "$value": 500,
+        "$type": "fontWeight",
+        "$description": "Labels, eyebrows, spec keys, boutons, nav links actifs."
+      },
+      "bold": {
+        "$value": 700,
+        "$type": "fontWeight",
+        "$description": "Reserve. Non utilise dans ce design — la hierarchie se fait sans bold."
+      }
+    },
+    "fontSize": {
+      "eyebrow": {
+        "$value": "11px",
+        "$type": "dimension",
+        "$description": "Micro-caps, labels de section. Letter-spacing compensatoire obligatoire."
+      },
+      "caption": {
+        "$value": "12px",
+        "$type": "dimension",
+        "$description": "Dates, meta, credits."
+      },
+      "small": {
+        "$value": "13px",
+        "$type": "dimension",
+        "$description": "Descriptions secondaires, tags, nav links."
+      },
+      "base": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "Taille base body desktop. Standard web — cohere avec la posture universelle du style."
+      },
+      "lead": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "Texte d'accroche / lead. Identique au base — la distinction vient de la couleur muted et du max-width."
+      },
+      "bodyMobile": {
+        "$value": "15px",
+        "$type": "dimension",
+        "$description": "Body mobile. Reduit de 1px — lisibilite sur devices mid-range avec Inter 300."
+      },
+      "h3": {
+        "$value": "clamp(18px, 2vw, 24px)",
+        "$type": "dimension",
+        "$description": "Sous-titres de composants. Fluide."
+      },
+      "h2": {
+        "$value": "clamp(28px, 3.5vw, 48px)",
+        "$type": "dimension",
+        "$description": "Titres de sections. Fluide. Weight 300."
+      },
+      "h1": {
+        "$value": "clamp(40px, 5vw, 72px)",
+        "$type": "dimension",
+        "$description": "Titre hero. Fluide. Weight 300."
+      },
+      "h1Mobile": {
+        "$value": "clamp(32px, 9vw, 40px)",
+        "$type": "dimension",
+        "$description": "Titre hero mobile. Reduit pour tenir sur 390px."
+      }
+    },
+    "lineHeight": {
+      "tight": {
+        "$value": 1.05,
+        "$type": "number",
+        "$description": "Grands titres H1."
+      },
+      "snug": {
+        "$value": 1.1,
+        "$type": "number",
+        "$description": "H2."
+      },
+      "compact": {
+        "$value": 1.3,
+        "$type": "number",
+        "$description": "H3."
+      },
+      "base": {
+        "$value": 1.6,
+        "$type": "number",
+        "$description": "Body standard."
+      },
+      "relaxed": {
+        "$value": 1.7,
+        "$type": "number",
+        "$description": "Descriptions secondaires et reviews."
+      },
+      "loose": {
+        "$value": 1.8,
+        "$type": "number",
+        "$description": "Manifesto body — cadence lente, posture editoriale."
+      }
+    },
+    "letterSpacing": {
+      "tightest": {
+        "$value": "-0.03em",
+        "$type": "dimension",
+        "$description": "H1 — compense le crennage Inter sur grande taille."
+      },
+      "tight": {
+        "$value": "-0.02em",
+        "$type": "dimension",
+        "$description": "H2."
+      },
+      "snug": {
+        "$value": "-0.01em",
+        "$type": "dimension",
+        "$description": "H3, sous-titres."
+      },
+      "normal": {
+        "$value": "0em",
+        "$type": "dimension",
+        "$description": "Body."
+      },
+      "wide": {
+        "$value": "0.02em",
+        "$type": "dimension",
+        "$description": "Boutons."
+      },
+      "wider": {
+        "$value": "0.08em",
+        "$type": "dimension",
+        "$description": "Labels, spec keys."
+      },
+      "widest": {
+        "$value": "0.12em",
+        "$type": "dimension",
+        "$description": "Eyebrows — micro-caps lisibles meme a 11px."
+      }
+    }
+  },
+
+  "spacing": {
+    "0": { "$value": "0px",   "$type": "dimension" },
+    "1": { "$value": "4px",   "$type": "dimension", "$description": "Micro — gaps visuels internes" },
+    "2": { "$value": "8px",   "$type": "dimension", "$description": "Tres petit" },
+    "3": { "$value": "12px",  "$type": "dimension" },
+    "4": { "$value": "16px",  "$type": "dimension", "$description": "Gap standard" },
+    "5": { "$value": "20px",  "$type": "dimension", "$description": "Padding mobile sections" },
+    "6": { "$value": "24px",  "$type": "dimension", "$description": "Gap composants — spec token" },
+    "7": { "$value": "28px",  "$type": "dimension" },
+    "8": { "$value": "32px",  "$type": "dimension", "$description": "Card padding — spec token" },
+    "10": { "$value": "40px", "$type": "dimension" },
+    "12": { "$value": "48px", "$type": "dimension", "$description": "Container padding lateral desktop" },
+    "14": { "$value": "56px", "$type": "dimension" },
+    "16": { "$value": "64px", "$type": "dimension" },
+    "20": { "$value": "80px", "$type": "dimension", "$description": "Hero padding top, gap colonnes" },
+    "30": { "$value": "120px","$type": "dimension", "$description": "Section padding — spec token. Ne jamais reduire." },
+    "section": {
+      "$value": "120px",
+      "$type": "dimension",
+      "$description": "Padding vertical entre sections desktop. C'est l'espace blanc qui separent les sections — pas de fond colore. Crucial pour le style."
+    },
+    "sectionMobile": {
+      "$value": "72px",
+      "$type": "dimension",
+      "$description": "Padding vertical sections mobile. Reduit mais toujours genereux."
+    },
+    "card": {
+      "$value": "32px",
+      "$type": "dimension",
+      "$description": "Padding interne des cards."
+    },
+    "gap": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Gap standard entre elements."
+    },
+    "gridGap": {
+      "$value": "2px",
+      "$type": "dimension",
+      "$description": "Gap entre items de grille image (gallery, designed). L'effet joint couture."
+    },
+    "containerPadding": {
+      "$value": "48px",
+      "$type": "dimension",
+      "$description": "Padding lateral du container desktop."
+    },
+    "containerPaddingMobile": {
+      "$value": "20px",
+      "$type": "dimension",
+      "$description": "Padding lateral mobile."
+    }
+  },
+
+  "borderRadius": {
+    "card": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$description": "Radius des cards. Minimaliste — soupcon de rondeur, jamais de rondeur prononcee."
+    },
+    "button": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$description": "Radius des boutons. Identique aux cards — coherence maximale."
+    },
+    "image": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$description": "Radius des images. Optionnel — certaines images saignent sans radius."
+    },
+    "badge": {
+      "$value": "2px",
+      "$type": "dimension",
+      "$description": "Radius des badges et tags. Plus petit encore que card/button."
+    }
+  },
+
+  "shadow": {
+    "card": {
+      "$value": "none",
+      "$type": "shadow",
+      "$description": "Pas de shadow au repos. Flat. L'elevation se fait par le fond #FAFAFA, pas la shadow."
+    },
+    "hover": {
+      "$value": "0 4px 12px rgba(0, 0, 0, 0.06)",
+      "$type": "shadow",
+      "$description": "Shadow uniquement au hover. Tres subtile — opacity 0.06 max. Jamais colore."
+    }
+  },
+
+  "motion": {
+    "ease": {
+      "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "Ease standard. Material Design standard ease — ni trop agressif ni trop mou."
+    },
+    "duration": {
+      "$value": "300ms",
+      "$type": "duration",
+      "$description": "Duree standard des transitions. Philosophie Kowalski (restraint) : 300ms max sur interactions utilisateur."
+    },
+    "durationFast": {
+      "$value": "200ms",
+      "$type": "duration",
+      "$description": "Transitions rapides (hover states simples)."
+    },
+    "durationSlow": {
+      "$value": "400ms",
+      "$type": "duration",
+      "$description": "FAQ accordion max-height — necessite plus de temps pour l'animation de hauteur."
+    },
+    "fadeUpDistance": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$description": "Distance de la fade-up animation. 12px — subtil. Pas 20-30px (trop visible), pas 4px (imperceptible)."
+    },
+    "staggerDelay": {
+      "$value": "60ms",
+      "$type": "duration",
+      "$description": "Delai entre elements en cascade (delay-1, delay-2...). 60ms — cascade serree, pas trop theatrale."
+    }
+  },
+
+  "layout": {
+    "maxWidth": {
+      "$value": "1200px",
+      "$type": "dimension",
+      "$description": "Largeur max du container. 1200px = standard. Ni trop large (diluant), ni trop etroit (contraignant)."
+    },
+    "navHeight": {
+      "$value": "56px",
+      "$type": "dimension",
+      "$description": "Hauteur de la nav sticky desktop."
+    },
+    "navHeightMobile": {
+      "$value": "52px",
+      "$type": "dimension",
+      "$description": "Hauteur nav mobile."
+    },
+    "stickyCtaHeight": {
+      "$value": "64px",
+      "$type": "dimension",
+      "$description": "Hauteur approximative de la sticky CTA bar mobile."
+    },
+    "breakpoints": {
+      "mobile": {
+        "$value": "390px",
+        "$type": "dimension",
+        "$description": "Cible mobile : iPhone 14 standard."
+      },
+      "tablet": {
+        "$value": "768px",
+        "$type": "dimension",
+        "$description": "Tablet min."
+      },
+      "desktop": {
+        "$value": "1024px",
+        "$type": "dimension",
+        "$description": "Desktop min."
+      }
+    }
+  },
+
+  "component": {
+    "button": {
+      "padding": {
+        "$value": "14px 32px",
+        "$type": "spacing",
+        "$description": "Padding bouton standard. 14px vertical = touch target correct (>44px de hauteur totale)."
+      },
+      "fontSize": {
+        "$value": "14px",
+        "$type": "dimension",
+        "$description": "Taille police bouton. Plus petite que le body (16px) — les boutons ne dominent pas le texte."
+      },
+      "fontWeight": {
+        "$value": 500,
+        "$type": "fontWeight",
+        "$description": "Medium — presente sans etre agressif."
+      },
+      "letterSpacing": {
+        "$value": "0.02em",
+        "$type": "dimension",
+        "$description": "Legere ouverture — les boutons en uppercase n'ont pas besoin de plus."
+      }
+    },
+    "nav": {
+      "logoStyle": {
+        "$value": "uppercase 12-13px weight:500 letter-spacing:0.08em",
+        "$type": "other",
+        "$description": "Logo traite en texte type logo marque — pas de police speciale. Coherent avec le minimalisme."
+      }
+    },
+    "card": {
+      "background": {
+        "$value": "#FAFAFA",
+        "$type": "color",
+        "$description": "Fond card. #FAFAFA uniquement — jamais de border ni de shadow au repos."
+      }
+    },
+    "divider": {
+      "style": {
+        "$value": "1px solid #E5E5E5",
+        "$type": "other",
+        "$description": "Separateur entre sections. Remplace l'alternance de fond — principe fondamental du style."
+      }
+    },
+    "materialBar": {
+      "height": {
+        "$value": "1px",
+        "$type": "dimension",
+        "$description": "Hauteur des barres de progression materiaux. 1px — element typographique, pas widget UI traditionnel."
+      }
+    },
+    "ratingBar": {
+      "height": {
+        "$value": "1px",
+        "$type": "dimension",
+        "$description": "Hauteur des barres de rating avis. Meme principe que materialBar."
+      }
+    }
+  },
+
+  "accessibility": {
+    "focusOutline": {
+      "$value": "2px solid #000000",
+      "$type": "border",
+      "$description": "Outline focus visible. Noir plein — contraste maximal."
+    },
+    "focusOutlineOffset": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$description": "Offset focus. Espace entre l'element et l'outline."
+    },
+    "minTouchTarget": {
+      "$value": "44px",
+      "$type": "dimension",
+      "$description": "Taille minimale zone de touch. WCAG 2.5.5 — respectee sur tous les boutons et FAQ questions."
+    },
+    "contrastRatios": {
+      "textOnBg": {
+        "$value": "21:1",
+        "$type": "other",
+        "$description": "#000000 sur #FFFFFF. WCAG AAA."
+      },
+      "mutedOnBg": {
+        "$value": "~4.81:1",
+        "$type": "other",
+        "$description": "#737373 sur #FFFFFF. WCAG AA (minimum 4.5:1 pour texte normal)."
+      },
+      "whiteOnBlack": {
+        "$value": "21:1",
+        "$type": "other",
+        "$description": "#FFFFFF sur #000000. WCAG AAA. Section manifesto."
+      }
+    }
+  }
+}

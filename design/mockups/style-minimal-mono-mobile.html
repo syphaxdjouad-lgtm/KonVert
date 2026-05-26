@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sac en cuir vintage — Style Minimal Mono — Mobile — Konvert V3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS — Minimal Mono (mobile)
+       ============================================================ */
+    :root {
+      --color-bg:         #FFFFFF;
+      --color-surface:    #FAFAFA;
+      --color-accent:     #000000;
+      --color-text:       #000000;
+      --color-text-muted: #737373;
+      --color-border:     #E5E5E5;
+
+      --font-heading: "Inter", system-ui, sans-serif;
+      --font-body:    "Inter", system-ui, sans-serif;
+
+      --space-section: 72px;
+      --space-card:    20px;
+      --space-gap:     16px;
+
+      --radius-card:   4px;
+      --radius-button: 4px;
+      --radius-image:  4px;
+
+      --shadow-hover: 0 4px 12px rgba(0,0,0,0.06);
+
+      --ease:     cubic-bezier(0.4, 0, 0.2, 1);
+      --duration: 300ms;
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      font-weight: 400;
+      max-width: 390px;   /* Simule iPhone 14 */
+      margin: 0 auto;
+      position: relative;
+    }
+
+    img { display: block; max-width: 100%; }
+
+    a {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+       ============================================================ */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity var(--duration) var(--ease),
+                  transform var(--duration) var(--ease);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up.delay-1 { transition-delay: 60ms; }
+    .fade-up.delay-2 { transition-delay: 120ms; }
+
+    /* ============================================================
+       TYPOGRAPHY
+       ============================================================ */
+    .h1 {
+      font-size: clamp(32px, 9vw, 40px);
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+
+    .h2 {
+      font-size: clamp(24px, 7vw, 30px);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .h3 {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    /* ============================================================
+       UTILITIES
+       ============================================================ */
+    .divider { border: none; border-top: 1px solid var(--color-border); }
+
+    .px {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    .py-section {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 24px;
+      border-radius: var(--radius-button);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: opacity var(--duration) var(--ease);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--color-accent);
+      color: #fff;
+      width: 100%;
+      text-align: center;
+    }
+    .btn-primary:hover { opacity: 0.7; }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--color-text);
+      border: 1px solid var(--color-accent);
+      width: 100%;
+      text-align: center;
+    }
+    .btn-secondary:hover {
+      background: var(--color-accent);
+      color: #fff;
+    }
+
+    /* ============================================================
+       NAV — sticky top
+       ============================================================ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.96);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 52px;
+      padding: 0 20px;
+    }
+
+    .nav-logo {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text);
+    }
+
+    .nav-cart {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-cart-btn {
+      background: var(--color-accent);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-button);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--font-body);
+    }
+
+    /* ============================================================
+       1. HERO — empilement vertical
+       ============================================================ */
+    .hero {
+      padding-top: 0;
+      background: var(--color-bg);
+    }
+
+    .hero-image {
+      width: 100%;
+      aspect-ratio: 4/5;
+      object-fit: cover;
+    }
+
+    .hero-content {
+      padding: 28px 20px 56px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--color-border);
+      padding: 3px 10px;
+      border-radius: 2px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      margin-bottom: 14px;
+    }
+
+    .hero-tagline {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      font-weight: 300;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .hero-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .hero-price {
+      font-size: 24px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-rating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .star {
+      width: 12px;
+      height: 12px;
+      background: var(--color-text);
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
+
+    .rating-text {
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    .hero-cta-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .hero-specs {
+      border-top: 1px solid var(--color-border);
+    }
+
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 13px;
+    }
+
+    .spec-row span:first-child { color: var(--color-text-muted); }
+    .spec-row span:last-child { font-weight: 500; }
+
+    /* ============================================================
+       2. GALLERY — scroll horizontal
+       ============================================================ */
+    .gallery-section {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .gallery-header {
+      padding: 0 20px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .gallery-scroll {
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .gallery-scroll::-webkit-scrollbar { display: none; }
+
+    .gallery-scroll-item {
+      flex-shrink: 0;
+      width: 72vw;
+    }
+
+    .gallery-scroll-item img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: var(--radius-image);
+    }
+
+    /* ============================================================
+       3. WHY WE LOVE — liste accordeon
+       ============================================================ */
+    .why-section {
+      padding: var(--space-section) 0;
+    }
+
+    .why-header {
+      padding: 0 20px;
+      margin-bottom: 32px;
+    }
+
+    .why-number {
+      font-size: 56px;
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      color: var(--color-border);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .why-list {
+      border-top: 1px solid var(--color-border);
+    }
+
+    .why-item {
+      padding: 20px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .why-item-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .why-index {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--color-text-muted);
+      flex-shrink: 0;
+      padding-top: 3px;
+    }
+
+    .why-title {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .why-desc {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ============================================================
+       4. THOUGHTFULLY DESIGNED — cartes empilees
+       ============================================================ */
+    .designed-section {
+      padding: var(--space-section) 0;
+    }
+
+    .designed-header {
+      padding: 0 20px;
+      margin-bottom: 28px;
+    }
+
+    .designed-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .designed-card {
+      background: var(--color-surface);
+      padding: 28px 20px;
+    }
+
+    .designed-card img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: var(--radius-image);
+    }
+
+    .designed-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 12px;
+    }
+
+    .designed-card-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .designed-card-desc {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .spec-mini-list {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spec-mini {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 12px;
+    }
+
+    .spec-mini:first-child { border-top: 1px solid var(--color-border); }
+    .spec-mini span:first-child { color: var(--color-text-muted); }
+    .spec-mini span:last-child { font-weight: 500; }
+
+    /* ============================================================
+       5. BEST FOR — scroll horizontal
+       ============================================================ */
+    .best-for-section {
+      padding: var(--space-section) 0;
+    }
+
+    .best-for-header {
+      padding: 0 20px;
+      margin-bottom: 24px;
+    }
+
+    .best-for-scroll {
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+    }
+    .best-for-scroll::-webkit-scrollbar { display: none; }
+
+    .best-for-card {
+      flex-shrink: 0;
+      width: 72vw;
+      background: var(--color-surface);
+      padding: 28px 24px;
+    }
+
+    .best-for-icon {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--color-border);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .best-for-icon svg { width: 14px; height: 14px; }
+
+    .best-for-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .best-for-desc {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ============================================================
+       6. MATERIALS
+       ============================================================ */
+    .materials-section {
+      padding: var(--space-section) 0;
+    }
+
+    .materials-header {
+      padding: 0 20px;
+      margin-bottom: 24px;
+    }
+
+    .materials-image {
+      width: 100%;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      margin-bottom: 28px;
+    }
+
+    .materials-list {
+      padding: 0 20px;
+    }
+
+    .material-item {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .material-item:first-child { border-top: 1px solid var(--color-border); }
+
+    .material-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .material-name { font-size: 14px; font-weight: 500; }
+    .material-sub { font-size: 12px; color: var(--color-text-muted); font-weight: 300; }
+
+    .material-bar {
+      height: 1px;
+      background: var(--color-border);
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .material-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 1px;
+      background: var(--color-text);
+    }
+
+    .material-desc {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       7. COMPARE VARIANTS — tableau responsive (scroll)
+       ============================================================ */
+    .compare-section {
+      padding: var(--space-section) 0;
+    }
+
+    .compare-header {
+      padding: 0 20px;
+      margin-bottom: 24px;
+    }
+
+    .compare-scroll {
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+    }
+    .compare-scroll::-webkit-scrollbar { display: none; }
+
+    .compare-table {
+      width: 600px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .compare-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      border-bottom: 1px solid var(--color-border);
+      background: var(--color-surface);
+      white-space: nowrap;
+    }
+
+    .compare-table td {
+      padding: 14px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--color-border);
+      vertical-align: middle;
+    }
+
+    .compare-table td:first-child {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+    }
+
+    .check-mark {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--color-text);
+      position: relative;
+    }
+
+    .check-mark::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+      width: 4px;
+      height: 7px;
+      border-right: 1.5px solid #fff;
+      border-bottom: 1.5px solid #fff;
+      margin-top: -2px;
+    }
+
+    .dash-mark {
+      display: inline-block;
+      width: 14px;
+      height: 1px;
+      background: var(--color-border);
+    }
+
+    .variant-badge {
+      display: inline-block;
+      border: 1px solid var(--color-text);
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       8. REVIEWS
+       ============================================================ */
+    .reviews-section {
+      padding: var(--space-section) 0;
+    }
+
+    .reviews-header {
+      padding: 0 20px;
+      margin-bottom: 24px;
+    }
+
+    .reviews-score-block {
+      margin: 0 20px 28px;
+      padding: 24px;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .score-left {
+      text-align: center;
+    }
+
+    .score-number {
+      font-size: 48px;
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .score-count {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    .rating-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .rating-label {
+      width: 20px;
+      text-align: right;
+      color: var(--color-text-muted);
+      flex-shrink: 0;
+    }
+
+    .rating-track {
+      flex: 1;
+      height: 1px;
+      background: var(--color-border);
+      position: relative;
+    }
+
+    .rating-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 1px;
+      background: var(--color-text);
+    }
+
+    .rating-pct {
+      width: 28px;
+      font-size: 11px;
+      color: var(--color-text-muted);
+    }
+
+    .ai-summary {
+      margin: 0 20px 24px;
+      padding: 20px;
+      border: 1px solid var(--color-border);
+    }
+
+    .ai-summary-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .ai-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .ai-badge {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      border: 1px solid var(--color-border);
+      padding: 2px 6px;
+      border-radius: 2px;
+    }
+
+    .ai-text {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--color-text);
+      font-weight: 300;
+    }
+
+    .reviews-list {
+      border-top: 1px solid var(--color-border);
+    }
+
+    .review-item {
+      padding: 20px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .review-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .reviewer-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .reviewer-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      flex-shrink: 0;
+    }
+
+    .reviewer-name { font-size: 13px; font-weight: 500; }
+    .reviewer-date { font-size: 11px; color: var(--color-text-muted); font-weight: 300; }
+
+    .review-score {
+      font-size: 12px;
+      color: var(--color-text-muted);
+    }
+
+    .review-text {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    .review-tag {
+      display: inline-block;
+      margin-top: 10px;
+      border: 1px solid var(--color-border);
+      padding: 3px 8px;
+      border-radius: 2px;
+      font-size: 11px;
+      color: var(--color-text-muted);
+    }
+
+    .reviews-cta {
+      padding: 20px;
+      border-top: 1px solid var(--color-border);
+      font-size: 13px;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    /* ============================================================
+       9. PRESS QUOTE
+       ============================================================ */
+    .press-section {
+      background: var(--color-surface);
+      padding: 56px 20px;
+      text-align: center;
+    }
+
+    .press-mark {
+      font-size: 56px;
+      font-weight: 300;
+      color: var(--color-border);
+      line-height: 0.5;
+      margin-bottom: 28px;
+      display: block;
+    }
+
+    .press-quote {
+      font-size: clamp(18px, 5vw, 22px);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1.5;
+      color: var(--color-text);
+      margin-bottom: 24px;
+    }
+
+    .press-source {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    /* ============================================================
+       10. CARE
+       ============================================================ */
+    .care-section {
+      padding: var(--space-section) 0;
+    }
+
+    .care-header {
+      padding: 0 20px;
+      margin-bottom: 24px;
+    }
+
+    .care-scroll {
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      padding: 0 20px;
+      scrollbar-width: none;
+    }
+    .care-scroll::-webkit-scrollbar { display: none; }
+
+    .care-card {
+      flex-shrink: 0;
+      width: 56vw;
+      background: var(--color-surface);
+      padding: 24px 20px;
+    }
+
+    .care-icon {
+      width: 20px;
+      height: 20px;
+      margin-bottom: 16px;
+    }
+
+    .care-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+    .care-desc { font-size: 12px; color: var(--color-text-muted); line-height: 1.6; font-weight: 300; }
+
+    /* ============================================================
+       11. FAQ
+       ============================================================ */
+    .faq-section {
+      padding: var(--space-section) 0;
+    }
+
+    .faq-header {
+      padding: 0 20px;
+      margin-bottom: 24px;
+    }
+
+    .faq-list {
+      border-top: 1px solid var(--color-border);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text);
+      font-family: var(--font-body);
+    }
+
+    .faq-toggle {
+      width: 14px;
+      height: 14px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .faq-toggle::before,
+    .faq-toggle::after {
+      content: '';
+      position: absolute;
+      background: var(--color-text-muted);
+      transition: transform var(--duration) var(--ease), opacity var(--duration) var(--ease);
+    }
+
+    .faq-toggle::before {
+      width: 14px;
+      height: 1px;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+
+    .faq-toggle::after {
+      width: 1px;
+      height: 14px;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .faq-item.open .faq-toggle::after {
+      opacity: 0;
+      transform: translateX(-50%) rotate(90deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 400ms var(--ease);
+    }
+
+    .faq-item.open .faq-answer { max-height: 400px; }
+
+    .faq-answer-inner {
+      padding: 0 20px 20px;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    /* ============================================================
+       12. MANIFESTO
+       ============================================================ */
+    .manifesto-section {
+      background: var(--color-text);
+      color: var(--color-bg);
+      padding: 64px 20px;
+    }
+
+    .manifesto-eyebrow {
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 24px;
+    }
+
+    .manifesto-title {
+      font-size: clamp(28px, 8vw, 40px);
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: #fff;
+      margin-bottom: 24px;
+    }
+
+    .manifesto-body {
+      font-size: 14px;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.5);
+      font-weight: 300;
+      margin-bottom: 36px;
+    }
+
+    .manifesto-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: #fff;
+      color: #000;
+      padding: 14px 24px;
+      border-radius: var(--radius-button);
+      font-size: 14px;
+      font-weight: 500;
+      font-family: var(--font-body);
+      text-decoration: none;
+      margin-bottom: 16px;
+    }
+
+    .manifesto-link {
+      display: block;
+      text-align: center;
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      padding-bottom: 2px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      padding: 32px 20px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .footer-brand {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      list-style: none;
+      margin-bottom: 20px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--color-text-muted);
+    }
+
+    .footer-copy {
+      font-size: 11px;
+      color: var(--color-text-muted);
+      font-weight: 300;
+    }
+
+    /* ============================================================
+       STICKY CTA BOTTOM — mobile only
+       ============================================================ */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255,255,255,0.96);
+      border-top: 1px solid var(--color-border);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 200;
+      max-width: 390px;
+      margin: 0 auto;
+    }
+
+    .sticky-cta-info {
+      flex: 1;
+    }
+
+    .sticky-cta-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .sticky-cta-price {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      font-weight: 300;
+    }
+
+    .sticky-cta-btn {
+      background: var(--color-accent);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius-button);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--font-body);
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       FOCUS STATES — WCAG AA
+       ============================================================ */
+    :focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 4px;
+    }
+
+    button { font-family: var(--font-body); }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" aria-label="Navigation">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Maison Atelier</a>
+      <div class="nav-cart">
+        <button class="nav-cart-btn" aria-label="Ajouter au panier">Panier</button>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- 1. HERO -->
+  <section aria-labelledby="hero-title">
+    <div class="hero">
+      <img
+        class="hero-image"
+        src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80&auto=format&fit=crop"
+        alt="Sac cuir vintage — vue principale"
+        width="390"
+        height="488"
+        loading="eager"
+      />
+      <div class="hero-content">
+        <div class="hero-badge">Cuir pleine fleur</div>
+
+        <h1 class="h1 hero-title" id="hero-title">Sac cuir<br/>vintage</h1>
+
+        <p class="hero-tagline">Fabriqué en tannerie familiale italienne. Fait pour durer des decades.</p>
+
+        <div class="hero-meta-row">
+          <span class="hero-price">79 EUR</span>
+          <div class="hero-rating">
+            <div class="stars" aria-label="4.6 sur 5 etoiles">
+              <span class="star" aria-hidden="true"></span>
+              <span class="star" aria-hidden="true"></span>
+              <span class="star" aria-hidden="true"></span>
+              <span class="star" aria-hidden="true"></span>
+              <span class="star" aria-hidden="true" style="opacity:0.35"></span>
+            </div>
+            <span class="rating-text">4.6 &middot; 324</span>
+          </div>
+        </div>
+
+        <div class="hero-cta-col">
+          <a href="#" class="btn btn-primary">Ajouter au panier</a>
+          <a href="#" class="btn btn-secondary">Voir les variantes</a>
+        </div>
+
+        <div class="hero-specs">
+          <div class="spec-row">
+            <span>Matiere</span>
+            <span>Cuir pleine fleur 2mm</span>
+          </div>
+          <div class="spec-row">
+            <span>Dimensions</span>
+            <span>38 x 28 x 12 cm</span>
+          </div>
+          <div class="spec-row">
+            <span>Livraison</span>
+            <span>3-5 jours</span>
+          </div>
+          <div class="spec-row">
+            <span>Garantie</span>
+            <span>3 ans fabrication</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- 2. GALLERY -->
+  <div class="gallery-section" aria-label="Galerie produit">
+    <div class="gallery-header">
+      <h2 class="h2">Details</h2>
+      <p class="eyebrow">4 visuels</p>
+    </div>
+    <div class="gallery-scroll" role="list">
+      <div class="gallery-scroll-item" role="listitem">
+        <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80&auto=format&fit=crop" alt="Vue de face" width="280" height="373" loading="lazy" />
+      </div>
+      <div class="gallery-scroll-item" role="listitem">
+        <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600&q=80&auto=format&fit=crop" alt="Detail couture" width="280" height="373" loading="lazy" />
+      </div>
+      <div class="gallery-scroll-item" role="listitem">
+        <img src="https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=600&q=80&auto=format&fit=crop" alt="Detail poignee" width="280" height="373" loading="lazy" />
+      </div>
+      <div class="gallery-scroll-item" role="listitem">
+        <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80&auto=format&fit=crop" alt="Interieur" width="280" height="373" loading="lazy" />
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+
+  <!-- 3. WHY WE LOVE -->
+  <section class="why-section" aria-labelledby="why-title">
+    <div class="why-header fade-up">
+      <p class="eyebrow" style="margin-bottom:12px;">Pourquoi on aime</p>
+      <div class="why-number">05</div>
+      <h2 class="h2" id="why-title">Ce qui fait la difference</h2>
+    </div>
+
+    <div class="why-list fade-up delay-1">
+      <div class="why-item">
+        <div class="why-item-header">
+          <span class="why-index">01</span>
+          <div>
+            <p class="why-title">Cuir pleine fleur non corroyé</p>
+            <p class="why-desc">La couche superieure du cuir est preservee. Il patine avec le temps — il ne vieillit pas, il evolue.</p>
+          </div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-item-header">
+          <span class="why-index">02</span>
+          <div>
+            <p class="why-title">Coutures main sellier</p>
+            <p class="why-desc">Double fil poisse. Si un fil casse, l'autre tient. Superieur aux coutures machine.</p>
+          </div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-item-header">
+          <span class="why-index">03</span>
+          <div>
+            <p class="why-title">Quincaillerie laiton massif</p>
+            <p class="why-desc">Pas de placage zinc. Aucun risque d'ecaillage sur le long terme.</p>
+          </div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-item-header">
+          <span class="why-index">04</span>
+          <div>
+            <p class="why-title">Doublure coton non traite</p>
+            <p class="why-desc">Protege votre contenu des migrations chimiques. Simple, propre, efficace.</p>
+          </div>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-item-header">
+          <span class="why-index">05</span>
+          <div>
+            <p class="why-title">Garantie 3 ans fabrication</p>
+            <p class="why-desc">Defaut de fabrication : on repare ou on remplace. Sans conditions cachees.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- 4. THOUGHTFULLY DESIGNED -->
+  <section class="designed-section" aria-labelledby="designed-title">
+    <div class="designed-header fade-up">
+      <p class="eyebrow" style="margin-bottom:12px;">Conception</p>
+      <h2 class="h2" id="designed-title">Pense pour durer</h2>
+    </div>
+
+    <div class="designed-stack fade-up delay-1">
+      <div class="designed-card">
+        <p class="designed-label">Structure</p>
+        <p class="designed-card-title">Base renforcee, forme preservee</p>
+        <p class="designed-card-desc">Un fond rigide en carton bois tresse maintient la structure a vide comme en charge.</p>
+        <div class="spec-mini-list">
+          <div class="spec-mini"><span>Fond</span><span>Carton bois 3mm</span></div>
+          <div class="spec-mini"><span>Cloisons</span><span>2 compartiments</span></div>
+          <div class="spec-mini"><span>Fermeture</span><span>Zip YKK 8mm</span></div>
+        </div>
+      </div>
+
+      <div class="designed-card" style="padding:0;overflow:hidden;">
+        <img
+          src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80&auto=format&fit=crop"
+          alt="Detail construction"
+          width="390"
+          height="220"
+          loading="lazy"
+          style="width:100%;aspect-ratio:16/9;object-fit:cover;"
+        />
+      </div>
+
+      <div class="designed-card" style="padding:0;overflow:hidden;">
+        <img
+          src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=800&q=80&auto=format&fit=crop"
+          alt="Detail laiton"
+          width="390"
+          height="220"
+          loading="lazy"
+          style="width:100%;aspect-ratio:16/9;object-fit:cover;"
+        />
+      </div>
+
+      <div class="designed-card">
+        <p class="designed-label">Ergonomie</p>
+        <p class="designed-card-title">Porte en main, porte en epaule</p>
+        <p class="designed-card-desc">Poignees courtes ou bandouliere amovible. Longueur reglable 90-140 cm.</p>
+        <div class="spec-mini-list">
+          <div class="spec-mini"><span>Poignees</span><span>Cuir tresse 25cm</span></div>
+          <div class="spec-mini"><span>Bandouliere</span><span>Amovible 90-140cm</span></div>
+          <div class="spec-mini"><span>Poids</span><span>680g</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- 5. BEST FOR -->
+  <section class="best-for-section" aria-labelledby="best-for-title">
+    <div class="best-for-header fade-up">
+      <p class="eyebrow" style="margin-bottom:12px;">Usage</p>
+      <h2 class="h2" id="best-for-title">Pour qui, pour quoi</h2>
+    </div>
+    <div class="best-for-scroll fade-up delay-1" role="list">
+      <div class="best-for-card" role="listitem">
+        <div class="best-for-icon">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="2" y="3" width="12" height="10" rx="1"/>
+          </svg>
+        </div>
+        <p class="best-for-title">Usage bureau quotidien</p>
+        <p class="best-for-desc">Deux compartiments, poche laptop 14 pouces. Structure suffisante pour ne pas chercher ses affaires.</p>
+      </div>
+      <div class="best-for-card" role="listitem">
+        <div class="best-for-icon">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="8" cy="8" r="6"/>
+            <path d="M8 4v4l3 2"/>
+          </svg>
+        </div>
+        <p class="best-for-title">Week-end court sejour</p>
+        <p class="best-for-desc">38 cm — conforme cabine. Deux jours de voyage sans bagage enregistre.</p>
+      </div>
+      <div class="best-for-card" role="listitem">
+        <div class="best-for-icon">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M2 6l6-4 6 4v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z"/>
+          </svg>
+        </div>
+        <p class="best-for-title">Cadeau durable</p>
+        <p class="best-for-desc">S'offre, se garde, se transmet. Emballage sans plastique. Message manuscrit inclus.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- 6. MATERIALS -->
+  <section class="materials-section" aria-labelledby="materials-title">
+    <div class="materials-header fade-up">
+      <p class="eyebrow" style="margin-bottom:12px;">Composition</p>
+      <h2 class="h2" id="materials-title">Ce qui le compose</h2>
+    </div>
+
+    <img
+      class="materials-image"
+      src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800&q=80&auto=format&fit=crop"
+      alt="Texture cuir pleine fleur"
+      width="390"
+      height="244"
+      loading="lazy"
+    />
+
+    <div class="materials-list fade-up delay-1">
+      <div class="material-item">
+        <div class="material-header">
+          <span class="material-name">Cuir pleine fleur — bovine</span>
+          <span class="material-sub">Exterieur</span>
+        </div>
+        <div class="material-bar"><div class="material-bar-fill" style="width:100%"></div></div>
+        <p class="material-desc">Tannage vegetal au chene. Provenance tracee Toscane, Italie.</p>
+      </div>
+      <div class="material-item">
+        <div class="material-header">
+          <span class="material-name">Coton non traite</span>
+          <span class="material-sub">Doublure</span>
+        </div>
+        <div class="material-bar"><div class="material-bar-fill" style="width:85%"></div></div>
+        <p class="material-desc">Coton canvas 280g. Lavable a 30 degres.</p>
+      </div>
+      <div class="material-item">
+        <div class="material-header">
+          <span class="material-name">Laiton massif</span>
+          <span class="material-sub">Quincaillerie</span>
+        </div>
+        <div class="material-bar"><div class="material-bar-fill" style="width:45%"></div></div>
+        <p class="material-desc">Boucles et fermoirs en laiton poli. Patine naturelle. Aucun placage.</p>
+      </div>
+      <div class="material-item">
+        <div class="material-header">
+          <span class="material-name">Carton bois tresse</span>
+          <span class="material-sub">Structure</span>
+        </div>
+        <div class="material-bar"><div class="material-bar-fill" style="width:30%"></div></div>
+        <p class="material-desc">Base rigide FSC certifie. Maintient la forme meme vide.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- 7. COMPARE VARIANTS -->
+  <section class="compare-section" aria-labelledby="compare-title">
+    <div class="compare-header fade-up">
+      <p class="eyebrow" style="margin-bottom:12px;">Variantes</p>
+      <h2 class="h2" id="compare-title">Choisir son modele</h2>
+    </div>
+    <div class="compare-scroll fade-up delay-1">
+      <table class="compare-table" role="table" aria-label="Comparaison variantes">
+        <thead>
+          <tr>
+            <th scope="col">Critere</th>
+            <th scope="col">S Natural <span class="variant-badge">Best</span></th>
+            <th scope="col">M Natural</th>
+            <th scope="col">M Noir</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Prix</td>
+            <td>69 EUR</td>
+            <td>79 EUR</td>
+            <td>79 EUR</td>
+          </tr>
+          <tr>
+            <td>Dimensions</td>
+            <td>30x22x10</td>
+            <td>38x28x12</td>
+            <td>38x28x12</td>
+          </tr>
+          <tr>
+            <td>Laptop 14"</td>
+            <td><span class="dash-mark" aria-label="Non"></span></td>
+            <td><span class="check-mark" aria-label="Oui"></span></td>
+            <td><span class="check-mark" aria-label="Oui"></span></td>
+          </tr>
+          <tr>
+            <td>Bandouliere</td>
+            <td><span class="check-mark" aria-label="Oui"></span></td>
+            <td><span class="check-mark" aria-label="Oui"></span></td>
+            <td><span class="check-mark" aria-label="Oui"></span></td>
+          </tr>
+          <tr>
+            <td>Poids</td>
+            <td>540g</td>
+            <td>680g</td>
+            <td>680g</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- 8. REVIEWS -->
+  <section class="reviews-section" aria-labelledby="reviews-title">
+    <div class="reviews-header fade-up">
+      <p class="eyebrow" style="margin-bottom:12px;">Avis clients</p>
+      <h2 class="h2" id="reviews-title">Ce qu'ils en pensent</h2>
+    </div>
+
+    <div class="reviews-score-block fade-up delay-1">
+      <div class="score-left">
+        <div class="stars" style="justify-content:center;" aria-hidden="true">
+          <span class="star"></span>
+          <span class="star"></span>
+          <span class="star"></span>
+          <span class="star"></span>
+          <span class="star" style="opacity:0.35"></span>
+        </div>
+        <div class="score-number" aria-label="Note 4.6 sur 5">4.6</div>
+        <p class="score-count">324 avis</p>
+      </div>
+      <div class="rating-breakdown">
+        <div class="rating-row">
+          <span class="rating-label">5</span>
+          <div class="rating-track"><div class="rating-fill" style="width:72%"></div></div>
+          <span class="rating-pct">72%</span>
+        </div>
+        <div class="rating-row">
+          <span class="rating-label">4</span>
+          <div class="rating-track"><div class="rating-fill" style="width:18%"></div></div>
+          <span class="rating-pct">18%</span>
+        </div>
+        <div class="rating-row">
+          <span class="rating-label">3</span>
+          <div class="rating-track"><div class="rating-fill" style="width:6%"></div></div>
+          <span class="rating-pct">6%</span>
+        </div>
+        <div class="rating-row">
+          <span class="rating-label">2</span>
+          <div class="rating-track"><div class="rating-fill" style="width:2%"></div></div>
+          <span class="rating-pct">2%</span>
+        </div>
+        <div class="rating-row">
+          <span class="rating-label">1</span>
+          <div class="rating-track"><div class="rating-fill" style="width:2%"></div></div>
+          <span class="rating-pct">2%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-summary fade-up delay-1">
+      <div class="ai-summary-head">
+        <span class="ai-label">Synthese</span>
+        <span class="ai-badge">Resume IA</span>
+      </div>
+      <p class="ai-text">La majorite souligne la qualite du cuir et la bonne tenue. Le format M est plebe pour les trajets bureau. Quelques mentions d'odeur de tannage initiale — normale, disparait en quelques semaines.</p>
+    </div>
+
+    <div class="reviews-list fade-up delay-2">
+      <div class="review-item">
+        <div class="review-top">
+          <div class="reviewer-row">
+            <div class="reviewer-avatar" aria-hidden="true">ML</div>
+            <div>
+              <p class="reviewer-name">Marie L.</p>
+              <p class="reviewer-date">Mars 2026</p>
+            </div>
+          </div>
+          <span class="review-score" aria-label="5 etoiles">5 / 5</span>
+        </div>
+        <p class="review-text">Achete pour mon mari. Il l'utilise depuis 4 mois. Le cuir prend une belle patine. Je recommande sans hesiter.</p>
+        <span class="review-tag">Usage quotidien</span>
+      </div>
+
+      <div class="review-item">
+        <div class="review-top">
+          <div class="reviewer-row">
+            <div class="reviewer-avatar" aria-hidden="true">TR</div>
+            <div>
+              <p class="reviewer-name">Thomas R.</p>
+              <p class="reviewer-date">Fevrier 2026</p>
+            </div>
+          </div>
+          <span class="review-score" aria-label="4 etoiles">4 / 5</span>
+        </div>
+        <p class="review-text">Tres beau sac. Odeur initiale un peu forte, disparue apres deux semaines. Le reste est excellent.</p>
+        <span class="review-tag">Premiere commande</span>
+      </div>
+
+      <div class="review-item">
+        <div class="review-top">
+          <div class="reviewer-row">
+            <div class="reviewer-avatar" aria-hidden="true">SD</div>
+            <div>
+              <p class="reviewer-name">Sophie D.</p>
+              <p class="reviewer-date">Janvier 2026</p>
+            </div>
+          </div>
+          <span class="review-score" aria-label="5 etoiles">5 / 5</span>
+        </div>
+        <p class="review-text">La bandouliere amovible change tout. Le cuir est doux d'emblee, pas besoin de rodage.</p>
+        <span class="review-tag">Cadeau</span>
+      </div>
+    </div>
+
+    <a href="#" class="reviews-cta">Voir les 324 avis</a>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- 9. PRESS QUOTE -->
+  <section class="press-section" aria-labelledby="press-title">
+    <span class="press-mark" aria-hidden="true">&ldquo;</span>
+    <p class="press-quote" id="press-title">Un sac qui refuse de vieillir. Il devient plus beau avec le temps.</p>
+    <p class="press-source">L'Obs Style &middot; Fevrier 2026</p>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- 10. CARE -->
+  <section class="care-section" aria-labelledby="care-title">
+    <div class="care-header fade-up">
+      <p class="eyebrow" style="margin-bottom:12px;">Entretien</p>
+      <h2 class="h2" id="care-title">Le garder en bon etat</h2>
+    </div>
+    <div class="care-scroll fade-up delay-1" role="list">
+      <div class="care-card" role="listitem">
+        <svg class="care-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <p class="care-title">Nettoyage</p>
+        <p class="care-desc">Chiffon doux sec. Tamponner sans frotter. Jamais d'eau directe.</p>
+      </div>
+      <div class="care-card" role="listitem">
+        <svg class="care-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        <p class="care-title">Nourrissage</p>
+        <p class="care-desc">Cire d'abeille, 2 fois par an. Laisser penetrer 12h.</p>
+      </div>
+      <div class="care-card" role="listitem">
+        <svg class="care-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M3 12a9 9 0 109 9M3 12V6M3 6h6"/>
+        </svg>
+        <p class="care-title">Stockage</p>
+        <p class="care-desc">Rembourre dans un sac coton. Jamais dans du plastique.</p>
+      </div>
+      <div class="care-card" role="listitem">
+        <svg class="care-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <p class="care-title">Pluie</p>
+        <p class="care-desc">Sechage a l'air libre. Pas de source de chaleur directe.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- 11. FAQ -->
+  <section class="faq-section" aria-labelledby="faq-title">
+    <div class="faq-header fade-up">
+      <p class="eyebrow" style="margin-bottom:12px;">Questions</p>
+      <h2 class="h2" id="faq-title">Ce qu'on nous demande</h2>
+    </div>
+
+    <div class="faq-list fade-up delay-1">
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="m-faq-1">
+          Le cuir est-il imperméable ?
+          <span class="faq-toggle" aria-hidden="true"></span>
+        </button>
+        <div class="faq-answer" id="m-faq-1">
+          <p class="faq-answer-inner">Le cuir pleine fleur non traite repousse les legeres eclaboussures mais n'est pas imperméable. Une cire naturelle appliquee 2 fois par an augmente significativement la resistance a l'humidite.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="m-faq-2">
+          Quelle est la politique de retour ?
+          <span class="faq-toggle" aria-hidden="true"></span>
+        </button>
+        <div class="faq-answer" id="m-faq-2">
+          <p class="faq-answer-inner">30 jours sans condition si le sac n'a pas ete utilise. Garantie fabrication 3 ans pour les defauts : couture, fermeture, quincaillerie. L'usure normale n'est pas couverte.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="m-faq-3">
+          Passe-t-il en cabine d'avion ?
+          <span class="faq-toggle" aria-hidden="true"></span>
+        </button>
+        <div class="faq-answer" id="m-faq-3">
+          <p class="faq-answer-inner">Le modele M (38x28x12 cm) est conforme a la majorite des compagnies europeennes. Verifiez toujours les dimensions de votre compagnie avant le depart.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" aria-controls="m-faq-4">
+          Peut-on personnaliser le sac ?
+          <span class="faq-toggle" aria-hidden="true"></span>
+        </button>
+        <div class="faq-answer" id="m-faq-4">
+          <p class="faq-answer-inner">Oui. Gravure initiales au feu (+12 EUR, +3 jours). Disponible sur les deux tailles et coloris. La gravure est permanente.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- 12. MANIFESTO -->
+  <section class="manifesto-section" aria-labelledby="manifesto-title">
+    <p class="eyebrow manifesto-eyebrow">Notre engagement</p>
+    <h2 class="manifesto-title" id="manifesto-title">La forme suit<br/>la fonction.</h2>
+    <p class="manifesto-body">Nous ne fabriquons pas de sacs. Nous fabriquons des outils quotidiens en cuir. Chaque choix — dicte par l'usage, pas par l'esthetique.</p>
+    <a href="#" class="manifesto-btn">Notre histoire</a>
+    <a href="#" class="manifesto-link">Voir tous les produits</a>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <span class="footer-brand">Maison Atelier</span>
+    <ul class="footer-links">
+      <li><a href="#">A propos</a></li>
+      <li><a href="#">Livraison</a></li>
+      <li><a href="#">Retours</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2026 Maison Atelier</p>
+  </footer>
+
+
+  <!-- Sticky CTA Bottom -->
+  <div class="sticky-cta" role="complementary" aria-label="Achat rapide">
+    <div class="sticky-cta-info">
+      <p class="sticky-cta-name">Sac cuir vintage</p>
+      <p class="sticky-cta-price">79 EUR · Taille M Natural</p>
+    </div>
+    <button class="sticky-cta-btn" aria-label="Ajouter au panier — 79 EUR">Ajouter</button>
+  </div>
+
+
+  <!-- SCRIPTS -->
+  <script>
+    // Fade-up
+    (function () {
+      const observer = new IntersectionObserver(
+        (entries) => entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+        }),
+        { threshold: 0.1 }
+      );
+      document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+    })();
+
+    // FAQ accordion
+    (function () {
+      document.querySelectorAll('.faq-question').forEach((btn) => {
+        btn.addEventListener('click', function () {
+          const item = this.closest('.faq-item');
+          const isOpen = item.classList.contains('open');
+          document.querySelectorAll('.faq-item.open').forEach((o) => {
+            o.classList.remove('open');
+            o.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+          });
+          if (!isOpen) {
+            item.classList.add('open');
+            this.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    })();
+
+    // Sticky CTA — masquer quand hero CTA visible
+    (function () {
+      const stickyCta = document.querySelector('.sticky-cta');
+      const heroCta = document.querySelector('.hero-cta-col');
+      if (!stickyCta || !heroCta) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            stickyCta.style.transform = e.isIntersecting ? 'translateY(100%)' : 'translateY(0)';
+          });
+        },
+        { threshold: 0.5 }
+      );
+      observer.observe(heroCta);
+    })();
+  </script>
+
+</body>
+</html>

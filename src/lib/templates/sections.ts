@@ -978,18 +978,98 @@ const SECTION_RENDERERS: Record<SectionKey, SectionRenderer> = {
   final_pitch:           renderFinalPitch,
 }
 
+// ─── click-to-edit injection helpers ────────────────────────────────────────
+
+/**
+ * Script injected once in edit mode — listens for clicks on sections,
+ * sends postMessage to parent React, and receives highlight commands.
+ * Runs inside the iframe.
+ */
+const KVT_CLICK_TO_EDIT_SCRIPT = `<script>
+(function(){
+  if (window.__kvtClickToEditInjected) return;
+  window.__kvtClickToEditInjected = true;
+  document.addEventListener('click', function(e){
+    var target = e.target.closest('[data-kvt-section-id]');
+    if (!target) {
+      window.parent.postMessage({ type: 'KVT_SECTION_DESELECTED' }, '*');
+      return;
+    }
+    var id = target.getAttribute('data-kvt-section-id');
+    window.parent.postMessage({ type: 'KVT_SECTION_SELECTED', id: id }, '*');
+  });
+  document.addEventListener('mouseover', function(e){
+    var target = e.target.closest('[data-kvt-section-id]');
+    if (!target) return;
+    if (!target.classList.contains('kvt-section-selected')) {
+      target.style.outline = '1px dashed rgba(168,181,160,0.8)';
+      target.style.outlineOffset = '-1px';
+    }
+  });
+  document.addEventListener('mouseout', function(e){
+    var target = e.target.closest('[data-kvt-section-id]');
+    if (!target) return;
+    if (!target.classList.contains('kvt-section-selected')) {
+      target.style.outline = '';
+      target.style.outlineOffset = '';
+    }
+  });
+  window.addEventListener('message', function(e){
+    if (!e.data || e.data.type !== 'KVT_HIGHLIGHT_SECTION') return;
+    document.querySelectorAll('[data-kvt-section-id]').forEach(function(s){
+      s.classList.remove('kvt-section-selected');
+      s.style.outline = '';
+      s.style.outlineOffset = '';
+    });
+    if (e.data.id) {
+      var target = document.querySelector('[data-kvt-section-id="' + e.data.id + '"]');
+      if (target) {
+        target.classList.add('kvt-section-selected');
+        target.style.outline = '2px solid #A8B5A0';
+        target.style.outlineOffset = '-2px';
+        target.style.backgroundColor = 'rgba(168,181,160,0.06)';
+      }
+    }
+  });
+})();
+<\/script>`
+
+/**
+ * Wraps rendered section HTML with data-kvt-section-id on the root <section>
+ * element. If no <section> tag is found, wraps in a <section> with the id.
+ * editMode=true only.
+ */
+function wrapWithKvtId(html: string, id: string): string {
+  // Match the first <section ... > tag (opening only) and inject the attribute
+  const sectionTagRe = /(<section\b)([^>]*>)/i
+  if (sectionTagRe.test(html)) {
+    return html.replace(sectionTagRe, (_match, tag, rest) => {
+      // Avoid duplicates
+      if (rest.includes('data-kvt-section-id')) return _match
+      return `${tag} data-kvt-section-id="${id}"${rest}`
+    })
+  }
+  // Fallback: wrap in section
+  return `<section data-kvt-section-id="${id}">${html}</section>`
+}
+
 // ─── renderRichSections — l'API publique ────────────────────────────────────
 // Rend les 19 sections riches dans l'ordre voulu, en skippant celles dont la
 // data est absente. Si KONVERT_RICH_SECTIONS=false (rollback prod), retourne
 // '' (aucune section).
+// editMode=true injecte data-kvt-section-id + script click-to-edit.
 
 export function renderRichSections(
   data: LandingPageData,
   theme: SectionTheme = DEFAULT_THEME,
   order?: SectionKey[] | SectionInstance[],
+  editMode = false,
 ): string {
   // Feature flag rollback (spec § 3.6)
   if (process.env.KONVERT_RICH_SECTIONS === 'false') return ''
+
+  // editMode flag can also be passed via data._kvt_edit_mode
+  const effectiveEditMode = editMode || Boolean((data as LandingPageData & { _kvt_edit_mode?: boolean })._kvt_edit_mode)
 
   // C1 : si data porte un _sectionOrder injecté par renderTemplate,
   // il prend priorité sur le param order (évite de modifier les 42+ templates).
@@ -998,36 +1078,53 @@ export function renderRichSections(
 
   // Cas 1 : pas d'order → DEFAULT_ORDER (comportement legacy chantier A)
   if (!order) {
-    return DEFAULT_ORDER
+    const sections = DEFAULT_ORDER
       .map(key => SECTION_RENDERERS[key]?.(data, theme) ?? '')
+      .filter(html => html.trim().length > 0)
+    if (!effectiveEditMode) return sections.join('\n')
+    // In edit mode without instance ids: use key as pseudo-id
+    return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + DEFAULT_ORDER
+      .map(key => {
+        const html = SECTION_RENDERERS[key]?.(data, theme) ?? ''
+        if (!html.trim()) return ''
+        return wrapWithKvtId(html, key)
+      })
       .filter(html => html.trim().length > 0)
       .join('\n')
   }
 
   // Cas 2 : array vide → ""
-  if (order.length === 0) return ''
+  if (order.length === 0) return effectiveEditMode ? KVT_CLICK_TO_EDIT_SCRIPT : ''
 
   // Cas 3 : détecter SectionInstance[] vs SectionKey[]
   const isInstanceArray =
     typeof order[0] === 'object' && order[0] !== null && 'id' in (order[0] as object)
 
   if (isInstanceArray) {
-    return (order as SectionInstance[])
+    const rendered = (order as SectionInstance[])
       .filter(s => s.visible)
-      .map(s => SECTION_RENDERERS[s.key]?.(data, theme) ?? '')
+      .map(s => {
+        const html = SECTION_RENDERERS[s.key]?.(data, theme) ?? ''
+        if (!html.trim()) return ''
+        return effectiveEditMode ? wrapWithKvtId(html, s.id) : html
+      })
       .filter(html => html.trim().length > 0)
-      .join('\n')
+    if (!effectiveEditMode) return rendered.join('\n')
+    return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + rendered.join('\n')
   }
 
   // Legacy : SectionKey[]
-  return (order as SectionKey[])
+  const rendered = (order as SectionKey[])
     .map(key => {
       const renderer = SECTION_RENDERERS[key]
       if (!renderer) return '' // clé inconnue → skip silencieux
-      return renderer(data, theme)
+      const html = renderer(data, theme)
+      if (!html.trim()) return ''
+      return effectiveEditMode ? wrapWithKvtId(html, key) : html
     })
     .filter(html => html.trim().length > 0)
-    .join('\n')
+  if (!effectiveEditMode) return rendered.join('\n')
+  return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + rendered.join('\n')
 }
 
 // ─── Backward compat ────────────────────────────────────────────────────────

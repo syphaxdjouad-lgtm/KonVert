@@ -5,14 +5,25 @@ import type { LandingPageData } from '@/types'
 import { DEFAULT_ORDER } from '@/lib/templates/sections'
 import type { SectionKey } from '@/lib/templates/sections'
 
+// Edit form state for SubPanelEdit (C1 minimal)
+export interface EditFormState {
+  title: string
+  subtitle: string
+}
+
 interface EditorActions {
   hydrate: (state: EditorState) => void
   moveSection: (fromIndex: number, toIndex: number) => void
   toggleVisible: (id: string) => void
   removeSection: (id: string) => void
+  duplicateSection: (id: string) => void
   setSelectedSection: (id: string | null) => void
   setPanelMode: (mode: PanelMode) => void
   setDevice: (device: Device) => void
+  setPanelOpen: (open: boolean) => void
+  setSubPanelEditOpen: (open: boolean) => void
+  setEditForm: (form: Partial<EditFormState>) => void
+  openSubPanelEdit: (sectionId: string) => void
 }
 
 interface EditorStore {
@@ -24,13 +35,23 @@ interface EditorStore {
   selectedSectionId: string | null
   panelMode: PanelMode
   device: Device
+  // v2 panel state
+  panelOpen: boolean
+  subPanelEditOpen: boolean
+  editingSectionId: string | null
+  editForm: EditFormState
   hydrate: EditorActions['hydrate']
   moveSection: EditorActions['moveSection']
   toggleVisible: EditorActions['toggleVisible']
   removeSection: EditorActions['removeSection']
+  duplicateSection: EditorActions['duplicateSection']
   setSelectedSection: EditorActions['setSelectedSection']
   setPanelMode: EditorActions['setPanelMode']
   setDevice: EditorActions['setDevice']
+  setPanelOpen: EditorActions['setPanelOpen']
+  setSubPanelEditOpen: EditorActions['setSubPanelEditOpen']
+  setEditForm: EditorActions['setEditForm']
+  openSubPanelEdit: EditorActions['openSubPanelEdit']
 }
 
 const emptyLanding: LandingPageData = {
@@ -49,6 +70,11 @@ export const useEditorStore = create<EditorStore>((set) => ({
   selectedSectionId: null,
   panelMode: 'sections',
   device: 'desktop',
+  // v2 panel state
+  panelOpen: false,
+  subPanelEditOpen: false,
+  editingSectionId: null,
+  editForm: { title: '', subtitle: '' },
 
   hydrate: (state) => set({
     templateId: state.templateId,
@@ -57,6 +83,10 @@ export const useEditorStore = create<EditorStore>((set) => ({
     visualSettings: state.visualSettings,
     globalStyles: state.globalStyles,
     selectedSectionId: null,
+    panelOpen: false,
+    subPanelEditOpen: false,
+    editingSectionId: null,
+    editForm: { title: '', subtitle: '' },
   }),
 
   moveSection: (fromIndex, toIndex) => set(state => {
@@ -81,11 +111,36 @@ export const useEditorStore = create<EditorStore>((set) => ({
   removeSection: (id) => set(state => ({
     sectionOrder: state.sectionOrder.filter(s => s.id !== id),
     selectedSectionId: state.selectedSectionId === id ? null : state.selectedSectionId,
+    editingSectionId: state.editingSectionId === id ? null : state.editingSectionId,
+    subPanelEditOpen: state.editingSectionId === id ? false : state.subPanelEditOpen,
   })),
 
-  setSelectedSection: (id) => set({ selectedSectionId: id }),
+  duplicateSection: (id) => set(state => {
+    const idx = state.sectionOrder.findIndex(s => s.id === id)
+    if (idx === -1) return state
+    const original = state.sectionOrder[idx]
+    const copy: SectionInstance = { ...original, id: uuidv4() }
+    const next = [...state.sectionOrder]
+    next.splice(idx + 1, 0, copy)
+    return { sectionOrder: next }
+  }),
+
+  setSelectedSection: (id) => set(state => ({
+    selectedSectionId: id,
+    // Auto-open panel when a section is selected
+    panelOpen: id !== null ? true : state.panelOpen,
+  })),
   setPanelMode: (mode) => set({ panelMode: mode }),
   setDevice: (device) => set({ device }),
+  setPanelOpen: (open) => set(state => ({
+    panelOpen: open,
+    // Close sub-panel when main panel closes
+    subPanelEditOpen: open ? state.subPanelEditOpen : false,
+    selectedSectionId: open ? state.selectedSectionId : null,
+  })),
+  setSubPanelEditOpen: (open) => set({ subPanelEditOpen: open }),
+  setEditForm: (form) => set(state => ({ editForm: { ...state.editForm, ...form } })),
+  openSubPanelEdit: (sectionId) => set({ subPanelEditOpen: true, editingSectionId: sectionId }),
 }))
 
 // ─── Migration helpers ──────────────────────────────────────────────────────

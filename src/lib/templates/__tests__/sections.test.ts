@@ -121,6 +121,67 @@ describe('renderRichSections — feature flag', () => {
   })
 })
 
+describe('renderRichSections — editMode (click-to-edit)', () => {
+  it('editMode=false : pas de data-kvt-section-id dans le HTML', () => {
+    const html = renderRichSections(mockLandingDataFull, undefined, undefined, false)
+    expect(html).not.toContain('data-kvt-section-id')
+  })
+
+  it('editMode=true : chaque section a data-kvt-section-id', () => {
+    const data = {
+      headline: '', subtitle: '', benefits: [], faq: [],
+      cta: '', urgency: '', product_name: '',
+      story: { problem: 'P', agitation: 'A', solution: 'S', transformation: 'T' },
+    } as LandingPageData
+    const html = renderRichSections(data, undefined, undefined, true)
+    expect(html).toContain('data-kvt-section-id')
+  })
+
+  it('editMode=true : le bloc <script> KVT est injecte exactement une fois', () => {
+    const html = renderRichSections(mockLandingDataFull, undefined, undefined, true)
+    // Compter le nombre de blocs <script> KVT (pas les occurrences de la string de detection)
+    const count = (html.match(/__kvtClickToEditInjected\s*=\s*true/g) ?? []).length
+    expect(count).toBe(1)
+  })
+
+  it('editMode=true avec SectionInstance[] : utilise l\'instance.id comme kvt-id', () => {
+    const instances = [
+      { id: 'instance-123', key: 'story' as SectionKey, visible: true },
+    ]
+    const data = {
+      headline: '', subtitle: '', benefits: [], faq: [],
+      cta: '', urgency: '', product_name: '',
+      story: { problem: 'P', agitation: 'A', solution: 'S', transformation: 'T' },
+    } as LandingPageData
+    const html = renderRichSections(data, undefined, instances, true)
+    expect(html).toContain('data-kvt-section-id="instance-123"')
+  })
+
+  it('editMode=true avec SectionInstance[] invisible : pas de section rendue', () => {
+    const instances = [
+      { id: 'inst-hidden', key: 'story' as SectionKey, visible: false },
+    ]
+    const data = {
+      headline: '', subtitle: '', benefits: [], faq: [],
+      cta: '', urgency: '', product_name: '',
+      story: { problem: 'P', agitation: 'A', solution: 'S', transformation: 'T' },
+    } as LandingPageData
+    const html = renderRichSections(data, undefined, instances, true)
+    expect(html).not.toContain('inst-hidden')
+  })
+
+  it('_kvt_edit_mode dans data active editMode sans le parametre', () => {
+    const data = {
+      headline: '', subtitle: '', benefits: [], faq: [],
+      cta: '', urgency: '', product_name: '',
+      _kvt_edit_mode: true,
+      story: { problem: 'P', agitation: 'A', solution: 'S', transformation: 'T' },
+    } as LandingPageData & { _kvt_edit_mode: boolean }
+    const html = renderRichSections(data)
+    expect(html).toContain('data-kvt-section-id')
+  })
+})
+
 describe('Backward compatibility aliases (V1 names)', () => {
   it('exporte renderStorySection qui pointe vers renderStoryV2', () => {
     expect(sections.renderStorySection).toBe(sections.renderStoryV2)

@@ -22,6 +22,12 @@ describe('PreviewIframe', () => {
       visualSettings: {},
       globalStyles: {},
       device: 'desktop',
+      selectedSectionId: null,
+      panelOpen: false,
+      subPanelEditOpen: false,
+      editingSectionId: null,
+      editForm: { title: '', subtitle: '' },
+      panelMode: 'sections',
     })
   })
 

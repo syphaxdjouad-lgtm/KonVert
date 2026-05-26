@@ -30,6 +30,10 @@ describe('useEditorStore', () => {
       selectedSectionId: null,
       panelMode: 'sections',
       device: 'desktop',
+      panelOpen: false,
+      subPanelEditOpen: false,
+      editingSectionId: null,
+      editForm: { title: '', subtitle: '' },
     })
   })
 
@@ -121,6 +125,11 @@ describe('useEditorStore', () => {
       useEditorStore.getState().setSelectedSection('id42')
       expect(useEditorStore.getState().selectedSectionId).toBe('id42')
     })
+    it('setSelectedSection avec un id non-null ouvre le panel', () => {
+      useEditorStore.setState({ panelOpen: false })
+      useEditorStore.getState().setSelectedSection('id1')
+      expect(useEditorStore.getState().panelOpen).toBe(true)
+    })
     it('setPanelMode accepte les 4 modes', () => {
       useEditorStore.getState().setPanelMode('blocks')
       expect(useEditorStore.getState().panelMode).toBe('blocks')
@@ -128,6 +137,69 @@ describe('useEditorStore', () => {
     it('setDevice accepte les 3 devices', () => {
       useEditorStore.getState().setDevice('mobile')
       expect(useEditorStore.getState().device).toBe('mobile')
+    })
+  })
+
+  describe('panelOpen / subPanelEditOpen', () => {
+    it('setPanelOpen(true) ouvre le panel', () => {
+      useEditorStore.getState().setPanelOpen(true)
+      expect(useEditorStore.getState().panelOpen).toBe(true)
+    })
+    it('setPanelOpen(false) ferme panel et subpanel', () => {
+      useEditorStore.setState({ panelOpen: true, subPanelEditOpen: true })
+      useEditorStore.getState().setPanelOpen(false)
+      expect(useEditorStore.getState().panelOpen).toBe(false)
+      expect(useEditorStore.getState().subPanelEditOpen).toBe(false)
+    })
+    it('setPanelOpen(false) reset selectedSectionId', () => {
+      useEditorStore.setState({ panelOpen: true, selectedSectionId: 'id1' })
+      useEditorStore.getState().setPanelOpen(false)
+      expect(useEditorStore.getState().selectedSectionId).toBeNull()
+    })
+    it('setSubPanelEditOpen(true) ouvre le sub-panel', () => {
+      useEditorStore.getState().setSubPanelEditOpen(true)
+      expect(useEditorStore.getState().subPanelEditOpen).toBe(true)
+    })
+    it('openSubPanelEdit stocke l\'id de la section en cours d\'edition', () => {
+      useEditorStore.getState().openSubPanelEdit('id2')
+      expect(useEditorStore.getState().subPanelEditOpen).toBe(true)
+      expect(useEditorStore.getState().editingSectionId).toBe('id2')
+    })
+    it('setEditForm met a jour les champs du formulaire', () => {
+      useEditorStore.getState().setEditForm({ title: 'Mon titre' })
+      expect(useEditorStore.getState().editForm.title).toBe('Mon titre')
+      // subtitle conserve sa valeur par defaut
+      expect(useEditorStore.getState().editForm.subtitle).toBe('')
+    })
+  })
+
+  describe('duplicateSection', () => {
+    it('insere une copie juste apres la section originale', () => {
+      useEditorStore.setState({ sectionOrder: [...fakeSections] })
+      useEditorStore.getState().duplicateSection('id1')
+      const order = useEditorStore.getState().sectionOrder
+      expect(order).toHaveLength(4)
+      expect(order[0].id).toBe('id1')
+      expect(order[1].key).toBe('social_proof_bar') // copie
+      expect(order[1].id).not.toBe('id1') // nouvel id
+    })
+    it('no-op pour id inconnu', () => {
+      useEditorStore.setState({ sectionOrder: [...fakeSections] })
+      useEditorStore.getState().duplicateSection('unknown')
+      expect(useEditorStore.getState().sectionOrder).toHaveLength(3)
+    })
+  })
+
+  describe('removeSection (v2)', () => {
+    it('ferme le sub-panel si on supprime la section en cours d\'edition', () => {
+      useEditorStore.setState({
+        sectionOrder: [...fakeSections],
+        editingSectionId: 'id2',
+        subPanelEditOpen: true,
+      })
+      useEditorStore.getState().removeSection('id2')
+      expect(useEditorStore.getState().subPanelEditOpen).toBe(false)
+      expect(useEditorStore.getState().editingSectionId).toBeNull()
     })
   })
 })

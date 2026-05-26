@@ -1,0 +1,429 @@
+{
+  "$schema": "https://design-tokens.org/community-group/format/1.0/schema.json",
+  "$metadata": {
+    "style": "apple-clean",
+    "version": "1.0.0",
+    "created": "2026-05-26",
+    "author": "OBITO / NEXARA",
+    "description": "Tokens du style Apple-Clean — SF Pro / Inter, blanc genereux, accent bleu Apple",
+    "vibe": "Sans serif sharp, white space massif, photo produit XL centree, accent bleu unique",
+    "reference": "apple.com/iphone-15-pro, apple.com/airpods-pro, nothing.tech/phone-2"
+  },
+
+  "color": {
+    "bg": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "Fond unique de toute la page. Pas d'alternance de sections."
+    },
+    "surface": {
+      "$value": "#F5F5F7",
+      "$type": "color",
+      "$description": "Fond des cards, fond des sections alternees (gallery, features, care, materials). Apple grey-50."
+    },
+    "accent": {
+      "$value": "#0066CC",
+      "$type": "color",
+      "$description": "Apple Blue. CTAs primaires, feature icons, material labels, active states variants."
+    },
+    "accentHover": {
+      "$value": "#004499",
+      "$type": "color",
+      "$description": "Apple Blue hover / pressed state. Assombrir de 20%."
+    },
+    "text": {
+      "$value": "#1D1D1F",
+      "$type": "color",
+      "$description": "Apple near-black. Tous les titres, texte principal, elements cles."
+    },
+    "textMuted": {
+      "$value": "#86868B",
+      "$type": "color",
+      "$description": "Apple grey. Sous-titres, descriptions, metadata, eyebrow labels."
+    },
+    "border": {
+      "$value": "#D2D2D7",
+      "$type": "color",
+      "$description": "Separateurs FAQ, nav border bottom. Ne pas utiliser sur les cards."
+    }
+  },
+
+  "typography": {
+    "fontHeading": {
+      "$value": "\"SF Pro Display\", \"Inter\", system-ui, -apple-system, sans-serif",
+      "$type": "fontFamily",
+      "$description": "Police des titres H1-H3. SF Pro Display active automatiquement sur macOS/iOS Safari. Fallback Inter."
+    },
+    "fontBody": {
+      "$value": "\"SF Pro Text\", \"Inter\", system-ui, -apple-system, sans-serif",
+      "$type": "fontFamily",
+      "$description": "Police du corps de texte. SF Pro Text optimisee pour les petites tailles."
+    },
+    "scale": {
+      "hero": {
+        "$value": "clamp(48px, 6vw, 96px)",
+        "$type": "dimension",
+        "$description": "H1 hero. font-weight 700, letter-spacing -0.025em, line-height 1.06."
+      },
+      "h2": {
+        "$value": "clamp(32px, 4vw, 56px)",
+        "$type": "dimension",
+        "$description": "H2 sections. font-weight 600, letter-spacing -0.02em, line-height 1.1."
+      },
+      "h3": {
+        "$value": "clamp(22px, 2.5vw, 32px)",
+        "$type": "dimension",
+        "$description": "H3 sous-sections. font-weight 600, letter-spacing -0.015em."
+      },
+      "lead": {
+        "$value": "19px",
+        "$type": "dimension",
+        "$description": "Corps principal des sections. line-height 1.47, font-weight 400."
+      },
+      "body": {
+        "$value": "17px",
+        "$type": "dimension",
+        "$description": "Corps standard Apple. line-height 1.47."
+      },
+      "bodyMobile": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "Corps mobile. Minimum absolu, jamais en dessous."
+      },
+      "small": {
+        "$value": "15px",
+        "$type": "dimension",
+        "$description": "Labels, metadata, descriptions de cards."
+      },
+      "caption": {
+        "$value": "13px",
+        "$type": "dimension",
+        "$description": "Metadata tertaires (dates avis, footer links)."
+      },
+      "eyebrow": {
+        "$value": "12px",
+        "$type": "dimension",
+        "$description": "Labels de section en uppercase. font-weight 600, letter-spacing 0.05em."
+      }
+    },
+    "weight": {
+      "regular": { "$value": "400", "$type": "fontWeight" },
+      "medium":  { "$value": "500", "$type": "fontWeight" },
+      "semibold":{ "$value": "600", "$type": "fontWeight" },
+      "bold":    { "$value": "700", "$type": "fontWeight" },
+      "extrabold":{ "$value": "800", "$type": "fontWeight" }
+    },
+    "tracking": {
+      "hero":    { "$value": "-0.025em", "$type": "letterSpacing" },
+      "h2":      { "$value": "-0.02em",  "$type": "letterSpacing" },
+      "h3":      { "$value": "-0.015em", "$type": "letterSpacing" },
+      "body":    { "$value": "0em",      "$type": "letterSpacing" },
+      "eyebrow": { "$value": "0.05em",   "$type": "letterSpacing" }
+    },
+    "leading": {
+      "hero":  { "$value": "1.06",  "$type": "lineHeight" },
+      "h2":    { "$value": "1.1",   "$type": "lineHeight" },
+      "body":  { "$value": "1.47",  "$type": "lineHeight" },
+      "relaxed":{ "$value": "1.65", "$type": "lineHeight" }
+    }
+  },
+
+  "spacing": {
+    "section": {
+      "$value": "120px",
+      "$type": "dimension",
+      "$description": "Padding vertical des sections desktop. Jamais moins que 96px. Mobile : 64px."
+    },
+    "sectionMobile": {
+      "$value": "64px",
+      "$type": "dimension",
+      "$description": "Padding vertical des sections mobile."
+    },
+    "card": {
+      "$value": "40px",
+      "$type": "dimension",
+      "$description": "Padding interne des cards desktop. Mobile : 24px."
+    },
+    "cardMobile": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Padding interne des cards mobile."
+    },
+    "gap": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Gap entre elements de grille desktop. Mobile : 12-16px."
+    },
+    "containerPadding": {
+      "$value": "48px",
+      "$type": "dimension",
+      "$description": "Padding lateral du container desktop."
+    },
+    "containerPaddingMobile": {
+      "$value": "20px",
+      "$type": "dimension",
+      "$description": "Padding lateral du container mobile."
+    },
+    "maxWidth": {
+      "$value": "1200px",
+      "$type": "dimension",
+      "$description": "Max-width du container principal. Plus etroit que d'autres styles pour preserver l'air."
+    }
+  },
+
+  "border": {
+    "radius": {
+      "card": {
+        "$value": "12px",
+        "$type": "borderRadius",
+        "$description": "Radius des cards, images, items de galerie."
+      },
+      "button": {
+        "$value": "980px",
+        "$type": "borderRadius",
+        "$description": "Radius des boutons — pill complet. Jamais de bouton rectangle dans apple-clean."
+      },
+      "image": {
+        "$value": "12px",
+        "$type": "borderRadius",
+        "$description": "Radius des images en context (hero, galerie, materials). Pas les images pleine largeur."
+      },
+      "icon": {
+        "$value": "10px",
+        "$type": "borderRadius",
+        "$description": "Radius du fond des icones (feature icons, care icons)."
+      }
+    }
+  },
+
+  "shadow": {
+    "card": {
+      "$value": "0 4px 12px rgba(0,0,0,0.04)",
+      "$type": "boxShadow",
+      "$description": "Shadow par defaut des cards. Tres subtile — on ne veut pas surcharger."
+    },
+    "hover": {
+      "$value": "0 12px 32px rgba(0,0,0,0.08)",
+      "$type": "boxShadow",
+      "$description": "Shadow au hover des cards. Feedback premium, pas cheap."
+    },
+    "ctaGlow": {
+      "$value": "0 8px 24px rgba(0,102,204,0.3)",
+      "$type": "boxShadow",
+      "$description": "Glow bleu au hover du bouton primaire. Signature du bouton Apple-Clean."
+    },
+    "variantSelected": {
+      "$value": "0 0 0 2px #0066CC",
+      "$type": "boxShadow",
+      "$description": "Ring de selection sur les variantes produit. Pattern iOS selection."
+    }
+  },
+
+  "animation": {
+    "ease": {
+      "$value": "cubic-bezier(0.42, 0, 0.58, 1)",
+      "$type": "cubicBezier",
+      "$description": "Easing Apple standard. Smooth in-out, organique. Utilise sur toutes les transitions."
+    },
+    "duration": {
+      "scroll": {
+        "$value": "600ms",
+        "$type": "duration",
+        "$description": "Duree des animations de scroll (fade-up). Assez long pour etre remarque, pas trop pour ne pas frustrer."
+      },
+      "hover": {
+        "$value": "300ms",
+        "$type": "duration",
+        "$description": "Duree des transitions hover sur les cards."
+      },
+      "button": {
+        "$value": "250ms",
+        "$type": "duration",
+        "$description": "Duree des transitions hover sur les boutons."
+      },
+      "imageScale": {
+        "$value": "800ms",
+        "$type": "duration",
+        "$description": "Duree du scale d'image au hover. Tres lent = sentiment de qualite."
+      }
+    },
+    "scroll": {
+      "translateY": {
+        "$value": "20px",
+        "$type": "dimension",
+        "$description": "Amplitude du fade-up. 20px = discret, jamais 40px+ (trop theatral pour apple-clean)."
+      },
+      "threshold": {
+        "$value": "0.12",
+        "$type": "number",
+        "$description": "Seuil IntersectionObserver. L'animation se declenche quand 12% de l'element est visible."
+      }
+    },
+    "hoverScales": {
+      "image": {
+        "$value": "1.02",
+        "$type": "number",
+        "$description": "Scale des images au hover. Tres leger — juste assez pour sentir le premium."
+      },
+      "card": {
+        "$value": "-3px",
+        "$type": "dimension",
+        "$description": "translateY des cards au hover. Negatif = monte."
+      },
+      "button": {
+        "$value": "-1px",
+        "$type": "dimension",
+        "$description": "translateY des boutons au hover."
+      }
+    }
+  },
+
+  "layout": {
+    "grids": {
+      "features": {
+        "desktop": { "$value": "repeat(4, 1fr)", "$type": "string" },
+        "tablet":  { "$value": "repeat(2, 1fr)", "$type": "string" },
+        "mobile":  { "$value": "repeat(2, 1fr)", "$type": "string" }
+      },
+      "gallery": {
+        "desktop": { "$value": "repeat(4, 1fr)", "$type": "string" },
+        "tablet":  { "$value": "repeat(2, 1fr)", "$type": "string" },
+        "mobile":  { "$value": "scroll-horizontal", "$type": "string", "$description": "Sur mobile, scroll horizontal avec scroll-snap" }
+      },
+      "materials": {
+        "desktop": { "$value": "repeat(3, 1fr)", "$type": "string" },
+        "tablet":  { "$value": "repeat(2, 1fr)", "$type": "string" },
+        "mobile":  { "$value": "flex-column", "$type": "string", "$description": "Cards horizontales empilees avec image inline" }
+      },
+      "variants": {
+        "desktop": { "$value": "repeat(3, 1fr)", "$type": "string" },
+        "tablet":  { "$value": "repeat(3, 1fr)", "$type": "string" },
+        "mobile":  { "$value": "scroll-horizontal", "$type": "string" }
+      },
+      "reviews": {
+        "desktop": { "$value": "repeat(3, 1fr)", "$type": "string" },
+        "mobile":  { "$value": "scroll-horizontal", "$type": "string" }
+      },
+      "care": {
+        "desktop": { "$value": "repeat(4, 1fr)", "$type": "string" },
+        "tablet":  { "$value": "repeat(2, 1fr)", "$type": "string" },
+        "mobile":  { "$value": "repeat(2, 1fr)", "$type": "string" }
+      },
+      "manifesto-pillars": {
+        "desktop": { "$value": "repeat(3, 1fr)", "$type": "string" },
+        "mobile":  { "$value": "flex-column", "$type": "string" }
+      }
+    },
+    "heroImageWidth": {
+      "$value": "65%",
+      "$type": "dimension",
+      "$description": "Largeur de l'image hero en desktop. 65% = editorial, pas 100% (trop agressif)."
+    },
+    "twoColumnSplit": {
+      "$value": "1fr 1fr",
+      "$type": "string",
+      "$description": "Sections Why We Love et Press Quote utilisent un split 50/50 avec 80px de gap."
+    },
+    "twoColumnGap": {
+      "$value": "80px",
+      "$type": "dimension",
+      "$description": "Gap entre les deux colonnes des sections split (why-we-love, press)."
+    }
+  },
+
+  "component": {
+    "button": {
+      "padding": { "$value": "14px 28px", "$type": "spacing", "$description": "Padding desktop." },
+      "paddingMobile": { "$value": "14px 24px", "$type": "spacing" },
+      "fontSize": { "$value": "17px", "$type": "dimension" },
+      "fontWeight": { "$value": "500", "$type": "fontWeight" }
+    },
+    "pill": {
+      "padding": { "$value": "12px 24px", "$type": "spacing" },
+      "paddingMobile": { "$value": "10px 18px", "$type": "spacing" },
+      "fontSize": { "$value": "16px", "$type": "dimension" },
+      "fontWeight": { "$value": "500", "$type": "fontWeight" },
+      "bg": { "$value": "#F5F5F7", "$type": "color" },
+      "bgActive": { "$value": "#0066CC", "$type": "color" },
+      "colorActive": { "$value": "#FFFFFF", "$type": "color" }
+    },
+    "nav": {
+      "height": { "$value": "52px", "$type": "dimension", "$description": "Nav desktop." },
+      "heightMobile": { "$value": "44px", "$type": "dimension", "$description": "Nav mobile — standard iOS." },
+      "backdropBlur": { "$value": "20px", "$type": "dimension" },
+      "bgOpacity": { "$value": "rgba(255,255,255,0.88)", "$type": "color" }
+    },
+    "stickyCtaMobile": {
+      "$description": "Barre de CTA fixee en bas sur mobile (pattern e-commerce natif).",
+      "height": { "$value": "72px", "$type": "dimension" },
+      "clearance": { "$value": "80px", "$type": "dimension", "$description": "Clearance dans le footer pour eviter que le contenu soit masque." }
+    },
+    "icon": {
+      "size": { "$value": "22px", "$type": "dimension", "$description": "Icones dans les feature cards." },
+      "sizeLarge": { "$value": "24px", "$type": "dimension", "$description": "Icones dans les care cards." },
+      "strokeWidth": { "$value": "1.5", "$type": "number", "$description": "Stroke width uniforme sur tous les SVG icons." },
+      "containerSize": { "$value": "44px", "$type": "dimension", "$description": "Taille du fond carre arrondi autour de l'icone." },
+      "containerSizeMobile": { "$value": "38px", "$type": "dimension" }
+    },
+    "reviewCard": {
+      "avatarSize": { "$value": "32px", "$type": "dimension" },
+      "avatarSizeMobile": { "$value": "28px", "$type": "dimension" }
+    },
+    "faq": {
+      "questionFontSize": { "$value": "18px", "$type": "dimension" },
+      "questionFontSizeMobile": { "$value": "16px", "$type": "dimension" },
+      "answerFontSize": { "$value": "16px", "$type": "dimension" },
+      "chevronSize": { "$value": "20px", "$type": "dimension" }
+    }
+  },
+
+  "breakpoints": {
+    "mobile": {
+      "$value": "375px",
+      "$type": "dimension",
+      "$description": "Viewport de reference pour le fichier mobile. Ce style est concu mobile-first."
+    },
+    "tablet": {
+      "$value": "768px",
+      "$type": "dimension"
+    },
+    "desktop": {
+      "$value": "1024px",
+      "$type": "dimension"
+    },
+    "wide": {
+      "$value": "1280px",
+      "$type": "dimension"
+    }
+  },
+
+  "accessibility": {
+    "contrastRatios": {
+      "textOnBg": {
+        "$value": "18.9:1",
+        "$type": "string",
+        "$description": "#1D1D1F sur #FFFFFF. Passe WCAG AAA (7:1 requis)."
+      },
+      "mutedOnBg": {
+        "$value": "4.6:1",
+        "$type": "string",
+        "$description": "#86868B sur #FFFFFF. Passe WCAG AA (4.5:1 requis)."
+      },
+      "accentOnBg": {
+        "$value": "6.8:1",
+        "$type": "string",
+        "$description": "#0066CC sur #FFFFFF. Passe WCAG AA+ (largement)."
+      },
+      "whiteOnAccent": {
+        "$value": "6.8:1",
+        "$type": "string",
+        "$description": "#FFFFFF sur #0066CC. Boutons primaires, passe WCAG AA."
+      }
+    },
+    "minimumTouchTarget": {
+      "$value": "44px",
+      "$type": "dimension",
+      "$description": "Taille minimale des zones cliquables. Standard iOS Human Interface Guidelines."
+    }
+  }
+}

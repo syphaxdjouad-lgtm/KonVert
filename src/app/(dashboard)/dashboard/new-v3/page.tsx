@@ -18,6 +18,7 @@
 import { useState } from 'react'
 import { StyleSummaryStep } from '../new/components/StyleSummaryStep'
 import { DataValidationStep, needsValidation } from '../new/components/DataValidationStep'
+import { ImageManager } from '../new/components/ImageManager'
 import type { V3PageData, CopyTone } from '@/types/v3'
 import type { StyleId } from '@/lib/styles/types'
 
@@ -188,31 +189,10 @@ export default function NewV3Page() {
             </div>
 
             <div>
-              <label className="text-xs uppercase tracking-wide text-neutral-500">
-                Images du produit ({images.length})
+              <label className="text-xs uppercase tracking-wide text-neutral-500 block mb-2">
+                Images du produit
               </label>
-              <div className="grid grid-cols-3 md:grid-cols-5 gap-2 mt-2">
-                {images.map((src, i) => (
-                  <div key={src + i} className="relative aspect-square rounded overflow-hidden border group">
-                    <img src={src} alt={`Image ${i + 1}`} className="w-full h-full object-cover" />
-                    {i === 0 && (
-                      <span className="absolute bottom-1 left-1 text-xs bg-purple-600 text-white px-2 py-0.5 rounded">
-                        Hero
-                      </span>
-                    )}
-                    <button
-                      onClick={() => setImages(images.filter((_, j) => j !== i))}
-                      className="absolute top-1 right-1 w-6 h-6 bg-white/90 rounded-full text-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                      aria-label="Supprimer"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-neutral-500 mt-2">
-                {images.length === 0 ? 'Aucune image. Le scraping n\'en a pas trouvé.' : 'Première image = hero. Upload viendra dans Sprint 7.'}
-              </p>
+              <ImageManager images={images} onChange={setImages} />
             </div>
           </div>
 

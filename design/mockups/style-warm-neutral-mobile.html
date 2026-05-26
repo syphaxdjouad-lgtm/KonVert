@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Sac cuir vintage — Style Warm Neutral / Mobile / Konvert V3</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       WARM NEUTRAL MOBILE — Tokens identiques au desktop
+       Viewport cible : 375px–430px (iPhone SE → iPhone 15 Pro Max)
+       ============================================================ */
+    :root {
+      --color-bg:           #F4ECE0;
+      --color-surface:      #FAF5EC;
+      --color-accent:       #B5854B;
+      --color-accent-light: #C9993F;
+      --color-accent-pale:  rgba(181, 133, 75, 0.10);
+      --color-text:         #3B2F23;
+      --color-text-muted:   #8B7D6E;
+      --color-border:       rgba(59, 47, 35, 0.10);
+      --color-border-med:   rgba(59, 47, 35, 0.18);
+
+      --font-heading: "PP Editorial New", "Playfair Display", Georgia, serif;
+      --font-body:    "Inter", system-ui, sans-serif;
+
+      /* Spacing reduit mobile */
+      --space-section: 72px;
+      --space-card:    20px;
+      --space-gap:     16px;
+
+      --radius-card:   8px;
+      --radius-button: 999px;
+      --radius-image:  8px;
+
+      --shadow-card:  0 2px 8px rgba(59, 47, 35, 0.06);
+      --shadow-hover: 0 8px 24px rgba(59, 47, 35, 0.10);
+
+      --ease:     cubic-bezier(0.4, 0, 0.2, 1);
+      --duration: 380ms;
+
+      --gutter: 20px;
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      /* Safe area iOS */
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      object-fit: cover;
+      filter: sepia(0.08) saturate(0.95) brightness(1.01);
+    }
+
+    /* ============================================================
+       SCROLL-REVEAL (leger sur mobile)
+       ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity var(--duration) var(--ease),
+                  transform var(--duration) var(--ease);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-d1 { transition-delay: 60ms; }
+    .reveal-d2 { transition-delay: 120ms; }
+    .reveal-d3 { transition-delay: 180ms; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition: none; opacity: 1; transform: none; }
+    }
+
+    /* ============================================================
+       LAYOUT
+       ============================================================ */
+    .container {
+      padding: 0 var(--gutter);
+    }
+
+    .section {
+      padding: var(--space-section) 0;
+    }
+
+    .section-sm {
+      padding: 48px 0;
+    }
+
+    .tan-rule {
+      display: block;
+      width: 36px;
+      height: 1px;
+      background: var(--color-accent);
+      margin-bottom: 28px;
+    }
+
+    .tan-rule--center {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.75rem, 7vw, 2.25rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--color-text);
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--color-accent);
+    }
+
+    /* ============================================================
+       BOUTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 28px;
+      border-radius: var(--radius-button);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: all 250ms var(--ease);
+      /* Touch target min 44px */
+      min-height: 48px;
+    }
+
+    .btn-primary {
+      background: var(--color-accent);
+      color: #FAF5EC;
+      width: 100%;
+    }
+
+    .btn-primary:active {
+      background: var(--color-accent-light);
+      transform: scale(0.98);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--color-accent);
+      border: 1.5px solid var(--color-accent);
+      width: 100%;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--color-text);
+      border: 1.5px solid var(--color-border-med);
+      width: 100%;
+    }
+
+    /* ============================================================
+       HEADER MOBILE
+       ============================================================ */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 16px var(--gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header__logo {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--color-text);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .header__actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .header__action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--color-text-muted);
+      padding: 4px;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ============================================================
+       1. HERO MOBILE — image plein ecran, info dessous
+       ============================================================ */
+    .hero {
+      /* Pas de padding top : image colle au header */
+    }
+
+    .hero__img-main {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+    }
+
+    /* Thumbnails sous l'image principale */
+    .hero__img-row {
+      display: flex;
+      gap: 8px;
+      padding: 8px var(--gutter) 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .hero__img-row::-webkit-scrollbar { display: none; }
+
+    .hero__img-thumb {
+      flex: 0 0 80px;
+      height: 80px;
+      border-radius: var(--radius-image);
+    }
+
+    /* Info produit sous les images */
+    .hero__info {
+      padding: 24px var(--gutter) 0;
+    }
+
+    .hero__rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .hero__stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .hero__star {
+      width: 13px;
+      height: 13px;
+      fill: var(--color-accent);
+    }
+
+    .hero__rating-text {
+      font-size: 13px;
+      color: var(--color-text-muted);
+    }
+
+    .hero__name {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 8vw, 2.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .hero__tagline {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-style: italic;
+      color: var(--color-text-muted);
+      margin-bottom: 20px;
+    }
+
+    .hero__price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .hero__price {
+      font-family: var(--font-heading);
+      font-size: 1.9rem;
+      font-weight: 400;
+      color: var(--color-text);
+    }
+
+    .hero__price-note {
+      font-size: 13px;
+      color: var(--color-text-muted);
+    }
+
+    .hero__shipping {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--color-accent);
+      font-weight: 500;
+      margin-bottom: 24px;
+      margin-top: 8px;
+    }
+
+    /* Variantes */
+    .hero__variants {
+      margin-bottom: 24px;
+    }
+
+    .hero__variants-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 12px;
+    }
+
+    .hero__variant-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hero__variant-pill {
+      padding: 10px 18px;
+      border-radius: var(--radius-button);
+      border: 1.5px solid var(--color-border-med);
+      background: transparent;
+      font-size: 13px;
+      color: var(--color-text);
+      cursor: pointer;
+      font-family: var(--font-body);
+      min-height: 44px;
+      transition: all 220ms var(--ease);
+    }
+
+    .hero__variant-pill.active {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      background: var(--color-accent-pale);
+    }
+
+    /* CTA fixe en bas — sticky sur mobile */
+    .hero__cta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+      padding-bottom: 32px;
+    }
+
+    /* Trust mobile — compact */
+    .hero__trust {
+      display: flex;
+      gap: 0;
+      flex-direction: column;
+      margin-top: 16px;
+      padding: 16px;
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+    }
+
+    .hero__trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--color-text-muted);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .hero__trust-item:last-child {
+      border-bottom: none;
+    }
+
+    /* ============================================================
+       2. GALLERY — scroll horizontal, items plus grands mobile
+       ============================================================ */
+    .gallery {
+      padding: 48px 0;
+      background: var(--color-surface);
+    }
+
+    .gallery__header {
+      padding: 0 var(--gutter);
+      margin-bottom: 24px;
+    }
+
+    .gallery__track {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 0 var(--gutter);
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .gallery__track::-webkit-scrollbar { display: none; }
+
+    .gallery__item {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+    }
+
+    .gallery__img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border-radius: var(--radius-image);
+    }
+
+    .gallery__caption {
+      margin-top: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    /* ============================================================
+       3. WHY WE LOVE — citation centree
+       ============================================================ */
+    .why-we-love {
+      text-align: center;
+    }
+
+    .why-we-love__text {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.7;
+      color: var(--color-text);
+    }
+
+    .why-we-love__attribution {
+      margin-top: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+
+    /* ============================================================
+       4. THOUGHTFULLY DESIGNED — colonne unique mobile
+       ============================================================ */
+    .features__image {
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+
+    .features__img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+    }
+
+    .features__list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .features__item {
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .features__item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 2px;
+      height: calc(100% - 4px);
+      background: var(--color-accent);
+      border-radius: 2px;
+    }
+
+    .features__item-title {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 400;
+      margin-bottom: 6px;
+    }
+
+    .features__item-desc {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       5. BEST FOR
+       ============================================================ */
+    .best-for { text-align: center; }
+
+    .best-for__pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 32px;
+    }
+
+    .best-for__pill {
+      padding: 10px 18px;
+      border-radius: var(--radius-button);
+      border: 1.5px solid var(--color-accent);
+      color: var(--color-accent);
+      background: transparent;
+      font-size: 13px;
+      font-weight: 500;
+      min-height: 44px;
+    }
+
+    /* ============================================================
+       6. MATERIALS — colonne unique mobile
+       ============================================================ */
+    .materials__intro {
+      margin-bottom: 40px;
+    }
+
+    .materials__grid {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-gap);
+    }
+
+    .material-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+
+    .material-card__img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+
+    .material-card__body {
+      padding: 20px;
+    }
+
+    .material-card__name {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 6px;
+    }
+
+    .material-card__caption {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 13px;
+      color: var(--color-accent);
+      margin-bottom: 10px;
+    }
+
+    .material-card__badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--color-accent-pale);
+      color: var(--color-accent);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .material-card__desc {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       8. COMPARE VARIANTS — scroll horizontal sur mobile
+       ============================================================ */
+    .variants__track {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      margin-top: 32px;
+    }
+
+    .variants__track::-webkit-scrollbar { display: none; }
+
+    .variant-card {
+      flex: 0 0 240px;
+      scroll-snap-align: start;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: var(--color-surface);
+      box-shadow: var(--shadow-card);
+    }
+
+    .variant-card.active {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 0;
+    }
+
+    .variant-card__img {
+      width: 100%;
+      aspect-ratio: 1;
+    }
+
+    .variant-card__body {
+      padding: 16px;
+    }
+
+    .variant-card__name {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+
+    .variant-card__desc {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .variant-card__price {
+      margin-top: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    /* ============================================================
+       9. REVIEWS — mobile
+       ============================================================ */
+    .reviews__summary-block {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 28px 20px;
+      margin-bottom: 36px;
+      position: relative;
+      box-shadow: var(--shadow-card);
+    }
+
+    .reviews__summary-block::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--color-accent);
+      border-radius: 8px 0 0 8px;
+    }
+
+    .reviews__summary-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 12px;
+    }
+
+    .reviews__summary-text {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.7;
+      color: var(--color-text);
+    }
+
+    .reviews__rating-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .reviews__score {
+      font-family: var(--font-heading);
+      font-size: 3rem;
+      font-weight: 400;
+      line-height: 1;
+      color: var(--color-text);
+    }
+
+    .reviews__stars-row {
+      display: flex;
+      gap: 3px;
+    }
+
+    .reviews__star {
+      width: 15px;
+      height: 15px;
+      fill: var(--color-accent);
+    }
+
+    .reviews__count {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    /* Avis : scroll horizontal sur mobile */
+    .reviews__track {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .reviews__track::-webkit-scrollbar { display: none; }
+
+    .review-card {
+      flex: 0 0 280px;
+      scroll-snap-align: start;
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      padding: 22px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .review-card__stars {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 12px;
+    }
+
+    .review-card__star {
+      width: 13px;
+      height: 13px;
+      fill: var(--color-accent);
+    }
+
+    .review-card__text {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--color-text);
+      margin-bottom: 16px;
+      font-style: italic;
+      font-family: var(--font-heading);
+      font-weight: 400;
+    }
+
+    .review-card__author {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .review-card__verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--color-accent);
+      margin-top: 4px;
+    }
+
+    /* ============================================================
+       10. PRESS — fond brun, mobile colonne unique
+       ============================================================ */
+    .press {
+      background: var(--color-text);
+      padding: 72px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .press::before {
+      content: '"';
+      position: absolute;
+      top: -20px;
+      left: 20px;
+      font-family: var(--font-heading);
+      font-size: 160px;
+      line-height: 1;
+      color: rgba(181, 133, 75, 0.08);
+      pointer-events: none;
+    }
+
+    .press__img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: var(--radius-image);
+      opacity: 0.85;
+      margin-bottom: 32px;
+    }
+
+    .press__logo-name {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: rgba(244, 236, 224, 0.5);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .press__text {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 400;
+      font-style: italic;
+      color: #FAF5EC;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .press__source {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+
+    /* ============================================================
+       11. CARE — 2 colonnes sur mobile
+       ============================================================ */
+    .care {
+      background: var(--color-surface);
+    }
+
+    .care__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 36px;
+    }
+
+    .care-item {
+      text-align: center;
+      padding: 24px 12px;
+      background: var(--color-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+    }
+
+    .care-item__icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 14px;
+      background: var(--color-accent-pale);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .care-item__icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--color-accent);
+    }
+
+    .care-item__title {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .care-item__desc {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       12. FAQ
+       ============================================================ */
+    .faq {
+      background: var(--color-bg);
+    }
+
+    .faq__item {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .faq__item:first-child {
+      border-top: 1px solid var(--color-border);
+    }
+
+    .faq__question {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      background: none;
+      border: none;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--color-text);
+      cursor: pointer;
+      text-align: left;
+      gap: 16px;
+      min-height: 44px;
+    }
+
+    .faq__icon {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      stroke: var(--color-accent);
+      transition: transform 280ms var(--ease);
+    }
+
+    .faq__item.open .faq__icon {
+      transform: rotate(45deg);
+    }
+
+    .faq__answer {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 320ms var(--ease);
+    }
+
+    .faq__item.open .faq__answer {
+      max-height: 400px;
+    }
+
+    .faq__answer-inner {
+      padding: 0 0 20px;
+      font-size: 14px;
+      color: var(--color-text-muted);
+      line-height: 1.75;
+    }
+
+    /* ============================================================
+       13. MANIFESTO — colonne unique, photo 4:5 au dessus
+       ============================================================ */
+    .manifesto {
+      background: var(--color-surface);
+    }
+
+    .manifesto__img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      border-radius: var(--radius-card);
+      margin-bottom: 36px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .manifesto__headline {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 6vw, 2rem);
+      font-weight: 400;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .manifesto__headline em {
+      font-style: italic;
+      color: var(--color-accent);
+    }
+
+    .manifesto__intro {
+      font-size: 15px;
+      color: var(--color-text-muted);
+      line-height: 1.75;
+      margin-bottom: 36px;
+    }
+
+    .manifesto__pillars {
+      list-style: none;
+      margin-bottom: 36px;
+    }
+
+    .manifesto__pillar {
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(181, 133, 75, 0.25);
+    }
+
+    .manifesto__pillar:first-child {
+      border-top: 1px solid rgba(181, 133, 75, 0.25);
+    }
+
+    .manifesto__pillar-title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--color-text);
+      margin-bottom: 6px;
+    }
+
+    .manifesto__pillar-text {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       FOOTER MOBILE
+       ============================================================ */
+    .footer {
+      background: var(--color-text);
+      color: #FAF5EC;
+      padding: 48px var(--gutter) 32px;
+    }
+
+    .footer__brand {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: #FAF5EC;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    .footer__tagline {
+      font-size: 12px;
+      color: rgba(250, 245, 236, 0.45);
+      margin-bottom: 32px;
+    }
+
+    .footer__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 24px;
+      list-style: none;
+      margin-bottom: 32px;
+    }
+
+    .footer__link {
+      font-size: 13px;
+      color: rgba(250, 245, 236, 0.55);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+
+    .footer__copy {
+      padding-top: 28px;
+      border-top: 1px solid rgba(250, 245, 236, 0.10);
+      font-size: 11px;
+      color: rgba(250, 245, 236, 0.30);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       STICKY BUY BAR MOBILE — full width, safe area
+       ============================================================ */
+    .sticky-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      padding: 12px var(--gutter);
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transform: translateY(100%);
+      transition: transform 350ms var(--ease);
+      z-index: 100;
+      box-shadow: 0 -6px 24px rgba(59, 47, 35, 0.09);
+    }
+
+    .sticky-bar.visible {
+      transform: translateY(0);
+    }
+
+    .sticky-bar__info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sticky-bar__name {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 400;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sticky-bar__price {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+    }
+
+    .sticky-bar__btn {
+      background: var(--color-accent);
+      color: #FAF5EC;
+      border: none;
+      border-radius: var(--radius-button);
+      padding: 14px 22px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      cursor: pointer;
+      min-height: 48px;
+      transition: background 200ms;
+    }
+
+    .sticky-bar__btn:active {
+      background: var(--color-accent-light);
+    }
+
+    /* ============================================================
+       ACCESSIBILITY
+       ============================================================ */
+    :focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 3px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER MOBILE -->
+  <header class="header" role="banner">
+    <a href="#" class="header__logo" aria-label="Retour accueil boutique">La Maison</a>
+    <div class="header__actions">
+      <button class="header__action-btn" aria-label="Rechercher">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button class="header__action-btn" aria-label="Panier, 0 article">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       1. HERO MOBILE
+       ============================================================ -->
+  <section class="hero" aria-labelledby="hero-title">
+
+    <!-- Image principale plein ecran -->
+    <img
+      class="hero__img-main reveal"
+      src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=1200"
+      alt="Sac cuir vintage cognac en lumiere naturelle chaude"
+      width="430"
+      height="573"
+      loading="eager"
+    />
+
+    <!-- Thumbnails scroll horizontal -->
+    <div class="hero__img-row" role="list" aria-label="Vues supplementaires du sac">
+      <img class="hero__img-thumb" role="listitem"
+        src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400"
+        alt="Vue cote, couture sellier" width="80" height="80" loading="lazy" />
+      <img class="hero__img-thumb" role="listitem"
+        src="https://images.unsplash.com/photo-1606522754091-a3bbf9ad4cb3?w=400"
+        alt="Interieur doublure coton" width="80" height="80" loading="lazy" />
+      <img class="hero__img-thumb" role="listitem"
+        src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=400"
+        alt="Fermeture laiton bruni" width="80" height="80" loading="lazy" />
+      <img class="hero__img-thumb" role="listitem"
+        src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400"
+        alt="Lifestyle porte" width="80" height="80" loading="lazy" />
+    </div>
+
+    <!-- Info produit -->
+    <div class="hero__info">
+      <!-- Rating -->
+      <div class="hero__rating">
+        <div class="hero__stars" aria-label="4.6 sur 5 etoiles">
+          <svg class="hero__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="hero__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="hero__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="hero__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="hero__star" viewBox="0 0 16 16" aria-hidden="true" style="fill:url(#warm-partial-m)">
+            <defs>
+              <linearGradient id="warm-partial-m">
+                <stop offset="60%" stop-color="#B5854B"/>
+                <stop offset="60%" stop-color="rgba(59,47,35,0.18)"/>
+              </linearGradient>
+            </defs>
+            <polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/>
+          </svg>
+        </div>
+        <span class="hero__rating-text">4.6 &nbsp;/&nbsp; 1 247 avis</span>
+      </div>
+
+      <h1 class="hero__name" id="hero-title">Sac cuir<br>vintage</h1>
+      <p class="hero__tagline">Un cuir qui vit avec toi</p>
+
+      <div class="hero__price-row">
+        <span class="hero__price">79 EUR</span>
+      </div>
+      <p class="hero__price-note" style="font-size:13px; color:var(--color-text-muted); margin-bottom:0;">Livraison offerte en France</p>
+
+      <div class="hero__shipping">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        3-5 jours &mdash; Retour 30 jours offerts
+      </div>
+
+      <!-- Variantes -->
+      <div class="hero__variants">
+        <p class="hero__variants-label">Coloris : <strong style="color:var(--color-text); font-weight:500;">Cognac</strong></p>
+        <div class="hero__variant-pills">
+          <button class="hero__variant-pill" type="button">Noir ebene</button>
+          <button class="hero__variant-pill active" type="button" aria-pressed="true">Cognac</button>
+          <button class="hero__variant-pill" type="button">Camel</button>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="hero__cta">
+        <button class="btn btn-primary" type="button">Ajouter au panier</button>
+        <button class="btn btn-ghost" type="button">Voir la collection</button>
+      </div>
+
+      <!-- Trust compact -->
+      <div class="hero__trust" role="list" aria-label="Garanties">
+        <span class="hero__trust-item" role="listitem">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Paiement securise SSL
+        </span>
+        <span class="hero__trust-item" role="listitem">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Origine tracable, tannerie francaise
+        </span>
+        <span class="hero__trust-item" role="listitem">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Garantie 2 ans couture et structure
+        </span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================================
+       2. GALLERY
+       ============================================================ -->
+  <section class="gallery" aria-label="Galerie produit">
+    <div class="gallery__header">
+      <p class="eyebrow">La piece dans son element</p>
+    </div>
+    <div class="gallery__track" role="region" aria-label="Photos produit">
+      <div class="gallery__item">
+        <img class="gallery__img" src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800" alt="Sac en exterieur, lumiere naturelle" width="280" height="373" loading="lazy"/>
+        <p class="gallery__caption">Porte au quotidien</p>
+      </div>
+      <div class="gallery__item">
+        <img class="gallery__img" src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800" alt="Grain cuir naturel, gros plan" width="280" height="373" loading="lazy"/>
+        <p class="gallery__caption">Cuir pleine fleur</p>
+      </div>
+      <div class="gallery__item">
+        <img class="gallery__img" src="https://images.unsplash.com/photo-1606522754091-a3bbf9ad4cb3?w=800" alt="Couture sellier main" width="280" height="373" loading="lazy"/>
+        <p class="gallery__caption">Couture sellier</p>
+      </div>
+      <div class="gallery__item">
+        <img class="gallery__img" src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=800" alt="Hardware laiton bruni" width="280" height="373" loading="lazy"/>
+        <p class="gallery__caption">Hardware laiton</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       3. WHY WE LOVE
+       ============================================================ -->
+  <section class="section why-we-love" aria-labelledby="why-title">
+    <div class="container">
+      <p class="eyebrow" id="why-title">Pourquoi on l'aime</p>
+      <span class="tan-rule" aria-hidden="true"></span>
+      <div class="reveal">
+        <p class="why-we-love__text">"Le cuir, ca se raconte. Chaque egratignure, chaque pli — c'est toi qui l'ecrits. Ce sac ne cherche pas la perfection du premier jour. Il cherche a etre beau dans dix ans."</p>
+        <p class="why-we-love__attribution">Notre equipe, Paris</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       4. THOUGHTFULLY DESIGNED
+       ============================================================ -->
+  <section class="section" aria-labelledby="features-title">
+    <div class="container">
+      <div class="features__image reveal">
+        <img class="features__img" src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800" alt="Artisan cousant le sac a la main" width="390" height="293" loading="lazy"/>
+      </div>
+      <p class="eyebrow" id="features-title">Pense avec soin</p>
+      <h2 class="section-title reveal" style="margin-bottom: 32px;">Chaque detail<br><em>a son histoire</em></h2>
+      <ul class="features__list" role="list">
+        <li class="features__item reveal">
+          <h3 class="features__item-title">Cuir pleine fleur tanne vegetalement</h3>
+          <p class="features__item-desc">Selectionne chez des tanneries francaises labellisees. Le cuir pleine fleur est la qualite superieure — il porte les marques du temps comme une signature.</p>
+        </li>
+        <li class="features__item reveal reveal-d1">
+          <h3 class="features__item-title">Couture sellier double fil</h3>
+          <p class="features__item-desc">Cousue a la main selon la technique des selliers — deux fils qui se croisent. Une solidite pensee sur le long terme.</p>
+        </li>
+        <li class="features__item reveal reveal-d2">
+          <h3 class="features__item-title">Hardware laiton bruni</h3>
+          <p class="features__item-desc">Les boucles et fermoirs sont en laiton massif bruni — sans nickel. Ils patinent avec le temps, comme le cuir.</p>
+        </li>
+        <li class="features__item reveal reveal-d3">
+          <h3 class="features__item-title">Doublure coton brossé naturel</h3>
+          <p class="features__item-desc">L'interieur respire. Une doublure coton epais, non teint, avec poche zippee securisee.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       5. BEST FOR
+       ============================================================ -->
+  <section class="section best-for" aria-labelledby="bestfor-title">
+    <div class="container">
+      <p class="eyebrow" id="bestfor-title">Fait pour</p>
+      <span class="tan-rule" aria-hidden="true"></span>
+      <h2 class="section-title reveal">Les gens qui choisissent<br><em>une fois pour toutes</em></h2>
+      <div class="best-for__pills" role="list">
+        <span class="best-for__pill" role="listitem">Quotidien bureau</span>
+        <span class="best-for__pill" role="listitem">Weekend en ville</span>
+        <span class="best-for__pill" role="listitem">Voyageur minimaliste</span>
+        <span class="best-for__pill" role="listitem">Cadeau qui dure</span>
+        <span class="best-for__pill" role="listitem">Achat conscient</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       6. MATERIALS
+       ============================================================ -->
+  <section class="section" aria-labelledby="materials-title">
+    <div class="container">
+      <div class="materials__intro">
+        <p class="eyebrow" id="materials-title">Composition</p>
+        <h2 class="section-title">Ce qui se cache<br><em>sous la surface</em></h2>
+      </div>
+      <div class="materials__grid">
+        <article class="material-card reveal">
+          <img class="material-card__img" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800" alt="Grain cuir naturel" width="390" height="220" loading="lazy"/>
+          <div class="material-card__body">
+            <h3 class="material-card__name">Cuir pleine fleur</h3>
+            <p class="material-card__caption">Tannage vegetal, Tanneries du Puy</p>
+            <span class="material-card__badge">France</span>
+            <p class="material-card__desc">La surface intacte conserve les pores naturels du cuir, conferant une resistance exceptionnelle et une patine unique.</p>
+          </div>
+        </article>
+        <article class="material-card reveal reveal-d1">
+          <img class="material-card__img" src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=800" alt="Fermeture laiton bruni" width="390" height="220" loading="lazy"/>
+          <div class="material-card__body">
+            <h3 class="material-card__name">Laiton bruni massif</h3>
+            <p class="material-card__caption">Sans nickel, finition artisanale</p>
+            <span class="material-card__badge">Sans nickel</span>
+            <p class="material-card__desc">Fondu et usine en petites series. Le brunissage cree une oxydation qui protege et caractere le laiton.</p>
+          </div>
+        </article>
+        <article class="material-card reveal reveal-d2">
+          <img class="material-card__img" src="https://images.unsplash.com/photo-1597953601374-1ff2d5640c85?w=800" alt="Fil lin cire en bobine" width="390" height="220" loading="lazy"/>
+          <div class="material-card__body">
+            <h3 class="material-card__name">Fil lin cire</h3>
+            <p class="material-card__caption">Technique sellier double passage</p>
+            <span class="material-card__badge">Artisanal</span>
+            <p class="material-card__desc">Le fil traditionnel de la sellerie de qualite. Il ne pourrit pas, ne craque pas — une durabilite sur des decennies.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7 HOW IT WORKS — SKIPPED -->
+
+  <!-- ============================================================
+       8. COMPARE VARIANTS — scroll horizontal
+       ============================================================ -->
+  <section class="section" aria-labelledby="variants-title">
+    <div class="container">
+      <p class="eyebrow" id="variants-title">Choisir le sien</p>
+      <h2 class="section-title reveal">Trois coloris,<br><em>trois caracteres</em></h2>
+    </div>
+    <div class="variants__track" role="list" aria-label="Variantes disponibles" style="padding: 0 20px;">
+      <article class="variant-card" role="listitem">
+        <img class="variant-card__img" src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600" alt="Sac cuir noir ebene" width="240" height="240" loading="lazy"/>
+        <div class="variant-card__body">
+          <h3 class="variant-card__name">Noir ebene</h3>
+          <p class="variant-card__desc">Discret et urbain.</p>
+          <p class="variant-card__price">79 EUR</p>
+        </div>
+      </article>
+      <article class="variant-card active" role="listitem" aria-current="true">
+        <img class="variant-card__img" src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=600" alt="Sac cuir cognac, coloris selectionne" width="240" height="240" loading="lazy"/>
+        <div class="variant-card__body">
+          <h3 class="variant-card__name">Cognac</h3>
+          <p class="variant-card__desc">La teinte signature. Patine avec grace.</p>
+          <p class="variant-card__price">79 EUR</p>
+        </div>
+      </article>
+      <article class="variant-card" role="listitem">
+        <img class="variant-card__img" src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600" alt="Sac cuir camel naturel" width="240" height="240" loading="lazy"/>
+        <div class="variant-card__body">
+          <h3 class="variant-card__name">Camel naturel</h3>
+          <p class="variant-card__desc">Evolue fortement avec l'usage.</p>
+          <p class="variant-card__price">79 EUR</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       9. REVIEWS
+       ============================================================ -->
+  <section class="section" aria-labelledby="reviews-title" style="background: var(--color-surface);">
+    <div class="container">
+      <p class="eyebrow" id="reviews-title">Ce qu'ils en disent</p>
+      <h2 class="section-title reveal" style="margin-bottom: 32px;">1 247 avis,<br><em>un consensus</em></h2>
+
+      <div class="reviews__rating-row" aria-label="Note globale">
+        <span class="reviews__score" aria-hidden="true">4.6</span>
+        <div>
+          <div class="reviews__stars-row" aria-label="4.6 etoiles sur 5">
+            <svg class="reviews__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+            <svg class="reviews__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+            <svg class="reviews__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+            <svg class="reviews__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+            <svg class="reviews__star" viewBox="0 0 16 16" aria-hidden="true" style="opacity:0.3"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          </div>
+          <p class="reviews__count">1 247 avis verifies</p>
+        </div>
+      </div>
+
+      <div class="reviews__summary-block reveal">
+        <p class="reviews__summary-label">Resume par intelligence artificielle</p>
+        <p class="reviews__summary-text">"Les clients louent unanimement la qualite du cuir et sa capacite a vieillir avec grace. Le format est juge ideal. La durabilite est le mot qui revient le plus souvent."</p>
+      </div>
+    </div>
+
+    <!-- Avis scroll horizontal -->
+    <div class="reviews__track" role="list" aria-label="Avis clients" style="padding: 0 20px;">
+      <article class="review-card" role="listitem">
+        <div class="review-card__stars" aria-label="5 etoiles">
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+        </div>
+        <p class="review-card__text">"Je l'utilise chaque jour depuis 14 mois. Il a pris une patine magnifique et quelques eraflures qui le rendent plus beau qu'au depart."</p>
+        <p class="review-card__author">Marie-Laure D.</p>
+        <p class="review-card__verified">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Achat verifie
+        </p>
+      </article>
+      <article class="review-card" role="listitem">
+        <div class="review-card__stars" aria-label="5 etoiles">
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+        </div>
+        <p class="review-card__text">"Offert a ma femme pour son anniversaire. Elle qui etait sceptique sur le prix a change d'avis des la premiere semaine."</p>
+        <p class="review-card__author">Thomas M.</p>
+        <p class="review-card__verified">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Achat verifie
+        </p>
+      </article>
+      <article class="review-card" role="listitem">
+        <div class="review-card__stars" aria-label="4 etoiles">
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+          <svg class="review-card__star" viewBox="0 0 16 16" aria-hidden="true" style="opacity:0.25"><polygon points="8,1 10.2,6 16,6.6 11.7,10.5 13.1,16 8,13 2.9,16 4.3,10.5 0,6.6 5.8,6"/></svg>
+        </div>
+        <p class="review-card__text">"Le format est parfait pour mon quotidien — ordi 13 pouces, trousse, bouteille. Rien ne depasse, tout rentre."</p>
+        <p class="review-card__author">Camille B.</p>
+        <p class="review-card__verified">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Achat verifie
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       10. PRESS — fond brun profond, colonne unique mobile
+       ============================================================ -->
+  <section class="press" aria-labelledby="press-title">
+    <div class="container">
+      <img class="press__img reveal"
+        src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800"
+        alt="Le sac cuir vintage, photo editoriale presse"
+        width="390" height="293" loading="lazy"
+      />
+      <div class="reveal reveal-d1">
+        <p class="press__logo-name" id="press-title">Madame Figaro</p>
+        <blockquote>
+          <p class="press__text">"Un sac qui refuse de vieillir mal. Dans un monde de fast fashion, cela devient presque subversif."</p>
+          <footer class="press__source">Selection artisanat francais 2024</footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       11. CARE — 2 colonnes sur mobile
+       ============================================================ -->
+  <section class="section care" aria-labelledby="care-title">
+    <div class="container">
+      <p class="eyebrow" id="care-title">Entretien</p>
+      <span class="tan-rule" aria-hidden="true"></span>
+      <h2 class="section-title reveal" style="margin-bottom: 0;">Prendre soin,<br><em>c'est investir</em></h2>
+      <div class="care__grid">
+        <div class="care-item reveal">
+          <div class="care-item__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"><path d="M12 2a10 10 0 00-9.95 9h11.64L9.74 7.05a1 1 0 011.41-1.41l5.66 5.65a1 1 0 010 1.42l-5.66 5.65a1 1 0 01-1.41-1.41L13.69 13H2.05A10 10 0 1012 2z"/></svg>
+          </div>
+          <h3 class="care-item__title">Nettoyer a sec</h3>
+          <p class="care-item__desc">Chiffon sec, jamais de detergent.</p>
+        </div>
+        <div class="care-item reveal reveal-d1">
+          <div class="care-item__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="care-item__title">Nourrir 2x/an</h3>
+          <p class="care-item__desc">Cire d'abeille ou creme cuir naturelle.</p>
+        </div>
+        <div class="care-item reveal reveal-d2">
+          <div class="care-item__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 19.11a5.13 5.13 0 0 0 5.68 7.2C7.33 21.7 9.5 20.5 10.5 20s3-1 4-2.5a4 4 0 0 0-3.5-6.18"/><path d="M10.46 7.26C10.2 5.88 9.39 4.26 6 3.6"/></svg>
+          </div>
+          <h3 class="care-item__title">Eviter l'eau</h3>
+          <p class="care-item__desc">Secher a plat, loin de la chaleur.</p>
+        </div>
+        <div class="care-item reveal reveal-d3">
+          <div class="care-item__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </div>
+          <h3 class="care-item__title">Ranger vide</h3>
+          <p class="care-item__desc">Bourre d'un chiffon, debout de preference.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       12. FAQ
+       ============================================================ -->
+  <section class="section faq" aria-labelledby="faq-title">
+    <div class="container">
+      <p class="eyebrow" id="faq-title">Questions</p>
+      <span class="tan-rule" aria-hidden="true"></span>
+      <h2 class="section-title reveal" style="margin-bottom: 32px;">Ce que vous<br><em>voulez savoir</em></h2>
+
+      <div role="list">
+        <div class="faq__item" role="listitem">
+          <button class="faq__question" aria-expanded="false" type="button">
+            Le cuir est-il garanti longtemps ?
+            <svg class="faq__icon" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p class="faq__answer-inner">Nous offrons une garantie de 2 ans sur la structure et les coutures. Le vieillissement du cuir est une qualite intrinseque. Un cuir bien entretenu dure des decennies.</p>
+          </div>
+        </div>
+        <div class="faq__item" role="listitem">
+          <button class="faq__question" aria-expanded="false" type="button">
+            Compatible avec un ordi 13 pouces ?
+            <svg class="faq__icon" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p class="faq__answer-inner">Le sac mesure 35 x 27 x 9 cm — il accueille un ordinateur de 13 pouces et des documents A4. Pour un 15 pouces, nous recommandons la version Grand Format.</p>
+          </div>
+        </div>
+        <div class="faq__item" role="listitem">
+          <button class="faq__question" aria-expanded="false" type="button">
+            Delais de livraison et retours ?
+            <svg class="faq__icon" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p class="faq__answer-inner">Livraison sous 3 a 5 jours ouvres en France, gratuite. Retour accepte sous 30 jours pour tout article non utilise, dans son emballage d'origine.</p>
+          </div>
+        </div>
+        <div class="faq__item" role="listitem">
+          <button class="faq__question" aria-expanded="false" type="button">
+            Peut-on personnaliser le sac ?
+            <svg class="faq__icon" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq__answer">
+            <p class="faq__answer-inner">Oui — gravure a chaud sur la languette exterieure. Jusqu'a 3 initiales. Contactez-nous avant de passer commande. Delai supplementaire : 5 jours ouvres.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       13. BRAND MANIFESTO — colonne unique, photo au dessus
+       ============================================================ -->
+  <section class="section manifesto" aria-labelledby="manifesto-title">
+    <div class="container">
+      <img class="manifesto__img reveal"
+        src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=800"
+        alt="Atelier artisan cuir, lumiere chaude fin d'apres-midi"
+        width="390" height="488" loading="lazy"
+      />
+      <p class="eyebrow" id="manifesto-title">Notre manifeste</p>
+      <h2 class="manifesto__headline reveal">Faire moins,<br><em>pour faire mieux</em></h2>
+      <p class="manifesto__intro">Nous ne faisons pas de collections saisonnieres. Nous faisons des pieces. Une seule a la fois, jusqu'a ce qu'elle soit juste.</p>
+      <ul class="manifesto__pillars" role="list">
+        <li class="manifesto__pillar reveal">
+          <h3 class="manifesto__pillar-title">La lenteur comme methode</h3>
+          <p class="manifesto__pillar-text">Un artisan fabrique quatre sacs par jour. Pas quarante. Cette contrainte est une garantie.</p>
+        </li>
+        <li class="manifesto__pillar reveal reveal-d1">
+          <h3 class="manifesto__pillar-title">La durabilite comme luxe accessible</h3>
+          <p class="manifesto__pillar-text">Un sac a 79 EUR qui dure 15 ans coute 5 EUR par an. Le calcul est simple.</p>
+        </li>
+        <li class="manifesto__pillar reveal reveal-d2">
+          <h3 class="manifesto__pillar-title">Le caractere comme finition</h3>
+          <p class="manifesto__pillar-text">Nous voulons que nos pieces aient l'air de vous appartenir — profondement, evidemment.</p>
+        </li>
+      </ul>
+      <a href="#" class="btn btn-outline">Lire notre histoire</a>
+    </div>
+  </section>
+
+  <!-- FOOTER MOBILE -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__brand">La Maison</p>
+    <p class="footer__tagline">Pieces de cuir, faites pour durer.</p>
+    <nav aria-label="Liens footer">
+      <ul class="footer__links">
+        <li><a href="#" class="footer__link">Expedition</a></li>
+        <li><a href="#" class="footer__link">Retours</a></li>
+        <li><a href="#" class="footer__link">Entretien</a></li>
+        <li><a href="#" class="footer__link">Contact</a></li>
+        <li><a href="#" class="footer__link">Instagram</a></li>
+      </ul>
+    </nav>
+    <p class="footer__copy">La Maison &copy; 2024. Fait en France.</p>
+  </footer>
+
+  <!-- STICKY BUY BAR MOBILE -->
+  <div class="sticky-bar" id="sticky-bar" role="complementary" aria-label="Achat rapide">
+    <div class="sticky-bar__info">
+      <p class="sticky-bar__name">Sac cuir vintage</p>
+      <p class="sticky-bar__price">79 EUR &mdash; Cognac</p>
+    </div>
+    <button class="sticky-bar__btn" type="button">Ajouter</button>
+  </div>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.10, rootMargin: '0px 0px -30px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Sticky bar
+    const hero = document.querySelector('.hero');
+    const stickyBar = document.getElementById('sticky-bar');
+    const stickyObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        stickyBar.classList.toggle('visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 });
+    if (hero) stickyObs.observe(hero);
+
+    // FAQ
+    document.querySelectorAll('.faq__question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq__item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq__item.open').forEach(el => {
+          el.classList.remove('open');
+          el.querySelector('.faq__question').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+      });
+    });
+
+    // Variant pills
+    document.querySelectorAll('.hero__variant-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.hero__variant-pill').forEach(p => { p.classList.remove('active'); p.removeAttribute('aria-pressed'); });
+        pill.classList.add('active');
+        pill.setAttribute('aria-pressed', 'true');
+      });
+    });
+  </script>
+
+</body>
+</html>

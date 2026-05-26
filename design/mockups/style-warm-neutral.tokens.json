@@ -1,0 +1,323 @@
+{
+  "$schema": "https://design-tokens.org/schema/v1.0/tokens.schema.json",
+  "$metadata": {
+    "name": "Warm Neutral",
+    "description": "Style tokens pour Konvert V3 — vibe Aimé Leon Dore x Norse Projects x Anine Bing. Tan/beige chaleureux, serif PP Editorial New, palette sépia warm.",
+    "version": "1.0.0",
+    "created": "2026-05-26",
+    "author": "OBITO — NEXARA Design"
+  },
+
+  "color": {
+    "$description": "Palette Warm Neutral — ton brun-crème, accent doré tan",
+
+    "bg": {
+      "$value": "#F4ECE0",
+      "$type": "color",
+      "$description": "Fond dominant — tan crème légèrement rosé. Jamais remplacé par du blanc."
+    },
+    "surface": {
+      "$value": "#FAF5EC",
+      "$type": "color",
+      "$description": "Surface des cards et composants — ~6% plus clair que bg. Délimite sans couper."
+    },
+    "accent": {
+      "$value": "#B5854B",
+      "$type": "color",
+      "$description": "Doré tan — laiton naturel, cire cuir. CTAs, eyebrows, séparateurs, traits feature. Max 4 usages/section."
+    },
+    "accentLight": {
+      "$value": "#C9993F",
+      "$type": "color",
+      "$description": "Accent au hover — légèrement plus lumineux, même teinte."
+    },
+    "accentPale": {
+      "$value": "rgba(181, 133, 75, 0.10)",
+      "$type": "color",
+      "$description": "Fond transparent accent — pills sélectionnées, badges, fonds icones."
+    },
+    "text": {
+      "$value": "#3B2F23",
+      "$type": "color",
+      "$description": "Texte principal — brun chaud profond. Jamais noir pur pour préserver l'harmonie avec le fond."
+    },
+    "textMuted": {
+      "$value": "#8B7D6E",
+      "$type": "color",
+      "$description": "Texte secondaire — captions, descriptions, métadonnées. Ratio ~4.7:1 sur bg (WCAG AA)."
+    },
+    "border": {
+      "$value": "rgba(59, 47, 35, 0.10)",
+      "$type": "color",
+      "$description": "Bordure légère — séparateurs mineurs (header, FAQ items). Jamais entre sections."
+    },
+    "borderMed": {
+      "$value": "rgba(59, 47, 35, 0.18)",
+      "$type": "color",
+      "$description": "Bordure medium — pills inactives, btn-ghost."
+    },
+    "pressBackground": {
+      "$value": "#3B2F23",
+      "$type": "color",
+      "$description": "Fond section press quote — inversion de fond pour rupture de tempo. Identique à text."
+    },
+    "footerBackground": {
+      "$value": "#3B2F23",
+      "$type": "color",
+      "$description": "Fond footer — même logique que press, continuité visuelle bas de page."
+    },
+    "onDark": {
+      "$value": "#FAF5EC",
+      "$type": "color",
+      "$description": "Texte sur fonds sombres (press, footer) — surface color repurposée."
+    },
+    "tanRule": {
+      "$value": "rgba(181, 133, 75, 0.25)",
+      "$type": "color",
+      "$description": "Trait séparateur des piliers manifesto — plus transparent que l'accent direct."
+    }
+  },
+
+  "typography": {
+    "$description": "Système typographique Warm Neutral — serif éditorial + sans neutre",
+
+    "fontHeading": {
+      "$value": "\"PP Editorial New\", \"Playfair Display\", Georgia, serif",
+      "$type": "fontFamily",
+      "$description": "Fonte principale headings. PP Editorial New (propriétaire) — fallback Playfair Display (Google Fonts). Même ADN : serif classique, contraste élevé, bon italic."
+    },
+    "fontBody": {
+      "$value": "\"Inter\", system-ui, sans-serif",
+      "$type": "fontFamily",
+      "$description": "Fonte corps de texte — neutre, lisible, ne concurrence pas le serif."
+    },
+
+    "scale": {
+      "xs":   { "$value": "0.75rem",  "$type": "dimension", "$description": "12px — labels minuscules" },
+      "sm":   { "$value": "0.875rem", "$type": "dimension", "$description": "14px — descriptions, feature desc" },
+      "base": { "$value": "1rem",     "$type": "dimension", "$description": "16px — corps standard" },
+      "lg":   { "$value": "1.0625rem","$type": "dimension", "$description": "17px — body-lg" },
+      "xl":   { "$value": "1.125rem", "$type": "dimension", "$description": "18px — tagline hero" },
+      "2xl":  { "$value": "1.2rem",   "$type": "dimension", "$description": "~19px — review text, summary" },
+      "3xl":  { "$value": "1.4rem",   "$type": "dimension", "$description": "~22px — press logo, footer brand" },
+      "4xl":  { "$value": "1.9rem",   "$type": "dimension", "$description": "~30px — hero price mobile" },
+      "5xl":  { "$value": "2.2rem",   "$type": "dimension", "$description": "~35px — hero price desktop" },
+      "hero": { "$value": "clamp(2.2rem, 4vw, 3.25rem)", "$type": "dimension", "$description": "H1 hero — fluide entre 35px et 52px" }
+    },
+
+    "lineHeight": {
+      "tight":   { "$value": "1.1",  "$type": "number", "$description": "Grands titres serif" },
+      "heading": { "$value": "1.15", "$type": "number", "$description": "Titres de section" },
+      "body":    { "$value": "1.65", "$type": "number", "$description": "Corps standard" },
+      "loose":   { "$value": "1.8",  "$type": "number", "$description": "Body-lg, longues descriptions" }
+    },
+
+    "fontWeight": {
+      "regular": { "$value": "400", "$type": "number", "$description": "Serif headings, body standard" },
+      "medium":  { "$value": "500", "$type": "number", "$description": "Labels boutons, prix" },
+      "semibold": { "$value": "600", "$type": "number", "$description": "Eyebrows uppercase" }
+    },
+
+    "letterSpacing": {
+      "tight":    { "$value": "-0.02em", "$type": "dimension", "$description": "Grands titres — h1" },
+      "normal":   { "$value": "-0.01em", "$type": "dimension", "$description": "Titres section" },
+      "none":     { "$value": "0",       "$type": "dimension", "$description": "Corps texte" },
+      "wide":     { "$value": "0.04em",  "$type": "dimension", "$description": "Logo, footer brand" },
+      "wider":    { "$value": "0.06em",  "$type": "dimension", "$description": "Boutons uppercase" },
+      "widest":   { "$value": "0.16em",  "$type": "dimension", "$description": "Eyebrows uppercase" }
+    }
+  },
+
+  "spacing": {
+    "$description": "Système d'espacement — base 8px grid",
+
+    "1":  { "$value": "0.25rem",  "$type": "dimension", "$description": "4px" },
+    "2":  { "$value": "0.5rem",   "$type": "dimension", "$description": "8px" },
+    "3":  { "$value": "0.75rem",  "$type": "dimension", "$description": "12px" },
+    "4":  { "$value": "1rem",     "$type": "dimension", "$description": "16px" },
+    "5":  { "$value": "1.25rem",  "$type": "dimension", "$description": "20px" },
+    "6":  { "$value": "1.5rem",   "$type": "dimension", "$description": "24px — gap standard" },
+    "7":  { "$value": "1.75rem",  "$type": "dimension", "$description": "28px" },
+    "8":  { "$value": "2rem",     "$type": "dimension", "$description": "32px — card padding" },
+    "10": { "$value": "2.5rem",   "$type": "dimension", "$description": "40px" },
+    "12": { "$value": "3rem",     "$type": "dimension", "$description": "48px — small section mobile" },
+    "16": { "$value": "4rem",     "$type": "dimension", "$description": "64px — gutter desktop" },
+    "18": { "$value": "4.5rem",   "$type": "dimension", "$description": "72px — section mobile" },
+    "20": { "$value": "5rem",     "$type": "dimension", "$description": "80px — small section" },
+    "24": { "$value": "6rem",     "$type": "dimension", "$description": "96px" },
+    "32": { "$value": "8rem",     "$type": "dimension", "$description": "128px — section desktop" },
+
+    "section": {
+      "desktop": { "$value": "128px", "$type": "dimension", "$description": "Padding vertical section desktop" },
+      "mobile":  { "$value": "72px",  "$type": "dimension", "$description": "Padding vertical section mobile" }
+    },
+    "card":    { "$value": "32px",   "$type": "dimension", "$description": "Padding interne cards desktop" },
+    "cardMd":  { "$value": "28px",   "$type": "dimension", "$description": "Padding material cards" },
+    "cardSm":  { "$value": "20px",   "$type": "dimension", "$description": "Padding cards mobile" },
+    "gap":     { "$value": "24px",   "$type": "dimension", "$description": "Gap grille composants" },
+    "gutter":  { "$value": "64px",   "$type": "dimension", "$description": "Marge horizontale container desktop" },
+    "gutterMobile": { "$value": "20px", "$type": "dimension", "$description": "Marge horizontale container mobile" }
+  },
+
+  "borderRadius": {
+    "$description": "Radius — doux sans être candy. Cohérent partout.",
+
+    "card":   { "$value": "8px",   "$type": "dimension", "$description": "Cards, images — radius principal" },
+    "button": { "$value": "999px", "$type": "dimension", "$description": "Boutons pill — full rounded" },
+    "image":  { "$value": "8px",   "$type": "dimension", "$description": "Images produit — même que card" },
+    "badge":  { "$value": "999px", "$type": "dimension", "$description": "Badges matériaux, labels" },
+    "icon":   { "$value": "50%",   "$type": "dimension", "$description": "Icones cerclées (care, trust)" }
+  },
+
+  "shadow": {
+    "$description": "Ombres warm-toned — jamais grises neutres",
+
+    "card": {
+      "$value": "0 2px 8px rgba(59, 47, 35, 0.06)",
+      "$type": "shadow",
+      "$description": "Ombre repos card — présence sans lourdeur"
+    },
+    "hover": {
+      "$value": "0 12px 32px rgba(59, 47, 35, 0.10)",
+      "$type": "shadow",
+      "$description": "Ombre hover card — elevation signifiée"
+    },
+    "stickyBar": {
+      "$value": "0 -8px 32px rgba(59, 47, 35, 0.09)",
+      "$type": "shadow",
+      "$description": "Ombre sticky buy bar — directionnelle vers le haut"
+    },
+    "ctaHover": {
+      "$value": "0 8px 24px rgba(181, 133, 75, 0.22)",
+      "$type": "shadow",
+      "$description": "Ombre hover CTA primary — teintée accent tan"
+    }
+  },
+
+  "motion": {
+    "$description": "Animation — philosophie Emil Kowalski (Restraint). Jamais > 500ms sur interactions utilisateur.",
+
+    "ease": {
+      "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "Easing standard — smooth in/out. Entrées et transitions de composants."
+    },
+    "easeOut": {
+      "$value": "cubic-bezier(0, 0, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "Ease-out — pour les éléments qui entrent en scène"
+    },
+
+    "duration": {
+      "fast":     { "$value": "200ms", "$type": "duration", "$description": "Hover states, pill transitions" },
+      "base":     { "$value": "300ms", "$type": "duration", "$description": "Hover cards, boutons" },
+      "reveal":   { "$value": "450ms", "$type": "duration", "$description": "Scroll reveal — entrée sections" },
+      "revealMobile": { "$value": "380ms", "$type": "duration", "$description": "Scroll reveal mobile — légèrement plus court" },
+      "faq":      { "$value": "380ms", "$type": "duration", "$description": "Accordeon FAQ max-height" },
+      "sticky":   { "$value": "350ms", "$type": "duration", "$description": "Sticky bar slide" }
+    },
+
+    "stagger": {
+      "d1": { "$value": "80ms",  "$type": "duration", "$description": "Délai d1 stagger desktop" },
+      "d2": { "$value": "160ms", "$type": "duration", "$description": "Délai d2 stagger desktop" },
+      "d3": { "$value": "240ms", "$type": "duration", "$description": "Délai d3 stagger desktop" },
+      "d4": { "$value": "320ms", "$type": "duration", "$description": "Délai d4 stagger desktop" },
+      "d1Mobile": { "$value": "60ms",  "$type": "duration", "$description": "Délai d1 stagger mobile" },
+      "d2Mobile": { "$value": "120ms", "$type": "duration", "$description": "Délai d2 stagger mobile" },
+      "d3Mobile": { "$value": "180ms", "$type": "duration", "$description": "Délai d3 stagger mobile" }
+    }
+  },
+
+  "layout": {
+    "$description": "Contraintes de layout",
+
+    "maxWidth": {
+      "$value": "1280px",
+      "$type": "dimension",
+      "$description": "Max-width container — cohérent avec styles organic, soft. Plus resserré que editorial (1440px)."
+    },
+    "gridColumns": {
+      "desktop": { "$value": "12", "$type": "number", "$description": "Colonnes grille desktop" },
+      "tablet":  { "$value": "8",  "$type": "number", "$description": "Colonnes grille tablet" },
+      "mobile":  { "$value": "4",  "$type": "number", "$description": "Colonnes grille mobile" }
+    },
+    "breakpoints": {
+      "sm": { "$value": "640px",  "$type": "dimension" },
+      "md": { "$value": "768px",  "$type": "dimension" },
+      "lg": { "$value": "1024px", "$type": "dimension" },
+      "xl": { "$value": "1280px", "$type": "dimension" }
+    }
+  },
+
+  "component": {
+    "$description": "Tokens spécifiques composants",
+
+    "button": {
+      "paddingX":   { "$value": "36px", "$type": "dimension", "$description": "Padding horizontal bouton desktop" },
+      "paddingY":   { "$value": "16px", "$type": "dimension", "$description": "Padding vertical bouton" },
+      "fontSize":   { "$value": "13px", "$type": "dimension", "$description": "Taille texte bouton" },
+      "letterSpacing": { "$value": "0.06em", "$type": "dimension", "$description": "Tracking uppercase bouton" },
+      "minHeight":  { "$value": "48px", "$type": "dimension", "$description": "Touch target mobile minimum" }
+    },
+
+    "card": {
+      "background": { "$value": "#FAF5EC", "$type": "color", "$description": "Fond card = surface" },
+      "padding":    { "$value": "32px", "$type": "dimension", "$description": "Padding interne desktop" },
+      "paddingMobile": { "$value": "20px", "$type": "dimension", "$description": "Padding interne mobile" }
+    },
+
+    "tanRule": {
+      "width":  { "$value": "48px", "$type": "dimension", "$description": "Largeur trait séparateur" },
+      "height": { "$value": "1px",  "$type": "dimension", "$description": "Hauteur trait séparateur" },
+      "color":  { "$value": "#B5854B", "$type": "color", "$description": "Couleur trait" }
+    },
+
+    "eyebrow": {
+      "fontSize":     { "$value": "11px",  "$type": "dimension" },
+      "fontWeight":   { "$value": "600",   "$type": "number" },
+      "letterSpacing": { "$value": "0.16em", "$type": "dimension" },
+      "textTransform": { "$value": "uppercase", "$type": "string" },
+      "color": { "$value": "#B5854B", "$type": "color" },
+      "marginBottom": { "$value": "20px", "$type": "dimension" }
+    },
+
+    "photoFilter": {
+      "$value": "sepia(0.08) saturate(0.95) brightness(1.01)",
+      "$type": "string",
+      "$description": "Filtre CSS appliqué à toutes les images — apporte chaleur subtile, uniformise les sources. Ne pas dépasser sepia(0.10) pour éviter le jaunissement."
+    }
+  },
+
+  "accessibility": {
+    "$description": "Métriques WCAG 2.1 AA — vérification contraste",
+
+    "contrastRatios": {
+      "textOnBg": {
+        "$value": "10.2",
+        "$type": "number",
+        "$description": "#3B2F23 sur #F4ECE0 — AAA (minimum requis 4.5:1)"
+      },
+      "mutedOnBg": {
+        "$value": "4.7",
+        "$type": "number",
+        "$description": "#8B7D6E sur #F4ECE0 — AA (minimum requis 4.5:1)"
+      },
+      "onDarkOnPress": {
+        "$value": "10.2",
+        "$type": "number",
+        "$description": "#FAF5EC sur #3B2F23 — AAA"
+      },
+      "accentOnSurface": {
+        "$value": "3.5",
+        "$type": "number",
+        "$description": "#B5854B sur #FAF5EC — AA pour grands textes (>18px) et composants non-texte (boutons)"
+      }
+    },
+
+    "touchTargetMinimum": {
+      "$value": "44px",
+      "$type": "dimension",
+      "$description": "Taille minimale cible tactile — Apple HIG, WCAG 2.5.5"
+    }
+  }
+}

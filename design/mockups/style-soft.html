@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sac à bandoulière en cuir vintage — Style Soft / Konvert V3</title>
+
+  <!-- Google Fonts : Cormorant Garamond (heading) + Inter (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       SOFT STYLE — DESIGN TOKENS (src/lib/styles/soft/tokens.ts)
+       ============================================================ */
+    :root {
+      /* Colors */
+      --color-bg:           #FAF7F2;
+      --color-surface:      #FFFFFF;
+      --color-accent:       #C9A77E;
+      --color-accent-dark:  #A8845A;
+      --color-text:         #1A1614;
+      --color-text-muted:   #7A6F66;
+      --color-border:       rgba(26, 22, 20, 0.08);
+
+      /* Fonts */
+      --font-heading: "Cormorant Garamond", Georgia, serif;
+      --font-body:    "Inter", system-ui, sans-serif;
+
+      /* Spacing */
+      --space-section: 128px;
+      --space-card:    32px;
+      --space-gap:     24px;
+
+      /* Radius */
+      --radius-card:   6px;
+      --radius-button: 999px;
+      --radius-image:  4px;
+
+      /* Shadows */
+      --shadow-card:  0 1px 3px rgba(26, 22, 20, 0.04);
+      --shadow-hover: 0 8px 24px rgba(26, 22, 20, 0.08);
+
+      /* Motion */
+      --ease:     cubic-bezier(0.4, 0, 0.2, 1);
+      --duration: 400ms;
+
+      /* Layout */
+      --max-w: 1280px;
+      --gutter: 64px;
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: var(--font-body);
+    }
+
+    /* ============================================================
+       SCROLL FADE-IN ANIMATION
+       ============================================================ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity var(--duration) var(--ease),
+                  transform var(--duration) var(--ease);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-delay-1 { transition-delay: 80ms; }
+    .fade-in-delay-2 { transition-delay: 160ms; }
+    .fade-in-delay-3 { transition-delay: 240ms; }
+    .fade-in-delay-4 { transition-delay: 320ms; }
+
+    /* ============================================================
+       TYPOGRAPHY HELPERS
+       ============================================================ */
+    .h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.75rem, 3vw, 2.75rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+
+    .h3 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.25rem, 2vw, 1.75rem);
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+
+    .body-sm {
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--color-text-muted);
+    }
+
+    /* ============================================================
+       LAYOUT HELPERS
+       ============================================================ */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    .section {
+      padding: var(--space-section) 0;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--color-border);
+    }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 40px;
+      background: var(--color-accent);
+      color: #FFFFFF;
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: var(--radius-button);
+      transition: background var(--duration) var(--ease),
+                  transform var(--duration) var(--ease),
+                  box-shadow var(--duration) var(--ease);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-accent-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 40px;
+      background: transparent;
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(26, 22, 20, 0.2);
+      border-radius: var(--radius-button);
+      transition: border-color var(--duration) var(--ease),
+                  background var(--duration) var(--ease);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--color-accent);
+      background: rgba(201, 167, 126, 0.04);
+    }
+
+    /* ============================================================
+       NAVBAR (mini — pas dans le brief mais nécessaire)
+       ============================================================ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 247, 242, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .navbar-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar-brand {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .navbar-links a {
+      font-size: 0.8125rem;
+      font-weight: 400;
+      color: var(--color-text-muted);
+      letter-spacing: 0.04em;
+      transition: color var(--duration) var(--ease);
+    }
+
+    .navbar-links a:hover {
+      color: var(--color-text);
+    }
+
+    .navbar-cart {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ============================================================
+       SECTION 1 — HERO
+       ============================================================ */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100vh - 64px);
+      gap: 0;
+    }
+
+    .hero-image-col {
+      position: sticky;
+      top: 64px;
+      height: calc(100vh - 64px);
+      overflow: hidden;
+    }
+
+    .hero-image-col img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 0 0 var(--radius-image) var(--radius-image);
+      transition: transform 0.6s var(--ease);
+    }
+
+    .hero-image-col:hover img {
+      transform: scale(1.02);
+    }
+
+    .hero-content-col {
+      padding: 80px var(--gutter) 80px 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 32px;
+    }
+
+    .hero-breadcrumb {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-breadcrumb span {
+      color: var(--color-border);
+    }
+
+    .hero-rating {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: -8px;
+    }
+
+    .stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .star {
+      width: 14px;
+      height: 14px;
+      color: var(--color-accent);
+    }
+
+    .rating-text {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+    }
+
+    .rating-link {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color var(--duration) var(--ease);
+    }
+
+    .rating-link:hover {
+      color: var(--color-text);
+    }
+
+    .hero-tagline-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero-subtagline {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+
+    .hero-description {
+      font-size: 1rem;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      max-width: 440px;
+    }
+
+    .hero-price-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-price {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--color-text);
+    }
+
+    .hero-price-original {
+      font-size: 1.125rem;
+      color: var(--color-text-muted);
+      text-decoration: line-through;
+    }
+
+    .hero-free-ship {
+      font-size: 0.75rem;
+      color: var(--color-accent);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-variants {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .hero-variants-label {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .hero-variants-swatches {
+      display: flex;
+      gap: 12px;
+    }
+
+    .swatch {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform var(--duration) var(--ease);
+      border: 2px solid transparent;
+    }
+
+    .swatch:hover {
+      transform: scale(1.1);
+    }
+
+    .swatch.active {
+      border-color: var(--color-accent);
+      outline: 2px solid rgba(201, 167, 126, 0.3);
+      outline-offset: 2px;
+    }
+
+    .swatch-noir  { background: #1A1614; }
+    .swatch-cognac { background: #8B4513; }
+    .swatch-camel  { background: #C19A6B; }
+
+    .swatch-label {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .hero-cta-group .btn-primary {
+      width: 100%;
+    }
+
+    .hero-cta-group .btn-secondary {
+      width: 100%;
+    }
+
+    .hero-guarantee {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+
+    .hero-guarantee svg {
+      color: var(--color-accent);
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       SECTION 2 — GALLERY
+       ============================================================ */
+    .gallery {
+      background: var(--color-surface);
+    }
+
+    .gallery-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .gallery-item {
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.04);
+    }
+
+    .gallery-item-featured {
+      grid-column: span 2;
+      aspect-ratio: 16/10;
+    }
+
+    /* ============================================================
+       SECTION 3 — WHY WE LOVE IT
+       ============================================================ */
+    .why-we-love {
+      text-align: center;
+    }
+
+    .why-we-love-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .why-we-love-text {
+      font-family: var(--font-heading);
+      font-size: clamp(1.375rem, 2.5vw, 1.875rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.55;
+      color: var(--color-text);
+      margin-top: 24px;
+    }
+
+    .why-we-love-text em {
+      font-style: normal;
+      color: var(--color-accent);
+    }
+
+    /* ============================================================
+       SECTION 4 — THOUGHTFULLY DESIGNED
+       ============================================================ */
+    .thoughtfully-designed {
+      background: var(--color-surface);
+    }
+
+    .thoughtfully-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 96px;
+      align-items: center;
+    }
+
+    .thoughtfully-image {
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      aspect-ratio: 4/5;
+    }
+
+    .thoughtfully-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thoughtfully-content {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .feature-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .feature-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .feature-name {
+      font-family: var(--font-heading);
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    .feature-name strong {
+      color: var(--color-accent);
+    }
+
+    .feature-desc {
+      font-size: 0.9375rem;
+      color: var(--color-text-muted);
+      line-height: 1.65;
+    }
+
+    /* ============================================================
+       SECTION 5 — BEST FOR
+       ============================================================ */
+    .best-for {
+      text-align: center;
+    }
+
+    .best-for-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .pills-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+
+    .pill {
+      padding: 10px 24px;
+      border: 1px solid rgba(201, 167, 126, 0.35);
+      border-radius: var(--radius-button);
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: var(--color-text);
+      letter-spacing: 0.02em;
+      background: var(--color-surface);
+      transition: border-color var(--duration) var(--ease),
+                  background var(--duration) var(--ease),
+                  color var(--duration) var(--ease);
+    }
+
+    .pill:hover,
+    .pill.active {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      color: #FFFFFF;
+    }
+
+    /* ============================================================
+       SECTION 6 — MATERIALS BREAKDOWN
+       ============================================================ */
+    .materials {
+      background: var(--color-surface);
+    }
+
+    .materials-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .materials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-gap);
+    }
+
+    .material-card {
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: var(--color-bg);
+      box-shadow: var(--shadow-card);
+      transition: box-shadow var(--duration) var(--ease),
+                  transform var(--duration) var(--ease);
+    }
+
+    .material-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-3px);
+    }
+
+    .material-card-image {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+
+    .material-card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease);
+    }
+
+    .material-card:hover .material-card-image img {
+      transform: scale(1.04);
+    }
+
+    .material-card-body {
+      padding: var(--space-card);
+    }
+
+    .material-card-name {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .material-card-benefit {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       SECTION 7 — HOW IT WORKS (SKIP — sac)
+       ============================================================ */
+    /* Section skippée pour ce type de produit (sac).
+       how_it_works s'affiche uniquement si catégorie = skincare/wellness.
+       Voir spec §5.1 règle display. */
+
+    /* ============================================================
+       SECTION 8 — COMPARE VARIANTS
+       ============================================================ */
+    .compare-variants {
+    }
+
+    .compare-variants-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .variants-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-gap);
+    }
+
+    .variant-card {
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: var(--color-surface);
+      box-shadow: var(--shadow-card);
+      transition: box-shadow var(--duration) var(--ease),
+                  transform var(--duration) var(--ease);
+      cursor: pointer;
+    }
+
+    .variant-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .variant-card.selected {
+      box-shadow: 0 0 0 2px var(--color-accent);
+    }
+
+    .variant-image {
+      aspect-ratio: 1;
+      overflow: hidden;
+    }
+
+    .variant-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s var(--ease);
+    }
+
+    .variant-card:hover .variant-image img {
+      transform: scale(1.04);
+    }
+
+    .variant-info {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .variant-name {
+      font-family: var(--font-heading);
+      font-size: 1.125rem;
+      font-weight: 500;
+    }
+
+    .variant-price {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+    }
+
+    .variant-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      background: rgba(201, 167, 126, 0.12);
+      color: var(--color-accent);
+      border-radius: 99px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    /* ============================================================
+       SECTION 9 — REVIEWS AI SUMMARY
+       ============================================================ */
+    .reviews {
+      background: var(--color-surface);
+    }
+
+    .reviews-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 56px;
+    }
+
+    .reviews-score-group {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .reviews-score-big {
+      font-family: var(--font-heading);
+      font-size: 5rem;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--color-text);
+    }
+
+    .reviews-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .reviews-count {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+    }
+
+    .reviews-summary-quote {
+      max-width: 560px;
+      font-family: var(--font-heading);
+      font-size: 1.125rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .reviews-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-gap);
+    }
+
+    .review-card {
+      background: var(--color-bg);
+      border-radius: var(--radius-card);
+      padding: var(--space-card);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .review-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .review-author {
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+
+    .review-date {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+
+    .review-title {
+      font-family: var(--font-heading);
+      font-size: 1.0625rem;
+      font-weight: 500;
+    }
+
+    .review-body {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      line-height: 1.65;
+    }
+
+    .review-verified {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.6875rem;
+      color: var(--color-accent);
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       SECTION 10 — PRESS QUOTE
+       ============================================================ */
+    .press-quote {
+      position: relative;
+      min-height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .press-quote-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .press-quote-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+    }
+
+    /* Overlay warm beige — respect du feedback "JAMAIS de fond noir" */
+    .press-quote-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(250, 247, 242, 0.82);
+      z-index: 1;
+    }
+
+    .press-quote-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 720px;
+      padding: 80px var(--gutter);
+    }
+
+    .press-quote-mark {
+      font-family: var(--font-heading);
+      font-size: 6rem;
+      line-height: 0.6;
+      color: var(--color-accent);
+      opacity: 0.4;
+      display: block;
+      margin-bottom: 24px;
+    }
+
+    .press-quote-text {
+      font-family: var(--font-heading);
+      font-size: clamp(1.375rem, 2.5vw, 2rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--color-text);
+    }
+
+    .press-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .press-source-line {
+      width: 32px;
+      height: 1px;
+      background: var(--color-accent);
+    }
+
+    .press-source-name {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    /* ============================================================
+       SECTION 11 — CARE INSTRUCTIONS
+       ============================================================ */
+    .care {
+    }
+
+    .care-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .care-cols {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+    }
+
+    .care-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: var(--space-card);
+      border-top: 2px solid var(--color-accent);
+    }
+
+    .care-col-icon {
+      width: 40px;
+      height: 40px;
+      color: var(--color-accent);
+    }
+
+    .care-col-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    .care-col-body {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      line-height: 1.65;
+    }
+
+    /* ============================================================
+       SECTION 12 — FAQ
+       ============================================================ */
+    .faq {
+      background: var(--color-surface);
+    }
+
+    .faq-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .faq-list {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .faq-item:first-child {
+      border-top: 1px solid var(--color-border);
+    }
+
+    details > summary {
+      list-style: none;
+    }
+
+    details > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0;
+      cursor: pointer;
+      user-select: none;
+      gap: 16px;
+    }
+
+    .faq-question {
+      font-family: var(--font-heading);
+      font-size: 1.0625rem;
+      font-weight: 500;
+      color: var(--color-text);
+      flex: 1;
+    }
+
+    .faq-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--color-accent);
+      transition: transform var(--duration) var(--ease);
+      flex-shrink: 0;
+    }
+
+    details[open] .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      padding: 0 0 24px;
+      font-size: 0.9375rem;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       SECTION 13 — BRAND MANIFESTO
+       ============================================================ */
+    .manifesto {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .manifesto-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 96px;
+      align-items: center;
+    }
+
+    .manifesto-image {
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      position: relative;
+    }
+
+    .manifesto-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .manifesto-content {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .manifesto-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .manifesto-pillar {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .manifesto-pillar-name {
+      font-family: var(--font-heading);
+      font-size: 1.125rem;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--color-accent);
+    }
+
+    .manifesto-pillar-desc {
+      font-size: 0.9375rem;
+      color: var(--color-text-muted);
+      line-height: 1.65;
+    }
+
+    /* ============================================================
+       FOOTER (minimal)
+       ============================================================ */
+    .footer {
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      padding: 48px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-brand {
+      font-family: var(--font-heading);
+      font-size: 1.125rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      transition: color var(--duration) var(--ease);
+    }
+
+    .footer-links a:hover {
+      color: var(--color-text);
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAVBAR
+       ============================================================ -->
+  <nav class="navbar" role="navigation" aria-label="Navigation principale">
+    <div class="navbar-inner">
+      <a href="#" class="navbar-brand">Maison Objet</a>
+      <ul class="navbar-links" role="list">
+        <li><a href="#">Maroquinerie</a></li>
+        <li><a href="#">Accessoires</a></li>
+        <li><a href="#">Notre histoire</a></li>
+        <li><a href="#">Soins cuir</a></li>
+      </ul>
+      <a href="#" class="navbar-cart" aria-label="Panier — 0 articles">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        Panier (0)
+      </a>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       SECTION 1 — HERO
+       ============================================================ -->
+  <section class="hero" aria-labelledby="product-name">
+    <div class="hero-image-col">
+      <img
+        src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=1600&auto=format&fit=crop&q=85"
+        alt="Sac à bandoulière en cuir vintage — vue principale, coloris Cognac"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+
+    <div class="hero-content-col">
+      <nav class="hero-breadcrumb" aria-label="Fil d'Ariane">
+        <a href="#">Maroquinerie</a>
+        <span aria-hidden="true">·</span>
+        <span>Sacs à bandoulière</span>
+      </nav>
+
+      <div>
+        <p class="eyebrow fade-in">Cuir véritable italien</p>
+        <h1 class="h1 fade-in fade-in-delay-1" id="product-name">
+          Sac à bandoulière<br/>en cuir vintage
+        </h1>
+        <div class="hero-tagline-group fade-in fade-in-delay-2">
+          <p class="hero-subtagline">Un cuir qui vit avec toi · Patine unique, finition main</p>
+        </div>
+      </div>
+
+      <div class="hero-rating fade-in fade-in-delay-2">
+        <div class="stars" role="img" aria-label="Note : 4,6 étoiles sur 5">
+          <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="star" viewBox="0 0 20 20" aria-hidden="true" style="position:relative;overflow:hidden;">
+            <defs><linearGradient id="star-partial"><stop offset="60%" stop-color="currentColor"/><stop offset="60%" stop-color="none"/></linearGradient></defs>
+            <path fill="url(#star-partial)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+          </svg>
+        </div>
+        <span class="rating-text">4,6</span>
+        <a href="#reviews" class="rating-link">1&nbsp;247 avis</a>
+      </div>
+
+      <p class="hero-description fade-in fade-in-delay-3">
+        Cuir véritable patiné main, finition italienne, bandoulière réglable parfaitement ajustée. Pour celles qui savent reconnaître la qualité d'un geste simple.
+      </p>
+
+      <div class="hero-price-row fade-in fade-in-delay-3">
+        <span class="hero-price">79&thinsp;€</span>
+        <span class="hero-free-ship" aria-label="Livraison gratuite">Livraison offerte</span>
+      </div>
+
+      <div class="hero-variants fade-in fade-in-delay-4">
+        <p class="hero-variants-label">Coloris — <strong>Cognac</strong></p>
+        <div class="hero-variants-swatches" role="radiogroup" aria-label="Choisir une couleur">
+          <div>
+            <button class="swatch swatch-noir" role="radio" aria-checked="false" aria-label="Noir" title="Noir"></button>
+            <p class="swatch-label">Noir</p>
+          </div>
+          <div>
+            <button class="swatch swatch-cognac active" role="radio" aria-checked="true" aria-label="Cognac" title="Cognac"></button>
+            <p class="swatch-label">Cognac</p>
+          </div>
+          <div>
+            <button class="swatch swatch-camel" role="radio" aria-checked="false" aria-label="Camel" title="Camel"></button>
+            <p class="swatch-label">Camel</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-cta-group fade-in fade-in-delay-4">
+        <button class="btn-primary" aria-label="Ajouter au panier — Sac cuir vintage Cognac, 79 euros">
+          Ajouter au panier — 79&thinsp;€
+        </button>
+        <button class="btn-secondary" aria-label="Acheter maintenant">
+          Acheter maintenant
+        </button>
+        <p class="hero-guarantee">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Retours gratuits sous 30 jours · Paiement sécurisé
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 2 — GALLERY
+       ============================================================ -->
+  <section class="gallery section" aria-labelledby="gallery-title">
+    <div class="container">
+      <div class="gallery-header fade-in">
+        <p class="eyebrow">Sous tous les angles</p>
+        <h2 class="h2" id="gallery-title" style="margin-top:12px;">Chaque détail compte</h2>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-item gallery-item-featured fade-in">
+          <img
+            src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=1600&auto=format&fit=crop&q=85"
+            alt="Sac cuir vintage — vue lifestyle, port en bandoulière"
+            loading="lazy"
+          />
+        </div>
+        <div class="gallery-item fade-in fade-in-delay-1">
+          <img
+            src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=800&auto=format&fit=crop&q=85"
+            alt="Sac cuir vintage — détail couture et hardware laiton"
+            loading="lazy"
+          />
+        </div>
+        <div class="gallery-item fade-in fade-in-delay-2">
+          <img
+            src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&auto=format&fit=crop&q=85&crop=entropy"
+            alt="Sac cuir vintage — texture pleine fleur, grain naturel"
+            loading="lazy"
+          />
+        </div>
+        <div class="gallery-item fade-in fade-in-delay-3">
+          <img
+            src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&auto=format&fit=crop&q=85"
+            alt="Sac cuir vintage — intérieur doublure coton bio"
+            loading="lazy"
+          />
+        </div>
+        <div class="gallery-item fade-in fade-in-delay-4">
+          <img
+            src="https://images.unsplash.com/photo-1606522754091-a3bbf9ad4cb3?w=800&auto=format&fit=crop&q=85"
+            alt="Sac cuir vintage — bandoulière SoftFit, réglage ajusté"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3 — WHY WE LOVE IT
+       ============================================================ -->
+  <section class="why-we-love section" aria-labelledby="why-title">
+    <div class="container">
+      <div class="why-we-love-inner">
+        <p class="eyebrow fade-in">Pourquoi on l'aime</p>
+        <blockquote class="why-we-love-text fade-in fade-in-delay-1" id="why-title">
+          Il y a des objets qu'on achète. Et d'autres qu'on adopte.<br/>
+          Ce sac est du second type. <em>La patine qu'il développe avec toi</em> est unique — personne d'autre n'aura exactement le même. Chaque rayure légère, chaque trace de lumière lui appartient. C'est du cuir vivant, pas du vinyle poli.
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ============================================================
+       SECTION 4 — THOUGHTFULLY DESIGNED
+       ============================================================ -->
+  <section class="thoughtfully-designed section" aria-labelledby="designed-title">
+    <div class="container">
+      <div class="thoughtfully-layout">
+        <div class="thoughtfully-image fade-in">
+          <img
+            src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=1200&auto=format&fit=crop&q=85"
+            alt="Détail couture et finition italienne du sac en cuir vintage"
+            loading="lazy"
+          />
+        </div>
+        <div class="thoughtfully-content">
+          <div class="fade-in">
+            <p class="eyebrow">Concu avec intention</p>
+            <h2 class="h2" id="designed-title" style="margin-top:12px;">Chaque geste a une raison</h2>
+          </div>
+          <ul class="features-list" role="list">
+            <li class="feature-item fade-in fade-in-delay-1">
+              <p class="feature-name"><strong>Cuir véritable italien</strong></p>
+              <p class="feature-desc">Pleine fleur, tannage végétal certifié. Pas de couche de finition industrielle. La peau reste vivante, respirante, unique.</p>
+            </li>
+            <li class="feature-item fade-in fade-in-delay-2">
+              <p class="feature-name"><strong>Bandoulière SoftFit&trade;</strong></p>
+              <p class="feature-desc">Sangle réglable à contour épaulé, répartit le poids sur 180&deg; d'appui. Journée entière sans tension.</p>
+            </li>
+            <li class="feature-item fade-in fade-in-delay-3">
+              <p class="feature-name"><strong>Doublure coton bio</strong></p>
+              <p class="feature-desc">Certifiée GOTS, soft touch. Protège téléphone, carnet, lunettes. Anti-rayures sur la doublure, pas sur tes affaires.</p>
+            </li>
+            <li class="feature-item fade-in fade-in-delay-4">
+              <p class="feature-name"><strong>Patine vivante</strong></p>
+              <p class="feature-desc">S'embellit avec le temps. Après 6 mois tu auras la seule version exactement la tienne au monde. C'est l'intention.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 5 — BEST FOR
+       ============================================================ -->
+  <section class="best-for section" aria-labelledby="bestfor-title">
+    <div class="container">
+      <div class="best-for-inner">
+        <p class="eyebrow fade-in">Fait pour</p>
+        <h2 class="h2 fade-in fade-in-delay-1" id="bestfor-title">Chaque moment de ta journée</h2>
+        <div class="pills-group fade-in fade-in-delay-2" role="list" aria-label="Cas d'usage recommandés">
+          <span class="pill active" role="listitem">Quotidien</span>
+          <span class="pill" role="listitem">Travail</span>
+          <span class="pill" role="listitem">Sortie</span>
+          <span class="pill" role="listitem">Voyage léger</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ============================================================
+       SECTION 6 — MATERIALS BREAKDOWN
+       ============================================================ -->
+  <section class="materials section" aria-labelledby="materials-title">
+    <div class="container">
+      <div class="materials-header fade-in">
+        <p class="eyebrow">Ce qui est dedans</p>
+        <h2 class="h2" id="materials-title" style="margin-top:12px;">Des matières qui méritent leur nom</h2>
+      </div>
+      <div class="materials-grid">
+        <article class="material-card fade-in" aria-label="Cuir pleine fleur">
+          <div class="material-card-image">
+            <img
+              src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&auto=format&fit=crop&q=85&crop=top"
+              alt="Texture cuir pleine fleur — grain naturel visible, surface non traitée"
+              loading="lazy"
+            />
+          </div>
+          <div class="material-card-body">
+            <h3 class="material-card-name">Cuir pleine fleur</h3>
+            <p class="material-card-benefit">Tannage végétal, finition italienne. Strate la plus noble du cuir — sans enduit de finition. Vit, respire, patine.</p>
+          </div>
+        </article>
+        <article class="material-card fade-in fade-in-delay-1" aria-label="Doublure coton bio">
+          <div class="material-card-image">
+            <img
+              src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&auto=format&fit=crop&q=85&crop=center"
+              alt="Doublure intérieure coton bio certifié GOTS — texture douce et claire"
+              loading="lazy"
+            />
+          </div>
+          <div class="material-card-body">
+            <h3 class="material-card-name">Doublure coton bio</h3>
+            <p class="material-card-benefit">Certifié GOTS. Soft touch, anti-rayures. Protège ton matériel sans jamais l'accrocher.</p>
+          </div>
+        </article>
+        <article class="material-card fade-in fade-in-delay-2" aria-label="Hardware laiton brossé">
+          <div class="material-card-image">
+            <img
+              src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=800&auto=format&fit=crop&q=85&crop=bottom"
+              alt="Fermeture laiton brossé main — bouton-pression doré, finition mate"
+              loading="lazy"
+            />
+          </div>
+          <div class="material-card-body">
+            <h3 class="material-card-name">Hardware laiton</h3>
+            <p class="material-card-benefit">Brossé main. Résiste à l'oxydation, ne ternit pas. Le détail qui distingue les sacs qui tiennent des sacs qui craquent.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 7 — HOW IT WORKS (SKIP)
+       <!-- Section how_it_works omise : règle d'affichage non satisfaite.
+            Cette section s'active uniquement pour catégorie = skincare / wellness.
+            Pour un sac (fashion / accessories), la section est masquée.
+            Voir spec V3 §5.1, colonne "Règle display". -->
+  <!-- ============================================================ -->
+
+  <!-- ============================================================
+       SECTION 8 — COMPARE VARIANTS
+       ============================================================ -->
+  <section class="compare-variants section" aria-labelledby="variants-title">
+    <div class="container">
+      <div class="compare-variants-header fade-in">
+        <p class="eyebrow">Nos coloris</p>
+        <h2 class="h2" id="variants-title" style="margin-top:12px;">La même âme, trois expressions</h2>
+      </div>
+      <div class="variants-grid">
+        <article class="variant-card" aria-label="Coloris Noir — 79 euros">
+          <div class="variant-image">
+            <img
+              src="https://images.unsplash.com/photo-1606522754091-a3bbf9ad4cb3?w=800&auto=format&fit=crop&q=85"
+              alt="Sac cuir vintage coloris Noir — sobre, intemporel"
+              loading="lazy"
+            />
+          </div>
+          <div class="variant-info">
+            <div>
+              <p class="variant-name">Noir</p>
+              <p class="variant-price">79&thinsp;€</p>
+            </div>
+          </div>
+        </article>
+        <article class="variant-card selected" aria-label="Coloris Cognac — sélectionné — 79 euros" aria-current="true">
+          <div class="variant-image">
+            <img
+              src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&auto=format&fit=crop&q=85"
+              alt="Sac cuir vintage coloris Cognac — chaud, vintage naturel"
+              loading="lazy"
+            />
+          </div>
+          <div class="variant-info">
+            <div>
+              <p class="variant-name">Cognac</p>
+              <p class="variant-price">79&thinsp;€</p>
+              <span class="variant-badge">Sélectionné</span>
+            </div>
+          </div>
+        </article>
+        <article class="variant-card" aria-label="Coloris Camel — 79 euros">
+          <div class="variant-image">
+            <img
+              src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&auto=format&fit=crop&q=85&crop=right"
+              alt="Sac cuir vintage coloris Camel — doux, lumineux, estival"
+              loading="lazy"
+            />
+          </div>
+          <div class="variant-info">
+            <div>
+              <p class="variant-name">Camel</p>
+              <p class="variant-price">79&thinsp;€</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ============================================================
+       SECTION 9 — REVIEWS AI SUMMARY
+       ============================================================ -->
+  <section class="reviews section" id="reviews" aria-labelledby="reviews-title">
+    <div class="container">
+      <div class="reviews-header fade-in">
+        <div class="reviews-score-group">
+          <p class="reviews-score-big" aria-label="Note moyenne 4,6">4,6</p>
+          <div class="reviews-meta">
+            <div class="stars" role="img" aria-label="4,6 étoiles sur 5">
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="reviews-count">1&nbsp;247 avis vérifiés</p>
+          </div>
+        </div>
+        <blockquote class="reviews-summary-quote" id="reviews-title">
+          "Les clientes adorent la qualité du cuir et la patine qui se développe au fil des mois. Le confort de la bandoulière et la doublure soft sont aussi salués. Quelques retours sur la taille — sac compact, prévoir grand pour ordinateur."
+        </blockquote>
+      </div>
+
+      <div class="reviews-cards">
+        <article class="review-card fade-in" aria-label="Avis de Sophie L.">
+          <div class="review-top">
+            <div class="stars" role="img" aria-label="5 étoiles sur 5">
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <span class="review-date">14 mars 2025</span>
+          </div>
+          <p class="review-author">Sophie L.</p>
+          <p class="review-title">La patine après 4 mois est incroyable</p>
+          <p class="review-body">J'ai pris le cognac en hésitant — et je ne regrette absolument pas. Le cuir a déjà commencé à se patiner dans les zones d'usage. Il a un caractère unique que mes autres sacs n'ont pas.</p>
+          <p class="review-verified">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            Achat vérifié
+          </p>
+        </article>
+
+        <article class="review-card fade-in fade-in-delay-1" aria-label="Avis de Camille D.">
+          <div class="review-top">
+            <div class="stars" role="img" aria-label="5 étoiles sur 5">
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <span class="review-date">2 fév. 2025</span>
+          </div>
+          <p class="review-author">Camille D.</p>
+          <p class="review-title">La bandoulière change tout</p>
+          <p class="review-body">J'avais peur du confort sur les longs trajets. La bandoulière SoftFit tient vraiment sa promesse — aucune tension après 3h de vélo en ville. Le sac reste impeccable.</p>
+          <p class="review-verified">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            Achat vérifié
+          </p>
+        </article>
+
+        <article class="review-card fade-in fade-in-delay-2" aria-label="Avis de Léa M.">
+          <div class="review-top">
+            <div class="stars" role="img" aria-label="4 étoiles sur 5">
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="star" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <span class="review-date">8 jan. 2025</span>
+          </div>
+          <p class="review-author">Léa M.</p>
+          <p class="review-title">Très bon, attention à la taille</p>
+          <p class="review-body">La qualité est irréprochable. Je mets juste 4 étoiles car mon MacBook 13" ne rentre pas — comme mentionné dans la FAQ, c'est un format compact. Pour les sorties et le quotidien il est parfait.</p>
+          <p class="review-verified">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            Achat vérifié
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 10 — PRESS QUOTE
+       ============================================================ -->
+  <section class="press-quote" aria-labelledby="press-title">
+    <div class="press-quote-bg" aria-hidden="true">
+      <img
+        src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=1600&auto=format&fit=crop&q=70"
+        alt=""
+        loading="lazy"
+      />
+    </div>
+    <div class="press-quote-overlay" aria-hidden="true"></div>
+    <div class="press-quote-content">
+      <span class="press-quote-mark" aria-hidden="true">"</span>
+      <blockquote>
+        <p class="press-quote-text" id="press-title">
+          Le sac qui réconcilie l'élégance et le quotidien.<br/>La patine après 6 mois est sublime.
+        </p>
+        <footer class="press-source">
+          <span class="press-source-line" aria-hidden="true"></span>
+          <cite class="press-source-name">Vogue Paris</cite>
+        </footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 11 — CARE INSTRUCTIONS
+       ============================================================ -->
+  <section class="care section" aria-labelledby="care-title">
+    <div class="container">
+      <div class="care-header fade-in">
+        <p class="eyebrow">Prendre soin de lui</p>
+        <h2 class="h2" id="care-title" style="margin-top:12px;">Livraison, entretien & retours</h2>
+      </div>
+      <div class="care-cols">
+        <div class="care-col fade-in">
+          <svg class="care-col-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <h3 class="care-col-title">Entretien</h3>
+          <p class="care-col-body">Un baume neutre tous les 6 mois suffit. Évite l'exposition prolongée à l'eau et au soleil direct. Si mouillé — laisse sécher à plat, naturellement. Jamais de sèche-cheveux.</p>
+        </div>
+        <div class="care-col fade-in fade-in-delay-1">
+          <svg class="care-col-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="1" y="3" width="15" height="13" rx="2"/>
+            <path d="M16 8h4l3 3v5h-7V8z"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          <h3 class="care-col-title">Livraison</h3>
+          <p class="care-col-body">24 à 48h ouvrées en France métropolitaine. Emballage éco conçu pour protéger le cuir pendant le transport. Suivi inclus, remis en main propre ou point relais.</p>
+        </div>
+        <div class="care-col fade-in fade-in-delay-2">
+          <svg class="care-col-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+          </svg>
+          <h3 class="care-col-title">Retours</h3>
+          <p class="care-col-body">30 jours pour changer d'avis, retour gratuit. Sac dans son état d'origine. Remboursement sous 5 jours ouvrés sur ton mode de paiement initial. Sans question.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ============================================================
+       SECTION 12 — FAQ
+       ============================================================ -->
+  <section class="faq section" aria-labelledby="faq-title">
+    <div class="container">
+      <div class="faq-header fade-in">
+        <p class="eyebrow">Questions fréquentes</p>
+        <h2 class="h2" id="faq-title" style="margin-top:12px;">Tout ce que tu veux savoir</h2>
+      </div>
+      <div class="faq-list" role="list">
+        <div class="faq-item" role="listitem">
+          <details>
+            <summary class="faq-summary" aria-expanded="false">
+              <span class="faq-question">Combien de temps pour la livraison ?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </summary>
+            <p class="faq-answer">24 à 48h ouvrées en France métropolitaine. Suivi e-mail dès l'expédition.</p>
+          </details>
+        </div>
+        <div class="faq-item" role="listitem">
+          <details>
+            <summary class="faq-summary">
+              <span class="faq-question">Le cuir vieillit comment ?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </summary>
+            <p class="faq-answer">Il développe une patine vivante avec ton usage. Plus tu le portes, plus il devient toi — zones d'appui, plis naturels, reflets qui évoluent. C'est la promesse du pleine fleur non traité.</p>
+          </details>
+        </div>
+        <div class="faq-item" role="listitem">
+          <details>
+            <summary class="faq-summary">
+              <span class="faq-question">Puis-je le retourner ?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </summary>
+            <p class="faq-answer">30 jours, retour gratuit, remboursement sous 5 jours ouvrés. Le sac doit être dans son état d'origine.</p>
+          </details>
+        </div>
+        <div class="faq-item" role="listitem">
+          <details>
+            <summary class="faq-summary">
+              <span class="faq-question">Quelle taille pour un ordinateur 13" ?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </summary>
+            <p class="faq-answer">Notre format Cognac large convient pour un 13". Le format standard présenté ici est compact — idéal quotidien/sortie sans ordinateur.</p>
+          </details>
+        </div>
+        <div class="faq-item" role="listitem">
+          <details>
+            <summary class="faq-summary">
+              <span class="faq-question">Comment entretenir le cuir ?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </summary>
+            <p class="faq-answer">Un baume neutre tous les 6 mois suffit. Évite l'eau et le soleil prolongé. Si mouillé, laisse sécher à température ambiante à plat — jamais de sèche-cheveux ni chaleur directe.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 13 — BRAND MANIFESTO
+       ============================================================ -->
+  <section class="manifesto section" aria-labelledby="manifesto-title">
+    <div class="container">
+      <div class="manifesto-inner">
+        <div class="manifesto-image fade-in">
+          <img
+            src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=1200&auto=format&fit=crop&q=85"
+            alt="Lifestyle — femme portant le sac en cuir vintage en milieu urbain"
+            loading="lazy"
+          />
+        </div>
+        <div class="manifesto-content fade-in fade-in-delay-1">
+          <div>
+            <p class="eyebrow">Notre raison d'être</p>
+            <h2 class="h2" id="manifesto-title" style="margin-top:12px;">Conçu pour celles qui savent</h2>
+          </div>
+          <div class="manifesto-pillars">
+            <div class="manifesto-pillar">
+              <p class="manifesto-pillar-name">Cuir vivant</p>
+              <p class="manifesto-pillar-desc">Patiné main, jamais industriel. La différence s'entend quand tu touches la peau pour la première fois.</p>
+            </div>
+            <div class="manifesto-pillar">
+              <p class="manifesto-pillar-name">Origine traçable</p>
+              <p class="manifesto-pillar-desc">Tannerie italienne certifiée, chaîne d'approvisionnement documentée. Tu sais d'où il vient.</p>
+            </div>
+            <div class="manifesto-pillar">
+              <p class="manifesto-pillar-name">Fait pour durer</p>
+              <p class="manifesto-pillar-desc">10 ans de garantie, ré-entoilage à vie. Nous réparons ce que nous vendons.</p>
+            </div>
+          </div>
+          <a href="#" class="btn-secondary" style="align-self:flex-start;">Découvrir l'histoire</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <p class="footer-brand">Maison Objet</p>
+        <ul class="footer-links" role="list">
+          <li><a href="#">Mentions légales</a></li>
+          <li><a href="#">Confidentialité</a></li>
+          <li><a href="#">CGV</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        <p class="footer-copy">&copy; 2025 Maison Objet. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       SCROLL ANIMATION OBSERVER
+       ============================================================ -->
+  <script>
+    (function () {
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      document.querySelectorAll('.fade-in').forEach(function (el) {
+        observer.observe(el);
+      });
+
+      // Swatch selection interaction
+      document.querySelectorAll('.swatch').forEach(function (sw) {
+        sw.addEventListener('click', function () {
+          document.querySelectorAll('.swatch').forEach(function (s) {
+            s.classList.remove('active');
+            s.setAttribute('aria-checked', 'false');
+          });
+          sw.classList.add('active');
+          sw.setAttribute('aria-checked', 'true');
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

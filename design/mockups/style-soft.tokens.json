@@ -1,0 +1,260 @@
+{
+  "$schema": "https://design-tokens.org/v0.0",
+  "$description": "Style Soft — Design Tokens Konvert V3. Miroir exact de src/lib/styles/soft/tokens.ts. Format W3C DTCG.",
+  "$version": "1.0.0",
+  "style": {
+    "$value": "soft",
+    "$description": "Identifiant du style. Vibe Mejuri / Glossier — serif fin, palette cream, bronze accent."
+  },
+  "colors": {
+    "$description": "Palette complète du style Soft. Source : softTokens.colors (tokens.ts).",
+    "bg": {
+      "$value": "#FAF7F2",
+      "$type": "color",
+      "$description": "Fond principal de la page et de toutes les sections. Warm cream. Jamais de fond blanc pur ni de fond sombre."
+    },
+    "surface": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "Fond des cartes, sections alternées (reviews, FAQ, gallery). Un niveau au-dessus de bg."
+    },
+    "accent": {
+      "$value": "#C9A77E",
+      "$type": "color",
+      "$description": "Bronze doux. Couleur principale pour CTAs, eyebrow labels, étoiles, borders actives, pillar names. Max 4 usages par page pour conserver le caractère premium."
+    },
+    "accentDark": {
+      "$value": "#A8845A",
+      "$type": "color",
+      "$description": "Accent foncé pour hover state sur les boutons primaires. Non présent dans tokens.ts — dérivé calculé pour les interactions."
+    },
+    "text": {
+      "$value": "#1A1614",
+      "$type": "color",
+      "$description": "Couleur de texte principale. Quasi-noir warm (pas #000000 pur). Contraste sur bg : ~16:1 (WCAG AAA)."
+    },
+    "textMuted": {
+      "$value": "#7A6F66",
+      "$type": "color",
+      "$description": "Texte secondaire — descriptions, dates, labels. Contraste sur bg : ~4.8:1 (WCAG AA). Ne pas aller en dessous de cette valeur."
+    },
+    "border": {
+      "$value": "rgba(26, 22, 20, 0.08)",
+      "$type": "color",
+      "$description": "Séparateurs, borders de sections, dividers. Quasi-invisible, juste structurel. Jamais de border colorée accent sur les cartes."
+    }
+  },
+  "fonts": {
+    "$description": "Paires typographiques. Source : softTokens.fonts (tokens.ts). Maximum 2 familles par projet.",
+    "heading": {
+      "$value": "\"Cormorant Garamond\", Georgia, serif",
+      "$type": "fontFamily",
+      "$description": "Font display pour H1, H2, H3, prix, quotes éditoriales, scores review. À charger via Google Fonts (poids 300, 400, 500 italic et regular). Utiliser weight 400 par défaut — le bold est réservé aux cas rares."
+    },
+    "body": {
+      "$value": "\"Inter\", system-ui, sans-serif",
+      "$type": "fontFamily",
+      "$description": "Font body pour tous les textes courants, labels, boutons, eyebrows. Google Fonts, poids 300/400/500/600."
+    }
+  },
+  "typography": {
+    "$description": "Échelle typographique appliquée dans la maquette. Non présent dans tokens.ts mais documenté ici pour ANNA.",
+    "h1": {
+      "size": {
+        "$value": "clamp(2.5rem, 4vw, 4rem)",
+        "$type": "dimension",
+        "$description": "H1 produit desktop. 40px → 64px selon viewport."
+      },
+      "sizeMobile": {
+        "$value": "2.125rem",
+        "$type": "dimension",
+        "$description": "H1 mobile fixe à 34px. Ne pas descendre en dessous."
+      },
+      "weight": { "$value": 400, "$type": "fontWeight" },
+      "lineHeight": { "$value": 1.1, "$type": "number" },
+      "letterSpacing": { "$value": "-0.02em", "$type": "dimension" }
+    },
+    "h2": {
+      "size": {
+        "$value": "clamp(1.75rem, 3vw, 2.75rem)",
+        "$type": "dimension",
+        "$description": "H2 sections desktop. 28px → 44px."
+      },
+      "sizeMobile": { "$value": "1.75rem", "$type": "dimension" },
+      "weight": { "$value": 400, "$type": "fontWeight" },
+      "lineHeight": { "$value": 1.15, "$type": "number" },
+      "letterSpacing": { "$value": "-0.01em", "$type": "dimension" }
+    },
+    "eyebrow": {
+      "size": { "$value": "0.6875rem", "$type": "dimension", "$description": "11px desktop" },
+      "weight": { "$value": 500, "$type": "fontWeight" },
+      "letterSpacing": { "$value": "0.14em", "$type": "dimension" },
+      "transform": { "$value": "uppercase", "$type": "string" },
+      "color": { "$value": "#C9A77E", "$type": "color", "$description": "Toujours en accent." }
+    },
+    "quote": {
+      "$description": "Utilisé pour why_we_love, press_quote, reviews_summary.",
+      "size": {
+        "$value": "clamp(1.375rem, 2.5vw, 1.875rem)",
+        "$type": "dimension"
+      },
+      "weight": { "$value": 300, "$type": "fontWeight" },
+      "style": { "$value": "italic", "$type": "string" },
+      "lineHeight": { "$value": 1.55, "$type": "number" }
+    },
+    "body": {
+      "size": { "$value": "1rem", "$type": "dimension" },
+      "weight": { "$value": 400, "$type": "fontWeight" },
+      "lineHeight": { "$value": 1.6, "$type": "number" }
+    },
+    "bodyMuted": {
+      "size": { "$value": "0.875rem", "$type": "dimension" },
+      "lineHeight": { "$value": 1.65, "$type": "number" }
+    },
+    "price": {
+      "size": { "$value": "2rem", "$type": "dimension" },
+      "font": { "$value": "\"Cormorant Garamond\", Georgia, serif", "$type": "fontFamily" },
+      "weight": { "$value": 400, "$type": "fontWeight" }
+    }
+  },
+  "spacing": {
+    "$description": "Source : softTokens.spacing (tokens.ts). Base grille 8px.",
+    "section": {
+      "$value": "128px",
+      "$type": "dimension",
+      "$description": "Padding vertical de chaque section desktop. Mobile : 72px."
+    },
+    "sectionMobile": {
+      "$value": "72px",
+      "$type": "dimension",
+      "$description": "Padding vertical mobile."
+    },
+    "card": {
+      "$value": "32px",
+      "$type": "dimension",
+      "$description": "Padding interne des cartes (material-card, review-card)."
+    },
+    "gap": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Gap entre éléments d'une grille (cards, gallery items)."
+    },
+    "gutter": {
+      "$value": "64px",
+      "$type": "dimension",
+      "$description": "Padding horizontal du container desktop. Mobile : 20px."
+    },
+    "gutterMobile": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "maxWidth": {
+      "$value": "1280px",
+      "$type": "dimension",
+      "$description": "Largeur maximale du container."
+    }
+  },
+  "radius": {
+    "$description": "Source : softTokens.radius (tokens.ts).",
+    "card": {
+      "$value": "6px",
+      "$type": "dimension",
+      "$description": "Radius des cartes (material-card, review-card, gallery-item). Petit, pas rond — signal de sérieux."
+    },
+    "button": {
+      "$value": "999px",
+      "$type": "dimension",
+      "$description": "Radius des boutons (pill shape). Pattern Mejuri / Glossier."
+    },
+    "image": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$description": "Radius des images en bloc. Légèrement arrondi, pas sharp."
+    }
+  },
+  "shadows": {
+    "$description": "Source : softTokens.shadows (tokens.ts).",
+    "card": {
+      "$value": "0 1px 3px rgba(26, 22, 20, 0.04)",
+      "$type": "shadow",
+      "$description": "Ombre au repos des cartes. Quasi-invisible — juste un signal de profondeur."
+    },
+    "hover": {
+      "$value": "0 8px 24px rgba(26, 22, 20, 0.08)",
+      "$type": "shadow",
+      "$description": "Ombre hover des cartes et boutons. Elevation douce, warm-tinted."
+    }
+  },
+  "motion": {
+    "$description": "Source : softTokens.motion (tokens.ts). Philosophie Jakub Krehel (polish/consumer premium).",
+    "ease": {
+      "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "Easing universel. Ease-in légère, ease-out marquée. Naturel, jamais linear."
+    },
+    "duration": {
+      "$value": "400ms",
+      "$type": "duration",
+      "$description": "Durée standard de toutes les transitions. Ne pas dépasser pour les interactions utilisateur (hover, click). Les animations d'image au scroll peuvent aller jusqu'à 600ms."
+    },
+    "durationFast": {
+      "$value": "200ms",
+      "$type": "duration",
+      "$description": "Durée rapide pour hover states simples (liens navbar, couleurs)."
+    },
+    "durationSlow": {
+      "$value": "600ms",
+      "$type": "duration",
+      "$description": "Durée lente pour les zooms d'images au hover. Imperceptible en conditions normales."
+    },
+    "scrollFadeY": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Amplitude translateY du fade-in scroll. Discret — ne pas augmenter."
+    },
+    "staggerStep": {
+      "$value": "80ms",
+      "$type": "duration",
+      "$description": "Délai entre chaque élément dans un stagger (cartes en grille)."
+    }
+  },
+  "breakpoints": {
+    "$description": "Breakpoints responsives utilisés dans la maquette.",
+    "mobile": {
+      "$value": "375px",
+      "$type": "dimension",
+      "$description": "Taille de test principale mobile (iPhone SE). Pas de scroll horizontal à cette largeur."
+    },
+    "tablet": {
+      "$value": "768px",
+      "$type": "dimension",
+      "$description": "Transition layout : grilles desktop activées."
+    },
+    "desktop": {
+      "$value": "1024px",
+      "$type": "dimension",
+      "$description": "Layout complet : hero split, grilles 3 colonnes."
+    },
+    "wide": {
+      "$value": "1280px",
+      "$type": "dimension",
+      "$description": "Max-width container."
+    }
+  },
+  "sections": {
+    "$description": "Mapping sections V3 → état dans la maquette Soft.",
+    "hero":                   { "$value": "included", "$type": "string" },
+    "gallery":                { "$value": "included", "$type": "string" },
+    "why_we_love":            { "$value": "included", "$type": "string" },
+    "thoughtfully_designed":  { "$value": "included", "$type": "string" },
+    "best_for":               { "$value": "included", "$type": "string" },
+    "materials_breakdown":    { "$value": "included", "$type": "string" },
+    "how_it_works":           { "$value": "skipped", "$type": "string", "$description": "Règle display : catégorie = sac/fashion, pas skincare/wellness. Section non affichée." },
+    "compare_variants":       { "$value": "included", "$type": "string" },
+    "reviews_ai_summary":     { "$value": "included", "$type": "string" },
+    "press_quote":            { "$value": "included", "$type": "string" },
+    "care_instructions":      { "$value": "included", "$type": "string" },
+    "faq":                    { "$value": "included", "$type": "string" },
+    "brand_manifesto":        { "$value": "included", "$type": "string" }
+  }
+}

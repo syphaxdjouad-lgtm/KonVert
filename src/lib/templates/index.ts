@@ -195,14 +195,15 @@ export interface TemplateOverrides {
   sectionOrder?: SectionInstance[]
   visualSettings?: VisualSettings
   globalStyles?: GlobalStyles
+  /** Editor v2 : active l'injection data-kvt-section-id + script click-to-edit dans l'iframe */
+  editMode?: boolean
 }
 
 export function renderTemplate(templateId: string, data: LandingPageData, overrides?: TemplateOverrides): string {
-  // C1 : injection de sectionOrder dans data via _sectionOrder (champ privé).
-  // renderRichSections lit ce champ et lui donne priorité sur DEFAULT_ORDER.
-  // Stratégie : évite de modifier la signature des 42+ fonctions template.
-  const renderData: LandingPageData = overrides?.sectionOrder
-    ? { ...data, _sectionOrder: overrides.sectionOrder } as LandingPageData
+  // C1 : injection de sectionOrder + editMode dans data via _ champs privés.
+  // renderRichSections lit ces champs.
+  const renderData: LandingPageData = (overrides?.sectionOrder || overrides?.editMode)
+    ? { ...data, _sectionOrder: overrides?.sectionOrder, _kvt_edit_mode: overrides?.editMode } as LandingPageData
     : data
 
   // Detection des overrides non encore supportes (C2/C5) — warning dev pour

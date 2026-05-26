@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Sac en cuir vintage — Style Vibrant Mobile — Konvert V3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS — Vibrant (identiques desktop)
+       ============================================================ */
+    :root {
+      --color-bg:           #FFFFFF;
+      --color-surface:      #FFF8E1;
+      --color-accent:       #FF4D88;
+      --color-accent-hover: #E03070;
+      --color-accent-light: rgba(255, 77, 136, 0.10);
+      --color-text:         #1A1A1A;
+      --color-text-muted:   #666666;
+      --color-border:       #1A1A1A;
+
+      --font-heading: "Clash Display", "Inter", sans-serif;
+      --font-body:    "Inter", system-ui, sans-serif;
+
+      --space-section: 72px;
+      --space-card:    20px;
+      --space-gap:     16px;
+
+      --radius-card:   16px;
+      --radius-button: 999px;
+      --radius-image:  16px;
+      --radius-pill:   999px;
+
+      --shadow-card:  0 4px 16px rgba(255, 77, 136, 0.15);
+      --shadow-hover: 0 16px 40px rgba(255, 77, 136, 0.25);
+
+      --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      --duration:    400ms;
+    }
+
+    /* ============================================================
+       RESET & BASE — Mobile first, viewport 375–430px
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+    body {
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 400;
+      /* Simuler un viewport mobile de 390px pour la preview */
+      max-width: 390px;
+      margin: 0 auto;
+      box-shadow: 0 0 60px rgba(0,0,0,0.12);
+    }
+
+    img { display: block; max-width: 100%; }
+
+    a { color: var(--color-accent); text-decoration: none; }
+
+    /* ============================================================
+       PILLS
+       ============================================================ */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--color-accent-light);
+      color: var(--color-accent);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    /* ============================================================
+       SECTION DIVIDER
+       ============================================================ */
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--color-border);
+      opacity: 0.10;
+    }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+       ============================================================ */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity var(--duration) var(--ease-bounce),
+                  transform var(--duration) var(--ease-bounce);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up.delay-1 { transition-delay: 80ms; }
+    .fade-up.delay-2 { transition-delay: 160ms; }
+    .fade-up.delay-3 { transition-delay: 240ms; }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 16px 28px;
+      border-radius: var(--radius-button);
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: transform var(--duration) var(--ease-bounce),
+                  box-shadow var(--duration) var(--ease-bounce);
+      white-space: nowrap;
+      min-height: 52px; /* touch target WCAG */
+    }
+
+    .btn-primary {
+      background: var(--color-accent);
+      color: #fff;
+      box-shadow: var(--shadow-card);
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--color-text);
+      border: 2px solid rgba(26,26,26,0.20);
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--color-text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 12px 0;
+    }
+
+    /* ============================================================
+       NAV MOBILE — sticky bottom (pattern iOS)
+       ============================================================ */
+    .nav-top {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo span { color: var(--color-accent); }
+
+    .nav-menu-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--color-accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+    }
+
+    .nav-menu-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--color-accent);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    /* CTA fixe en bas — sticky add to cart */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 390px;
+      max-width: 100vw;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(26,26,26,0.08);
+      padding: 12px 20px;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      z-index: 99;
+    }
+
+    .sticky-price {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       SECTIONS — padding mobile
+       ============================================================ */
+    section {
+      padding: var(--space-section) 20px;
+    }
+
+    section.surface {
+      background: var(--color-surface);
+    }
+
+    /* ============================================================
+       1. HERO MOBILE
+       ============================================================ */
+    .hero {
+      padding: 32px 20px 80px; /* padding-bottom = sticky CTA */
+      background: var(--color-bg);
+    }
+
+    .hero-eyebrow { margin-bottom: 16px; }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: clamp(40px, 11vw, 52px);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.0;
+      color: var(--color-text);
+      margin-bottom: 16px;
+    }
+
+    .hero-title .accent-word {
+      color: var(--color-accent);
+      position: relative;
+      display: inline-block;
+    }
+    .hero-title .accent-word::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--color-accent);
+      opacity: 0.35;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--color-text-muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .hero-image-wrap {
+      border-radius: var(--radius-image);
+      overflow: hidden;
+      box-shadow: var(--shadow-hover);
+      aspect-ratio: 3 / 4;
+      margin: 24px 0;
+      position: relative;
+    }
+
+    .hero-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Badge flottant */
+    .hero-float-badge {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: var(--color-accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .badge-label { font-size: 11px; color: var(--color-text-muted); font-weight: 500; }
+    .badge-value { font-size: 13px; font-weight: 700; color: var(--color-text); }
+
+    .hero-rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .stars { color: var(--color-accent); font-size: 16px; letter-spacing: 1px; }
+    .rating-text { font-size: 13px; color: var(--color-text-muted); font-weight: 500; }
+
+    /* ============================================================
+       2. GALLERY MOBILE — scroll horizontal
+       ============================================================ */
+    .gallery {
+      padding-bottom: var(--space-section);
+    }
+
+    .gallery-header {
+      margin-bottom: 24px;
+    }
+
+    .gallery-title {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+      margin-top: 12px;
+    }
+
+    .gallery-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 4px 0 16px;
+      margin: 0 -20px;
+      padding: 4px 20px 16px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .gallery-scroll::-webkit-scrollbar { display: none; }
+
+    .gallery-slide {
+      flex-shrink: 0;
+      width: 260px;
+      height: 310px;
+      border-radius: var(--radius-image);
+      overflow: hidden;
+      scroll-snap-align: start;
+      box-shadow: var(--shadow-card);
+    }
+
+    .gallery-slide.large {
+      width: 300px;
+      height: 380px;
+    }
+
+    .gallery-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ============================================================
+       3. WHY WE LOVE MOBILE — vertical stack
+       ============================================================ */
+    .why-header {
+      margin-bottom: 32px;
+    }
+
+    .why-title-main {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-top: 12px;
+      margin-bottom: 12px;
+    }
+
+    .why-lead {
+      font-size: 15px;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .why-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .why-card {
+      background: var(--color-bg);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .why-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--color-accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .why-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--color-accent);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .why-card-title {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 4px;
+    }
+
+    .why-card-desc {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      line-height: 1.55;
+    }
+
+    /* ============================================================
+       4. THOUGHTFULLY DESIGNED MOBILE
+       ============================================================ */
+    .thoughtfully-image {
+      border-radius: var(--radius-image);
+      overflow: hidden;
+      box-shadow: var(--shadow-hover);
+      aspect-ratio: 4 / 3;
+      margin-bottom: 28px;
+    }
+
+    .thoughtfully-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .section-label {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 12px 0;
+      line-height: 1.1;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: var(--color-text-muted);
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .feature-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .feature-check svg {
+      width: 11px;
+      height: 11px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ============================================================
+       5. BEST FOR MOBILE — 2 col grid
+       ============================================================ */
+    .best-for-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .best-for-card {
+      background: var(--color-bg);
+      border-radius: var(--radius-card);
+      padding: 18px 14px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .best-for-card:hover {
+      border-color: var(--color-accent);
+    }
+
+    .best-for-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--color-accent-light);
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .best-for-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--color-accent);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .best-for-label {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 6px;
+    }
+
+    .best-for-desc {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       6. MATERIALS MOBILE
+       ============================================================ */
+    .materials-image {
+      border-radius: var(--radius-image);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-hover);
+    }
+
+    .materials-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .material-item {
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(26, 26, 26, 0.10);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .material-item:last-child { border-bottom: none; }
+
+    .material-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .material-name {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 3px;
+    }
+
+    .material-desc {
+      font-size: 13px;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       8. VARIANTS MOBILE — horizontal scroll
+       ============================================================ */
+    .variants-header {
+      margin-bottom: 28px;
+    }
+
+    .variants-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      margin: 0 -20px;
+      padding: 4px 20px 16px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .variants-scroll::-webkit-scrollbar { display: none; }
+
+    .variant-card {
+      flex-shrink: 0;
+      width: 220px;
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      border: 2px solid transparent;
+      box-shadow: var(--shadow-card);
+      scroll-snap-align: start;
+      cursor: pointer;
+      transition: border-color 0.2s var(--ease-smooth),
+                  box-shadow 0.2s var(--ease-smooth);
+    }
+    .variant-card.selected {
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .variant-image {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+    }
+
+    .variant-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .variant-body {
+      padding: 14px;
+    }
+
+    .variant-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 4px;
+    }
+
+    .variant-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,0,0,0.1);
+      flex-shrink: 0;
+    }
+
+    .variant-desc {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    .variant-footer {
+      padding: 10px 14px;
+      border-top: 1px solid rgba(26,26,26,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .variant-price {
+      font-family: var(--font-heading);
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .variant-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.25s var(--ease-bounce), transform 0.25s var(--ease-bounce);
+    }
+    .variant-card.selected .variant-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* ============================================================
+       9. REVIEWS MOBILE
+       ============================================================ */
+    .score-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .score-big {
+      font-family: var(--font-heading);
+      font-size: 64px;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .score-stars { color: var(--color-accent); font-size: 20px; letter-spacing: 2px; }
+    .score-label { font-size: 13px; color: var(--color-text-muted); font-weight: 500; }
+
+    .ai-summary-box {
+      background: var(--color-bg);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 28px;
+      border-left: 4px solid var(--color-accent);
+    }
+
+    .ai-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-accent);
+      margin-bottom: 8px;
+    }
+
+    .ai-text {
+      font-size: 14px;
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+
+    .reviews-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      margin: 0 -20px;
+      padding: 4px 20px 16px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .reviews-scroll::-webkit-scrollbar { display: none; }
+
+    .review-card {
+      flex-shrink: 0;
+      width: 260px;
+      background: var(--color-bg);
+      border-radius: var(--radius-card);
+      padding: 18px;
+      box-shadow: var(--shadow-card);
+      scroll-snap-align: start;
+    }
+
+    .review-stars { color: var(--color-accent); font-size: 14px; letter-spacing: 1px; margin-bottom: 8px; }
+    .review-text { font-size: 14px; color: var(--color-text); line-height: 1.55; margin-bottom: 12px; font-style: italic; }
+    .review-author { font-size: 12px; font-weight: 600; color: var(--color-text-muted); }
+
+    /* ============================================================
+       10. PRESS QUOTE MOBILE
+       ============================================================ */
+    .press-quote-inner {
+      text-align: center;
+    }
+
+    .press-blockquote {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 7vw, 32px);
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin: 16px 0 20px;
+      position: relative;
+    }
+
+    .press-blockquote::before {
+      content: '"';
+      color: var(--color-accent);
+      font-size: 1.4em;
+      line-height: 0;
+      vertical-align: -0.3em;
+      margin-right: 2px;
+    }
+    .press-blockquote::after {
+      content: '"';
+      color: var(--color-accent);
+      font-size: 1.4em;
+      line-height: 0;
+      vertical-align: -0.3em;
+      margin-left: 2px;
+    }
+
+    .press-source {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .press-source-logo {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    .press-source-divider {
+      width: 1px;
+      height: 14px;
+      background: var(--color-text-muted);
+      opacity: 0.3;
+    }
+
+    .press-source-date { font-size: 13px; color: var(--color-text-muted); }
+
+    /* ============================================================
+       11. CARE MOBILE — 2x2 grid
+       ============================================================ */
+    .care-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .care-item {
+      background: var(--color-bg);
+      border-radius: var(--radius-card);
+      padding: 20px 14px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+    }
+
+    .care-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--color-accent-light);
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .care-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--color-accent);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .care-label {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 6px;
+    }
+
+    .care-desc {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       12. FAQ MOBILE
+       ============================================================ */
+    details {
+      border-bottom: 1px solid rgba(26, 26, 26, 0.10);
+    }
+    details:first-of-type {
+      border-top: 1px solid rgba(26, 26, 26, 0.10);
+    }
+
+    summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      cursor: pointer;
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+      list-style: none;
+      gap: 12px;
+      min-height: 56px; /* touch target */
+    }
+    summary::-webkit-details-marker { display: none; }
+
+    .summary-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--color-accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .summary-icon svg {
+      width: 13px;
+      height: 13px;
+      stroke: var(--color-accent);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      transition: transform 0.3s var(--ease-bounce);
+    }
+
+    details[open] .summary-icon { background: var(--color-accent); }
+    details[open] .summary-icon svg { stroke: #fff; transform: rotate(45deg); }
+
+    .faq-body {
+      padding: 0 0 16px 0;
+      font-size: 14px;
+      color: var(--color-text-muted);
+      line-height: 1.65;
+    }
+
+    /* ============================================================
+       13. MANIFESTO MOBILE
+       ============================================================ */
+    .manifesto-hero-image {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+    }
+
+    .manifesto-hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .manifesto-headline {
+      font-family: var(--font-heading);
+      font-size: clamp(36px, 11vw, 52px);
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.03em;
+      line-height: 1.0;
+      margin-bottom: 16px;
+    }
+
+    .manifesto-headline .accent-line { color: var(--color-accent); }
+
+    .manifesto-sub {
+      font-size: 15px;
+      color: var(--color-text-muted);
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+
+    /* Pills piliers — stack vertical sur mobile */
+    .manifesto-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .manifesto-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border-radius: var(--radius-pill);
+      background: var(--color-accent);
+      color: #fff;
+      font-family: var(--font-heading);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      box-shadow: var(--shadow-card);
+    }
+
+    .pillar-num {
+      font-size: 12px;
+      font-weight: 700;
+      opacity: 0.65;
+      font-family: var(--font-body);
+    }
+
+    .manifesto-cta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ============================================================
+       FOOTER MOBILE
+       ============================================================ */
+    .footer {
+      background: var(--color-text);
+      color: #fff;
+      padding: 40px 20px;
+      /* Ajout padding-bottom pour espace sticky CTA */
+      padding-bottom: calc(40px + 84px);
+    }
+
+    .footer-brand {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .footer-brand span { color: var(--color-accent); }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 24px;
+      list-style: none;
+      margin-bottom: 20px;
+    }
+
+    .footer-links a {
+      font-size: 14px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .footer-copy a { color: var(--color-accent); }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV TOP -->
+  <nav class="nav-top" role="navigation" aria-label="Navigation principale">
+    <a href="#" class="nav-logo" aria-label="Maison Cuir — accueil">
+      Maison<span>.</span>Cuir
+    </a>
+    <button class="nav-menu-btn" aria-label="Ouvrir le menu">
+      <svg viewBox="0 0 24 24"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
+    </button>
+  </nav>
+
+  <!-- STICKY CTA BOTTOM -->
+  <div class="sticky-cta" aria-label="Ajouter au panier">
+    <span class="sticky-price">79 EUR</span>
+    <a href="#variants" class="btn btn-primary" style="flex:1;">Ajouter au panier</a>
+  </div>
+
+
+  <!-- ============================================================
+       1. HERO MOBILE
+       ============================================================ -->
+  <section class="hero" id="hero" aria-label="Presentation du produit">
+
+    <div class="hero-eyebrow fade-up">
+      <span class="pill">Nouveau 2024</span>
+    </div>
+
+    <h1 class="hero-title fade-up delay-1">
+      Le sac qui<br><span class="accent-word">grandit</span><br>avec toi.
+    </h1>
+
+    <p class="hero-subtitle fade-up delay-2">
+      Cuir pleine fleur. Coutures sellier. Patine unique — chaque sac devient le tien.
+    </p>
+
+    <div class="hero-rating fade-up delay-2" aria-label="Note: 4.6 sur 5, 1247 avis">
+      <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+      <span class="rating-text">4.6 &middot; 1 247 avis</span>
+    </div>
+
+    <div class="hero-image-wrap fade-up delay-2">
+      <img
+        src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=750&q=80"
+        alt="Sac en cuir vintage cognac, bandouliere reglable"
+        width="750"
+        height="1000"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <div class="hero-float-badge" aria-hidden="true">
+        <div class="badge-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF4D88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="badge-label">Garantie</p>
+          <p class="badge-value">2 ans</p>
+        </div>
+      </div>
+    </div>
+
+    <a href="#variants" class="btn btn-primary fade-up delay-3" style="margin-top:8px;">Choisir ma variante</a>
+
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ============================================================
+       2. GALLERY MOBILE
+       ============================================================ -->
+  <section class="gallery surface" id="gallery" aria-label="Galerie photos">
+
+    <div class="gallery-header fade-up">
+      <span class="pill">Galerie</span>
+      <h2 class="gallery-title">Vu sous tous les angles.</h2>
+    </div>
+
+    <div class="gallery-scroll" role="list" aria-label="Photos du produit">
+      <div class="gallery-slide large" role="listitem">
+        <img
+          src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80"
+          alt="Sac cuir de face, cuir naturel cognac"
+          loading="lazy"
+          width="600"
+          height="750"
+        />
+      </div>
+      <div class="gallery-slide" role="listitem">
+        <img
+          src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=520&q=80"
+          alt="Sac porte en main, lumiere naturelle"
+          loading="lazy"
+          width="520"
+          height="620"
+        />
+      </div>
+      <div class="gallery-slide" role="listitem">
+        <img
+          src="https://images.unsplash.com/photo-1601924357840-3e50ad4dd6f2?auto=format&fit=crop&w=520&q=80"
+          alt="Detail couture sellier artisanale"
+          loading="lazy"
+          width="520"
+          height="620"
+        />
+      </div>
+      <div class="gallery-slide" role="listitem">
+        <img
+          src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=520&q=80"
+          alt="Sac en usage quotidien, style urban"
+          loading="lazy"
+          width="520"
+          height="620"
+        />
+      </div>
+    </div>
+
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ============================================================
+       3. WHY WE LOVE MOBILE
+       ============================================================ -->
+  <section class="why-we-love" id="why" aria-label="Pourquoi on adore ce produit">
+
+    <div class="why-header fade-up">
+      <span class="pill">Nos raisons</span>
+      <h2 class="why-title-main">Pourquoi on craque.</h2>
+      <p class="why-lead">Trois raisons qui font la difference entre un accessoire et un compagnon de vie.</p>
+    </div>
+
+    <div class="why-stack">
+
+      <div class="why-card fade-up delay-1">
+        <div class="why-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="why-card-title">Cuir qui patine</p>
+          <p class="why-card-desc">Le cuir pleine fleur prend du caractere avec le temps. Ton sac devient unique apres quelques mois.</p>
+        </div>
+      </div>
+
+      <div class="why-card fade-up delay-2">
+        <div class="why-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <div>
+          <p class="why-card-title">Concu pour durer</p>
+          <p class="why-card-desc">Coutures sellier au fil de lin double. Quincaillerie laiton massif. Fait pour traverser des decennies.</p>
+        </div>
+      </div>
+
+      <div class="why-card fade-up delay-3">
+        <div class="why-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <div>
+          <p class="why-card-title">Origine tracable</p>
+          <p class="why-card-desc">Fabrique en Toscane. Cuir tanne au vegetale certifie LWG Gold. Chaine courte, engagement reel.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ============================================================
+       4. THOUGHTFULLY DESIGNED MOBILE
+       ============================================================ -->
+  <section class="thoughtfully surface" id="design" aria-label="Design pense dans le detail">
+
+    <div class="thoughtfully-image fade-up">
+      <img
+        src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=750&q=80"
+        alt="Detail du sac, quincaillerie laiton, couture sellier visible"
+        loading="lazy"
+        width="750"
+        height="562"
+      />
+    </div>
+
+    <div class="fade-up delay-1">
+      <span class="pill">Le detail qui fait tout</span>
+      <h2 class="section-label">Pense pour ton quotidien.</h2>
+      <p class="section-desc">Chaque centimetre mesure pour une utilisation reelle. Un outil quotidien qui s'adapte a ta vie.</p>
+
+      <ul class="feature-list">
+        <li>
+          <span class="feature-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Compartiment 12L, separation interieure
+        </li>
+        <li>
+          <span class="feature-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Poche zippee dos accessible en bandouliere
+        </li>
+        <li>
+          <span class="feature-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Bandouliere reglable 60 a 120cm
+        </li>
+        <li>
+          <span class="feature-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Compatible ordinateur 13 pouces
+        </li>
+        <li>
+          <span class="feature-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          Fermeture aimantee silencieuse
+        </li>
+      </ul>
+    </div>
+
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ============================================================
+       5. BEST FOR MOBILE
+       ============================================================ -->
+  <section class="best-for" id="best-for" aria-label="Pour qui est ce produit">
+
+    <div class="fade-up" style="margin-bottom:28px;">
+      <span class="pill">Profil utilisateur</span>
+      <h2 class="section-label" style="margin-top:12px;">Fait pour toi si...</h2>
+    </div>
+
+    <div class="best-for-grid">
+
+      <div class="best-for-card fade-up delay-1">
+        <div class="best-for-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <p class="best-for-label">Tu travailles en freelance</p>
+        <p class="best-for-desc">Bureau, cafe, coworking — il suit ta journee.</p>
+      </div>
+
+      <div class="best-for-card fade-up delay-2">
+        <div class="best-for-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/>
+          </svg>
+        </div>
+        <p class="best-for-label">Tu voyages souvent</p>
+        <p class="best-for-desc">Avion, week-end, escapade. Format ideal.</p>
+      </div>
+
+      <div class="best-for-card fade-up delay-1">
+        <div class="best-for-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+          </svg>
+        </div>
+        <p class="best-for-label">Tu refuses le jetable</p>
+        <p class="best-for-desc">Un achat, dix ans d'usage. Le calcul est vite fait.</p>
+      </div>
+
+      <div class="best-for-card fade-up delay-2">
+        <div class="best-for-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <p class="best-for-label">Tu aimes les belles choses</p>
+        <p class="best-for-desc">Pas ostentatoire — juste bien fait.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ============================================================
+       6. MATERIALS MOBILE
+       ============================================================ -->
+  <section class="materials surface" id="materials" aria-label="Composition et matieres">
+
+    <div class="materials-image fade-up">
+      <img
+        src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=750&q=80"
+        alt="Detail texture cuir naturel pleine fleur, grain visible de pres"
+        loading="lazy"
+        width="750"
+        height="562"
+      />
+    </div>
+
+    <div class="fade-up delay-1">
+      <span class="pill">Transparence totale</span>
+      <h2 class="section-label" style="margin-top:12px;">Ce qu'il y a dedans.</h2>
+    </div>
+
+    <div class="fade-up delay-2">
+      <div class="material-item">
+        <div class="material-dot" aria-hidden="true"></div>
+        <div>
+          <p class="material-name">Cuir pleine fleur — Toscane</p>
+          <p class="material-desc">Tanne au vegetale, certification LWG Gold. Patine garantie avec le temps.</p>
+        </div>
+      </div>
+      <div class="material-item">
+        <div class="material-dot" aria-hidden="true"></div>
+        <div>
+          <p class="material-name">Fil de lin double — France</p>
+          <p class="material-desc">Couture sellier. Resistance 3x superieure au fil polyester.</p>
+        </div>
+      </div>
+      <div class="material-item">
+        <div class="material-dot" aria-hidden="true"></div>
+        <div>
+          <p class="material-name">Quincaillerie laiton massif — Allemagne</p>
+          <p class="material-desc">Boucles et anneaux en laiton brut. Patine doree naturelle.</p>
+        </div>
+      </div>
+      <div class="material-item">
+        <div class="material-dot" aria-hidden="true"></div>
+        <div>
+          <p class="material-name">Doublure coton bio — Portugal</p>
+          <p class="material-desc">Certifie GOTS. Ivoire naturel, nettoyable a sec.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- how_it_works SKIPPED — non applicable sac -->
+
+
+  <!-- ============================================================
+       8. VARIANTS MOBILE
+       ============================================================ -->
+  <section class="variants-section" id="variants" style="padding:var(--space-section) 0;" aria-label="Variantes disponibles">
+
+    <div class="variants-header fade-up" style="padding:0 20px;">
+      <span class="pill">3 coloris</span>
+      <h2 class="section-label" style="margin-top:12px;">Lequel est le tien ?</h2>
+    </div>
+
+    <div class="variants-scroll" role="list" aria-label="Variantes du sac">
+
+      <div class="variant-card selected fade-up" role="listitem button" tabindex="0" aria-pressed="true" aria-label="Variante Noir, selectionnee">
+        <div class="variant-image">
+          <img
+            src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=440&q=80"
+            alt="Sac cuir noir"
+            loading="lazy"
+            width="440"
+            height="440"
+          />
+        </div>
+        <div class="variant-body">
+          <p class="variant-name">
+            <span class="variant-swatch" style="background:#1A1A1A;" aria-hidden="true"></span>
+            Noir
+          </p>
+          <p class="variant-desc">Intemporel. S'accorde avec tout.</p>
+        </div>
+        <div class="variant-footer">
+          <span class="variant-price">79 EUR</span>
+          <span class="variant-check" aria-label="Selectionne">&#10003;</span>
+        </div>
+      </div>
+
+      <div class="variant-card fade-up delay-1" role="listitem button" tabindex="0" aria-pressed="false" aria-label="Variante Cognac">
+        <div class="variant-image">
+          <img
+            src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=440&q=80"
+            alt="Sac cuir cognac"
+            loading="lazy"
+            width="440"
+            height="440"
+          />
+        </div>
+        <div class="variant-body">
+          <p class="variant-name">
+            <span class="variant-swatch" style="background:#8B5E3C;" aria-hidden="true"></span>
+            Cognac
+          </p>
+          <p class="variant-desc">Chaleureux et lumineux.</p>
+        </div>
+        <div class="variant-footer">
+          <span class="variant-price">79 EUR</span>
+          <span class="variant-check" aria-label="Selectionne">&#10003;</span>
+        </div>
+      </div>
+
+      <div class="variant-card fade-up delay-2" role="listitem button" tabindex="0" aria-pressed="false" aria-label="Variante Camel">
+        <div class="variant-image">
+          <img
+            src="https://images.unsplash.com/photo-1601924357840-3e50ad4dd6f2?auto=format&fit=crop&w=440&q=80"
+            alt="Sac cuir camel"
+            loading="lazy"
+            width="440"
+            height="440"
+          />
+        </div>
+        <div class="variant-body">
+          <p class="variant-name">
+            <span class="variant-swatch" style="background:#C19A6B;" aria-hidden="true"></span>
+            Camel
+          </p>
+          <p class="variant-desc">Doux et naturel. Patine ambre chaud.</p>
+        </div>
+        <div class="variant-footer">
+          <span class="variant-price">79 EUR</span>
+          <span class="variant-check" aria-label="Selectionne">&#10003;</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ============================================================
+       9. REVIEWS MOBILE
+       ============================================================ -->
+  <section class="reviews surface" id="reviews" style="padding:var(--space-section) 20px;" aria-label="Avis clients">
+
+    <div class="fade-up">
+      <span class="pill">Avis verifies</span>
+      <h2 class="section-label" style="margin-top:12px;">1 247 avis. Un verdict.</h2>
+    </div>
+
+    <div class="score-row fade-up delay-1" aria-label="Note globale : 4.6 sur 5">
+      <span class="score-big" aria-hidden="true">4.6</span>
+      <div>
+        <div class="score-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="score-label">sur 1 247 avis verifies</p>
+      </div>
+    </div>
+
+    <div class="ai-summary-box fade-up delay-2">
+      <p class="ai-label">Synthese IA Konvert</p>
+      <p class="ai-text">"Qualite du cuir remarquable, construction artisanale visible, sac qui se bonifie avec l'usage. Leger rodage les premieres semaines — signe d'un bon cuir naturel."</p>
+    </div>
+
+    <div class="reviews-scroll" role="list" aria-label="Avis clients">
+
+      <div class="review-card" role="listitem">
+        <div class="review-stars" aria-label="5 etoiles">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="review-text">"Ca fait 8 mois que je l'utilise tous les jours. La patine est magnifique. J'aurais du l'acheter bien avant."</p>
+        <p class="review-author">Marie-Lou T. — Achat verifie</p>
+      </div>
+
+      <div class="review-card" role="listitem">
+        <div class="review-stars" aria-label="5 etoiles">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="review-text">"Qualite remarquable au toucher. Je l'emmene partout, bureau comme week-end. Format parfait."</p>
+        <p class="review-author">Thomas B. — Achat verifie</p>
+      </div>
+
+      <div class="review-card" role="listitem">
+        <div class="review-stars" aria-label="4 etoiles">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <p class="review-text">"Excellent sac. Cuir un peu raide au debut, normal pour un cuir naturel. S'assouplit rapidement."</p>
+        <p class="review-author">Sophie M. — Achat verifie</p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ============================================================
+       10. PRESS QUOTE MOBILE
+       ============================================================ -->
+  <section class="press-quote surface" id="press" style="padding:var(--space-section) 20px;" aria-label="Presse">
+
+    <div class="press-quote-inner fade-up">
+      <span class="pill">Lu dans la presse</span>
+
+      <blockquote class="press-blockquote">
+        Le rare exemple d'un produit artisanal vendu en ligne sans rien sacrifier de l'experience.
+      </blockquote>
+
+      <div class="press-source" aria-label="Source : Madame Figaro, janvier 2024">
+        <span class="press-source-logo">Madame Figaro</span>
+        <span class="press-source-divider" aria-hidden="true"></span>
+        <span class="press-source-date">Janvier 2024</span>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ============================================================
+       11. CARE MOBILE
+       ============================================================ -->
+  <section class="care" id="care" style="padding:var(--space-section) 20px;" aria-label="Instructions d'entretien">
+
+    <div class="fade-up" style="margin-bottom:28px;">
+      <span class="pill">Entretien</span>
+      <h2 class="section-label" style="margin-top:12px;">Prendre soin de lui.</h2>
+    </div>
+
+    <div class="care-grid">
+
+      <div class="care-item fade-up delay-1">
+        <div class="care-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 22a10 10 0 110-20 10 10 0 010 20z"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <p class="care-label">Cirer regulierement</p>
+        <p class="care-desc">Cire d'abeille tous les 2-3 mois.</p>
+      </div>
+
+      <div class="care-item fade-up delay-2">
+        <div class="care-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 9a4 4 0 018 0c0 5-4 9-4 9S4 14 4 9z"/>
+            <circle cx="8" cy="9" r="1"/>
+            <path d="M13 6a4 4 0 018 0c0 5-4 9-4 9s-4-4-4-9z"/>
+          </svg>
+        </div>
+        <p class="care-label">Eviter l'eau</p>
+        <p class="care-desc">Secher naturellement a l'ombre.</p>
+      </div>
+
+      <div class="care-item fade-up delay-1">
+        <div class="care-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 7V5a2 2 0 00-4 0v2M8 7V5a2 2 0 014 0v2"/>
+          </svg>
+        </div>
+        <p class="care-label">Ranger avec soin</p>
+        <p class="care-desc">Housse fournie dans la boite.</p>
+      </div>
+
+      <div class="care-item fade-up delay-2">
+        <div class="care-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <p class="care-label">Garantie 2 ans</p>
+        <p class="care-desc">Defaillance couverte. Reparation ou remplacement.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ============================================================
+       12. FAQ MOBILE
+       ============================================================ -->
+  <section class="faq surface" id="faq" style="padding:var(--space-section) 20px;" aria-label="Foire aux questions">
+
+    <div class="fade-up" style="margin-bottom:28px;">
+      <span class="pill">FAQ</span>
+      <h2 class="section-label" style="margin-top:12px;">Les questions qui reviennent.</h2>
+    </div>
+
+    <div class="fade-up delay-1">
+
+      <details>
+        <summary>
+          Delai de livraison ?
+          <span class="summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </span>
+        </summary>
+        <p class="faq-body">Expedition sous 24h. France 2-3 jours, Europe 4-6 jours. Gratuit sans minimum.</p>
+      </details>
+
+      <details>
+        <summary>
+          Le cuir est-il raide au debut ?
+          <span class="summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </span>
+        </summary>
+        <p class="faq-body">Oui — c'est le signe d'un cuir pleine fleur non traite. Il s'assouplit en 2 a 4 semaines d'usage regulier.</p>
+      </details>
+
+      <details>
+        <summary>
+          Compatible ordi 15 pouces ?
+          <span class="summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </span>
+        </summary>
+        <p class="faq-body">Non — concu pour 13 pouces. Notre modele Large (89 EUR) convient aux 15 pouces.</p>
+      </details>
+
+      <details>
+        <summary>
+          Politique de retour ?
+          <span class="summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </span>
+        </summary>
+        <p class="faq-body">30 jours, sans justification. Retour gratuit depuis la France. Remboursement sous 48h.</p>
+      </details>
+
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ============================================================
+       13. MANIFESTO MOBILE
+       ============================================================ -->
+  <section class="manifesto" id="manifesto" aria-label="Manifeste de marque">
+
+    <div class="manifesto-hero-image fade-up">
+      <img
+        src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=800&q=80"
+        alt="Sac en cuir porte en exterieur, lumiere doree, usage quotidien"
+        loading="lazy"
+        width="800"
+        height="600"
+      />
+    </div>
+
+    <div style="background:var(--color-surface);padding:var(--space-section) 20px;">
+
+      <h2 class="manifesto-headline fade-up">
+        Bon vibes.<br><span class="accent-line">Bon cuir.</span>
+      </h2>
+
+      <p class="manifesto-sub fade-up delay-1">
+        On croit que les objets qu'on aime doivent etre joyeux. Fabriques avec soin, choisis avec intention, portes avec plaisir.
+      </p>
+
+      <div class="manifesto-pillars fade-up delay-2" aria-label="Nos trois piliers">
+        <div class="manifesto-pill">
+          <span class="pillar-num" aria-hidden="true">01</span>
+          Cuir vivant
+        </div>
+        <div class="manifesto-pill">
+          <span class="pillar-num" aria-hidden="true">02</span>
+          Origine tracable
+        </div>
+        <div class="manifesto-pill">
+          <span class="pillar-num" aria-hidden="true">03</span>
+          Fait pour durer
+        </div>
+      </div>
+
+      <div class="manifesto-cta fade-up delay-3">
+        <a href="#variants" class="btn btn-primary">Commander maintenant</a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- FOOTER MOBILE -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer-brand">Maison<span>.</span>Cuir</p>
+    <ul class="footer-links">
+      <li><a href="#">Livraison</a></li>
+      <li><a href="#">Retours</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Mentions legales</a></li>
+    </ul>
+    <p class="footer-copy">Page generee par <a href="#">Konvert</a></p>
+  </footer>
+
+
+  <!-- ============================================================
+       SCROLL OBSERVER + VARIANT INTERACTIVITY
+       ============================================================ -->
+  <script>
+    (function () {
+      // Scroll fade-up
+      var els = document.querySelectorAll('.fade-up');
+      if (!window.IntersectionObserver) {
+        els.forEach(function (el) { el.classList.add('visible'); });
+      } else {
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
+        );
+        els.forEach(function (el) { observer.observe(el); });
+      }
+
+      // Variantes interactives
+      var variantCards = document.querySelectorAll('.variant-card');
+      variantCards.forEach(function (card) {
+        function select () {
+          variantCards.forEach(function (c) {
+            c.classList.remove('selected');
+            c.setAttribute('aria-pressed', 'false');
+          });
+          card.classList.add('selected');
+          card.setAttribute('aria-pressed', 'true');
+        }
+        card.addEventListener('click', select);
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(); }
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

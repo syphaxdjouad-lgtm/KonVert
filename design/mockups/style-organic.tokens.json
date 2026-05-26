@@ -1,0 +1,454 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$description": "Konvert V3 — Style Organic. Vibe : natural wellness clean beauty. References : Aesop, Necessaire, Patagonia.",
+  "$version": "1.0.0",
+  "$author": "OBITO / NEXARA",
+  "$date": "2026-05-26",
+
+  "color": {
+    "bg": {
+      "$value": "#F4F1ED",
+      "$type": "color",
+      "$description": "Fond dominant — cream warm. 90% des surfaces de page."
+    },
+    "surface": {
+      "$value": "#FAF8F4",
+      "$type": "color",
+      "$description": "Fond secondaire — cream plus clair. Cards, sections alternees."
+    },
+    "accent": {
+      "$value": "#4A7C59",
+      "$type": "color",
+      "$description": "Vert sage premium. CTAs, pills, dividers, border-left, badges."
+    },
+    "accent-light": {
+      "$value": "#6B9E78",
+      "$type": "color",
+      "$description": "Vert sage clair — hover states sur les boutons primaires."
+    },
+    "accent-pale": {
+      "$value": "rgba(74, 124, 89, 0.08)",
+      "$type": "color",
+      "$description": "Accent transparent — bg des badges, pills outline, highlight blocks."
+    },
+    "text": {
+      "$value": "#1F2D24",
+      "$type": "color",
+      "$description": "Quasi-noir teinté vert. Headings, prix, noms de produit."
+    },
+    "text-muted": {
+      "$value": "#6B7B70",
+      "$type": "color",
+      "$description": "Gris-vert pour descriptions, sous-titres, auteurs avis. WCAG AA sur bg et surface."
+    },
+    "border": {
+      "$value": "rgba(31, 45, 36, 0.08)",
+      "$type": "color",
+      "$description": "Bordure legere — separateurs, contour cards discret."
+    },
+    "border-med": {
+      "$value": "rgba(31, 45, 36, 0.14)",
+      "$type": "color",
+      "$description": "Bordure medium — pills variantes, elements interactifs au repos."
+    }
+  },
+
+  "font": {
+    "heading": {
+      "$value": "\"DM Serif Display\", Georgia, serif",
+      "$type": "fontFamily",
+      "$description": "Serif rond chaleureux. Headings, citations, taglines, manifesto. JAMAIS bold — le poids vient de la taille."
+    },
+    "body": {
+      "$value": "\"Inter\", system-ui, sans-serif",
+      "$type": "fontFamily",
+      "$description": "Sans-serif neutre universel. Body, labels, eyebrows, CTA."
+    }
+  },
+
+  "fontSize": {
+    "xs": {
+      "$value": "11px",
+      "$type": "dimension",
+      "$description": "Badges, eyebrows uppercase."
+    },
+    "sm": {
+      "$value": "13px",
+      "$type": "dimension",
+      "$description": "Captions, auteurs, notes de prix."
+    },
+    "base": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$description": "Body standard."
+    },
+    "lg": {
+      "$value": "18px",
+      "$type": "dimension",
+      "$description": "Body large — introductions de section, taglines."
+    },
+    "heading-sm": {
+      "$value": "1.05rem",
+      "$type": "dimension",
+      "$description": "Feature items, care titles, FAQ questions."
+    },
+    "heading-md": {
+      "$value": "1.2rem",
+      "$type": "dimension",
+      "$description": "Material card names, variant names."
+    },
+    "heading-lg": {
+      "$value": "clamp(1.75rem, 3vw, 2.5rem)",
+      "$type": "dimension",
+      "$description": "Section titles (manifesto, features). Fluid responsive."
+    },
+    "heading-xl": {
+      "$value": "clamp(2rem, 4vw, 3rem)",
+      "$type": "dimension",
+      "$description": "Section titles principales (materials, reviews)."
+    },
+    "hero": {
+      "$value": "clamp(2.2rem, 4vw, 3.25rem)",
+      "$type": "dimension",
+      "$description": "Nom produit hero. Jamais plus petit que 2.2rem mobile."
+    },
+    "press-quote": {
+      "$value": "clamp(1.5rem, 2.5vw, 2rem)",
+      "$type": "dimension",
+      "$description": "Citation presse sur fond vert."
+    }
+  },
+
+  "fontWeight": {
+    "light": {
+      "$value": "300",
+      "$type": "fontWeight",
+      "$description": "Usage tres rare — elements tres secondaires."
+    },
+    "regular": {
+      "$value": "400",
+      "$type": "fontWeight",
+      "$description": "Body, headings DM Serif Display (ne pas bolded les serifs)."
+    },
+    "medium": {
+      "$value": "500",
+      "$type": "fontWeight",
+      "$description": "CTA buttons, prix, labels importants."
+    },
+    "semibold": {
+      "$value": "600",
+      "$type": "fontWeight",
+      "$description": "Eyebrows, badges, noms d'auteurs."
+    }
+  },
+
+  "lineHeight": {
+    "tight": {
+      "$value": "1.1",
+      "$type": "number",
+      "$description": "Grands headings hero."
+    },
+    "heading": {
+      "$value": "1.15",
+      "$type": "number",
+      "$description": "Titres de section."
+    },
+    "relaxed": {
+      "$value": "1.6",
+      "$type": "number",
+      "$description": "Manifesto pillars, features descriptions."
+    },
+    "body": {
+      "$value": "1.65",
+      "$type": "number",
+      "$description": "Body standard. Legèrement plus aere que 1.5 pour la sensation organic."
+    },
+    "loose": {
+      "$value": "1.75",
+      "$type": "number",
+      "$description": "Body large, introductions de section."
+    }
+  },
+
+  "letterSpacing": {
+    "eyebrow": {
+      "$value": "0.14em",
+      "$type": "dimension",
+      "$description": "Eyebrows uppercase 11px — tracking large pour la lisibilite."
+    },
+    "badge": {
+      "$value": "0.08em",
+      "$type": "dimension",
+      "$description": "Badges et petits labels."
+    },
+    "normal": {
+      "$value": "0em",
+      "$type": "dimension",
+      "$description": "Body et headings."
+    },
+    "cta": {
+      "$value": "0.02em",
+      "$type": "dimension",
+      "$description": "Legers sur les CTA pour la lisibilite."
+    }
+  },
+
+  "spacing": {
+    "1": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$description": "Micro — espacement intra-composant ultra fin."
+    },
+    "2": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$description": "Petit — gap entre stars, gap thumb row."
+    },
+    "3": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$description": "Rating gap, variants gap mobile."
+    },
+    "4": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$description": "Base — gap standard, padding mobile."
+    },
+    "6": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Gap inter-elements principal (gap var)."
+    },
+    "8": {
+      "$value": "32px",
+      "$type": "dimension",
+      "$description": "Card padding desktop."
+    },
+    "10": {
+      "$value": "40px",
+      "$type": "dimension",
+      "$description": "Reviews summary padding, divider margin."
+    },
+    "12": {
+      "$value": "48px",
+      "$type": "dimension",
+      "$description": "Section small mobile (FAQ, gallery)."
+    },
+    "section-sm": {
+      "$value": "80px",
+      "$type": "dimension",
+      "$description": "Section small desktop — FAQ."
+    },
+    "section": {
+      "$value": "128px",
+      "$type": "dimension",
+      "$description": "Section standard desktop. Respiration Aesop-grade."
+    },
+    "section-mobile": {
+      "$value": "72px",
+      "$type": "dimension",
+      "$description": "Section standard mobile."
+    },
+    "gutter-desktop": {
+      "$value": "64px",
+      "$type": "dimension",
+      "$description": "Padding horizontal container desktop."
+    },
+    "gutter-mobile": {
+      "$value": "20px",
+      "$type": "dimension",
+      "$description": "Padding horizontal container mobile."
+    },
+    "max-width": {
+      "$value": "1280px",
+      "$type": "dimension",
+      "$description": "Max-width du container principal."
+    }
+  },
+
+  "borderRadius": {
+    "card": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$description": "Cards, materials, variants, care items. Genereux et moelleux."
+    },
+    "button": {
+      "$value": "999px",
+      "$type": "dimension",
+      "$description": "Tous les boutons — pill shape. Signature du style Organic."
+    },
+    "image": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$description": "Images dans les cards et galeries."
+    },
+    "pill-sm": {
+      "$value": "999px",
+      "$type": "dimension",
+      "$description": "Pills best_for et variants — meme valeur que button pour coherence."
+    },
+    "circle": {
+      "$value": "50%",
+      "$type": "dimension",
+      "$description": "Care item icons, dots de liste."
+    }
+  },
+
+  "shadow": {
+    "card": {
+      "$value": "0 2px 8px rgba(31, 45, 36, 0.06)",
+      "$type": "shadow",
+      "$description": "Shadow repos des cards — discrete, teinlee verte."
+    },
+    "hover": {
+      "$value": "0 12px 32px rgba(31, 45, 36, 0.10)",
+      "$type": "shadow",
+      "$description": "Shadow hover des cards — elevation visible."
+    },
+    "cta-hover": {
+      "$value": "0 6px 20px rgba(74, 124, 89, 0.25)",
+      "$type": "shadow",
+      "$description": "Glow vert sur hover bouton primaire."
+    },
+    "sticky": {
+      "$value": "0 -8px 24px rgba(31, 45, 36, 0.08)",
+      "$type": "shadow",
+      "$description": "Shadow des barres sticky (buy bar, mobile CTA)."
+    },
+    "active-ring": {
+      "$value": "0 0 0 2px #4A7C59",
+      "$type": "shadow",
+      "$description": "Ring de selection sur les variant cards actives."
+    }
+  },
+
+  "motion": {
+    "ease": {
+      "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "Easing principal — smooth deceleration. Inspire Material Design."
+    },
+    "duration-fast": {
+      "$value": "250ms",
+      "$type": "duration",
+      "$description": "Hover states simples (borders, couleurs)."
+    },
+    "duration-base": {
+      "$value": "300ms",
+      "$type": "duration",
+      "$description": "Transitions boutons, pills."
+    },
+    "duration-reveal": {
+      "$value": "500ms",
+      "$type": "duration",
+      "$description": "Scroll reveal principal. Genereux pour la sensation organic."
+    },
+    "duration-accordion": {
+      "$value": "350ms",
+      "$type": "duration",
+      "$description": "FAQ accordion expand/collapse."
+    },
+    "stagger-base": {
+      "$value": "80ms",
+      "$type": "duration",
+      "$description": "Delai de base entre elements staggeres."
+    },
+    "reveal-transform": {
+      "$value": "scale(0.98) translateY(16px)",
+      "$type": "custom",
+      "$description": "Transform initial pour le scroll reveal — subtil, pas dramatique."
+    }
+  },
+
+  "imageFilter": {
+    "product": {
+      "$value": "saturate(1.1) sepia(0.04) brightness(1.01)",
+      "$type": "custom",
+      "$description": "Filtre warming applique sur toutes les images. +10% saturation (renforce verts/cuir), +4% sepia (warming analogique), +1% brightness (compense le sepia). Ne pas appliquer sur images fond blanc studio — utiliser la classe .img-lifestyle."
+    }
+  },
+
+  "patterns": {
+    "eyebrow": {
+      "$value": "Inter 600 / 11px / 0.14em letter-spacing / uppercase / color accent",
+      "$type": "custom",
+      "$description": "Label au-dessus des titres de section. Toujours en vert sage."
+    },
+    "divider": {
+      "$value": "40px x 2px / border-radius 999px / bg accent / margin-bottom 48px (centré) ou 32px (aligné gauche)",
+      "$type": "custom",
+      "$description": "Separateur botanique entre eyebrow et section-title."
+    },
+    "border-left-feature": {
+      "$value": "2px solid accent / padding-left 24px",
+      "$type": "custom",
+      "$description": "Accent gauche sur les feature items. Signature visuelle Organic."
+    },
+    "pill-outline": {
+      "$value": "border 1.5px solid accent / color accent / bg transparent / radius 999px / padding 10px 22px",
+      "$type": "custom",
+      "$description": "Pills best_for — outline vert sage sur fond cream."
+    },
+    "badge-sm": {
+      "$value": "bg accent-pale / color accent / radius 999px / Inter 600 / 11px / 0.08em / uppercase / padding 3px 10px",
+      "$type": "custom",
+      "$description": "Badges materiaux et categories."
+    },
+    "section-manifesto-aesop": {
+      "$value": "Grid 2col / image-left / texte-right / headline DM Serif italic / pillars dots vert / CTA btn-primary",
+      "$type": "custom",
+      "$description": "Pattern manifesto inspire Aesop Philosophy page."
+    }
+  },
+
+  "breakpoints": {
+    "mobile": {
+      "$value": "375px",
+      "$type": "dimension",
+      "$description": "Viewport mobile reference (iPhone SE / 14)."
+    },
+    "tablet": {
+      "$value": "768px",
+      "$type": "dimension",
+      "$description": "Breakpoint tablet — passer en 1 colonne pour les grilles."
+    },
+    "desktop": {
+      "$value": "1024px",
+      "$type": "dimension",
+      "$description": "Breakpoint desktop — activer les layouts 2 colonnes."
+    },
+    "wide": {
+      "$value": "1280px",
+      "$type": "dimension",
+      "$description": "Max-width du container."
+    }
+  },
+
+  "accessibility": {
+    "contrast-body-on-bg": {
+      "$value": "13:1",
+      "$type": "custom",
+      "$description": "Text #1F2D24 sur bg #F4F1ED. WCAG AAA."
+    },
+    "contrast-muted-on-bg": {
+      "$value": "4.7:1",
+      "$type": "custom",
+      "$description": "Text-muted #6B7B70 sur bg #F4F1ED. WCAG AA."
+    },
+    "contrast-muted-on-surface": {
+      "$value": "4.5:1",
+      "$type": "custom",
+      "$description": "Text-muted #6B7B70 sur surface #FAF8F4. WCAG AA (valeur limite — surveiller)."
+    },
+    "contrast-cream-on-accent": {
+      "$value": "4.8:1",
+      "$type": "custom",
+      "$description": "Surface #FAF8F4 sur accent #4A7C59. WCAG AA. Utilise sur les boutons primaires."
+    },
+    "touch-target-min": {
+      "$value": "44px",
+      "$type": "dimension",
+      "$description": "Hauteur minimum pour tous les elements interactifs mobile."
+    }
+  }
+}

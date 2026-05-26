@@ -1,0 +1,327 @@
+{
+  "$schema": "https://design-tokens.org/dtcg/schema/1.0",
+  "$metadata": {
+    "style": "editorial",
+    "version": "1.0.0",
+    "date": "2026-05-26",
+    "author": "OBITO — NEXARA Design",
+    "description": "Tokens pour le style Editorial de Konvert V3. Vibe magazine de mode haut de gamme — serif dramatique, grilles asymetriques, radius zero, fond blanc pur, accents noir profond."
+  },
+
+  "colors": {
+    "$description": "Palette Editorial — noir sur blanc pur, aucun gris froid",
+    "bg": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "Fond principal — blanc pur, pas de teinte"
+    },
+    "surface": {
+      "$value": "#F8F6F2",
+      "$type": "color",
+      "$description": "Fond de sections alternees — blanc casse chaud, contraste doux avec bg"
+    },
+    "accent": {
+      "$value": "#0A0A0A",
+      "$type": "color",
+      "$description": "Accent principal — noir profond (pas pur noir pour eviter le dur)"
+    },
+    "accentInverse": {
+      "$value": "#FFFFFF",
+      "$type": "color",
+      "$description": "Texte sur fond accent (section best-for noire)"
+    },
+    "text": {
+      "$value": "#0A0A0A",
+      "$type": "color",
+      "$description": "Texte principal — identique accent par intention editoriale"
+    },
+    "textMuted": {
+      "$value": "#5C5C5C",
+      "$type": "color",
+      "$description": "Texte secondaire — 37% de luminosite. Ratio WCAG AA : 7.2:1 sur blanc"
+    },
+    "border": {
+      "$value": "rgba(10, 10, 10, 0.1)",
+      "$type": "color",
+      "$description": "Separateurs — 10% opacite pour legerte"
+    },
+    "borderHover": {
+      "$value": "rgba(10, 10, 10, 0.2)",
+      "$type": "color",
+      "$description": "Contour hover sur cards — barre noire 1px"
+    },
+    "overlayLight": {
+      "$value": "rgba(255, 255, 255, 0.96)",
+      "$type": "color",
+      "$description": "Fond navbar transparent avec backdrop-blur"
+    },
+    "overlayDark": {
+      "$value": "rgba(10, 10, 10, 0.55)",
+      "$type": "color",
+      "$description": "Overlay sur image full-bleed press quote"
+    }
+  },
+
+  "fonts": {
+    "$description": "Deux familles max — display serif pour dramatique, sans-serif clean pour lisibilite",
+    "heading": {
+      "$value": "\"Tiempos Headline\", \"Times New Roman\", serif",
+      "$type": "fontFamily",
+      "$description": "Serif editorial — Tiempos Headline premium, fallback Times New Roman. NE PAS REMPLACER par une font sans license sans validation."
+    },
+    "body": {
+      "$value": "\"Inter\", system-ui, sans-serif",
+      "$type": "fontFamily",
+      "$description": "Sans-serif neutre et lisible — Inter via Google Fonts ou variable font local"
+    },
+    "mono": {
+      "$value": "\"JetBrains Mono\", \"Courier New\", monospace",
+      "$type": "fontFamily",
+      "$description": "Monospace pour codes de reduction, references produit (usage optionnel)"
+    }
+  },
+
+  "fontSizes": {
+    "$description": "Scale typographique — ratios 1.25 entre niveaux. H1 intentionnellement enorme (editorial dramatique)",
+    "xs": { "$value": "10px", "$type": "dimension", "$description": "Labels section, numeros, captions meta" },
+    "sm": { "$value": "12px", "$type": "dimension", "$description": "Captions, links footer, badges" },
+    "base": { "$value": "14px", "$type": "dimension", "$description": "Corps alternatif, texte secondaire" },
+    "md": { "$value": "16px", "$type": "dimension", "$description": "Corps principal (base readability)" },
+    "lg": { "$value": "18px", "$type": "dimension", "$description": "Sous-titres, variantes, titre materiau" },
+    "xl": { "$value": "22px", "$type": "dimension", "$description": "Titre feature item, titre materiau large" },
+    "2xl": { "$value": "28px", "$type": "dimension", "$description": "Titre de section (t-headline mobile)" },
+    "3xl": { "$value": "34px", "$type": "dimension", "$description": "Text WHY WE LOVE (serif editorial long)" },
+    "4xl": { "$value": "48px", "$type": "dimension", "$description": "Headline section desktop (t-headline)" },
+    "5xl": { "$value": "64px", "$type": "dimension", "$description": "Hero title desktop" },
+    "displayFluid": { "$value": "clamp(56px, 8vw, 96px)", "$type": "string", "$description": "Display principal — fluide pour tous les viewports" }
+  },
+
+  "fontWeights": {
+    "light":   { "$value": 300, "$type": "fontWeight" },
+    "regular": { "$value": 400, "$type": "fontWeight", "$description": "Poids dominant — les serifs editorial ont beaucoup de caractere meme en regular" },
+    "medium":  { "$value": 500, "$type": "fontWeight" },
+    "semibold":{ "$value": 600, "$type": "fontWeight", "$description": "Labels et boutons uniquement" }
+  },
+
+  "lineHeights": {
+    "tight":  { "$value": 1.0,  "$type": "number", "$description": "H1, display — condensation dramatique" },
+    "snug":   { "$value": 1.1,  "$type": "number", "$description": "H2, headlines" },
+    "normal": { "$value": 1.3,  "$type": "number", "$description": "H3, titres de taille moyenne" },
+    "relaxed":{ "$value": 1.5,  "$type": "number", "$description": "Texte serif editorial long (why_we_love)" },
+    "loose":  { "$value": 1.7,  "$type": "number", "$description": "Corps Inter — maximum confort lecture" }
+  },
+
+  "letterSpacings": {
+    "tight":   { "$value": "-0.03em", "$type": "dimension", "$description": "H1 display — rapprochement majeur" },
+    "snug":    { "$value": "-0.02em", "$type": "dimension", "$description": "H2 headlines" },
+    "normal":  { "$value": "0em",     "$type": "dimension" },
+    "wide":    { "$value": "0.06em",  "$type": "dimension", "$description": "Boutons, navbar brand" },
+    "wider":   { "$value": "0.10em",  "$type": "dimension", "$description": "Labels categoriques" },
+    "widest":  { "$value": "0.16em",  "$type": "dimension", "$description": "Section numbers, labels les plus discrets" }
+  },
+
+  "spacing": {
+    "$description": "Scale 8pt — cohérence avec la grille",
+    "1":   { "$value": "4px",   "$type": "dimension" },
+    "2":   { "$value": "8px",   "$type": "dimension" },
+    "3":   { "$value": "12px",  "$type": "dimension" },
+    "4":   { "$value": "16px",  "$type": "dimension" },
+    "5":   { "$value": "20px",  "$type": "dimension" },
+    "6":   { "$value": "24px",  "$type": "dimension" },
+    "8":   { "$value": "32px",  "$type": "dimension" },
+    "10":  { "$value": "40px",  "$type": "dimension" },
+    "12":  { "$value": "48px",  "$type": "dimension" },
+    "14":  { "$value": "56px",  "$type": "dimension" },
+    "16":  { "$value": "64px",  "$type": "dimension" },
+    "20":  { "$value": "80px",  "$type": "dimension" },
+    "24":  { "$value": "96px",  "$type": "dimension" },
+    "section": {
+      "$value": "160px",
+      "$type": "dimension",
+      "$description": "Padding entre sections desktop — genereux, editorial. Mobile : 80px"
+    },
+    "card": {
+      "$value": "40px",
+      "$type": "dimension",
+      "$description": "Padding interne des cards matieres et colonnes care"
+    },
+    "gap": {
+      "$value": "32px",
+      "$type": "dimension",
+      "$description": "Gap inter-colonnes dans les grilles"
+    },
+    "gutter": {
+      "$value": "80px",
+      "$type": "dimension",
+      "$description": "Gutter horizontal container desktop. Mobile : 24px"
+    },
+    "gutterMobile": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Gutter horizontal sur mobile (375px viewport)"
+    }
+  },
+
+  "layout": {
+    "maxWidth": {
+      "$value": "1440px",
+      "$type": "dimension",
+      "$description": "Largeur max container — plus large que le style Soft (1280px) pour les compositions editoriales horizontales"
+    },
+    "navbarHeight": {
+      "$value": "64px",
+      "$type": "dimension",
+      "$description": "Hauteur navbar desktop. Mobile : 56px"
+    },
+    "navbarHeightMobile": {
+      "$value": "56px",
+      "$type": "dimension"
+    }
+  },
+
+  "grids": {
+    "$description": "Colonnes asymetriques — principe editorial core. NE PAS utiliser 1/2 - 1/2.",
+    "heroSplit":        { "$value": "3fr 2fr",         "$type": "string", "$description": "Hero — image large, content compact" },
+    "featuresSplit":    { "$value": "2fr 3fr",         "$type": "string", "$description": "Features — image sticky 40%, liste 60%" },
+    "reviewsSplit":     { "$value": "2fr 3fr",         "$type": "string", "$description": "Reviews — summary sticky 40%, liste 60%" },
+    "manifestoSplit":   { "$value": "3fr 2fr",         "$type": "string", "$description": "Manifesto — content 60%, image 40%" },
+    "faqSplit":         { "$value": "1fr 2fr",         "$type": "string", "$description": "FAQ — sidebar 33%, liste 67%" },
+    "materialsSplit":   { "$value": "1fr 2fr",         "$type": "string", "$description": "Materials header — titre 33%, description 67%" },
+    "whySplit":         { "$value": "1fr 3fr",         "$type": "string", "$description": "Why we love — label 25%, texte 75%" },
+    "materialsCards":   { "$value": "repeat(3, 1fr)",  "$type": "string", "$description": "Materials cards — 3 egaux (exception editoriale justifiee)" },
+    "variantsCards":    { "$value": "repeat(3, 1fr)",  "$type": "string", "$description": "Variants — 3 egaux" },
+    "galleryGrid":      { "$value": "2fr 1fr 1fr",     "$type": "string", "$description": "Gallery — image principale 2/4, secondaires 1/4 chacune" }
+  },
+
+  "radius": {
+    "$description": "TOUT A ZERO — principe editorial fondamental. Jamais d'arrondi.",
+    "card":   { "$value": "0px", "$type": "dimension", "$description": "Cards, images, tous les conteneurs" },
+    "button": { "$value": "0px", "$type": "dimension", "$description": "Boutons — angles vifs" },
+    "image":  { "$value": "0px", "$type": "dimension", "$description": "Images — angles vifs, style magazin" }
+  },
+
+  "shadows": {
+    "card":  { "$value": "none", "$type": "shadow", "$description": "Pas d'elevation — separation par espacement et bordures 1px" },
+    "hover": { "$value": "0 0 0 1px rgba(10, 10, 10, 0.2)", "$type": "shadow", "$description": "Hover state — barre noire fine 1px en box-shadow" }
+  },
+
+  "motion": {
+    "$description": "Philosophie motion : Jakub Krehel (polish) — transitions soignees, pas spectaculaires",
+    "ease": {
+      "$value": "cubic-bezier(0.16, 1, 0.3, 1)",
+      "$type": "cubicBezier",
+      "$description": "Easing principal — deceleration douce, entree rapide sortie naturelle"
+    },
+    "easeOut": {
+      "$value": "cubic-bezier(0, 0, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "Easing sortie — pour fadeUp, slideIn elements"
+    },
+    "duration": {
+      "$value": "600ms",
+      "$type": "duration",
+      "$description": "Duree standard — transitions de page et elements principaux"
+    },
+    "durationFast": {
+      "$value": "200ms",
+      "$type": "duration",
+      "$description": "Interactions rapides — hover, focus, couleurs"
+    },
+    "durationSlow": {
+      "$value": "800ms",
+      "$type": "duration",
+      "$description": "Images hero — scaleIn au chargement"
+    },
+    "staggerDelay": {
+      "$value": "100ms",
+      "$type": "duration",
+      "$description": "Delai entre elements en cascade (hero eyebrow > title > tagline > meta > CTA)"
+    }
+  },
+
+  "zIndex": {
+    "base":    { "$value": 0,   "$type": "number" },
+    "above":   { "$value": 10,  "$type": "number" },
+    "sticky":  { "$value": 50,  "$type": "number" },
+    "navbar":  { "$value": 100, "$type": "number" },
+    "modal":   { "$value": 200, "$type": "number" }
+  },
+
+  "breakpoints": {
+    "mobile": { "$value": "375px",  "$type": "dimension", "$description": "Cible mobile principale" },
+    "sm":     { "$value": "640px",  "$type": "dimension" },
+    "md":     { "$value": "768px",  "$type": "dimension" },
+    "lg":     { "$value": "1024px", "$type": "dimension" },
+    "xl":     { "$value": "1280px", "$type": "dimension" },
+    "2xl":    { "$value": "1440px", "$type": "dimension", "$description": "Max-width layout editorial" }
+  },
+
+  "components": {
+    "button": {
+      "primary": {
+        "background":   { "$value": "{colors.accent}", "$type": "color" },
+        "color":        { "$value": "#FFFFFF",          "$type": "color" },
+        "borderRadius": { "$value": "{radius.button}",  "$type": "dimension" },
+        "paddingH":     { "$value": "32px",             "$type": "dimension" },
+        "paddingV":     { "$value": "16px",             "$type": "dimension" },
+        "fontSize":     { "$value": "13px",             "$type": "dimension" },
+        "fontWeight":   { "$value": 500,                "$type": "fontWeight" },
+        "letterSpacing":{ "$value": "0.06em",           "$type": "dimension" },
+        "textTransform":{ "$value": "uppercase",        "$type": "string" }
+      },
+      "outline": {
+        "background":   { "$value": "transparent",            "$type": "color" },
+        "color":        { "$value": "{colors.text}",          "$type": "color" },
+        "border":       { "$value": "1px solid {colors.accent}", "$type": "string" },
+        "hoverBg":      { "$value": "{colors.accent}",        "$type": "color" },
+        "hoverColor":   { "$value": "#FFFFFF",                "$type": "color" }
+      },
+      "ghost": {
+        "background":   { "$value": "transparent", "$type": "color" },
+        "borderBottom": { "$value": "1px solid transparent", "$type": "string" },
+        "hoverBorder":  { "$value": "1px solid {colors.accent}", "$type": "string" }
+      }
+    },
+
+    "sectionNumber": {
+      "fontSize":     { "$value": "10px",   "$type": "dimension" },
+      "fontWeight":   { "$value": 600,      "$type": "fontWeight" },
+      "letterSpacing":{ "$value": "0.16em", "$type": "dimension" },
+      "textTransform":{ "$value": "uppercase", "$type": "string" },
+      "color":        { "$value": "{colors.textMuted}", "$type": "color" },
+      "marginBottom": { "$value": "40px",   "$type": "dimension" },
+      "pattern":      { "$value": "0N / Label", "$type": "string", "$description": "Format : 01 / Hero, 02 / Galerie..." }
+    },
+
+    "caption": {
+      "fontFamily":   { "$value": "{fonts.body}",       "$type": "fontFamily" },
+      "fontSize":     { "$value": "12px",               "$type": "dimension" },
+      "fontStyle":    { "$value": "italic",             "$type": "string" },
+      "color":        { "$value": "{colors.textMuted}", "$type": "color" },
+      "letterSpacing":{ "$value": "0.01em",             "$type": "dimension" }
+    },
+
+    "card": {
+      "background":   { "$value": "{colors.bg}",     "$type": "color" },
+      "borderRadius": { "$value": "{radius.card}",   "$type": "dimension" },
+      "shadow":       { "$value": "{shadows.card}",  "$type": "shadow" },
+      "hoverShadow":  { "$value": "{shadows.hover}", "$type": "shadow" },
+      "gapBetween":   { "$value": "2px",             "$type": "dimension", "$description": "Gap entre cards matieres et variantes — effet jointure" }
+    }
+  },
+
+  "editorialPrinciples": {
+    "$description": "Regles non-tokenisables mais documentees pour ANNA lors du code production",
+    "asymmetry":      "Ne jamais centrer toutes les sections. Alterner text-image left/right avec offsets verticaux intentionnels.",
+    "fullBleed":      "Au moins 2 sections sortent de la grille max-width : hero (100vh) et press_quote (100vw).",
+    "zeroRadius":     "Aucun border-radius dans toute la page. Pas d'exceptions.",
+    "hoverBar":       "Hover sur boutons et cards = barre noire 1px (box-shadow: 0 0 0 1px), pas de background tint.",
+    "sectionNumbers": "Chaque section affiche son numero en haut a gauche (format: '0N / Titre'), police label uppercase.",
+    "captions":       "Les images importantes ont une legende italic en caption class, positioning absolu en bas a gauche.",
+    "typeDramatic":   "H1 minimum 40px mobile / 64px desktop. Gras evite — le serif regular EST la force.",
+    "noPills":        "Pas de pills arrondies. Les tags best_for sont des blocs rectangulaires avec border 1px.",
+    "gridPreference": "Grilles preferees : 2fr/3fr, 3fr/2fr, 1fr/3fr. La 50/50 est interdite.",
+    "stickyContent":  "Colonnes narratives (summary reviews, image features, sidebar faq) sont sticky top:100px.",
+    "whitespace":     "Spacing section = 160px desktop. Ne jamais reduire en dessous de 80px. Le vide EST le design."
+  }
+}

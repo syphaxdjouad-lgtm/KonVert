@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konvert — Editor V2 Mockup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── RESET ──────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #FAFAF7;
+    }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    input  { font-family: inherit; }
+
+    /* ─── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --bg-app:         #FAFAF7;
+      --bg-panel:       #FFFFFF;
+      --bg-topbar:      #FFFFFF;
+      --bg-preview:     #F0EDE8;
+      --bg-row-hover:   #FAFAF7;
+      --bg-row-active:  #F5F1EB;
+      --bg-device-active: #F5F1EB;
+
+      --text-primary:   #2D2D2D;
+      --text-muted:     #8B8680;
+      --text-disabled:  #C4BFB9;
+
+      --border-panel:   #EDE8DF;
+      --border-subtle:  #DDD8CF;
+      --border-active:  #A8B5A0;
+
+      --accent:         #A8B5A0;
+      --accent-bg:      #EEF2EC;
+      --accent-terra:   #C8A887;
+
+      --shadow-panel:   4px 0 24px rgba(0,0,0,0.04), 1px 0 4px rgba(0,0,0,0.03);
+      --shadow-fab:     0 2px 12px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+      --shadow-tooltip: 0 4px 16px rgba(0,0,0,0.08);
+      --shadow-menu:    0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* ─── APP SHELL ──────────────────────────────────────── */
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* ─── TOPBAR ─────────────────────────────────────────── */
+    .topbar {
+      height: 52px;
+      background: var(--bg-topbar);
+      border-bottom: 1px solid var(--border-panel);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      flex-shrink: 0;
+      z-index: 400;
+      position: relative;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 400;
+      padding: 6px 8px;
+      border-radius: 6px;
+      transition: color 150ms ease, background 150ms ease;
+    }
+    .btn-back:hover { color: var(--text-primary); background: var(--bg-row-hover); }
+
+    .topbar-divider {
+      width: 1px;
+      height: 18px;
+      background: var(--border-panel);
+    }
+
+    .topbar-product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--text-primary);
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Device switcher */
+    .device-switcher {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg-row-hover);
+      border: 1px solid var(--border-panel);
+      border-radius: 8px;
+      padding: 3px;
+    }
+
+    .device-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 30px;
+      border-radius: 6px;
+      color: var(--text-muted);
+      transition: background 150ms ease, color 150ms ease;
+    }
+    .device-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.8); }
+    .device-btn.active {
+      background: #FFFFFF;
+      color: var(--text-primary);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    /* Save button */
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-save {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      padding: 7px 14px;
+      border-radius: 8px;
+      transition: background 150ms ease, border-color 150ms ease;
+    }
+    .btn-save:hover { background: var(--bg-row-active); border-color: var(--border-active); }
+    .btn-save svg { color: var(--text-muted); }
+
+    /* Saved state */
+    .btn-save.saved {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn-save.saved svg { color: var(--accent); }
+
+    /* ─── WORKSPACE ──────────────────────────────────────── */
+    .workspace {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-preview);
+    }
+
+    /* Preview area */
+    .preview-area {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .preview-frame {
+      margin: 0 auto;
+      background: #FFFFFF;
+      transition: max-width 320ms cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 100%;
+      position: relative;
+    }
+
+    .preview-frame.desktop { max-width: 100%; }
+    .preview-frame.tablet  { max-width: 768px; box-shadow: 0 0 0 1px var(--border-panel); }
+    .preview-frame.mobile  { max-width: 390px; box-shadow: 0 0 0 1px var(--border-panel); }
+
+    /* ─── FAB ────────────────────────────────────────────── */
+    .fab {
+      position: fixed;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 200;
+      width: 44px;
+      height: 44px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-panel);
+      border-radius: 10px;
+      box-shadow: var(--shadow-fab);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition:
+        background 150ms ease,
+        color 150ms ease,
+        box-shadow 200ms ease,
+        transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .fab:hover {
+      color: var(--text-primary);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.06);
+      transform: translateY(-50%) scale(1.05);
+    }
+    .fab.open {
+      background: var(--accent-bg);
+      color: var(--accent);
+      border-color: rgba(168, 181, 160, 0.4);
+    }
+
+    /* FAB tooltip */
+    .fab-tooltip {
+      position: fixed;
+      left: 68px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--text-primary);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 180ms ease;
+      z-index: 201;
+    }
+    .fab:hover + .fab-tooltip { opacity: 1; }
+
+    /* ─── PANEL SLIDE-IN ─────────────────────────────────── */
+    .panel {
+      position: fixed;
+      left: 0;
+      top: 52px;
+      width: 400px;
+      height: calc(100vh - 52px);
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border-panel);
+      box-shadow: var(--shadow-panel);
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+    .panel.open {
+      transform: translateX(0);
+    }
+
+    /* Panel header */
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 16px 0 20px;
+      flex-shrink: 0;
+    }
+    .panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+    .panel-count {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-left: 6px;
+    }
+    .btn-close-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      color: var(--text-muted);
+      transition: background 120ms ease, color 120ms ease;
+    }
+    .btn-close-panel:hover { background: var(--bg-row-hover); color: var(--text-primary); }
+
+    /* Search bar */
+    .panel-search {
+      padding: 12px 16px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .panel-search-icon {
+      position: absolute;
+      left: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-disabled);
+      pointer-events: none;
+      display: flex;
+    }
+    .panel-search input {
+      width: 100%;
+      height: 34px;
+      background: var(--bg-app);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--text-primary);
+      padding: 0 12px 0 34px;
+      outline: none;
+      transition: border-color 150ms ease;
+    }
+    .panel-search input::placeholder { color: var(--text-disabled); }
+    .panel-search input:focus { border-color: var(--accent); }
+
+    /* Sections list */
+    .sections-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 12px 8px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-subtle) transparent;
+    }
+    .sections-list::-webkit-scrollbar { width: 4px; }
+    .sections-list::-webkit-scrollbar-track { background: transparent; }
+    .sections-list::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 4px; }
+
+    /* Section row */
+    .section-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      position: relative;
+      transition: background 120ms ease;
+      border-left: 3px solid transparent;
+      user-select: none;
+    }
+    .section-row:hover { background: var(--bg-row-hover); }
+    .section-row.active {
+      background: var(--bg-row-active);
+      border-left-color: var(--border-active);
+      padding-left: 13px;
+    }
+    .section-row.hidden-section .section-label {
+      opacity: 0.38;
+      font-style: italic;
+    }
+
+    .drag-handle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      color: var(--text-disabled);
+      cursor: grab;
+      flex-shrink: 0;
+      transition: color 120ms ease;
+    }
+    .section-row:hover .drag-handle { color: var(--text-muted); }
+
+    .section-label {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: opacity 150ms ease;
+    }
+
+    .section-actions {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      opacity: 0;
+      transition: opacity 120ms ease;
+    }
+    .section-row:hover .section-actions,
+    .section-row.active .section-actions { opacity: 1; }
+
+    .section-action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      color: var(--text-muted);
+      transition: background 120ms ease, color 120ms ease;
+    }
+    .section-action-btn:hover { background: var(--bg-app); color: var(--text-primary); }
+    .section-action-btn.hidden-icon { color: var(--text-disabled); }
+
+    /* Context menu */
+    .context-menu {
+      position: absolute;
+      right: 8px;
+      top: calc(100% + 4px);
+      background: var(--bg-panel);
+      border: 1px solid var(--border-panel);
+      border-radius: 8px;
+      box-shadow: var(--shadow-menu);
+      z-index: 500;
+      min-width: 160px;
+      padding: 4px 0;
+      display: none;
+    }
+    .context-menu.open { display: block; }
+
+    .context-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      height: 34px;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-primary);
+      transition: background 100ms ease;
+    }
+    .context-menu-item:hover { background: var(--bg-row-hover); }
+    .context-menu-item.danger { color: #EF4444; }
+    .context-menu-item.danger:hover { background: #FEF2F2; }
+
+    .context-menu-separator {
+      height: 1px;
+      background: var(--border-panel);
+      margin: 4px 0;
+    }
+
+    /* Panel footer */
+    .panel-footer {
+      flex-shrink: 0;
+      border-top: 1px solid var(--border-panel);
+      padding: 10px 12px;
+    }
+    .btn-add-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      height: 38px;
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      border-radius: 8px;
+      transition: background 120ms ease;
+    }
+    .btn-add-section:hover { background: var(--accent-bg); }
+
+    /* ─── PREVIEW CONTENT (mock landing) ──────────────────── */
+    .preview-nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #FFFFFF;
+      border-bottom: 1px solid #DDD8CF;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+    }
+    .preview-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: #2D2D2D;
+      font-style: normal;
+    }
+    .preview-nav-links {
+      display: flex;
+      gap: 32px;
+    }
+    .preview-nav-link {
+      font-size: 13px;
+      color: #8B8680;
+    }
+    .preview-nav-cta {
+      font-size: 13px;
+      font-weight: 500;
+      color: #2D2D2D;
+      border-bottom: 1px solid #2D2D2D;
+      padding-bottom: 1px;
+    }
+
+    .preview-section {
+      position: relative;
+      cursor: pointer;
+      outline: 1px solid transparent;
+      transition: outline-color 200ms ease, background-color 200ms ease;
+    }
+    .preview-section:hover {
+      outline: 1px dashed rgba(168, 181, 160, 0.8);
+    }
+    .preview-section.selected {
+      outline: 2px solid #A8B5A0;
+      background-color: rgba(168, 181, 160, 0.06);
+    }
+
+    /* Section tooltip */
+    .section-tooltip {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #2D2D2D;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 6px;
+      z-index: 50;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      opacity: 0;
+      transform: translateY(2px);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+    .preview-section:hover .section-tooltip { opacity: 1; transform: translateY(0); }
+
+    /* ─── HERO SECTION (preview) ─────────────────────────── */
+    .prev-hero {
+      display: flex;
+      min-height: 520px;
+      background: #FFFFFF;
+    }
+    .prev-hero-img {
+      flex: 0 0 54%;
+      background: url('https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=800') center/cover no-repeat;
+      background-color: #EDE8DF;
+    }
+    .prev-hero-content {
+      flex: 0 0 46%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 64px 56px;
+    }
+    .prev-eyebrow {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #A8B5A0;
+      margin-bottom: 16px;
+    }
+    .prev-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 3.5vw, 52px);
+      font-weight: 700;
+      color: #2D2D2D;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .prev-sub {
+      font-size: 16px;
+      color: #7A7A72;
+      line-height: 1.7;
+      margin-bottom: 36px;
+    }
+    .prev-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #2D2D2D;
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 14px 28px;
+      border-radius: 2px;
+      width: fit-content;
+    }
+
+    /* ─── STORY SECTION ──────────────────────────────────── */
+    .prev-story {
+      background: #FFFFFF;
+      padding: 96px 64px;
+    }
+    .prev-story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .prev-story-img {
+      background: url('https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?auto=compress&cs=tinysrgb&w=800') center/cover no-repeat;
+      background-color: #F5F1EB;
+      aspect-ratio: 3/4;
+      border-radius: 2px;
+    }
+    .prev-story-body { font-size: 16px; color: #7A7A72; line-height: 1.8; }
+    .prev-h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 3vw, 44px);
+      font-weight: 700;
+      color: #2D2D2D;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    /* ─── FEATURES SECTION ───────────────────────────────── */
+    .prev-features {
+      background: #F5F1EB;
+      padding: 96px 64px;
+    }
+    .prev-feat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: #DDD8CF;
+      margin-top: 48px;
+    }
+    .prev-feat-card {
+      background: #FAFAF7;
+      padding: 40px 32px;
+    }
+    .prev-feat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #EEF2EC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #A8B5A0;
+      margin-bottom: 20px;
+    }
+    .prev-feat-title { font-size: 17px; font-weight: 600; color: #2D2D2D; margin-bottom: 8px; }
+    .prev-feat-desc { font-size: 14px; color: #7A7A72; line-height: 1.7; }
+
+    /* ─── TESTIMONIAL SECTION ────────────────────────────── */
+    .prev-testimonial {
+      background: #FFFFFF;
+      padding: 96px 64px;
+      text-align: center;
+    }
+    .prev-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 2vw, 30px);
+      font-style: italic;
+      color: #2D2D2D;
+      line-height: 1.6;
+      max-width: 640px;
+      margin: 0 auto 28px;
+    }
+    .prev-quote-author { font-size: 13px; font-weight: 600; color: #2D2D2D; }
+    .prev-quote-role { font-size: 12px; color: #8B8680; margin-top: 4px; }
+
+    /* ─── GALLERY ────────────────────────────────────────── */
+    .prev-gallery {
+      background: #F5F1EB;
+      padding: 80px 64px;
+    }
+    .prev-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      margin-top: 40px;
+    }
+    .prev-gallery-item {
+      aspect-ratio: 3/4;
+      background-size: cover;
+      background-position: center;
+      background-color: #EDE8DF;
+    }
+
+    /* ─── MOBILE RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 640px) {
+      .panel {
+        width: 100vw;
+        border-right: none;
+      }
+      .topbar { padding: 0 12px; }
+      .topbar-product-name { font-size: 14px; max-width: 120px; }
+      .device-switcher { display: none; }
+      .prev-hero { flex-direction: column; min-height: auto; }
+      .prev-hero-img { height: 220px; flex: none; }
+      .prev-hero-content { flex: none; padding: 40px 24px; }
+      .prev-story-grid { grid-template-columns: 1fr; gap: 32px; }
+      .prev-feat-grid { grid-template-columns: 1fr; }
+      .prev-gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .prev-story, .prev-features, .prev-testimonial, .prev-gallery { padding: 64px 24px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
+
+    /* ─── STATUS TOAST ───────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: #2D2D2D;
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 8px;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease, transform 200ms ease;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ─── TOPBAR ──────────────────────────────────────────── -->
+  <header class="topbar">
+    <!-- Left : back + product name -->
+    <div class="topbar-left">
+      <button class="btn-back" onclick="showToast('Retour au dashboard')">
+        <!-- chevron-left -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Retour
+      </button>
+      <div class="topbar-divider"></div>
+      <span class="topbar-product-name">Allbirds Natural Runner</span>
+    </div>
+
+    <!-- Center : device switcher -->
+    <div class="device-switcher">
+      <button class="device-btn active" id="btn-desktop" onclick="setDevice('desktop')" title="Bureau">
+        <!-- desktop -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+      </button>
+      <button class="device-btn" id="btn-tablet" onclick="setDevice('tablet')" title="Tablette">
+        <!-- tablet -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2"/>
+          <circle cx="12" cy="18" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+      <button class="device-btn" id="btn-mobile" onclick="setDevice('mobile')" title="Mobile">
+        <!-- mobile -->
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2"/>
+          <circle cx="12" cy="18" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Right : save -->
+    <div class="topbar-right">
+      <button class="btn-save" id="btn-save" onclick="handleSave()">
+        <!-- save -->
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/>
+          <polyline points="7 3 7 8 15 8"/>
+        </svg>
+        Sauvegarder
+      </button>
+    </div>
+  </header>
+
+  <!-- ─── WORKSPACE ────────────────────────────────────────── -->
+  <div class="workspace">
+
+    <!-- Preview area -->
+    <div class="preview-area" id="preview-area" onclick="handlePreviewClick(event)">
+      <div class="preview-frame desktop" id="preview-frame">
+
+        <!-- NAV -->
+        <nav class="preview-nav">
+          <span class="preview-brand">Natural</span>
+          <div class="preview-nav-links">
+            <span class="preview-nav-link">Notre histoire</span>
+            <span class="preview-nav-link">Matériaux</span>
+            <span class="preview-nav-link">Avis</span>
+          </div>
+          <span class="preview-nav-cta">Découvrir</span>
+        </nav>
+
+        <!-- HERO -->
+        <div
+          class="preview-section"
+          data-section-id="hero"
+          onclick="selectSection(event, 'hero')"
+        >
+          <div class="section-tooltip">Hero — Accroche produit ✎</div>
+          <div class="prev-hero">
+            <div class="prev-hero-img"></div>
+            <div class="prev-hero-content">
+              <p class="prev-eyebrow">Nouveau — Collection Automne</p>
+              <h1 class="prev-h1">Fait pour<br>durer.</h1>
+              <p class="prev-sub">Conçu à partir de matériaux naturels sélectionnés pour leur durabilité et leur respect de la planète.</p>
+              <span class="prev-cta">
+                Découvrir maintenant
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STORY -->
+        <div
+          class="preview-section"
+          data-section-id="story"
+          onclick="selectSection(event, 'story')"
+        >
+          <div class="section-tooltip">Histoire (PAS) ✎</div>
+          <div class="prev-story">
+            <div class="prev-story-grid">
+              <div class="prev-story-img"></div>
+              <div>
+                <p class="prev-eyebrow">Notre histoire</p>
+                <h2 class="prev-h2">Pourquoi ce produit existe</h2>
+                <p class="prev-story-body">Nous avons créé ce produit pour résoudre un problème réel — pas pour suivre une tendance. Chaque matériau est sélectionné à la source, chaque couture pensée pour durer des années sans compromettre la planète.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FEATURES -->
+        <div
+          class="preview-section"
+          data-section-id="features"
+          onclick="selectSection(event, 'features')"
+        >
+          <div class="section-tooltip">Caractéristiques ✎</div>
+          <div class="prev-features">
+            <div style="max-width:1100px;margin:0 auto;">
+              <p class="prev-eyebrow">Les matériaux</p>
+              <h2 class="prev-h2">Conçu avec soin</h2>
+              <div class="prev-feat-grid">
+                <div class="prev-feat-card">
+                  <div class="prev-feat-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                  </div>
+                  <p class="prev-feat-title">Matière naturelle</p>
+                  <p class="prev-feat-desc">Sélectionné à la source pour sa qualité supérieure et son impact minimal.</p>
+                </div>
+                <div class="prev-feat-card">
+                  <div class="prev-feat-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                  </div>
+                  <p class="prev-feat-title">Fabrication responsable</p>
+                  <p class="prev-feat-desc">Chaque pièce assemblée avec une attention extrême au détail.</p>
+                </div>
+                <div class="prev-feat-card">
+                  <div class="prev-feat-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+                  </div>
+                  <p class="prev-feat-title">Durabilité certifiée</p>
+                  <p class="prev-feat-desc">Conçu pour accompagner chaque jour, longtemps.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TESTIMONIAL -->
+        <div
+          class="preview-section"
+          data-section-id="testimonials"
+          onclick="selectSection(event, 'testimonials')"
+        >
+          <div class="section-tooltip">Témoignages ✎</div>
+          <div class="prev-testimonial">
+            <p class="prev-eyebrow" style="margin-bottom:16px;">Ce qu'ils disent</p>
+            <blockquote class="prev-quote">
+              "Ce produit a changé ma façon de consommer. Je ne reviendrai pas en arrière."
+            </blockquote>
+            <p class="prev-quote-author">Camille L.</p>
+            <p class="prev-quote-role">Cliente depuis 2 ans</p>
+          </div>
+        </div>
+
+        <!-- GALLERY -->
+        <div
+          class="preview-section"
+          data-section-id="gallery"
+          onclick="selectSection(event, 'gallery')"
+        >
+          <div class="section-tooltip">Galerie produit ✎</div>
+          <div class="prev-gallery">
+            <div style="max-width:1100px;margin:0 auto;">
+              <p class="prev-eyebrow">Galerie</p>
+              <div class="prev-gallery-grid">
+                <div class="prev-gallery-item" style="background-image:url('https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=400')"></div>
+                <div class="prev-gallery-item" style="background-image:url('https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=400')"></div>
+                <div class="prev-gallery-item" style="background-image:url('https://images.pexels.com/photos/3321582/pexels-photo-3321582.jpeg?auto=compress&cs=tinysrgb&w=400')"></div>
+                <div class="prev-gallery-item" style="background-image:url('https://images.pexels.com/photos/3762879/pexels-photo-3762879.jpeg?auto=compress&cs=tinysrgb&w=400')"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /preview-frame -->
+    </div><!-- /preview-area -->
+
+    <!-- ─── FAB ──────────────────────────────────────────── -->
+    <button
+      class="fab"
+      id="fab"
+      onclick="togglePanel()"
+      aria-label="Ouvrir les sections"
+      aria-expanded="false"
+      aria-controls="editor-panel"
+    >
+      <!-- sections icon -->
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="8" height="5" rx="1"/>
+        <rect x="13" y="3" width="8" height="5" rx="1"/>
+        <rect x="3" y="11" width="8" height="5" rx="1"/>
+        <rect x="13" y="11" width="8" height="5" rx="1"/>
+        <line x1="3" y1="20" x2="21" y2="20" stroke-width="1.5"/>
+      </svg>
+    </button>
+    <div class="fab-tooltip" aria-hidden="true">Sections</div>
+
+    <!-- ─── PANEL ─────────────────────────────────────────── -->
+    <aside
+      class="panel"
+      id="editor-panel"
+      role="dialog"
+      aria-modal="false"
+      aria-label="Panneau sections"
+    >
+      <!-- Header -->
+      <div class="panel-header">
+        <div style="display:flex;align-items:center;gap:0;">
+          <span class="panel-title">Sections</span>
+          <span class="panel-count" id="sections-count">(5)</span>
+        </div>
+        <button class="btn-close-panel" onclick="closePanel()" aria-label="Fermer le panneau">
+          <!-- x-close -->
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Search -->
+      <div class="panel-search">
+        <div class="panel-search-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+        <input
+          type="text"
+          placeholder="Rechercher une section..."
+          id="search-input"
+          oninput="filterSections(this.value)"
+          aria-label="Rechercher une section"
+        >
+      </div>
+
+      <!-- Sections list -->
+      <div class="sections-list" id="sections-list" role="list">
+        <!-- Rows générées par JS -->
+      </div>
+
+      <!-- Footer -->
+      <div class="panel-footer">
+        <button class="btn-add-section" onclick="showToast('Bibliothèque de sections — disponible en C2')">
+          <!-- plus -->
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Ajouter une section
+        </button>
+      </div>
+    </aside>
+
+  </div><!-- /workspace -->
+</div><!-- /app -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ─── STATE ────────────────────────────────────────────────────────
+  var state = {
+    panelOpen: false,
+    selectedSection: null,
+    device: 'desktop',
+    sections: [
+      { id: 'hero',         label: 'Hero — Accroche produit',  visible: true  },
+      { id: 'story',        label: 'Histoire (PAS)',            visible: true  },
+      { id: 'features',     label: 'Caractéristiques',         visible: true  },
+      { id: 'testimonials', label: 'Témoignages',              visible: false }, // masqué par défaut pour la démo
+      { id: 'gallery',      label: 'Galerie produit',          visible: true  },
+    ]
+  }
+
+  // ─── RENDER SECTIONS LIST ─────────────────────────────────────────
+  function renderSections(query) {
+    var list = document.getElementById('sections-list')
+    var q = (query || '').toLowerCase()
+    var filtered = state.sections.filter(function(s) {
+      return s.label.toLowerCase().indexOf(q) !== -1
+    })
+
+    list.innerHTML = filtered.map(function(section) {
+      return [
+        '<div',
+        '  class="section-row' + (state.selectedSection === section.id ? ' active' : '') + (section.visible ? '' : ' hidden-section') + '"',
+        '  role="listitem"',
+        '  data-id="' + section.id + '"',
+        '  onclick="selectFromPanel(event, \'' + section.id + '\')"',
+        '>',
+        '  <span class="drag-handle" title="Glisser pour réorganiser">',
+        '    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">',
+        '      <circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/>',
+        '      <circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/>',
+        '      <circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/>',
+        '    </svg>',
+        '  </span>',
+        '  <span class="section-label">' + escapeHtml(section.label) + '</span>',
+        '  <div class="section-actions">',
+        '    <button class="section-action-btn' + (section.visible ? '' : ' hidden-icon') + '"',
+        '      onclick="toggleVisibility(event, \'' + section.id + '\')"',
+        '      title="' + (section.visible ? 'Masquer' : 'Afficher') + '"',
+        '      aria-label="' + (section.visible ? 'Masquer ' : 'Afficher ') + section.label + '"',
+        '    >',
+        section.visible
+          ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+          : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
+        '    </button>',
+        '    <button class="section-action-btn"',
+        '      onclick="openContextMenu(event, \'' + section.id + '\')"',
+        '      title="Plus d\'options"',
+        '      aria-label="Plus d\'options pour ' + escapeHtml(section.label) + '"',
+        '    >',
+        '      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none">',
+        '        <circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
+        '      </svg>',
+        '    </button>',
+        '  </div>',
+        '</div>'
+      ].join('\n')
+    }).join('')
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+  }
+
+  // ─── PANEL CONTROLS ───────────────────────────────────────────────
+  function openPanel() {
+    if (state.panelOpen) return
+    state.panelOpen = true
+    document.getElementById('editor-panel').classList.add('open')
+    document.getElementById('fab').classList.add('open')
+    document.getElementById('fab').setAttribute('aria-expanded', 'true')
+  }
+
+  function closePanel() {
+    if (!state.panelOpen) return
+    state.panelOpen = false
+    document.getElementById('editor-panel').classList.remove('open')
+    document.getElementById('fab').classList.remove('open')
+    document.getElementById('fab').setAttribute('aria-expanded', 'false')
+  }
+
+  function togglePanel() {
+    if (state.panelOpen) {
+      closePanel()
+    } else {
+      openPanel()
+    }
+  }
+
+  // ─── SECTION SELECTION ────────────────────────────────────────────
+
+  // Click depuis la preview
+  function selectSection(event, sectionId) {
+    event.stopPropagation()
+
+    // Sync l'état sélection
+    state.selectedSection = sectionId
+
+    // Ouvrir le panneau si fermé
+    openPanel()
+
+    // Mettre à jour visuel preview
+    document.querySelectorAll('.preview-section').forEach(function(el) {
+      el.classList.remove('selected')
+    })
+    document.querySelector('[data-section-id="' + sectionId + '"]').classList.add('selected')
+
+    // Re-render panel + scroll vers la row
+    renderSections()
+    setTimeout(function() {
+      var activeRow = document.querySelector('.section-row.active')
+      if (activeRow) {
+        activeRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }
+    }, 50)
+  }
+
+  // Click depuis le panel
+  function selectFromPanel(event, sectionId) {
+    if (event.target.closest('.section-actions')) return
+    state.selectedSection = sectionId
+
+    // Mettre à jour visuel preview
+    document.querySelectorAll('.preview-section').forEach(function(el) {
+      el.classList.remove('selected')
+    })
+    var previewEl = document.querySelector('[data-section-id="' + sectionId + '"]')
+    if (previewEl) {
+      previewEl.classList.add('selected')
+      previewEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+
+    renderSections()
+  }
+
+  // Click zone vide preview → deselect + ferme panel
+  function handlePreviewClick(event) {
+    if (event.target.closest('.preview-section')) return
+    if (state.selectedSection) {
+      state.selectedSection = null
+      document.querySelectorAll('.preview-section').forEach(function(el) {
+        el.classList.remove('selected')
+      })
+      renderSections()
+    }
+    if (state.panelOpen) closePanel()
+  }
+
+  // ─── VISIBILITY TOGGLE ────────────────────────────────────────────
+  function toggleVisibility(event, sectionId) {
+    event.stopPropagation()
+    var section = state.sections.find(function(s) { return s.id === sectionId })
+    if (!section) return
+    section.visible = !section.visible
+
+    // Update preview opacity
+    var previewEl = document.querySelector('[data-section-id="' + sectionId + '"]')
+    if (previewEl) {
+      previewEl.style.opacity = section.visible ? '1' : '0.25'
+      previewEl.style.pointerEvents = section.visible ? '' : 'none'
+    }
+
+    renderSections()
+    showToast(section.visible ? section.label + ' — visible' : section.label + ' — masquée')
+  }
+
+  // ─── CONTEXT MENU ─────────────────────────────────────────────────
+  var activeMenu = null
+
+  function openContextMenu(event, sectionId) {
+    event.stopPropagation()
+
+    // Fermer menu existant
+    closeContextMenu()
+
+    var btn = event.currentTarget
+    var row = btn.closest('.section-row')
+    var section = state.sections.find(function(s) { return s.id === sectionId })
+
+    var menu = document.createElement('div')
+    menu.className = 'context-menu open'
+    menu.innerHTML = [
+      '<button class="context-menu-item" onclick="duplicateSection(event,\'' + sectionId + '\')">',
+      '  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+      '  Dupliquer',
+      '</button>',
+      '<button class="context-menu-item" onclick="toggleVisibility(event,\'' + sectionId + '\');closeContextMenu()">',
+      '  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><circle cx="12" cy="12" r="3"/></svg>',
+      '  ' + (section && section.visible ? 'Masquer' : 'Afficher'),
+      '</button>',
+      '<div class="context-menu-separator"></div>',
+      '<button class="context-menu-item danger" onclick="deleteSection(event,\'' + sectionId + '\')">',
+      '  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>',
+      '  Supprimer',
+      '</button>'
+    ].join('')
+
+    row.style.position = 'relative'
+    row.appendChild(menu)
+    activeMenu = menu
+
+    // Close on click outside
+    setTimeout(function() {
+      document.addEventListener('click', closeContextMenu, { once: true })
+    }, 10)
+  }
+
+  function closeContextMenu() {
+    if (activeMenu) {
+      activeMenu.remove()
+      activeMenu = null
+    }
+  }
+
+  function duplicateSection(event, sectionId) {
+    event.stopPropagation()
+    closeContextMenu()
+    var idx = state.sections.findIndex(function(s) { return s.id === sectionId })
+    if (idx === -1) return
+    var original = state.sections[idx]
+    var copy = { id: sectionId + '_copy_' + Date.now(), label: original.label + ' (copie)', visible: original.visible }
+    state.sections.splice(idx + 1, 0, copy)
+    renderSections()
+    showToast(original.label + ' — dupliquée')
+  }
+
+  function deleteSection(event, sectionId) {
+    event.stopPropagation()
+    closeContextMenu()
+    var section = state.sections.find(function(s) { return s.id === sectionId })
+    var label = section ? section.label : sectionId
+    state.sections = state.sections.filter(function(s) { return s.id !== sectionId })
+    if (state.selectedSection === sectionId) {
+      state.selectedSection = null
+      document.querySelectorAll('.preview-section').forEach(function(el) { el.classList.remove('selected') })
+    }
+    document.getElementById('sections-count').textContent = '(' + state.sections.length + ')'
+    renderSections()
+    showToast(label + ' — supprimée')
+  }
+
+  // ─── SEARCH ───────────────────────────────────────────────────────
+  function filterSections(query) {
+    renderSections(query)
+  }
+
+  // ─── DEVICE SWITCHER ──────────────────────────────────────────────
+  function setDevice(device) {
+    state.device = device
+    var frame = document.getElementById('preview-frame')
+    frame.className = 'preview-frame ' + device
+    document.querySelectorAll('.device-btn').forEach(function(btn) {
+      btn.classList.remove('active')
+    })
+    document.getElementById('btn-' + device).classList.add('active')
+  }
+
+  // ─── SAVE ─────────────────────────────────────────────────────────
+  function handleSave() {
+    var btn = document.getElementById('btn-save')
+    btn.classList.add('saved')
+    btn.innerHTML = [
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+      'Sauvegardé'
+    ].join('')
+    showToast('Modifications sauvegardées')
+    setTimeout(function() {
+      btn.classList.remove('saved')
+      btn.innerHTML = [
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>',
+        'Sauvegarder'
+      ].join('')
+    }, 2500)
+  }
+
+  // ─── TOAST ────────────────────────────────────────────────────────
+  var toastTimer
+  function showToast(msg) {
+    clearTimeout(toastTimer)
+    var t = document.getElementById('toast')
+    t.textContent = msg
+    t.classList.add('show')
+    toastTimer = setTimeout(function() { t.classList.remove('show') }, 2200)
+  }
+
+  // ─── KEYBOARD ─────────────────────────────────────────────────────
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeContextMenu()
+      if (state.panelOpen) {
+        closePanel()
+        return
+      }
+      if (state.selectedSection) {
+        state.selectedSection = null
+        document.querySelectorAll('.preview-section').forEach(function(el) { el.classList.remove('selected') })
+        renderSections()
+      }
+    }
+  })
+
+  // ─── INIT ─────────────────────────────────────────────────────────
+  (function init() {
+    renderSections()
+
+    // Appliquer opacité aux sections masquées dans preview
+    state.sections.forEach(function(s) {
+      if (!s.visible) {
+        var el = document.querySelector('[data-section-id="' + s.id + '"]')
+        if (el) { el.style.opacity = '0.25'; el.style.pointerEvents = 'none'; }
+      }
+    })
+  })()
+</script>
+
+</body>
+</html>

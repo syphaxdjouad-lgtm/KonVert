@@ -1,6 +1,6 @@
 # Editor V2 — Specs Design UI Premium
 **Date :** 2026-05-26  
-**Statut :** v2.1 — ajustements post-feedback (panel width, responsive, kebab menu, edit sub-panel)  
+**Statut :** v2.2 — drag-drop Shopify-style + kebab 3 actions (retire boutons déplacement)  
 **Référence :** `etec-natural.ts` — palette, typo, DA cohérents  
 **Mockup :** `.mockups/editor-v2.html`
 
@@ -780,17 +780,13 @@ Réduit à `--panel-width: 360px` (token CSS). Ratio preview/panel plus respiran
 
 **Handle swipe mobile :** pseudo-élément `::before` sur `.panel` — barre `36×4px` sand, `border-radius:2px`, `margin: 8px auto`. Signal affordance sans JS supplémentaire.
 
-### 10.3 Menu kebab (3 points verticaux) par section row
+### 10.3 Menu kebab (3 points verticaux) par section row — v2.2
 
-**Remplacement du contexte menu précédent** (3 dots horizontaux inline) par un kebab vertical `⋮` SVG outline 1.5px, cohérent avec la bibliothèque d'icônes.
-
-**5 actions dans le dropdown :**
+**3 actions seulement** (les boutons "Déplacer haut/bas" ont été retirés — le reorder se fait exclusivement par drag-drop).
 
 ```
 ┌─────────────────────────────┐
 │ ✎  Éditer                   │  → ouvre sub-panel droit
-│ ↑  Déplacer vers le haut    │  → swap avec index-1
-│ ↓  Déplacer vers le bas     │  → swap avec index+1
 │ ❏  Dupliquer                │  → insert copie à index+1
 │ ─────────────────────────── │
 │ 🗑  Supprimer                │  → rouge #D9534F (muted, pas #EF4444)
@@ -803,8 +799,107 @@ Réduit à `--panel-width: 360px` (token CSS). Ratio preview/panel plus respiran
 - ESC ferme en priorité 1 (avant subpanel, avant panel)
 - `transform-origin: top right` + scale 0.96→1 + translateY -4px→0 sur 140ms ease — ouverture naturelle
 - Protection viewport : si menu déborde en bas → flip au-dessus du bouton ; si déborde à gauche → clamp à 8px
+- Hauteur estimée `menuH` réduite de 175 → 120px (3 items au lieu de 5)
 
-**Drag handle conservé :** complémentaire au menu — les deux coexistent.
+**Drag handle conservé :** hint visuel d'affordance à gauche de chaque row. Au hover de la row entière, les 6 dots passent de `--text-disabled` à `--accent` (sage).
+
+### 10.5 Drag & Drop Shopify-style — v2.2
+
+**Philosophie :** toute la row est draggable (curseur `grab`), le handle 6 dots est un signal visuel d'affordance et non la zone exclusive d'initiation.
+
+#### États visuels
+
+```
+ROW — DEFAULT
+  cursor: grab
+  drag-handle: color var(--text-disabled)
+
+ROW — HOVER
+  background: var(--bg-row-hover)
+  cursor: grab
+  drag-handle: color var(--accent)  ← passe sage au lieu de muted
+
+ROW — DRAGGING (lifted)
+  cursor: grabbing
+  opacity: 0.95
+  transform: scale(1.02)
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.05)
+  background: var(--bg-panel)  ← blanc, détaché du fond
+  border-left: 3px solid var(--border-active)
+  transition: none  ← pour suivre la souris sans lag
+
+ROW — SNAP BACK (drop atterri)
+  transition: transform 150ms ease, opacity 150ms ease, box-shadow 150ms ease
+  → retour scale(1) opacity(1) box-shadow(none) en 150ms
+```
+
+#### Drop indicator
+
+```
+.drop-indicator
+  height: 2px
+  background: var(--accent)  ← sage #A8B5A0
+  border-radius: 2px
+  margin: 0 8px
+  opacity: 0 → 1 sur 120ms ease (quand .active)
+
+Position : injecté dans le DOM entre chaque row et après la dernière.
+N rows → N+1 indicateurs (indices 0 à N).
+```
+
+#### ASCII — état dragging
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                                                              │
+│  :: Hero — Accroche produit                         👁  ...  │  ← row normale
+│                                                              │
+│  ─────────────────────────────────────────  ← drop indicator (sage 2px)
+│                                                              │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ :: Histoire (PAS)                           👁  ...  │   │  ← row lifted
+│  │    transform: scale(1.02) + shadow douce             │   │
+│  └──────────────────────────────────────────────────────┘   │
+│                                                              │
+│  :: Caractéristiques                                👁  ...  │  ← row normale
+│  :: Témoignages                                     ◌  ...  │
+│  :: Galerie produit                                 👁  ...  │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+```
+
+#### Logique JS
+
+**Threshold anti-clic involontaire :**
+- `time: 150ms` — le drag ne s'active qu'après 150ms de pression maintenue OU
+- `dist: 5px` — si le pointeur bouge de >5px pendant le pression
+- Ces deux conditions sont en OR : la première atteinte déclenche le drag
+
+**Détection d'index cible :**
+- À chaque `pointermove`, calcul du Y de chaque row
+- Si `clientY < midpoint_row[i]` → indicateur affiché avant la row i
+- Sinon → indicateur affiché après la dernière row
+
+**Protection click post-drop :**
+- À `endDrag`, flag `drag.justDropped = true` pendant 80ms
+- `selectFromPanel` ignore le click si `drag.justDropped` est vrai
+- Évite la sélection involontaire de la section après un drop
+
+**Touch / mobile :**
+- Implémenté via `pointerdown / pointermove / pointerup` (API unifiée mouse + touch)
+- `setPointerCapture` sur la row → les événements pointermove/pointerup restent capturés même si le doigt sort de l'élément
+
+#### Accessibilité motion
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  /* Déjà couvert par la règle globale du fichier */
+  *, *::before, *::after { transition-duration: 0.01ms !important; }
+  /* Le drag-drop lui-même reste fonctionnel (seul le lift visuel est réduit) */
+}
+```
+
+**Note A11y :** le drag-drop natif est la seule méthode de reorder (boutons up/down retirés du menu). Pour l'accessibilité clavier stricte (WCAG 2.1 SC 2.1.1), une implémentation C2 devra proposer une alternative clavier — par exemple un mode "reorder" avec flèches directionnelles sur les rows sélectionnées.
 
 ### 10.4 Action "Éditer" — Option A retenue (Sub-panel droit)
 
@@ -862,7 +957,7 @@ Footer :
 - [ ] FAB : `aria-expanded`, `aria-controls="editor-panel"`
 - [ ] Panel : `role="dialog"`, `aria-modal="true"`, focus trap à l'ouverture
 - [ ] ESC ferme le panneau
-- [ ] Drag & drop : alternative clavier (buttons up/down dans le mini-menu)
+- [ ] Drag & drop : alternative clavier (boutons up/down retirés du menu v2.2 — prévoir mode reorder clavier en C2)
 - [ ] Contraste : charcoal #2D2D2D sur white #FFFFFF = 13.9:1 (AAA)
 - [ ] Contraste : muted #8B8680 sur white = 4.6:1 (AA)
 - [ ] Contraste : sage #A8B5A0 sur white = 2.9:1 — **usage décoratif seulement** (outline, border), jamais pour du texte informationnel

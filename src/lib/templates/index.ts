@@ -190,20 +190,25 @@ export const TEMPLATES = [
  *   Lu par renderRichSections via injection _sectionOrder dans data.
  * @field visualSettings - RESERVE Chantier C2. Ignore en C1, warning dev si fourni.
  * @field globalStyles - RESERVE Chantier C5. Ignore en C1, warning dev si fourni.
+ * @field editMode - Editor v2 : active injection data-kvt-section-id +
+ *   script click-to-edit postMessage dans l'iframe. Faux en prod.
  */
 export interface TemplateOverrides {
   sectionOrder?: SectionInstance[]
   visualSettings?: VisualSettings
   globalStyles?: GlobalStyles
+  editMode?: boolean
 }
 
 export function renderTemplate(templateId: string, data: LandingPageData, overrides?: TemplateOverrides): string {
   // C1 : injection de sectionOrder dans data via _sectionOrder (champ privé).
-  // renderRichSections lit ce champ et lui donne priorité sur DEFAULT_ORDER.
+  // Editor v2 : injection de _kvt_edit_mode pour activer click-to-edit dans iframe.
   // Stratégie : évite de modifier la signature des 42+ fonctions template.
-  const renderData: LandingPageData = overrides?.sectionOrder
-    ? { ...data, _sectionOrder: overrides.sectionOrder } as LandingPageData
-    : data
+  const renderData: LandingPageData = {
+    ...data,
+    ...(overrides?.sectionOrder ? { _sectionOrder: overrides.sectionOrder } : {}),
+    ...(overrides?.editMode ? { _kvt_edit_mode: true } : {}),
+  } as LandingPageData
 
   // Detection des overrides non encore supportes (C2/C5) — warning dev pour
   // eviter les faux positifs silencieux ("ca marche pas mais pas d'erreur").
@@ -282,4 +287,33 @@ export function renderTemplate(templateId: string, data: LandingPageData, overri
     case 'home-deco':       return templateEtecSage(renderData)
     default:                return templateEtecBlue(renderData)
   }
+}
+
+// ─── V3 RENDERER (feature flag) ──────────────────────────────────────────────
+
+import { renderPageV3 } from '@/lib/sections-v3/render-page'
+import type { V3PageData, V3SectionKey } from '@/types/v3'
+import type { StyleId } from '@/lib/styles/types'
+
+const V3_ENABLED = process.env.KONVERT_V3_RENDERER === 'true'
+
+/**
+ * Point d'entrée principal de rendu. Route entre V3 (si styleId présent + flag ON)
+ * et legacy (renderTemplate sur templateId).
+ *
+ * Activable via env var KONVERT_V3_RENDERER=true.
+ */
+export function renderPage(input: {
+  styleId?: StyleId
+  templateId?: string
+  data: V3PageData & { _legacyData?: LandingPageData }
+  sectionOrder?: V3SectionKey[]
+}): string {
+  if (V3_ENABLED && input.styleId) {
+    return renderPageV3(input.styleId, input.data, input.sectionOrder)
+  }
+  if (input.templateId && input.data._legacyData) {
+    return renderTemplate(input.templateId, input.data._legacyData)
+  }
+  throw new Error('renderPage: ni styleId+V3_ENABLED ni templateId+legacy fournis')
 }

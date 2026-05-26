@@ -18,7 +18,7 @@
       background: #FAFAF7;
     }
     button { cursor: pointer; border: none; background: none; font-family: inherit; }
-    input  { font-family: inherit; }
+    input, textarea { font-family: inherit; }
 
     /* ─── TOKENS ─────────────────────────────────────────── */
     :root {
@@ -46,6 +46,10 @@
       --shadow-fab:     0 2px 12px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
       --shadow-tooltip: 0 4px 16px rgba(0,0,0,0.08);
       --shadow-menu:    0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+
+      --panel-width:    360px;
+      --subpanel-width: 360px;
+      --topbar-h:       52px;
     }
 
     /* ─── APP SHELL ──────────────────────────────────────── */
@@ -57,7 +61,7 @@
 
     /* ─── TOPBAR ─────────────────────────────────────────── */
     .topbar {
-      height: 52px;
+      height: var(--topbar-h);
       background: var(--bg-topbar);
       border-bottom: 1px solid var(--border-panel);
       display: flex;
@@ -133,6 +137,19 @@
       color: var(--text-primary);
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     }
+
+    /* Mobile overflow menu "..." for topbar */
+    .topbar-overflow-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      color: var(--text-muted);
+      transition: background 150ms ease, color 150ms ease;
+    }
+    .topbar-overflow-btn:hover { background: var(--bg-row-hover); color: var(--text-primary); }
 
     /* Save button */
     .topbar-right {
@@ -213,6 +230,7 @@
         background 150ms ease,
         color 150ms ease,
         box-shadow 200ms ease,
+        left 280ms cubic-bezier(0.4, 0, 0.2, 1),
         transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .fab:hover {
@@ -224,6 +242,12 @@
       background: var(--accent-bg);
       color: var(--accent);
       border-color: rgba(168, 181, 160, 0.4);
+    }
+    /* Laptop : FAB se decale a droite du panel quand ouvert */
+    @media (min-width: 1024px) and (max-width: 1279px) {
+      .fab.open {
+        left: calc(var(--panel-width) + 12px);
+      }
     }
 
     /* FAB tooltip */
@@ -250,9 +274,9 @@
     .panel {
       position: fixed;
       left: 0;
-      top: 52px;
-      width: 400px;
-      height: calc(100vh - 52px);
+      top: var(--topbar-h);
+      width: var(--panel-width);
+      height: calc(100vh - var(--topbar-h));
       background: var(--bg-panel);
       border-right: 1px solid var(--border-panel);
       box-shadow: var(--shadow-panel);
@@ -408,27 +432,34 @@
       border-radius: 6px;
       color: var(--text-muted);
       transition: background 120ms ease, color 120ms ease;
+      position: relative;
     }
     .section-action-btn:hover { background: var(--bg-app); color: var(--text-primary); }
     .section-action-btn.hidden-icon { color: var(--text-disabled); }
 
-    /* Context menu */
-    .context-menu {
-      position: absolute;
-      right: 8px;
-      top: calc(100% + 4px);
+    /* ─── KEBAB DROPDOWN ─────────────────────────────────── */
+    .kebab-menu {
+      position: fixed;
       background: var(--bg-panel);
       border: 1px solid var(--border-panel);
       border-radius: 8px;
       box-shadow: var(--shadow-menu);
-      z-index: 500;
-      min-width: 160px;
+      z-index: 600;
+      min-width: 188px;
       padding: 4px 0;
-      display: none;
+      opacity: 0;
+      transform: scale(0.96) translateY(-4px);
+      transform-origin: top right;
+      transition: opacity 140ms ease, transform 140ms ease;
+      pointer-events: none;
     }
-    .context-menu.open { display: block; }
+    .kebab-menu.open {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      pointer-events: all;
+    }
 
-    .context-menu-item {
+    .kebab-item {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -439,16 +470,27 @@
       font-weight: 400;
       color: var(--text-primary);
       transition: background 100ms ease;
+      text-align: left;
     }
-    .context-menu-item:hover { background: var(--bg-row-hover); }
-    .context-menu-item.danger { color: #EF4444; }
-    .context-menu-item.danger:hover { background: #FEF2F2; }
+    .kebab-item:hover { background: var(--bg-row-hover); }
+    .kebab-item.danger { color: #D9534F; }
+    .kebab-item.danger:hover { background: #FEF2F2; color: #D9534F; }
+    .kebab-item svg { flex-shrink: 0; }
 
-    .context-menu-separator {
+    .kebab-separator {
       height: 1px;
       background: var(--border-panel);
       margin: 4px 0;
     }
+
+    /* Overlay fermeture menu */
+    .kebab-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 599;
+      display: none;
+    }
+    .kebab-overlay.active { display: block; }
 
     /* Panel footer */
     .panel-footer {
@@ -470,6 +512,189 @@
       transition: background 120ms ease;
     }
     .btn-add-section:hover { background: var(--accent-bg); }
+
+    /* ─── SUB-PANEL EDIT (Option A) ──────────────────────── */
+    .subpanel {
+      position: fixed;
+      right: 0;
+      top: var(--topbar-h);
+      width: var(--subpanel-width);
+      height: calc(100vh - var(--topbar-h));
+      background: var(--bg-panel);
+      border-left: 1px solid var(--border-panel);
+      box-shadow: -4px 0 24px rgba(0,0,0,0.05), -1px 0 4px rgba(0,0,0,0.03);
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+    .subpanel.open {
+      transform: translateX(0);
+    }
+
+    .subpanel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 16px 0 20px;
+      flex-shrink: 0;
+    }
+    .subpanel-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .subpanel-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-disabled);
+    }
+    .subpanel-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+    .btn-close-subpanel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      color: var(--text-muted);
+      transition: background 120ms ease, color 120ms ease;
+    }
+    .btn-close-subpanel:hover { background: var(--bg-row-hover); color: var(--text-primary); }
+
+    .subpanel-divider {
+      height: 1px;
+      background: var(--border-panel);
+      margin: 14px 20px 0;
+    }
+
+    .subpanel-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.01em;
+    }
+    .field-input {
+      width: 100%;
+      height: 38px;
+      background: var(--bg-app);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--text-primary);
+      padding: 0 12px;
+      outline: none;
+      transition: border-color 150ms ease;
+    }
+    .field-input:focus { border-color: var(--accent); background: #FFFFFF; }
+    .field-input::placeholder { color: var(--text-disabled); }
+
+    .field-textarea {
+      width: 100%;
+      min-height: 100px;
+      background: var(--bg-app);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--text-primary);
+      padding: 10px 12px;
+      outline: none;
+      resize: vertical;
+      line-height: 1.6;
+      transition: border-color 150ms ease;
+    }
+    .field-textarea:focus { border-color: var(--accent); background: #FFFFFF; }
+    .field-textarea::placeholder { color: var(--text-disabled); }
+
+    /* Image upload placeholder */
+    .field-image-placeholder {
+      width: 100%;
+      height: 80px;
+      background: var(--bg-app);
+      border: 1px dashed var(--border-subtle);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-disabled);
+      cursor: pointer;
+      transition: border-color 150ms ease, background 150ms ease;
+    }
+    .field-image-placeholder:hover {
+      border-color: var(--accent);
+      background: var(--accent-bg);
+      color: var(--accent);
+    }
+
+    .subpanel-footer {
+      flex-shrink: 0;
+      border-top: 1px solid var(--border-panel);
+      padding: 14px 20px;
+      display: flex;
+      gap: 8px;
+    }
+    .btn-apply {
+      flex: 1;
+      height: 38px;
+      background: var(--text-primary);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: background 150ms ease, opacity 150ms ease;
+    }
+    .btn-apply:hover { background: #3D3D3D; }
+
+    .btn-cancel-edit {
+      height: 38px;
+      padding: 0 16px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      transition: background 150ms ease, border-color 150ms ease;
+    }
+    .btn-cancel-edit:hover { background: var(--bg-row-active); border-color: var(--border-active); }
+
+    /* C2 hint badge dans le subpanel */
+    .c2-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-disabled);
+      background: var(--bg-app);
+      border: 1px solid var(--border-panel);
+      border-radius: 4px;
+      padding: 3px 8px;
+    }
 
     /* ─── PREVIEW CONTENT (mock landing) ──────────────────── */
     .preview-nav {
@@ -691,28 +916,6 @@
       background-color: #EDE8DF;
     }
 
-    /* ─── MOBILE RESPONSIVE ──────────────────────────────── */
-    @media (max-width: 640px) {
-      .panel {
-        width: 100vw;
-        border-right: none;
-      }
-      .topbar { padding: 0 12px; }
-      .topbar-product-name { font-size: 14px; max-width: 120px; }
-      .device-switcher { display: none; }
-      .prev-hero { flex-direction: column; min-height: auto; }
-      .prev-hero-img { height: 220px; flex: none; }
-      .prev-hero-content { flex: none; padding: 40px 24px; }
-      .prev-story-grid { grid-template-columns: 1fr; gap: 32px; }
-      .prev-feat-grid { grid-template-columns: 1fr; }
-      .prev-gallery-grid { grid-template-columns: repeat(2, 1fr); }
-      .prev-story, .prev-features, .prev-testimonial, .prev-gallery { padding: 64px 24px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { transition-duration: 0.01ms !important; }
-    }
-
     /* ─── STATUS TOAST ───────────────────────────────────── */
     .toast {
       position: fixed;
@@ -732,6 +935,103 @@
       white-space: nowrap;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ────────────────────────────────────────────────────────
+       RESPONSIVE — toutes les transitions via transform (GPU)
+    ─────────────────────────────────────────────────────────── */
+
+    /* ── LAPTOP 1024–1279px ──────────────────────────────── */
+    @media (min-width: 1024px) and (max-width: 1279px) {
+      /* Panel identique, FAB se déplace via JS (classe open + CSS above) */
+    }
+
+    /* ── TABLET 768–1023px ───────────────────────────────── */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      :root { --panel-width: 320px; }
+
+      /* Le FAB se cache derrière le panel quand ouvert */
+      .fab.open {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* Sub-panel: pleine hauteur à droite, 320px */
+      .subpanel {
+        width: 320px;
+      }
+    }
+
+    /* ── MOBILE 375–767px ────────────────────────────────── */
+    @media (max-width: 767px) {
+      :root { --panel-width: 100vw; }
+
+      /* Panel fullscreen */
+      .panel {
+        width: 100vw;
+        border-right: none;
+        /* Ajout d'une barre handle en haut */
+        padding-top: 4px;
+      }
+      /* Handle swipe visuel */
+      .panel::before {
+        content: '';
+        display: block;
+        width: 36px;
+        height: 4px;
+        background: var(--border-subtle);
+        border-radius: 2px;
+        margin: 8px auto 0;
+        flex-shrink: 0;
+      }
+
+      /* FAB se cache quand panel ouvert */
+      .fab.open {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 200ms ease;
+      }
+
+      /* Topbar mobile : réduite */
+      .topbar { padding: 0 12px; }
+      .topbar-product-name {
+        font-size: 14px;
+        max-width: 120px;
+      }
+      /* Device switcher caché, remplacé par "..." */
+      .device-switcher { display: none; }
+      .topbar-overflow-btn { display: flex; }
+
+      /* Sub-panel fullscreen aussi */
+      .subpanel {
+        width: 100vw;
+        border-left: none;
+      }
+
+      /* Preview: sections verticales */
+      .prev-hero { flex-direction: column; min-height: auto; }
+      .prev-hero-img { height: 220px; flex: none; }
+      .prev-hero-content { flex: none; padding: 40px 24px; }
+      .prev-story-grid { grid-template-columns: 1fr; gap: 32px; }
+      .prev-feat-grid { grid-template-columns: 1fr; }
+      .prev-gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .prev-story, .prev-features, .prev-testimonial, .prev-gallery { padding: 64px 24px; }
+      .preview-nav { padding: 16px 20px; }
+      .preview-nav-links { display: none; }
+    }
+
+    /* ── MINI MOBILE 320–374px ───────────────────────────── */
+    @media (max-width: 374px) {
+      .panel-title { font-size: 14px; }
+      .section-label { font-size: 13px; }
+      .panel-search input { font-size: 12px; }
+      .subpanel-title { font-size: 14px; }
+      .field-input, .field-textarea { font-size: 13px; }
+      .topbar-product-name { font-size: 13px; max-width: 100px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 <body>
@@ -743,7 +1043,6 @@
     <!-- Left : back + product name -->
     <div class="topbar-left">
       <button class="btn-back" onclick="showToast('Retour au dashboard')">
-        <!-- chevron-left -->
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="15 18 9 12 15 6"/>
         </svg>
@@ -753,10 +1052,9 @@
       <span class="topbar-product-name">Allbirds Natural Runner</span>
     </div>
 
-    <!-- Center : device switcher -->
+    <!-- Center : device switcher (desktop/laptop/tablet) -->
     <div class="device-switcher">
       <button class="device-btn active" id="btn-desktop" onclick="setDevice('desktop')" title="Bureau">
-        <!-- desktop -->
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="3" width="20" height="14" rx="2"/>
           <line x1="8" y1="21" x2="16" y2="21"/>
@@ -764,14 +1062,12 @@
         </svg>
       </button>
       <button class="device-btn" id="btn-tablet" onclick="setDevice('tablet')" title="Tablette">
-        <!-- tablet -->
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <rect x="4" y="2" width="16" height="20" rx="2"/>
           <circle cx="12" cy="18" r="1" fill="currentColor" stroke="none"/>
         </svg>
       </button>
       <button class="device-btn" id="btn-mobile" onclick="setDevice('mobile')" title="Mobile">
-        <!-- mobile -->
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <rect x="5" y="2" width="14" height="20" rx="2"/>
           <circle cx="12" cy="18" r="1" fill="currentColor" stroke="none"/>
@@ -779,10 +1075,18 @@
       </button>
     </div>
 
+    <!-- Mobile overflow "..." pour device switcher -->
+    <button class="topbar-overflow-btn" onclick="showToast('Vue desktop / tablette / mobile — disponible en plein écran')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/>
+        <circle cx="19" cy="12" r="1" fill="currentColor" stroke="none"/>
+        <circle cx="5" cy="12" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </button>
+
     <!-- Right : save -->
     <div class="topbar-right">
       <button class="btn-save" id="btn-save" onclick="handleSave()">
-        <!-- save -->
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
           <polyline points="17 21 17 13 7 13 7 21"/>
@@ -812,12 +1116,8 @@
         </nav>
 
         <!-- HERO -->
-        <div
-          class="preview-section"
-          data-section-id="hero"
-          onclick="selectSection(event, 'hero')"
-        >
-          <div class="section-tooltip">Hero — Accroche produit ✎</div>
+        <div class="preview-section" data-section-id="hero" onclick="selectSection(event, 'hero')">
+          <div class="section-tooltip">Hero — Accroche produit</div>
           <div class="prev-hero">
             <div class="prev-hero-img"></div>
             <div class="prev-hero-content">
@@ -833,12 +1133,8 @@
         </div>
 
         <!-- STORY -->
-        <div
-          class="preview-section"
-          data-section-id="story"
-          onclick="selectSection(event, 'story')"
-        >
-          <div class="section-tooltip">Histoire (PAS) ✎</div>
+        <div class="preview-section" data-section-id="story" onclick="selectSection(event, 'story')">
+          <div class="section-tooltip">Histoire (PAS)</div>
           <div class="prev-story">
             <div class="prev-story-grid">
               <div class="prev-story-img"></div>
@@ -852,12 +1148,8 @@
         </div>
 
         <!-- FEATURES -->
-        <div
-          class="preview-section"
-          data-section-id="features"
-          onclick="selectSection(event, 'features')"
-        >
-          <div class="section-tooltip">Caractéristiques ✎</div>
+        <div class="preview-section" data-section-id="features" onclick="selectSection(event, 'features')">
+          <div class="section-tooltip">Caractéristiques</div>
           <div class="prev-features">
             <div style="max-width:1100px;margin:0 auto;">
               <p class="prev-eyebrow">Les matériaux</p>
@@ -890,12 +1182,8 @@
         </div>
 
         <!-- TESTIMONIAL -->
-        <div
-          class="preview-section"
-          data-section-id="testimonials"
-          onclick="selectSection(event, 'testimonials')"
-        >
-          <div class="section-tooltip">Témoignages ✎</div>
+        <div class="preview-section" data-section-id="testimonials" onclick="selectSection(event, 'testimonials')">
+          <div class="section-tooltip">Témoignages</div>
           <div class="prev-testimonial">
             <p class="prev-eyebrow" style="margin-bottom:16px;">Ce qu'ils disent</p>
             <blockquote class="prev-quote">
@@ -907,12 +1195,8 @@
         </div>
 
         <!-- GALLERY -->
-        <div
-          class="preview-section"
-          data-section-id="gallery"
-          onclick="selectSection(event, 'gallery')"
-        >
-          <div class="section-tooltip">Galerie produit ✎</div>
+        <div class="preview-section" data-section-id="gallery" onclick="selectSection(event, 'gallery')">
+          <div class="section-tooltip">Galerie produit</div>
           <div class="prev-gallery">
             <div style="max-width:1100px;margin:0 auto;">
               <p class="prev-eyebrow">Galerie</p>
@@ -938,7 +1222,6 @@
       aria-expanded="false"
       aria-controls="editor-panel"
     >
-      <!-- sections icon -->
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="3" width="8" height="5" rx="1"/>
         <rect x="13" y="3" width="8" height="5" rx="1"/>
@@ -964,7 +1247,6 @@
           <span class="panel-count" id="sections-count">(5)</span>
         </div>
         <button class="btn-close-panel" onclick="closePanel()" aria-label="Fermer le panneau">
-          <!-- x-close -->
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"/>
             <line x1="6" y1="6" x2="18" y2="18"/>
@@ -997,7 +1279,6 @@
       <!-- Footer -->
       <div class="panel-footer">
         <button class="btn-add-section" onclick="showToast('Bibliothèque de sections — disponible en C2')">
-          <!-- plus -->
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"/>
             <line x1="5" y1="12" x2="19" y2="12"/>
@@ -1007,8 +1288,80 @@
       </div>
     </aside>
 
+    <!-- ─── SUB-PANEL EDIT (Option A : slide depuis droite) ─ -->
+    <aside
+      class="subpanel"
+      id="edit-subpanel"
+      role="dialog"
+      aria-modal="false"
+      aria-label="Éditer la section"
+    >
+      <div class="subpanel-header">
+        <div class="subpanel-title-wrap">
+          <span class="subpanel-label">Éditer</span>
+          <span class="subpanel-title" id="subpanel-title">Histoire (PAS)</span>
+        </div>
+        <button class="btn-close-subpanel" onclick="closeSubpanel()" aria-label="Fermer l'éditeur">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="subpanel-divider"></div>
+
+      <div class="subpanel-body">
+        <div class="field-group">
+          <label class="field-label" for="edit-title">Titre</label>
+          <input
+            type="text"
+            class="field-input"
+            id="edit-title"
+            placeholder="Titre de la section..."
+          >
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="edit-subtitle">Sous-titre / Corps</label>
+          <textarea
+            class="field-textarea"
+            id="edit-subtitle"
+            placeholder="Décrivez le contenu de cette section..."
+            rows="5"
+          ></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Image principale</label>
+          <div class="field-image-placeholder" onclick="showToast('Upload image — disponible en C2')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/>
+              <polyline points="21 15 16 10 5 21"/>
+            </svg>
+            Ajouter une image
+          </div>
+          <span class="c2-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Upload complet en C2
+          </span>
+        </div>
+      </div>
+
+      <div class="subpanel-footer">
+        <button class="btn-cancel-edit" onclick="closeSubpanel()">Annuler</button>
+        <button class="btn-apply" onclick="applyEdit()">Appliquer</button>
+      </div>
+    </aside>
+
   </div><!-- /workspace -->
 </div><!-- /app -->
+
+<!-- Overlay invisible pour fermer le menu kebab -->
+<div class="kebab-overlay" id="kebab-overlay" onclick="closeKebabMenu()"></div>
+
+<!-- Menu kebab (positionné par JS) -->
+<div class="kebab-menu" id="kebab-menu" role="menu" aria-label="Actions sur la section">
+  <!-- Contenu généré par JS -->
+</div>
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
@@ -1017,15 +1370,29 @@
   // ─── STATE ────────────────────────────────────────────────────────
   var state = {
     panelOpen: false,
+    subpanelOpen: false,
     selectedSection: null,
+    editingSection: null,
     device: 'desktop',
     sections: [
       { id: 'hero',         label: 'Hero — Accroche produit',  visible: true  },
       { id: 'story',        label: 'Histoire (PAS)',            visible: true  },
       { id: 'features',     label: 'Caractéristiques',         visible: true  },
-      { id: 'testimonials', label: 'Témoignages',              visible: false }, // masqué par défaut pour la démo
+      { id: 'testimonials', label: 'Témoignages',              visible: false },
       { id: 'gallery',      label: 'Galerie produit',          visible: true  },
     ]
+  }
+
+  // ─── SVG ICONS ────────────────────────────────────────────────────
+  var SVG = {
+    eye: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+    eyeOff: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
+    kebab: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1" fill="currentColor" stroke="none"/></svg>',
+    edit: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+    arrowUp: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>',
+    arrowDown: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>',
+    copy: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+    trash: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>',
   }
 
   // ─── RENDER SECTIONS LIST ─────────────────────────────────────────
@@ -1053,23 +1420,23 @@
         '  </span>',
         '  <span class="section-label">' + escapeHtml(section.label) + '</span>',
         '  <div class="section-actions">',
+        // Bouton visibilité
         '    <button class="section-action-btn' + (section.visible ? '' : ' hidden-icon') + '"',
         '      onclick="toggleVisibility(event, \'' + section.id + '\')"',
         '      title="' + (section.visible ? 'Masquer' : 'Afficher') + '"',
-        '      aria-label="' + (section.visible ? 'Masquer ' : 'Afficher ') + section.label + '"',
+        '      aria-label="' + (section.visible ? 'Masquer ' : 'Afficher ') + escapeHtml(section.label) + '"',
         '    >',
-        section.visible
-          ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
-          : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
+        section.visible ? SVG.eye : SVG.eyeOff,
         '    </button>',
+        // Bouton kebab (3 points verticaux)
         '    <button class="section-action-btn"',
-        '      onclick="openContextMenu(event, \'' + section.id + '\')"',
+        '      onclick="openKebabMenu(event, \'' + section.id + '\')"',
         '      title="Plus d\'options"',
         '      aria-label="Plus d\'options pour ' + escapeHtml(section.label) + '"',
+        '      aria-haspopup="true"',
+        '      data-kebab-btn="' + section.id + '"',
         '    >',
-        '      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="none">',
-        '        <circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
-        '      </svg>',
+        SVG.kebab,
         '    </button>',
         '  </div>',
         '</div>'
@@ -1096,6 +1463,8 @@
     document.getElementById('editor-panel').classList.remove('open')
     document.getElementById('fab').classList.remove('open')
     document.getElementById('fab').setAttribute('aria-expanded', 'false')
+    // Fermer le subpanel si ouvert
+    closeSubpanel()
   }
 
   function togglePanel() {
@@ -1106,40 +1475,78 @@
     }
   }
 
+  // ─── SUB-PANEL EDIT ───────────────────────────────────────────────
+  function openSubpanel(sectionId) {
+    var section = state.sections.find(function(s) { return s.id === sectionId })
+    if (!section) return
+
+    state.editingSection = sectionId
+    document.getElementById('subpanel-title').textContent = section.label
+
+    // Pre-fill fields (valeurs mockées)
+    var titleMap = {
+      hero:         'Fait pour durer.',
+      story:        'Pourquoi ce produit existe',
+      features:     'Conçu avec soin',
+      testimonials: 'Ce qu\'ils disent',
+      gallery:      'Galerie'
+    }
+    var subtitleMap = {
+      hero:         'Conçu à partir de matériaux naturels sélectionnés pour leur durabilité et leur respect de la planète.',
+      story:        'Nous avons créé ce produit pour résoudre un problème réel — pas pour suivre une tendance.',
+      features:     'Sélectionné à la source pour sa qualité supérieure et son impact minimal.',
+      testimonials: '"Ce produit a changé ma façon de consommer. Je ne reviendrai pas en arrière."',
+      gallery:      ''
+    }
+    document.getElementById('edit-title').value = titleMap[sectionId] || ''
+    document.getElementById('edit-subtitle').value = subtitleMap[sectionId] || ''
+
+    document.getElementById('edit-subpanel').classList.add('open')
+    state.subpanelOpen = true
+
+    // Focus sur le premier champ
+    setTimeout(function() {
+      document.getElementById('edit-title').focus()
+    }, 300)
+  }
+
+  function closeSubpanel() {
+    if (!state.subpanelOpen) return
+    state.subpanelOpen = false
+    state.editingSection = null
+    document.getElementById('edit-subpanel').classList.remove('open')
+  }
+
+  function applyEdit() {
+    var title = document.getElementById('edit-title').value
+    var section = state.sections.find(function(s) { return s.id === state.editingSection })
+    closeSubpanel()
+    showToast((section ? section.label : 'Section') + ' — modifications appliquées')
+  }
+
   // ─── SECTION SELECTION ────────────────────────────────────────────
 
-  // Click depuis la preview
   function selectSection(event, sectionId) {
     event.stopPropagation()
-
-    // Sync l'état sélection
     state.selectedSection = sectionId
-
-    // Ouvrir le panneau si fermé
     openPanel()
 
-    // Mettre à jour visuel preview
     document.querySelectorAll('.preview-section').forEach(function(el) {
       el.classList.remove('selected')
     })
     document.querySelector('[data-section-id="' + sectionId + '"]').classList.add('selected')
 
-    // Re-render panel + scroll vers la row
     renderSections()
     setTimeout(function() {
       var activeRow = document.querySelector('.section-row.active')
-      if (activeRow) {
-        activeRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-      }
+      if (activeRow) activeRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
     }, 50)
   }
 
-  // Click depuis le panel
   function selectFromPanel(event, sectionId) {
     if (event.target.closest('.section-actions')) return
     state.selectedSection = sectionId
 
-    // Mettre à jour visuel preview
     document.querySelectorAll('.preview-section').forEach(function(el) {
       el.classList.remove('selected')
     })
@@ -1148,11 +1555,9 @@
       previewEl.classList.add('selected')
       previewEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
-
     renderSections()
   }
 
-  // Click zone vide preview → deselect + ferme panel
   function handlePreviewClick(event) {
     if (event.target.closest('.preview-section')) return
     if (state.selectedSection) {
@@ -1172,7 +1577,6 @@
     if (!section) return
     section.visible = !section.visible
 
-    // Update preview opacity
     var previewEl = document.querySelector('[data-section-id="' + sectionId + '"]')
     if (previewEl) {
       previewEl.style.opacity = section.visible ? '1' : '0.25'
@@ -1183,69 +1587,127 @@
     showToast(section.visible ? section.label + ' — visible' : section.label + ' — masquée')
   }
 
-  // ─── CONTEXT MENU ─────────────────────────────────────────────────
-  var activeMenu = null
-
-  function openContextMenu(event, sectionId) {
+  // ─── MOVE SECTION ─────────────────────────────────────────────────
+  function moveSectionUp(event, sectionId) {
     event.stopPropagation()
-
-    // Fermer menu existant
-    closeContextMenu()
-
-    var btn = event.currentTarget
-    var row = btn.closest('.section-row')
-    var section = state.sections.find(function(s) { return s.id === sectionId })
-
-    var menu = document.createElement('div')
-    menu.className = 'context-menu open'
-    menu.innerHTML = [
-      '<button class="context-menu-item" onclick="duplicateSection(event,\'' + sectionId + '\')">',
-      '  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
-      '  Dupliquer',
-      '</button>',
-      '<button class="context-menu-item" onclick="toggleVisibility(event,\'' + sectionId + '\');closeContextMenu()">',
-      '  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><circle cx="12" cy="12" r="3"/></svg>',
-      '  ' + (section && section.visible ? 'Masquer' : 'Afficher'),
-      '</button>',
-      '<div class="context-menu-separator"></div>',
-      '<button class="context-menu-item danger" onclick="deleteSection(event,\'' + sectionId + '\')">',
-      '  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>',
-      '  Supprimer',
-      '</button>'
-    ].join('')
-
-    row.style.position = 'relative'
-    row.appendChild(menu)
-    activeMenu = menu
-
-    // Close on click outside
-    setTimeout(function() {
-      document.addEventListener('click', closeContextMenu, { once: true })
-    }, 10)
+    var idx = state.sections.findIndex(function(s) { return s.id === sectionId })
+    if (idx <= 0) { showToast('Déjà en première position'); return }
+    var tmp = state.sections[idx]
+    state.sections[idx] = state.sections[idx - 1]
+    state.sections[idx - 1] = tmp
+    renderSections()
+    showToast(tmp.label + ' — déplacée vers le haut')
   }
 
-  function closeContextMenu() {
-    if (activeMenu) {
-      activeMenu.remove()
-      activeMenu = null
+  function moveSectionDown(event, sectionId) {
+    event.stopPropagation()
+    var idx = state.sections.findIndex(function(s) { return s.id === sectionId })
+    if (idx === -1 || idx >= state.sections.length - 1) { showToast('Déjà en dernière position'); return }
+    var tmp = state.sections[idx]
+    state.sections[idx] = state.sections[idx + 1]
+    state.sections[idx + 1] = tmp
+    renderSections()
+    showToast(tmp.label + ' — déplacée vers le bas')
+  }
+
+  // ─── KEBAB MENU ───────────────────────────────────────────────────
+  var kebabState = { open: false, sectionId: null }
+
+  function openKebabMenu(event, sectionId) {
+    event.stopPropagation()
+    closeKebabMenu()
+
+    kebabState.open = true
+    kebabState.sectionId = sectionId
+
+    var btn = event.currentTarget
+    var rect = btn.getBoundingClientRect()
+    var section = state.sections.find(function(s) { return s.id === sectionId })
+
+    var menu = document.getElementById('kebab-menu')
+    menu.innerHTML = [
+      // Éditer
+      '<button class="kebab-item" role="menuitem" onclick="handleEditFromMenu(\'' + sectionId + '\')">' +
+        SVG.edit + ' Éditer' +
+      '</button>',
+      // Déplacer haut
+      '<button class="kebab-item" role="menuitem" onclick="moveSectionUp(event,\'' + sectionId + '\');closeKebabMenu()">' +
+        SVG.arrowUp + ' Déplacer vers le haut' +
+      '</button>',
+      // Déplacer bas
+      '<button class="kebab-item" role="menuitem" onclick="moveSectionDown(event,\'' + sectionId + '\');closeKebabMenu()">' +
+        SVG.arrowDown + ' Déplacer vers le bas' +
+      '</button>',
+      // Dupliquer
+      '<button class="kebab-item" role="menuitem" onclick="duplicateSection(event,\'' + sectionId + '\')">' +
+        SVG.copy + ' Dupliquer' +
+      '</button>',
+      // Séparateur
+      '<div class="kebab-separator"></div>',
+      // Supprimer
+      '<button class="kebab-item danger" role="menuitem" onclick="deleteSection(event,\'' + sectionId + '\')">' +
+        SVG.trash + ' Supprimer' +
+      '</button>',
+    ].join('')
+
+    // Positionnement : ancré à droite du bouton, en dessous
+    var menuW = 188
+    var menuH = 175 // estimation
+    var left = rect.right - menuW
+    var top = rect.bottom + 4
+
+    // Eviter débordement viewport en bas
+    if (top + menuH > window.innerHeight - 8) {
+      top = rect.top - menuH - 4
     }
+    // Eviter débordement viewport à gauche
+    if (left < 8) left = 8
+
+    menu.style.left = left + 'px'
+    menu.style.top = top + 'px'
+
+    // Ouvrir
+    requestAnimationFrame(function() {
+      menu.classList.add('open')
+    })
+
+    document.getElementById('kebab-overlay').classList.add('active')
+  }
+
+  function closeKebabMenu() {
+    if (!kebabState.open) return
+    kebabState.open = false
+    kebabState.sectionId = null
+    var menu = document.getElementById('kebab-menu')
+    menu.classList.remove('open')
+    document.getElementById('kebab-overlay').classList.remove('active')
+  }
+
+  function handleEditFromMenu(sectionId) {
+    closeKebabMenu()
+    // Sélectionner la section si pas déjà
+    state.selectedSection = sectionId
+    renderSections()
+    // Ouvrir le subpanel
+    openSubpanel(sectionId)
   }
 
   function duplicateSection(event, sectionId) {
     event.stopPropagation()
-    closeContextMenu()
+    closeKebabMenu()
     var idx = state.sections.findIndex(function(s) { return s.id === sectionId })
     if (idx === -1) return
     var original = state.sections[idx]
     var copy = { id: sectionId + '_copy_' + Date.now(), label: original.label + ' (copie)', visible: original.visible }
     state.sections.splice(idx + 1, 0, copy)
+    document.getElementById('sections-count').textContent = '(' + state.sections.length + ')'
     renderSections()
     showToast(original.label + ' — dupliquée')
   }
 
   function deleteSection(event, sectionId) {
     event.stopPropagation()
-    closeContextMenu()
+    closeKebabMenu()
     var section = state.sections.find(function(s) { return s.id === sectionId })
     var label = section ? section.label : sectionId
     state.sections = state.sections.filter(function(s) { return s.id !== sectionId })
@@ -1253,6 +1715,7 @@
       state.selectedSection = null
       document.querySelectorAll('.preview-section').forEach(function(el) { el.classList.remove('selected') })
     }
+    if (state.editingSection === sectionId) closeSubpanel()
     document.getElementById('sections-count').textContent = '(' + state.sections.length + ')'
     renderSections()
     showToast(label + ' — supprimée')
@@ -1305,11 +1768,9 @@
   // ─── KEYBOARD ─────────────────────────────────────────────────────
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-      closeContextMenu()
-      if (state.panelOpen) {
-        closePanel()
-        return
-      }
+      if (kebabState.open) { closeKebabMenu(); return }
+      if (state.subpanelOpen) { closeSubpanel(); return }
+      if (state.panelOpen) { closePanel(); return }
       if (state.selectedSection) {
         state.selectedSection = null
         document.querySelectorAll('.preview-section').forEach(function(el) { el.classList.remove('selected') })
@@ -1322,7 +1783,6 @@
   (function init() {
     renderSections()
 
-    // Appliquer opacité aux sections masquées dans preview
     state.sections.forEach(function(s) {
       if (!s.visible) {
         var el = document.querySelector('[data-section-id="' + s.id + '"]')

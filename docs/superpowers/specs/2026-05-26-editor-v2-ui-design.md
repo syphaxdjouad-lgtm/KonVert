@@ -1,6 +1,6 @@
 # Editor V2 — Specs Design UI Premium
 **Date :** 2026-05-26  
-**Statut :** specs finales, mockup livré  
+**Statut :** v2.1 — ajustements post-feedback (panel width, responsive, kebab menu, edit sub-panel)  
 **Référence :** `etec-natural.ts` — palette, typo, DA cohérents  
 **Mockup :** `.mockups/editor-v2.html`
 
@@ -755,6 +755,104 @@ Toutes les icônes : stroke 1.5px, viewBox 24×24, fill none, stroke-linecap rou
 | Aucune shadow aggressive | max 4% opacity, subtile |
 | Aucun border-radius >12px | Pas de "rounded-full" sur des éléments rectangulaires |
 | Aucune animation >300ms sur actions directes | Philosophie Kowalski restraint |
+
+---
+
+---
+
+## 10. Changelog v2.1 — Ajustements post-feedback
+
+### 10.1 Panel width : 400 → 360px
+
+Réduit à `--panel-width: 360px` (token CSS). Ratio preview/panel plus respirant, notamment sur laptop 1280px où la preview récupère 40px supplémentaires. `--subpanel-width` aligné à 360px par cohérence.
+
+### 10.2 Responsive complet — 5 breakpoints
+
+| Breakpoint | Comportement panel | Comportement FAB | Topbar |
+|---|---|---|---|
+| Desktop ≥1280px | overlay 360px gauche | `left:16px` fixe | complète |
+| Laptop 1024–1279px | overlay 360px gauche | se décale `left: panel-width + 12px` quand ouvert (via CSS sur `.fab.open`) | complète |
+| Tablet 768–1023px | drawer 320px (override via token) | masqué (opacity:0) quand panel ouvert | complète |
+| Mobile 375–767px | fullscreen 100vw, handle swipe visuel | masqué quand panel ouvert | minimaliste : device-switcher caché, "..." overflow |
+| Mini mobile 320–374px | idem mobile | idem | typo -1px sur labels |
+
+**Principe performance :** toutes les transitions panel/subpanel utilisent `transform: translateX()` exclusivement — aucun `left` animé, aucun `width` animé. GPU-composited sur tous les appareils.
+
+**Handle swipe mobile :** pseudo-élément `::before` sur `.panel` — barre `36×4px` sand, `border-radius:2px`, `margin: 8px auto`. Signal affordance sans JS supplémentaire.
+
+### 10.3 Menu kebab (3 points verticaux) par section row
+
+**Remplacement du contexte menu précédent** (3 dots horizontaux inline) par un kebab vertical `⋮` SVG outline 1.5px, cohérent avec la bibliothèque d'icônes.
+
+**5 actions dans le dropdown :**
+
+```
+┌─────────────────────────────┐
+│ ✎  Éditer                   │  → ouvre sub-panel droit
+│ ↑  Déplacer vers le haut    │  → swap avec index-1
+│ ↓  Déplacer vers le bas     │  → swap avec index+1
+│ ❏  Dupliquer                │  → insert copie à index+1
+│ ─────────────────────────── │
+│ 🗑  Supprimer                │  → rouge #D9534F (muted, pas #EF4444)
+└─────────────────────────────┘
+```
+
+**Implémentation :**
+- Menu DOM unique (`#kebab-menu`) positionné par `getBoundingClientRect()` — pas un child du row (évite overflow:hidden du panel)
+- Overlay transparent `#kebab-overlay` couvre tout le viewport sous le menu — click ferme
+- ESC ferme en priorité 1 (avant subpanel, avant panel)
+- `transform-origin: top right` + scale 0.96→1 + translateY -4px→0 sur 140ms ease — ouverture naturelle
+- Protection viewport : si menu déborde en bas → flip au-dessus du bouton ; si déborde à gauche → clamp à 8px
+
+**Drag handle conservé :** complémentaire au menu — les deux coexistent.
+
+### 10.4 Action "Éditer" — Option A retenue (Sub-panel droit)
+
+**Choix : Option A — Sub-panel droit 360px, slide depuis le bord right.**
+
+**Justification :** l'Option A est la seule qui maintient simultanément le contexte de la liste (panel gauche visible, row active en surbrillance) ET un espace dédié pour les champs d'édition. L'Option B (modal) couvre la preview et rompt le lien spatial panel ↔ preview. L'Option C (inline expansion) fragmente la liste dès qu'on a 3+ sections ouvertes et génère du CLS visible.
+
+L'effet directionnel est intentionnel : panel entre par la gauche, sub-panel entre par la droite — deux bords opposés pour deux contextes (navigation sections / édition contenu).
+
+**Specs sub-panel :**
+
+```
+Position : fixed, right: 0, top: 52px
+Width : 360px (--subpanel-width)
+Height : calc(100vh - 52px)
+Background : #FFFFFF
+Border-left : 1px solid #EDE8DF
+Shadow : -4px 0 24px rgba(0,0,0,0.05), -1px 0 4px rgba(0,0,0,0.03)
+Z-index : 300 (même que panel — ils ne se superposent jamais)
+Animation : transform translateX(100%) → translateX(0), 280ms cubic-bezier(0.4,0,0.2,1)
+
+Header :
+  - Label "Éditer" : 10px Inter 500, uppercase, letter-spacing 0.1em, #C4BFB9
+  - Titre section : 15px Inter 600, #2D2D2D
+  - Bouton X close : 30×30px, radius 6px, hover #F5F1EB
+  - Divider : 1px solid #EDE8DF, margin 14px 20px 0
+
+Body (champs C1) :
+  - Title input : height 38px, bg #FAFAF7, border 1px solid #DDD8CF, radius 6px
+  - Subtitle textarea : min-height 100px, resize:vertical, line-height 1.6
+  - Image placeholder : height 80px, dashed border 1px #DDD8CF, hover → sage
+  - C2 badge : 11px, bg #FAFAF7, border 1px #EDE8DF, radius 4px — "Upload complet en C2"
+  - gap: 20px entre chaque field-group
+
+Footer :
+  - Btn "Annuler" : outlined, height 38px, Inter 13px weight 400
+  - Btn "Appliquer" : bg #2D2D2D, color white, height 38px, flex:1
+  - Gap: 8px entre boutons
+```
+
+**Comportements :**
+- Ouverture : `openKebabMenu("Éditer")` → `closeKebabMenu()` → `openSubpanel(sectionId)`
+- Pre-fill des champs avec les valeurs mockées correspondant à la section
+- Focus automatique sur `#edit-title` après 300ms (post-animation)
+- ESC : ferme subpanel en priorité 2 (après menu, avant panel)
+- Mobile/Mini : sub-panel passe fullscreen (100vw) comme le panel principal
+
+**C2 — éditeurs par section-type :** chaque section (hero, story, features, testimonials, gallery) aura son propre schéma de champs. En C1 le sub-panel est générique (title + subtitle + image). Les champs spécifiques viennent en C2 (ex: galerie → multi-images, features → array de 3 cards, témoignages → auteur + note).
 
 ---
 

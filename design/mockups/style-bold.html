@@ -1,0 +1,2535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bold — Sac à bandoulière en cuir vintage · Konvert V3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       TOKENS — Bold style
+       ============================================================ */
+    :root {
+      --bg:            #FFFFFF;
+      --surface:       #FFF5E6;
+      --accent:        #FF2277;
+      --text:          #0F0F0F;
+      --text-muted:    #6B6B6B;
+      --border:        #0F0F0F;
+
+      --font-heading:  "Arial Black", "Helvetica Neue", sans-serif;
+      --font-body:     "Inter", system-ui, sans-serif;
+
+      --space-section: 120px;
+      --space-card:    32px;
+      --space-gap:     20px;
+
+      --radius-card:   20px;
+      --radius-button: 999px;
+      --radius-image:  20px;
+
+      --shadow-card:   8px 8px 0 #0F0F0F;
+      --shadow-hover:  12px 12px 0 #FF2277;
+      --shadow-accent: 8px 8px 0 #FF2277;
+
+      --ease-bounce:   cubic-bezier(0.34, 1.56, 0.64, 1);
+      --duration:      350ms;
+    }
+
+    /* ============================================================
+       RESET
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ============================================================
+       TYPOGRAPHY UTILS
+       ============================================================ */
+    .display-xl {
+      font-family: var(--font-heading);
+      font-size: clamp(56px, 8vw, 96px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+
+    .display-lg {
+      font-family: var(--font-heading);
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .display-md {
+      font-family: var(--font-heading);
+      font-size: clamp(24px, 3vw, 40px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      text-transform: uppercase;
+    }
+
+    .display-sm {
+      font-family: var(--font-heading);
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .number-giant {
+      font-family: var(--font-heading);
+      font-size: clamp(80px, 12vw, 120px);
+      font-weight: 900;
+      line-height: 1;
+      color: var(--accent);
+      letter-spacing: -0.04em;
+    }
+
+    .body-lg {
+      font-size: 18px;
+      line-height: 1.65;
+      font-weight: 400;
+    }
+
+    .body-md {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .body-sm {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .label {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       LAYOUT UTILS
+       ============================================================ */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .section {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .section-surface {
+      background: var(--surface);
+    }
+
+    /* ============================================================
+       CARD — Neobrutalist soft
+       ============================================================ */
+    .card {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: var(--space-card);
+      transition:
+        box-shadow var(--duration) var(--ease-bounce),
+        transform var(--duration) var(--ease-bounce);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(-4px, -4px);
+    }
+
+    .card-surface {
+      background: var(--surface);
+    }
+
+    /* ============================================================
+       BADGE
+       ============================================================ */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-button);
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--bg);
+    }
+
+    .badge-accent {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .badge-dark {
+      background: var(--text);
+      color: #fff;
+      border-color: var(--text);
+    }
+
+    /* ============================================================
+       BUTTONS
+       ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 18px 40px;
+      border-radius: var(--radius-button);
+      border: 2px solid var(--border);
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition:
+        box-shadow var(--duration) var(--ease-bounce),
+        transform var(--duration) var(--ease-bounce);
+    }
+
+    .btn-primary {
+      background: var(--text);
+      color: #fff;
+      box-shadow: 6px 6px 0 var(--border);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 10px 10px 0 var(--accent);
+      transform: translate(-2px, -2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      box-shadow: 6px 6px 0 var(--border);
+    }
+
+    .btn-outline:hover {
+      box-shadow: 10px 10px 0 var(--accent);
+      transform: translate(-2px, -2px);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 6px 6px 0 var(--border);
+    }
+
+    .btn-accent:hover {
+      box-shadow: 10px 10px 0 var(--text);
+      transform: translate(-2px, -2px);
+    }
+
+    /* ============================================================
+       SEPARATOR — accent stroke
+       ============================================================ */
+    .sep {
+      width: 64px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* ============================================================
+       STARS
+       ============================================================ */
+    .stars {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .star {
+      width: 16px;
+      height: 16px;
+      fill: var(--accent);
+    }
+
+    .star-empty {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 2;
+    }
+
+    /* ============================================================
+       NAVBAR
+       ============================================================ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 2px solid var(--border);
+    }
+
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .navbar-logo {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .navbar-logo span {
+      color: var(--accent);
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .navbar-links li a {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 200ms ease;
+    }
+
+    .navbar-links li a:hover {
+      color: var(--accent);
+    }
+
+    .navbar-cta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* ============================================================
+       SECTION 1 — HERO
+       ============================================================ */
+    .hero {
+      padding-top: 80px;
+      padding-bottom: 80px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-image-wrap {
+      position: relative;
+    }
+
+    .hero-image-frame {
+      border-radius: var(--radius-image);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      aspect-ratio: 4/5;
+    }
+
+    .hero-image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 600ms ease;
+    }
+
+    .hero-image-frame:hover img {
+      transform: scale(1.03);
+    }
+
+    .hero-badge-floating {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: clamp(40px, 5vw, 72px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+
+    .hero-title .line-accent {
+      color: var(--accent);
+      display: block;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-body);
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-width: 420px;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .hero-price {
+      font-family: var(--font-heading);
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-rating-text {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-feature-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-button);
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-feature-pill-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-shipping {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .hero-shipping-dot {
+      width: 6px;
+      height: 6px;
+      background: #22c55e;
+      border-radius: 50%;
+    }
+
+    /* ============================================================
+       SECTION 2 — GALLERY
+       ============================================================ */
+    .gallery {
+      padding-top: 48px;
+      padding-bottom: var(--space-section);
+    }
+
+    .gallery-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-gap);
+    }
+
+    .gallery-item {
+      border-radius: var(--radius-image);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      transition:
+        box-shadow var(--duration) var(--ease-bounce),
+        transform var(--duration) var(--ease-bounce);
+      cursor: pointer;
+    }
+
+    .gallery-item:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(-3px, -3px);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      transition: transform 500ms ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.04);
+    }
+
+    .gallery-item-large {
+      grid-row: span 2;
+    }
+
+    .gallery-item-large img {
+      aspect-ratio: 3/8;
+    }
+
+    /* ============================================================
+       SECTION 3 — WHY WE LOVE
+       ============================================================ */
+    .why-we-love {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .why-content {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .why-story {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--text);
+      max-width: 520px;
+    }
+
+    .why-story strong {
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .why-visual {
+      position: relative;
+    }
+
+    .why-visual-card {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      aspect-ratio: 4/5;
+    }
+
+    .why-visual-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .why-visual-floating {
+      position: absolute;
+      bottom: -24px;
+      left: -24px;
+      background: var(--accent);
+      color: #fff;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: 6px 6px 0 var(--border);
+      padding: 20px 24px;
+    }
+
+    .why-stat-number {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .why-stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0.85;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* ============================================================
+       SECTION 4 — THOUGHTFULLY DESIGNED
+       ============================================================ */
+    .features {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: 72px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-gap);
+    }
+
+    .feature-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: var(--space-card);
+      transition:
+        box-shadow var(--duration) var(--ease-bounce),
+        transform var(--duration) var(--ease-bounce);
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(-4px, -4px);
+    }
+
+    .feature-card:nth-child(2n) {
+      background: var(--surface);
+    }
+
+    .feature-number {
+      font-family: var(--font-heading);
+      font-size: 80px;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--accent);
+      letter-spacing: -0.04em;
+      opacity: 0.15;
+      margin-bottom: -20px;
+    }
+
+    .feature-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .feature-desc {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .feature-tag {
+      display: inline-block;
+      padding: 5px 12px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: var(--radius-button);
+      font-family: var(--font-heading);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      align-self: flex-start;
+    }
+
+    /* ============================================================
+       SECTION 5 — BEST FOR
+       ============================================================ */
+    .best-for {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .best-for-inner {
+      background: var(--text);
+      border-radius: var(--radius-card);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow-card);
+      padding: 72px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .best-for-title {
+      color: #fff;
+    }
+
+    .best-for-sep {
+      width: 64px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .best-for-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .usage-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 24px;
+      background: rgba(255,255,255,0.06);
+      border: 2px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-button);
+      color: #fff;
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition:
+        background var(--duration) var(--ease-bounce),
+        border-color var(--duration) var(--ease-bounce),
+        transform var(--duration) var(--ease-bounce),
+        box-shadow var(--duration) var(--ease-bounce);
+      cursor: default;
+    }
+
+    .usage-pill:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--accent);
+    }
+
+    .usage-pill-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    /* ============================================================
+       SECTION 6 — MATERIALS BREAKDOWN
+       ============================================================ */
+    .materials {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .materials-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 48px;
+      gap: 32px;
+    }
+
+    .materials-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .materials-header-right {
+      max-width: 380px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .materials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-gap);
+    }
+
+    .material-card {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      transition:
+        box-shadow var(--duration) var(--ease-bounce),
+        transform var(--duration) var(--ease-bounce);
+    }
+
+    .material-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(-4px, -4px);
+    }
+
+    .material-card:nth-child(2) {
+      background: var(--surface);
+    }
+
+    .material-card:nth-child(3) {
+      background: var(--text);
+      color: #fff;
+    }
+
+    .material-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .material-body {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .material-name {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+
+    .material-card:nth-child(3) .material-name {
+      color: var(--accent);
+    }
+
+    .material-benefit {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+
+    .material-card:nth-child(3) .material-benefit {
+      color: rgba(255,255,255,0.7);
+    }
+
+    .material-certified {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: var(--radius-button);
+      border: 2px solid currentColor;
+      font-family: var(--font-heading);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      align-self: flex-start;
+    }
+
+    /* HOW IT WORKS — SKIPPED for this product (bag) */
+    /* <!-- how_it_works SKIP: non applicable pour accessoires/sacs — section réservée aux produits actifs (sérum, supplément) --> */
+
+    /* ============================================================
+       SECTION 8 — COMPARE VARIANTS
+       ============================================================ */
+    .variants {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .variants-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+
+    .variants-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-gap);
+    }
+
+    .variant-card {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      transition:
+        box-shadow var(--duration) var(--ease-bounce),
+        transform var(--duration) var(--ease-bounce);
+      cursor: pointer;
+    }
+
+    .variant-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(-4px, -4px);
+    }
+
+    .variant-card.active {
+      border-color: var(--accent);
+      box-shadow: 8px 8px 0 var(--accent);
+    }
+
+    .variant-img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .variant-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .variant-name {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+
+    .variant-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .variant-price {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .variant-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: inline-block;
+    }
+
+    /* ============================================================
+       SECTION 9 — REVIEWS AI SUMMARY
+       ============================================================ */
+    .reviews {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .reviews-inner {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 64px;
+    }
+
+    .reviews-top {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 64px;
+      align-items: center;
+      margin-bottom: 56px;
+      padding-bottom: 56px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .reviews-score-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .reviews-big-score {
+      font-family: var(--font-heading);
+      font-size: 80px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .reviews-big-score span {
+      color: var(--accent);
+    }
+
+    .reviews-count {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .reviews-ai-summary-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .reviews-ai-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    .reviews-ai-summary-text {
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--text);
+      max-width: 680px;
+    }
+
+    .reviews-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-gap);
+    }
+
+    .review-card {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition:
+        box-shadow var(--duration) var(--ease-bounce),
+        transform var(--duration) var(--ease-bounce);
+    }
+
+    .review-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(-3px, -3px);
+    }
+
+    .review-card:nth-child(2) {
+      background: var(--text);
+      color: #fff;
+    }
+
+    .review-card:nth-child(2) .review-text {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .review-card:nth-child(2) .review-date {
+      color: rgba(255,255,255,0.5);
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .review-author {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .review-text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .review-date {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       SECTION 10 — PRESS QUOTE
+       ============================================================ */
+    .press {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .press-inner {
+      position: relative;
+      background: var(--text);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 480px;
+    }
+
+    .press-content {
+      padding: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 32px;
+    }
+
+    .press-logo {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .press-quote {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 2.5vw, 34px);
+      font-weight: 900;
+      line-height: 1.2;
+      color: #fff;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .press-quote em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .press-source {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 500;
+    }
+
+    .press-image {
+      position: relative;
+    }
+
+    .press-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .press-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--text) 0%, transparent 50%);
+    }
+
+    /* ============================================================
+       SECTION 11 — CARE INSTRUCTIONS
+       ============================================================ */
+    .care {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .care-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .care-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-gap);
+    }
+
+    .care-card {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 36px var(--space-card);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition:
+        box-shadow var(--duration) var(--ease-bounce),
+        transform var(--duration) var(--ease-bounce);
+    }
+
+    .care-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(-4px, -4px);
+    }
+
+    .care-card:nth-child(2) {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .care-card:nth-child(2) .care-body,
+    .care-card:nth-child(2) .care-card-title {
+      color: #fff;
+    }
+
+    .care-icon {
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .care-card-title {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+
+    .care-body {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .care-highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .care-card:nth-child(2) .care-highlight {
+      color: rgba(255,255,255,0.9);
+    }
+
+    /* ============================================================
+       SECTION 12 — FAQ
+       ============================================================ */
+    .faq {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .faq-intro {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: sticky;
+      top: 100px;
+    }
+
+    .faq-intro-desc {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text-muted);
+      max-width: 380px;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      transition:
+        box-shadow var(--duration) var(--ease-bounce),
+        transform var(--duration) var(--ease-bounce);
+    }
+
+    .faq-item:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translate(-2px, -2px);
+    }
+
+    .faq-item:nth-child(2n) {
+      background: var(--surface);
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 24px;
+      cursor: pointer;
+    }
+
+    .faq-question-text {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .faq-chevron {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-weight: 900;
+      font-size: 16px;
+      transition: background var(--duration) var(--ease-bounce);
+    }
+
+    .faq-item.open .faq-chevron {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0 24px 22px;
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--text-muted);
+      border-top: 2px solid var(--border);
+      margin: 0 24px;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    /* ============================================================
+       SECTION 13 — BRAND MANIFESTO
+       ============================================================ */
+    .manifesto {
+      padding-top: var(--space-section);
+      padding-bottom: var(--space-section);
+    }
+
+    .manifesto-inner {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 600px;
+    }
+
+    .manifesto-content {
+      padding: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .manifesto-title {
+      font-family: var(--font-heading);
+      font-size: clamp(36px, 4vw, 60px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+
+    .manifesto-title .accent-line {
+      color: var(--accent);
+      display: block;
+    }
+
+    .manifesto-text {
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      max-width: 440px;
+    }
+
+    .manifesto-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .pillar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .pillar-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .pillar-text {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .manifesto-cta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .manifesto-image {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .manifesto-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 600ms ease;
+    }
+
+    .manifesto-inner:hover .manifesto-image img {
+      transform: scale(1.03);
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
+    .footer {
+      background: var(--text);
+      color: #fff;
+      padding: 80px 0 40px;
+      border-top: 2px solid var(--border);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 64px;
+    }
+
+    .footer-brand-name {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .footer-brand-name span {
+      color: var(--accent);
+    }
+
+    .footer-brand-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.55);
+      max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 20px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links li a {
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      transition: color 200ms ease;
+    }
+
+    .footer-links li a:hover {
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-legal {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .footer-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ============================================================
+       ENTRANCE ANIMATIONS
+       ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(32px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.88); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .animate-fade-up {
+      animation: fadeUp 0.55s var(--ease-bounce) forwards;
+    }
+
+    .animate-pop {
+      animation: popIn 0.45s var(--ease-bounce) forwards;
+    }
+
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+    .delay-4 { animation-delay: 0.32s; }
+    .delay-5 { animation-delay: 0.40s; }
+
+    /* ============================================================
+       ACCESSIBILITY
+       ============================================================ */
+    :focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAVBAR
+       ============================================================ -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <div class="navbar-logo">Cuir<span>Co</span></div>
+        <ul class="navbar-links">
+          <li><a href="#">Collections</a></li>
+          <li><a href="#">Matières</a></li>
+          <li><a href="#">Notre histoire</a></li>
+          <li><a href="#">Soin du cuir</a></li>
+        </ul>
+        <div class="navbar-cta">
+          <a href="#" class="btn btn-primary" style="padding: 12px 24px; font-size: 12px;">Acheter — 79 €</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       SECTION 1 — HERO
+       ============================================================ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+
+        <!-- Image -->
+        <div class="hero-image-wrap animate-pop">
+          <div class="hero-image-frame">
+            <img
+              src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=1600"
+              alt="Sac à bandoulière en cuir vintage - vue principale"
+              loading="eager"
+            >
+          </div>
+          <!-- Badge flottant -->
+          <div class="hero-badge-floating">
+            <div class="badge badge-accent" style="font-size: 13px; padding: 10px 18px; box-shadow: 4px 4px 0 #0F0F0F;">
+              Nouveau
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="hero-content">
+
+          <div class="hero-eyebrow">
+            <div class="badge">Cuir pleine fleur</div>
+            <div class="badge badge-dark">Fait main</div>
+          </div>
+
+          <h1 class="hero-title animate-fade-up">
+            Un cuir qui
+            <span class="line-accent">vit avec toi</span>
+          </h1>
+
+          <p class="hero-tagline animate-fade-up delay-1">
+            Sac a bandouliere en cuir vintage. Patine unique, finition main.
+            Concu pour celles qui savent que le style se construit avec le temps.
+          </p>
+
+          <div class="hero-meta animate-fade-up delay-2">
+            <div class="hero-price">79 €</div>
+            <div class="hero-rating">
+              <div class="stars">
+                <svg class="star" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+              </div>
+              <span class="hero-rating-text">4.6 / 5 · 1247 avis</span>
+            </div>
+          </div>
+
+          <div class="hero-features animate-fade-up delay-3">
+            <div class="hero-feature-pill">
+              <span class="hero-feature-pill-dot"></span>
+              Cuir vérit. italien
+            </div>
+            <div class="hero-feature-pill">
+              <span class="hero-feature-pill-dot"></span>
+              Bandoulière SoftFit
+            </div>
+            <div class="hero-feature-pill">
+              <span class="hero-feature-pill-dot"></span>
+              Doublure coton bio
+            </div>
+            <div class="hero-feature-pill">
+              <span class="hero-feature-pill-dot"></span>
+              Patine vivante
+            </div>
+          </div>
+
+          <div class="hero-cta-row animate-fade-up delay-4">
+            <button class="btn btn-primary" style="font-size: 15px; padding: 20px 48px;">
+              Ajouter au panier
+            </button>
+            <button class="btn btn-outline" style="padding: 20px 28px;">
+              Voir les variantes
+            </button>
+          </div>
+
+          <div class="hero-shipping animate-fade-up delay-5">
+            <span class="hero-shipping-dot"></span>
+            Livraison offerte en France · Retours 30 jours
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 2 — GALLERY
+       ============================================================ -->
+  <section class="gallery">
+    <div class="container">
+
+      <div class="gallery-header">
+        <div class="sep"></div>
+        <h2 class="display-md">Tous les angles</h2>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <img
+            src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=1600"
+            alt="Sac vue de cote - cuir cognac"
+            loading="lazy"
+          >
+        </div>
+        <div class="gallery-item gallery-item-large">
+          <img
+            src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=1600"
+            alt="Sac porte en situation"
+            loading="lazy"
+          >
+        </div>
+        <div class="gallery-item">
+          <img
+            src="https://images.unsplash.com/photo-1606522754091-a3bbf9ad4cb3?w=1600"
+            alt="Detail couture et finitions"
+            loading="lazy"
+          >
+        </div>
+        <div class="gallery-item">
+          <img
+            src="https://images.unsplash.com/photo-1564422170194-896b89110ef8?w=1600"
+            alt="Interieur doublure coton bio"
+            loading="lazy"
+          >
+        </div>
+        <div class="gallery-item">
+          <img
+            src="https://images.unsplash.com/photo-1473188588951-666fce8e7c68?w=1600"
+            alt="Hardware laiton - detail fermeture"
+            loading="lazy"
+          >
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3 — WHY WE LOVE
+       ============================================================ -->
+  <section class="why-we-love section section-surface">
+    <div class="container">
+      <div class="why-grid">
+
+        <div class="why-content">
+          <div class="badge badge-accent" style="align-self: flex-start;">Notre coup de coeur</div>
+          <div class="sep"></div>
+          <h2 class="display-lg">Pourquoi on
+            <br>l'adore</h2>
+          <p class="why-story">
+            Ce sac est ne d'une conviction simple : <strong>le cuir ne vieilli pas, il evolue.</strong>
+            Chaque egratignure, chaque rayon de soleil laisse une empreinte qui lui appartient.
+            Dans six mois, ton sac sera unique au monde — et c'est exactement le but.
+            Le cuir pleine fleur que nous choisissons en Toscane est traite sans chromage.
+            Pas pour la tendance. Pour que tu portes quelque chose de vrai.
+          </p>
+          <button class="btn btn-outline" style="align-self: flex-start;">
+            L'histoire de la marque
+          </button>
+        </div>
+
+        <div class="why-visual">
+          <div class="why-visual-card">
+            <img
+              src="https://images.unsplash.com/photo-1559563458-527698bf5295?w=1600"
+              alt="Sac en cuir vintage pose sur une surface de bois"
+              loading="lazy"
+            >
+          </div>
+          <div class="why-visual-floating">
+            <div class="why-stat-number">1247</div>
+            <div class="why-stat-label">clientes satisfaites</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 4 — THOUGHTFULLY DESIGNED
+       ============================================================ -->
+  <section class="features section">
+    <div class="container">
+
+      <div class="features-header">
+        <div class="sep"></div>
+        <h2 class="display-lg">Concu pour durer</h2>
+        <p class="body-lg" style="color: var(--text-muted); max-width: 560px; text-align: center;">
+          Chaque detail a ete pense. Rien n'est superflu.
+          Tout ce qui est la a une raison d'etre.
+        </p>
+      </div>
+
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-number">01</div>
+          <div class="feature-title">Cuir pleine fleur</div>
+          <p class="feature-desc">
+            Grade A. Premier choix. Le grain naturel reste visible et se bonifie
+            avec le temps. Aucun corroyage masquant les imperfections — c'est
+            la peau dans son etat le plus noble.
+          </p>
+          <span class="feature-tag">Qualite premium</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-number">02</div>
+          <div class="feature-title">SoftFit Bandouliere</div>
+          <p class="feature-desc">
+            Rembourrage anatomique 12mm. Largeur 3cm pour repartir le poids.
+            Reglage sans outil en 5 positions. Testee sur 48h de port continu
+            sans marque sur l'epaule.
+          </p>
+          <span class="feature-tag">Brevet interne</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-number">03</div>
+          <div class="feature-title">Doublure coton bio</div>
+          <p class="feature-desc">
+            Certifie GOTS. Tisse serre pour resister aux frottements quotidiens.
+            Poche integree sans couture apparente. La doublure tient aussi longtemps
+            que le cuir lui-meme.
+          </p>
+          <span class="feature-tag">Certifie GOTS</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-number">04</div>
+          <div class="feature-title">Patine vivante</div>
+          <p class="feature-desc">
+            Le cuir non traite reagit a la chaleur, a l'humidite, a la lumiere.
+            Ta facon de le porter laisse une trace unique. Dans 2 ans, aucun
+            autre sac ne ressemblera au tien.
+          </p>
+          <span class="feature-tag">Caractere unique</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 5 — BEST FOR
+       ============================================================ -->
+  <section class="best-for section">
+    <div class="container">
+      <div class="best-for-inner">
+
+        <div style="display: flex; flex-direction: column; gap: 28px;">
+          <div class="best-for-sep"></div>
+          <h2 class="display-lg best-for-title">Parfait pour</h2>
+          <p style="color: rgba(255,255,255,0.6); font-size: 16px; line-height: 1.65; max-width: 380px;">
+            Ce sac n'est pas fait pour tout le monde. Il est fait pour toi
+            si ta vie ressemble a l'un de ces moments.
+          </p>
+        </div>
+
+        <div class="best-for-pills">
+          <div class="usage-pill">
+            <span class="usage-pill-icon">☀</span>
+            Quotidien
+          </div>
+          <div class="usage-pill">
+            <span class="usage-pill-icon">💼</span>
+            Travail
+          </div>
+          <div class="usage-pill">
+            <span class="usage-pill-icon">🌙</span>
+            Sortie soir
+          </div>
+          <div class="usage-pill">
+            <span class="usage-pill-icon">✈</span>
+            Voyage leger
+          </div>
+          <div class="usage-pill">
+            <span class="usage-pill-icon">☕</span>
+            Week-end
+          </div>
+          <div class="usage-pill">
+            <span class="usage-pill-icon">🎨</span>
+            Creatif
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 6 — MATERIALS BREAKDOWN
+       ============================================================ -->
+  <section class="materials section section-surface">
+    <div class="container">
+
+      <div class="materials-header">
+        <div class="materials-header-left">
+          <div class="sep"></div>
+          <h2 class="display-lg">Ce qu'il y a dedans</h2>
+        </div>
+        <p class="materials-header-right">
+          Trois materiaux. Choisis ensemble pour leur complementarite.
+          Pas une seule couture qui n'ait ete verifiee a la main avant expedition.
+        </p>
+      </div>
+
+      <div class="materials-grid">
+
+        <div class="material-card">
+          <img
+            class="material-img"
+            src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=1600"
+            alt="Cuir pleine fleur - grain naturel"
+            loading="lazy"
+          >
+          <div class="material-body">
+            <div class="material-name">Cuir pleine fleur</div>
+            <p class="material-benefit">
+              Toscane, Italie. Tannage vegetal au chene. 3 mois de preparation.
+              Le cuir le plus robuste qui existe — sans compromis esthetique.
+            </p>
+            <span class="material-certified">Tannage vegetal certifie</span>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <img
+            class="material-img"
+            src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=1600"
+            alt="Doublure coton bio - texte serree"
+            loading="lazy"
+          >
+          <div class="material-body">
+            <div class="material-name">Coton bio GOTS</div>
+            <p class="material-benefit">
+              Tissage serre 280g/m2. Resiste aux frottements de clefs et stylos.
+              Certifie GOTS — traçabilite complete depuis le champ.
+            </p>
+            <span class="material-certified" style="color: #22c55e; border-color: #22c55e;">Certifie GOTS</span>
+          </div>
+        </div>
+
+        <div class="material-card">
+          <img
+            class="material-img"
+            src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=1600"
+            alt="Hardware laiton - fermeture et anneaux"
+            loading="lazy"
+          >
+          <div class="material-body">
+            <div class="material-name">Laiton massif</div>
+            <p class="material-benefit">
+              Couleur naturelle qui se patine en harmonie avec le cuir.
+              Pas d'electroplacage qui s'ecaille. Les fermoirs laiton durent
+              autant que le sac lui-meme.
+            </p>
+            <span class="material-certified" style="color: #fff; border-color: rgba(255,255,255,0.3);">Hardware premium</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- how_it_works SKIP: non applicable pour accessoires/sacs — section reservee aux produits actifs (serum, supplement, nutrition) -->
+
+  <!-- ============================================================
+       SECTION 8 — COMPARE VARIANTS
+       ============================================================ -->
+  <section class="variants section">
+    <div class="container">
+
+      <div class="variants-header">
+        <div class="sep"></div>
+        <h2 class="display-md">Choisir ta couleur</h2>
+        <div class="badge badge-accent" style="margin-left: auto;">3 variantes</div>
+      </div>
+
+      <div class="variants-grid">
+
+        <div class="variant-card active">
+          <img
+            class="variant-img"
+            src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=1600"
+            alt="Sac noir - variante Noir"
+            loading="lazy"
+          >
+          <div class="variant-body">
+            <div class="variant-name">Noir</div>
+            <p class="variant-desc">
+              Le classique absolu. Neutre sur tout, sophistique partout.
+              Patine vers un brun profond avec l'usage.
+            </p>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div class="variant-price">79 €</div>
+              <span class="variant-swatch" style="background: #1a1a1a;"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="variant-card">
+          <img
+            class="variant-img"
+            src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=1600"
+            alt="Sac cognac - variante Cognac"
+            loading="lazy"
+          >
+          <div class="variant-body">
+            <div class="variant-name">Cognac</div>
+            <p class="variant-desc">
+              Chaud et lumineux. Vieillit vers un caramel dore.
+              Notre best-seller depuis le lancement.
+            </p>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div class="variant-price">79 €</div>
+              <span class="variant-swatch" style="background: #8B5E3C;"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="variant-card">
+          <img
+            class="variant-img"
+            src="https://images.unsplash.com/photo-1606522754091-a3bbf9ad4cb3?w=1600"
+            alt="Sac camel - variante Camel"
+            loading="lazy"
+          >
+          <div class="variant-body">
+            <div class="variant-name">Camel</div>
+            <p class="variant-desc">
+              La teinte prairie. Lumineux en ete, chaud en hiver.
+              La couleur qui va avec tout sans effort.
+            </p>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div class="variant-price">79 €</div>
+              <span class="variant-swatch" style="background: #C19A6B;"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 9 — REVIEWS AI SUMMARY
+       ============================================================ -->
+  <section class="reviews section section-surface">
+    <div class="container">
+
+      <div class="reviews-inner">
+
+        <div class="reviews-top">
+          <div class="reviews-score-block">
+            <div class="reviews-big-score"><span>4.6</span></div>
+            <div class="stars" style="justify-content: center;">
+              <svg class="star" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+              <svg class="star" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+              <svg class="star" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+              <svg class="star" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+              <svg class="star" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+            </div>
+            <div class="reviews-count">1 247 avis verifies</div>
+          </div>
+          <div>
+            <div class="reviews-ai-summary-label">
+              <div class="reviews-ai-dot"></div>
+              <span class="label" style="color: var(--accent);">Synthese IA des avis</span>
+            </div>
+            <p class="reviews-ai-summary-text">
+              Les clientes mentionnent unanimement la <strong>qualite du cuir</strong> comme premiere surprise positive —
+              beaucoup s'attendaient a moins pour ce prix. La bandouliere SoftFit est tres souvent citee apres une
+              journee de port intensif en ville. Le <strong>vieillissement du cuir</strong> est un sujet qui revient
+              frequemment : celles qui ont le sac depuis plus de 6 mois decrivent une patine qu'elles decrivent comme
+              "unique" et "encore plus belle qu'au depart". Seul point nuance : quelques avis mentionnent que la
+              teinte Camel est plus claire que sur les photos en ecran sombre.
+            </p>
+          </div>
+        </div>
+
+        <div class="reviews-cards">
+          <div class="review-card">
+            <div class="review-header">
+              <div class="review-author">Mathilde R.</div>
+              <div class="stars">
+                <svg class="star" style="width:14px;height:14px;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+              </div>
+            </div>
+            <p class="review-text">
+              "Jamais eu de sac aussi solide a ce prix. La bandouliere est un vrai luxe au quotidien.
+              Le cuir commence deja a prendre une belle couleur."
+            </p>
+            <div class="review-date">Il y a 3 semaines · Cognac</div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-header">
+              <div class="review-author">Camille D.</div>
+              <div class="stars">
+                <svg class="star" style="width:14px;height:14px;fill:#FF2277;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;fill:#FF2277;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;fill:#FF2277;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;fill:#FF2277;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;fill:#FF2277;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+              </div>
+            </div>
+            <p class="review-text">
+              "Honnete : j'avais peur que ca soit 'artisanal' au mauvais sens.
+              C'est le contraire. Superbe qualite, livraison rapide, j'en veux un deuxieme."
+            </p>
+            <div class="review-date">Il y a 2 mois · Noir</div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-header">
+              <div class="review-author">Sophie L.</div>
+              <div class="stars">
+                <svg class="star" style="width:14px;height:14px;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+                <svg class="star" style="width:14px;height:14px;fill:none;stroke:var(--accent);stroke-width:2;" viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12.1 16.2,18.5 10,15 3.8,18.5 5.5,12.1 0.5,7.6 7.1,7"/></svg>
+              </div>
+            </div>
+            <p class="review-text">
+              "9 mois d'utilisation quotidienne. Pas un fil qui lache, pas une ferrure qui rouille.
+              La patine sur le Camel est vraiment magnifique maintenant."
+            </p>
+            <div class="review-date">Il y a 9 mois · Camel</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 10 — PRESS QUOTE
+       ============================================================ -->
+  <section class="press section">
+    <div class="container">
+      <div class="press-inner">
+
+        <div class="press-content">
+          <div class="press-logo">Vogue Paris</div>
+          <blockquote class="press-quote">
+            "Le sac qui reconcilie
+            <em>l'elegance</em>
+            et le quotidien."
+          </blockquote>
+          <cite class="press-source">Vogue Paris — Selection Accessoires Automne 2024</cite>
+        </div>
+
+        <div class="press-image">
+          <img
+            src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=1600"
+            alt="Sac en cuir vintage - editorial"
+            loading="lazy"
+          >
+          <div class="press-image-overlay"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 11 — CARE INSTRUCTIONS
+       ============================================================ -->
+  <section class="care section section-surface">
+    <div class="container">
+
+      <div class="care-header">
+        <div class="sep"></div>
+        <h2 class="display-lg">On s'en occupe</h2>
+        <p class="body-lg" style="color: var(--text-muted); max-width: 520px; text-align: center;">
+          Ton sac merite d'etre chouchoute. Voila tout ce que tu dois savoir —
+          et tout ce qu'on fait de notre cote pour que tu sois tranquille.
+        </p>
+      </div>
+
+      <div class="care-grid">
+
+        <div class="care-card">
+          <div class="care-icon">🚚</div>
+          <div class="care-card-title">Livraison offerte</div>
+          <p class="care-body">
+            Livraison standard offerte en France metropolitaine.
+            Expedie sous 24h ouvrees. Suivi en temps reel par SMS.
+            Emballage recyclable — pas de plastique.
+          </p>
+          <div class="care-highlight">
+            <span style="color: var(--accent);">—</span>
+            Offert en France
+          </div>
+        </div>
+
+        <div class="care-card">
+          <div class="care-icon">↩</div>
+          <div class="care-card-title">Retours 30 jours</div>
+          <p class="care-body">
+            Pas satisfaite ? On te rembourse integralement dans les 30 jours.
+            Pas de questions. Pas de formulaire inutile.
+            Etiquette retour prepayee incluse dans le colis.
+          </p>
+          <div class="care-highlight">Sans conditions</div>
+        </div>
+
+        <div class="care-card">
+          <div class="care-icon">🧴</div>
+          <div class="care-card-title">Entretien simple</div>
+          <p class="care-body">
+            Un chiffon sec pour la poussiere. Un peu de cire naturelle
+            deux fois par an. Ton sac n'a pas besoin de plus. La notice
+            d'entretien est incluse avec chaque commande.
+          </p>
+          <div class="care-highlight">
+            <span style="color: var(--accent);">—</span>
+            Notice incluse
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 12 — FAQ
+       ============================================================ -->
+  <section class="faq section">
+    <div class="container">
+      <div class="faq-grid">
+
+        <div class="faq-intro">
+          <div class="sep"></div>
+          <h2 class="display-lg">Questions frequentes</h2>
+          <p class="faq-intro-desc">
+            Ce que nos clientes nous demandent le plus souvent.
+            Si ta question n'est pas la, on est a deux messages.
+          </p>
+          <button class="btn btn-outline" style="align-self: flex-start;">
+            Contacter le support
+          </button>
+        </div>
+
+        <div class="faq-list">
+
+          <div class="faq-item open">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+              <span class="faq-question-text">Combien de temps pour la livraison ?</span>
+              <span class="faq-chevron">−</span>
+            </div>
+            <div class="faq-answer" style="display:block; padding-top:16px;">
+              Commande passee avant 14h en semaine : expediee le jour meme.
+              Livraison standard 2-3 jours ouvrables. Express 24h disponible au panier.
+              Tu recois un SMS avec le numero de suivi des l'expedition.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+              <span class="faq-question-text">Le cuir va-t-il se degrader rapidement ?</span>
+              <span class="faq-chevron">+</span>
+            </div>
+            <div class="faq-answer">
+              Non. Le cuir pleine fleur tanne au vegetal est le cuir le plus resistant qui existe.
+              Il va patiner (changer de couleur et de texture) — c'est voulu, c'est sa beaute.
+              Avec un entretien basique deux fois par an, il dure 15-20 ans.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+              <span class="faq-question-text">Quelles sont les dimensions exactes ?</span>
+              <span class="faq-chevron">+</span>
+            </div>
+            <div class="faq-answer">
+              Largeur 28cm · Hauteur 22cm · Profondeur 10cm.
+              Bandouliere reglable de 80cm a 140cm (port epaule ou bandouliere).
+              Contenance : 8 litres. Format cabine-friendly.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+              <span class="faq-question-text">Comment entretenir le cuir au quotidien ?</span>
+              <span class="faq-chevron">+</span>
+            </div>
+            <div class="faq-answer">
+              Essuie les eclaboussures immediatement avec un chiffon sec.
+              Nourris le cuir tous les 6 mois avec de la cire naturelle (fournie).
+              Evite les sacs en plastique pour le rangement — laisse respirer.
+              En cas de pluie : laisse secher naturellement, sans source de chaleur.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+              <span class="faq-question-text">Les retours sont-ils vraiment sans conditions ?</span>
+              <span class="faq-chevron">+</span>
+            </div>
+            <div class="faq-answer">
+              Oui. 30 jours apres reception. Produit non utilise ou meme utilise
+              (si defaut constate). Etiquette prepayee dans le colis. Remboursement
+              sous 5 jours ouvrables apres reception du retour. Aucun frais de restockage.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 13 — BRAND MANIFESTO
+       ============================================================ -->
+  <section class="manifesto section">
+    <div class="container">
+      <div class="manifesto-inner">
+
+        <div class="manifesto-content">
+          <div class="badge badge-accent" style="align-self: flex-start;">Notre manifeste</div>
+          <h2 class="manifesto-title">
+            Concu pour celles
+            <span class="accent-line">qui savent</span>
+          </h2>
+          <p class="manifesto-text">
+            On ne fait pas des sacs. On fait des compagnons.
+            Des objets qui absorbent ta vie, qui prennent ta forme,
+            qui deviennent irreplacables. Pas parce qu'ils sont chers.
+            Parce qu'ils sont vrais.
+          </p>
+          <div class="manifesto-pillars">
+            <div class="pillar">
+              <div class="pillar-dot"></div>
+              <span class="pillar-text">Cuir vivant — origine tracable</span>
+            </div>
+            <div class="pillar">
+              <div class="pillar-dot"></div>
+              <span class="pillar-text">Fait pour durer — pas pour etre remplace</span>
+            </div>
+            <div class="pillar">
+              <div class="pillar-dot"></div>
+              <span class="pillar-text">Unique au monde — comme celle qui le porte</span>
+            </div>
+          </div>
+          <div class="manifesto-cta">
+            <button class="btn btn-primary" style="font-size: 15px; padding: 20px 40px;">
+              Commander maintenant
+            </button>
+            <button class="btn btn-outline">
+              Notre histoire
+            </button>
+          </div>
+        </div>
+
+        <div class="manifesto-image">
+          <img
+            src="https://images.unsplash.com/photo-1559563458-527698bf5295?w=1600"
+            alt="Sac en cuir vintage - mode de vie"
+            loading="lazy"
+          >
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name">Cuir<span>Co</span></div>
+          <p class="footer-brand-desc">
+            Des accessoires en cuir véritable, faits pour durer.
+            Origine traçable, artisanat sincere, sans compromis.
+          </p>
+        </div>
+        <div>
+          <div class="footer-col-title">Produits</div>
+          <ul class="footer-links">
+            <li><a href="#">Sacs bandoulière</a></li>
+            <li><a href="#">Portefeuilles</a></li>
+            <li><a href="#">Ceintures</a></li>
+            <li><a href="#">Nouveautes</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Aide</div>
+          <ul class="footer-links">
+            <li><a href="#">Livraison</a></li>
+            <li><a href="#">Retours</a></li>
+            <li><a href="#">Entretien cuir</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Marque</div>
+          <ul class="footer-links">
+            <li><a href="#">Notre histoire</a></li>
+            <li><a href="#">Fabrication</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Presse</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-legal">2024 CuirCo. Tous droits reserves.</span>
+        <div class="footer-badge">
+          Genere par Konvert
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ accordion — sections already toggle via onclick
+    // Additional: close others when one opens
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const wasOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+        const chevrons = document.querySelectorAll('.faq-chevron');
+        chevrons.forEach(c => c.textContent = '+');
+        if (!wasOpen) {
+          item.classList.add('open');
+          btn.querySelector('.faq-chevron').textContent = '−';
+        }
+      });
+    });
+
+    // Init first item
+    const firstChevron = document.querySelector('.faq-item.open .faq-chevron');
+    if (firstChevron) firstChevron.textContent = '−';
+
+    // Variant selection
+    document.querySelectorAll('.variant-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.variant-card').forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>

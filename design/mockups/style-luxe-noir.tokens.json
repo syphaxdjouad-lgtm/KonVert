@@ -1,0 +1,367 @@
+{
+  "$schema": "https://design-tokens.org/schema",
+  "$metadata": {
+    "tokenSetOrder": ["primitive", "semantic", "component"],
+    "style": "luxe-noir",
+    "version": "1.0.0",
+    "created": "2026-05-26",
+    "author": "OBITO / NEXARA",
+    "description": "Konvert V3 — Style Luxe Noir. Dark warm élégant inspiré joaillerie et horlogerie haute gamme. Accent or #C9A84C, fond warm dark #14110F, serif Playfair Display.",
+    "references": ["cartier.com", "audemarspiguet.com", "mejuri.com dark mode"]
+  },
+
+  "primitive": {
+    "color": {
+      "warm-dark": {
+        "50": { "$value": "#F5F0E8", "$type": "color", "$description": "Cream warm — texte principal" },
+        "100": { "$value": "#EDE6D8", "$type": "color" },
+        "200": { "$value": "#D4C9B5", "$type": "color" },
+        "300": { "$value": "#A89E91", "$type": "color", "$description": "Texte muted" },
+        "400": { "$value": "#7A6E63", "$type": "color" },
+        "500": { "$value": "#504540", "$type": "color" },
+        "600": { "$value": "#3A3028", "$type": "color" },
+        "700": { "$value": "#2A251F", "$type": "color", "$description": "Surface tertiaire" },
+        "800": { "$value": "#1F1B17", "$type": "color", "$description": "Surface secondaire" },
+        "900": { "$value": "#17130F", "$type": "color" },
+        "950": { "$value": "#14110F", "$type": "color", "$description": "Background principal — warm dark (JAMAIS #000000)" }
+      },
+      "gold": {
+        "100": { "$value": "#F9EFD0", "$type": "color" },
+        "200": { "$value": "#F0D88A", "$type": "color" },
+        "300": { "$value": "#E4C460", "$type": "color" },
+        "400": { "$value": "#DFC07A", "$type": "color", "$description": "Accent light — hover boutons" },
+        "500": { "$value": "#C9A84C", "$type": "color", "$description": "Accent principal — or chaud" },
+        "600": { "$value": "#A8893A", "$type": "color" },
+        "700": { "$value": "#876B2C", "$type": "color" },
+        "800": { "$value": "#664E1E", "$type": "color" },
+        "900": { "$value": "#3D2E10", "$type": "color" }
+      },
+      "semantic": {
+        "success": { "$value": "#4A7C59", "$type": "color", "$description": "Vert sage warm — pas de vert vif sur dark" },
+        "warning": { "$value": "#C9A84C", "$type": "color", "$description": "Utilise l'or pour warning — cohérent visuellement" },
+        "error": { "$value": "#8B3A3A", "$type": "color", "$description": "Rouge foncé warm — jamais saturé sur dark" },
+        "info": { "$value": "#3A5A7A", "$type": "color", "$description": "Bleu acier — neutre sur dark" }
+      }
+    }
+  },
+
+  "semantic": {
+    "color": {
+      "bg": {
+        "$value": "{primitive.color.warm-dark.950}",
+        "$type": "color",
+        "$description": "Fond principal — #14110F warm dark. JAMAIS remplacer par #000000.",
+        "$rule": "Seul fond autorisé pour ce style. Pas d'alternance avec d'autres teintes."
+      },
+      "surface": {
+        "$value": "{primitive.color.warm-dark.800}",
+        "$type": "color",
+        "$description": "Surface secondaire — sections alternées, cards, inputs"
+      },
+      "surface-2": {
+        "$value": "{primitive.color.warm-dark.700}",
+        "$type": "color",
+        "$description": "Surface tertiaire — intérieur cards, code blocks"
+      },
+      "accent": {
+        "$value": "{primitive.color.gold.500}",
+        "$type": "color",
+        "$description": "Accent or #C9A84C. Max 5 éléments par page : CTAs, overlines, séparateurs, badges, piliers."
+      },
+      "accent-light": {
+        "$value": "{primitive.color.gold.400}",
+        "$type": "color",
+        "$description": "Accent hover — boutons au survol"
+      },
+      "accent-dim": {
+        "$value": "rgba(201, 168, 76, 0.15)",
+        "$type": "color",
+        "$description": "Fond badges or — très transparent"
+      },
+      "text": {
+        "$value": "{primitive.color.warm-dark.50}",
+        "$type": "color",
+        "$description": "Texte principal — cream #F5F0E8. Jamais blanc pur sur ce style."
+      },
+      "text-muted": {
+        "$value": "{primitive.color.warm-dark.300}",
+        "$type": "color",
+        "$description": "Texte secondaire — descriptions, sous-titres"
+      },
+      "border": {
+        "$value": "rgba(245, 240, 232, 0.10)",
+        "$type": "color",
+        "$description": "Border neutre subtile — toujours semi-transparente"
+      },
+      "border-gold": {
+        "$value": "rgba(201, 168, 76, 0.30)",
+        "$type": "color",
+        "$description": "Border or — uniquement sur hover/active, jamais au repos"
+      }
+    },
+
+    "typography": {
+      "font-heading": {
+        "$value": "\"Playfair Display\", \"Times New Roman\", serif",
+        "$type": "fontFamily",
+        "$description": "Serif dramatique — H1, H2, quotes, prix, noms produits. Jamais pour le body."
+      },
+      "font-body": {
+        "$value": "\"Inter\", system-ui, sans-serif",
+        "$type": "fontFamily",
+        "$description": "Sans serif neutre — tout le corps de texte, labels, boutons, overlines"
+      },
+      "size-xs": { "$value": "0.75rem", "$type": "dimension", "$description": "12px — overlines, légales, captions" },
+      "size-sm": { "$value": "0.8125rem", "$type": "dimension", "$description": "13px — body secondaire" },
+      "size-base": { "$value": "0.875rem", "$type": "dimension", "$description": "14px — body mobile" },
+      "size-md": { "$value": "0.9375rem", "$type": "dimension", "$description": "15px — body desktop" },
+      "size-lg": { "$value": "1.0625rem", "$type": "dimension", "$description": "17px — feature names" },
+      "size-xl": { "$value": "1.125rem", "$type": "dimension", "$description": "18px — sous-titres, piliers manifesto" },
+      "size-2xl": { "$value": "1.25rem", "$type": "dimension", "$description": "20px — footer brand name" },
+      "size-3xl": { "$value": "1.5rem", "$type": "dimension", "$description": "24px — H3 mobile" },
+      "size-4xl": { "$value": "1.875rem", "$type": "dimension", "$description": "30px — H2 mobile" },
+      "size-5xl": { "$value": "2.25rem", "$type": "dimension", "$description": "36px — H2 desktop min" },
+      "size-hero": { "$value": "clamp(2.625rem, 4vw, 4rem)", "$type": "dimension", "$description": "42-64px — H1 hero desktop" },
+      "size-manifesto": { "$value": "clamp(3rem, 5vw, 5rem)", "$type": "dimension", "$description": "48-80px — manifesto headline" },
+
+      "weight-light": { "$value": "300", "$type": "fontWeight" },
+      "weight-regular": { "$value": "400", "$type": "fontWeight" },
+      "weight-medium": { "$value": "500", "$type": "fontWeight" },
+      "weight-semibold": { "$value": "600", "$type": "fontWeight" },
+      "weight-bold": { "$value": "700", "$type": "fontWeight" },
+      "weight-extrabold": { "$value": "800", "$type": "fontWeight", "$description": "Manifesto headline uniquement" },
+
+      "line-height-tight": { "$value": "1.08", "$type": "number", "$description": "Grands titres display (H1 hero, manifesto)" },
+      "line-height-heading": { "$value": "1.15", "$type": "number", "$description": "H2 sections" },
+      "line-height-body": { "$value": "1.7", "$type": "number", "$description": "Corps de texte" },
+      "line-height-relaxed": { "$value": "1.75", "$type": "number", "$description": "Body long (why_we_love)" },
+
+      "letter-spacing-heading": { "$value": "-0.03em", "$type": "dimension", "$description": "H1, H2 — resserre pour effet joaillerie" },
+      "letter-spacing-manifesto": { "$value": "-0.04em", "$type": "dimension", "$description": "Manifesto headline uniquement" },
+      "letter-spacing-overline": { "$value": "0.18em", "$type": "dimension", "$description": "Overlines — ouvert, tradition typographique luxe" },
+      "letter-spacing-button": { "$value": "0.12em", "$type": "dimension", "$description": "Labels boutons uppercase" },
+      "letter-spacing-badge": { "$value": "0.08em", "$type": "dimension" }
+    },
+
+    "spacing": {
+      "xs": { "$value": "0.5rem", "$type": "dimension", "$description": "8px — micro spacing intra-composant" },
+      "sm": { "$value": "1rem", "$type": "dimension", "$description": "16px — base spacing" },
+      "md": { "$value": "1.5rem", "$type": "dimension", "$description": "24px — gap standard" },
+      "lg": { "$value": "2rem", "$type": "dimension", "$description": "32px — card padding" },
+      "xl": { "$value": "3rem", "$type": "dimension", "$description": "48px — section intro spacing" },
+      "2xl": { "$value": "5rem", "$type": "dimension", "$description": "80px — between major blocks" },
+      "section": { "$value": "8.75rem", "$type": "dimension", "$description": "140px desktop — section vertical padding. Luxe respire." },
+      "section-mobile": { "$value": "4.5rem", "$type": "dimension", "$description": "72px mobile" },
+      "gutter": { "$value": "4rem", "$type": "dimension", "$description": "64px — marge container desktop" },
+      "gutter-mobile": { "$value": "1.25rem", "$type": "dimension", "$description": "20px — marge container mobile" },
+      "max-width": { "$value": "1280px", "$type": "dimension", "$description": "Container max-width" }
+    },
+
+    "border": {
+      "radius-card": { "$value": "2px", "$type": "borderRadius", "$description": "Cards — presque vif, soupçon d'arrondi. Référence maroquinerie." },
+      "radius-button": { "$value": "0px", "$type": "borderRadius", "$description": "Boutons — vifs. Sobre, premium, direct." },
+      "radius-image": { "$value": "2px", "$type": "borderRadius", "$description": "Images — cohérent avec les cards" },
+      "radius-avatar": { "$value": "50%", "$type": "borderRadius", "$description": "Avatars reviews uniquement" },
+      "width-thin": { "$value": "1px", "$type": "borderWidth", "$description": "Tous les borders du style" },
+      "width-accent": { "$value": "2px", "$type": "borderWidth", "$description": "Left border accent (AI synthesis, piliers)" }
+    },
+
+    "shadow": {
+      "card": { "$value": "none", "$type": "shadow", "$description": "Pas de shadow au repos — les cards n'ont pas de profondeur par défaut" },
+      "hover": {
+        "$value": "0 0 24px rgba(201, 168, 76, 0.30)",
+        "$type": "shadow",
+        "$description": "Glow doré au hover — simule l'éclairage vitrine joaillerie"
+      },
+      "hover-strong": {
+        "$value": "0 0 32px rgba(201, 168, 76, 0.35)",
+        "$type": "shadow",
+        "$description": "Glow bouton gold au hover"
+      },
+      "hero-image": { "$value": "none", "$type": "shadow" }
+    },
+
+    "motion": {
+      "ease": {
+        "$value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "$type": "cubicBezier",
+        "$description": "Easing standard — entrées et transitions douces"
+      },
+      "ease-out": {
+        "$value": "cubic-bezier(0, 0, 0.2, 1)",
+        "$type": "cubicBezier",
+        "$description": "Pour les éléments qui entrent dans le viewport"
+      },
+      "duration-fast": { "$value": "180ms", "$type": "duration", "$description": "Hover states, color transitions" },
+      "duration-base": { "$value": "400ms", "$type": "duration", "$description": "Reveals, accordéons" },
+      "duration-slow": { "$value": "500ms", "$type": "duration", "$description": "Image zoom, scroll animations" },
+      "duration-hero-zoom": { "$value": "8000ms", "$type": "duration", "$description": "Zoom très lent image héro — 'vie' ambiante imperceptible" },
+      "stagger-delay": { "$value": "100ms", "$type": "duration", "$description": "Décalage entre éléments staggered (features, reviews)" },
+      "philosophy": {
+        "$value": "Jakub Krehel — production polish",
+        "$type": "other",
+        "$description": "Chaque micro-interaction soignée. Spring physics non nécessaires en CSS-only. Priorité : cohérence et élégance sur l'expressivité."
+      }
+    },
+
+    "image": {
+      "filter-standard": {
+        "$value": "brightness(0.88) saturate(0.9)",
+        "$type": "other",
+        "$description": "Filtre appliqué à toutes les images produit. Homogénéise les sources hétérogènes et crée la cohérence visuelle dark warm."
+      },
+      "filter-hero": {
+        "$value": "brightness(0.82) saturate(0.85)",
+        "$type": "other",
+        "$description": "Filtre légèrement plus fort pour les images héro"
+      },
+      "filter-press": {
+        "$value": "brightness(0.22) saturate(0.7)",
+        "$type": "other",
+        "$description": "Full-bleed press section — fortement assombri + overlay"
+      }
+    }
+  },
+
+  "component": {
+    "button-primary": {
+      "background": { "$value": "{semantic.color.accent}", "$type": "color" },
+      "background-hover": { "$value": "{semantic.color.accent-light}", "$type": "color" },
+      "color": { "$value": "{semantic.color.bg}", "$type": "color" },
+      "font-family": { "$value": "{semantic.typography.font-body}", "$type": "fontFamily" },
+      "font-size": { "$value": "0.75rem", "$type": "dimension", "$description": "12px" },
+      "font-weight": { "$value": "{semantic.typography.weight-semibold}", "$type": "fontWeight" },
+      "letter-spacing": { "$value": "{semantic.typography.letter-spacing-button}", "$type": "dimension" },
+      "text-transform": { "$value": "uppercase", "$type": "other" },
+      "padding": { "$value": "16px 36px", "$type": "other" },
+      "border-radius": { "$value": "{semantic.border.radius-button}", "$type": "borderRadius" },
+      "shadow-hover": { "$value": "{semantic.shadow.hover-strong}", "$type": "shadow" },
+      "transform-hover": { "$value": "translateY(-1px)", "$type": "other" }
+    },
+
+    "button-ghost": {
+      "background": { "$value": "transparent", "$type": "color" },
+      "color": { "$value": "{semantic.color.text-muted}", "$type": "color" },
+      "color-hover": { "$value": "{semantic.color.text}", "$type": "color" },
+      "border": { "$value": "1px solid {semantic.color.border}", "$type": "other" },
+      "border-hover": { "$value": "1px solid {semantic.color.accent}", "$type": "other" },
+      "padding": { "$value": "15px 35px", "$type": "other" },
+      "border-radius": { "$value": "{semantic.border.radius-button}", "$type": "borderRadius" }
+    },
+
+    "card": {
+      "background": { "$value": "{semantic.color.surface}", "$type": "color" },
+      "border": { "$value": "1px solid {semantic.color.border}", "$type": "other" },
+      "border-hover": { "$value": "1px solid {semantic.color.border-gold}", "$type": "other" },
+      "border-radius": { "$value": "{semantic.border.radius-card}", "$type": "borderRadius" },
+      "shadow": { "$value": "{semantic.shadow.card}", "$type": "shadow" },
+      "shadow-hover": { "$value": "{semantic.shadow.hover}", "$type": "shadow" },
+      "padding": { "$value": "{semantic.spacing.lg}", "$type": "dimension" }
+    },
+
+    "card-feature": {
+      "background": { "$value": "{semantic.color.surface-2}", "$type": "color" },
+      "padding": { "$value": "48px 32px", "$type": "other" }
+    },
+
+    "overline": {
+      "font-family": { "$value": "{semantic.typography.font-body}", "$type": "fontFamily" },
+      "font-size": { "$value": "0.6875rem", "$type": "dimension", "$description": "11px" },
+      "font-weight": { "$value": "{semantic.typography.weight-medium}", "$type": "fontWeight" },
+      "letter-spacing": { "$value": "{semantic.typography.letter-spacing-overline}", "$type": "dimension" },
+      "text-transform": { "$value": "uppercase", "$type": "other" },
+      "color": { "$value": "{semantic.color.accent}", "$type": "color" }
+    },
+
+    "gold-line": {
+      "width": { "$value": "48px", "$type": "dimension", "$description": "36px mobile" },
+      "height": { "$value": "1px", "$type": "dimension" },
+      "background": { "$value": "{semantic.color.accent}", "$type": "color" },
+      "margin": { "$value": "16px 0", "$type": "other" }
+    },
+
+    "header": {
+      "height": { "$value": "64px", "$type": "dimension", "$description": "54px mobile" },
+      "background": { "$value": "rgba(20, 17, 15, 0.92)", "$type": "color" },
+      "backdrop-filter": { "$value": "blur(20px)", "$type": "other" },
+      "border-bottom": { "$value": "1px solid {semantic.color.border}", "$type": "other" },
+      "position": { "$value": "sticky", "$type": "other" }
+    },
+
+    "faq-item": {
+      "background": { "$value": "{semantic.color.surface-2}", "$type": "color" },
+      "border": { "$value": "1px solid {semantic.color.border}", "$type": "other" },
+      "border-hover": { "$value": "1px solid {semantic.color.border-gold}", "$type": "other" },
+      "question-font": { "$value": "{semantic.typography.font-heading}", "$type": "fontFamily" },
+      "question-size": { "$value": "1rem", "$type": "dimension" },
+      "answer-font-size": { "$value": "0.875rem", "$type": "dimension" },
+      "answer-line-height": { "$value": "1.7", "$type": "number" }
+    },
+
+    "review-card": {
+      "background": { "$value": "{semantic.color.surface-2}", "$type": "color" },
+      "border": { "$value": "1px solid {semantic.color.border}", "$type": "other" },
+      "padding": { "$value": "{semantic.spacing.lg}", "$type": "dimension" },
+      "avatar-size": { "$value": "36px", "$type": "dimension" },
+      "avatar-background": { "$value": "{semantic.color.surface}", "$type": "color" },
+      "avatar-color": { "$value": "{semantic.color.accent}", "$type": "color" }
+    },
+
+    "press-section": {
+      "min-height": { "$value": "520px", "$type": "dimension" },
+      "bg-filter": { "$value": "{semantic.image.filter-press}", "$type": "other" },
+      "quote-font": { "$value": "{semantic.typography.font-heading}", "$type": "fontFamily" },
+      "quote-style": { "$value": "italic", "$type": "other" },
+      "quote-size": { "$value": "clamp(1.75rem, 3.5vw, 3rem)", "$type": "dimension" }
+    },
+
+    "manifesto": {
+      "headline-size": { "$value": "{semantic.typography.size-manifesto}", "$type": "dimension" },
+      "headline-weight": { "$value": "{semantic.typography.weight-extrabold}", "$type": "fontWeight" },
+      "pillar-line-color": { "$value": "{semantic.color.accent}", "$type": "color" },
+      "pillar-line-width": { "$value": "2px", "$type": "dimension" },
+      "pillar-line-height": { "$value": "32px", "$type": "dimension" },
+      "pillar-font": { "$value": "{semantic.typography.font-heading}", "$type": "fontFamily" },
+      "pillar-style": { "$value": "italic", "$type": "other" }
+    },
+
+    "sticky-cta-mobile": {
+      "background": { "$value": "rgba(20, 17, 15, 0.96)", "$type": "color" },
+      "border-top": { "$value": "1px solid {semantic.color.border}", "$type": "other" },
+      "height": { "$value": "72px", "$type": "dimension" },
+      "backdrop-filter": { "$value": "blur(16px)", "$type": "other" },
+      "display": { "$value": "mobile only", "$type": "other", "$description": "Masqué sur desktop (min-width 768px)" }
+    }
+  },
+
+  "rules": {
+    "bg-discipline": {
+      "$value": "JAMAIS #000000 comme fond. Toujours #14110F (warm dark). La chaleur du fond est la signature principale du style Luxe Noir.",
+      "$type": "other"
+    },
+    "accent-usage": {
+      "$value": "L'accent or (#C9A84C) est appliqué sur 5 types d'éléments maximum : 1. overlines, 2. CTAs primaires, 3. séparateurs (gold-line), 4. badges/tags, 5. piliers manifesto. Jamais en fond large surface.",
+      "$type": "other"
+    },
+    "no-section-borders": {
+      "$value": "Zéro border entre sections. La transition BG→surface crée la hiérarchie. Les borders entre sections créent un look 'template cheap' incompatible avec le positionnement luxe.",
+      "$type": "other"
+    },
+    "no-alternating-bg": {
+      "$value": "Ne pas alterner BG et surface sur toutes les sections de façon mécanique (odd/even). Choisir l'alternance avec intention selon le contenu (sections denses = surface, sections narratives = bg).",
+      "$type": "other"
+    },
+    "image-filter-mandatory": {
+      "$value": "Toutes les images reçoivent filter: brightness(0.88) saturate(0.9). C'est le fondement de la cohérence visuelle du style — homogénéise les images sources hétérogènes.",
+      "$type": "other"
+    },
+    "radius-consistency": {
+      "$value": "radius-card: 2px, radius-button: 0px. Ne jamais mélanger avec des radius > 4px dans ce style. Le vif est intentionnel.",
+      "$type": "other"
+    },
+    "text-cream-not-white": {
+      "$value": "Texte principal = #F5F0E8 cream. Jamais #FFFFFF sur fond dark warm — le blanc pur crée un contraste agressif qui détruit l'atmosphère luxe.",
+      "$type": "other"
+    }
+  }
+}

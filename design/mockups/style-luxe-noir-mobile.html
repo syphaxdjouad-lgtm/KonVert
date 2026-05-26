@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Konvert V3 — Style Luxe Noir (Mobile 375px)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       KONVERT V3 — STYLE LUXE NOIR — MOBILE 375px
+       Designer : OBITO / NEXARA — 2026-05-26
+    ============================================================ */
+
+    /* --- TOKENS (identiques desktop) --- */
+    :root {
+      --bg:           #14110F;
+      --surface:      #1F1B17;
+      --surface-2:    #2A251F;
+      --accent:       #C9A84C;
+      --accent-light: #DFC07A;
+      --accent-dim:   rgba(201, 168, 76, 0.15);
+      --text:         #F5F0E8;
+      --text-muted:   #A89E91;
+      --border:       rgba(245, 240, 232, 0.1);
+      --border-gold:  rgba(201, 168, 76, 0.3);
+
+      --font-heading: "Playfair Display", "Times New Roman", serif;
+      --font-body:    "Inter", system-ui, sans-serif;
+
+      --gutter:       20px;
+      --space-xs:     8px;
+      --space-sm:     16px;
+      --space-md:     24px;
+      --space-lg:     32px;
+      --space-xl:     48px;
+      --space-section:72px;
+
+      --radius-card:  2px;
+      --radius-btn:   0px;
+
+      --ease:         cubic-bezier(0.4, 0, 0.2, 1);
+      --duration:     400ms;
+      --duration-fast:180ms;
+    }
+
+    /* --- RESET --- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      max-width: 375px;
+      margin: 0 auto;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      filter: brightness(0.88) saturate(0.9);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    .container { padding: 0 var(--gutter); }
+
+    /* --- SEPARATEUR OR --- */
+    .gold-line {
+      display: block;
+      width: 36px;
+      height: 1px;
+      background: var(--accent);
+      margin: 12px 0;
+    }
+    .gold-line--center { margin: 12px auto; }
+
+    /* --- TYPOGRAPHIE --- */
+    .overline {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* --- BOUTONS --- */
+    .btn-gold {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 17px 24px;
+      border-radius: var(--radius-btn);
+      border: none;
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--ease),
+                  box-shadow var(--duration-fast) var(--ease);
+    }
+    .btn-gold:active {
+      background: var(--accent-light);
+      box-shadow: 0 0 24px rgba(201, 168, 76, 0.3);
+    }
+
+    .btn-ghost {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 16px 24px;
+      border-radius: var(--radius-btn);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color var(--duration-fast) var(--ease);
+    }
+    .btn-ghost:active { border-color: var(--accent); }
+
+    .star { width: 11px; height: 11px; fill: var(--accent); }
+
+    /* ============================================================
+       HEADER MOBILE
+    ============================================================ */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(20, 17, 15, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 54px;
+      padding: 0 var(--gutter);
+    }
+
+    .header-logo {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--text);
+    }
+    .header-logo span { color: var(--accent); }
+
+    .header-menu-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+    .header-menu-btn span {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: var(--text-muted);
+    }
+
+    .header-cart {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--border-gold);
+      padding: 6px 14px;
+      background: var(--accent-dim);
+    }
+
+    /* ============================================================
+       SECTION 1 : HERO MOBILE
+    ============================================================ */
+    .hero { }
+
+    .hero-image-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+    }
+    .hero-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      filter: brightness(0.8) saturate(0.85);
+    }
+    /* Gradient bas pour transition vers le contenu */
+    .hero-image-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(to bottom, transparent 0%, rgba(20,17,15,0.95) 100%);
+    }
+
+    /* Badge flottant sur l'image */
+    .hero-float-badge {
+      position: absolute;
+      bottom: var(--space-md);
+      left: var(--gutter);
+      z-index: 1;
+    }
+    .hero-float-badge .overline { color: var(--accent); }
+
+    .hero-content {
+      padding: var(--space-md) var(--gutter) var(--space-lg);
+      background: var(--bg);
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--text);
+      margin: var(--space-xs) 0 var(--space-xs);
+    }
+
+    .hero-tagline {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: var(--space-md);
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-sm);
+    }
+
+    .hero-price {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .hero-rating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stars { display: flex; gap: 2px; }
+    .rating-text { font-size: 12px; color: var(--text-muted); }
+
+    .hero-shipping {
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: var(--space-md);
+    }
+    .hero-shipping strong { color: var(--accent); }
+
+    /* Swatches couleurs */
+    .hero-variants {
+      display: flex;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    .variant-swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+    .swatch-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+    }
+    .variant-swatch.active .swatch-dot { border-color: var(--accent); }
+    .swatch-label { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+
+    .hero-actions { display: flex; flex-direction: column; gap: 10px; }
+
+    /* ============================================================
+       SECTION 2 : GALLERY MOBILE (scroll horizontal)
+    ============================================================ */
+    .gallery { padding: var(--space-section) 0; background: var(--surface); }
+
+    .gallery-header {
+      text-align: center;
+      margin-bottom: var(--space-lg);
+      padding: 0 var(--gutter);
+    }
+    .gallery-title {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-top: var(--space-xs);
+    }
+
+    .gallery-scroll {
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      padding: 0 var(--gutter) 0;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      scroll-snap-type: x mandatory;
+    }
+    .gallery-scroll::-webkit-scrollbar { display: none; }
+
+    .gallery-item {
+      flex-shrink: 0;
+      width: 280px;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      scroll-snap-align: start;
+    }
+    .gallery-item:first-child { width: 320px; }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.85) saturate(0.9);
+    }
+
+    .gallery-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: var(--space-sm);
+      padding: 0 var(--gutter);
+    }
+    .gallery-dot {
+      width: 20px;
+      height: 2px;
+      background: var(--border);
+      transition: background var(--duration-fast) var(--ease),
+                  width var(--duration-fast) var(--ease);
+    }
+    .gallery-dot.active { background: var(--accent); width: 32px; }
+
+    /* ============================================================
+       SECTION 3 : WHY WE LOVE MOBILE
+    ============================================================ */
+    .why-we-love { padding: var(--space-section) 0; background: var(--bg); }
+
+    .why-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      margin-bottom: var(--space-lg);
+      position: relative;
+    }
+    .why-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.83) saturate(0.88);
+    }
+    .why-image-badge {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(20,17,15,0.95) 0%, transparent 100%);
+      padding: var(--space-lg) var(--gutter) var(--space-md);
+    }
+    .why-image-badge p {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .why-text { padding: 0 var(--gutter); }
+
+    .why-title {
+      font-family: var(--font-heading);
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin: var(--space-xs) 0 var(--space-md);
+    }
+    .why-title em { font-style: italic; color: var(--accent); }
+
+    .why-body {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       SECTION 4 : THOUGHTFULLY DESIGNED MOBILE
+    ============================================================ */
+    .thoughtfully { padding: var(--space-section) 0; background: var(--surface); }
+
+    .thoughtfully-header {
+      text-align: center;
+      padding: 0 var(--gutter);
+      margin-bottom: var(--space-lg);
+    }
+    .thoughtfully-title {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: var(--space-xs);
+    }
+
+    .features-list { display: flex; flex-direction: column; gap: 2px; }
+
+    .feature-item {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: var(--space-lg) var(--gutter);
+      display: flex;
+      gap: var(--space-md);
+      align-items: flex-start;
+    }
+
+    .feature-num {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      flex-shrink: 0;
+      padding-top: 3px;
+    }
+
+    .feature-name {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+
+    .feature-tag {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ============================================================
+       SECTION 5 : BEST FOR MOBILE
+    ============================================================ */
+    .best-for { padding: var(--space-section) 0; background: var(--bg); border-top: 1px solid var(--border); }
+
+    .best-for-header {
+      text-align: center;
+      padding: 0 var(--gutter);
+      margin-bottom: var(--space-lg);
+    }
+    .best-for-title {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: var(--space-xs);
+    }
+
+    .use-cases {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xs);
+      padding: 0 var(--gutter);
+    }
+
+    .use-case-pill {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: var(--space-lg) var(--space-sm);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    .use-case-icon { font-size: 22px; }
+    .use-case-label {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .use-case-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    /* ============================================================
+       SECTION 6 : MATERIALS MOBILE (scroll + stacked)
+    ============================================================ */
+    .materials { padding: var(--space-section) 0; background: var(--surface); }
+
+    .materials-header {
+      padding: 0 var(--gutter);
+      margin-bottom: var(--space-lg);
+    }
+    .materials-title {
+      font-family: var(--font-heading);
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin: var(--space-xs) 0 var(--space-sm);
+    }
+    .materials-intro {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .materials-scroll {
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      padding: 0 var(--gutter);
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+    }
+    .materials-scroll::-webkit-scrollbar { display: none; }
+
+    .material-card {
+      flex-shrink: 0;
+      width: 280px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      scroll-snap-align: start;
+    }
+
+    .material-img {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+    .material-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.85) saturate(0.9);
+    }
+
+    .material-body { padding: var(--space-md); }
+    .material-number {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .material-name {
+      font-family: var(--font-heading);
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .material-benefit {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       SECTION 7 : VARIANTS MOBILE
+    ============================================================ */
+    .variants { padding: var(--space-section) 0; background: var(--bg); }
+
+    .variants-header {
+      text-align: center;
+      padding: 0 var(--gutter);
+      margin-bottom: var(--space-lg);
+    }
+    .variants-title {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: var(--space-xs);
+    }
+
+    .variants-scroll {
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      padding: 0 var(--gutter);
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+    }
+    .variants-scroll::-webkit-scrollbar { display: none; }
+
+    .variant-card {
+      flex-shrink: 0;
+      width: 240px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      scroll-snap-align: start;
+      transition: border-color var(--duration-fast) var(--ease);
+    }
+    .variant-card.active { border-color: var(--accent); }
+
+    .variant-img-wrap { aspect-ratio: 3/4; overflow: hidden; }
+    .variant-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.85) saturate(0.9);
+    }
+
+    .variant-info { padding: var(--space-sm) var(--space-md); }
+    .variant-name {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .variant-desc { font-size: 12px; color: var(--text-muted); }
+
+    /* ============================================================
+       SECTION 8 : REVIEWS MOBILE
+    ============================================================ */
+    .reviews { padding: var(--space-section) 0; background: var(--surface); }
+
+    .reviews-hero {
+      padding: 0 var(--gutter);
+      margin-bottom: var(--space-lg);
+    }
+    .reviews-title {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin: var(--space-xs) 0 var(--space-md);
+    }
+
+    .reviews-score-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .score-big {
+      font-family: var(--font-heading);
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--text);
+    }
+    .score-details { display: flex; flex-direction: column; gap: 4px; }
+    .score-details small { font-size: 11px; color: var(--text-muted); }
+
+    .ai-synthesis {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent);
+      padding: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    .ai-synthesis-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .ai-synthesis p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .reviews-scroll {
+      display: flex;
+      gap: var(--space-sm);
+      overflow-x: auto;
+      padding: 0 var(--gutter);
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+    }
+    .reviews-scroll::-webkit-scrollbar { display: none; }
+
+    .review-card {
+      flex-shrink: 0;
+      width: 300px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: var(--space-md);
+      scroll-snap-align: start;
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .review-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .review-author { font-size: 12px; font-weight: 500; color: var(--text); }
+    .review-date { font-size: 10px; color: var(--text-muted); }
+
+    .review-text {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ============================================================
+       SECTION 9 : PRESS MOBILE
+    ============================================================ */
+    .press {
+      position: relative;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .press-bg {
+      position: absolute;
+      inset: 0;
+    }
+    .press-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.22) saturate(0.7);
+    }
+    .press-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(20, 17, 15, 0.45);
+    }
+
+    .press-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: var(--space-section) var(--gutter);
+      width: 100%;
+    }
+
+    .press-logo {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: var(--space-md);
+    }
+
+    .press-quote {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--text);
+      margin-bottom: var(--space-md);
+    }
+    .press-quote::before { content: '\201C'; }
+    .press-quote::after  { content: '\201D'; }
+
+    .press-attribution {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       SECTION 10 : CARE MOBILE
+    ============================================================ */
+    .care { padding: var(--space-section) 0; background: var(--bg); }
+
+    .care-header {
+      text-align: center;
+      padding: 0 var(--gutter);
+      margin-bottom: var(--space-lg);
+    }
+    .care-title {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: var(--space-xs);
+    }
+
+    .care-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .care-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--gutter);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .care-icon { font-size: 22px; flex-shrink: 0; }
+
+    .care-name {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .care-desc { font-size: 12px; line-height: 1.5; color: var(--text-muted); }
+
+    /* ============================================================
+       SECTION 11 : FAQ MOBILE
+    ============================================================ */
+    .faq { padding: var(--space-section) 0; background: var(--surface); border-top: 1px solid var(--border); }
+
+    .faq-header {
+      padding: 0 var(--gutter);
+      margin-bottom: var(--space-lg);
+    }
+    .faq-title {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin: var(--space-xs) 0 var(--space-sm);
+    }
+    .faq-subtitle {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .faq-list { display: flex; flex-direction: column; gap: 2px; }
+
+    .faq-item {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-md) var(--gutter);
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      gap: var(--space-sm);
+    }
+
+    .faq-arrow {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--border-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--accent);
+      transition: transform var(--duration-fast) var(--ease);
+    }
+    .faq-item.open .faq-arrow { transform: rotate(45deg); }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--duration) var(--ease);
+    }
+    .faq-item.open .faq-answer { max-height: 300px; }
+
+    .faq-answer p {
+      padding: 0 var(--gutter) var(--space-md);
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       SECTION 12 : MANIFESTO MOBILE
+    ============================================================ */
+    .manifesto { padding: var(--space-section) 0; background: var(--bg); }
+
+    .manifesto-image {
+      width: 100%;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: var(--space-lg);
+    }
+    .manifesto-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.8) saturate(0.85);
+    }
+    .manifesto-image-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(20,17,15,0.96) 0%, transparent 100%);
+      padding: var(--space-xl) var(--gutter) var(--space-md);
+      text-align: center;
+    }
+    .manifesto-image-caption p {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .manifesto-content { padding: 0 var(--gutter); }
+
+    .manifesto-headline {
+      font-family: var(--font-heading);
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.0;
+      color: var(--text);
+      margin: var(--space-xs) 0 var(--space-lg);
+    }
+    .manifesto-headline em { font-style: italic; color: var(--accent); }
+
+    .manifesto-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: var(--space-lg);
+    }
+
+    .manifesto-pillar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .pillar-line {
+      width: 2px;
+      height: 28px;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .pillar-text {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .manifesto-actions { display: flex; flex-direction: column; gap: 10px; }
+
+    /* ============================================================
+       STICKY CTA MOBILE (bas de page)
+    ============================================================ */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(20, 17, 15, 0.96);
+      border-top: 1px solid var(--border);
+      padding: var(--space-sm) var(--gutter);
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      backdrop-filter: blur(16px);
+    }
+
+    .sticky-price {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+
+    .sticky-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 15px var(--space-sm);
+      border: none;
+      cursor: pointer;
+    }
+
+    /* ============================================================
+       FOOTER MOBILE
+    ============================================================ */
+    .footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: var(--space-xl) var(--gutter) var(--space-2xl);
+      padding-bottom: calc(var(--space-xl) + 72px); /* Espace sticky CTA */
+    }
+
+    .footer-brand-name {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: var(--space-xs);
+    }
+    .footer-brand-name span { color: var(--accent); }
+
+    .footer-tagline {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: var(--space-lg);
+    }
+
+    .footer-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: var(--space-md) 0;
+    }
+
+    .footer-links-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg) var(--space-md);
+    }
+
+    .footer-heading {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .footer-links { display: flex; flex-direction: column; gap: 8px; }
+    .footer-links a { font-size: 12px; color: var(--text-muted); }
+
+    .footer-legal {
+      margin-top: var(--space-lg);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--border);
+      font-size: 10px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* ============================================================
+       ACCESSIBILITY + REDUCED MOTION
+    ============================================================ */
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" role="banner">
+    <div class="header-inner">
+      <div class="header-logo">Atelier<span>.</span>Cuir</div>
+      <button class="header-menu-btn" aria-label="Menu navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="header-cart" role="status" aria-label="Panier : 1 article">Panier (1)</div>
+    </div>
+  </header>
+
+  <!-- SECTION 1 : HERO -->
+  <section class="hero" aria-label="Produit principal">
+    <div class="hero-image-wrap">
+      <img
+        src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&auto=format&fit=crop"
+        alt="Sac a bandouliere en cuir vintage"
+        loading="eager"
+        fetchpriority="high"
+      >
+      <div class="hero-float-badge">
+        <p class="overline">Collection permanente</p>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <span class="gold-line"></span>
+      <h1 class="hero-title">Sac Bandouliere Cuir Vintage</h1>
+      <p class="hero-tagline">Un cuir qui vit avec toi.<br>Patine unique, finition main.</p>
+
+      <div class="hero-meta">
+        <span class="hero-price">79 &euro;</span>
+        <div class="hero-rating" aria-label="Note 4.6 sur 5">
+          <div class="stars" aria-hidden="true">
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12" style="opacity:.45"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+          </div>
+          <span class="rating-text">4.6 (1 247)</span>
+        </div>
+      </div>
+
+      <p class="hero-shipping"><strong>Livraison offerte</strong> &bull; Retour 30j gratuit</p>
+
+      <div class="hero-variants" role="group" aria-label="Couleurs">
+        <div class="variant-swatch active">
+          <div class="swatch-dot" style="background:#1A1108;"></div>
+          <span class="swatch-label">Noir</span>
+        </div>
+        <div class="variant-swatch">
+          <div class="swatch-dot" style="background:#8B5A2B;"></div>
+          <span class="swatch-label">Cognac</span>
+        </div>
+        <div class="variant-swatch">
+          <div class="swatch-dot" style="background:#C19A6B;"></div>
+          <span class="swatch-label">Camel</span>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn-gold">Ajouter au panier</button>
+        <button class="btn-ghost">Voir les variantes</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2 : GALLERY -->
+  <section class="gallery" aria-label="Galerie">
+    <div class="gallery-header">
+      <p class="overline">Multi-angles</p>
+      <span class="gold-line gold-line--center"></span>
+      <h2 class="gallery-title">La piece sous tous ses angles</h2>
+    </div>
+
+    <div class="gallery-scroll" role="list" aria-label="Galerie produit">
+      <div class="gallery-item" role="listitem">
+        <img src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=600&auto=format&fit=crop" alt="Sac — frontal" loading="lazy">
+      </div>
+      <div class="gallery-item" role="listitem">
+        <img src="https://images.unsplash.com/photo-1564422170194-896b89110ef8?w=600&auto=format&fit=crop" alt="Sac — detail couture" loading="lazy">
+      </div>
+      <div class="gallery-item" role="listitem">
+        <img src="https://images.unsplash.com/photo-1473188588951-666fce8e7c68?w=600&auto=format&fit=crop" alt="Sac — lifestyle nocturne" loading="lazy">
+      </div>
+      <div class="gallery-item" role="listitem">
+        <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&auto=format&fit=crop&crop=bottom" alt="Sac — detail hardware" loading="lazy">
+      </div>
+    </div>
+
+    <div class="gallery-dots" aria-hidden="true">
+      <div class="gallery-dot active"></div>
+      <div class="gallery-dot"></div>
+      <div class="gallery-dot"></div>
+      <div class="gallery-dot"></div>
+    </div>
+  </section>
+
+  <!-- SECTION 3 : WHY WE LOVE -->
+  <section class="why-we-love" aria-label="Notre histoire">
+    <div class="why-image">
+      <img src="https://images.unsplash.com/photo-1473188588951-666fce8e7c68?w=800&auto=format&fit=crop" alt="Detail cuir patine" loading="lazy">
+      <div class="why-image-badge">
+        <p>Patine unique garantie. Aucun exemplaire identique.</p>
+      </div>
+    </div>
+
+    <div class="why-text">
+      <p class="overline">Pourquoi on l'aime</p>
+      <span class="gold-line"></span>
+      <h2 class="why-title">Un cuir qui <em>raconte</em> ton histoire</h2>
+      <p class="why-body">
+        Chaque sac sort de nos ateliers avec une personnalite deja formee. Mais c'est toi qui lui donnes sa vraie nature. Au fil des mois, le cuir pleine fleur s'assouplit, prend la forme de tes habitudes, developpe une patine que personne d'autre ne possede.
+      </p>
+      <p class="why-body" style="margin-top:12px;">
+        Les matieres ont ete choisies pour durer une decennie, pas une saison. La bandouliere SoftFit absorbe le poids. La doublure coton bio respire. Le hardware laiton — pas du zinc plaque — resiste aux annees.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 4 : THOUGHTFULLY DESIGNED -->
+  <section class="thoughtfully" aria-label="Caracteristiques">
+    <div class="thoughtfully-header">
+      <p class="overline">Concu avec intention</p>
+      <span class="gold-line gold-line--center"></span>
+      <h2 class="thoughtfully-title">Chaque detail a une raison d'etre</h2>
+    </div>
+
+    <div class="features-list">
+      <div class="feature-item">
+        <span class="feature-num">01</span>
+        <div>
+          <p class="feature-name">Cuir pleine fleur italien</p>
+          <p class="feature-desc">Tanne vegetalement dans les Marches. La couche la plus noble du cuir.</p>
+          <span class="feature-tag">Origine tracable</span>
+        </div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-num">02</span>
+        <div>
+          <p class="feature-name">Bandouliere SoftFit</p>
+          <p class="feature-desc">Rembourree 3cm, repartition optimisee. Portable 8h sans tension.</p>
+          <span class="feature-tag">Brevet depose</span>
+        </div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-num">03</span>
+        <div>
+          <p class="feature-name">Doublure coton bio</p>
+          <p class="feature-desc">GOTS certifie. Protection veloutee, entretien facile, aucun peluchage.</p>
+          <span class="feature-tag">GOTS certifie</span>
+        </div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-num">04</span>
+        <div>
+          <p class="feature-name">Hardware laiton massif</p>
+          <p class="feature-desc">Fermoirs en laiton brut 70/30. Aucun placage. Patine annee apres annee.</p>
+          <span class="feature-tag">Laiton brut</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5 : BEST FOR -->
+  <section class="best-for" aria-label="Cas d'usage">
+    <div class="best-for-header">
+      <p class="overline">Fait pour toi si</p>
+      <span class="gold-line gold-line--center"></span>
+      <h2 class="best-for-title">Il s'adapte a ta vie</h2>
+    </div>
+
+    <div class="use-cases container" role="list">
+      <div class="use-case-pill" role="listitem">
+        <span class="use-case-icon" aria-hidden="true">&#9728;</span>
+        <span class="use-case-label">Quotidien</span>
+        <span class="use-case-desc">Du matin au soir</span>
+      </div>
+      <div class="use-case-pill" role="listitem">
+        <span class="use-case-icon" aria-hidden="true">&#9681;</span>
+        <span class="use-case-label">Travail</span>
+        <span class="use-case-desc">Tablet 10" + essentiels</span>
+      </div>
+      <div class="use-case-pill" role="listitem">
+        <span class="use-case-icon" aria-hidden="true">&#10022;</span>
+        <span class="use-case-label">Sortie</span>
+        <span class="use-case-desc">Soiree, diner</span>
+      </div>
+      <div class="use-case-pill" role="listitem">
+        <span class="use-case-icon" aria-hidden="true">&#9654;</span>
+        <span class="use-case-label">Voyage</span>
+        <span class="use-case-desc">Week-end, cabin</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6 : MATERIALS -->
+  <section class="materials" aria-label="Matieres">
+    <div class="materials-header">
+      <p class="overline">Composition</p>
+      <span class="gold-line"></span>
+      <h2 class="materials-title">Des matieres sans compromis</h2>
+      <p class="materials-intro">Trois matieres. Chacune choisie pour sa durabilite et la relation qu'elle developpe avec le temps.</p>
+    </div>
+
+    <div class="materials-scroll" role="list">
+      <div class="material-card" role="listitem">
+        <div class="material-img">
+          <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&auto=format&fit=crop" alt="Cuir pleine fleur" loading="lazy">
+        </div>
+        <div class="material-body">
+          <p class="material-number">01</p>
+          <p class="material-name">Cuir pleine fleur</p>
+          <p class="material-benefit">Developpe une patine vivante. Origine : Marches, Italie.</p>
+        </div>
+      </div>
+      <div class="material-card" role="listitem">
+        <div class="material-img">
+          <img src="https://images.unsplash.com/photo-1564422170194-896b89110ef8?w=600&auto=format&fit=crop" alt="Doublure coton bio" loading="lazy">
+        </div>
+        <div class="material-body">
+          <p class="material-number">02</p>
+          <p class="material-name">Doublure coton bio</p>
+          <p class="material-benefit">Certifie GOTS. Protection veloutee, non teintee.</p>
+        </div>
+      </div>
+      <div class="material-card" role="listitem">
+        <div class="material-img">
+          <img src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=600&auto=format&fit=crop" alt="Hardware laiton" loading="lazy">
+        </div>
+        <div class="material-body">
+          <p class="material-number">03</p>
+          <p class="material-name">Hardware laiton</p>
+          <p class="material-benefit">Laiton brut 70/30. Aucun placage. Resistance 5 ans testee.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7 : VARIANTS -->
+  <section class="variants" aria-label="Variantes">
+    <div class="variants-header">
+      <p class="overline">Les trois versions</p>
+      <span class="gold-line gold-line--center"></span>
+      <h2 class="variants-title">Meme sac. Trois caracteres.</h2>
+    </div>
+
+    <div class="variants-scroll" role="list">
+      <div class="variant-card active" role="listitem" tabindex="0">
+        <div class="variant-img-wrap">
+          <img src="https://images.unsplash.com/photo-1473188588951-666fce8e7c68?w=600&auto=format&fit=crop" alt="Noir" loading="lazy">
+        </div>
+        <div class="variant-info">
+          <p class="variant-name">Noir</p>
+          <p class="variant-desc">Intemporel. Du bureau au diner.</p>
+        </div>
+      </div>
+      <div class="variant-card" role="listitem" tabindex="0">
+        <div class="variant-img-wrap">
+          <img src="https://images.unsplash.com/photo-1564422170194-896b89110ef8?w=600&auto=format&fit=crop" alt="Cognac" loading="lazy">
+        </div>
+        <div class="variant-info">
+          <p class="variant-name">Cognac</p>
+          <p class="variant-desc">Chaleureux. Patine miellee apres 6 mois.</p>
+        </div>
+      </div>
+      <div class="variant-card" role="listitem" tabindex="0">
+        <div class="variant-img-wrap">
+          <img src="https://images.unsplash.com/photo-1591561954555-607968c989ab?w=600&auto=format&fit=crop" alt="Camel" loading="lazy">
+        </div>
+        <div class="variant-info">
+          <p class="variant-name">Camel</p>
+          <p class="variant-desc">Lumineux. Contraste tenues sombres.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8 : REVIEWS -->
+  <section class="reviews" aria-label="Avis clients">
+    <div class="reviews-hero container">
+      <p class="overline">Ce qu'elles en disent</p>
+      <span class="gold-line"></span>
+      <h2 class="reviews-title">1 247 avis. Un consensus.</h2>
+
+      <div class="reviews-score-row">
+        <span class="score-big" aria-label="4.6 sur 5">4.6</span>
+        <div class="score-details">
+          <div class="stars" aria-hidden="true">
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12" style="opacity:.45"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+          </div>
+          <small>1 247 avis verifies</small>
+          <small>Shopify Reviews</small>
+        </div>
+      </div>
+
+      <div class="ai-synthesis">
+        <p class="ai-synthesis-label">Synthese par IA</p>
+        <p>Les clients soulignent la qualite du cuir et la bandouliere SoftFit. La patine apres 6-12 mois est decrite comme "inattendue et magnifique". Point d'attention : la fermeture magnetique peut marquer les cartes bancaires.</p>
+      </div>
+    </div>
+
+    <div class="reviews-scroll" role="list">
+      <div class="review-card" role="listitem">
+        <div class="review-header">
+          <div class="review-avatar" aria-hidden="true">M</div>
+          <div>
+            <p class="review-author">Marie-Laure D.</p>
+            <p class="review-date">Mars 2026</p>
+          </div>
+          <div class="stars" style="margin-left:auto" aria-label="5 etoiles">
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+          </div>
+        </div>
+        <p class="review-text">"Un an apres l'achat, la patine cognac est bluffante. On dirait un vintage a 400 euros. Jamais une couture lachee."</p>
+      </div>
+
+      <div class="review-card" role="listitem">
+        <div class="review-header">
+          <div class="review-avatar" aria-hidden="true">S</div>
+          <div>
+            <p class="review-author">Sophie A.</p>
+            <p class="review-date">Fevrier 2026</p>
+          </div>
+          <div class="stars" style="margin-left:auto" aria-label="5 etoiles">
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+          </div>
+        </div>
+        <p class="review-text">"La bandouliere SoftFit m'a convaincu. Dos fragile, porte toute la journee sans tension. Cuir exceptionnel pour ce prix."</p>
+      </div>
+
+      <div class="review-card" role="listitem">
+        <div class="review-header">
+          <div class="review-avatar" aria-hidden="true">L</div>
+          <div>
+            <p class="review-author">Lucie M.</p>
+            <p class="review-date">Avril 2026</p>
+          </div>
+          <div class="stars" style="margin-left:auto" aria-label="5 etoiles">
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+            <svg class="star" viewBox="0 0 12 12"><polygon points="6,1 7.5,4.5 11,5 8.5,7.5 9.2,11 6,9.2 2.8,11 3.5,7.5 1,5 4.5,4.5"/></svg>
+          </div>
+        </div>
+        <p class="review-text">"Le coloris camel avec le hardware laiton est d'un raffinement absolu. On me demande constamment ou je l'ai achete."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 9 : PRESS -->
+  <section class="press" aria-label="Presse">
+    <div class="press-bg">
+      <img src="https://images.unsplash.com/photo-1473188588951-666fce8e7c68?w=800&auto=format&fit=crop" alt="" aria-hidden="true" loading="lazy">
+    </div>
+    <div class="press-content">
+      <p class="press-logo">Vogue Paris</p>
+      <blockquote class="press-quote">Le sac qui reconcilie l'elegance et le quotidien.</blockquote>
+      <p class="press-attribution">Vogue Paris &mdash; A/H 2025</p>
+    </div>
+  </section>
+
+  <!-- SECTION 10 : CARE -->
+  <section class="care" aria-label="Entretien et garanties">
+    <div class="care-header">
+      <p class="overline">Savoir-faire</p>
+      <span class="gold-line gold-line--center"></span>
+      <h2 class="care-title">Concu pour durer</h2>
+    </div>
+
+    <div class="care-list">
+      <div class="care-item">
+        <span class="care-icon" aria-hidden="true">&#9729;</span>
+        <div>
+          <p class="care-name">Entretien naturel</p>
+          <p class="care-desc">Un chiffon sec suffit. Cire vegetale tous les 6 mois (incluse).</p>
+        </div>
+      </div>
+      <div class="care-item">
+        <span class="care-icon" aria-hidden="true">&#9737;</span>
+        <div>
+          <p class="care-name">Garantie 2 ans</p>
+          <p class="care-desc">Couture, hardware, bandouliere — reparation ou remplacement sans condition.</p>
+        </div>
+      </div>
+      <div class="care-item">
+        <span class="care-icon" aria-hidden="true">&#8693;</span>
+        <div>
+          <p class="care-name">Retour 30 jours</p>
+          <p class="care-desc">Retour gratuit. Remboursement sous 48h apres reception.</p>
+        </div>
+      </div>
+      <div class="care-item">
+        <span class="care-icon" aria-hidden="true">&#9670;</span>
+        <div>
+          <p class="care-name">Livraison offerte</p>
+          <p class="care-desc">Expedie sous 24h. France 2-3 jours, Europe 5-7 jours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 11 : FAQ -->
+  <section class="faq" aria-label="FAQ">
+    <div class="faq-header">
+      <p class="overline">Questions</p>
+      <span class="gold-line"></span>
+      <h2 class="faq-title">Ce que vous voulez savoir</h2>
+      <p class="faq-subtitle">Reponses aux questions les plus posees. Notre equipe repond en moins de 2h.</p>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item open">
+        <button class="faq-question" aria-expanded="true" onclick="toggleFAQ(this)">
+          Comment le cuir va-t-il vieillir ?
+          <span class="faq-arrow" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Le cuir pleine fleur developpe une patine progressive au contact de vos mains et de la lumiere. Apres 3 mois, des zones de vie apparaissent. Apres 12 mois, votre sac est unique.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" onclick="toggleFAQ(this)">
+          Quelle est la taille du sac ?
+          <span class="faq-arrow" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>28cm x 22cm x 9cm. Poids : 680g. Capacite : 6 litres. Tablet 10" couche + essentiels journee.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" onclick="toggleFAQ(this)">
+          Les retours sont-ils vraiment gratuits ?
+          <span class="faq-arrow" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Oui, sans condition. Etiquette depuis votre compte, depot en point relais. Remboursement integral sous 48h, meme si le cuir a ete utilise.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" onclick="toggleFAQ(this)">
+          La bandouliere est-elle detachable ?
+          <span class="faq-arrow" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Oui. Deux anneaux en laiton — detachable en une seconde. Porte aussi en pochette. Bandouliere supplementaire disponible en option.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false" onclick="toggleFAQ(this)">
+          Est-ce que le sac tient en pluie ?
+          <span class="faq-arrow" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Resistant a la pluie legere. Pour pluie soutenue, appliquez la cire incluse. Ne pas immerger ni secher pres de chaleur directe.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 12 : MANIFESTO -->
+  <section class="manifesto" aria-label="Manifeste">
+    <div class="manifesto-image">
+      <img src="https://images.unsplash.com/photo-1564422170194-896b89110ef8?w=800&auto=format&fit=crop" alt="Sac dans sa boite d'expedition" loading="lazy">
+      <div class="manifesto-image-caption">
+        <p>Emballee dans du papier de soie, avec sa cire et son livret de patine.</p>
+      </div>
+    </div>
+
+    <div class="manifesto-content">
+      <p class="overline">Notre engagement</p>
+      <span class="gold-line"></span>
+      <h2 class="manifesto-headline">Concu pour celles qui <em>savent.</em></h2>
+
+      <div class="manifesto-pillars">
+        <div class="manifesto-pillar">
+          <div class="pillar-line" aria-hidden="true"></div>
+          <span class="pillar-text">Cuir vivant — chaque piece est unique</span>
+        </div>
+        <div class="manifesto-pillar">
+          <div class="pillar-line" aria-hidden="true"></div>
+          <span class="pillar-text">Origine tracable — Italie, certifiee</span>
+        </div>
+        <div class="manifesto-pillar">
+          <div class="pillar-line" aria-hidden="true"></div>
+          <span class="pillar-text">Fait pour durer — garantie 10 ans cuir</span>
+        </div>
+      </div>
+
+      <div class="manifesto-actions">
+        <button class="btn-gold">Commander maintenant</button>
+        <button class="btn-ghost">Decouvrir la collection</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer-brand-name">Atelier<span>.</span>Cuir</p>
+    <p class="footer-tagline">Maroquinerie cuir pleine fleur. Fait pour celles qui savent ce qu'elles veulent.</p>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-links-row">
+      <div>
+        <p class="footer-heading">Boutique</p>
+        <ul class="footer-links">
+          <li><a href="#">Sacs a bandouliere</a></li>
+          <li><a href="#">Portefeuilles</a></li>
+          <li><a href="#">Nouveautes</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-heading">Support</p>
+        <ul class="footer-links">
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Livraisons</a></li>
+          <li><a href="#">Retours</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-heading">La marque</p>
+        <ul class="footer-links">
+          <li><a href="#">Notre histoire</a></li>
+          <li><a href="#">Nos ateliers</a></li>
+          <li><a href="#">Presse</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-heading">Legal</p>
+        <ul class="footer-links">
+          <li><a href="#">Mentions legales</a></li>
+          <li><a href="#">CGV</a></li>
+          <li><a href="#">Confidentialite</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="footer-legal">
+      &copy; 2026 Atelier.Cuir &mdash; Tous droits reserves<br>
+      Paiement securise &bull; SSL &bull; Stripe
+    </p>
+  </footer>
+
+  <!-- STICKY CTA MOBILE -->
+  <div class="sticky-cta" role="complementary" aria-label="Commande rapide">
+    <span class="sticky-price">79 &euro;</span>
+    <button class="sticky-btn" aria-label="Ajouter au panier — 79 euros">Ajouter au panier</button>
+  </div>
+
+  <script>
+    // FAQ toggle
+    function toggleFAQ(btn) {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    // Gallery dots — scroll tracking
+    const galleryScroll = document.querySelector('.gallery-scroll');
+    const dots = document.querySelectorAll('.gallery-dot');
+    if (galleryScroll) {
+      galleryScroll.addEventListener('scroll', () => {
+        const idx = Math.round(galleryScroll.scrollLeft / galleryScroll.offsetWidth * (dots.length));
+        dots.forEach((d, i) => d.classList.toggle('active', i === Math.min(idx, dots.length - 1)));
+      }, { passive: true });
+    }
+
+    // Swatches selection
+    document.querySelectorAll('.variant-swatch').forEach(sw => {
+      sw.addEventListener('click', () => {
+        document.querySelectorAll('.variant-swatch').forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>

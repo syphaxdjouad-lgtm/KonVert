@@ -5,17 +5,29 @@ import { DEFAULT_SECTION_ORDER_V3 } from './index'
 import { shouldRenderSection } from './display-rules'
 import { softTokens } from '@/lib/styles/soft/tokens'
 import { renderHero } from './hero/render'
+import { renderGallery } from './gallery/render'
+import { renderWhyWeLove } from './why-we-love/render'
+import { renderThoughtfullyDesigned } from './thoughtfully-designed/render'
+import { renderBestFor } from './best-for/render'
+import { renderCareInstructions } from './care-instructions/render'
+import { renderFaq } from './faq/render'
 
 // Map style -> tokens. Sprints 2-3 + Task 6.1 ajouteront les 9 autres entries.
 const STYLE_TOKENS: Partial<Record<StyleId, StyleTokens>> = {
   'soft': softTokens,
 }
 
-// Map section -> renderer. Sprints 4-5 ajouteront les 12 autres entries.
+// Map section -> renderer. Sprint 5 ajoutera les 6 sections restantes.
 type SectionRendererFn = (data: V3PageData, tokens: StyleTokens) => string
 
 const SECTION_RENDERERS: Partial<Record<V3SectionKey, SectionRendererFn>> = {
-  'hero': renderHero,
+  'hero':                  renderHero,
+  'gallery':               renderGallery,
+  'why_we_love':           renderWhyWeLove,
+  'thoughtfully_designed': renderThoughtfullyDesigned,
+  'best_for':              renderBestFor,
+  'care_instructions':     renderCareInstructions,
+  'faq':                   renderFaq,
 }
 
 export function renderPageV3(

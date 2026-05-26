@@ -4,6 +4,15 @@ import { STYLE_IDS } from '@/lib/styles'
 import { DEFAULT_SECTION_ORDER_V3 } from './index'
 import { shouldRenderSection } from './display-rules'
 import { softTokens } from '@/lib/styles/soft/tokens'
+import { editorialTokens } from '@/lib/styles/editorial/tokens'
+import { appleCleanTokens } from '@/lib/styles/apple-clean/tokens'
+import { boldTokens } from '@/lib/styles/bold/tokens'
+import { organicTokens } from '@/lib/styles/organic/tokens'
+import { luxeNoirTokens } from '@/lib/styles/luxe-noir/tokens'
+import { brutalistTokens } from '@/lib/styles/brutalist/tokens'
+import { warmNeutralTokens } from '@/lib/styles/warm-neutral/tokens'
+import { minimalMonoTokens } from '@/lib/styles/minimal-mono/tokens'
+import { vibrantTokens } from '@/lib/styles/vibrant/tokens'
 import { renderHero } from './hero/render'
 import { renderGallery } from './gallery/render'
 import { renderWhyWeLove } from './why-we-love/render'
@@ -18,9 +27,18 @@ import { renderCareInstructions } from './care-instructions/render'
 import { renderFaq } from './faq/render'
 import { renderBrandManifesto } from './brand-manifesto/render'
 
-// Map style -> tokens. Task 6.1 ajoutera les 9 autres entries.
-const STYLE_TOKENS: Partial<Record<StyleId, StyleTokens>> = {
-  'soft': softTokens,
+// Map style -> tokens. Tous les 10 styles V3 sont enregistrés.
+const STYLE_TOKENS: Record<StyleId, StyleTokens> = {
+  'soft':         softTokens,
+  'editorial':    editorialTokens,
+  'apple-clean':  appleCleanTokens,
+  'bold':         boldTokens,
+  'organic':      organicTokens,
+  'luxe-noir':    luxeNoirTokens,
+  'brutalist':    brutalistTokens,
+  'warm-neutral': warmNeutralTokens,
+  'minimal-mono': minimalMonoTokens,
+  'vibrant':      vibrantTokens,
 }
 
 // Map section -> renderer. Tous les 13 renderers V3 sont enregistrés ici.
@@ -51,9 +69,6 @@ export function renderPageV3(
     throw new Error(`Unknown styleId: ${styleId}`)
   }
   const tokens = STYLE_TOKENS[styleId]
-  if (!tokens) {
-    throw new Error(`No tokens registered for styleId: ${styleId} (POC: only 'soft' until S6)`)
-  }
   const order = sectionOrder ?? DEFAULT_SECTION_ORDER_V3
 
   const sections = order

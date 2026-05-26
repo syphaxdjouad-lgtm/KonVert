@@ -373,11 +373,11 @@
       height: 44px;
       padding: 0 8px;
       border-radius: 8px;
-      cursor: pointer;
       position: relative;
-      transition: background 120ms ease;
+      transition: background 120ms ease, transform 200ms ease, opacity 200ms ease, box-shadow 200ms ease;
       border-left: 3px solid transparent;
       user-select: none;
+      will-change: transform;
     }
     .section-row:hover { background: var(--bg-row-hover); }
     .section-row.active {
@@ -390,17 +390,78 @@
       font-style: italic;
     }
 
+    /* ─── DRAG & DROP SHOPIFY-STYLE ─────────────────────────── */
+
+    /* Toute la row est draggable */
+    .section-row {
+      cursor: grab;
+    }
+    .section-row:active {
+      cursor: grabbing;
+    }
+
+    /* Pendant le drag : la row soulève légèrement */
+    .section-row.dragging {
+      cursor: grabbing !important;
+      opacity: 0.95;
+      transform: scale(1.02);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.05);
+      background: var(--bg-panel);
+      border-left-color: var(--border-active) !important;
+      border-left-width: 3px;
+      z-index: 10;
+      position: relative;
+      /* transition désactivée pendant le drag pour suivre la souris sans lag */
+    }
+
+    /* Drop indicator — fine ligne sage entre rows */
+    .drop-indicator {
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin: 0 8px;
+      opacity: 0;
+      transition: opacity 120ms ease;
+      flex-shrink: 0;
+    }
+    .drop-indicator.active {
+      opacity: 1;
+    }
+
+    /* Rows non-draggées : transition douce pour s'écarter */
+    .section-row.drag-over-above {
+      transform: translateY(6px);
+      transition: transform 200ms ease;
+    }
+    .section-row.drag-over-below {
+      transform: translateY(-6px);
+      transition: transform 200ms ease;
+    }
+
+    /* Retour à la normale (snap) */
+    .section-row.snap-back {
+      transition: transform 150ms ease, opacity 150ms ease, box-shadow 150ms ease;
+    }
+
     .drag-handle {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 20px;
       color: var(--text-disabled);
-      cursor: grab;
       flex-shrink: 0;
-      transition: color 120ms ease;
+      transition: color 120ms ease, opacity 120ms ease;
+      position: relative;
     }
-    .section-row:hover .drag-handle { color: var(--text-muted); }
+    /* Handle devient accent au hover de la row */
+    .section-row:hover .drag-handle {
+      color: var(--accent);
+      opacity: 1;
+    }
+    /* Tooltip natif via title — géré en JS pour le custom */
+    .drag-handle[data-tooltip] {
+      cursor: inherit;
+    }
 
     .section-label {
       flex: 1;
@@ -1411,7 +1472,7 @@
         '  data-id="' + section.id + '"',
         '  onclick="selectFromPanel(event, \'' + section.id + '\')"',
         '>',
-        '  <span class="drag-handle" title="Glisser pour réorganiser">',
+        '  <span class="drag-handle" title="Glisser pour déplacer" aria-hidden="true">',
         '    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">',
         '      <circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/>',
         '      <circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/>',
@@ -1442,6 +1503,9 @@
         '</div>'
       ].join('\n')
     }).join('')
+
+    // Attacher les listeners drag-drop sur les nouvelles rows
+    attachDragListeners()
   }
 
   function escapeHtml(str) {
@@ -1545,6 +1609,8 @@
 
   function selectFromPanel(event, sectionId) {
     if (event.target.closest('.section-actions')) return
+    // Ignorer si un drag vient de se terminer (le pointerup déclenche aussi onclick)
+    if (drag.justDropped) { drag.justDropped = false; return }
     state.selectedSection = sectionId
 
     document.querySelectorAll('.preview-section').forEach(function(el) {
@@ -1587,27 +1653,216 @@
     showToast(section.visible ? section.label + ' — visible' : section.label + ' — masquée')
   }
 
-  // ─── MOVE SECTION ─────────────────────────────────────────────────
-  function moveSectionUp(event, sectionId) {
-    event.stopPropagation()
-    var idx = state.sections.findIndex(function(s) { return s.id === sectionId })
-    if (idx <= 0) { showToast('Déjà en première position'); return }
-    var tmp = state.sections[idx]
-    state.sections[idx] = state.sections[idx - 1]
-    state.sections[idx - 1] = tmp
-    renderSections()
-    showToast(tmp.label + ' — déplacée vers le haut')
+  // ─── DRAG & DROP SHOPIFY-STYLE ────────────────────────────────────
+  var drag = {
+    active: false,
+    justDropped: false,
+    sectionId: null,
+    startY: 0,
+    dragEl: null,       // l'élément DOM en cours de drag
+    targetIndex: -1,    // index de drop cible
+    indicators: [],     // éléments DOM drop-indicator
+    threshold: { time: 150, dist: 5 } // seuils anti-clic involontaire
   }
 
-  function moveSectionDown(event, sectionId) {
-    event.stopPropagation()
-    var idx = state.sections.findIndex(function(s) { return s.id === sectionId })
-    if (idx === -1 || idx >= state.sections.length - 1) { showToast('Déjà en dernière position'); return }
-    var tmp = state.sections[idx]
-    state.sections[idx] = state.sections[idx + 1]
-    state.sections[idx + 1] = tmp
-    renderSections()
-    showToast(tmp.label + ' — déplacée vers le bas')
+  // Indicateur de drop : un div fin entre chaque row
+  function buildDropIndicators() {
+    var list = document.getElementById('sections-list')
+    // Nettoyer les indicateurs existants
+    list.querySelectorAll('.drop-indicator').forEach(function(el) { el.remove() })
+    drag.indicators = []
+
+    var rows = list.querySelectorAll('.section-row')
+    rows.forEach(function(row, i) {
+      var ind = document.createElement('div')
+      ind.className = 'drop-indicator'
+      ind.dataset.index = i
+      // Insérer AVANT chaque row
+      list.insertBefore(ind, row)
+      drag.indicators.push(ind)
+    })
+    // Indicateur final (après la dernière row)
+    var indLast = document.createElement('div')
+    indLast.className = 'drop-indicator'
+    indLast.dataset.index = rows.length
+    list.appendChild(indLast)
+    drag.indicators.push(indLast)
+  }
+
+  function showIndicator(index) {
+    drag.indicators.forEach(function(ind, i) {
+      ind.classList.toggle('active', i === index)
+    })
+  }
+
+  function hideAllIndicators() {
+    drag.indicators.forEach(function(ind) { ind.classList.remove('active') })
+  }
+
+  // Calcul de l'index cible en fonction de Y du pointeur
+  function getDropIndex(clientY) {
+    var rows = document.getElementById('sections-list').querySelectorAll('.section-row')
+    var best = rows.length // défaut : fin de liste
+    rows.forEach(function(row, i) {
+      var rect = row.getBoundingClientRect()
+      var mid = rect.top + rect.height / 2
+      if (clientY < mid && i < best) {
+        best = i
+      }
+    })
+    return best
+  }
+
+  function initDragOnRow(rowEl, sectionId) {
+    var pressTimer = null
+    var pressStartY = 0
+    var pressStartX = 0
+    var pendingDrag = false
+
+    function onPointerDown(e) {
+      // Ignorer les boutons d'action (eye, kebab) — ils gèrent leur propre click
+      if (e.target.closest('.section-actions') || e.target.closest('.section-action-btn')) return
+      // Seulement bouton gauche / touch
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+
+      pressStartY = e.clientY
+      pressStartX = e.clientX
+      pendingDrag = false
+
+      // Démarrer timer pour détecter drag intentionnel
+      pressTimer = setTimeout(function() {
+        pendingDrag = true
+      }, drag.threshold.time)
+
+      rowEl.setPointerCapture(e.pointerId)
+      rowEl.addEventListener('pointermove', onPointerMove)
+      rowEl.addEventListener('pointerup', onPointerUp)
+      rowEl.addEventListener('pointercancel', onPointerUp)
+    }
+
+    function onPointerMove(e) {
+      var dy = Math.abs(e.clientY - pressStartY)
+      var dx = Math.abs(e.clientX - pressStartX)
+      var dist = Math.sqrt(dy * dy + dx * dx)
+
+      // Déclenchement drag uniquement si threshold atteint
+      if (!drag.active && (pendingDrag || dist > drag.threshold.dist) && dist > drag.threshold.dist) {
+        clearTimeout(pressTimer)
+        startDrag(e, rowEl, sectionId)
+      }
+
+      if (drag.active && drag.sectionId === sectionId) {
+        updateDrag(e)
+      }
+    }
+
+    function onPointerUp(e) {
+      clearTimeout(pressTimer)
+      rowEl.removeEventListener('pointermove', onPointerMove)
+      rowEl.removeEventListener('pointerup', onPointerUp)
+      rowEl.removeEventListener('pointercancel', onPointerUp)
+
+      if (drag.active && drag.sectionId === sectionId) {
+        endDrag(e)
+      }
+      // Sinon : c'est un click simple → selectFromPanel géré par onclick du row
+    }
+
+    rowEl.addEventListener('pointerdown', onPointerDown)
+  }
+
+  function startDrag(e, rowEl, sectionId) {
+    drag.active = true
+    drag.sectionId = sectionId
+    drag.startY = e.clientY
+    drag.dragEl = rowEl
+
+    // Classes visuelles
+    rowEl.classList.add('dragging')
+
+    // Désactiver la transition sur la row draggée pour qu'elle suive le pointeur sans délai
+    rowEl.style.transition = 'none'
+
+    // Construire indicateurs
+    buildDropIndicators()
+
+    // Empêcher scroll involontaire sur mobile
+    document.body.style.userSelect = 'none'
+    document.body.style.webkitUserSelect = 'none'
+  }
+
+  function updateDrag(e) {
+    if (!drag.active) return
+
+    // Calculer index de drop et afficher l'indicateur
+    var targetIdx = getDropIndex(e.clientY)
+    drag.targetIndex = targetIdx
+    showIndicator(targetIdx)
+  }
+
+  function endDrag(e) {
+    if (!drag.active) return
+
+    var dragEl = drag.dragEl
+    var sectionId = drag.sectionId
+    var targetIdx = drag.targetIndex
+
+    // Flag pour bloquer le onclick qui va suivre immédiatement le pointerup
+    drag.justDropped = true
+    setTimeout(function() { drag.justDropped = false }, 80)
+
+    // Cleanup immédiat du state drag
+    drag.active = false
+    drag.sectionId = null
+    drag.dragEl = null
+    drag.targetIndex = -1
+
+    // Reset body
+    document.body.style.userSelect = ''
+    document.body.style.webkitUserSelect = ''
+
+    // Animation snap : retour à scale(1) fluid
+    dragEl.classList.remove('dragging')
+    dragEl.classList.add('snap-back')
+    dragEl.style.transition = ''
+    setTimeout(function() {
+      dragEl.classList.remove('snap-back')
+    }, 160)
+
+    hideAllIndicators()
+
+    // Appliquer le reorder si l'index est valide et différent
+    var fromIdx = state.sections.findIndex(function(s) { return s.id === sectionId })
+    if (fromIdx === -1 || targetIdx === -1) { renderSections(); return }
+
+    // Ajustement : si on déplace vers le bas, l'index cible doit compenser la position d'origine
+    var adjustedTarget = targetIdx
+    if (targetIdx > fromIdx) {
+      adjustedTarget = targetIdx - 1
+    }
+
+    if (adjustedTarget !== fromIdx && adjustedTarget >= 0 && adjustedTarget < state.sections.length) {
+      // Reorder
+      var moved = state.sections.splice(fromIdx, 1)[0]
+      state.sections.splice(adjustedTarget, 0, moved)
+      renderSections()
+      showToast(moved.label + ' — repositionnée')
+    } else {
+      // Pas de changement : juste cleanup visuel
+      renderSections()
+    }
+  }
+
+  // Hook appelé après chaque renderSections pour attacher les listeners drag
+  function attachDragListeners() {
+    var list = document.getElementById('sections-list')
+    var rows = list.querySelectorAll('.section-row')
+    rows.forEach(function(rowEl) {
+      var sectionId = rowEl.dataset.id
+      if (sectionId) {
+        initDragOnRow(rowEl, sectionId)
+      }
+    })
   }
 
   // ─── KEBAB MENU ───────────────────────────────────────────────────
@@ -1630,14 +1885,6 @@
       '<button class="kebab-item" role="menuitem" onclick="handleEditFromMenu(\'' + sectionId + '\')">' +
         SVG.edit + ' Éditer' +
       '</button>',
-      // Déplacer haut
-      '<button class="kebab-item" role="menuitem" onclick="moveSectionUp(event,\'' + sectionId + '\');closeKebabMenu()">' +
-        SVG.arrowUp + ' Déplacer vers le haut' +
-      '</button>',
-      // Déplacer bas
-      '<button class="kebab-item" role="menuitem" onclick="moveSectionDown(event,\'' + sectionId + '\');closeKebabMenu()">' +
-        SVG.arrowDown + ' Déplacer vers le bas' +
-      '</button>',
       // Dupliquer
       '<button class="kebab-item" role="menuitem" onclick="duplicateSection(event,\'' + sectionId + '\')">' +
         SVG.copy + ' Dupliquer' +
@@ -1652,7 +1899,7 @@
 
     // Positionnement : ancré à droite du bouton, en dessous
     var menuW = 188
-    var menuH = 175 // estimation
+    var menuH = 120 // estimation 3 items
     var left = rect.right - menuW
     var top = rect.bottom + 4
 

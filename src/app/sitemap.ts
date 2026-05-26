@@ -21,6 +21,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${APP_URL}/testimonials`,     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
     { url: `${APP_URL}/integrations`,     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
     { url: `${APP_URL}/changelog`,        lastModified: new Date(), changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${APP_URL}/alternative-a-xpage`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${APP_URL}/vs/xpage`,         lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.8 },
   ]
 
   const blogRoutes: MetadataRoute.Sitemap = allArticles.map((article) => ({

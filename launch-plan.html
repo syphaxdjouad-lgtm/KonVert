@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KONVERT — Plan de lancement</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #5B47F5;
+    --accent-light: #EEF2FF;
+    --accent-muted: rgba(91,71,245,0.12);
+    --green: #16A34A;
+    --green-light: #F0FDF4;
+    --orange: #EA580C;
+    --orange-light: #FFF7ED;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-300: #D1D5DB;
+    --gray-400: #9CA3AF;
+    --gray-500: #6B7280;
+    --gray-600: #4B5563;
+    --gray-700: #374151;
+    --gray-900: #111827;
+    --border: #E5E7EB;
+    --font: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+    font-family: var(--font);
+    color: var(--gray-900);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  /* === LAYOUT === */
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* === HEADER === */
+  .header {
+    flex-shrink: 0;
+    background: #fff;
+    border-bottom: 1.5px solid var(--border);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .header-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-900);
+    letter-spacing: -0.3px;
+  }
+
+  .header-title span {
+    color: var(--accent);
+  }
+
+  .header-sub {
+    font-size: 11px;
+    color: var(--gray-500);
+    font-weight: 400;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .global-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .global-counter {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-700);
+    white-space: nowrap;
+  }
+
+  .progress-bar-wrap {
+    width: 120px;
+    height: 6px;
+    background: var(--gray-200);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width 0.3s ease;
+  }
+
+  /* === BOARD === */
+  .board {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* === COLUMN === */
+  .col {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border);
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .col:last-child { border-right: none; }
+
+  .col-header {
+    flex-shrink: 0;
+    padding: 7px 10px 6px;
+    border-bottom: 1.5px solid var(--border);
+    background: var(--gray-50);
+    position: sticky;
+    top: 0;
+  }
+
+  .col-label {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--gray-400);
+    margin-bottom: 1px;
+  }
+
+  .col-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.2;
+  }
+
+  .col-obj {
+    font-size: 10px;
+    color: var(--gray-500);
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+
+  .col-stats {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .col-counter {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gray-600);
+  }
+
+  .col-progress-wrap {
+    flex: 1;
+    height: 3px;
+    background: var(--gray-200);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .col-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width 0.3s ease;
+  }
+
+  .col-progress-fill.done { background: var(--green); }
+
+  /* === TASKS LIST === */
+  .col-tasks {
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px 0 2px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gray-300) transparent;
+  }
+
+  .col-tasks::-webkit-scrollbar { width: 4px; }
+  .col-tasks::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 99px; }
+
+  /* === TASK === */
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 4px 10px;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+    transition: background 0.1s;
+    user-select: none;
+  }
+
+  .task:hover { background: var(--gray-50); }
+  .task:last-child { border-bottom: none; }
+
+  .task-check {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 3px;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    background: #fff;
+  }
+
+  .task.checked .task-check {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .task-check-icon {
+    display: none;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .task.checked .task-check-icon { display: block; }
+
+  .task-body { flex: 1; min-width: 0; }
+
+  .task-day {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 1px;
+  }
+
+  .task-label {
+    font-size: 11.5px;
+    color: var(--gray-800, #1F2937);
+    line-height: 1.35;
+    transition: color 0.15s;
+  }
+
+  .task.checked .task-label {
+    text-decoration: line-through;
+    color: var(--gray-400);
+  }
+
+  .task-label strong {
+    font-weight: 600;
+  }
+
+  .task-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 9.5px;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 3px;
+    line-height: 1.4;
+  }
+
+  .tag-moi {
+    background: var(--accent-muted);
+    color: var(--accent);
+  }
+
+  .tag-toi {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+
+  .tag-both {
+    background: #F5F3FF;
+    color: #7C3AED;
+  }
+
+  .tag-time {
+    font-size: 9.5px;
+    color: var(--gray-400);
+    font-weight: 400;
+  }
+
+  /* === FOOTER === */
+  .footer {
+    flex-shrink: 0;
+    border-top: 1.5px solid var(--border);
+    background: var(--gray-50);
+    padding: 5px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .footer-risks {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .footer-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-400);
+    white-space: nowrap;
+  }
+
+  .risk {
+    font-size: 10px;
+    color: var(--gray-600);
+    padding: 2px 7px;
+    background: #FEF3C7;
+    border-radius: 3px;
+    border-left: 2.5px solid #F59E0B;
+    line-height: 1.3;
+  }
+
+  .footer-stats {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+  }
+
+  .footer-stat {
+    font-size: 10px;
+    color: var(--gray-500);
+  }
+
+  .footer-stat strong {
+    font-weight: 600;
+    color: var(--gray-700);
+  }
+
+  .btn-reset {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--gray-500);
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 4px;
+    padding: 3px 9px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font);
+  }
+
+  .btn-reset:hover {
+    background: #FEE2E2;
+    color: #DC2626;
+    border-color: #FECACA;
+  }
+
+  /* Col 1 highlight — ce soir */
+  .col:first-child .col-header {
+    background: #FEFCE8;
+    border-bottom-color: #FDE68A;
+  }
+
+  .col:first-child .col-label { color: #92400E; }
+  .col:first-child .col-title { color: #78350F; }
+
+  /* Col 5 highlight — launch */
+  .col:last-child .col-header {
+    background: #EEF2FF;
+    border-bottom-color: #C7D2FE;
+  }
+
+  .col:last-child .col-label { color: #3730A3; }
+  .col:last-child .col-title { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <div class="header-title"><span>KONVERT</span> — Plan de lancement</div>
+      <div class="header-sub">Objectif : Product Hunt + launch public le J+28 &middot; domaine acheté J+1 max</div>
+    </div>
+    <div class="header-right">
+      <div class="global-progress">
+        <div class="global-counter" id="global-counter">0 / 63 tâches</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="global-bar" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BOARD -->
+  <main class="board" id="board">
+
+    <!-- ===================== COLONNE 1 — PHASE 0 CE SOIR ===================== -->
+    <div class="col">
+      <div class="col-header">
+        <div class="col-label">Phase 0</div>
+        <div class="col-title">CE SOIR &middot; 2-3h code</div>
+        <div class="col-obj">Virer bugs visibles + débloquer tracking funnel</div>
+        <div class="col-stats">
+          <div class="col-counter" id="counter-0">0 / 8</div>
+          <div class="col-progress-wrap">
+            <div class="col-progress-fill" id="progress-0" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-tasks" id="col-0">
+
+        <div class="task" data-id="0-0" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-label">Retirer Trustpilot fake (<code>page.tsx:279-290</code>) — risque légal</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">5 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="0-1" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-label">Injecter tagline officielle (hero + meta + footer + OG)</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">15 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="0-2" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-label">Câbler ~10 events PostHog manquants (pricing_viewed, checkout_started, signup_*, essai_*, preview_viewed)</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">30 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="0-3" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-label">Middleware UTM capture (cookie 90j + injection signup)</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">25 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="0-4" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-label"><code>/api/health/deep</code> (ping Supabase + DeepSeek + Stripe, gardé ADMIN_SECRET)</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">20 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="0-5" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-label">GitHub Actions CI : lint + tsc + build sur PR → main</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">30 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="0-6" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-label">Sentry alert rules (&gt;5% error sur generate, webhook, crons)</div>
+            <div class="task-meta">
+              <span class="tag tag-both">[moi+toi]</span>
+              <span class="tag-time">15 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="0-7" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-label">Push + check Vercel ✅</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">5 min</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== COLONNE 2 — SEMAINE 1 ===================== -->
+    <div class="col">
+      <div class="col-header">
+        <div class="col-label">Semaine 1</div>
+        <div class="col-title">J+1 → J+7 &middot; Foundations</div>
+        <div class="col-obj">Stripe LIVE encaisse + domaine vit + warmup démarre</div>
+        <div class="col-stats">
+          <div class="col-counter" id="counter-1">0 / 16</div>
+          <div class="col-progress-wrap">
+            <div class="col-progress-fill" id="progress-1" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-tasks" id="col-1">
+
+        <div class="task" data-id="1-0" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+1</div>
+            <div class="task-label"><strong>Acheter domaine final</strong></div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">30 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-1" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+1</div>
+            <div class="task-label">Vercel : ajouter domaine + DNS CNAME <code>cname.vercel-dns.com</code></div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">15 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-2" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+1</div>
+            <div class="task-label">Stripe Dashboard : créer 6 prices (3 plans × monthly/annual)</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">30 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-3" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+2</div>
+            <div class="task-label">Vercel env vars : STRIPE_SECRET_KEY=sk_live_, webhook secret, 6 STRIPE_PRICE_*, RESEND_API_KEY LIVE, NEXT_PUBLIC_APP_URL</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">20 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-4" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+2</div>
+            <div class="task-label">Resend : ajouter domaine + DKIM/SPF/DMARC</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">30 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-5" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+3</div>
+            <div class="task-label">Stripe webhook endpoint : URL prod + events subscription/invoice</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">15 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-6" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+3</div>
+            <div class="task-label"><strong>Démarrer warmup Instantly/Smartlead</strong> — 14j minimum</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">45 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-7" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+4</div>
+            <div class="task-label">Créer pixels (Meta Business Manager, Google Ads, TikTok) → me donner les IDs</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">45 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-8" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+1</div>
+            <div class="task-label">Pixels installés (Meta + CAPI server, Google tag, TikTok) gated consent</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-9" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+2</div>
+            <div class="task-label">Conversions API server-side (CAPI Meta + Google enhanced) sur signup, checkout, purchase</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-10" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+3</div>
+            <div class="task-label">Smoke test E2E : signup → essai → checkout TEST puis LIVE → webhook</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-11" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+3</div>
+            <div class="task-label">Page <code>/affiliate</code> + intégration Tolt sandbox</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h30</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-12" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+4</div>
+            <div class="task-label">Bio Syphax <code>/about</code> : photo + story + LinkedIn + Schema.org Person</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-13" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+5</div>
+            <div class="task-label">Migrations Supabase restantes + RLS check</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">30 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-14" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+6</div>
+            <div class="task-label">Vidéo démo Remotion → render → Mux/Loom → embed hero</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h30</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="1-15" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+7</div>
+            <div class="task-label"><code>llms.txt</code> + <code>llms-full.txt</code> + Schema Product/Offer/FAQ /pricing /features</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">45 min</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== COLONNE 3 — SEMAINE 2 ===================== -->
+    <div class="col">
+      <div class="col-header">
+        <div class="col-label">Semaine 2</div>
+        <div class="col-title">J+8 → J+14 &middot; Trust + content</div>
+        <div class="col-obj">Crédibilité + trafic tracké + ProductHunt prêt</div>
+        <div class="col-stats">
+          <div class="col-counter" id="counter-2">0 / 14</div>
+          <div class="col-progress-wrap">
+            <div class="col-progress-fill" id="progress-2" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-tasks" id="col-2">
+
+        <div class="task" data-id="2-0" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+8</div>
+            <div class="task-label">Réveiller comptes IndieHackers, Reddit (entrepreneur, Shopify, dropship), HN, BetaList</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-1" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+9</div>
+            <div class="task-label">Cold email soft (50/jour, ICP e-com Shopify FR + MENA)</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">1h30</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-2" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+10</div>
+            <div class="task-label"><strong>ProductHunt Upcoming page</strong> + 5-10 hunters identifiés</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-3" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+11</div>
+            <div class="task-label">LinkedIn / Twitter fondateur : 3 posts narratifs</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-4" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+12</div>
+            <div class="task-label">2-3 articles blog SEO pré-launch</div>
+            <div class="task-meta">
+              <span class="tag tag-both">[moi+toi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-5" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+13</div>
+            <div class="task-label">5 testimonials beta (réseau e-com)</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-6" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+14</div>
+            <div class="task-label">OG images polish + validators Twitter/LinkedIn</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">30 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-7" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+8</div>
+            <div class="task-label"><strong>P1 sécu :</strong> SSRF WC IPv6, rate limit /api/upload /workspaces /push, validation taille</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-8" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+9</div>
+            <div class="task-label"><strong>P1 QA :</strong> race double-click /essai, F5 wizard backup localStorage, drift TZ crons</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-9" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+10</div>
+            <div class="task-label"><code>/pricing</code> + <code>/essai</code> en Server Components (sortir BAILOUT_TO_CLIENT)</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h30</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-10" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+11</div>
+            <div class="task-label">9 img Unsplash homepage → next/image AVIF + LCP priority</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-11" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+12</div>
+            <div class="task-label">Cleanup 57 console.log (PII RGPD) + 6 fallback localhost:3000</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-12" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+13</div>
+            <div class="task-label">Polish a11y : aria-label boutons (9.4% → 80%), focus, touch targets</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h30</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="2-13" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+14</div>
+            <div class="task-label">UptimeRobot/BetterUptime : /api/health + /health/deep + / + alerte Slack/Telegram</div>
+            <div class="task-meta">
+              <span class="tag tag-both">[moi+toi]</span>
+              <span class="tag-time">45 min</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== COLONNE 4 — SEMAINE 3 ===================== -->
+    <div class="col">
+      <div class="col-header">
+        <div class="col-label">Semaine 3</div>
+        <div class="col-title">J+15 → J+21 &middot; Tests + bug bash</div>
+        <div class="col-obj">Zéro régression au launch</div>
+        <div class="col-stats">
+          <div class="col-counter" id="counter-3">0 / 13</div>
+          <div class="col-progress-wrap">
+            <div class="col-progress-fill" id="progress-3" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-tasks" id="col-3">
+
+        <div class="task" data-id="3-0" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+15</div>
+            <div class="task-label"><strong>Vitest</strong> + 20 tests unit : cleanProduct, escapeHtmlText, safeImageUrl, looksHallucinated, verifyUnsubscribeToken, isAuthorized, getStripePrice, assignVariant, decrement_quota</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">3h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-1" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+16</div>
+            <div class="task-label"><strong>Playwright</strong> + 10 smoke E2E : essai, signup confirm, génération auth, checkout monthly+annual, unsubscribe, dashboard create page, webhook simulé, scrape mock, generate timeout rollback</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">3h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-2" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+17</div>
+            <div class="task-label">P1 dette tech : 22 <code>any</code> → types stricts, lib/templates hors bundle client (−800 KB)</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-3" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+18</div>
+            <div class="task-label"><strong>Bug bash interne</strong> (mode user idiot : clicks rapides, refresh, mobile, slow 3G, no cookies)</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-4" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+19</div>
+            <div class="task-label">Patch tous bugs trouvés J+18</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">2h+</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-5" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+20</div>
+            <div class="task-label">Test charge /api/generate/public 10 req simultanées + check quotas</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-6" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+21</div>
+            <div class="task-label">Audit final Anna+Madara+Konan+Sasori → scoring vs aujourd'hui</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-7" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+15</div>
+            <div class="task-label">Beta test 5 personnes confiance (e-com réels) → noter friction</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-8" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+17</div>
+            <div class="task-label">Press kit : logo HD, screenshots, bio, pitch 1-liner/1-paragraphe/1-page</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-9" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+18</div>
+            <div class="task-label">Liste journalistes/podcasters tech FR+EN (FrenchWeb, Maddyness, BFM, IndieHackers podcast)</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-10" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+19</div>
+            <div class="task-label">5 emails press personnalisés + 3 DMs Twitter/LinkedIn</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-11" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+20</div>
+            <div class="task-label">Crisp config : scénarios, workflows, heures</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">30 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="3-12" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+21</div>
+            <div class="task-label">Switch warmup → vraies campagnes (200/jour ramping)</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">30 min</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== COLONNE 5 — SEMAINE 4 LAUNCH ===================== -->
+    <div class="col">
+      <div class="col-header">
+        <div class="col-label">Semaine 4</div>
+        <div class="col-title">J+22 → J+28 &middot; LAUNCH</div>
+        <div class="col-obj">Premiers euros + buzz contrôlé + Product Hunt</div>
+        <div class="col-stats">
+          <div class="col-counter" id="counter-4">0 / 19</div>
+          <div class="col-progress-wrap">
+            <div class="col-progress-fill" id="progress-4" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-tasks" id="col-4">
+
+        <div class="task" data-id="4-0" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+22 lun</div>
+            <div class="task-label">Soft launch : annonce LinkedIn + Twitter perso (sans push large)</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">30 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-1" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+22</div>
+            <div class="task-label">Monitoring temps réel Sentry + PostHog + UptimeRobot</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">journée</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-2" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+22</div>
+            <div class="task-label">Objectif : 20 signups · 3 paiements · 0 incident sev2</div>
+            <div class="task-meta">
+              <span class="tag tag-both">[moi+toi]</span>
+              <span class="tag-time">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-3" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+23 mar</div>
+            <div class="task-label">Posts IndieHackers + Reddit Shopify (timing US)</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-4" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+23</div>
+            <div class="task-label">Hot-fix réactif si problème reporté</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">journée</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-5" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+24 mer</div>
+            <div class="task-label">Envoie 5 emails press perso + 10 DMs LinkedIn founders e-com</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-6" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+24</div>
+            <div class="task-label">Page <code>/launch-day</code> : countdown + coupon LAUNCH50</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h30</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-7" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+25 jeu</div>
+            <div class="task-label"><strong>Créer post Product Hunt final</strong> + brief hunters</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-8" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+25</div>
+            <div class="task-label">Préparer 5 posts/replies H+1, H+3, H+6 PH thread</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">45 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-9" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+25</div>
+            <div class="task-label">Page <code>/producthunt</code> : offre exclusive</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-10" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+26 ven</div>
+            <div class="task-label">Bug bash final + derniers patches J+22-25 feedback</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">2h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-11" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+26</div>
+            <div class="task-label">Prep contenu réseaux social weekend</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">1h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-12" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+27 sam</div>
+            <div class="task-label"><strong>REPOS OBLIGATOIRE</strong> avant launch lundi</div>
+            <div class="task-meta">
+              <span class="tag tag-both">[moi+toi]</span>
+              <span class="tag-time">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-13" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+28 LUN 9h FR</div>
+            <div class="task-label" style="font-weight:700;color:#5B47F5;">Product Hunt published (00h PST)</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">instant</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-14" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+28 9h05</div>
+            <div class="task-label">Posts IndieHackers + HN Show HN + Reddit</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">30 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-15" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+28 9h15</div>
+            <div class="task-label">LinkedIn perso + Twitter thread</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">15 min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-16" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+28 10h-22h</div>
+            <div class="task-label"><strong>Engagement permanent PH</strong> (chaque commentaire répondu)</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">12h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-17" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+28</div>
+            <div class="task-label">Disponible Crisp + DM toute la journée</div>
+            <div class="task-meta">
+              <span class="tag tag-toi">[toi]</span>
+              <span class="tag-time">journée</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="task" data-id="4-18" onclick="toggle(this)">
+          <div class="task-check"><span class="task-check-icon">✓</span></div>
+          <div class="task-body">
+            <div class="task-day">J+28</div>
+            <div class="task-label">Monitoring + hot-fix si besoin</div>
+            <div class="task-meta">
+              <span class="tag tag-moi">[moi]</span>
+              <span class="tag-time">journée</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-risks">
+      <div class="footer-label">Garde-fous</div>
+      <div class="risk">Si J+1 domaine pas acheté → tout glisse d'1 semaine (launch J+35)</div>
+      <div class="risk">Si bug bash J+18 sort &gt;10 bugs P0 → launch décale d'1 semaine</div>
+      <div class="risk">Si warmup pas démarré J+5 → cold email phase 1 désactivée au launch</div>
+    </div>
+    <div class="footer-stats">
+      <div class="footer-stat"><strong>63</strong> tâches total</div>
+      <div class="footer-stat"><strong>~24h</strong> toi &middot; <strong>~39h</strong> moi sur 4 sem</div>
+      <button class="btn-reset" onclick="resetAll()">Reset</button>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // ── CONFIG ────────────────────────────────────────────────
+  const STORAGE_KEY = 'konvert_launch_plan_v1';
+  const COL_TOTALS  = [8, 16, 14, 13, 19];
+  const GRAND_TOTAL = 70; // sum of COL_TOTALS
+
+  // ── STATE ─────────────────────────────────────────────────
+  function loadState() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch(e) { return {}; }
+  }
+
+  function saveState(state) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  // ── TOGGLE ────────────────────────────────────────────────
+  function toggle(el) {
+    const id = el.dataset.id;
+    const state = loadState();
+    state[id] = !state[id];
+    saveState(state);
+    applyState(state);
+  }
+
+  // ── APPLY STATE ───────────────────────────────────────────
+  function applyState(state) {
+    const tasks = document.querySelectorAll('.task');
+    const colCounts = [0, 0, 0, 0, 0];
+    let globalDone = 0;
+
+    tasks.forEach(task => {
+      const id  = task.dataset.id;
+      const col = parseInt(id.split('-')[0]);
+      const done = !!state[id];
+
+      task.classList.toggle('checked', done);
+
+      if (done) {
+        colCounts[col]++;
+        globalDone++;
+      }
+    });
+
+    // Update column counters + bars
+    for (let c = 0; c < 5; c++) {
+      const total = COL_TOTALS[c];
+      const done  = colCounts[c];
+      const pct   = total > 0 ? Math.round(done / total * 100) : 0;
+
+      const counter  = document.getElementById('counter-' + c);
+      const bar      = document.getElementById('progress-' + c);
+
+      if (counter) counter.textContent = done + ' / ' + total;
+      if (bar) {
+        bar.style.width = pct + '%';
+        bar.classList.toggle('done', done === total && total > 0);
+      }
+    }
+
+    // Update global
+    const globalPct = Math.round(globalDone / GRAND_TOTAL * 100);
+    const globalCounter = document.getElementById('global-counter');
+    const globalBar     = document.getElementById('global-bar');
+
+    if (globalCounter) globalCounter.textContent = globalDone + ' / ' + GRAND_TOTAL + ' tâches';
+    if (globalBar)     globalBar.style.width = globalPct + '%';
+  }
+
+  // ── RESET ─────────────────────────────────────────────────
+  function resetAll() {
+    if (confirm('Remettre toutes les tâches à zéro ?')) {
+      localStorage.removeItem(STORAGE_KEY);
+      applyState({});
+    }
+  }
+
+  // ── INIT ──────────────────────────────────────────────────
+  applyState(loadState());
+</script>
+
+</body>
+</html>

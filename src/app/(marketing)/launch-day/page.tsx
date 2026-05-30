@@ -6,24 +6,11 @@ import { ArrowRight, Check, Gift, Clock, Sparkles, Zap, Rocket } from 'lucide-re
 import { toast } from 'sonner'
 import { track } from '@/lib/analytics'
 import { launchEventSchema, jsonLd } from '@/lib/schema'
+import { getLaunchDate } from '@/lib/launch'
 
-// Page de pré-launch — countdown vers J-Day. Permet de capter l'attention
-// pré-launch (newsletter, communautés, social) et collecter des waitlist
-// signups en attendant le go-live.
-//
-// La date de launch est paramétrable via NEXT_PUBLIC_LAUNCH_DATE (ISO 8601).
-// Fallback : 2026-06-02 07:01 Paris (CEST = UTC+2) = 05:01 UTC = 00:01 PST.
-// Sweet spot Product Hunt — launches démarrant à minuit PST ont la meilleure
-// fenêtre algorithmique sur 24h. Quand le launch est passé, la page bascule
-// en mode "We're live!".
-
-const LAUNCH_DATE_DEFAULT = '2026-06-02T05:01:00Z'
-
-function getLaunchDate(): Date {
-  const raw = process.env.NEXT_PUBLIC_LAUNCH_DATE?.trim() || LAUNCH_DATE_DEFAULT
-  const d = new Date(raw)
-  return Number.isNaN(d.getTime()) ? new Date(LAUNCH_DATE_DEFAULT) : d
-}
+// Page de pré-launch — countdown vers J-Day puis bascule "We're live!" une
+// fois le launch passé. Date paramétrable via NEXT_PUBLIC_LAUNCH_DATE (ISO
+// 8601). Source unique : @/lib/launch (alignée avec schema/index.ts).
 
 function useCountdown(target: Date) {
   // SSR et 1er render client doivent retourner la même valeur, sinon React #418.

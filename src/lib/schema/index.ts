@@ -5,6 +5,8 @@
 // citer le site avec précision (tarifs, FAQ, offres). Avec Schema, on devient
 // réutilisable comme source.
 
+import { LAUNCH_DATE_ISO } from '@/lib/launch'
+
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
 // Organization commune — référencée par les autres entités via @id.
@@ -155,7 +157,8 @@ export function jsonLd(schema: unknown): string {
 // avec date + offre — meilleure visibilité dans "what's launching today" type
 // queries.
 export function launchEventSchema() {
-  const launchDate = process.env.NEXT_PUBLIC_LAUNCH_DATE?.trim() || '2026-06-08T00:00:00Z'
+  // Source unique partagée avec launch-day/page.tsx (cf @/lib/launch).
+  const launchDate = LAUNCH_DATE_ISO
   return {
     '@context': 'https://schema.org',
     '@type': 'SaleEvent',

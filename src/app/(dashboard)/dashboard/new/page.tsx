@@ -1099,6 +1099,14 @@ function NewPageInner() {
                 <p className="text-[12px]" style={{ color: '#15803d' }}>Sans photo, l'IA utilisera automatiquement les images scrappées depuis l'URL produit.</p>
               </div>
             )}
+
+            <button
+              onClick={() => setStep(s => s + 1)}
+              className="mt-4 text-[12px] font-medium w-full text-center py-2 rounded-xl transition-all"
+              style={{ color: '#8b8b9e', background: 'transparent' }}
+            >
+              Passer cette étape
+            </button>
           </div>
         )}
 

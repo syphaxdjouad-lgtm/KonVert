@@ -8,6 +8,8 @@ import { renderPageV3 } from '@/lib/sections-v3/render-page'
 import { suggestStyle } from '@/lib/styles/auto-pick'
 import { autoPickTone } from '@/lib/ai/auto-pick-tone'
 import { TONE_PROMPTS } from '@/lib/ai/tone-prompts'
+import { generateV3Copy } from '@/lib/ai/deepseek-v3'
+import type { DeepSeekV3Output } from '@/lib/ai/v3-schema'
 import type { ScrapedProduct } from '@/types'
 import type { V3PageData, CopyTone } from '@/types/v3'
 import type { StyleId } from '@/lib/styles/types'
@@ -67,74 +69,6 @@ Règles :
 - materials : 2-4 matériaux, confidence honest (0.9 = explicite dans desc, 0.4 = inféré)
 - faq : 4-5 questions
 - Retourne UNIQUEMENT le JSON, aucun texte avant/après`.trim()
-}
-
-/**
- * Raw DeepSeek V3 JSON output shape — reflects only what the prompt asks for.
- * All fields are optional defensively (partial responses are acceptable).
- */
-interface DeepSeekV3Output {
-  hero?: { tagline: string; subtagline: string }
-  why_we_love?: string
-  features?: Array<{ name: string; description: string; isPropriety?: boolean }>
-  best_for?: string[]
-  materials?: Array<{ name: string; benefit: string; confidence: number }>
-  care?: string
-  faq?: Array<{ q: string; a: string }>
-  manifesto?: { headline: string; pillars: string[] }
-  press_quote?: { quote: string; source: string }
-  reviews_summary?: string
-  how_it_works?: Array<{ step: number; title: string; description: string }>
-}
-
-/**
- * Calls DeepSeek to generate V3 DTC copy.
- * Reuses the same API key and timeout strategy as the legacy path.
- */
-async function callDeepSeekV3(systemPrompt: string): Promise<DeepSeekV3Output> {
-  const apiKey = process.env.DEEPSEEK_API_KEY
-  if (!apiKey) throw new Error('DEEPSEEK_API_KEY manquante dans les variables d\'environnement')
-
-  const doFetch = () =>
-    fetch('https://api.deepseek.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'deepseek-chat',
-        max_tokens: 4096,
-        response_format: { type: 'json_object' },
-        messages: [{ role: 'system', content: systemPrompt }],
-      }),
-      signal: AbortSignal.timeout(50000),
-    })
-
-  let res = await doFetch()
-  if (!res.ok && (res.status === 429 || res.status >= 500)) {
-    await new Promise(r => setTimeout(r, 800))
-    res = await doFetch()
-  }
-  if (!res.ok) {
-    const txt = await res.text().catch(() => '')
-    throw new Error(`DeepSeek V3 ${res.status} : ${txt.slice(0, 200)}`)
-  }
-
-  interface _DSResponse { choices: { message: { content: string } }[] }
-  const json = await res.json() as _DSResponse
-  const raw = json.choices[0]?.message?.content ?? ''
-  const cleaned = raw
-    .replace(/^```json\s*/i, '')
-    .replace(/^```\s*/i, '')
-    .replace(/```\s*$/i, '')
-    .trim()
-
-  try {
-    return JSON.parse(cleaned) as DeepSeekV3Output
-  } catch {
-    throw new Error('JSON V3 invalide reçu de DeepSeek — réessaie')
-  }
 }
 
 export async function POST(req: NextRequest) {
@@ -310,7 +244,7 @@ export async function POST(req: NextRequest) {
 
       let aiOutput: DeepSeekV3Output
       try {
-        aiOutput = await callDeepSeekV3(systemPrompt)
+        aiOutput = await generateV3Copy(systemPrompt)
       } catch (genErr) {
         await rollbackQuota()
         throw genErr

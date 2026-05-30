@@ -96,21 +96,27 @@ function SignupContent() {
       })
     }
 
-    // Email de bienvenue J+0 — uniquement si la session est créée (compte direct).
-    // Si confirmation email activée, on ne peut pas savoir si l'email est réel
-    // tant qu'il n'est pas confirmé → on évite d'envoyer le welcome aux faux emails.
+    // Email de bienvenue J+0 — envoyé dès l'inscription, session ou pas.
+    // Si "Confirm email" est activé côté Supabase, data.session est null mais
+    // data.user.email est toujours disponible et l'email est syntaxiquement
+    // valide (Supabase vérifie avant d'émettre le lien de confirmation).
+    // On préfère un welcome envoyé avant confirmation plutôt que zéro email J0
+    // pour 100% des users en mode "confirm email" (risque prod DEIDARA QW2).
     const sessionCreated = !!data.session
+    const recipientEmail = email || data.user?.email
     track.signupCompleted('email')
     // Pixels CompleteRegistration : déclenché même si pending email confirm
     // (l'event représente l'intention, pas l'activation). On peut affiner
     // avec un event Activation séparé après 1ère page créée.
     pixels.completeRegistration({ method: 'email', value: 0 })
-    if (sessionCreated) {
+    if (recipientEmail) {
       fetch('/api/email/welcome', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name }),
+        body: JSON.stringify({ email: recipientEmail, name }),
       }).catch(() => {})
+    }
+    if (sessionCreated) {
 
       // Plan pré-sélectionné depuis /pricing → on relance le checkout Stripe
       // directement plutôt que de renvoyer l'user sur /dashboard puis /pricing.

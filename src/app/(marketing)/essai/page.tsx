@@ -51,7 +51,7 @@ const T: Record<Locale, {
   fr: {
     switchTo: 'EN',
     emailTitle: 'Génère ta première page gratuitement',
-    emailSubtitle: 'Aucune CB. Résultat en 30 secondes.',
+    emailSubtitle: 'Aucune CB. Résultat en moins d\'une minute.',
     firstName: 'Ton prénom',
     firstNamePh: 'Ex : Ahmed',
     emailLabel: 'Où on envoie ta page ?',
@@ -70,7 +70,7 @@ const T: Record<Locale, {
     productDescLabel: 'Description courte',
     productDescOptional: '(optionnel)',
     productDescPh: 'Ce que fait le produit, pour qui, bénéfices...',
-    generateBtnFinal: 'Générer ma page en 30 secondes',
+    generateBtnFinal: 'Générer ma page en moins d\'une minute',
     back: '← Retour',
     loadingTexts: [
       'Analyse du produit...',
@@ -78,7 +78,7 @@ const T: Record<Locale, {
       'Optimisation SEO...',
       'Finalisation de la page...',
     ],
-    loadingDuration: 'Ça prend environ 30 secondes.',
+    loadingDuration: 'Ça prend environ 60 secondes — accroche-toi !',
     trust: ['Aucune CB', 'Résultat immédiat', '100% gratuit'],
     errEmail: 'Entre un email valide.',
     errUrl: 'Colle l\u2019URL du produit.',
@@ -90,7 +90,7 @@ const T: Record<Locale, {
   en: {
     switchTo: 'FR',
     emailTitle: 'Generate your first page for free',
-    emailSubtitle: 'No credit card. Result in 30 seconds.',
+    emailSubtitle: 'No credit card. Result in under a minute.',
     firstName: 'Your first name',
     firstNamePh: 'E.g. Ahmed',
     emailLabel: 'Where do we send your page?',
@@ -109,7 +109,7 @@ const T: Record<Locale, {
     productDescLabel: 'Short description',
     productDescOptional: '(optional)',
     productDescPh: 'What the product does, who it\u2019s for, benefits...',
-    generateBtnFinal: 'Generate my page in 30 seconds',
+    generateBtnFinal: 'Generate my page in under a minute',
     back: '\u2190 Back',
     loadingTexts: [
       'Analyzing the product...',
@@ -117,7 +117,7 @@ const T: Record<Locale, {
       'Optimizing SEO...',
       'Finalizing the page...',
     ],
-    loadingDuration: 'This takes about 30 seconds.',
+    loadingDuration: 'This takes about 60 seconds — hang tight!',
     trust: ['No card', 'Instant result', '100% free'],
     errEmail: 'Enter a valid email.',
     errUrl: 'Paste the product URL.',

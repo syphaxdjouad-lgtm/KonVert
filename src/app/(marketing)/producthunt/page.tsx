@@ -120,7 +120,8 @@ function PHContent() {
           </div>
 
           <h1 className="text-4xl md:text-6xl font-black text-white mb-5 leading-tight" style={{ letterSpacing: '-0.03em' }}>
-            Une offre exclusive<br />
+            Une offre exclusive{' '}
+            <br />
             pour la communauté PH
           </h1>
           <p className="text-white/90 text-xl mb-10 max-w-2xl mx-auto leading-relaxed">

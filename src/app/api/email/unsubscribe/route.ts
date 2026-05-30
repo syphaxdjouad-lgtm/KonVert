@@ -5,7 +5,7 @@ import { rateLimitAsync } from '@/lib/security/ratelimit'
 
 async function checkRateLimit(req: NextRequest) {
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
-  const rl = await rateLimitAsync(`unsub:${ip}`, 10, 60_000)
+  const rl = await rateLimitAsync(`unsub:${ip}`, 5, 60_000)
   if (rl.allowed) return null
   return NextResponse.json(
     { error: 'Trop de tentatives, réessaye dans quelques instants.' },

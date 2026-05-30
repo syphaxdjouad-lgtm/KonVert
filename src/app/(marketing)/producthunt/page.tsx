@@ -249,7 +249,7 @@ function PHContent() {
             Profite des 50 % avant minuit
           </h2>
           <p className="text-white/60 text-lg mb-8">
-            Code <code className="font-black text-white">LAUNCH50</code> valable uniquement aujourd&apos;hui pour les supporters ProductHunt.
+            Code <code className="font-black text-white">LAUNCH50</code> valable jusqu&apos;au 9 juin pour les supporters ProductHunt.
           </p>
           <Link
             href="/pricing?coupon=LAUNCH50&utm_source=producthunt&utm_campaign=ph_launch_day"

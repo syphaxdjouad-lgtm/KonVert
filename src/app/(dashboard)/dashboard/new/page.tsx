@@ -92,6 +92,16 @@ const TONES = [
   { id: 'informatif',  label: 'Informatif',    desc: 'Factuel, technique, comparatif'                 },
 ]
 
+// Mapping tone legacy (4 valeurs) → tone V3 (5 valeurs). Les tones V3 viennent
+// de src/types/v3.ts CopyTone : 'friendly' | 'premium' | 'bold' | 'storytelling' | 'educational'
+// (+ 'auto' que l'engine V3 résout via autoPickTone).
+const LEGACY_TONE_TO_V3: Record<string, 'friendly' | 'premium' | 'bold' | 'storytelling' | 'educational'> = {
+  persuasif:  'bold',
+  premium:    'premium',
+  fun:        'friendly',
+  informatif: 'educational',
+}
+
 const PLATFORMS = [
   { id: 'shopify',      label: 'Shopify',         icon: '🟢' },
   { id: 'woocommerce',  label: 'WooCommerce',      icon: '🟣' },
@@ -546,6 +556,20 @@ function NewPageInner() {
         }
       }
 
+      // ── Path V3 — quand l'user a choisi un style V3 sur l'étape 5/8 ──
+      // L'engine V3 (AI SDK + Zod + 13 sections + renderPageV3) prend la main.
+      // styleId = slug V3 direct (ex: 'apple-clean'), tone mappé vers les
+      // 5 tones V3 via LEGACY_TONE_TO_V3, images du wizard transmises.
+      if (styleMode === 'v3') {
+        body = {
+          ...body,
+          engine: 'v3',
+          styleId: selectedStyle,
+          tone: LEGACY_TONE_TO_V3[selectedTone] || 'friendly',
+          images: uploadedPhotos.length > 0 ? uploadedPhotos : undefined,
+        }
+      }
+
       const res  = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -574,6 +598,60 @@ function NewPageInner() {
       }
 
       if (!res.ok) throw new Error(json.error)
+
+      // ── Path V3 — engine V3 a retourné { html, data, engine: 'v3' } ────────
+      // Skip renderTemplate côté client : l'HTML est déjà rendu serveur via
+      // renderPageV3 avec les 13 sections Allbirds-grade. Skip aussi le mismatch
+      // product_type qui est un check legacy (V3 n'a pas la notion de "themed").
+      if (json.engine === 'v3') {
+        const v3Html = json.html as string
+        const v3Data = json.data as { product?: { title?: string }; images?: string[] } | null
+        setHtml(v3Html)
+        setLandingData(v3Data as unknown as LandingPageData)
+        const v3Title = v3Data?.product?.title || 'Nouvelle page'
+        setTitle(v3Title)
+        track.generateCompleted('dashboard', Date.now() - startedAt)
+        track.pageGenerated('dashboard')
+        setMode('editor')
+        if (json.partial) {
+          setPartialWarning(json.warning
+            ? `Scrape partiel : ${json.warning}. Vérifie le titre, le prix et les images avant de publier.`
+            : 'Scrape partiel — vérifie le titre, le prix et les images avant de publier.')
+        } else {
+          setPartialWarning(null)
+        }
+        // Autosave V3 — même logique que legacy, json_content tag _engine='v3'
+        if (!pageId) {
+          try {
+            const supabase = createClient()
+            const { data: { user } } = await supabase.auth.getUser()
+            if (user) {
+              const jsonWithSlug = { ...(v3Data as object), _template_slug: selectedStyle, _engine: 'v3' }
+              const { data: inserted, error: insertErr } = await supabase
+                .from('pages')
+                .insert({
+                  user_id:      user.id,
+                  title:        v3Title,
+                  product_url:  inputMode === 'url' ? url : null,
+                  html_content: v3Html,
+                  json_content: jsonWithSlug,
+                  status:       'draft',
+                })
+                .select('id')
+                .single()
+              if (!insertErr && inserted?.id) {
+                setPageId(inserted.id)
+                window.history.replaceState(null, '', `/dashboard/new?page_id=${inserted.id}`)
+              } else if (insertErr) {
+                console.warn('[autosave-v3] insert failed', insertErr.message)
+              }
+            }
+          } catch (autosaveErr) {
+            console.warn('[autosave-v3]', autosaveErr)
+          }
+        }
+        return
+      }
 
       const data: LandingPageData = json.data
 
@@ -735,6 +813,14 @@ function NewPageInner() {
 
   function changeTemplate(id: string) {
     setSelectedStyle(id)
+    // Styles V3 (soft, editorial, apple-clean, etc.) ne sont pas rendus
+    // côté client : renderPageV3 vit en serveur. L'user doit re-générer
+    // (clic sur Régénérer) — preview du nouveau style impossible inline.
+    const isV3Style = V3_STYLES.some(s => s.id === id)
+    if (isV3Style) {
+      setError('Style V3 sélectionné. Pour appliquer le rendu, regénère la page (l\'éditeur ne preview pas les V3 inline).')
+      return
+    }
     if (landingData) {
       import('@/lib/templates').then(({ renderTemplate }) => {
         setHtml(renderTemplate(id, landingData))
@@ -1418,17 +1504,21 @@ function NewPageInner() {
               </div>
             )}
 
-            {/* ── Liste Styles V3 (10 nouveaux Allbirds-grade) — Phase 2 branchera engine ── */}
+            {/* ── Liste Styles V3 (10 nouveaux Allbirds-grade) — Engine V3 actif ── */}
             {styleMode === 'v3' && (
               <div className="space-y-2 mb-6">
-                <div className="p-3 rounded-lg mb-2 text-[12px]" style={{ background: '#fef3c7', color: '#92400e' }}>
-                  <strong>Aperçu Phase 1</strong> — l&apos;UX des 10 styles V3 est en place. La génération via engine V3 (AI SDK + Zod + 13 sections Allbirds-grade) sera activée à la prochaine étape. Pour générer maintenant, repasse sur l&apos;onglet <strong>Templates</strong>.
+                <div className="p-3 rounded-lg mb-2 text-[12px]" style={{ background: '#ede9fe', color: '#5b21b6' }}>
+                  <strong>Engine V3 actif</strong> — génération via Vercel AI SDK + Zod + 13 sections universelles (Allbirds-grade). Rendu serveur direct.
                 </div>
                 {V3_STYLES.map(s => (
-                  <div
+                  <button
                     key={s.id}
-                    className="w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left opacity-70"
-                    style={{ borderColor: '#E3E3E8', background: '#fafafa', cursor: 'not-allowed' }}
+                    onClick={() => setSelectedStyle(s.id)}
+                    className="w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all"
+                    style={selectedStyle === s.id
+                      ? { borderColor: '#7c3aed', background: '#faf9ff' }
+                      : { borderColor: '#E3E3E8', background: '#fff' }
+                    }
                   >
                     <span className="text-2xl">{s.emoji}</span>
                     <div className="flex-1">
@@ -1438,8 +1528,12 @@ function NewPageInner() {
                       </div>
                       <p className="text-[12px]" style={{ color: '#8b8b9e' }}>{s.desc}</p>
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-1 rounded" style={{ background: '#f3f0ff', color: '#7c3aed' }}>BIENTÔT</span>
-                  </div>
+                    {selectedStyle === s.id && (
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: '#7c3aed' }}>
+                        <Check className="w-3 h-3 text-white" />
+                      </div>
+                    )}
+                  </button>
                 ))}
               </div>
             )}

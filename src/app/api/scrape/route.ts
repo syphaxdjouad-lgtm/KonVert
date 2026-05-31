@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { scrapeProduct, cleanProduct, ScrapeError } from '@/lib/scraper'
 import { createClient } from '@/lib/supabase/server'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
+import { rateLimitAsync } from '@/lib/security/ratelimit'
 
 // Vercel Pro + Fluid Compute = 90s — Bright Data AliExpress peut prendre 50-65s
 export const maxDuration = 90
@@ -13,6 +14,18 @@ export async function POST(req: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       return NextResponse.json({ error: 'Authentification requise' }, { status: 401 })
+    }
+
+    // Rate limit (10 scrapes / minute / user). Le scraper consomme du crédit
+    // Firecrawl/Bright Data payant — sans throttle un user peut épuiser
+    // accidentellement (ou volontairement) la facture en quelques minutes.
+    const rl = await rateLimitAsync(`scrape:${user.id}`, 10, 60_000)
+    if (!rl.allowed) {
+      const retryAfter = Math.ceil(rl.retryAfterMs / 1000)
+      return NextResponse.json(
+        { error: `Trop de scrapes simultanés. Réessaie dans ${retryAfter}s.` },
+        { status: 429, headers: { 'Retry-After': String(retryAfter) } }
+      )
     }
 
     const body = await req.json()

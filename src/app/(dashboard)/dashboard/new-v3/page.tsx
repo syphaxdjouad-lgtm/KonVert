@@ -151,6 +151,23 @@ export default function NewV3Page() {
           >
             {scraping ? 'Scraping...' : 'Analyser le produit →'}
           </button>
+
+          <div className="mt-8 pt-6 border-t border-neutral-200">
+            <p className="text-sm text-neutral-500 mb-3">
+              Pas d&apos;URL ou le scraping est bloqué (Allbirds, Glossier, SSENSE… ont des firewalls anti-bot) ?
+            </p>
+            <button
+              onClick={() => {
+                setProduct({ title: '', description: '', price: '', images: [] })
+                setImages([])
+                setUrl('')
+                setStep('product')
+              }}
+              className="text-purple-600 hover:text-purple-700 font-semibold underline underline-offset-4"
+            >
+              Saisir les infos à la main →
+            </button>
+          </div>
         </div>
       )}
 

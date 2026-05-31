@@ -1,9 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { rateLimitAsync } from '@/lib/security/ratelimit'
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit (3 messages / 5 min / IP). Endpoint public sans Turnstile —
+    // sans throttle, J0 ProductHunt = vague de bots qui inondent
+    // contact_messages + génèrent du bruit Sentry.
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+      || req.headers.get('x-real-ip')
+      || 'unknown'
+    const rl = await rateLimitAsync(`contact:${ip}`, 3, 300_000)
+    if (!rl.allowed) {
+      const retryAfter = Math.ceil(rl.retryAfterMs / 1000)
+      return NextResponse.json(
+        { error: 'Trop de messages envoyés. Réessaie plus tard.' },
+        { status: 429, headers: { 'Retry-After': String(retryAfter) } }
+      )
+    }
+
     const { name, email, subject, message } = await req.json()
 
     if (!name || !email || !subject || !message) {

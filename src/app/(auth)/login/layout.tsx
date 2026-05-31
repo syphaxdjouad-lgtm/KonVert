@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Connexion — KONVERT',
+  title: 'Connexion',
   description: 'Connecte-toi à ton espace KONVERT pour générer et publier tes landing pages e-commerce.',
   robots: { index: false, follow: false },
   alternates: {

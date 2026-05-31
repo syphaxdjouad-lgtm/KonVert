@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { generateMetadata as genMeta } from '@/lib/metadata'
 
 export const metadata: Metadata = genMeta({
-  title: 'Contact — KONVERT',
+  title: 'Contact',
   description: 'Une question sur KONVERT ? Contactez-nous par email ou chat. Réponse garantie sous 24h, en français.',
   path: '/contact',
 })

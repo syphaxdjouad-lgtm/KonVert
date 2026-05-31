@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { generateMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = generateMetadata({
-  title: '42 Templates de pages produit haute conversion — KONVERT',
+  title: '42 Templates de pages produit haute conversion',
   description:
     '42 templates de landing pages e-commerce testés sur 50 000+ pages. Choisissez votre style, copiez-collez sur Shopify ou WooCommerce. Minimal, luxe, beauty, gaming et plus.',
   path: '/templates',

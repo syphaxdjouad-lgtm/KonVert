@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Créer mon compte — KONVERT',
+  title: 'Créer mon compte',
   description: 'Crée ton compte KONVERT et génère des landing pages e-commerce haute conversion en 30 secondes. Sans engagement, satisfait ou remboursé 30 jours.',
   openGraph: {
     title: 'Créer mon compte KONVERT — Landing pages e-commerce IA',

@@ -11,7 +11,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
 export const metadata: Metadata = {
   ...genMeta({
-    title: 'Blog E-commerce & Dropshipping | KONVERT',
+    title: 'Blog E-commerce & Dropshipping',
     description:
       'Guides SEO, tutoriels Shopify, stratégies de conversion et conseils dropshipping. Tout pour vendre plus avec vos landing pages e-commerce.',
     path: '/blog',

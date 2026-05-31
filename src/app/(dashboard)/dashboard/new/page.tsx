@@ -69,6 +69,22 @@ const STYLES = [
   { id: 'etec-boost',      name: 'Boost',     desc: 'Conversion max — badges confiance, preuves sociales, DTC wellness',     emoji: '🚀' },
 ]
 
+// ── Styles V3 (Phase 2 : branchera engine V3 + 13 sections Allbirds-grade) ──
+// Phase 1 actuelle = juste l'UI pour visualiser les 10 styles. Pas encore branché
+// sur l'engine V3 — l'engine legacy reste actif pour la génération.
+const V3_STYLES = [
+  { id: 'soft',         name: 'Soft',         desc: 'Mejuri / Glossier vibe — rose poudré, sérif raffiné, intimité moderne',     emoji: '🌸' },
+  { id: 'editorial',    name: 'Editorial',    desc: 'Magazine éditorial — typo généreuse, blanc + crème, storytelling premium',  emoji: '📰' },
+  { id: 'apple-clean',  name: 'Apple Clean',  desc: 'Apple-grade clarté — blanc pur, sans-serif système, glassmorphism subtil',  emoji: '⚪' },
+  { id: 'luxe-noir',    name: 'Luxe Noir',    desc: 'Dark warm + or — noir profond, accents dorés, joaillerie / haute couture', emoji: '✨' },
+  { id: 'organic',      name: 'Organic',      desc: 'Aesop vibe — vert sauge, sérif, naturel, bien-être, supplements bio',      emoji: '🌿' },
+  { id: 'brutalist',    name: 'Brutalist',    desc: 'Brut & impactant — mono très bold (JetBrains), grilles strictes, raw',     emoji: '◼️' },
+  { id: 'warm-neutral', name: 'Warm Neutral', desc: 'ALD vibe — beige sable, terra cotta, mode caramelisée, lifestyle élégant',  emoji: '🍂' },
+  { id: 'minimal-mono', name: 'Minimal Mono', desc: 'MUJI minimal — typo Inter, neutres absolus, pureté zen, anti-décor',       emoji: '◽' },
+  { id: 'vibrant',      name: 'Vibrant',      desc: 'Tonies / Notion vibe — couleurs vibrantes, joyeux, jeune, énergique',       emoji: '🎨' },
+  { id: 'bold',         name: 'Bold',         desc: 'Statement maximaliste — typo display géante, contraste extrême, impact',    emoji: '💥' },
+]
+
 const TONES = [
   { id: 'persuasif',   label: 'Persuasif',     desc: 'Copy de vente direct, urgence, FOMO'           },
   { id: 'premium',     label: 'Premium',       desc: 'Luxe, exclusivité, qualité supérieure'          },
@@ -182,6 +198,10 @@ function NewPageInner() {
 
   // Step 5 — Style & Ton
   const [selectedStyle, setSelectedStyle] = useState('etec-blue')
+  // Phase 1 — toggle UI entre la liste des templates legacy (etec-*) et la
+  // liste des nouveaux styles V3. Engine de génération reste legacy pour
+  // l'instant (Phase 2 branchera engine V3 quand l'UI sera validée).
+  const [styleMode, setStyleMode] = useState<'legacy' | 'v3'>('legacy')
   const [selectedTone,  setSelectedTone]  = useState('persuasif')
 
   // Step 6 — Plateforme cible
@@ -1329,45 +1349,100 @@ function NewPageInner() {
             <p className="text-[14px] mb-6" style={{ color: '#8b8b9e' }}>Choisis le style visuel et le ton du copy IA.</p>
 
             <label className="block text-[13px] font-bold mb-3" style={{ color: '#1a1a2e' }}>Style visuel</label>
-            <div className="space-y-2 mb-6">
-              {STYLES.map(s => {
-                const tpl = TEMPLATES.find(t => t.id === s.id)
-                const isUniversal = tpl?.productType === 'universal' || tpl?.themed === false
-                const productLabel = tpl ? PRODUCT_TYPE_LABELS[tpl.productType] : null
-                return (
-                <button
-                  key={s.id}
-                  onClick={() => setSelectedStyle(s.id)}
-                  className="w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all"
-                  style={selectedStyle === s.id
-                    ? { borderColor: '#7c3aed', background: '#faf9ff' }
-                    : { borderColor: '#E3E3E8', background: '#fff' }
-                  }
-                >
-                  <span className="text-2xl">{s.emoji}</span>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
-                      {s.id === 'etec-blue' && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#fef3c7', color: '#d97706' }}>POPULAIRE</span>
-                      )}
-                      {productLabel && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={isUniversal
-                          ? { background: '#ecfdf5', color: '#047857' }
-                          : { background: '#f3e8ff', color: '#6d28d9' }
-                        }>{productLabel}</span>
-                      )}
-                    </div>
-                    <p className="text-[12px]" style={{ color: '#8b8b9e' }}>{s.desc}</p>
-                  </div>
-                  {selectedStyle === s.id && (
-                    <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: '#7c3aed' }}>
-                      <Check className="w-3 h-3 text-white" />
-                    </div>
-                  )}
-                </button>
-              )})}
+
+            {/* ── Toggle Templates / Styles V3 ── */}
+            <div className="flex gap-2 mb-4 p-1 rounded-xl" style={{ background: '#f3f0ff' }}>
+              <button
+                onClick={() => setStyleMode('legacy')}
+                className="flex-1 px-4 py-2 rounded-lg text-[13px] font-bold transition-all"
+                style={styleMode === 'legacy'
+                  ? { background: '#fff', color: '#7c3aed', boxShadow: '0 1px 2px rgba(124,58,237,0.08)' }
+                  : { background: 'transparent', color: '#8b8b9e' }
+                }
+              >
+                Templates
+              </button>
+              <button
+                onClick={() => setStyleMode('v3')}
+                className="flex-1 px-4 py-2 rounded-lg text-[13px] font-bold transition-all relative"
+                style={styleMode === 'v3'
+                  ? { background: '#fff', color: '#7c3aed', boxShadow: '0 1px 2px rgba(124,58,237,0.08)' }
+                  : { background: 'transparent', color: '#8b8b9e' }
+                }
+              >
+                Styles V3
+                <span className="ml-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded" style={{ background: '#fef3c7', color: '#d97706' }}>NOUVEAU</span>
+              </button>
             </div>
+
+            {/* ── Liste Templates legacy (etec-*) ── */}
+            {styleMode === 'legacy' && (
+              <div className="space-y-2 mb-6">
+                {STYLES.map(s => {
+                  const tpl = TEMPLATES.find(t => t.id === s.id)
+                  const isUniversal = tpl?.productType === 'universal' || tpl?.themed === false
+                  const productLabel = tpl ? PRODUCT_TYPE_LABELS[tpl.productType] : null
+                  return (
+                  <button
+                    key={s.id}
+                    onClick={() => setSelectedStyle(s.id)}
+                    className="w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all"
+                    style={selectedStyle === s.id
+                      ? { borderColor: '#7c3aed', background: '#faf9ff' }
+                      : { borderColor: '#E3E3E8', background: '#fff' }
+                    }
+                  >
+                    <span className="text-2xl">{s.emoji}</span>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
+                        {s.id === 'etec-blue' && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#fef3c7', color: '#d97706' }}>POPULAIRE</span>
+                        )}
+                        {productLabel && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={isUniversal
+                            ? { background: '#ecfdf5', color: '#047857' }
+                            : { background: '#f3e8ff', color: '#6d28d9' }
+                          }>{productLabel}</span>
+                        )}
+                      </div>
+                      <p className="text-[12px]" style={{ color: '#8b8b9e' }}>{s.desc}</p>
+                    </div>
+                    {selectedStyle === s.id && (
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: '#7c3aed' }}>
+                        <Check className="w-3 h-3 text-white" />
+                      </div>
+                    )}
+                  </button>
+                )})}
+              </div>
+            )}
+
+            {/* ── Liste Styles V3 (10 nouveaux Allbirds-grade) — Phase 2 branchera engine ── */}
+            {styleMode === 'v3' && (
+              <div className="space-y-2 mb-6">
+                <div className="p-3 rounded-lg mb-2 text-[12px]" style={{ background: '#fef3c7', color: '#92400e' }}>
+                  <strong>Aperçu Phase 1</strong> — l&apos;UX des 10 styles V3 est en place. La génération via engine V3 (AI SDK + Zod + 13 sections Allbirds-grade) sera activée à la prochaine étape. Pour générer maintenant, repasse sur l&apos;onglet <strong>Templates</strong>.
+                </div>
+                {V3_STYLES.map(s => (
+                  <div
+                    key={s.id}
+                    className="w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left opacity-70"
+                    style={{ borderColor: '#E3E3E8', background: '#fafafa', cursor: 'not-allowed' }}
+                  >
+                    <span className="text-2xl">{s.emoji}</span>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#ede9fe', color: '#6d28d9' }}>V3</span>
+                      </div>
+                      <p className="text-[12px]" style={{ color: '#8b8b9e' }}>{s.desc}</p>
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-1 rounded" style={{ background: '#f3f0ff', color: '#7c3aed' }}>BIENTÔT</span>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <label className="block text-[13px] font-bold mb-3" style={{ color: '#1a1a2e' }}>Ton du copywriting IA</label>
             <div className="grid grid-cols-2 gap-2">

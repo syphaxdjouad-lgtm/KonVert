@@ -3,7 +3,9 @@ import { generateLandingPage, GENERATION_MODEL } from '@/lib/anthropic/generate'
 import { scrapeProduct, cleanProduct, looksHallucinated, ScrapeError } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import { createClient } from '@/lib/supabase/server'
+import { supabaseAdmin } from '@/lib/supabase/admin'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
+import { rateLimitAsync } from '@/lib/security/ratelimit'
 import { renderPageV3 } from '@/lib/sections-v3/render-page'
 import { suggestStyle } from '@/lib/styles/auto-pick'
 import { autoPickTone } from '@/lib/ai/auto-pick-tone'
@@ -83,9 +85,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Authentification requise' }, { status: 401 })
     }
 
+    // Rate limit burst (5 générations / minute / user). Le quota DB bloque
+    // déjà l'abus mensuel (75/300/9999 selon plan) mais sans throttle un user
+    // Pro peut burst 300 appels DeepSeek en quelques secondes (cost
+    // amplification ~ $1-2 cramés). Ce limiter est indépendant du quota et
+    // protège la facture DeepSeek en cas de script abusif.
+    const rl = await rateLimitAsync(`generate:${user.id}`, 5, 60_000)
+    if (!rl.allowed) {
+      const retryAfter = Math.ceil(rl.retryAfterMs / 1000)
+      return NextResponse.json(
+        { error: `Trop de générations simultanées. Réessaie dans ${retryAfter}s.` },
+        { status: 429, headers: { 'Retry-After': String(retryAfter) } }
+      )
+    }
+
     // Vérification et incrément atomique du quota via fonction SQL (FOR UPDATE)
-    // Évite la race condition : deux requêtes simultanées ne peuvent pas dépasser le quota
-    const { data: quotaOk, error: quotaError } = await supabase
+    // Évite la race condition : deux requêtes simultanées ne peuvent pas dépasser le quota.
+    // On utilise supabaseAdmin (service_role) car la fonction SQL est révoquée
+    // du rôle `authenticated` depuis la migration 20260531_grants_hardening —
+    // elle ne doit être appelable que côté serveur, jamais via le client SDK.
+    const { data: quotaOk, error: quotaError } = await supabaseAdmin
       .rpc('check_and_increment_quota', { p_user_id: user.id })
 
     if (quotaError) {
@@ -107,7 +126,9 @@ export async function POST(req: NextRequest) {
     // quota du user reste perdu définitivement et il viendra réclamer au support.
     const rollbackQuota = async () => {
       try {
-        await supabase.rpc('decrement_quota', { p_user_id: user.id })
+        // Idem check_and_increment_quota : appel via service_role
+        // (migration 20260531_grants_hardening).
+        await supabaseAdmin.rpc('decrement_quota', { p_user_id: user.id })
       } catch (rbErr) {
         console.error('[/api/generate] decrement_quota échoué:', rbErr)
         const Sentry = await import('@sentry/nextjs').catch(() => null)

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { rateLimitAsync } from '@/lib/security/ratelimit'
 
 // Headers CORS pour les appels cross-origin (pages Shopify/WooCommerce)
 const CORS_HEADERS = {
@@ -16,6 +17,19 @@ export async function OPTIONS() {
 // Appelé par le script de tracking injecté dans les pages générées
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit : 30 events/min/IP. L'endpoint est public + CORS wildcard
+    // (script de tracking embarqué sur les boutiques clients) donc sans
+    // throttle un script adverse peut polluer les stats de toutes les pages
+    // publiées. Au-delà du seuil on renvoie un 200 silencieux pour ne pas
+    // signaler le throttle au tracker côté client (et éviter qu'il retry).
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+      || req.headers.get('x-real-ip')
+      || 'unknown'
+    const rl = await rateLimitAsync(`analytics:${ip}`, 30, 60_000)
+    if (!rl.allowed) {
+      return NextResponse.json({ ok: true }, { headers: CORS_HEADERS })
+    }
+
     const { page_id, event_type, meta } = await req.json()
 
     if (!page_id || !event_type) {
@@ -46,9 +60,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Page introuvable' }, { status: 404 })
     }
 
-    // Hash de l'IP pour anonymat RGPD
-    const ip     = req.headers.get('x-forwarded-for')?.split(',')[0] || req.headers.get('x-real-ip') || ''
-    const ipHash = ip ? await hashIp(ip) : null
+    // Hash de l'IP pour anonymat RGPD — réutilise l'IP déjà extraite pour le
+    // rate limit, sauf si elle vaut 'unknown' (pas d'IP réelle disponible).
+    const ipHash = ip !== 'unknown' ? await hashIp(ip) : null
 
     await supabaseAdmin.from('analytics_events').insert({
       page_id,

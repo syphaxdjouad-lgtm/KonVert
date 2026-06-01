@@ -15,6 +15,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import type { LandingPageData } from '@/types'
 import { track } from '@/lib/analytics'
+import { PlatformLogo } from '@/components/ui/platform-logo'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _Palette = Palette
@@ -71,32 +72,32 @@ const STYLES = [
 ]
 
 // ── Styles V3 (10 styles Allbirds-grade — engine V3 branché Phase 2) ──
-// Chaque style expose des couleurs + fonts pour les previews visuels dans
-// la carte du wizard étape 5/8 (Phase 3). Les tokens réels vivent dans
-// src/lib/styles/<id>/tokens.ts — on duplique ici juste ce qu'il faut pour
-// la preview UI (bg, accent, text, font heading) pour éviter d'importer
-// tous les fichiers tokens côté client.
+// Chaque style expose des tokens visuels pour la mini-preview "vraie page
+// produit" dans la carte du wizard étape 5/8 (Phase 3 v2). Les tokens
+// réels vivent dans src/lib/styles/<id>/tokens.ts — on duplique ici juste
+// ce qu'il faut pour la preview UI (bg, surface, accent, text, font, btn
+// radius, mock product) pour éviter d'importer les tokens côté client.
 const V3_STYLES = [
   { id: 'soft',         name: 'Soft',         desc: 'Mejuri / Glossier vibe — rose poudré, sérif raffiné, intimité moderne',     emoji: '🌸',
-    bg: '#FAF7F2', accent: '#C9A77E', text: '#1A1614', font: '"Cormorant Garamond", Georgia, serif' },
+    bg: '#FAF7F2', surface: '#F0E8DC', accent: '#C9A77E', text: '#1A1614', font: '"Cormorant Garamond", Georgia, serif', btnRadius: 999, brand: 'MEJURI', product: 'Demi Hoop Earrings' },
   { id: 'editorial',    name: 'Editorial',    desc: 'Magazine éditorial — typo généreuse, blanc + crème, storytelling premium',  emoji: '📰',
-    bg: '#FFFFFF', accent: '#0A0A0A', text: '#0A0A0A', font: '"Playfair Display", "Times New Roman", serif' },
+    bg: '#FFFFFF', surface: '#F8F6F2', accent: '#0A0A0A', text: '#0A0A0A', font: '"Playfair Display", "Times New Roman", serif', btnRadius: 0, brand: 'MONOCLE', product: 'Travel Wallet' },
   { id: 'apple-clean',  name: 'Apple Clean',  desc: 'Apple-grade clarté — blanc pur, sans-serif système, glassmorphism subtil',  emoji: '⚪',
-    bg: '#F5F5F7', accent: '#0066CC', text: '#1D1D1F', font: '"SF Pro Display", "Inter", system-ui, sans-serif' },
+    bg: '#F5F5F7', surface: '#FFFFFF', accent: '#0066CC', text: '#1D1D1F', font: '"SF Pro Display", "Inter", system-ui, sans-serif', btnRadius: 980, brand: 'AERO', product: 'AirPro Wireless' },
   { id: 'luxe-noir',    name: 'Luxe Noir',    desc: 'Dark warm + or — noir profond, accents dorés, joaillerie / haute couture', emoji: '✨',
-    bg: '#14110F', accent: '#C9A84C', text: '#F5F0E8', font: '"Playfair Display", Georgia, serif' },
+    bg: '#14110F', surface: '#1F1B17', accent: '#C9A84C', text: '#F5F0E8', font: '"Playfair Display", Georgia, serif', btnRadius: 0, brand: 'NOIR', product: 'Diamond Solitaire' },
   { id: 'organic',      name: 'Organic',      desc: 'Aesop vibe — vert sauge, sérif, naturel, bien-être, supplements bio',      emoji: '🌿',
-    bg: '#F4F1EB', accent: '#5B6E4F', text: '#1F2D24', font: '"DM Serif Display", Georgia, serif' },
+    bg: '#F4F1EB', surface: '#E8E2D4', accent: '#5B6E4F', text: '#1F2D24', font: '"DM Serif Display", Georgia, serif', btnRadius: 999, brand: 'AESOP', product: 'Sage & Cedar Balm' },
   { id: 'brutalist',    name: 'Brutalist',    desc: 'Brut & impactant — mono très bold (JetBrains), grilles strictes, raw',     emoji: '◼️',
-    bg: '#FFFFFF', accent: '#FF3300', text: '#000000', font: '"JetBrains Mono", "Courier New", monospace' },
+    bg: '#FFFFFF', surface: '#F0F0F0', accent: '#FF3300', text: '#000000', font: '"JetBrains Mono", "Courier New", monospace', btnRadius: 0, brand: 'RAW.CO', product: 'Concrete Vase /01' },
   { id: 'warm-neutral', name: 'Warm Neutral', desc: 'ALD vibe — beige sable, terra cotta, mode caramelisée, lifestyle élégant',  emoji: '🍂',
-    bg: '#F4ECE0', accent: '#B5854B', text: '#3B2F23', font: '"DM Serif Display", Georgia, serif' },
+    bg: '#F4ECE0', surface: '#E8DCC8', accent: '#B5854B', text: '#3B2F23', font: '"DM Serif Display", Georgia, serif', btnRadius: 999, brand: 'ALD', product: 'Caramel Cardigan' },
   { id: 'minimal-mono', name: 'Minimal Mono', desc: 'MUJI minimal — typo Inter, neutres absolus, pureté zen, anti-décor',       emoji: '◽',
-    bg: '#FFFFFF', accent: '#000000', text: '#000000', font: '"Inter", system-ui, sans-serif' },
+    bg: '#FFFFFF', surface: '#F2F2F2', accent: '#000000', text: '#000000', font: '"Inter", system-ui, sans-serif', btnRadius: 4, brand: 'MUJI', product: 'Linen T-Shirt' },
   { id: 'vibrant',      name: 'Vibrant',      desc: 'Tonies / Notion vibe — couleurs vibrantes, joyeux, jeune, énergique',       emoji: '🎨',
-    bg: '#FFFFFF', accent: '#FF4D88', text: '#1A1A1A', font: '"Space Grotesk", "Inter", sans-serif' },
+    bg: '#FFFFFF', surface: '#FFF1D6', accent: '#FF4D88', text: '#1A1A1A', font: '"Space Grotesk", "Inter", sans-serif', btnRadius: 999, brand: 'TONIES', product: 'Pop Speaker Mini' },
   { id: 'bold',         name: 'Bold',         desc: 'Statement maximaliste — typo display géante, contraste extrême, impact',    emoji: '💥',
-    bg: '#FFFFFF', accent: '#FF2277', text: '#0F0F0F', font: '"Space Grotesk", "Arial Black", sans-serif' },
+    bg: '#FFFFFF', surface: '#FFF5E6', accent: '#FF2277', text: '#0F0F0F', font: '"Space Grotesk", "Arial Black", sans-serif', btnRadius: 999, brand: 'BLOOP', product: 'Mega Drop /03' },
 ]
 
 const TONES = [
@@ -116,11 +117,24 @@ const LEGACY_TONE_TO_V3: Record<string, 'friendly' | 'premium' | 'bold' | 'story
   informatif: 'educational',
 }
 
+// Détecte si une couleur hex (#RRGGBB) est foncée (luminance perceived <128).
+// Sert à choisir la couleur du texte d'un button accent dans la preview V3 :
+// fond clair → texte foncé, fond foncé → texte blanc.
+function isColorDark(hex: string): boolean {
+  const c = hex.replace('#', '')
+  if (c.length !== 6) return false
+  const r = parseInt(c.slice(0, 2), 16)
+  const g = parseInt(c.slice(2, 4), 16)
+  const b = parseInt(c.slice(4, 6), 16)
+  // Perceived luminance (W3C formula simplifiée)
+  return (r * 0.299 + g * 0.587 + b * 0.114) < 140
+}
+
 const PLATFORMS = [
-  { id: 'shopify',      label: 'Shopify',         icon: '🟢' },
-  { id: 'woocommerce',  label: 'WooCommerce',      icon: '🟣' },
-  { id: 'youcan',       label: 'YouCan',           icon: '🟠' },
-  { id: 'standalone',   label: 'Page standalone',  icon: '🔗' },
+  { id: 'shopify',      label: 'Shopify' },
+  { id: 'woocommerce',  label: 'WooCommerce' },
+  { id: 'youcan',       label: 'YouCan' },
+  { id: 'standalone',   label: 'Page standalone' },
 ]
 
 const LANGUAGES = [
@@ -918,7 +932,6 @@ function NewPageInner() {
                       const isShopify = store.platform === 'shopify'
                       const isYouCan  = store.platform === 'youcan'
                       const color     = isShopify ? '#16a34a' : isYouCan ? '#f97316' : '#7c3aed'
-                      const icon      = isShopify ? '🟢' : isYouCan ? '🟠' : '🟣'
                       return (
                         <button
                           key={store.id}
@@ -926,7 +939,7 @@ function NewPageInner() {
                           disabled={!!publishing}
                           className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 disabled:opacity-50"
                         >
-                          <span>{icon}</span>
+                          <PlatformLogo platform={store.platform} size={20} />
                           <div className="flex-1 min-w-0">
                             <div className="text-[13px] font-bold truncate" style={{ color: '#111' }}>{store.name}</div>
                             <div className="text-[11px] font-semibold capitalize" style={{ color }}>{store.platform}</div>
@@ -1829,64 +1842,126 @@ function NewPageInner() {
             {/* ── Liste Styles V3 (10 nouveaux Allbirds-grade) — Engine V3 actif ── */}
             {styleMode === 'v3' && (
               <div className="space-y-3 mb-6">
+                {/* Charge Google Fonts dans le dashboard pour que les vraies fonts
+                    apparaissent dans les mini-aperçus (sans ça : fallback system-ui). */}
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Playfair+Display:wght@500;600;700&family=DM+Serif+Display&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" />
+
                 <div className="p-3 rounded-lg mb-2 text-[12px]" style={{ background: '#ede9fe', color: '#5b21b6' }}>
                   <strong>Engine V3 actif</strong> — génération via Vercel AI SDK + Zod + 13 sections universelles (Allbirds-grade). Rendu serveur direct.
                 </div>
                 {V3_STYLES.map(s => {
                   const isSelected = selectedStyle === s.id
+                  const isDarkBg = isColorDark(s.bg)
+                  const btnTextColor = isColorDark(s.accent) ? '#FFFFFF' : s.text
                   return (
                     <button
                       key={s.id}
                       onClick={() => setSelectedStyle(s.id)}
-                      className="w-full flex gap-4 p-4 rounded-xl border-2 text-left transition-all hover:shadow-sm"
+                      className="w-full flex gap-4 p-3 rounded-xl border-2 text-left transition-all hover:shadow-sm"
                       style={isSelected
                         ? { borderColor: '#7c3aed', background: '#faf9ff' }
                         : { borderColor: '#E3E3E8', background: '#fff' }
                       }
                     >
-                      {/* ── Mini-mockup preview du style (114px × 84px) ── */}
+                      {/* ── Vrai mini-aperçu page produit (220×140px) ── */}
                       <div
-                        className="flex-shrink-0 rounded-lg overflow-hidden relative"
+                        className="flex-shrink-0 rounded-lg overflow-hidden"
                         style={{
-                          width: 114,
-                          height: 84,
+                          width: 220,
+                          height: 140,
                           background: s.bg,
-                          border: `1px solid ${s.text === '#FFFFFF' || s.text === '#F5F0E8' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'}`,
+                          border: `1px solid ${isDarkBg ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)'}`,
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                          display: 'flex',
                         }}
                       >
-                        {/* Faux header — barre minuscule color accent */}
-                        <div style={{ height: 4, background: s.accent, opacity: 0.9 }} />
-                        {/* Faux titre dans la vraie font du style */}
-                        <div
-                          style={{
-                            padding: '10px 12px 4px',
-                            fontFamily: s.font,
-                            fontSize: 16,
+                        {/* Image produit (placeholder gradient + emoji décoratif) */}
+                        <div style={{
+                          width: 84,
+                          height: '100%',
+                          background: `linear-gradient(135deg, ${s.surface} 0%, ${s.bg} 100%)`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: 32,
+                          borderRight: `1px solid ${isDarkBg ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'}`,
+                          flexShrink: 0,
+                        }}>
+                          <span style={{ opacity: 0.5 }}>{s.emoji}</span>
+                        </div>
+
+                        {/* Contenu hero (brand eyebrow + titre + prix + button) */}
+                        <div style={{
+                          flex: 1,
+                          padding: '12px 11px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          minWidth: 0,
+                          color: s.text,
+                        }}>
+                          <div style={{ minWidth: 0 }}>
+                            {/* Brand eyebrow uppercase letter-spacing */}
+                            <div style={{
+                              fontFamily: '"Inter", system-ui, sans-serif',
+                              fontSize: 8,
+                              fontWeight: 700,
+                              letterSpacing: '0.16em',
+                              textTransform: 'uppercase',
+                              color: s.accent,
+                              marginBottom: 5,
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}>
+                              {s.brand}
+                            </div>
+                            {/* Headline produit — VRAIE font du style */}
+                            <div style={{
+                              fontFamily: s.font,
+                              fontSize: 13,
+                              fontWeight: 600,
+                              lineHeight: 1.15,
+                              color: s.text,
+                              marginBottom: 5,
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              wordBreak: 'break-word',
+                            }}>
+                              {s.product}
+                            </div>
+                            {/* Prix */}
+                            <div style={{
+                              fontFamily: s.font,
+                              fontSize: 11,
+                              fontWeight: 600,
+                              color: s.text,
+                              opacity: 0.78,
+                            }}>
+                              €98
+                            </div>
+                          </div>
+
+                          {/* Mini-button accent avec le bon radius */}
+                          <div style={{
+                            alignSelf: 'flex-start',
+                            fontFamily: '"Inter", system-ui, sans-serif',
+                            fontSize: 8,
                             fontWeight: 600,
-                            color: s.text,
-                            lineHeight: 1,
-                          }}
-                        >
-                          Aa
-                        </div>
-                        {/* Faux lignes texte (skeleton) */}
-                        <div style={{ padding: '0 12px' }}>
-                          <div style={{ height: 4, background: s.text, opacity: 0.15, borderRadius: 2, marginBottom: 4, width: '70%' }} />
-                          <div style={{ height: 4, background: s.text, opacity: 0.1, borderRadius: 2, marginBottom: 4, width: '90%' }} />
-                          <div style={{ height: 4, background: s.text, opacity: 0.1, borderRadius: 2, width: '50%' }} />
-                        </div>
-                        {/* Faux button rond accent en bas */}
-                        <div
-                          style={{
-                            position: 'absolute',
-                            bottom: 8,
-                            right: 8,
-                            width: 14,
-                            height: 14,
-                            borderRadius: '50%',
+                            padding: '4px 9px',
+                            borderRadius: s.btnRadius,
                             background: s.accent,
-                          }}
-                        />
+                            color: btnTextColor,
+                            letterSpacing: '0.02em',
+                            whiteSpace: 'nowrap',
+                          }}>
+                            Ajouter
+                          </div>
+                        </div>
                       </div>
 
                       {/* ── Texte descriptif ── */}
@@ -1897,7 +1972,7 @@ function NewPageInner() {
                           <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#ede9fe', color: '#6d28d9' }}>V3</span>
                         </div>
                         <p className="text-[12px] leading-snug" style={{ color: '#8b8b9e' }}>{s.desc}</p>
-                        {/* ── Swatch couleurs ── */}
+                        {/* Swatch couleurs + font name */}
                         <div className="flex items-center gap-1.5 mt-2">
                           <span title="Background" style={{ width: 14, height: 14, borderRadius: 4, background: s.bg, border: '1px solid rgba(0,0,0,0.08)' }} />
                           <span title="Accent" style={{ width: 14, height: 14, borderRadius: 4, background: s.accent, border: '1px solid rgba(0,0,0,0.08)' }} />
@@ -1975,7 +2050,7 @@ function NewPageInner() {
                     : { borderColor: '#E3E3E8', background: '#fff' }
                   }
                 >
-                  <span className="text-3xl">{p.icon}</span>
+                  <PlatformLogo platform={p.id} size={36} />
                   <div className="flex-1">
                     <span className="text-[14px] font-bold" style={{ color: '#1a1a2e' }}>{p.label}</span>
                   </div>

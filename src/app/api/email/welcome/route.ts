@@ -58,10 +58,13 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { email, name } = await req.json()
-    if (!email || !name) {
-      return NextResponse.json({ error: 'email et name requis' }, { status: 400 })
+    const { email, name: rawName } = await req.json()
+    if (!email) {
+      return NextResponse.json({ error: 'email requis' }, { status: 400 })
     }
+    // name est optionnel — fallback sur la partie locale de l'email pour
+    // ne pas bloquer le signup quand le champ prénom est vide
+    const name = rawName || email.split('@')[0]
 
     const { subject, html } = emailWelcome(name)
     await sendEmail({ to: email, subject, html })

@@ -16,7 +16,28 @@ async function isAuthorized(req: NextRequest): Promise<boolean> {
   const cronSecret = process.env.CRON_SECRET || ''
   if (cronSecret && safeCompare(internalSecret, cronSecret)) return true
 
-  // Autorisé si session Supabase valide (appel depuis signup côté client)
+  // Autorisé si Bearer token valide dans Authorization header.
+  // Le signup client passe son access_token fraîchement créé ici car les
+  // cookies Supabase ne sont pas encore propagés au moment du fetch post-signup.
+  const authHeader = req.headers.get('authorization') || ''
+  if (authHeader.startsWith('Bearer ')) {
+    const token = authHeader.slice(7)
+    if (token) {
+      try {
+        const supabase = createServerClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          { cookies: { getAll: () => [], setAll: () => {} } }
+        )
+        const { data: { user } } = await supabase.auth.getUser(token)
+        if (user) return true
+      } catch {
+        // token invalide → continue vers cookie check
+      }
+    }
+  }
+
+  // Autorisé si session Supabase valide via cookies (autres contextes)
   try {
     const cookieStore = await cookies()
     const supabase = createServerClient(

@@ -14,6 +14,11 @@ export const track = {
   previewViewed: (previewId: string) =>
     posthog.capture('preview_viewed', { preview_id: previewId }),
 
+  // Déclenché quand la preview post-génération /essai est chargée et visible.
+  // Permet de mesurer le funnel essai_started → generate_completed → preview_seen.
+  essaiPreviewGenerated: (previewId: string) =>
+    posthog.capture('essai_preview_generated', { preview_id: previewId }),
+
   // ── Auth ─────────────────────────────────────────────
   signupStarted: () =>
     posthog.capture('signup_started'),

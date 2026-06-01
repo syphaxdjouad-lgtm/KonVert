@@ -13,20 +13,22 @@ import { getLaunchDate } from '@/lib/launch'
 // 8601). Source unique : @/lib/launch (alignée avec schema/index.ts).
 
 function useCountdown(target: Date) {
-  // SSR et 1er render client doivent retourner la même valeur, sinon React #418.
-  // On initialise à target.getTime() (diff=0) puis on bascule sur Date.now() au mount.
-  const [now, setNow] = useState(() => target.getTime())
+  // Initialiser à null → le composant n'affiche rien avant l'hydratation
+  // (évite que isLive = true au SSR car now = target au render initial).
+  // La page est full client ('use client') donc pas de mismatch React #418.
+  const [now, setNow] = useState<number | null>(null)
   useEffect(() => {
     setNow(Date.now())
     const id = setInterval(() => setNow(Date.now()), 1000)
     return () => clearInterval(id)
   }, [target])
-  const diff = Math.max(0, target.getTime() - now)
+  const diff = now === null ? 1 : Math.max(0, target.getTime() - now)
   const days = Math.floor(diff / 86400000)
   const hours = Math.floor((diff % 86400000) / 3600000)
   const mins = Math.floor((diff % 3600000) / 60000)
   const secs = Math.floor((diff % 60000) / 1000)
-  return { diff, days, hours, mins, secs, isLive: diff <= 0 }
+  // isLive uniquement si now est initialisé ET que la date est passée
+  return { diff, days, hours, mins, secs, isLive: now !== null && diff <= 0 }
 }
 
 function CountdownCard({ value, label }: { value: number; label: string }) {

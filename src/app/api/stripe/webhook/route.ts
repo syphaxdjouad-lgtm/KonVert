@@ -87,6 +87,18 @@ export async function POST(req: NextRequest) {
         const value = (session.amount_total ?? 0) / 100
         const currency = (session.currency ?? 'eur').toUpperCase()
 
+        // Identify avant capture pour que le profil PostHog fusionne les events
+        // anonymes (tunnel /essai) avec l'utilisateur authentifié.
+        if (session.customer_details?.email) {
+          ph?.identify({
+            distinctId: userId,
+            properties: {
+              email: session.customer_details.email,
+              plan,
+              stripe_customer_id: session.customer as string,
+            },
+          })
+        }
         ph?.capture({
           distinctId: userId,
           event: 'subscription_started',

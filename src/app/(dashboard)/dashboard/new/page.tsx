@@ -260,6 +260,18 @@ function NewPageInner() {
     track.newPageWizardStarted()
   }, [])
 
+  // ── Tracking avancement steps wizard ──
+  // Noms des steps alignés avec l'UI pour lisibilité dans PostHog.
+  const STEP_NAMES: Record<number, string> = {
+    1: 'source', 2: 'photos', 3: 'ugc', 4: 'before_after',
+    5: 'style_tone', 6: 'platform', 7: 'language', 8: 'generate',
+  }
+  useEffect(() => {
+    if (mode !== 'wizard' || step < 1) return
+    track.newPageWizardStepCompleted(step, STEP_NAMES[step] ?? `step_${step}`)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step])
+
   // ── Backup wizard dans localStorage ─────────────────────────────────
   // F5 ou crash navigateur pendant le wizard = perte des inputs avant ce fix
   // (audit Konan P1-3). On sauvegarde les champs des steps 1-7 à chaque change,

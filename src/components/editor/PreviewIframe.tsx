@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useEditorStore } from './store'
 import { renderTemplate } from '@/lib/templates'
+import { createClient } from '@/lib/supabase/client'
 
 // postMessage types (strict discriminated union)
 type KvtMessageIn =
@@ -17,6 +18,15 @@ const DEVICE_WIDTHS: Record<string, string> = {
   tablet:  '768px',
   mobile:  '390px',
 }
+
+// Styles V3 — rendus côté serveur via renderPageV3 (sections-v3/render-page).
+// PreviewIframe NE PEUT PAS les rendre côté client (renderTemplate legacy
+// connaît uniquement les etec-*). Quand templateId matche un V3 styleId,
+// on fetch directement le html_content sauvegardé en DB (via /api/pages/[id]).
+const V3_STYLE_IDS = new Set([
+  'soft', 'editorial', 'apple-clean', 'luxe-noir', 'organic',
+  'brutalist', 'warm-neutral', 'minimal-mono', 'vibrant', 'bold',
+])
 
 function isKvtMessage(data: unknown): data is KvtMessageIn {
   if (!data || typeof data !== 'object') return false
@@ -47,6 +57,42 @@ export default function PreviewIframe() {
 
   useEffect(() => {
     if (!templateId) return
+
+    // ─── Path V3 — fetch html_content depuis DB ────────────────────────────
+    // renderTemplate côté client ne connaît pas les styleId V3 (apple-clean, etc.)
+    // → on récupère le html déjà rendu serveur via l'API pages.
+    if (V3_STYLE_IDS.has(templateId)) {
+      const pageIdMatch = typeof window !== 'undefined'
+        ? new URLSearchParams(window.location.search).get('page_id')
+        : null
+      if (!pageIdMatch) {
+        setSrcdoc(`<!doctype html><html><body style="font-family:system-ui;padding:60px 40px;text-align:center;color:#5c5c7a;background:#faf9ff">
+          <h2 style="color:#1a1a2e;margin-bottom:12px">Style V3 — ${templateId}</h2>
+          <p style="font-size:14px;line-height:1.6">Génère la page pour voir le rendu V3 (serveur).</p>
+        </body></html>`)
+        return
+      }
+      // Fetch le html_content directement depuis Supabase (RLS filtre par user)
+      const supabase = createClient()
+      supabase
+        .from('pages')
+        .select('html_content')
+        .eq('id', pageIdMatch)
+        .single()
+        .then(({ data, error }: { data: { html_content?: string } | null; error: unknown }) => {
+          if (!error && data?.html_content) {
+            setSrcdoc(data.html_content)
+          } else {
+            setSrcdoc(`<!doctype html><html><body style="font-family:system-ui;padding:60px 40px;text-align:center;color:#5c5c7a">
+              <h2>Style V3 — ${templateId}</h2>
+              <p>Aperçu live indisponible. Clique <strong>Publier</strong> pour voir ta page en ligne.</p>
+            </body></html>`)
+          }
+        })
+      return
+    }
+
+    // ─── Path legacy — renderTemplate côté client (inchangé) ───────────────
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => {
       try {

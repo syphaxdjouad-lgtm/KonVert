@@ -9,6 +9,7 @@ import {
   Link2, Pencil, Loader2, ArrowLeft, ArrowRight, Check,
   Upload, Palette, Sparkles, Camera, Lightbulb,
   Zap, X, ChevronRight, Send, ChevronDown, CheckCircle2, AlertCircle,
+  Video, Film, TrendingUp, Plus, Music2,
 } from 'lucide-react'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -1158,53 +1159,127 @@ function NewPageInner() {
         {step === 2 && (
           <div>
             <h1 className="text-2xl font-black mb-1" style={{ color: '#1a1a2e' }}>Tes photos produit</h1>
-            <p className="text-[14px] mb-6" style={{ color: '#8b8b9e' }}>Tu as déjà des photos ? Uploade-les pour les intégrer directement dans ta page.</p>
+            <p className="text-[14px] mb-5" style={{ color: '#8b8b9e' }}>Tu as déjà des photos ? Uploade-les pour les intégrer directement dans ta page.</p>
 
-            {/* Drop zone */}
-            <div
-              className="border-2 border-dashed rounded-2xl p-10 text-center mb-4 cursor-pointer transition-all"
-              style={{ borderColor: '#c4b5fd', background: '#faf9ff' }}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" style={{ background: '#f3f0ff' }}>
-                <Upload className="w-6 h-6" style={{ color: '#7c3aed' }} />
+            {/* Drop zone — compact si photos uploadées, plein si vide */}
+            {uploadedPhotos.length === 0 ? (
+              <div
+                className="border-2 border-dashed rounded-2xl text-center cursor-pointer transition-all"
+                style={{ borderColor: '#c4b5fd', background: '#faf9ff', padding: '36px 24px' }}
+                onClick={() => fileInputRef.current?.click()}
+                onMouseEnter={e => {
+                  const el = e.currentTarget
+                  el.style.borderColor = '#a78bfa'
+                  el.style.boxShadow = '0 4px 16px rgba(124,58,237,0.08)'
+                  el.style.transform = 'translateY(-1px)'
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget
+                  el.style.borderColor = '#c4b5fd'
+                  el.style.boxShadow = 'none'
+                  el.style.transform = 'translateY(0)'
+                }}
+              >
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" style={{ background: '#f3f0ff' }}>
+                  <Upload className="w-[22px] h-[22px]" style={{ color: '#7c3aed' }} />
+                </div>
+                <p className="font-bold text-[14px] mb-1" style={{ color: '#1a1a2e' }}>Glisse tes photos ici</p>
+                <p className="text-[12px]" style={{ color: '#8b8b9e' }}>ou clique pour sélectionner · JPG, PNG, WEBP · max 5 photos</p>
+                <span className="block text-[11px] font-semibold mt-2" style={{ color: '#a78bfa' }}>
+                  {uploadedPhotos.length} / 5 photos
+                </span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={handlePhotoUpload}
+                />
               </div>
-              <p className="font-bold text-[14px] mb-1" style={{ color: '#1a1a2e' }}>Glisse tes photos ici</p>
-              <p className="text-[12px]" style={{ color: '#8b8b9e' }}>ou clique pour sélectionner · JPG, PNG, WEBP · max 5 photos</p>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                multiple
-                className="hidden"
-                onChange={handlePhotoUpload}
-              />
-            </div>
+            ) : (
+              /* Mode compact quand des photos sont déjà uploadées */
+              <div
+                className="border-2 border-dashed rounded-2xl cursor-pointer transition-all mb-4"
+                style={{ borderColor: '#c4b5fd', background: '#faf9ff', padding: '16px 20px' }}
+                onClick={() => fileInputRef.current?.click()}
+                onMouseEnter={e => {
+                  const el = e.currentTarget
+                  el.style.borderColor = '#a78bfa'
+                  el.style.boxShadow = '0 4px 16px rgba(124,58,237,0.08)'
+                  el.style.transform = 'translateY(-1px)'
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget
+                  el.style.borderColor = '#c4b5fd'
+                  el.style.boxShadow = 'none'
+                  el.style.transform = 'translateY(0)'
+                }}
+              >
+                <div className="flex items-center gap-3 justify-center">
+                  <div className="flex-shrink-0 flex items-center justify-center rounded-[10px]" style={{ width: 36, height: 36, background: '#f3f0ff' }}>
+                    <Upload className="w-[18px] h-[18px]" style={{ color: '#7c3aed' }} />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[13px] font-bold mb-0.5" style={{ color: '#1a1a2e' }}>Ajouter d'autres photos</p>
+                    <p className="text-[11.5px]" style={{ color: '#8b8b9e' }}>JPG, PNG, WEBP · max 5 photos</p>
+                  </div>
+                  <span className="ml-auto text-[11px] font-semibold flex-shrink-0" style={{ color: '#a78bfa' }}>
+                    {uploadedPhotos.length} / 5 photos
+                  </span>
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={handlePhotoUpload}
+                />
+              </div>
+            )}
 
-            {/* Preview photos */}
+            {/* Grid photos + slot "+" */}
             {uploadedPhotos.length > 0 && (
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-4 gap-3 mt-4">
                 {uploadedPhotos.map((photo, i) => (
-                  <div key={i} className="relative aspect-square rounded-xl overflow-hidden" style={{ border: '1px solid #E3E3E8' }}>
+                  <div key={i} className="relative aspect-square rounded-xl overflow-hidden" style={{ border: '1px solid #e9e5ff' }}>
                     <img src={photo} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
                     <button
                       onClick={() => removePhoto(i)}
-                      className="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center"
-                      style={{ background: 'rgba(0,0,0,0.6)' }}
+                      className="absolute top-1.5 right-1.5 flex items-center justify-center rounded-[6px]"
+                      style={{ width: 22, height: 22, background: 'rgba(15,10,30,0.65)', backdropFilter: 'blur(4px)' }}
                     >
-                      <X className="w-3 h-3 text-white" />
+                      <X className="w-[11px] h-[11px] text-white" strokeWidth={2.5} />
                     </button>
                   </div>
                 ))}
+                {/* Slot "+" pour ajouter une photo si < 5 */}
+                {uploadedPhotos.length < 5 && (
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="aspect-square rounded-xl flex items-center justify-center transition-all"
+                    style={{ border: '2px dashed #ddd6fe', background: '#faf9ff' }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = '#a78bfa'
+                      e.currentTarget.style.background = '#f3f0ff'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = '#ddd6fe'
+                      e.currentTarget.style.background = '#faf9ff'
+                    }}
+                  >
+                    <Plus className="w-5 h-5" style={{ color: '#c4b5fd' }} strokeWidth={2} />
+                  </button>
+                )}
               </div>
             )}
 
-            {uploadedPhotos.length === 0 && (
-              <div className="flex items-center gap-2 p-3 rounded-xl" style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
-                <Check className="w-4 h-4 flex-shrink-0" style={{ color: '#16a34a' }} />
-                <p className="text-[12px]" style={{ color: '#15803d' }}>Sans photo, l'IA utilisera automatiquement les images scrappées depuis l'URL produit.</p>
-              </div>
-            )}
+            {/* Tip vert success — toujours visible (fallback IA info fonctionnelle) */}
+            <div className="flex items-start gap-2 p-3 rounded-xl mt-4" style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#16a34a' }} />
+              <p className="text-[12px]" style={{ color: '#15803d' }}>Sans photo, l'IA utilisera automatiquement les images scrappées depuis l'URL produit.</p>
+            </div>
 
             <button
               onClick={() => setStep(s => s + 1)}
@@ -1216,18 +1291,24 @@ function NewPageInner() {
           </div>
         )}
 
-        {/* ── STEP 3 : Vidéos UGC ── */}
+        {/* ── STEP 3 : Vidéos UGC — Premium Minimal ── */}
         {step === 3 && (
           <div>
             <h1 className="text-2xl font-black mb-1" style={{ color: '#1a1a2e' }}>Vidéos UGC</h1>
-            <p className="text-[14px] mb-6" style={{ color: '#8b8b9e' }}>Ajoute des vidéos clients, unboxing ou reviews pour booster la confiance.</p>
+            <p className="text-[14px] mb-5" style={{ color: '#8b8b9e' }}>Ajoute des vidéos clients, unboxing ou reviews pour booster la confiance.</p>
 
-            {/* Tabs upload / liens */}
-            <div className="flex gap-2 mb-5">
+            {/* Tabs upload / liens — segmented toggle */}
+            <div className="flex gap-1 p-1 rounded-xl mb-5" style={{ background: '#faf9ff', border: '1px solid #ede9fe', width: 'fit-content' }}>
               {['Upload', 'Liens externes'].map((tab, i) => (
-                <button key={tab} onClick={() => setUgcTab(i)}
-                  className="px-4 py-2 rounded-xl text-[13px] font-bold transition-all"
-                  style={ugcTab === i ? { background: '#7c3aed', color: '#fff' } : { background: '#F6F6F7', color: '#5c5c7a' }}>
+                <button
+                  key={tab}
+                  onClick={() => setUgcTab(i)}
+                  className="px-4 py-2 rounded-lg text-[13px] font-bold transition-all"
+                  style={ugcTab === i
+                    ? { background: '#7c3aed', color: '#fff', boxShadow: '0 1px 2px rgba(124,58,237,0.15)' }
+                    : { background: 'transparent', color: '#5c5c7a' }
+                  }
+                >
                   {tab}
                 </button>
               ))}
@@ -1235,10 +1316,26 @@ function NewPageInner() {
 
             {ugcTab === 0 ? (
               <div>
-                <div className="border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer mb-4"
-                  style={{ borderColor: '#c4b5fd', background: '#faf9ff' }}
-                  onClick={() => videoInputRef.current?.click()}>
-                  <div className="text-4xl mb-2">🎬</div>
+                <div
+                  className="border-2 border-dashed rounded-2xl text-center cursor-pointer transition-all mb-4"
+                  style={{ borderColor: '#c4b5fd', background: '#faf9ff', padding: '32px 24px' }}
+                  onClick={() => videoInputRef.current?.click()}
+                  onMouseEnter={e => {
+                    const el = e.currentTarget
+                    el.style.borderColor = '#a78bfa'
+                    el.style.boxShadow = '0 4px 16px rgba(124,58,237,0.08)'
+                    el.style.transform = 'translateY(-1px)'
+                  }}
+                  onMouseLeave={e => {
+                    const el = e.currentTarget
+                    el.style.borderColor = '#c4b5fd'
+                    el.style.boxShadow = 'none'
+                    el.style.transform = 'translateY(0)'
+                  }}
+                >
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" style={{ background: '#f3f0ff' }}>
+                    <Video className="w-[22px] h-[22px]" style={{ color: '#7c3aed' }} />
+                  </div>
                   <p className="font-bold text-[14px] mb-1" style={{ color: '#1a1a2e' }}>Glisse tes vidéos ici</p>
                   <p className="text-[12px]" style={{ color: '#8b8b9e' }}>MP4, MOV, AVI · max 100MB par vidéo</p>
                   <input ref={videoInputRef} type="file" accept="video/*" multiple className="hidden" onChange={handleVideoUpload} />
@@ -1246,12 +1343,19 @@ function NewPageInner() {
                 {ugcVideos.length > 0 && (
                   <div className="space-y-2">
                     {ugcVideos.map((_, i) => (
-                      <div key={i} className="flex items-center gap-3 p-3 rounded-xl" style={{ background: '#f8f8fc', border: '1px solid #E3E3E8' }}>
-                        <span className="text-lg">🎥</span>
+                      <div key={i} className="flex items-center gap-3 p-3 rounded-xl transition-all" style={{ background: '#f8f8fc', border: '1px solid #e9e5ff' }}>
+                        <div className="flex-shrink-0 flex items-center justify-center rounded-lg" style={{ width: 40, height: 40, background: '#ede9fe' }}>
+                          <Film className="w-[18px] h-[18px]" style={{ color: '#7c3aed' }} />
+                        </div>
                         <span className="flex-1 text-[13px] font-medium truncate" style={{ color: '#1a1a2e' }}>Vidéo {i + 1}</span>
-                        <button onClick={() => setUgcVideos(prev => prev.filter((__, j) => j !== i))}
-                          className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: '#fee2e2' }}>
-                          <X className="w-3 h-3 text-red-500" />
+                        <button
+                          onClick={() => setUgcVideos(prev => prev.filter((__, j) => j !== i))}
+                          className="flex items-center justify-center rounded-full transition-all"
+                          style={{ width: 28, height: 28, background: '#fef2f2' }}
+                          onMouseEnter={e => (e.currentTarget.style.background = '#fee2e2')}
+                          onMouseLeave={e => (e.currentTarget.style.background = '#fef2f2')}
+                        >
+                          <X className="w-[14px] h-[14px]" style={{ color: '#dc2626' }} strokeWidth={2.5} />
                         </button>
                       </div>
                     ))}
@@ -1260,36 +1364,55 @@ function NewPageInner() {
               </div>
             ) : (
               <div>
-                {ugcLinks.map((link, i) => (
-                  <div key={i} className="flex gap-2 mb-2">
-                    <input
-                      value={link}
-                      onChange={e => { const n = [...ugcLinks]; n[i] = e.target.value; setUgcLinks(n) }}
-                      placeholder="https://youtube.com/... ou tiktok.com/..."
-                      className="flex-1 border rounded-xl px-4 py-2.5 text-[13px] outline-none"
-                      style={{ borderColor: '#E3E3E8', background: '#fff', color: '#1a1a2e' }}
-                      onFocus={e => (e.target.style.borderColor = '#7c3aed')}
-                      onBlur={e => (e.target.style.borderColor = '#E3E3E8')}
-                    />
-                    {ugcLinks.length > 1 && (
-                      <button onClick={() => setUgcLinks(prev => prev.filter((_, j) => j !== i))}
-                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#fee2e2' }}>
-                        <X className="w-4 h-4 text-red-500" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-                <button onClick={() => setUgcLinks(prev => [...prev, ''])}
-                  className="text-[13px] font-semibold flex items-center gap-1.5 mt-2"
-                  style={{ color: '#7c3aed' }}>
-                  <span className="text-lg">+</span> Ajouter un lien
+                {ugcLinks.map((link, i) => {
+                  const lower = link.toLowerCase()
+                  const isTikTok = lower.includes('tiktok.com')
+                  const isYoutube = lower.includes('youtube.com') || lower.includes('youtu.be')
+                  const PlatformIcon = isTikTok ? Music2 : isYoutube ? Film : Link2
+                  return (
+                    <div key={i} className="flex gap-2 mb-2">
+                      <div className="flex-1 flex items-center gap-2 rounded-xl px-3" style={{ background: '#fff', border: '1px solid #E3E3E8' }}>
+                        <div className="flex-shrink-0 flex items-center justify-center rounded-md" style={{ width: 26, height: 26, background: '#f3f0ff' }}>
+                          <PlatformIcon className="w-[14px] h-[14px]" style={{ color: '#7c3aed' }} />
+                        </div>
+                        <input
+                          value={link}
+                          onChange={e => { const n = [...ugcLinks]; n[i] = e.target.value; setUgcLinks(n) }}
+                          placeholder="https://youtube.com/... ou tiktok.com/..."
+                          className="flex-1 py-2.5 text-[13px] outline-none bg-transparent"
+                          style={{ color: '#1a1a2e' }}
+                        />
+                      </div>
+                      {ugcLinks.length > 1 && (
+                        <button
+                          onClick={() => setUgcLinks(prev => prev.filter((_, j) => j !== i))}
+                          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all"
+                          style={{ background: '#fef2f2' }}
+                          onMouseEnter={e => (e.currentTarget.style.background = '#fee2e2')}
+                          onMouseLeave={e => (e.currentTarget.style.background = '#fef2f2')}
+                        >
+                          <X className="w-4 h-4" style={{ color: '#dc2626' }} strokeWidth={2.5} />
+                        </button>
+                      )}
+                    </div>
+                  )
+                })}
+                <button
+                  onClick={() => setUgcLinks(prev => [...prev, ''])}
+                  className="text-[13px] font-semibold flex items-center gap-1.5 mt-2 transition-all"
+                  style={{ color: '#7c3aed' }}
+                  onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')}
+                  onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                >
+                  <Plus className="w-4 h-4" strokeWidth={2.5} /> Ajouter un lien
                 </button>
               </div>
             )}
 
-            <div className="mt-5 p-3 rounded-xl flex items-start gap-3" style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
-              <span className="text-lg">📈</span>
-              <p className="text-[12px]" style={{ color: '#15803d' }}>Les vidéos UGC augmentent les conversions de <strong>+34%</strong> en moyenne. Même une courte vidéo fait la différence.</p>
+            {/* Tip violet — conseil éducatif (cohérence wizard) */}
+            <div className="mt-5 p-3 rounded-xl flex items-start gap-2.5" style={{ background: '#faf9ff', border: '1px solid #ddd6fe' }}>
+              <TrendingUp className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#7c3aed' }} />
+              <p className="text-[12px]" style={{ color: '#5b21b6' }}>Les vidéos UGC augmentent les conversions de <strong>+34%</strong> en moyenne. Même une courte vidéo fait la différence.</p>
             </div>
 
             <button

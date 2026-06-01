@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan Launch Konvert — J0 au J+30</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --coral:      #ff6154;
+      --coral-light:#ff8160;
+      --coral-dark: #da552f;
+      --coral-bg:   #fff4f2;
+      --coral-mid:  #ffecea;
+      --white:      #ffffff;
+      --off-white:  #fafaf9;
+      --surface:    #f5f5f3;
+      --border:     #e8e5e2;
+      --border-mid: #d4cfc9;
+      --text:       #1a1614;
+      --text-2:     #4a4540;
+      --text-3:     #7a746e;
+      --text-4:     #a09894;
+      --green:      #16a34a;
+      --green-bg:   #f0fdf4;
+      --orange:     #ea580c;
+      --orange-bg:  #fff7ed;
+      --red:        #dc2626;
+      --red-bg:     #fef2f2;
+      --yellow:     #ca8a04;
+      --yellow-bg:  #fefce8;
+      --blue:       #1d4ed8;
+      --blue-bg:    #eff6ff;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --radius: 10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.04);
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--font);
+      background: var(--off-white);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ===== PRINT ===== */
+    @media print {
+      .sticky-nav { display: none !important; }
+      .hero { padding: 32px 24px !important; }
+      body { background: white; }
+      .card { box-shadow: none; border: 1px solid var(--border); }
+      .no-print { display: none !important; }
+    }
+
+    /* ===== LAYOUT ===== */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ===== STICKY NAV ===== */
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+    }
+    .sticky-nav-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 52px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .sticky-nav-inner::-webkit-scrollbar { display: none; }
+    .nav-brand {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--coral);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      margin-right: 12px;
+      text-decoration: none;
+    }
+    .nav-link {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-3);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .nav-link:hover { color: var(--text); background: var(--surface); }
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(135deg, #fff4f2 0%, #ffffff 50%, #fff8f6 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 20px 48px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--coral-bg);
+      border: 1px solid rgba(255,97,84,0.25);
+      color: var(--coral-dark);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 99px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--coral);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--coral) 0%, var(--coral-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-tagline {
+      font-size: 16px;
+      color: var(--text-3);
+      font-style: italic;
+      margin-bottom: 28px;
+      font-weight: 400;
+    }
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .meta-pill {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 8px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-2);
+      box-shadow: var(--shadow-sm);
+    }
+    .meta-pill.highlight {
+      background: var(--coral);
+      border-color: var(--coral);
+      color: white;
+    }
+    .meta-pill strong { color: var(--coral-dark); }
+    .meta-pill.highlight strong { color: white; }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      padding: 56px 20px;
+    }
+    .section + .section {
+      border-top: 1px solid var(--border);
+    }
+    .section-header {
+      margin-bottom: 32px;
+    }
+    .section-number {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--coral);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .section-title {
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+    .section-sub {
+      font-size: 14px;
+      color: var(--text-3);
+      margin-top: 6px;
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px) {
+      .card-grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ===== STRATEGY BOX ===== */
+    .strategy-box {
+      background: linear-gradient(135deg, var(--coral-bg) 0%, #fff 100%);
+      border: 1.5px solid rgba(255,97,84,0.3);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .strategy-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .strategy-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--coral-dark);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .strategy-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* ===== TIMELINE / DAY CARDS ===== */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .day-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .day-header {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .day-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 99px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .day-badge.j-3 { background: var(--yellow-bg); color: var(--yellow); }
+    .day-badge.j-2 { background: var(--orange-bg); color: var(--orange); }
+    .day-badge.j-0 { background: var(--coral-bg); color: var(--coral-dark); border: 1px solid rgba(255,97,84,0.3); }
+    .day-title { font-size: 16px; font-weight: 700; color: var(--text); }
+    .day-subtitle { font-size: 13px; color: var(--text-3); margin-left: auto; }
+    .day-body { padding: 20px; }
+    .task-list { display: flex; flex-direction: column; gap: 10px; }
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--off-white);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .task-item:hover { border-color: var(--coral-light); background: var(--coral-mid); }
+    .task-item.done { opacity: 0.55; }
+    .task-item.done .task-text { text-decoration: line-through; }
+    .task-checkbox {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border-mid);
+      border-radius: 5px;
+      margin-top: 2px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background: white;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .task-checkbox:checked {
+      background: var(--coral);
+      border-color: var(--coral);
+    }
+    .task-checkbox:checked::after {
+      content: '';
+      position: absolute;
+      left: 3px; top: 0px;
+      width: 5px; height: 9px;
+      border: 2px solid white;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+    .task-text { flex: 1; font-size: 14px; color: var(--text); line-height: 1.5; }
+    .task-text strong { font-weight: 700; color: var(--text); }
+    .task-meta {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-top: 3px;
+    }
+    .code-inline {
+      font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+      font-size: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 6px;
+      color: var(--text-2);
+    }
+    .code-block {
+      font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+      font-size: 12px;
+      background: #1e1b18;
+      color: #e8e4df;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 8px;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+    .code-block .comment { color: #6b6560; }
+    .code-block .cmd { color: #ff8c6b; }
+
+    /* ===== J0 SPECIAL ===== */
+    .j0-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .j0-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+    .j0-row:hover { background: var(--coral-mid); border-color: rgba(255,97,84,0.2); }
+    .j0-time {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--coral-dark);
+      width: 56px;
+      flex-shrink: 0;
+      padding-top: 2px;
+      font-family: 'Menlo', monospace;
+    }
+    .j0-action { font-size: 14px; color: var(--text); line-height: 1.5; }
+    .j0-action strong { font-weight: 600; }
+
+    /* ===== ROUTINE BOX ===== */
+    .routine-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 540px) { .routine-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 768px) { .routine-grid { grid-template-columns: repeat(4, 1fr); } }
+    .routine-slot {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .routine-time {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--coral);
+      font-family: 'Menlo', monospace;
+      margin-bottom: 6px;
+    }
+    .routine-label { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .routine-desc { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+
+    /* ===== TABLE ===== */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: var(--white);
+    }
+    thead th {
+      background: var(--surface);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-3);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-2);
+      vertical-align: middle;
+      line-height: 1.4;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: var(--off-white); }
+    .td-bold { font-weight: 700; color: var(--text); }
+    .td-coral { font-weight: 700; color: var(--coral-dark); }
+    .td-green { font-weight: 700; color: var(--green); }
+
+    /* ===== PILLS STATUS ===== */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 99px;
+    }
+    .pill-done { background: var(--green-bg); color: var(--green); }
+    .pill-pending { background: var(--yellow-bg); color: var(--yellow); }
+    .pill-blocked { background: var(--red-bg); color: var(--red); }
+
+    /* ===== SEO LIST ===== */
+    .seo-list { display: flex; flex-direction: column; gap: 8px; }
+    .seo-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+    .seo-item:hover { border-color: var(--coral-light); }
+    .seo-day {
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      background: var(--coral);
+      padding: 3px 8px;
+      border-radius: 5px;
+      white-space: nowrap;
+      font-family: 'Menlo', monospace;
+    }
+    .seo-file {
+      font-family: 'Menlo', monospace;
+      font-size: 12px;
+      color: var(--coral-dark);
+      background: var(--coral-bg);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .seo-note { font-size: 12px; color: var(--text-3); margin-left: auto; }
+
+    /* ===== BACKLINKS ===== */
+    .backlink-tier {
+      margin-bottom: 24px;
+    }
+    .tier-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding: 4px 10px;
+      border-radius: 5px;
+      display: inline-block;
+    }
+    .tier-1 .tier-label { background: #fef9c3; color: #854d0e; }
+    .tier-2 .tier-label { background: var(--off-white); color: var(--text-3); border: 1px solid var(--border); }
+    .tier-3 .tier-label { background: var(--surface); color: var(--text-3); border: 1px solid var(--border); }
+    .backlink-items { display: flex; flex-direction: column; gap: 6px; }
+    .backlink-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 14px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .bl-name { font-weight: 600; color: var(--text); width: 130px; flex-shrink: 0; }
+    .bl-cost { font-size: 12px; color: var(--text-3); }
+    .bl-date { font-size: 12px; font-family: 'Menlo', monospace; color: var(--text-3); margin-left: auto; }
+
+    /* ===== SECURITY FINDINGS ===== */
+    .finding-list { display: flex; flex-direction: column; gap: 10px; }
+    .finding-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      border-left: 4px solid;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left-width: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+    .finding-item.sev-high { border-left-color: var(--red); }
+    .finding-item.sev-medium { border-left-color: var(--orange); }
+    .finding-item.sev-low { border-left-color: var(--yellow); }
+    .finding-id {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+      flex-shrink: 0;
+      font-family: 'Menlo', monospace;
+      margin-top: 1px;
+    }
+    .sev-high .finding-id { background: var(--red-bg); color: var(--red); }
+    .sev-medium .finding-id { background: var(--orange-bg); color: var(--orange); }
+    .sev-low .finding-id { background: var(--yellow-bg); color: var(--yellow); }
+    .finding-content { flex: 1; }
+    .finding-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .finding-desc { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+
+    /* ===== PLAN B ===== */
+    .planb-box {
+      background: var(--red-bg);
+      border: 1.5px solid rgba(220,38,38,0.25);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+    }
+    .planb-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .planb-header .icon { font-size: 22px; }
+    .planb-header .label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .planb-items { display: flex; flex-direction: column; gap: 8px; }
+    .planb-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+    .planb-item::before { content: '→'; color: var(--red); font-weight: 700; flex-shrink: 0; }
+
+    /* ===== FILE TREE ===== */
+    .file-tree {
+      background: #1e1b18;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #e8e4df;
+    }
+    .ft-dir { color: #ff8c6b; font-weight: 700; }
+    .ft-file { color: #a8d5a2; }
+    .ft-comment { color: #6b6560; }
+    .ft-indent { padding-left: 20px; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 32px 20px;
+      text-align: center;
+    }
+    .footer-brand {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    .footer-brand span { color: var(--coral); }
+    .footer-meta { font-size: 12px; color: var(--text-4); line-height: 1.6; }
+
+    /* ===== MISC HELPERS ===== */
+    .divider { height: 1px; background: var(--border); margin: 24px 0; }
+    .highlight-note {
+      background: var(--blue-bg);
+      border: 1px solid rgba(29,78,216,0.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--blue);
+      font-weight: 500;
+      margin-top: 14px;
+    }
+
+    /* ===== PROGRESS INDICATOR ===== */
+    .progress-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .progress-bar-wrap .label { font-size: 12px; color: var(--text-3); width: 80px; flex-shrink: 0; }
+    .progress-bar {
+      flex: 1;
+      height: 6px;
+      background: var(--surface);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--coral) 0%, var(--coral-light) 100%);
+      transition: width 0.4s ease;
+    }
+    .progress-pct { font-size: 12px; font-weight: 700; color: var(--coral-dark); width: 36px; text-align: right; }
+  </style>
+</head>
+<body>
+
+<!-- ===== STICKY NAV ===== -->
+<nav class="sticky-nav" role="navigation" aria-label="Navigation rapide">
+  <div class="sticky-nav-inner">
+    <a href="#hero" class="nav-brand">KONVERT</a>
+    <a href="#strategie" class="nav-link">Stratégie</a>
+    <a href="#timeline" class="nav-link">J-3 → J0</a>
+    <a href="#routine" class="nav-link">Routine</a>
+    <a href="#pipeline" class="nav-link">Pipeline</a>
+    <a href="#seo" class="nav-link">SEO</a>
+    <a href="#backlinks" class="nav-link">Backlinks</a>
+    <a href="#decisions" class="nav-link">Décisions</a>
+    <a href="#secu" class="nav-link">Sécu</a>
+    <a href="#planb" class="nav-link">Plan B</a>
+    <a href="#fichiers" class="nav-link">Fichiers</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Launch actif — J-3
+  </div>
+  <h1>PLAN LAUNCH<br><span>KONVERT</span></h1>
+  <p class="hero-tagline">"Generate Shopify product pages that convert. In 30 seconds."</p>
+  <div class="hero-meta">
+    <div class="meta-pill highlight">
+      <strong>J0 — Mardi 2 juin 2026 · 07h01</strong>
+    </div>
+    <div class="meta-pill">Cible · <strong>1 paiement Stripe d'ici 2 juillet</strong></div>
+    <div class="meta-pill">Budget ads · <strong>0 €</strong></div>
+  </div>
+</section>
+
+<!-- ===== STRATÉGIE ===== -->
+<section class="section" id="strategie">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">01 — Stratégie</div>
+      <h2 class="section-title">Cap en 1 phrase</h2>
+    </div>
+    <div class="strategy-box">
+      <div class="strategy-icon">🎯</div>
+      <div>
+        <div class="strategy-label">Stratégie centrale</div>
+        <p class="strategy-text">SEO long terme + cold email court terme depuis <span class="code-inline">hello@konvertpilot.com</span> à 30–50 emails/jour, zéro budget ads — premier client probable via cold email semaine 3–4.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TIMELINE J-3 → J0 ===== -->
+<section class="section" id="timeline">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">02 — Préparation</div>
+      <h2 class="section-title">J-3 → J0 : 4 jours de sprint</h2>
+      <p class="section-sub">Chaque case cochable. L'état est sauvegardé localement dans ton navigateur.</p>
+    </div>
+
+    <div class="timeline">
+
+      <!-- DIMANCHE J-3 -->
+      <div class="day-card" id="day-j3">
+        <div class="day-header">
+          <span class="day-badge j-3">J-3</span>
+          <span class="day-title">Dimanche 31 mai</span>
+          <span class="day-subtitle">~5h de travail</span>
+        </div>
+        <div class="day-body">
+          <div class="task-list">
+
+            <label class="task-item" id="t-d31-1">
+              <input type="checkbox" class="task-checkbox" data-id="t-d31-1">
+              <div>
+                <div class="task-text"><strong>Matin (3 min)</strong> — Lancer le script visuels Product Hunt</div>
+                <div class="task-meta">~$0.23 fal.ai — génère 14 PNG dans <span class="code-inline">launch/assets/</span>. Sélectionner les meilleurs.</div>
+                <div class="code-block">
+                  <span class="comment"># Dans terminal :</span><br>
+                  <span class="cmd">source</span> /Users/mac/nexara/konvert/.env.local<br>
+                  <span class="cmd">python3</span> /Users/mac/nexara/konvert/launch/assets/generate-ph-assets.py
+                </div>
+              </div>
+            </label>
+
+            <label class="task-item" id="t-d31-2">
+              <input type="checkbox" class="task-checkbox" data-id="t-d31-2">
+              <div>
+                <div class="task-text"><strong>14h–16h (2h)</strong> — Vidéo Loom 60 secondes</div>
+                <div class="task-meta">Loom screen-record sur konvertpilot.com/essai · voix-over selon <span class="code-inline">launch/video-script-60s.md</span> · upload YouTube Unlisted · créer GIF avec ffmpeg+Gifski</div>
+                <div class="code-block">
+                  <span class="cmd">brew install</span> ffmpeg gifski
+                </div>
+              </div>
+            </label>
+
+            <label class="task-item" id="t-d31-3">
+              <input type="checkbox" class="task-checkbox" data-id="t-d31-3">
+              <div>
+                <div class="task-text"><strong>Soir (15 min)</strong> — Importer base Notion CRM</div>
+                <div class="task-meta">3 min de copier-coller depuis <span class="code-inline">cold-email/notion-crm-setup.md</span> · importer <span class="code-inline">leads-verified-template.csv</span></div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- LUNDI J-2 -->
+      <div class="day-card" id="day-j2">
+        <div class="day-header">
+          <span class="day-badge j-2">J-2</span>
+          <span class="day-title">Lundi 1 juin</span>
+          <span class="day-subtitle">~2h30 de config</span>
+        </div>
+        <div class="day-body">
+          <div class="task-list">
+
+            <label class="task-item" id="t-l1-1">
+              <input type="checkbox" class="task-checkbox" data-id="t-l1-1">
+              <div>
+                <div class="task-text"><strong>Vercel prod (15 min)</strong> — Variables d'environnement + redeploy</div>
+                <div class="task-meta">
+                  Ajouter : <span class="code-inline">NEXT_PUBLIC_LAUNCH_DATE=2026-06-02T05:01:00Z</span> · <span class="code-inline">ENCRYPTION_KEY=$(openssl rand -base64 32)</span><br>
+                  Vérifier présence : <span class="code-inline">TURNSTILE_SECRET_KEY</span> · <span class="code-inline">UPSTASH_REDIS_REST_URL</span> · <span class="code-inline">UPSTASH_REDIS_REST_TOKEN</span> · puis Redeploy
+                </div>
+              </div>
+            </label>
+
+            <label class="task-item" id="t-l1-2">
+              <input type="checkbox" class="task-checkbox" data-id="t-l1-2">
+              <div>
+                <div class="task-text"><strong>Stripe (10 min)</strong> — Clé live + coupon LAUNCH50</div>
+                <div class="task-meta">Confirmer <span class="code-inline">STRIPE_SECRET_KEY = sk_live_***</span> · créer coupon <span class="code-inline">LAUNCH50</span> : 50% once, 100 redemptions, expire 9 juin</div>
+              </div>
+            </label>
+
+            <label class="task-item" id="t-l1-3">
+              <input type="checkbox" class="task-checkbox" data-id="t-l1-3">
+              <div>
+                <div class="task-text"><strong>UptimeRobot (10 min)</strong> — 5 monitors</div>
+                <div class="task-meta"><span class="code-inline">/</span> · <span class="code-inline">/api/health/deep</span> · <span class="code-inline">/dashboard</span> · <span class="code-inline">/essai</span> · <span class="code-inline">/api/stripe/webhook</span></div>
+              </div>
+            </label>
+
+            <label class="task-item" id="t-l1-4">
+              <input type="checkbox" class="task-checkbox" data-id="t-l1-4">
+              <div>
+                <div class="task-text"><strong>Sentry (10 min)</strong> — 4 alert rules</div>
+                <div class="task-meta">Error rate &gt;1% · p95 &gt;3s · Stripe webhook fail · /api/generate fail &gt;10%</div>
+              </div>
+            </label>
+
+            <label class="task-item" id="t-l1-5">
+              <input type="checkbox" class="task-checkbox" data-id="t-l1-5">
+              <div>
+                <div class="task-text"><strong>Gmail (20 min)</strong> — 3 filtres <span class="code-inline">hello@konvertpilot.com</span></div>
+                <div class="task-meta">
+                  Label <strong>transac</strong> P1 : from stripe.com / supabase.io / noreply@<br>
+                  Label <strong>support</strong> P1 : to hello@ mais pas réponse à séquence<br>
+                  Label <strong>outbound-cold</strong> P2 : réponses aux mails partis depuis hello@
+                </div>
+              </div>
+            </label>
+
+            <label class="task-item" id="t-l1-6">
+              <input type="checkbox" class="task-checkbox" data-id="t-l1-6">
+              <div>
+                <div class="task-text"><strong>Warmup naturel (30 min)</strong> — 5–10 mails vrais depuis hello@</div>
+                <div class="task-meta">Envoyer à des contacts réels — chauffe la réputation inbox avant les 30 cold/jour</div>
+              </div>
+            </label>
+
+            <label class="task-item" id="t-l1-7">
+              <input type="checkbox" class="task-checkbox" data-id="t-l1-7">
+              <div>
+                <div class="task-text"><strong>Merge feat/pages-v3 → main (30 min)</strong> — PR ou push direct</div>
+                <div class="task-meta">Vercel auto-deploy déclenché. Avant cette étape : code est sur la branche, pas en prod.</div>
+              </div>
+            </label>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- MARDI J0 -->
+      <div class="day-card" id="day-j0">
+        <div class="day-header">
+          <span class="day-badge j-0">J0 — LAUNCH DAY</span>
+          <span class="day-title">Mardi 2 juin 2026</span>
+          <span class="day-subtitle">Product Hunt · 07h01</span>
+        </div>
+        <div class="day-body">
+          <div class="j0-timeline">
+            <div class="j0-row">
+              <div class="j0-time">06h45</div>
+              <div class="j0-action">Café, connecté, écran prêt. Aucune distraction.</div>
+            </div>
+            <div class="j0-row">
+              <div class="j0-time">07h01</div>
+              <div class="j0-action"><strong>Post live Product Hunt</strong> — copies dans <span class="code-inline">launch/producthunt-launch-kit.md</span></div>
+            </div>
+            <div class="j0-row">
+              <div class="j0-time">07h05</div>
+              <div class="j0-action">First comment maker — texte pré-écrit à copier-coller</div>
+            </div>
+            <div class="j0-row">
+              <div class="j0-time">07h15</div>
+              <div class="j0-action"><strong>Twitter thread</strong> + <strong>LinkedIn LUNAnCO</strong> + <strong>IndieHackers</strong> — copies dans <span class="code-inline">launch/soft-launch-multi-canal.md</span></div>
+            </div>
+            <div class="j0-row">
+              <div class="j0-time">08h–23h</div>
+              <div class="j0-action">Monitoring PostHog dashboard + replies PH + <strong>200 premiers cold emails</strong> (depuis hello@, max 30 ce jour)</div>
+            </div>
+            <div class="j0-row">
+              <div class="j0-time">23h59</div>
+              <div class="j0-action">Bilan J0 : <strong>? signups</strong> / <strong>? paiements</strong> / <strong>? rank PH</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /timeline -->
+  </div>
+</section>
+
+<!-- ===== ROUTINE POST-J0 ===== -->
+<section class="section" id="routine">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">03 — Routine</div>
+      <h2 class="section-title">Quotidien J+1 → J+30</h2>
+      <p class="section-sub">Cold email : planning horaire par bloc</p>
+    </div>
+    <div class="routine-grid">
+      <div class="routine-slot">
+        <div class="routine-time">09h00</div>
+        <div class="routine-label">Revue Gmail</div>
+        <div class="routine-desc">Label <span class="code-inline">outbound-cold</span> → tagger dans Notion CRM les replies chaudes / froides / bounce</div>
+      </div>
+      <div class="routine-slot">
+        <div class="routine-time">10h – 12h</div>
+        <div class="routine-label">Envoi cold emails</div>
+        <div class="routine-desc">30/j en S1 · 40/j en S2 · 50/j en S3 — depuis <span class="code-inline">hello@konvertpilot.com</span></div>
+      </div>
+      <div class="routine-slot">
+        <div class="routine-time">14h – 17h</div>
+        <div class="routine-label">Replies 1-to-1</div>
+        <div class="routine-desc">Warm replies personnalisés + démos Cal.com bookées pour les prospects intéressés</div>
+      </div>
+      <div class="routine-slot">
+        <div class="routine-time">17h – 18h</div>
+        <div class="routine-label">Mise à jour CRM</div>
+        <div class="routine-desc">Notion CRM : tags + pipeline stage + planning lendemain + notes post-démo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PIPELINE MATH ===== -->
+<section class="section" id="pipeline">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">04 — Pipeline</div>
+      <h2 class="section-title">Math cold email · Cible J+30</h2>
+      <p class="section-sub">1 paiement Pro 79€ ou Agency 199€ attendu en S4</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Semaine</th>
+            <th>Envois cumulés</th>
+            <th>Replies</th>
+            <th>Meetings</th>
+            <th>Trials</th>
+            <th>Paiements cible</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-bold">S1 · J0 → J+7</td>
+            <td>300 – 500</td>
+            <td>10 – 25</td>
+            <td>1 – 3</td>
+            <td>0 – 1</td>
+            <td class="td-coral">0 (ramp)</td>
+          </tr>
+          <tr>
+            <td class="td-bold">S2 · J+7 → J+14</td>
+            <td>700 – 1 000</td>
+            <td>25 – 50</td>
+            <td>3 – 6</td>
+            <td>1 – 3</td>
+            <td class="td-coral">0 – 1</td>
+          </tr>
+          <tr>
+            <td class="td-bold">S3 · J+14 → J+21</td>
+            <td>1 100 – 1 500</td>
+            <td>50 – 75</td>
+            <td>6 – 10</td>
+            <td>3 – 5</td>
+            <td class="td-coral">0 – 1</td>
+          </tr>
+          <tr>
+            <td class="td-bold">S4 · J+21 → J+30</td>
+            <td>1 500 – 2 000</td>
+            <td>75 – 100</td>
+            <td>10 – 15</td>
+            <td>5 – 8</td>
+            <td class="td-green">1+ Pro / Agency ★</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="highlight-note">
+      Taux de conversion estimés : 5% reply → meeting · 50% meeting → trial · 20% trial → paiement. Objectif : 1 paiement minimum d'ici le 2 juillet.
+    </div>
+  </div>
+</section>
+
+<!-- ===== SEO ===== -->
+<section class="section" id="seo">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">05 — SEO</div>
+      <h2 class="section-title">Calendrier publication — 15 articles</h2>
+      <p class="section-sub">Articles déjà écrits dans <span class="code-inline">seo/articles/</span> — publier au rythme ci-dessous</p>
+    </div>
+    <div class="seo-list">
+      <div class="seo-item">
+        <span class="seo-day">J0</span>
+        <span class="seo-file">erreurs-fiche-produit-shopify.md</span>
+        <span class="seo-note">Quick win — top priorité</span>
+      </div>
+      <div class="seo-item">
+        <span class="seo-day">J+2</span>
+        <span class="seo-file">alternative-gempages-gratuit-shopify.md</span>
+        <span class="seo-note">Intent compétitif fort</span>
+      </div>
+      <div class="seo-item">
+        <span class="seo-day">J+4</span>
+        <span class="seo-file">fiche-produit-shopify-qui-convertit.md</span>
+        <span class="seo-note">Hub 1 — pilier principal</span>
+      </div>
+      <div class="seo-item">
+        <span class="seo-day">J+6 → J+26</span>
+        <span class="seo-file">12 articles suivants</span>
+        <span class="seo-note">Calendrier complet dans <span class="code-inline">seo/cluster-plan-30j.md</span></span>
+      </div>
+    </div>
+    <div class="highlight-note" style="margin-top: 14px;">
+      Chaque article doit être intégré avec JSON-LD schemas + sitemap avant publication. Vérifier la cohérence interne des liens entre articles.
+    </div>
+  </div>
+</section>
+
+<!-- ===== BACKLINKS ===== -->
+<section class="section" id="backlinks">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">06 — Backlinks</div>
+      <h2 class="section-title">15 directories — 3 tiers</h2>
+      <p class="section-sub">Détails complets dans <span class="code-inline">launch/directory-submissions.md</span></p>
+    </div>
+
+    <div class="backlink-tier tier-1">
+      <div class="tier-label">Tier 1 — Launch Day (J0)</div>
+      <div class="backlink-items">
+        <div class="backlink-item">
+          <span class="bl-name">Product Hunt</span>
+          <span class="bl-cost">Gratuit — post principal</span>
+          <span class="bl-date">J0 · 07h01</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="backlink-tier tier-2" style="margin-top: 20px;">
+      <div class="tier-label">Tier 2 — J0 à J+6</div>
+      <div class="backlink-items">
+        <div class="backlink-item">
+          <span class="bl-name">BetaList</span>
+          <span class="bl-cost">$129</span>
+          <span class="bl-date">J0 → J+3</span>
+        </div>
+        <div class="backlink-item">
+          <span class="bl-name">IndieHackers</span>
+          <span class="bl-cost">Gratuit</span>
+          <span class="bl-date">J0 → J+3</span>
+        </div>
+        <div class="backlink-item">
+          <span class="bl-name">Show HN</span>
+          <span class="bl-cost">Gratuit</span>
+          <span class="bl-date">J0 → J+3</span>
+        </div>
+        <div class="backlink-item">
+          <span class="bl-name">AlternativeTo</span>
+          <span class="bl-cost">Gratuit</span>
+          <span class="bl-date">J0 → J+3</span>
+        </div>
+        <div class="backlink-item">
+          <span class="bl-name">SaaSHub</span>
+          <span class="bl-cost">Gratuit</span>
+          <span class="bl-date">J+4 → J+6</span>
+        </div>
+        <div class="backlink-item">
+          <span class="bl-name">TAAFT</span>
+          <span class="bl-cost">$347 net (~$47 avec PPC bonus)</span>
+          <span class="bl-date">J+4 → J+6</span>
+        </div>
+        <div class="backlink-item">
+          <span class="bl-name">Futurepedia</span>
+          <span class="bl-cost">Gratuit</span>
+          <span class="bl-date">J+4 → J+6</span>
+        </div>
+        <div class="backlink-item">
+          <span class="bl-name">G2</span>
+          <span class="bl-cost">Gratuit</span>
+          <span class="bl-date">J+4 → J+6</span>
+        </div>
+        <div class="backlink-item">
+          <span class="bl-name">Capterra</span>
+          <span class="bl-cost">Gratuit</span>
+          <span class="bl-date">J+4 → J+6</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="backlink-tier tier-3" style="margin-top: 20px;">
+      <div class="tier-label">Tier 3 — J+7 à J+10</div>
+      <div class="backlink-items">
+        <div class="backlink-item">
+          <span class="bl-name">Toolify</span>
+          <span class="bl-cost">Gratuit</span>
+          <span class="bl-date">J+7 → J+10</span>
+        </div>
+        <div class="backlink-item">
+          <span class="bl-name">Aitools.fyi</span>
+          <span class="bl-cost">Gratuit</span>
+          <span class="bl-date">J+7 → J+10</span>
+        </div>
+        <div class="backlink-item">
+          <span class="bl-name">AppSumo</span>
+          <span class="bl-cost">Go / No-go à décider</span>
+          <span class="bl-date">J+7 → J+10</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== DÉCISIONS EN ATTENTE ===== -->
+<section class="section" id="decisions">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">07 — Décisions</div>
+      <h2 class="section-title">Actions en attente</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>Quand</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-bold">1</td>
+            <td>Lancer script visuels (fal.ai)</td>
+            <td>Dimanche matin</td>
+            <td><span class="pill pill-pending">⏳ À faire</span></td>
+          </tr>
+          <tr>
+            <td class="td-bold">2</td>
+            <td>Setup Vercel + Stripe + UptimeRobot + Sentry</td>
+            <td>Lundi matin</td>
+            <td><span class="pill pill-pending">⏳ À faire</span></td>
+          </tr>
+          <tr>
+            <td class="td-bold">3</td>
+            <td>Loom screen record + upload YouTube Unlisted</td>
+            <td>Dimanche après-midi</td>
+            <td><span class="pill pill-pending">⏳ À faire</span></td>
+          </tr>
+          <tr>
+            <td class="td-bold">4</td>
+            <td>Setup Gmail filters + Notion CRM</td>
+            <td>Dimanche / lundi</td>
+            <td><span class="pill pill-pending">⏳ À faire</span></td>
+          </tr>
+          <tr>
+            <td class="td-bold">5</td>
+            <td>Warmup naturel hello@konvertpilot.com</td>
+            <td>Lundi soir</td>
+            <td><span class="pill pill-pending">⏳ À faire</span></td>
+          </tr>
+          <tr>
+            <td class="td-bold">6</td>
+            <td>Merge feat/pages-v3 → main</td>
+            <td>Lundi soir</td>
+            <td><span class="pill pill-pending">⏳ À faire</span></td>
+          </tr>
+          <tr>
+            <td class="td-bold">7</td>
+            <td>Tagline EN finale validée</td>
+            <td>—</td>
+            <td><span class="pill pill-done">✅ Validé</span></td>
+          </tr>
+          <tr>
+            <td class="td-bold">8</td>
+            <td>Stratégie inboxes — hello@ seul</td>
+            <td>—</td>
+            <td><span class="pill pill-done">✅ Validé</span></td>
+          </tr>
+          <tr>
+            <td class="td-bold">9</td>
+            <td>Budget ads — 0€</td>
+            <td>—</td>
+            <td><span class="pill pill-done">✅ Validé</span></td>
+          </tr>
+          <tr>
+            <td class="td-bold">10</td>
+            <td>Rotate FAL_KEY (sécu)</td>
+            <td>Cette semaine</td>
+            <td><span class="pill pill-pending">⏳ À faire</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SÉCU ===== -->
+<section class="section" id="secu">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">08 — Sécurité</div>
+      <h2 class="section-title">Findings à corriger avant J+7</h2>
+      <p class="section-sub">6 points identifiés — les 4 premiers sont critiques avant J0</p>
+    </div>
+    <div class="finding-list">
+
+      <div class="finding-item sev-high">
+        <span class="finding-id">H-01</span>
+        <div class="finding-content">
+          <div class="finding-title">Turnstile — clé absente en prod</div>
+          <div class="finding-desc">Vérifier <span class="code-inline">TURNSTILE_SECRET_KEY</span> dans Vercel. Sinon <span class="code-inline">/api/generate/public</span> est spammable par bots.</div>
+        </div>
+      </div>
+
+      <div class="finding-item sev-high">
+        <span class="finding-id">H-02</span>
+        <div class="finding-content">
+          <div class="finding-title">/api/generate — rate limit absent</div>
+          <div class="finding-desc">Ajouter rate limit Upstash 10 req/min/user sur l'endpoint de génération.</div>
+        </div>
+      </div>
+
+      <div class="finding-item sev-medium">
+        <span class="finding-id">H-03</span>
+        <div class="finding-content">
+          <div class="finding-title">PreviewIframe — postMessage wildcard</div>
+          <div class="finding-desc">Remplacer <span class="code-inline">postMessage(msg, '*')</span> par <span class="code-inline">targetOrigin = window.location.origin</span> pour éviter le vol de données cross-origin.</div>
+        </div>
+      </div>
+
+      <div class="finding-item sev-medium">
+        <span class="finding-id">H-04</span>
+        <div class="finding-content">
+          <div class="finding-title">/api/contact + /api/waitlist — pas de rate limit IP</div>
+          <div class="finding-desc">Ajouter rate limit Upstash 5 req/min/IP sur ces deux endpoints.</div>
+        </div>
+      </div>
+
+      <div class="finding-item sev-high">
+        <span class="finding-id">MW</span>
+        <div class="finding-content">
+          <div class="finding-title">Middleware Edge absent</div>
+          <div class="finding-desc">Créer <span class="code-inline">src/middleware.ts</span> qui invoque <span class="code-inline">updateSession()</span>. Sans ça, les JWT Supabase ne sont pas auto-refreshés — déconnexions silencieuses possibles.</div>
+        </div>
+      </div>
+
+      <div class="finding-item sev-low">
+        <span class="finding-id">RGPD</span>
+        <div class="finding-content">
+          <div class="finding-title">Endpoints RGPD manquants</div>
+          <div class="finding-desc">Créer <span class="code-inline">/api/user/export</span> (art. 15 — droit d'accès) + <span class="code-inline">/api/user/delete</span> (art. 17 — droit à l'effacement).</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== PLAN B ===== -->
+<section class="section" id="planb">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">09 — Contingence</div>
+      <h2 class="section-title">Plan B — si aucun paiement à J+30</h2>
+    </div>
+    <div class="planb-box">
+      <div class="planb-header">
+        <div class="icon">⚡</div>
+        <div class="label">Si 0 paiement au 2 juillet — activer immédiatement</div>
+      </div>
+      <div class="planb-items">
+        <div class="planb-item">Activer un client SMMA existant en client Konvert Pro (warm sale interne — conversion quasi garantie)</div>
+        <div class="planb-item">Doubler le volume cold à 80–100 emails/jour avec une 2e inbox Gmail perso (warm)</div>
+        <div class="planb-item">Ajouter LinkedIn DM en couche 2 sur les non-répondeurs J+7</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FICHIERS DE RÉFÉRENCE ===== -->
+<section class="section" id="fichiers">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-number">10 — Référence</div>
+      <h2 class="section-title">Arborescence fichiers</h2>
+      <p class="section-sub">Tous dans <span class="code-inline">/Users/mac/nexara/konvert/</span></p>
+    </div>
+    <div class="file-tree">
+      <div><span class="ft-dir">cold-email/</span></div>
+      <div class="ft-indent"><span class="ft-file">├── playbook-nagato.md</span>      <span class="ft-comment">routine quotidienne envoi</span></div>
+      <div class="ft-indent"><span class="ft-file">├── sourcing-2000-leads.md</span>   <span class="ft-comment">plan sourcing Apollo/etc.</span></div>
+      <div class="ft-indent"><span class="ft-file">├── sequences-zara.md</span>        <span class="ft-comment">3 séquences FR / MENA / EN</span></div>
+      <div class="ft-indent"><span class="ft-file">├── leads-verified-template.csv</span> <span class="ft-comment">CSV à importer dans Notion</span></div>
+      <div class="ft-indent"><span class="ft-file">└── notion-crm-setup.md</span>     <span class="ft-comment">schema CRM + vues</span></div>
+      <br>
+      <div><span class="ft-dir">seo/</span></div>
+      <div class="ft-indent"><span class="ft-file">├── cluster-plan-30j.md</span>     <span class="ft-comment">stratégie 3 piliers + calendrier</span></div>
+      <div class="ft-indent"><span class="ft-file">└── articles/</span>              <span class="ft-comment">17 articles markdown prêts à publier</span></div>
+      <br>
+      <div><span class="ft-dir">launch/</span></div>
+      <div class="ft-indent"><span class="ft-file">├── producthunt-launch-kit.md</span> <span class="ft-comment">copies PH J0 + first comment</span></div>
+      <div class="ft-indent"><span class="ft-file">├── soft-launch-multi-canal.md</span> <span class="ft-comment">LinkedIn / Twitter / Reddit / IH</span></div>
+      <div class="ft-indent"><span class="ft-file">├── directory-submissions.md</span> <span class="ft-comment">15 directories pré-remplis</span></div>
+      <div class="ft-indent"><span class="ft-file">├── video-script-60s.md</span>     <span class="ft-comment">script Loom FR + EN scene-by-scene</span></div>
+      <div class="ft-indent"><span class="ft-file">├── gif-demo-spec.md</span>        <span class="ft-comment">workflow ffmpeg + Gifski</span></div>
+      <div class="ft-indent"><span class="ft-file">├── dashboard-J0-spec.md</span>   <span class="ft-comment">KPIs PostHog + plan horaire J0</span></div>
+      <div class="ft-indent"><span class="ft-file">├── deidara-onboarding-audit.md</span> <span class="ft-comment">audit onboarding + save offers</span></div>
+      <div class="ft-indent"><span class="ft-file">└── assets/generate-ph-assets.py</span> <span class="ft-comment">script Python visuels fal.ai</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-brand">Konvert <span>·</span> by LUNAnCO</div>
+  <div class="footer-meta">
+    Généré le 30 mai 2026 · Version 1.0<br>
+    Launch J0 : mardi 2 juin 2026 · 07h01 Paris<br>
+    Cible : 1 paiement Stripe Pro 79€ ou Agency 199€ avant le 2 juillet 2026
+  </div>
+</footer>
+
+<!-- ===== VANILLA JS — STATE CHECKBOXES ===== -->
+<script>
+  // Sauvegarde des checkboxes dans localStorage
+  const STORAGE_KEY = 'konvert-launch-plan-v1';
+
+  function saveState() {
+    const state = {};
+    document.querySelectorAll('.task-checkbox').forEach(cb => {
+      if (cb.dataset.id) state[cb.dataset.id] = cb.checked;
+    });
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return {};
+      return JSON.parse(raw);
+    } catch(e) { return {}; }
+  }
+
+  function applyState() {
+    const state = loadState();
+    document.querySelectorAll('.task-checkbox').forEach(cb => {
+      if (cb.dataset.id && state[cb.dataset.id]) {
+        cb.checked = true;
+        const item = cb.closest('.task-item');
+        if (item) item.classList.add('done');
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    applyState();
+
+    document.querySelectorAll('.task-checkbox').forEach(cb => {
+      cb.addEventListener('change', () => {
+        const item = cb.closest('.task-item');
+        if (item) {
+          item.classList.toggle('done', cb.checked);
+        }
+        saveState();
+      });
+    });
+
+    // Empêcher le click sur le label de toggler deux fois
+    document.querySelectorAll('.task-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        if (e.target.classList.contains('task-checkbox')) return;
+        const cb = item.querySelector('.task-checkbox');
+        if (cb) {
+          cb.checked = !cb.checked;
+          item.classList.toggle('done', cb.checked);
+          saveState();
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

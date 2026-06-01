@@ -79,25 +79,35 @@ const STYLES = [
 // radius, mock product) pour éviter d'importer les tokens côté client.
 const V3_STYLES = [
   { id: 'soft',         name: 'Soft',         desc: 'Mejuri / Glossier vibe — rose poudré, sérif raffiné, intimité moderne',     emoji: '🌸',
-    bg: '#FAF7F2', surface: '#F0E8DC', accent: '#C9A77E', text: '#1A1614', font: '"Cormorant Garamond", Georgia, serif', btnRadius: 999, brand: 'MEJURI', product: 'Demi Hoop Earrings' },
+    bg: '#FAF7F2', surface: '#F0E8DC', accent: '#C9A77E', text: '#1A1614', font: '"Cormorant Garamond", Georgia, serif', btnRadius: 999, brand: 'MEJURI', product: 'Demi Hoop Earrings',
+    tagline: 'Designed to be worn always', photo: 'https://images.unsplash.com/photo-1635767582909-345d2b65a6b3?w=600&q=80&auto=format&fit=crop' },
   { id: 'editorial',    name: 'Editorial',    desc: 'Magazine éditorial — typo généreuse, blanc + crème, storytelling premium',  emoji: '📰',
-    bg: '#FFFFFF', surface: '#F8F6F2', accent: '#0A0A0A', text: '#0A0A0A', font: '"Playfair Display", "Times New Roman", serif', btnRadius: 0, brand: 'MONOCLE', product: 'Travel Wallet' },
+    bg: '#FFFFFF', surface: '#F8F6F2', accent: '#0A0A0A', text: '#0A0A0A', font: '"Playfair Display", "Times New Roman", serif', btnRadius: 0, brand: 'MONOCLE', product: 'Travel Wallet',
+    tagline: 'Crafted in Florence since 1962', photo: 'https://images.unsplash.com/photo-1606503825008-909a67e63c3d?w=600&q=80&auto=format&fit=crop' },
   { id: 'apple-clean',  name: 'Apple Clean',  desc: 'Apple-grade clarté — blanc pur, sans-serif système, glassmorphism subtil',  emoji: '⚪',
-    bg: '#F5F5F7', surface: '#FFFFFF', accent: '#0066CC', text: '#1D1D1F', font: '"SF Pro Display", "Inter", system-ui, sans-serif', btnRadius: 980, brand: 'AERO', product: 'AirPro Wireless' },
+    bg: '#F5F5F7', surface: '#FFFFFF', accent: '#0066CC', text: '#1D1D1F', font: '"SF Pro Display", "Inter", system-ui, sans-serif', btnRadius: 980, brand: 'AERO', product: 'AirPro Wireless',
+    tagline: 'Pure sound. Pure design.', photo: 'https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=600&q=80&auto=format&fit=crop' },
   { id: 'luxe-noir',    name: 'Luxe Noir',    desc: 'Dark warm + or — noir profond, accents dorés, joaillerie / haute couture', emoji: '✨',
-    bg: '#14110F', surface: '#1F1B17', accent: '#C9A84C', text: '#F5F0E8', font: '"Playfair Display", Georgia, serif', btnRadius: 0, brand: 'NOIR', product: 'Diamond Solitaire' },
+    bg: '#14110F', surface: '#1F1B17', accent: '#C9A84C', text: '#F5F0E8', font: '"Playfair Display", Georgia, serif', btnRadius: 0, brand: 'NOIR', product: 'Diamond Solitaire',
+    tagline: 'For the timeless few', photo: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80&auto=format&fit=crop' },
   { id: 'organic',      name: 'Organic',      desc: 'Aesop vibe — vert sauge, sérif, naturel, bien-être, supplements bio',      emoji: '🌿',
-    bg: '#F4F1EB', surface: '#E8E2D4', accent: '#5B6E4F', text: '#1F2D24', font: '"DM Serif Display", Georgia, serif', btnRadius: 999, brand: 'AESOP', product: 'Sage & Cedar Balm' },
+    bg: '#F4F1EB', surface: '#E8E2D4', accent: '#5B6E4F', text: '#1F2D24', font: '"DM Serif Display", Georgia, serif', btnRadius: 999, brand: 'AESOP', product: 'Sage & Cedar Balm',
+    tagline: 'Botanicals for sensitive skin', photo: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80&auto=format&fit=crop' },
   { id: 'brutalist',    name: 'Brutalist',    desc: 'Brut & impactant — mono très bold (JetBrains), grilles strictes, raw',     emoji: '◼️',
-    bg: '#FFFFFF', surface: '#F0F0F0', accent: '#FF3300', text: '#000000', font: '"JetBrains Mono", "Courier New", monospace', btnRadius: 0, brand: 'RAW.CO', product: 'Concrete Vase /01' },
+    bg: '#FFFFFF', surface: '#F0F0F0', accent: '#FF3300', text: '#000000', font: '"JetBrains Mono", "Courier New", monospace', btnRadius: 0, brand: 'RAW.CO', product: 'Concrete Vase /01',
+    tagline: 'Raw materials. No compromise.', photo: 'https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=600&q=80&auto=format&fit=crop' },
   { id: 'warm-neutral', name: 'Warm Neutral', desc: 'ALD vibe — beige sable, terra cotta, mode caramelisée, lifestyle élégant',  emoji: '🍂',
-    bg: '#F4ECE0', surface: '#E8DCC8', accent: '#B5854B', text: '#3B2F23', font: '"DM Serif Display", Georgia, serif', btnRadius: 999, brand: 'ALD', product: 'Caramel Cardigan' },
+    bg: '#F4ECE0', surface: '#E8DCC8', accent: '#B5854B', text: '#3B2F23', font: '"DM Serif Display", Georgia, serif', btnRadius: 999, brand: 'ALD', product: 'Caramel Cardigan',
+    tagline: 'Slow fashion, warm tones', photo: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&q=80&auto=format&fit=crop' },
   { id: 'minimal-mono', name: 'Minimal Mono', desc: 'MUJI minimal — typo Inter, neutres absolus, pureté zen, anti-décor',       emoji: '◽',
-    bg: '#FFFFFF', surface: '#F2F2F2', accent: '#000000', text: '#000000', font: '"Inter", system-ui, sans-serif', btnRadius: 4, brand: 'MUJI', product: 'Linen T-Shirt' },
+    bg: '#FFFFFF', surface: '#F2F2F2', accent: '#000000', text: '#000000', font: '"Inter", system-ui, sans-serif', btnRadius: 4, brand: 'MUJI', product: 'Linen T-Shirt',
+    tagline: 'Essential, nothing more', photo: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80&auto=format&fit=crop' },
   { id: 'vibrant',      name: 'Vibrant',      desc: 'Tonies / Notion vibe — couleurs vibrantes, joyeux, jeune, énergique',       emoji: '🎨',
-    bg: '#FFFFFF', surface: '#FFF1D6', accent: '#FF4D88', text: '#1A1A1A', font: '"Space Grotesk", "Inter", sans-serif', btnRadius: 999, brand: 'TONIES', product: 'Pop Speaker Mini' },
+    bg: '#FFFFFF', surface: '#FFF1D6', accent: '#FF4D88', text: '#1A1A1A', font: '"Space Grotesk", "Inter", sans-serif', btnRadius: 999, brand: 'TONIES', product: 'Pop Speaker Mini',
+    tagline: 'Sound that makes you smile', photo: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&q=80&auto=format&fit=crop' },
   { id: 'bold',         name: 'Bold',         desc: 'Statement maximaliste — typo display géante, contraste extrême, impact',    emoji: '💥',
-    bg: '#FFFFFF', surface: '#FFF5E6', accent: '#FF2277', text: '#0F0F0F', font: '"Space Grotesk", "Arial Black", sans-serif', btnRadius: 999, brand: 'BLOOP', product: 'Mega Drop /03' },
+    bg: '#FFFFFF', surface: '#FFF5E6', accent: '#FF2277', text: '#0F0F0F', font: '"Space Grotesk", "Arial Black", sans-serif', btnRadius: 999, brand: 'BLOOP', product: 'Mega Drop /03',
+    tagline: 'Drop. Sold out. Repeat.', photo: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&auto=format&fit=crop' },
 ]
 
 const TONES = [
@@ -1859,136 +1869,173 @@ function NewPageInner() {
                     <button
                       key={s.id}
                       onClick={() => setSelectedStyle(s.id)}
-                      className="w-full flex gap-4 p-3 rounded-xl border-2 text-left transition-all hover:shadow-sm"
+                      className="w-full text-left rounded-2xl border-2 overflow-hidden transition-all hover:shadow-md"
                       style={isSelected
-                        ? { borderColor: '#7c3aed', background: '#faf9ff' }
+                        ? { borderColor: '#7c3aed', boxShadow: '0 0 0 4px rgba(124,58,237,0.08)' }
                         : { borderColor: '#E3E3E8', background: '#fff' }
                       }
                     >
-                      {/* ── Vrai mini-aperçu page produit (220×140px) ── */}
-                      <div
-                        className="flex-shrink-0 rounded-lg overflow-hidden"
-                        style={{
-                          width: 220,
-                          height: 140,
-                          background: s.bg,
-                          border: `1px solid ${isDarkBg ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)'}`,
-                          boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-                          display: 'flex',
-                        }}
-                      >
-                        {/* Image produit (placeholder gradient + emoji décoratif) */}
+                      {/* ─── VRAI MINI-SITE — header + hero photo + features strip ─── */}
+                      <div style={{ background: s.bg, color: s.text, position: 'relative' }}>
+                        {/* HEADER : logo brand + nav + mini icons */}
                         <div style={{
-                          width: 84,
-                          height: '100%',
-                          background: `linear-gradient(135deg, ${s.surface} 0%, ${s.bg} 100%)`,
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: 32,
-                          borderRight: `1px solid ${isDarkBg ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'}`,
-                          flexShrink: 0,
-                        }}>
-                          <span style={{ opacity: 0.5 }}>{s.emoji}</span>
-                        </div>
-
-                        {/* Contenu hero (brand eyebrow + titre + prix + button) */}
-                        <div style={{
-                          flex: 1,
-                          padding: '12px 11px',
-                          display: 'flex',
-                          flexDirection: 'column',
                           justifyContent: 'space-between',
-                          minWidth: 0,
-                          color: s.text,
+                          padding: '12px 18px',
+                          borderBottom: `1px solid ${isDarkBg ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
                         }}>
-                          <div style={{ minWidth: 0 }}>
-                            {/* Brand eyebrow uppercase letter-spacing */}
-                            <div style={{
-                              fontFamily: '"Inter", system-ui, sans-serif',
-                              fontSize: 8,
-                              fontWeight: 700,
-                              letterSpacing: '0.16em',
-                              textTransform: 'uppercase',
-                              color: s.accent,
-                              marginBottom: 5,
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                            }}>
-                              {s.brand}
-                            </div>
-                            {/* Headline produit — VRAIE font du style */}
-                            <div style={{
-                              fontFamily: s.font,
-                              fontSize: 13,
-                              fontWeight: 600,
-                              lineHeight: 1.15,
-                              color: s.text,
-                              marginBottom: 5,
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden',
-                              wordBreak: 'break-word',
-                            }}>
-                              {s.product}
-                            </div>
-                            {/* Prix */}
-                            <div style={{
-                              fontFamily: s.font,
-                              fontSize: 11,
-                              fontWeight: 600,
-                              color: s.text,
-                              opacity: 0.78,
-                            }}>
-                              €98
-                            </div>
-                          </div>
-
-                          {/* Mini-button accent avec le bon radius */}
                           <div style={{
-                            alignSelf: 'flex-start',
-                            fontFamily: '"Inter", system-ui, sans-serif',
-                            fontSize: 8,
-                            fontWeight: 600,
-                            padding: '4px 9px',
-                            borderRadius: s.btnRadius,
-                            background: s.accent,
-                            color: btnTextColor,
-                            letterSpacing: '0.02em',
-                            whiteSpace: 'nowrap',
+                            fontFamily: s.font,
+                            fontSize: 14,
+                            fontWeight: 700,
+                            letterSpacing: '0.06em',
+                            color: s.text,
+                          }}>{s.brand}</div>
+                          <div style={{
+                            display: 'flex', gap: 14, fontFamily: '"Inter", sans-serif',
+                            fontSize: 9, fontWeight: 500, opacity: 0.75,
+                            textTransform: 'uppercase', letterSpacing: '0.12em',
+                            color: s.text,
                           }}>
-                            Ajouter
+                            <span>Shop</span><span>Story</span><span>Journal</span>
+                            <span style={{ marginLeft: 4 }}>⌕</span>
+                            <span>⊕</span>
                           </div>
                         </div>
+
+                        {/* HERO 2 colonnes : photo gauche + contenu droite */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: 220 }}>
+                          {/* Photo produit RÉELLE (Unsplash) */}
+                          <div style={{
+                            background: `linear-gradient(135deg, ${s.surface} 0%, ${s.bg} 100%)`,
+                            position: 'relative',
+                            overflow: 'hidden',
+                          }}>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={s.photo}
+                              alt={s.product}
+                              loading="lazy"
+                              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', minHeight: 220 }}
+                              onError={(e) => { e.currentTarget.style.display = 'none' }}
+                            />
+                            {/* Emoji XL en overlay bottom-left (visible si image absente) */}
+                            <div style={{
+                              position: 'absolute', bottom: 10, left: 14,
+                              fontSize: 22, opacity: 0.5, pointerEvents: 'none',
+                            }}>{s.emoji}</div>
+                          </div>
+
+                          {/* Contenu hero — eyebrow + H1 grand + tagline + price + rating + button */}
+                          <div style={{
+                            padding: '24px 28px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            gap: 10,
+                          }}>
+                            <div style={{
+                              fontFamily: '"Inter", sans-serif',
+                              fontSize: 9, fontWeight: 700,
+                              letterSpacing: '0.2em', textTransform: 'uppercase',
+                              color: s.accent,
+                            }}>New · {s.brand}</div>
+                            <div style={{
+                              fontFamily: s.font,
+                              fontSize: 24, fontWeight: 600,
+                              lineHeight: 1.1, color: s.text,
+                              wordBreak: 'break-word',
+                            }}>{s.product}</div>
+                            <div style={{
+                              fontFamily: '"Inter", sans-serif',
+                              fontSize: 11, fontWeight: 400, lineHeight: 1.4,
+                              color: s.text, opacity: 0.7, fontStyle: 'italic',
+                            }}>{s.tagline}</div>
+                            <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginTop: 4 }}>
+                              <div style={{
+                                fontFamily: s.font,
+                                fontSize: 17, fontWeight: 600, color: s.text,
+                              }}>€98</div>
+                              <div style={{
+                                fontFamily: '"Inter", sans-serif',
+                                fontSize: 10, color: s.accent, fontWeight: 500,
+                              }}>★ 4.8 (2,847)</div>
+                            </div>
+                            <div style={{
+                              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                              alignSelf: 'flex-start',
+                              fontFamily: '"Inter", sans-serif',
+                              fontSize: 10, fontWeight: 600,
+                              padding: '9px 18px', borderRadius: s.btnRadius,
+                              background: s.accent, color: btnTextColor,
+                              letterSpacing: '0.04em', marginTop: 6,
+                              textTransform: 'uppercase',
+                            }}>Ajouter au panier</div>
+                          </div>
+                        </div>
+
+                        {/* FEATURES STRIP : 3 trust badges en bas */}
+                        <div style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr 1fr',
+                          padding: '10px 18px',
+                          borderTop: `1px solid ${isDarkBg ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
+                          background: isDarkBg ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.015)',
+                        }}>
+                          {['Livraison offerte · 48h', 'Retours 30 jours', 'Garantie à vie'].map((feat, i) => (
+                            <div key={i} style={{
+                              fontFamily: '"Inter", sans-serif',
+                              fontSize: 8, fontWeight: 500,
+                              letterSpacing: '0.08em', textTransform: 'uppercase',
+                              color: s.text, opacity: 0.65,
+                              textAlign: 'center',
+                              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                            }}>{feat}</div>
+                          ))}
+                        </div>
+
+                        {/* Checkmark overlay si selected */}
+                        {isSelected && (
+                          <div style={{
+                            position: 'absolute', top: 12, right: 12,
+                            width: 22, height: 22, borderRadius: '50%',
+                            background: '#7c3aed',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 2px 8px rgba(124,58,237,0.4)',
+                          }}>
+                            <Check className="w-3.5 h-3.5 text-white" />
+                          </div>
+                        )}
                       </div>
 
-                      {/* ── Texte descriptif ── */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <span className="text-base">{s.emoji}</span>
-                          <span className="text-[14px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#ede9fe', color: '#6d28d9' }}>V3</span>
+                      {/* ─── BARRE INFO STYLE sous la preview ─── */}
+                      <div style={{
+                        padding: '12px 16px',
+                        background: '#fff',
+                        borderTop: '1px solid #f3f3f5',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 12,
+                      }}>
+                        <span className="text-xl">{s.emoji}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-[14px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#ede9fe', color: '#6d28d9' }}>V3</span>
+                            <span className="text-[10px]" style={{ color: '#a8a8b8' }}>
+                              {s.font.split(',')[0].replace(/['"]/g, '').trim()}
+                            </span>
+                          </div>
+                          <p className="text-[11px] mt-0.5 leading-tight" style={{ color: '#8b8b9e' }}>{s.desc}</p>
                         </div>
-                        <p className="text-[12px] leading-snug" style={{ color: '#8b8b9e' }}>{s.desc}</p>
-                        {/* Swatch couleurs + font name */}
-                        <div className="flex items-center gap-1.5 mt-2">
+                        <div className="flex items-center gap-1 flex-shrink-0">
                           <span title="Background" style={{ width: 14, height: 14, borderRadius: 4, background: s.bg, border: '1px solid rgba(0,0,0,0.08)' }} />
                           <span title="Accent" style={{ width: 14, height: 14, borderRadius: 4, background: s.accent, border: '1px solid rgba(0,0,0,0.08)' }} />
                           <span title="Text" style={{ width: 14, height: 14, borderRadius: 4, background: s.text, border: '1px solid rgba(0,0,0,0.08)' }} />
-                          <span className="text-[10px] ml-1.5" style={{ color: '#a8a8b8' }}>
-                            {s.font.split(',')[0].replace(/['"]/g, '').trim()}
-                          </span>
                         </div>
                       </div>
 
-                      {/* ── Checkmark si sélectionné ── */}
-                      {isSelected && (
-                        <div className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center self-start" style={{ background: '#7c3aed' }}>
-                          <Check className="w-3 h-3 text-white" />
-                        </div>
-                      )}
                     </button>
                   )
                 })}

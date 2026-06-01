@@ -70,20 +70,33 @@ const STYLES = [
   { id: 'etec-boost',      name: 'Boost',     desc: 'Conversion max — badges confiance, preuves sociales, DTC wellness',     emoji: '🚀' },
 ]
 
-// ── Styles V3 (Phase 2 : branchera engine V3 + 13 sections Allbirds-grade) ──
-// Phase 1 actuelle = juste l'UI pour visualiser les 10 styles. Pas encore branché
-// sur l'engine V3 — l'engine legacy reste actif pour la génération.
+// ── Styles V3 (10 styles Allbirds-grade — engine V3 branché Phase 2) ──
+// Chaque style expose des couleurs + fonts pour les previews visuels dans
+// la carte du wizard étape 5/8 (Phase 3). Les tokens réels vivent dans
+// src/lib/styles/<id>/tokens.ts — on duplique ici juste ce qu'il faut pour
+// la preview UI (bg, accent, text, font heading) pour éviter d'importer
+// tous les fichiers tokens côté client.
 const V3_STYLES = [
-  { id: 'soft',         name: 'Soft',         desc: 'Mejuri / Glossier vibe — rose poudré, sérif raffiné, intimité moderne',     emoji: '🌸' },
-  { id: 'editorial',    name: 'Editorial',    desc: 'Magazine éditorial — typo généreuse, blanc + crème, storytelling premium',  emoji: '📰' },
-  { id: 'apple-clean',  name: 'Apple Clean',  desc: 'Apple-grade clarté — blanc pur, sans-serif système, glassmorphism subtil',  emoji: '⚪' },
-  { id: 'luxe-noir',    name: 'Luxe Noir',    desc: 'Dark warm + or — noir profond, accents dorés, joaillerie / haute couture', emoji: '✨' },
-  { id: 'organic',      name: 'Organic',      desc: 'Aesop vibe — vert sauge, sérif, naturel, bien-être, supplements bio',      emoji: '🌿' },
-  { id: 'brutalist',    name: 'Brutalist',    desc: 'Brut & impactant — mono très bold (JetBrains), grilles strictes, raw',     emoji: '◼️' },
-  { id: 'warm-neutral', name: 'Warm Neutral', desc: 'ALD vibe — beige sable, terra cotta, mode caramelisée, lifestyle élégant',  emoji: '🍂' },
-  { id: 'minimal-mono', name: 'Minimal Mono', desc: 'MUJI minimal — typo Inter, neutres absolus, pureté zen, anti-décor',       emoji: '◽' },
-  { id: 'vibrant',      name: 'Vibrant',      desc: 'Tonies / Notion vibe — couleurs vibrantes, joyeux, jeune, énergique',       emoji: '🎨' },
-  { id: 'bold',         name: 'Bold',         desc: 'Statement maximaliste — typo display géante, contraste extrême, impact',    emoji: '💥' },
+  { id: 'soft',         name: 'Soft',         desc: 'Mejuri / Glossier vibe — rose poudré, sérif raffiné, intimité moderne',     emoji: '🌸',
+    bg: '#FAF7F2', accent: '#C9A77E', text: '#1A1614', font: '"Cormorant Garamond", Georgia, serif' },
+  { id: 'editorial',    name: 'Editorial',    desc: 'Magazine éditorial — typo généreuse, blanc + crème, storytelling premium',  emoji: '📰',
+    bg: '#FFFFFF', accent: '#0A0A0A', text: '#0A0A0A', font: '"Playfair Display", "Times New Roman", serif' },
+  { id: 'apple-clean',  name: 'Apple Clean',  desc: 'Apple-grade clarté — blanc pur, sans-serif système, glassmorphism subtil',  emoji: '⚪',
+    bg: '#F5F5F7', accent: '#0066CC', text: '#1D1D1F', font: '"SF Pro Display", "Inter", system-ui, sans-serif' },
+  { id: 'luxe-noir',    name: 'Luxe Noir',    desc: 'Dark warm + or — noir profond, accents dorés, joaillerie / haute couture', emoji: '✨',
+    bg: '#14110F', accent: '#C9A84C', text: '#F5F0E8', font: '"Playfair Display", Georgia, serif' },
+  { id: 'organic',      name: 'Organic',      desc: 'Aesop vibe — vert sauge, sérif, naturel, bien-être, supplements bio',      emoji: '🌿',
+    bg: '#F4F1EB', accent: '#5B6E4F', text: '#1F2D24', font: '"DM Serif Display", Georgia, serif' },
+  { id: 'brutalist',    name: 'Brutalist',    desc: 'Brut & impactant — mono très bold (JetBrains), grilles strictes, raw',     emoji: '◼️',
+    bg: '#FFFFFF', accent: '#FF3300', text: '#000000', font: '"JetBrains Mono", "Courier New", monospace' },
+  { id: 'warm-neutral', name: 'Warm Neutral', desc: 'ALD vibe — beige sable, terra cotta, mode caramelisée, lifestyle élégant',  emoji: '🍂',
+    bg: '#F4ECE0', accent: '#B5854B', text: '#3B2F23', font: '"DM Serif Display", Georgia, serif' },
+  { id: 'minimal-mono', name: 'Minimal Mono', desc: 'MUJI minimal — typo Inter, neutres absolus, pureté zen, anti-décor',       emoji: '◽',
+    bg: '#FFFFFF', accent: '#000000', text: '#000000', font: '"Inter", system-ui, sans-serif' },
+  { id: 'vibrant',      name: 'Vibrant',      desc: 'Tonies / Notion vibe — couleurs vibrantes, joyeux, jeune, énergique',       emoji: '🎨',
+    bg: '#FFFFFF', accent: '#FF4D88', text: '#1A1A1A', font: '"Space Grotesk", "Inter", sans-serif' },
+  { id: 'bold',         name: 'Bold',         desc: 'Statement maximaliste — typo display géante, contraste extrême, impact',    emoji: '💥',
+    bg: '#FFFFFF', accent: '#FF2277', text: '#0F0F0F', font: '"Space Grotesk", "Arial Black", sans-serif' },
 ]
 
 const TONES = [
@@ -1815,35 +1828,95 @@ function NewPageInner() {
 
             {/* ── Liste Styles V3 (10 nouveaux Allbirds-grade) — Engine V3 actif ── */}
             {styleMode === 'v3' && (
-              <div className="space-y-2 mb-6">
+              <div className="space-y-3 mb-6">
                 <div className="p-3 rounded-lg mb-2 text-[12px]" style={{ background: '#ede9fe', color: '#5b21b6' }}>
                   <strong>Engine V3 actif</strong> — génération via Vercel AI SDK + Zod + 13 sections universelles (Allbirds-grade). Rendu serveur direct.
                 </div>
-                {V3_STYLES.map(s => (
-                  <button
-                    key={s.id}
-                    onClick={() => setSelectedStyle(s.id)}
-                    className="w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all"
-                    style={selectedStyle === s.id
-                      ? { borderColor: '#7c3aed', background: '#faf9ff' }
-                      : { borderColor: '#E3E3E8', background: '#fff' }
-                    }
-                  >
-                    <span className="text-2xl">{s.emoji}</span>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#ede9fe', color: '#6d28d9' }}>V3</span>
+                {V3_STYLES.map(s => {
+                  const isSelected = selectedStyle === s.id
+                  return (
+                    <button
+                      key={s.id}
+                      onClick={() => setSelectedStyle(s.id)}
+                      className="w-full flex gap-4 p-4 rounded-xl border-2 text-left transition-all hover:shadow-sm"
+                      style={isSelected
+                        ? { borderColor: '#7c3aed', background: '#faf9ff' }
+                        : { borderColor: '#E3E3E8', background: '#fff' }
+                      }
+                    >
+                      {/* ── Mini-mockup preview du style (114px × 84px) ── */}
+                      <div
+                        className="flex-shrink-0 rounded-lg overflow-hidden relative"
+                        style={{
+                          width: 114,
+                          height: 84,
+                          background: s.bg,
+                          border: `1px solid ${s.text === '#FFFFFF' || s.text === '#F5F0E8' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)'}`,
+                        }}
+                      >
+                        {/* Faux header — barre minuscule color accent */}
+                        <div style={{ height: 4, background: s.accent, opacity: 0.9 }} />
+                        {/* Faux titre dans la vraie font du style */}
+                        <div
+                          style={{
+                            padding: '10px 12px 4px',
+                            fontFamily: s.font,
+                            fontSize: 16,
+                            fontWeight: 600,
+                            color: s.text,
+                            lineHeight: 1,
+                          }}
+                        >
+                          Aa
+                        </div>
+                        {/* Faux lignes texte (skeleton) */}
+                        <div style={{ padding: '0 12px' }}>
+                          <div style={{ height: 4, background: s.text, opacity: 0.15, borderRadius: 2, marginBottom: 4, width: '70%' }} />
+                          <div style={{ height: 4, background: s.text, opacity: 0.1, borderRadius: 2, marginBottom: 4, width: '90%' }} />
+                          <div style={{ height: 4, background: s.text, opacity: 0.1, borderRadius: 2, width: '50%' }} />
+                        </div>
+                        {/* Faux button rond accent en bas */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            bottom: 8,
+                            right: 8,
+                            width: 14,
+                            height: 14,
+                            borderRadius: '50%',
+                            background: s.accent,
+                          }}
+                        />
                       </div>
-                      <p className="text-[12px]" style={{ color: '#8b8b9e' }}>{s.desc}</p>
-                    </div>
-                    {selectedStyle === s.id && (
-                      <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: '#7c3aed' }}>
-                        <Check className="w-3 h-3 text-white" />
+
+                      {/* ── Texte descriptif ── */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <span className="text-base">{s.emoji}</span>
+                          <span className="text-[14px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#ede9fe', color: '#6d28d9' }}>V3</span>
+                        </div>
+                        <p className="text-[12px] leading-snug" style={{ color: '#8b8b9e' }}>{s.desc}</p>
+                        {/* ── Swatch couleurs ── */}
+                        <div className="flex items-center gap-1.5 mt-2">
+                          <span title="Background" style={{ width: 14, height: 14, borderRadius: 4, background: s.bg, border: '1px solid rgba(0,0,0,0.08)' }} />
+                          <span title="Accent" style={{ width: 14, height: 14, borderRadius: 4, background: s.accent, border: '1px solid rgba(0,0,0,0.08)' }} />
+                          <span title="Text" style={{ width: 14, height: 14, borderRadius: 4, background: s.text, border: '1px solid rgba(0,0,0,0.08)' }} />
+                          <span className="text-[10px] ml-1.5" style={{ color: '#a8a8b8' }}>
+                            {s.font.split(',')[0].replace(/['"]/g, '').trim()}
+                          </span>
+                        </div>
                       </div>
-                    )}
-                  </button>
-                ))}
+
+                      {/* ── Checkmark si sélectionné ── */}
+                      {isSelected && (
+                        <div className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center self-start" style={{ background: '#7c3aed' }}>
+                          <Check className="w-3 h-3 text-white" />
+                        </div>
+                      )}
+                    </button>
+                  )
+                })}
               </div>
             )}
 

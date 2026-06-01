@@ -10,6 +10,10 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}'],
     exclude: ['node_modules', '.next', 'video', 'e2e'],
     globals: false,
+    // setupFiles tourne AVANT tous les imports — indispensable pour les env
+    // vars que les modules lisent au import-time (ex: ENCRYPTION_KEY dans
+    // unsubscribe-token.ts).
+    setupFiles: ['./vitest.setup.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],

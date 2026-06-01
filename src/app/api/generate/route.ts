@@ -376,21 +376,17 @@ export async function POST(req: NextRequest) {
     const Sentry = await import('@sentry/nextjs').catch(() => null)
     Sentry?.captureException(err, { tags: { route: 'api/generate' } })
 
-    // DEBUG TEMPORAIRE (J-1 launch) — expose le message d'erreur côté UI
-    // pour diagnostic prod sans accès Sentry/logs. À nettoyer post-launch.
-    const debugSuffix = ` [debug: ${message.slice(0, 200)}]`
-
     // JSON parse error = Claude a retourné du texte invalide
     if (message.includes('JSON') || message.includes('parse')) {
       return NextResponse.json(
-        { error: 'La génération IA a retourné un format invalide. Réessaie.' + debugSuffix },
+        { error: 'La génération IA a retourné un format invalide. Réessaie.' },
         { status: 500 }
       )
     }
 
     // Ne jamais exposer les détails internes en prod
     return NextResponse.json(
-      { error: 'Une erreur est survenue lors de la génération. Réessaie.' + debugSuffix },
+      { error: 'Une erreur est survenue lors de la génération. Réessaie.' },
       { status: 500 }
     )
   }

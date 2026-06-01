@@ -132,14 +132,18 @@ const LOCALE_KEY = 'konvert-locale'
 
 function detectLocale(searchParams: URLSearchParams): Locale {
   // Priorité : ?lang=xx → localStorage → navigator.language → 'fr'
+  // On défaut sur FR : cible principale francophone (MENA + France + Belgique).
+  // Le visiteur Product Hunt peut switcher via le toggle EN en haut à droite.
   const fromQuery = searchParams.get('lang')
   if (fromQuery === 'en' || fromQuery === 'fr') return fromQuery
   if (typeof window !== 'undefined') {
     const stored = localStorage.getItem(LOCALE_KEY)
     if (stored === 'en' || stored === 'fr') return stored
+    // Seuls les anglophones explicites (en-US, en-GB, etc.) passent en EN.
+    // Tout le reste (ar, fr, es, non détecté) → FR par défaut.
     const nav = navigator.language?.toLowerCase() ?? ''
-    if (nav.startsWith('fr')) return 'fr'
-    return 'en'  // par défaut anglais hors francophone (acquisition internationale)
+    if (nav.startsWith('en')) return 'en'
+    return 'fr'
   }
   return 'fr'
 }

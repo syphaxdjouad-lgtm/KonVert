@@ -162,26 +162,6 @@ function useReveal() {
   }, [])
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   HOOK — useCounter
-═══════════════════════════════════════════════════════════════════════════ */
-function useCounter(target: number, duration: number, triggered: boolean): number {
-  const [value, setValue] = useState(0)
-  useEffect(() => {
-    if (!triggered) return
-    let start: number | null = null
-    const step = (ts: number) => {
-      if (!start) start = ts
-      const progress = Math.min((ts - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setValue(Math.floor(eased * target))
-      if (progress < 1) requestAnimationFrame(step)
-      else setValue(target)
-    }
-    requestAnimationFrame(step)
-  }, [target, duration, triggered])
-  return value
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    HOOK — useSlider
@@ -1082,34 +1062,18 @@ function TrustBar() {
 
 /* ═══════════════════════════════════════════════════════════════════════════
    PROOF SECTION — Leadpages-style, fond lavande clair
+   Stats statiques factuelles — chiffres produit mesurables dès J0.
+   Pas de compteurs animés depuis 0 (= mauvais signal de confiance au scroll).
 ═══════════════════════════════════════════════════════════════════════════ */
+const PROOF_STATS = [
+  { value: '< 30s',    label: 'pour générer une page complète' },
+  { value: '50+',      label: 'templates optimisés conversion' },
+  { value: '3',        label: 'plateformes : Shopify, WooCommerce, YouCan' },
+] as const
+
 function ProofSection() {
-  const [triggered, setTriggered] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!ref.current) return
-    const io = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setTriggered(true); io.disconnect() } },
-      { threshold: 0.3 }
-    )
-    io.observe(ref.current)
-    return () => io.disconnect()
-  }, [])
-
-  const pages  = useCounter(50000, 1800, triggered)
-  const cvr    = useCounter(48,    1400, triggered)
-  const stores = useCounter(2800,  1600, triggered)
-
-  const stats = [
-    { value: pages,  suffix: '+',  label: 'pages générées en production' },
-    { value: cvr,    suffix: '%',  label: 'taux de conversion moyen' },
-    { value: stores, suffix: '+',  label: 'boutiques actives et en croissance' },
-  ]
-
   return (
     <section
-      ref={ref}
       style={{ background: 'linear-gradient(135deg, #f5f3ff 0%, #fdfbff 55%, #ede8ff 100%)' }}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
@@ -1118,19 +1082,19 @@ function ProofSection() {
           {/* Gauche — titre + description */}
           <div>
             <h2 className="reveal text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.08] tracking-tight text-gray-900 mb-6">
-              La preuve est dans les{' '}
+              Conçu pour{' '}
               <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                résultats.
+                convertir.
               </span>
             </h2>
             <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed max-w-lg">
-              KONVERT propulse les e-commerçants vers plus de conversions, avec des données actionnables et des résultats prouvés. Des milliers de pages actives — les chiffres parlent d&apos;eux-mêmes.
+              KONVERT génère des pages produit optimisées conversion en quelques secondes — scraping, copy IA, mise en forme. Tu publies directement sur ta boutique sans toucher au code.
             </p>
           </div>
 
           {/* Droite — 3 stats empilées */}
           <div className="flex flex-col">
-            {stats.map((s, i) => (
+            {PROOF_STATS.map((s, i) => (
               <div
                 key={i}
                 className="reveal py-8"
@@ -1143,7 +1107,7 @@ function ProofSection() {
                   className="text-4xl sm:text-6xl lg:text-7xl font-black leading-none mb-2"
                   style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
                 >
-                  {s.value.toLocaleString('fr-FR')}{s.suffix}
+                  {s.value}
                 </div>
                 <div className="text-gray-500 text-base font-medium">{s.label}</div>
               </div>

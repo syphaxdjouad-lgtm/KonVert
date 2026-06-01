@@ -127,27 +127,27 @@ export default function DemoPage() {
       </div>
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="pt-36 pb-10" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
+      <section className="pt-36 pb-10 bg-slate-50">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
 
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-6 border"
-               style={{ background: 'rgba(91,71,245,0.15)', borderColor: 'rgba(91,71,245,0.3)', color: '#a78bfa' }}>
+               style={{ background: 'rgba(91,71,245,0.10)', borderColor: 'rgba(91,71,245,0.25)', color: '#5B47F5' }}>
             <Sparkles className="w-3.5 h-3.5" />
             Démo interactive — Essayez gratuitement
           </div>
 
-          <h1 className="text-4xl sm:text-5xl font-black text-white mb-4">
+          <h1 className="text-4xl sm:text-5xl font-black text-slate-900 mb-4">
             Collez une URL.<br />
-            <span style={{ color: '#8b77ff' }}>Obtenez une page en 30s.</span>
+            <span style={{ color: '#5B47F5' }}>Obtenez une page en 30s.</span>
           </h1>
-          <p className="text-base leading-relaxed mb-2" style={{ color: '#8b8baa' }}>
+          <p className="text-base leading-relaxed mb-2 text-slate-600">
             Pas de compte requis. Testez avec n'importe quelle URL AliExpress, Amazon ou Alibaba.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 mt-5">
             {SUPPORTED.map(({ name, emoji }) => (
               <span key={name} className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full font-medium"
-                    style={{ background: 'rgba(255,255,255,0.08)', color: '#8b8baa' }}>
+                    style={{ background: 'rgba(91,71,245,0.08)', color: '#64748b' }}>
                 {emoji} {name}
               </span>
             ))}

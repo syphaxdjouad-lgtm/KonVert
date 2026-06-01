@@ -477,3 +477,29 @@ select:focus-visible {
   outline: 2px solid #5B47F5 !important;
   outline-offset: 2px !important;
 }
+
+/* ─── FOCUS RING WCAG 2.4.7 — CTAs marketing ────────────────────────────── */
+
+/* Classe utilitaire .focus-konvert à appliquer sur les CTAs <Link>/<button>
+   qui ne passent pas par le composant Button (pages marketing inline). */
+.focus-konvert {
+  outline: none;
+}
+.focus-konvert:focus-visible {
+  outline: 2px solid #5B47F5;
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+/* ─── FALLBACK REVEAL — empêche le gel opacity:0 ─────────────────────────── */
+
+/* Si IntersectionObserver ne fire pas (prefers-reduced-motion) ou si
+   l'utilisateur a désactivé les animations, on révèle tout d'office.
+   Utilisé sur /about et /features. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

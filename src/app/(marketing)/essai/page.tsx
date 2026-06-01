@@ -150,7 +150,7 @@ function detectLocale(searchParams: URLSearchParams): Locale {
 
 export default function EssaiPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen" style={{ background: '#0d0d1a' }} />}>
+    <Suspense fallback={<div className="min-h-screen bg-slate-50" />}>
       <EssaiContent />
     </Suspense>
   )
@@ -323,15 +323,14 @@ function EssaiContent() {
   if (step === 'generating') {
     return (
       <div
-        className="min-h-screen flex flex-col items-center justify-center px-4"
-        style={{ background: '#0d0d1a' }}
+        className="min-h-screen flex flex-col items-center justify-center px-4 bg-slate-50"
       >
         <div className="text-center max-w-sm">
           {/* Logo */}
           <div className="mb-10">
             <span style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.03em' }}>
-              <span style={{ color: '#fff' }}>KON</span>
-              <span style={{ color: '#a78bfa' }}>VERT</span>
+              <span style={{ color: '#1e293b' }}>KON</span>
+              <span style={{ color: '#5B47F5' }}>VERT</span>
             </span>
           </div>
 
@@ -339,21 +338,20 @@ function EssaiContent() {
           <div className="relative mb-8 flex items-center justify-center">
             <div
               className="w-20 h-20 rounded-full flex items-center justify-center"
-              style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(139,92,246,0.25)' }}
+              style={{ background: 'rgba(91,71,245,0.10)', border: '1px solid rgba(91,71,245,0.2)' }}
             >
-              <Sparkles className="w-8 h-8 animate-pulse" style={{ color: '#a78bfa' }} />
+              <Sparkles className="w-8 h-8 animate-pulse" style={{ color: '#5B47F5' }} />
             </div>
           </div>
 
           {/* Texte animé */}
           <p
             key={loadingText}
-            className="text-base font-medium transition-all"
-            style={{ color: 'rgba(196,181,253,0.85)' }}
+            className="text-base font-medium transition-all text-slate-700"
           >
             {loadingText}
           </p>
-          <p className="text-sm mt-2" style={{ color: 'rgba(167,139,250,0.4)' }}>
+          <p className="text-sm mt-2 text-slate-400">
             {t.loadingDuration}
           </p>
         </div>
@@ -364,24 +362,23 @@ function EssaiContent() {
   // ── Layout commun ────────────────────────────────────────────────────────
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-center px-4 py-16"
-      style={{ background: '#0d0d1a' }}
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-16 bg-slate-50"
     >
       <div className="w-full max-w-md">
 
         {/* Top bar — logo + toggle langue */}
         <div className="flex items-center justify-between mb-10">
           <span style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.03em' }}>
-            <span style={{ color: '#fff' }}>KON</span>
-            <span style={{ color: '#a78bfa' }}>VERT</span>
+            <span style={{ color: '#1e293b' }}>KON</span>
+            <span style={{ color: '#5B47F5' }}>VERT</span>
           </span>
           <button
             onClick={toggleLocale}
             className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:opacity-80"
             style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(139,92,246,0.25)',
-              color: 'rgba(196,181,253,0.85)',
+              background: 'rgba(91,71,245,0.08)',
+              border: '1px solid rgba(91,71,245,0.2)',
+              color: '#5B47F5',
               letterSpacing: '0.05em',
             }}
             aria-label={locale === 'fr' ? 'Switch to English' : 'Passer en français'}
@@ -411,8 +408,9 @@ function EssaiContent() {
         <div
           className="rounded-2xl p-8"
           style={{
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(139,92,246,0.2)',
+            background: '#ffffff',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
           }}
         >
 
@@ -421,18 +419,18 @@ function EssaiContent() {
             <form onSubmit={handleEmailSubmit} className="space-y-5">
               <div>
                 <h1
-                  className="text-2xl font-black mb-2"
-                  style={{ color: '#fff', lineHeight: 1.2 }}
+                  className="text-2xl font-black mb-2 text-slate-900"
+                  style={{ lineHeight: 1.2 }}
                 >
                   {t.emailTitle}
                 </h1>
-                <p className="text-sm" style={{ color: 'rgba(196,181,253,0.6)' }}>
+                <p className="text-sm text-slate-500">
                   {t.emailSubtitle}
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(196,181,253,0.8)' }}>
+                <label className="block text-sm font-medium mb-1.5 text-slate-700">
                   {t.firstName}
                 </label>
                 <input
@@ -442,9 +440,9 @@ function EssaiContent() {
                   placeholder={t.firstNamePh}
                   className="w-full rounded-xl px-4 py-3 text-sm outline-none transition"
                   style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(139,92,246,0.2)',
-                    color: '#fff',
+                    background: '#ffffff',
+                    border: '1px solid #e2e8f0',
+                    color: '#0f172a',
                   }}
                 />
               </div>
@@ -461,9 +459,9 @@ function EssaiContent() {
                   required
                   className="w-full rounded-xl px-4 py-3 text-sm outline-none transition"
                   style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(139,92,246,0.2)',
-                    color: '#fff',
+                    background: '#ffffff',
+                    border: '1px solid #e2e8f0',
+                    color: '#0f172a',
                   }}
                 />
                 <p className="text-xs mt-1.5" style={{ color: 'rgba(167,139,250,0.4)' }}>

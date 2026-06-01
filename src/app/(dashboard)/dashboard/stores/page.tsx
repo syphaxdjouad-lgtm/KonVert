@@ -2,9 +2,10 @@
 
 import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Plus, Store, Trash2, CheckCircle, AlertCircle, Zap, ExternalLink, Link2, X } from 'lucide-react'
+import { Plus, Trash2, CheckCircle, AlertCircle, Zap, ExternalLink, Link2, X } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { PlatformLogo } from '@/components/ui/platform-logo'
 
 /* ── Modale de confirmation ─────────────────────────────────────────────── */
 function ConfirmModal({
@@ -456,7 +457,7 @@ function StoreCard({ store, onDelete }: { store: any; onDelete: () => void }) {
     <div className="rounded-2xl p-5 flex items-center justify-between transition-colors hover:shadow-sm" style={{ background: '#fff', border: '1px solid #e5e7eb' }}>
       <div className="flex items-center gap-4">
         <div className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: bgColor }}>
-          <Store className="w-5 h-5" style={{ color }} />
+          <PlatformLogo platform={store.platform} size={28} />
         </div>
         <div>
           <div className="font-black text-sm" style={{ color: '#111' }}>{store.name}</div>

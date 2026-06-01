@@ -21,16 +21,17 @@ export default function CookieBanner() {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-[100] p-4 sm:p-6 pb-[88px] md:pb-6"
+      className="fixed bottom-0 left-0 right-0 z-[100] p-4 sm:p-6 pb-4 md:pb-6"
+      style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
       role="dialog"
       aria-label="Consentement cookies"
     >
       <div
-        className="max-w-3xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-4 px-5 py-4 rounded-2xl bg-white"
-        style={{ boxShadow: '0 -2px 20px rgba(0,0,0,0.08), 0 4px 24px rgba(0,0,0,0.06)', border: '1px solid #f0f0f0' }}
+        className="max-w-3xl mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-4 px-5 py-4 rounded-2xl bg-white/95 backdrop-blur-sm"
+        style={{ boxShadow: '0 -2px 20px rgba(0,0,0,0.08), 0 4px 24px rgba(0,0,0,0.06)', border: '1px solid #e5e7eb' }}
       >
         <p className="text-sm text-gray-600 flex-1 leading-relaxed">
-          On utilise des cookies pour améliorer votre expérience.{' '}
+          On utilise des cookies pour améliorer ton expérience.{' '}
           <Link href="/legal/cookies" className="text-[#5B47F5] font-semibold hover:underline">
             En savoir plus
           </Link>

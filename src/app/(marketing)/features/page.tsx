@@ -580,9 +580,12 @@ export default function FeaturesPage() {
   useEffect(() => {
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
-    }, { threshold: 0.15 })
+    }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' })
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el))
-    return () => obs.disconnect()
+    const safetyTimeout = setTimeout(() => {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'))
+    }, 800)
+    return () => { obs.disconnect(); clearTimeout(safetyTimeout) }
   }, [])
 
   const currentTab = DEEP_DIVE_TABS.find(t => t.id === activeTab)!
@@ -590,26 +593,26 @@ export default function FeaturesPage() {
   return (
     <>
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section id="features" className="pt-32 pb-16" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
+      <section id="features" className="pt-32 pb-16 bg-slate-50">
         <div className="max-w-4xl mx-auto px-5 sm:px-8 text-center">
 
           <div className="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-7 border"
-               style={{ background: 'rgba(91,71,245,0.15)', borderColor: 'rgba(91,71,245,0.3)', color: '#a78bfa' }}>
+               style={{ background: 'rgba(91,71,245,0.08)', borderColor: 'rgba(91,71,245,0.2)', color: '#5B47F5' }}>
             <Sparkle className="w-3.5 h-3.5" weight="fill" />
             Fonctionnalités
           </div>
 
-          <h1 className="reveal delay-1 text-4xl sm:text-5xl font-black text-white mb-5 leading-tight">
+          <h1 className="reveal delay-1 text-4xl sm:text-5xl font-black text-slate-900 mb-5 leading-tight">
             Tout ce qu'il faut pour<br />
-            <span style={{ color: '#8b77ff' }}>vendre plus. Dès aujourd'hui.</span>
+            <span style={{ color: '#5B47F5' }}>vendre plus. Dès aujourd'hui.</span>
           </h1>
-          <p className="reveal delay-2 text-lg max-w-2xl mx-auto leading-relaxed mb-8" style={{ color: '#8b8baa' }}>
+          <p className="reveal delay-2 text-lg max-w-2xl mx-auto leading-relaxed mb-8 text-slate-600">
             KONVERT combine IA générative, templates optimisés, analytics temps réel et intégrations natives pour te donner un avantage concurrentiel immédiat.
           </p>
           <div className="reveal delay-3">
             <Link
               href="/demo"
-              className="btn-shimmer inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-bold text-sm"
+              className="focus-konvert btn-shimmer inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-bold text-sm"
               style={{ boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
             >
               Voir la démo live
@@ -797,18 +800,18 @@ export default function FeaturesPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section className="py-20" style={{ background: 'linear-gradient(135deg, #08080f, #0f0f2e)' }}>
+      <section className="py-20" style={{ background: 'linear-gradient(135deg, #F0EDFF 0%, #F8F7FF 100%)' }}>
         <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">
-          <h2 className="reveal text-3xl font-black text-white mb-4">
+          <h2 className="reveal text-3xl font-black text-slate-900 mb-4">
             Prêt à tester toutes ces fonctionnalités ?
           </h2>
-          <p className="reveal delay-1 text-sm mb-8" style={{ color: '#8b8baa' }}>
+          <p className="reveal delay-1 text-sm mb-8 text-slate-600">
             1 page gratuite. Sans carte de crédit. Résultat en 30 secondes.
           </p>
           <div className="reveal delay-2 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/pricing"
-              className="btn-shimmer inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold"
+              className="focus-konvert btn-shimmer inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold"
               style={{ boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
             >
               Voir les tarifs
@@ -816,8 +819,8 @@ export default function FeaturesPage() {
             </Link>
             <Link
               href="/demo"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-sm border"
-              style={{ borderColor: 'rgba(255,255,255,0.2)', color: '#fff' }}
+              className="focus-konvert inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-sm border transition-colors"
+              style={{ borderColor: 'rgba(91,71,245,0.3)', color: '#5B47F5' }}
             >
               Voir la démo
             </Link>

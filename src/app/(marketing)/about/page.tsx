@@ -170,28 +170,33 @@ export default function AboutPage() {
   useEffect(() => {
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
-    }, { threshold: 0.15 })
+    }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' })
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el))
-    return () => obs.disconnect()
+    // Timeout de sécurité : si l'observer ne fire pas après 800ms,
+    // on révèle tout (page déjà scrollée ou problème de viewport)
+    const safetyTimeout = setTimeout(() => {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'))
+    }, 800)
+    return () => { obs.disconnect(); clearTimeout(safetyTimeout) }
   }, [])
 
   return (
     <>
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="pt-32 pb-20" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
+      <section className="pt-32 pb-20 bg-slate-50">
         <div className="max-w-4xl mx-auto px-5 sm:px-8 text-center">
 
           <div className="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-8 border"
-               style={{ background: 'rgba(91,71,245,0.15)', borderColor: 'rgba(91,71,245,0.3)', color: '#a78bfa' }}>
+               style={{ background: 'rgba(91,71,245,0.10)', borderColor: 'rgba(91,71,245,0.25)', color: '#5B47F5' }}>
             <Users className="w-3.5 h-3.5" />
             À propos de nous
           </div>
 
-          <h1 className="reveal delay-1 text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
+          <h1 className="reveal delay-1 text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-tight mb-6">
             On a construit l'outil<br />
-            <span style={{ color: '#8b77ff' }}>qu'on voulait utiliser.</span>
+            <span style={{ color: '#5B47F5' }}>qu'on voulait utiliser.</span>
           </h1>
-          <p className="reveal delay-2 text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: '#8b8baa' }}>
+          <p className="reveal delay-2 text-lg max-w-2xl mx-auto leading-relaxed text-slate-600">
             KONVERT est né d'une frustration : créer une bonne page produit prenait des heures, nécessitait un designer,
             un copywriter et un développeur. On a automatisé tout ça en 30 secondes.
           </p>
@@ -362,11 +367,13 @@ export default function AboutPage() {
 
             {/* Case study 1 — Décoration */}
             <div className="reveal delay-1 rounded-3xl overflow-hidden border border-[#ede8ff]" style={{ boxShadow: '0 4px 20px rgba(91,71,245,0.07)' }}>
-              <div
-                className="h-40 flex items-center justify-center text-6xl"
-                style={{ background: 'linear-gradient(135deg, #faf5ff, #ede8ff)' }}
-              >
-                🏡
+              <div className="h-40 overflow-hidden">
+                <img
+                  src="https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  alt="Boutique décoration maison"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
               </div>
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-4">
@@ -402,11 +409,13 @@ export default function AboutPage() {
 
             {/* Case study 2 — Agence SMMA */}
             <div className="reveal delay-2 rounded-3xl overflow-hidden border border-[#ede8ff]" style={{ boxShadow: '0 4px 20px rgba(91,71,245,0.07)' }}>
-              <div
-                className="h-40 flex items-center justify-center text-6xl"
-                style={{ background: 'linear-gradient(135deg, #f0fdf4, #dcfce7)' }}
-              >
-                📈
+              <div className="h-40 overflow-hidden">
+                <img
+                  src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  alt="Agence SMMA croissance"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
               </div>
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-4">
@@ -445,18 +454,18 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section className="py-20" style={{ background: 'linear-gradient(135deg, #08080f, #0f0f2e)' }}>
+      <section className="py-20" style={{ background: 'linear-gradient(135deg, #F0EDFF 0%, #F8F7FF 100%)' }}>
         <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">
-          <h2 className="reveal text-3xl font-black text-white mb-4">
+          <h2 className="reveal text-3xl font-black text-slate-900 mb-4">
             Rejoignez les 2 800+ boutiques<br />qui convertissent avec KONVERT.
           </h2>
-          <p className="reveal delay-1 text-sm mb-8" style={{ color: '#8b8baa' }}>
+          <p className="reveal delay-1 text-sm mb-8 text-slate-600">
             1 page gratuite. Aucune carte de crédit. Résultat immédiat.
           </p>
           <div className="reveal delay-2 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/essai"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold"
+              className="focus-konvert inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold"
               style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
             >
               Commencer gratuitement
@@ -464,8 +473,8 @@ export default function AboutPage() {
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold border text-sm transition-colors"
-              style={{ borderColor: 'rgba(255,255,255,0.2)', color: '#fff' }}
+              className="focus-konvert inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold border text-sm transition-colors"
+              style={{ borderColor: 'rgba(91,71,245,0.3)', color: '#5B47F5' }}
             >
               Nous contacter
             </Link>

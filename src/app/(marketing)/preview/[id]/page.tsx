@@ -54,6 +54,11 @@ export default function PreviewPage() {
         if (json.error) { setError(json.error); return }
         setData(json)
         track.previewViewed(id)
+        // Si la preview vient du tunnel /essai (source=public dans l'API),
+        // on track l'event dédié pour mesurer la conversion funnel complet.
+        if (json.source === 'public') {
+          track.essaiPreviewGenerated(id)
+        }
       })
       .catch(() => setError('Erreur réseau.'))
       .finally(() => setLoading(false))

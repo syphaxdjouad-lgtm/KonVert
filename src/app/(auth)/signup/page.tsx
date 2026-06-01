@@ -110,9 +110,18 @@ function SignupContent() {
     // avec un event Activation séparé après 1ère page créée.
     pixels.completeRegistration({ method: 'email', value: 0 })
     if (recipientEmail) {
+      // Passe le access_token de la session fraîchement créée dans Authorization.
+      // Sans ça, les cookies Supabase ne sont pas encore propagés côté serveur
+      // au moment où la route /api/email/welcome tente getUser() → 401.
+      // Si data.session est null (mode "Confirm email" Supabase activé),
+      // le welcome sera déclenché par le webhook auth post-confirmation.
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+      if (data.session?.access_token) {
+        headers['Authorization'] = `Bearer ${data.session.access_token}`
+      }
       fetch('/api/email/welcome', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ email: recipientEmail, name }),
       }).catch(() => {})
     }

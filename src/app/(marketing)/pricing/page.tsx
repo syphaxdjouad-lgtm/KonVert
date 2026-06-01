@@ -82,7 +82,6 @@ const PLANS = [
       'White-label (logo + couleurs)',
       'Dashboard multi-clients',
       'Rapports clients',
-      'Accès API (bientôt)',
       'Onboarding personnalisé',
     ],
     cta: 'Démarrer avec Agency',
@@ -140,6 +139,18 @@ function FaqItem({ q, a }: { q: string; a: string }) {
     </div>
   )
 }
+
+/* ─── COMPARE ROWS — KONVERT vs DIY vs Freelance ────────────────────── */
+const COMPARE_ROWS = [
+  { label: 'Temps par page produit',  konvert: '30 secondes',      diy: '2-4 heures',        freelance: '2-5 jours' },
+  { label: 'Coût par page',           konvert: '< 0,15€',          diy: 'Temps = argent',     freelance: '150-500€' },
+  { label: 'Qualité copy',            konvert: 'IA e-commerce',    diy: 'Variable',            freelance: 'Variable selon profil' },
+  { label: 'Intégration Shopify',     konvert: '1 clic natif',     diy: 'Manuel + code',      freelance: 'Dépend du freelance' },
+  { label: 'A/B testing',             konvert: 'Intégré',          diy: 'Outil externe payant', freelance: 'Non inclus' },
+  { label: 'Scalabilité',             konvert: 'Illimitée',        diy: 'Limitée par le temps', freelance: 'Coût x pages' },
+  { label: 'Analytics intégrés',      konvert: 'Oui (Pro+)',       diy: 'Non',                freelance: 'Non inclus' },
+  { label: 'Support',                 konvert: 'Dédié inclus',     diy: 'Seul',               freelance: 'Hors contrat' },
+]
 
 /* ─── FAQ CONTENT (réutilisé par UI + Schema FAQPage) ─────────────────── */
 const PRICING_FAQ = [
@@ -576,7 +587,6 @@ function PricingContent() {
               { feature: 'Export HTML',      values: [true, true, true, true] },
               { feature: 'Analytics',        values: [false, true, true, true] },
               { feature: 'White-label',      values: [false, false, true, true] },
-              { feature: 'Accès API',        values: [false, false, true, true] },
               { feature: 'Multi-clients',    values: [false, false, true, true] },
               { feature: 'Rapports PDF',     values: [false, false, true, true] },
               { feature: 'SLA garanti',      values: [false, false, false, true] },
@@ -616,6 +626,81 @@ function PricingContent() {
         </div>
       </div>
 
+      {/* ── COMPARATIF KONVERT vs DIY vs FREELANCE ───────────────────────── */}
+      <div className="py-16 px-6 bg-white border-t border-gray-100">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl font-black text-gray-900 mb-8 text-center" style={{ letterSpacing: '-0.02em' }}>
+            KONVERT vs Faire soi-même vs Freelance
+          </h2>
+
+          {/* Header colonnes — Desktop uniquement */}
+          <div className="hidden md:grid grid-cols-4 gap-3 mb-3 px-2">
+            <div />
+            <div className="rounded-2xl p-4 text-center" style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)' }}>
+              <p className="text-white font-black text-sm">KONVERT</p>
+              <p className="text-white/70 text-xs mt-0.5">La solution IA</p>
+            </div>
+            <div className="rounded-2xl p-4 text-center bg-gray-100">
+              <p className="text-gray-700 font-bold text-sm">Faire soi-même</p>
+              <p className="text-gray-400 text-xs mt-0.5">DIY</p>
+            </div>
+            <div className="rounded-2xl p-4 text-center bg-gray-100">
+              <p className="text-gray-700 font-bold text-sm">Freelance</p>
+              <p className="text-gray-400 text-xs mt-0.5">Agence / Indépendant</p>
+            </div>
+          </div>
+
+          <div className="rounded-2xl overflow-hidden border border-gray-100">
+
+            {/* VERSION MOBILE (< md) : cards empilées par critère */}
+            <div className="md:hidden space-y-3 p-4">
+              {COMPARE_ROWS.map((row) => (
+                <div key={row.label} className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                  <div className="px-4 py-3 bg-slate-50 border-b border-gray-100">
+                    <span className="text-xs font-bold text-slate-700">{row.label}</span>
+                  </div>
+                  <div className="grid grid-cols-3 divide-x divide-gray-100">
+                    <div className="px-3 py-3 flex flex-col gap-0.5" style={{ background: 'rgba(91,71,245,0.04)' }}>
+                      <span className="text-[10px] font-bold text-[#5B47F5] uppercase tracking-wide block">KONVERT</span>
+                      <span className="text-xs font-semibold text-[#5B47F5]">{row.konvert}</span>
+                    </div>
+                    <div className="px-3 py-3 flex flex-col gap-0.5">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block">DIY</span>
+                      <span className="text-xs text-slate-500">{row.diy}</span>
+                    </div>
+                    <div className="px-3 py-3 flex flex-col gap-0.5">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block">Freelance</span>
+                      <span className="text-xs text-slate-500">{row.freelance}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* VERSION DESKTOP (md+) : grid 4 colonnes */}
+            <div className="hidden md:block">
+              {COMPARE_ROWS.map((row, i) => (
+                <div key={row.label} className={`grid grid-cols-4 gap-0 ${i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                  <div className="px-4 py-4 flex items-center">
+                    <span className="text-xs font-semibold text-gray-600">{row.label}</span>
+                  </div>
+                  <div className="px-4 py-4 flex items-center justify-center" style={{ background: 'rgba(91,71,245,0.06)' }}>
+                    <span className="text-xs font-bold text-[#5B47F5] text-center">{row.konvert}</span>
+                  </div>
+                  <div className="px-4 py-4 flex items-center justify-center">
+                    <span className="text-xs text-gray-500 text-center">{row.diy}</span>
+                  </div>
+                  <div className="px-4 py-4 flex items-center justify-center">
+                    <span className="text-xs text-gray-500 text-center">{row.freelance}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
       {/* ── FAQ PRICING ──────────────────────────────────────────────────── */}
       <div className="py-16 px-6 bg-white border-t border-gray-100">
         <div className="max-w-2xl mx-auto">
@@ -634,29 +719,29 @@ function PricingContent() {
       {/* ── CTA FINAL ────────────────────────────────────────────────────── */}
       <div
         className="py-20 px-6 text-center"
-        style={{ background: '#111827' }}
+        style={{ background: 'linear-gradient(135deg, #F0EDFF 0%, #F8F7FF 100%)' }}
       >
         <h2
-          className="text-3xl md:text-4xl font-black text-white mb-4"
+          className="text-3xl md:text-4xl font-black text-slate-900 mb-4"
           style={{ letterSpacing: '-0.02em' }}
         >
           Prêt à générer ta première page ?
         </h2>
-        <p className="text-lg mb-8" style={{ color: 'rgba(255,255,255,0.6)' }}>
+        <p className="text-lg mb-8 text-slate-600">
           Génère ta 1ère page gratuitement — vois le résultat avant de payer.
         </p>
         <Link
           href="/essai"
-          className="inline-flex items-center gap-2 font-bold px-10 py-4 rounded-lg text-white text-base bg-green-600 hover:bg-green-700 transition-colors"
-          style={{ boxShadow: '0 4px 20px rgba(22,163,74,0.35)' }}
+          className="focus-konvert inline-flex items-center gap-2 font-bold px-10 py-4 rounded-lg text-white text-base transition-colors"
+          style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 4px 20px rgba(91,71,245,0.35)' }}
         >
           Générer ma première page — gratuit
           <ArrowRight className="w-4 h-4" />
         </Link>
-        <p className="mt-3 text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>
+        <p className="mt-3 text-sm text-slate-400">
           Stripe · Annulation à tout moment · Sans engagement
         </p>
-        <p className="mt-2 text-sm font-semibold" style={{ color: 'rgba(134,239,172,0.8)' }}>
+        <p className="mt-2 text-sm font-semibold text-green-700">
           <ShieldCheck className="inline w-3.5 h-3.5 mr-1" /> Satisfait ou remboursé 30 jours — Sans question
         </p>
       </div>

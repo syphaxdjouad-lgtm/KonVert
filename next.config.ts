@@ -13,6 +13,8 @@ const commonHeaders = [
   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
   // Force HTTPS pendant 1 an + preload (eligible HSTS Preload List)
   { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' },
+  // Isole le contexte de navigation pour atténuer les attaques cross-origin
+  { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
 ]
 
 const cspBase = {
@@ -28,12 +30,14 @@ const cspBase = {
 // CSP stricte : pas d'unsafe-eval. Appliquée partout sauf builder GrapesJS.
 const strictCsp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://js.stripe.com https://client.crisp.chat https://eu-assets.i.posthog.com https://us-assets.i.posthog.com https://va.vercel-scripts.com",
+  // Cloudflare Turnstile requis pour /essai (challenge.js + iframe challenge)
+  "script-src 'self' 'unsafe-inline' https://js.stripe.com https://client.crisp.chat https://eu-assets.i.posthog.com https://us-assets.i.posthog.com https://va.vercel-scripts.com https://challenges.cloudflare.com",
   cspBase.styleSrc,
   cspBase.imgSrc,
   cspBase.fontSrc,
   cspBase.connectSrc,
-  cspBase.frameSrc,
+  // Cloudflare Turnstile utilise un iframe sandbox depuis challenges.cloudflare.com
+  "frame-src https://js.stripe.com https://hooks.stripe.com https://game.crisp.chat https://challenges.cloudflare.com",
   cspBase.workerSrc,
 ].join('; ')
 
@@ -41,12 +45,12 @@ const strictCsp = [
 // Limitée aux routes builder uniquement.
 const builderCsp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://client.crisp.chat https://eu-assets.i.posthog.com https://us-assets.i.posthog.com https://va.vercel-scripts.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://client.crisp.chat https://eu-assets.i.posthog.com https://us-assets.i.posthog.com https://va.vercel-scripts.com https://challenges.cloudflare.com",
   cspBase.styleSrc,
   cspBase.imgSrc,
   cspBase.fontSrc,
   cspBase.connectSrc,
-  cspBase.frameSrc,
+  "frame-src https://js.stripe.com https://hooks.stripe.com https://game.crisp.chat https://challenges.cloudflare.com",
   cspBase.workerSrc,
 ].join('; ')
 

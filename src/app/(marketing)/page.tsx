@@ -162,26 +162,6 @@ function useReveal() {
   }, [])
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   HOOK — useCounter
-═══════════════════════════════════════════════════════════════════════════ */
-function useCounter(target: number, duration: number, triggered: boolean): number {
-  const [value, setValue] = useState(0)
-  useEffect(() => {
-    if (!triggered) return
-    let start: number | null = null
-    const step = (ts: number) => {
-      if (!start) start = ts
-      const progress = Math.min((ts - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setValue(Math.floor(eased * target))
-      if (progress < 1) requestAnimationFrame(step)
-      else setValue(target)
-    }
-    requestAnimationFrame(step)
-  }, [target, duration, triggered])
-  return value
-}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    HOOK — useSlider
@@ -253,7 +233,7 @@ function Slide1() {
               className="btn-shimmer btn-ripple inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg"
               onClick={addRipple}
             >
-              Essaie avec ton produit — gratuit <ArrowRight className="w-4 h-4" />
+              Génère ma première page — gratuit <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/demo"
@@ -1041,16 +1021,16 @@ function HeroSlider() {
 /* ═══════════════════════════════════════════════════════════════════════════
    TRUST BAR — Logo marquee style
 ═══════════════════════════════════════════════════════════════════════════ */
+// Partenaires technologiques officiels (intégrations live dès J0 — pas des clients)
 const TRUST_BRANDS = [
-  { name: 'SoundCloud',               style: { fontWeight: 700, fontSize: '17px', letterSpacing: '-0.3px' } },
-  { name: 'Harvard Business Review',  style: { fontWeight: 800, fontSize: '13px', lineHeight: '1.2', maxWidth: '90px', textAlign: 'center' as const } },
-  { name: 'CHOMPS',                   style: { fontWeight: 900, fontSize: '26px', letterSpacing: '1.5px' } },
-  { name: 'ebay',                     style: { fontWeight: 800, fontSize: '26px', letterSpacing: '-1px', color: '#4b5563' } },
-  { name: 'vimeo',                    style: { fontWeight: 700, fontSize: '22px', fontStyle: 'italic' } },
-  { name: 'Zapier',                   style: { fontWeight: 700, fontSize: '18px' } },
-  { name: 'Shopify',                  style: { fontWeight: 700, fontSize: '18px' } },
-  { name: 'Stripe',                   style: { fontWeight: 700, fontSize: '20px', letterSpacing: '-0.5px' } },
-  { name: 'Klaviyo',                  style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'Shopify',      style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'WooCommerce',  style: { fontWeight: 700, fontSize: '16px' } },
+  { name: 'Stripe',       style: { fontWeight: 700, fontSize: '20px', letterSpacing: '-0.5px' } },
+  { name: 'AliExpress',   style: { fontWeight: 700, fontSize: '16px' } },
+  { name: 'Klaviyo',      style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'Zapier',       style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'YouCan',       style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'DeepSeek',     style: { fontWeight: 700, fontSize: '18px' } },
 ]
 
 function TrustBar() {
@@ -1059,7 +1039,7 @@ function TrustBar() {
     <section style={{ background: '#f0eeff', borderTop: '1px solid #e4daff', borderBottom: '1px solid #e4daff' }}>
       <div className="py-3">
         <p className="text-center text-xs font-semibold uppercase tracking-widest mb-5" style={{ color: '#b8aee8' }}>
-          Utilisé par des marques qui convertissent
+          Intégrations natives disponibles dès J0
         </p>
         <div className="marquee-wrap">
           <div className="marquee-track">
@@ -1082,34 +1062,18 @@ function TrustBar() {
 
 /* ═══════════════════════════════════════════════════════════════════════════
    PROOF SECTION — Leadpages-style, fond lavande clair
+   Stats statiques factuelles — chiffres produit mesurables dès J0.
+   Pas de compteurs animés depuis 0 (= mauvais signal de confiance au scroll).
 ═══════════════════════════════════════════════════════════════════════════ */
+const PROOF_STATS = [
+  { value: '< 30s',    label: 'pour générer une page complète' },
+  { value: '50+',      label: 'templates optimisés conversion' },
+  { value: '3',        label: 'plateformes : Shopify, WooCommerce, YouCan' },
+] as const
+
 function ProofSection() {
-  const [triggered, setTriggered] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!ref.current) return
-    const io = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setTriggered(true); io.disconnect() } },
-      { threshold: 0.3 }
-    )
-    io.observe(ref.current)
-    return () => io.disconnect()
-  }, [])
-
-  const pages  = useCounter(50000, 1800, triggered)
-  const cvr    = useCounter(48,    1400, triggered)
-  const stores = useCounter(2800,  1600, triggered)
-
-  const stats = [
-    { value: pages,  suffix: '+',  label: 'pages générées en production' },
-    { value: cvr,    suffix: '%',  label: 'taux de conversion moyen' },
-    { value: stores, suffix: '+',  label: 'boutiques actives et en croissance' },
-  ]
-
   return (
     <section
-      ref={ref}
       style={{ background: 'linear-gradient(135deg, #f5f3ff 0%, #fdfbff 55%, #ede8ff 100%)' }}
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 sm:py-24">
@@ -1118,19 +1082,19 @@ function ProofSection() {
           {/* Gauche — titre + description */}
           <div>
             <h2 className="reveal text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.08] tracking-tight text-gray-900 mb-6">
-              La preuve est dans les{' '}
+              Conçu pour{' '}
               <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                résultats.
+                convertir.
               </span>
             </h2>
             <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed max-w-lg">
-              KONVERT propulse les e-commerçants vers plus de conversions, avec des données actionnables et des résultats prouvés. Des milliers de pages actives — les chiffres parlent d&apos;eux-mêmes.
+              KONVERT génère des pages produit optimisées conversion en quelques secondes — scraping, copy IA, mise en forme. Tu publies directement sur ta boutique sans toucher au code.
             </p>
           </div>
 
           {/* Droite — 3 stats empilées */}
           <div className="flex flex-col">
-            {stats.map((s, i) => (
+            {PROOF_STATS.map((s, i) => (
               <div
                 key={i}
                 className="reveal py-8"
@@ -1143,7 +1107,7 @@ function ProofSection() {
                   className="text-4xl sm:text-6xl lg:text-7xl font-black leading-none mb-2"
                   style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}
                 >
-                  {s.value.toLocaleString('fr-FR')}{s.suffix}
+                  {s.value}
                 </div>
                 <div className="text-gray-500 text-base font-medium">{s.label}</div>
               </div>
@@ -1587,7 +1551,7 @@ function HowItWorks() {
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold text-sm transition-transform hover:scale-105"
                 style={{ background: 'linear-gradient(135deg,#7c3aed,#6d28d9)' }}
               >
-                Essayer maintenant — gratuit
+                Génère ma première page — gratuit
               </a>
             </div>
             <button
@@ -2949,7 +2913,7 @@ const PLANS = [
     name: 'Agency',
     monthly: 199,
     desc: 'Pour les agences SMMA',
-    features: ['Tout dans Pro', 'Multi-clients illimité', 'White-label (logo + couleurs)', 'Rapports clients', 'Accès API (bientôt)', 'Onboarding personnalisé'],
+    features: ['Tout dans Pro', 'Multi-clients illimité', 'White-label (logo + couleurs)', 'Rapports clients', 'Onboarding personnalisé'],
     cta: 'Contacter les ventes',
     highlighted: false,
   },
@@ -3195,60 +3159,16 @@ function FinalCTA() {
 /* ═══════════════════════════════════════════════════════════════════════════
    PAGE PRINCIPALE
 ═══════════════════════════════════════════════════════════════════════════ */
-// Schema.org SoftwareApplication — visible par Google Rich Results et
-// les LLM crawlers (ChatGPT, Perplexity) pour citer KONVERT correctement.
-const STRUCTURED_DATA = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'SoftwareApplication',
-      name: 'KONVERT',
-      applicationCategory: 'BusinessApplication',
-      operatingSystem: 'Web',
-      description: 'Générateur IA de pages produit e-commerce optimisées conversion. Colle une URL produit, KONVERT scrape, génère et publie sur Shopify, WooCommerce ou YouCan.',
-      url: 'https://konvertpilot.com',
-      offers: {
-        '@type': 'AggregateOffer',
-        lowPrice: '0',
-        highPrice: '199',
-        priceCurrency: 'EUR',
-        offerCount: '4',
-      },
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.9',
-        ratingCount: '1247',
-      },
-      featureList: [
-        'Scraping AliExpress / Amazon / Alibaba',
-        'Génération copy IA (DeepSeek)',
-        'Publication 1-clic Shopify, WooCommerce, YouCan',
-        'Builder visuel GrapesJS',
-        'A/B testing intégré',
-        'Analytics conversion',
-      ],
-    },
-    {
-      '@type': 'Organization',
-      name: 'KONVERT',
-      url: 'https://konvertpilot.com',
-      logo: 'https://konvertpilot.com/icon.svg',
-      sameAs: [
-        'https://twitter.com/konvertapp',
-      ],
-    },
-  ],
-}
+// Note : le schema SoftwareApplication + Organization est monté globalement
+// dans src/app/layout.tsx via softwareApplicationSchema() + organizationSchema.
+// Pas de script JSON-LD local ici pour éviter la duplication (ratingCount
+// divergent 247 vs 1247 → Google peut rejeter les deux). Source unique = layout.
 
 export default function HomePage() {
   useReveal()
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA) }}
-      />
       <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }} />
       <main>
         <HeroSlider />

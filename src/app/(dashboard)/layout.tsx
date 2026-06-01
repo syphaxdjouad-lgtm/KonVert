@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import NotificationBell from '@/components/dashboard/NotificationBell'
-import { identifyUser, resetUser } from '@/lib/analytics'
+import { identifyUser, resetUser, track } from '@/lib/analytics'
 
 const NAV_ITEMS = [
   { href: '/dashboard',           icon: LayoutDashboard, label: 'Vue d\'ensemble' },
@@ -44,7 +44,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     setMobileMenuOpen(false)
   }, [pathname])
 
-  // Récupérer l'initiale et identifier l'utilisateur dans PostHog
+  // Récupérer l'initiale, identifier l'utilisateur dans PostHog, et tracker la vue dashboard
   useEffect(() => {
     const supabase = createClient()
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -56,6 +56,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         email: user.email,
         created_at: user.created_at,
       })
+      // Track dashboard_viewed une fois par session — permet de mesurer
+      // le taux d'activation (signup → dashboard vu) dans PostHog.
+      track.dashboardViewed()
     })
   }, [])
 

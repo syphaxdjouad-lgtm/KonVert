@@ -127,27 +127,27 @@ export default function DemoPage() {
       </div>
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="pt-36 pb-10" style={{ background: 'linear-gradient(135deg, #08080f 0%, #0f0f2e 100%)' }}>
+      <section className="pt-36 pb-10 bg-slate-50">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
 
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-6 border"
-               style={{ background: 'rgba(91,71,245,0.15)', borderColor: 'rgba(91,71,245,0.3)', color: '#a78bfa' }}>
+               style={{ background: 'rgba(91,71,245,0.08)', borderColor: 'rgba(91,71,245,0.2)', color: '#5B47F5' }}>
             <Sparkles className="w-3.5 h-3.5" />
             Démo interactive — Essayez gratuitement
           </div>
 
-          <h1 className="text-4xl sm:text-5xl font-black text-white mb-4">
+          <h1 className="text-4xl sm:text-5xl font-black text-slate-900 mb-4">
             Collez une URL.<br />
-            <span style={{ color: '#8b77ff' }}>Obtenez une page en 30s.</span>
+            <span style={{ color: '#5B47F5' }}>Obtenez une page en 30s.</span>
           </h1>
-          <p className="text-base leading-relaxed mb-2" style={{ color: '#8b8baa' }}>
+          <p className="text-base leading-relaxed mb-2 text-slate-600">
             Pas de compte requis. Testez avec n'importe quelle URL AliExpress, Amazon ou Alibaba.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 mt-5">
             {SUPPORTED.map(({ name, emoji }) => (
               <span key={name} className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full font-medium"
-                    style={{ background: 'rgba(255,255,255,0.08)', color: '#8b8baa' }}>
+                    style={{ background: 'rgba(91,71,245,0.08)', color: '#64748b' }}>
                 {emoji} {name}
               </span>
             ))}
@@ -414,13 +414,13 @@ export default function DemoPage() {
             </div>
 
             {/* CTA upgrade */}
-            <div className="mt-6 p-8 rounded-3xl text-center" style={{ background: 'linear-gradient(135deg, #08080f, #0f0f2e)' }}>
-              <p className="text-white font-black text-xl mb-2">Publiez cette page sur votre boutique.</p>
-              <p className="text-sm mb-6" style={{ color: '#8b8baa' }}>Connexion Shopify ou WooCommerce en 1 clic. 1 page gratuite pour tester.</p>
+            <div className="mt-6 p-8 rounded-3xl text-center" style={{ background: 'linear-gradient(135deg, #F0EDFF 0%, #F8F7FF 100%)', border: '1px solid rgba(91,71,245,0.12)' }}>
+              <p className="text-slate-900 font-black text-xl mb-2">Publiez cette page sur votre boutique.</p>
+              <p className="text-sm mb-6 text-slate-600">Connexion Shopify ou WooCommerce en 1 clic. 1 page gratuite pour tester.</p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
                   href="/essai"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold text-sm"
+                  className="focus-konvert inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold text-sm"
                   style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
                 >
                   Publier sur Shopify
@@ -428,8 +428,8 @@ export default function DemoPage() {
                 </Link>
                 <Link
                   href="/templates"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-sm border"
-                  style={{ borderColor: 'rgba(255,255,255,0.2)', color: '#fff' }}
+                  className="focus-konvert inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-sm border transition-colors"
+                  style={{ borderColor: 'rgba(91,71,245,0.3)', color: '#5B47F5' }}
                 >
                   <Palette className="w-4 h-4" />
                   Voir les 42 templates

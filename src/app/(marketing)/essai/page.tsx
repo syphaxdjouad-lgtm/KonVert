@@ -132,21 +132,25 @@ const LOCALE_KEY = 'konvert-locale'
 
 function detectLocale(searchParams: URLSearchParams): Locale {
   // Priorité : ?lang=xx → localStorage → navigator.language → 'fr'
+  // On défaut sur FR : cible principale francophone (MENA + France + Belgique).
+  // Le visiteur Product Hunt peut switcher via le toggle EN en haut à droite.
   const fromQuery = searchParams.get('lang')
   if (fromQuery === 'en' || fromQuery === 'fr') return fromQuery
   if (typeof window !== 'undefined') {
     const stored = localStorage.getItem(LOCALE_KEY)
     if (stored === 'en' || stored === 'fr') return stored
+    // Seuls les anglophones explicites (en-US, en-GB, etc.) passent en EN.
+    // Tout le reste (ar, fr, es, non détecté) → FR par défaut.
     const nav = navigator.language?.toLowerCase() ?? ''
-    if (nav.startsWith('fr')) return 'fr'
-    return 'en'  // par défaut anglais hors francophone (acquisition internationale)
+    if (nav.startsWith('en')) return 'en'
+    return 'fr'
   }
   return 'fr'
 }
 
 export default function EssaiPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen" style={{ background: '#0d0d1a' }} />}>
+    <Suspense fallback={<div className="min-h-screen" style={{ background: '#F8F7FF' }} />}>
       <EssaiContent />
     </Suspense>
   )
@@ -320,14 +324,14 @@ function EssaiContent() {
     return (
       <div
         className="min-h-screen flex flex-col items-center justify-center px-4"
-        style={{ background: '#0d0d1a' }}
+        style={{ background: '#F8F7FF' }}
       >
         <div className="text-center max-w-sm">
           {/* Logo */}
           <div className="mb-10">
             <span style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.03em' }}>
-              <span style={{ color: '#fff' }}>KON</span>
-              <span style={{ color: '#a78bfa' }}>VERT</span>
+              <span style={{ color: '#1e293b' }}>KON</span>
+              <span style={{ color: '#5B47F5' }}>VERT</span>
             </span>
           </div>
 
@@ -335,9 +339,9 @@ function EssaiContent() {
           <div className="relative mb-8 flex items-center justify-center">
             <div
               className="w-20 h-20 rounded-full flex items-center justify-center"
-              style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(139,92,246,0.25)' }}
+              style={{ background: 'rgba(91,71,245,0.10)', border: '1px solid rgba(91,71,245,0.2)' }}
             >
-              <Sparkles className="w-8 h-8 animate-pulse" style={{ color: '#a78bfa' }} />
+              <Sparkles className="w-8 h-8 animate-pulse" style={{ color: '#5B47F5' }} />
             </div>
           </div>
 
@@ -345,11 +349,11 @@ function EssaiContent() {
           <p
             key={loadingText}
             className="text-base font-medium transition-all"
-            style={{ color: 'rgba(196,181,253,0.85)' }}
+            style={{ color: '#475569' }}
           >
             {loadingText}
           </p>
-          <p className="text-sm mt-2" style={{ color: 'rgba(167,139,250,0.4)' }}>
+          <p className="text-sm mt-2" style={{ color: '#94a3b8' }}>
             {t.loadingDuration}
           </p>
         </div>
@@ -361,23 +365,23 @@ function EssaiContent() {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-4 py-16"
-      style={{ background: '#0d0d1a' }}
+      style={{ background: '#F8F7FF' }}
     >
       <div className="w-full max-w-md">
 
         {/* Top bar — logo + toggle langue */}
         <div className="flex items-center justify-between mb-10">
           <span style={{ fontSize: 22, fontWeight: 900, letterSpacing: '-0.03em' }}>
-            <span style={{ color: '#fff' }}>KON</span>
-            <span style={{ color: '#a78bfa' }}>VERT</span>
+            <span style={{ color: '#1e293b' }}>KON</span>
+            <span style={{ color: '#5B47F5' }}>VERT</span>
           </span>
           <button
             onClick={toggleLocale}
             className="text-xs font-bold px-3 py-1.5 rounded-lg transition-all hover:opacity-80"
             style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(139,92,246,0.25)',
-              color: 'rgba(196,181,253,0.85)',
+              background: 'rgba(91,71,245,0.08)',
+              border: '1px solid rgba(91,71,245,0.2)',
+              color: '#5B47F5',
               letterSpacing: '0.05em',
             }}
             aria-label={locale === 'fr' ? 'Switch to English' : 'Passer en français'}
@@ -407,8 +411,8 @@ function EssaiContent() {
         <div
           className="rounded-2xl p-8"
           style={{
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(139,92,246,0.2)',
+            background: '#ffffff',
+            border: '1px solid #e2e8f0',
           }}
         >
 
@@ -418,17 +422,17 @@ function EssaiContent() {
               <div>
                 <h1
                   className="text-2xl font-black mb-2"
-                  style={{ color: '#fff', lineHeight: 1.2 }}
+                  style={{ color: '#0f172a', lineHeight: 1.2 }}
                 >
                   {t.emailTitle}
                 </h1>
-                <p className="text-sm" style={{ color: 'rgba(196,181,253,0.6)' }}>
+                <p className="text-sm" style={{ color: '#64748b' }}>
                   {t.emailSubtitle}
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(196,181,253,0.8)' }}>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: '#475569' }}>
                   {t.firstName}
                 </label>
                 <input
@@ -438,15 +442,15 @@ function EssaiContent() {
                   placeholder={t.firstNamePh}
                   className="w-full rounded-xl px-4 py-3 text-sm outline-none transition"
                   style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(139,92,246,0.2)',
-                    color: '#fff',
+                    background: '#ffffff',
+                    border: '1px solid #e2e8f0',
+                    color: '#0f172a',
                   }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(196,181,253,0.8)' }}>
+                <label className="block text-sm font-medium mb-1.5" style={{ color: '#475569' }}>
                   {t.emailLabel}
                 </label>
                 <input
@@ -457,12 +461,12 @@ function EssaiContent() {
                   required
                   className="w-full rounded-xl px-4 py-3 text-sm outline-none transition"
                   style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(139,92,246,0.2)',
-                    color: '#fff',
+                    background: '#ffffff',
+                    border: '1px solid #e2e8f0',
+                    color: '#0f172a',
                   }}
                 />
-                <p className="text-xs mt-1.5" style={{ color: 'rgba(167,139,250,0.4)' }}>
+                <p className="text-xs mt-1.5" style={{ color: '#94a3b8' }}>
                   {t.emailHelp}
                 </p>
               </div>
@@ -491,11 +495,11 @@ function EssaiContent() {
               <div>
                 <h2
                   className="text-xl font-black mb-1"
-                  style={{ color: '#fff', lineHeight: 1.2 }}
+                  style={{ color: '#0f172a', lineHeight: 1.2 }}
                 >
                   {t.productTitle}
                 </h2>
-                <p className="text-sm" style={{ color: 'rgba(196,181,253,0.6)' }}>
+                <p className="text-sm" style={{ color: '#64748b' }}>
                   {t.productSubtitle}
                 </p>
               </div>
@@ -503,7 +507,7 @@ function EssaiContent() {
               {/* Toggle URL / Manuel */}
               <div
                 className="flex rounded-xl p-1 gap-1"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(139,92,246,0.15)' }}
+                style={{ background: '#f1f5f9', border: '1px solid #e2e8f0' }}
               >
                 {([['url', t.modeUrl, Link2], ['manual', t.modeManual, Pencil]] as const).map(
                   ([mode, label, Icon]) => (
@@ -527,7 +531,7 @@ function EssaiContent() {
 
               {inputMode === 'url' ? (
                 <div>
-                  <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(196,181,253,0.8)' }}>
+                  <label className="block text-sm font-medium mb-1.5" style={{ color: '#475569' }}>
                     {t.urlLabel}
                   </label>
                   <input
@@ -542,14 +546,14 @@ function EssaiContent() {
                       color: '#fff',
                     }}
                   />
-                  <p className="text-xs mt-1.5" style={{ color: 'rgba(167,139,250,0.4)' }}>
+                  <p className="text-xs mt-1.5" style={{ color: '#94a3b8' }}>
                     {t.urlHelp}
                   </p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(196,181,253,0.8)' }}>
+                    <label className="block text-sm font-medium mb-1.5" style={{ color: '#475569' }}>
                       {t.productNameLabel}
                     </label>
                     <input
@@ -566,8 +570,8 @@ function EssaiContent() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(196,181,253,0.8)' }}>
-                      {t.productDescLabel} <span style={{ color: 'rgba(167,139,250,0.4)' }}>{t.productDescOptional}</span>
+                    <label className="block text-sm font-medium mb-1.5" style={{ color: '#475569' }}>
+                      {t.productDescLabel} <span style={{ color: '#94a3b8' }}>{t.productDescOptional}</span>
                     </label>
                     <textarea
                       value={productDesc}
@@ -583,9 +587,9 @@ function EssaiContent() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(196,181,253,0.8)' }}>
+                    <label className="block text-sm font-medium mb-1.5" style={{ color: '#475569' }}>
                       {locale === 'fr' ? 'URL image produit' : 'Product image URL'}{' '}
-                      <span style={{ color: 'rgba(167,139,250,0.4)' }}>
+                      <span style={{ color: '#94a3b8' }}>
                         {locale === 'fr' ? '(optionnel)' : '(optional)'}
                       </span>
                     </label>
@@ -601,7 +605,7 @@ function EssaiContent() {
                         color: '#fff',
                       }}
                     />
-                    <p className="text-xs mt-1.5" style={{ color: 'rgba(167,139,250,0.5)' }}>
+                    <p className="text-xs mt-1.5" style={{ color: '#94a3b8' }}>
                       {locale === 'fr'
                         ? 'Si vide, on utilise une image placeholder — tu pourras la remplacer ensuite.'
                         : 'If empty, a placeholder is used — you can replace it later.'}
@@ -639,7 +643,7 @@ function EssaiContent() {
                 type="button"
                 onClick={() => { setStep('email'); setError(null) }}
                 className="w-full text-sm text-center"
-                style={{ color: 'rgba(167,139,250,0.5)' }}
+                style={{ color: '#94a3b8' }}
               >
                 {t.back}
               </button>

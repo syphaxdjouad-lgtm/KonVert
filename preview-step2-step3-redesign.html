@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview — Step 2 & 3 Redesign · Direction A Premium Minimal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', system-ui, sans-serif; box-sizing: border-box; }
+    body { background: #f5f5f7; padding: 48px 24px 80px; }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #8b8b9e;
+      margin-bottom: 16px;
+      padding-left: 2px;
+    }
+    .section-label span {
+      color: #7c3aed;
+    }
+
+    /* ── Card wrapper (mimics wizard panel) ── */
+    .wizard-panel {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 32px 28px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ── Step header ── */
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #f3f0ff;
+      color: #7c3aed;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+    .step-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: #1a1a2e;
+      letter-spacing: -0.03em;
+    }
+    .step-subtitle {
+      font-size: 13.5px;
+      color: #8b8b9e;
+      margin-top: 4px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* ── Dropzone ── */
+    .dropzone {
+      border: 2px dashed #c4b5fd;
+      border-radius: 16px;
+      padding: 36px 24px;
+      text-align: center;
+      background: #faf9ff;
+      cursor: pointer;
+      transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+    }
+    .dropzone:hover,
+    .dropzone.hover-demo {
+      border-color: #a78bfa;
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.08);
+      transform: translateY(-1px);
+    }
+
+    /* ── Icon wrapper ── */
+    .icon-wrapper {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #f3f0ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+    }
+
+    /* ── Photo grid ── */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .photo-item {
+      position: relative;
+      aspect-ratio: 1/1;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e9e5ff;
+    }
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-remove {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: rgba(15, 10, 30, 0.65);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* ── Photo counter ── */
+    .photo-counter {
+      font-size: 11px;
+      font-weight: 600;
+      color: #a78bfa;
+      margin-top: 8px;
+      display: block;
+    }
+
+    /* ── Tip ── */
+    .tip-green {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+    }
+    .tip-green p {
+      font-size: 12px;
+      color: #15803d;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .tip-violet {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #faf9ff;
+      border: 1px solid #ddd6fe;
+    }
+    .tip-violet p {
+      font-size: 12px;
+      color: #5b21b6;
+      line-height: 1.5;
+      margin: 0;
+    }
+    .tip-icon-green {
+      width: 16px;
+      height: 16px;
+      color: #16a34a;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .tip-icon-violet {
+      width: 16px;
+      height: 16px;
+      color: #7c3aed;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Skip button ── */
+    .skip-btn {
+      font-size: 12px;
+      font-weight: 500;
+      color: #8b8b9e;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 12px;
+      margin-top: 8px;
+      transition: color 150ms;
+    }
+    .skip-btn:hover { color: #5c5c7a; }
+
+    /* ── Tabs (Step 3) ── */
+    .tab-group {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .tab-btn {
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: background 150ms, color 150ms;
+    }
+    .tab-btn.active {
+      background: #7c3aed;
+      color: #ffffff;
+    }
+    .tab-btn.inactive {
+      background: #f3f0ff;
+      color: #7c3aed;
+    }
+
+    /* ── Video list item ── */
+    .video-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f8f8fc;
+      border: 1px solid #e9e5ff;
+      margin-bottom: 8px;
+    }
+    .video-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: #ede9fe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .video-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .video-item-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a1a2e;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+    .video-item-meta {
+      font-size: 11px;
+      color: #8b8b9e;
+      display: block;
+      margin-top: 1px;
+    }
+    .video-remove {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* ── Link input ── */
+    .link-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+    .link-input-wrapper {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .link-platform-icon {
+      position: absolute;
+      left: 12px;
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .link-input {
+      width: 100%;
+      border: 1.5px solid #e9e5ff;
+      border-radius: 11px;
+      padding: 10px 12px 10px 38px;
+      font-size: 13px;
+      color: #1a1a2e;
+      background: #ffffff;
+      outline: none;
+      transition: border-color 150ms;
+    }
+    .link-input:focus { border-color: #7c3aed; }
+    .add-link-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #7c3aed;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px 0;
+      margin-top: 4px;
+    }
+
+    /* ── Divider / spacer ── */
+    .preview-block {
+      margin-bottom: 48px;
+    }
+    .preview-divider {
+      height: 1px;
+      background: #e9e5ff;
+      opacity: 0.5;
+      margin: 36px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+       STEP 2 — VARIANTE A · Tip success vert
+       État empty
+  ════════════════════════════════════════════════ -->
+
+  <div class="preview-block">
+    <p class="section-label">STEP 2 — <span>Variante A</span> · Tip success vert · État EMPTY</p>
+    <div class="wizard-panel">
+
+      <!-- Header -->
+      <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:20px;">
+        <div class="step-badge">02</div>
+        <div>
+          <h1 class="step-title">Tes photos produit</h1>
+          <p class="step-subtitle">Tu as déjà des photos ? Uploade-les pour les intégrer directement dans ta page.</p>
+        </div>
+      </div>
+
+      <!-- Dropzone empty -->
+      <div class="dropzone hover-demo">
+        <div class="icon-wrapper">
+          <i data-lucide="upload" style="width:22px;height:22px;color:#7c3aed;stroke-width:2;"></i>
+        </div>
+        <p style="font-size:14px;font-weight:700;color:#1a1a2e;margin:0 0 4px;">Glisse tes photos ici</p>
+        <p style="font-size:12px;color:#8b8b9e;margin:0;">ou clique pour sélectionner · JPG, PNG, WEBP · max 5 photos</p>
+        <span class="photo-counter">0 / 5 photos</span>
+      </div>
+
+      <!-- Tip vert -->
+      <div class="tip-green" style="margin-top:12px;">
+        <i data-lucide="check-circle-2" class="tip-icon-green"></i>
+        <p>Sans photo, l'IA utilisera automatiquement les images scrappées depuis l'URL produit.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       STEP 2 — VARIANTE A · Tip success vert
+       État avec 3 photos uploadées
+  ════════════════════════════════════════════════ -->
+
+  <div class="preview-block">
+    <p class="section-label">STEP 2 — <span>Variante A</span> · Tip success vert · État AVEC 3 PHOTOS</p>
+    <div class="wizard-panel">
+
+      <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:20px;">
+        <div class="step-badge">02</div>
+        <div>
+          <h1 class="step-title">Tes photos produit</h1>
+          <p class="step-subtitle">Tu as déjà des photos ? Uploade-les pour les intégrer directement dans ta page.</p>
+        </div>
+      </div>
+
+      <!-- Dropzone compact avec photos -->
+      <div class="dropzone" style="padding:20px 24px;">
+        <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
+          <div style="width:36px;height:36px;border-radius:10px;background:#f3f0ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i data-lucide="upload" style="width:18px;height:18px;color:#7c3aed;stroke-width:2;"></i>
+          </div>
+          <div style="text-align:left;">
+            <p style="font-size:13px;font-weight:700;color:#1a1a2e;margin:0 0 2px;">Ajouter d'autres photos</p>
+            <p style="font-size:11.5px;color:#8b8b9e;margin:0;">JPG, PNG, WEBP · max 5 photos</p>
+          </div>
+          <span class="photo-counter" style="margin:0;margin-left:auto;">3 / 5 photos</span>
+        </div>
+      </div>
+
+      <!-- Photo grid -->
+      <div class="photo-grid">
+        <div class="photo-item">
+          <img src="https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Photo 1">
+          <button class="photo-remove">
+            <i data-lucide="x" style="width:11px;height:11px;color:#fff;stroke-width:2.5;"></i>
+          </button>
+        </div>
+        <div class="photo-item">
+          <img src="https://images.pexels.com/photos/3587477/pexels-photo-3587477.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Photo 2">
+          <button class="photo-remove">
+            <i data-lucide="x" style="width:11px;height:11px;color:#fff;stroke-width:2.5;"></i>
+          </button>
+        </div>
+        <div class="photo-item">
+          <img src="https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Photo 3">
+          <button class="photo-remove">
+            <i data-lucide="x" style="width:11px;height:11px;color:#fff;stroke-width:2.5;"></i>
+          </button>
+        </div>
+        <!-- Slot vide -->
+        <div style="aspect-ratio:1/1;border-radius:12px;border:2px dashed #ddd6fe;background:#faf9ff;display:flex;align-items:center;justify-content:center;">
+          <i data-lucide="plus" style="width:20px;height:20px;color:#c4b5fd;stroke-width:2;"></i>
+        </div>
+      </div>
+
+      <!-- Tip vert (visible aussi avec photos) -->
+      <div class="tip-green" style="margin-top:14px;">
+        <i data-lucide="check-circle-2" class="tip-icon-green"></i>
+        <p>Sans photo, l'IA utilisera automatiquement les images scrappées depuis l'URL produit.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       STEP 2 — VARIANTE B · Tip violet wizard
+       État empty
+  ════════════════════════════════════════════════ -->
+
+  <div class="preview-block">
+    <p class="section-label">STEP 2 — <span>Variante B</span> · Tip violet wizard · État EMPTY</p>
+    <div class="wizard-panel">
+
+      <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:20px;">
+        <div class="step-badge">02</div>
+        <div>
+          <h1 class="step-title">Tes photos produit</h1>
+          <p class="step-subtitle">Tu as déjà des photos ? Uploade-les pour les intégrer directement dans ta page.</p>
+        </div>
+      </div>
+
+      <!-- Dropzone empty -->
+      <div class="dropzone hover-demo">
+        <div class="icon-wrapper">
+          <i data-lucide="upload" style="width:22px;height:22px;color:#7c3aed;stroke-width:2;"></i>
+        </div>
+        <p style="font-size:14px;font-weight:700;color:#1a1a2e;margin:0 0 4px;">Glisse tes photos ici</p>
+        <p style="font-size:12px;color:#8b8b9e;margin:0;">ou clique pour sélectionner · JPG, PNG, WEBP · max 5 photos</p>
+        <span class="photo-counter">0 / 5 photos</span>
+      </div>
+
+      <!-- Tip violet -->
+      <div class="tip-violet" style="margin-top:12px;">
+        <i data-lucide="lightbulb" class="tip-icon-violet"></i>
+        <p>Sans photo, l'IA utilisera automatiquement les images scrappées depuis l'URL produit.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       STEP 2 — VARIANTE B · Tip violet wizard
+       État avec 3 photos uploadées
+  ════════════════════════════════════════════════ -->
+
+  <div class="preview-block">
+    <p class="section-label">STEP 2 — <span>Variante B</span> · Tip violet wizard · État AVEC 3 PHOTOS</p>
+    <div class="wizard-panel">
+
+      <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:20px;">
+        <div class="step-badge">02</div>
+        <div>
+          <h1 class="step-title">Tes photos produit</h1>
+          <p class="step-subtitle">Tu as déjà des photos ? Uploade-les pour les intégrer directement dans ta page.</p>
+        </div>
+      </div>
+
+      <div class="dropzone" style="padding:20px 24px;">
+        <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
+          <div style="width:36px;height:36px;border-radius:10px;background:#f3f0ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i data-lucide="upload" style="width:18px;height:18px;color:#7c3aed;stroke-width:2;"></i>
+          </div>
+          <div style="text-align:left;">
+            <p style="font-size:13px;font-weight:700;color:#1a1a2e;margin:0 0 2px;">Ajouter d'autres photos</p>
+            <p style="font-size:11.5px;color:#8b8b9e;margin:0;">JPG, PNG, WEBP · max 5 photos</p>
+          </div>
+          <span class="photo-counter" style="margin:0;margin-left:auto;">3 / 5 photos</span>
+        </div>
+      </div>
+
+      <div class="photo-grid">
+        <div class="photo-item">
+          <img src="https://images.pexels.com/photos/3756766/pexels-photo-3756766.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Photo 1">
+          <button class="photo-remove">
+            <i data-lucide="x" style="width:11px;height:11px;color:#fff;stroke-width:2.5;"></i>
+          </button>
+        </div>
+        <div class="photo-item">
+          <img src="https://images.pexels.com/photos/577769/pexels-photo-577769.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Photo 2">
+          <button class="photo-remove">
+            <i data-lucide="x" style="width:11px;height:11px;color:#fff;stroke-width:2.5;"></i>
+          </button>
+        </div>
+        <div class="photo-item">
+          <img src="https://images.pexels.com/photos/1037992/pexels-photo-1037992.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Photo 3">
+          <button class="photo-remove">
+            <i data-lucide="x" style="width:11px;height:11px;color:#fff;stroke-width:2.5;"></i>
+          </button>
+        </div>
+        <div style="aspect-ratio:1/1;border-radius:12px;border:2px dashed #ddd6fe;background:#faf9ff;display:flex;align-items:center;justify-content:center;">
+          <i data-lucide="plus" style="width:20px;height:20px;color:#c4b5fd;stroke-width:2;"></i>
+        </div>
+      </div>
+
+      <!-- Tip violet -->
+      <div class="tip-violet" style="margin-top:14px;">
+        <i data-lucide="lightbulb" class="tip-icon-violet"></i>
+        <p>Sans photo, l'IA utilisera automatiquement les images scrappées depuis l'URL produit.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SÉPARATEUR STEP 2 → STEP 3
+  ═══════════════════════════════════════ -->
+  <div style="max-width:680px;margin:0 auto;">
+    <div class="preview-divider"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       STEP 3 — Premium Minimal
+       Tab Upload · État EMPTY · Tip VERT
+  ════════════════════════════════════════════════ -->
+
+  <div class="preview-block">
+    <p class="section-label">STEP 3 — <span>Premium Minimal</span> · Tab Upload · État EMPTY · Tip SUCCESS VERT</p>
+    <div class="wizard-panel">
+
+      <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:20px;">
+        <div class="step-badge">03</div>
+        <div>
+          <h1 class="step-title">Vidéos UGC</h1>
+          <p class="step-subtitle">Ajoute des vidéos clients, unboxing ou reviews pour booster la confiance.</p>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-group">
+        <button class="tab-btn active">Upload</button>
+        <button class="tab-btn inactive">Liens externes</button>
+      </div>
+
+      <!-- Dropzone -->
+      <div class="dropzone hover-demo">
+        <div class="icon-wrapper">
+          <i data-lucide="video" style="width:22px;height:22px;color:#7c3aed;stroke-width:2;"></i>
+        </div>
+        <p style="font-size:14px;font-weight:700;color:#1a1a2e;margin:0 0 4px;">Glisse tes vidéos ici</p>
+        <p style="font-size:12px;color:#8b8b9e;margin:0;">MP4, MOV, AVI · max 100 MB par vidéo</p>
+      </div>
+
+      <!-- Tip vert -->
+      <div class="tip-green" style="margin-top:14px;">
+        <i data-lucide="trending-up" class="tip-icon-green"></i>
+        <p>Les vidéos UGC augmentent les conversions de <strong>+34%</strong> en moyenne. Même une courte vidéo fait la différence.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       STEP 3 — Premium Minimal
+       Tab Upload · État EMPTY · Tip VIOLET
+  ════════════════════════════════════════════════ -->
+
+  <div class="preview-block">
+    <p class="section-label">STEP 3 — <span>Premium Minimal</span> · Tab Upload · État EMPTY · Tip VIOLET WIZARD</p>
+    <div class="wizard-panel">
+
+      <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:20px;">
+        <div class="step-badge">03</div>
+        <div>
+          <h1 class="step-title">Vidéos UGC</h1>
+          <p class="step-subtitle">Ajoute des vidéos clients, unboxing ou reviews pour booster la confiance.</p>
+        </div>
+      </div>
+
+      <div class="tab-group">
+        <button class="tab-btn active">Upload</button>
+        <button class="tab-btn inactive">Liens externes</button>
+      </div>
+
+      <div class="dropzone hover-demo">
+        <div class="icon-wrapper">
+          <i data-lucide="video" style="width:22px;height:22px;color:#7c3aed;stroke-width:2;"></i>
+        </div>
+        <p style="font-size:14px;font-weight:700;color:#1a1a2e;margin:0 0 4px;">Glisse tes vidéos ici</p>
+        <p style="font-size:12px;color:#8b8b9e;margin:0;">MP4, MOV, AVI · max 100 MB par vidéo</p>
+      </div>
+
+      <!-- Tip violet -->
+      <div class="tip-violet" style="margin-top:14px;">
+        <i data-lucide="lightbulb" class="tip-icon-violet"></i>
+        <p>Les vidéos UGC augmentent les conversions de <strong>+34%</strong> en moyenne. Même une courte vidéo fait la différence.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       STEP 3 — Premium Minimal
+       Tab Upload · État AVEC 2 VIDÉOS · Tip VIOLET
+  ════════════════════════════════════════════════ -->
+
+  <div class="preview-block">
+    <p class="section-label">STEP 3 — <span>Premium Minimal</span> · Tab Upload · AVEC 2 VIDÉOS · Tip VIOLET WIZARD</p>
+    <div class="wizard-panel">
+
+      <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:20px;">
+        <div class="step-badge">03</div>
+        <div>
+          <h1 class="step-title">Vidéos UGC</h1>
+          <p class="step-subtitle">Ajoute des vidéos clients, unboxing ou reviews pour booster la confiance.</p>
+        </div>
+      </div>
+
+      <div class="tab-group">
+        <button class="tab-btn active">Upload</button>
+        <button class="tab-btn inactive">Liens externes</button>
+      </div>
+
+      <!-- Dropzone compact -->
+      <div class="dropzone" style="padding:16px 24px;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
+          <div style="width:36px;height:36px;border-radius:10px;background:#f3f0ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i data-lucide="video" style="width:18px;height:18px;color:#7c3aed;stroke-width:2;"></i>
+          </div>
+          <div style="text-align:left;">
+            <p style="font-size:13px;font-weight:700;color:#1a1a2e;margin:0 0 2px;">Ajouter d'autres vidéos</p>
+            <p style="font-size:11.5px;color:#8b8b9e;margin:0;">MP4, MOV, AVI · max 100 MB par vidéo</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Liste vidéos -->
+      <div>
+        <div class="video-item">
+          <div class="video-thumb">
+            <i data-lucide="film" style="width:18px;height:18px;color:#7c3aed;stroke-width:2;"></i>
+          </div>
+          <div class="video-item-info">
+            <span class="video-item-name">review-product-unboxing.mp4</span>
+            <span class="video-item-meta">24.7 MB · MP4</span>
+          </div>
+          <button class="video-remove">
+            <i data-lucide="x" style="width:13px;height:13px;color:#ef4444;stroke-width:2.5;"></i>
+          </button>
+        </div>
+        <div class="video-item">
+          <div class="video-thumb">
+            <i data-lucide="film" style="width:18px;height:18px;color:#7c3aed;stroke-width:2;"></i>
+          </div>
+          <div class="video-item-info">
+            <span class="video-item-name">client-testimonial-sarah.mp4</span>
+            <span class="video-item-meta">41.2 MB · MP4</span>
+          </div>
+          <button class="video-remove">
+            <i data-lucide="x" style="width:13px;height:13px;color:#ef4444;stroke-width:2.5;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tip violet -->
+      <div class="tip-violet" style="margin-top:14px;">
+        <i data-lucide="lightbulb" class="tip-icon-violet"></i>
+        <p>Les vidéos UGC augmentent les conversions de <strong>+34%</strong> en moyenne. Même une courte vidéo fait la différence.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       STEP 3 — Premium Minimal
+       Tab Liens externes · 2 inputs remplis · Tip VIOLET
+  ════════════════════════════════════════════════ -->
+
+  <div class="preview-block">
+    <p class="section-label">STEP 3 — <span>Premium Minimal</span> · Tab Liens externes · 2 LIENS · Tip VIOLET WIZARD</p>
+    <div class="wizard-panel">
+
+      <div style="display:flex; align-items:flex-start; gap:12px; margin-bottom:20px;">
+        <div class="step-badge">03</div>
+        <div>
+          <h1 class="step-title">Vidéos UGC</h1>
+          <p class="step-subtitle">Ajoute des vidéos clients, unboxing ou reviews pour booster la confiance.</p>
+        </div>
+      </div>
+
+      <div class="tab-group">
+        <button class="tab-btn inactive">Upload</button>
+        <button class="tab-btn active">Liens externes</button>
+      </div>
+
+      <!-- Lien YouTube -->
+      <div class="link-row">
+        <div class="link-input-wrapper">
+          <div class="link-platform-icon" style="background:#fff0f0;color:#ff0000;">
+            <!-- YouTube Y icon -->
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#ff0000">
+              <path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.55A3.02 3.02 0 0 0 .5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 0 0 2.12 2.14C4.5 20.5 12 20.5 12 20.5s7.5 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/>
+            </svg>
+          </div>
+          <input class="link-input" type="text" value="https://youtube.com/watch?v=dQw4w9WgXcQ" readonly>
+        </div>
+        <button style="width:34px;height:38px;border-radius:10px;background:#fef2f2;border:1px solid #fecaca;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;">
+          <i data-lucide="x" style="width:13px;height:13px;color:#ef4444;stroke-width:2.5;"></i>
+        </button>
+      </div>
+
+      <!-- Lien TikTok -->
+      <div class="link-row">
+        <div class="link-input-wrapper">
+          <div class="link-platform-icon" style="background:#f0f0ff;color:#69C9D0;">
+            <!-- TikTok icon simplified -->
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#010101">
+              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.96a8.28 8.28 0 0 0 4.84 1.55V7.07a4.85 4.85 0 0 1-1.07-.38z"/>
+            </svg>
+          </div>
+          <input class="link-input" type="text" value="https://tiktok.com/@user/video/123456789" readonly>
+        </div>
+        <button style="width:34px;height:38px;border-radius:10px;background:#fef2f2;border:1px solid #fecaca;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;">
+          <i data-lucide="x" style="width:13px;height:13px;color:#ef4444;stroke-width:2.5;"></i>
+        </button>
+      </div>
+
+      <!-- Ajouter un lien -->
+      <button class="add-link-btn">
+        <i data-lucide="plus" style="width:15px;height:15px;color:#7c3aed;stroke-width:2.5;"></i>
+        Ajouter un lien
+      </button>
+
+      <!-- Tip violet -->
+      <div class="tip-violet" style="margin-top:16px;">
+        <i data-lucide="lightbulb" class="tip-icon-violet"></i>
+        <p>Les vidéos UGC augmentent les conversions de <strong>+34%</strong> en moyenne. Même une courte vidéo fait la différence.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+  </div>
+
+  <!-- Activation Lucide -->
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

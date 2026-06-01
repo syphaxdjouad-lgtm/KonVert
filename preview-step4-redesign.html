@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Step 4 — Redesign Preview · Konvert</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    * { font-family: 'Inter', system-ui, sans-serif; box-sizing: border-box; }
+
+    body {
+      background: #f5f5f7;
+      padding: 48px 24px;
+      min-height: 100vh;
+    }
+
+    /* ── Layout top nav ── */
+    .page-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #8b8b9e;
+      margin-bottom: 32px;
+    }
+
+    /* ── Section headers ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #7c3aed;
+      margin-bottom: 8px;
+    }
+    .section-desc {
+      font-size: 13px;
+      color: #8b8b9e;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #E3E3E8 20%, #E3E3E8 80%, transparent);
+      margin: 56px 0;
+    }
+
+    /* ── Wizard card shell ── */
+    .wizard-card {
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid #E3E3E8;
+      padding: 32px;
+      max-width: 680px;
+      margin: 0 auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+    }
+
+    /* ── Progress bar (fake) ── */
+    .progress-bar {
+      height: 6px;
+      background: #e8e8f0;
+      border-radius: 999px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 42%;
+      background: #5B47F5;
+      border-radius: 999px;
+    }
+
+    /* ── Step title pattern ── */
+    .step-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+    .step-sub {
+      font-size: 14px;
+      color: #8b8b9e;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* ─────────────────────────────────────────────
+       DIRECTION A — Premium Minimal
+       Numérotation 01/02, violet pur, flèche centrale
+    ───────────────────────────────────────────── */
+
+    /* Column header */
+    .dir-a .col-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .dir-a .col-num {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #7c3aed;
+      font-variant-numeric: tabular-nums;
+    }
+    .dir-a .col-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .dir-a .col-separator {
+      flex: 1;
+      height: 1px;
+      background: #f0ecff;
+    }
+
+    /* Dropzone */
+    .dir-a .dropzone {
+      border: 1.5px dashed #c4b5fd;
+      border-radius: 16px;
+      background: #faf9ff;
+      min-height: 148px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .dir-a .dropzone:hover {
+      border-color: #7c3aed;
+      background: #f5f1ff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(124,58,237,0.08);
+    }
+    .dir-a .dropzone .icon-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #f3f0ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dir-a .dropzone .dz-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .dir-a .dropzone .dz-hint {
+      font-size: 11px;
+      color: #8b8b9e;
+    }
+
+    /* Arrow separator between columns */
+    .dir-a .arrow-sep {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 4px;
+      margin-top: 40px; /* align with dropzone center */
+    }
+    .dir-a .arrow-line {
+      width: 1px;
+      height: 28px;
+      background: linear-gradient(180deg, transparent, #c4b5fd);
+    }
+    .dir-a .arrow-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f3f0ff;
+      border: 1px solid #ddd6fe;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dir-a .arrow-line-bot {
+      width: 1px;
+      height: 28px;
+      background: linear-gradient(180deg, #c4b5fd, transparent);
+    }
+
+    /* Tip */
+    .dir-a .tip {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #faf9ff;
+      border: 1px solid #ddd6fe;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .dir-a .tip-icon {
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .dir-a .tip p {
+      font-size: 12px;
+      color: #5b21b6;
+      line-height: 1.5;
+    }
+
+    /* Skip button */
+    .skip-btn {
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #8b8b9e;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      padding: 8px;
+      border-radius: 12px;
+      transition: color 0.15s;
+    }
+    .skip-btn:hover { color: #5c5c7a; }
+
+    /* Filled state — dir A */
+    .dir-a .dropzone.filled {
+      border-style: solid;
+      border-color: #ddd6fe;
+      padding: 0;
+      min-height: 148px;
+      background: #000;
+    }
+    .dir-a .dropzone.filled img {
+      width: 100%;
+      height: 148px;
+      object-fit: cover;
+      border-radius: 14px;
+      display: block;
+    }
+    .dir-a .dropzone.filled .overlay-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      background: rgba(10,8,20,0.65);
+      backdrop-filter: blur(4px);
+      color: #e9d5ff;
+      text-transform: uppercase;
+    }
+
+    /* Preview comparaison dir A */
+    .dir-a .preview-block {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #f8f8fc;
+      border: 1px solid #E3E3E8;
+    }
+    .dir-a .preview-block .pv-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #5c5c7a;
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .dir-a .preview-block .pv-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .dir-a .preview-block .pv-img-wrap {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .dir-a .preview-block .pv-img-wrap img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      display: block;
+    }
+    .dir-a .preview-block .pv-badge {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(10,8,20,0.6);
+      backdrop-filter: blur(4px);
+      color: #e9d5ff;
+    }
+    .dir-a .preview-block .pv-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #c4b5fd;
+    }
+
+    /* ─────────────────────────────────────────────
+       DIRECTION B — Subtle Gradient
+       Même dropzone unique, gradient de fond qui suggère transformation
+    ───────────────────────────────────────────── */
+
+    .dir-b .transformation-band {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      padding: 24px;
+      background: linear-gradient(110deg, #faf9ff 0%, #f5f1ff 50%, #faf9ff 100%);
+      border: 1px solid #e8e3ff;
+    }
+    .dir-b .transformation-band::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 45%, rgba(124,58,237,0.03) 50%, transparent 55%);
+      pointer-events: none;
+    }
+
+    .dir-b .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 36px 1fr;
+      gap: 0;
+      align-items: start;
+    }
+    .dir-b .col-inner {
+      display: flex;
+      flex-direction: column;
+    }
+    .dir-b .badge-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px 4px 4px;
+      border-radius: 99px;
+      background: rgba(124,58,237,0.07);
+      border: 1px solid rgba(124,58,237,0.15);
+      margin-bottom: 12px;
+      align-self: flex-start;
+    }
+    .dir-b .badge-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .dir-b .badge-dot.before { background: #ede9fe; color: #5b21b6; }
+    .dir-b .badge-dot.after  { background: #7c3aed; color: #fff; }
+    .dir-b .badge-text {
+      font-size: 12px;
+      font-weight: 700;
+      color: #5b21b6;
+      letter-spacing: 0.02em;
+    }
+
+    .dir-b .dropzone {
+      border: 1.5px dashed #c4b5fd;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.7);
+      min-height: 136px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(4px);
+    }
+    .dir-b .dropzone:hover {
+      background: rgba(255,255,255,0.9);
+      border-color: #7c3aed;
+      box-shadow: 0 2px 16px rgba(124,58,237,0.1);
+    }
+    .dir-b .dropzone .icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #f3f0ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dir-b .dropzone .dz-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .dir-b .dropzone .dz-hint {
+      font-size: 11px;
+      color: #8b8b9e;
+    }
+
+    .dir-b .sep-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding-top: 52px; /* visually align with dropzone center */
+    }
+    .dir-b .sep-inner {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid #ddd6fe;
+      box-shadow: 0 1px 4px rgba(124,58,237,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dir-b .dropzone.filled {
+      border-style: solid;
+      border-color: #ddd6fe;
+      padding: 0;
+      min-height: 136px;
+      overflow: hidden;
+      background: #000;
+    }
+    .dir-b .dropzone.filled img {
+      width: 100%;
+      height: 136px;
+      object-fit: cover;
+      display: block;
+      border-radius: 12px;
+    }
+    .dir-b .dropzone.filled .overlay-badge {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 800;
+      background: rgba(10,8,20,0.6);
+      backdrop-filter: blur(4px);
+      color: #e9d5ff;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .dir-b .col-inner-filled { position: relative; }
+
+    .dir-b .tip {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #faf9ff;
+      border: 1px solid #ddd6fe;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .dir-b .tip p {
+      font-size: 12px;
+      color: #5b21b6;
+      line-height: 1.5;
+    }
+
+    /* ─────────────────────────────────────────────
+       DIRECTION C — Editorial Cards
+       2 cartes shadow, label en header card, feel "éditorial"
+    ───────────────────────────────────────────── */
+
+    .dir-c .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .dir-c .edit-card {
+      border-radius: 16px;
+      border: 1px solid #E8E3FF;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(124,58,237,0.05), 0 0 0 0 transparent;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+    .dir-c .edit-card:hover {
+      box-shadow: 0 4px 20px rgba(124,58,237,0.1), 0 0 0 2px #ede9fe;
+      transform: translateY(-1px);
+    }
+
+    .dir-c .card-header {
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid #f0ecff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #faf9ff;
+    }
+    .dir-c .card-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dir-c .card-step-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .dir-c .card-step-dot.before {
+      background: #ede9fe;
+      color: #7c3aed;
+    }
+    .dir-c .card-step-dot.after {
+      background: #7c3aed;
+      color: #fff;
+    }
+    .dir-c .card-step-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .dir-c .card-step-sub {
+      font-size: 10px;
+      font-weight: 600;
+      color: #8b8b9e;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .dir-c .card-body {
+      padding: 14px;
+    }
+    .dir-c .dropzone {
+      border: 1.5px dashed #c4b5fd;
+      border-radius: 12px;
+      background: #faf9ff;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dir-c .dropzone:hover {
+      background: #f5f1ff;
+      border-color: #7c3aed;
+    }
+    .dir-c .dropzone .icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #f3f0ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dir-c .dropzone .dz-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    .dir-c .dropzone .dz-hint {
+      font-size: 11px;
+      color: #8b8b9e;
+    }
+
+    .dir-c .dropzone.filled {
+      border-style: solid;
+      border-color: #ddd6fe;
+      padding: 0;
+      min-height: 120px;
+      overflow: hidden;
+      background: #000;
+    }
+    .dir-c .dropzone.filled img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Arrow between dir-c cards */
+    .dir-c .cards-outer {
+      position: relative;
+    }
+    .dir-c .center-arrow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid #ddd6fe;
+      box-shadow: 0 2px 8px rgba(124,58,237,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dir-c .tip {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #faf9ff;
+      border: 1px solid #ddd6fe;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .dir-c .tip p {
+      font-size: 12px;
+      color: #5b21b6;
+      line-height: 1.5;
+    }
+
+    /* ── Before/After label — before state ── */
+    .state-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .state-label.empty { background: #f3f0ff; color: #7c3aed; }
+    .state-label.filled-lbl { background: rgba(10,8,20,0.55); color: #e9d5ff; backdrop-filter: blur(4px); }
+
+    /* ── Compare preview shared ── */
+    .compare-block {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 16px;
+      background: #f8f8fc;
+      border: 1px solid #E3E3E8;
+    }
+    .compare-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #5c5c7a;
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 28px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+    .compare-img-wrap {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .compare-img-wrap img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      display: block;
+    }
+    .compare-badge {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(10,8,20,0.6);
+      backdrop-filter: blur(4px);
+      color: #e9d5ff;
+    }
+    .compare-sep {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #a78bfa;
+    }
+
+    /* ── State labels row ── */
+    .states-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .state-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #f3f0ff;
+      border: 1px solid #ede9fe;
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #7c3aed;
+    }
+    .state-badge.filled-badge {
+      background: #7c3aed;
+      border-color: #7c3aed;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ───────────────────────── PAGE HEADER ───────────────────────── -->
+  <div style="max-width:760px;margin:0 auto 40px;">
+    <div class="page-label">Konvert — Wizard Step 4 · Preview 3 Directions</div>
+    <h1 style="font-size:26px;font-weight:900;color:#1a1a2e;margin-bottom:8px;">Redesign : Photos Avant / Après</h1>
+    <p style="font-size:14px;color:#5c5c7a;line-height:1.6;">Chaque direction ci-dessous inclut l'état <strong>vide</strong> puis l'état <strong>rempli</strong>. Fond #f5f5f7 = contexte dashboard réel. Largeur container ≈ 680px.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       DIRECTION A — PREMIUM MINIMAL
+  ════════════════════════════════════════════════════════════════ -->
+  <div style="max-width:760px;margin:0 auto;">
+
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+      <span style="background:#7c3aed;color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:99px;letter-spacing:0.06em;">DIRECTION A</span>
+      <span style="font-size:15px;font-weight:800;color:#1a1a2e;">Premium Minimal</span>
+    </div>
+    <p class="section-desc">Numérotation <strong>01 / 02</strong> discrète, violet unifié, flèche centrale qui raconte la transformation. Zéro couleur parasite.</p>
+
+    <!-- STATE LABELS -->
+    <div class="states-row">
+      <div class="state-badge"><i class="ph ph-circle-dashed" style="font-size:12px;"></i> État vide</div>
+      <div class="state-badge filled-badge"><i class="ph ph-check-circle" style="font-size:12px;"></i> État rempli (+ aperçu)</div>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="wizard-card dir-a" style="margin-bottom:16px;">
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <h1 class="step-title">Photos Avant / Après</h1>
+      <p class="step-sub">Les comparaisons avant/après sont les preuves visuelles les plus persuasives.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 44px 1fr;gap:0;align-items:start;">
+        <!-- Col AVANT -->
+        <div>
+          <div class="col-header">
+            <span class="col-num">01</span>
+            <div class="col-separator"></div>
+            <span class="col-label">Avant</span>
+          </div>
+          <div class="dropzone">
+            <div class="icon-wrap">
+              <i class="ph ph-camera" style="font-size:20px;color:#7c3aed;"></i>
+            </div>
+            <span class="dz-label">Photo avant</span>
+            <span class="dz-hint">Cliquez ou glissez</span>
+          </div>
+        </div>
+
+        <!-- Arrow sep -->
+        <div class="arrow-sep">
+          <div class="arrow-line"></div>
+          <div class="arrow-icon">
+            <i class="ph ph-arrow-right" style="font-size:12px;color:#7c3aed;"></i>
+          </div>
+          <div class="arrow-line-bot"></div>
+        </div>
+
+        <!-- Col APRÈS -->
+        <div>
+          <div class="col-header">
+            <span class="col-num">02</span>
+            <div class="col-separator"></div>
+            <span class="col-label">Après</span>
+          </div>
+          <div class="dropzone">
+            <div class="icon-wrap">
+              <i class="ph ph-sparkle" style="font-size:20px;color:#7c3aed;"></i>
+            </div>
+            <span class="dz-label">Photo après</span>
+            <span class="dz-hint">Cliquez ou glissez</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tip -->
+      <div class="tip">
+        <i class="ph ph-lightbulb tip-icon" style="font-size:15px;color:#7c3aed;margin-top:1px;"></i>
+        <p>Ces photos seront automatiquement intégrées dans une section "Transformation" sur ta page produit.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+
+    <!-- FILLED STATE -->
+    <div class="wizard-card dir-a">
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <h1 class="step-title">Photos Avant / Après</h1>
+      <p class="step-sub">Les comparaisons avant/après sont les preuves visuelles les plus persuasives.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 44px 1fr;gap:0;align-items:start;">
+        <!-- Col AVANT filled -->
+        <div>
+          <div class="col-header">
+            <span class="col-num">01</span>
+            <div class="col-separator"></div>
+            <span class="col-label">Avant</span>
+          </div>
+          <div class="dropzone filled" style="position:relative;">
+            <img src="https://picsum.photos/seed/before1/400/300" alt="Avant" />
+            <span class="overlay-badge">Avant</span>
+          </div>
+        </div>
+
+        <!-- Arrow sep -->
+        <div class="arrow-sep">
+          <div class="arrow-line"></div>
+          <div class="arrow-icon">
+            <i class="ph ph-arrow-right" style="font-size:12px;color:#7c3aed;"></i>
+          </div>
+          <div class="arrow-line-bot"></div>
+        </div>
+
+        <!-- Col APRÈS filled -->
+        <div>
+          <div class="col-header">
+            <span class="col-num">02</span>
+            <div class="col-separator"></div>
+            <span class="col-label">Après</span>
+          </div>
+          <div class="dropzone filled" style="position:relative;">
+            <img src="https://picsum.photos/seed/after1/400/300" alt="Après" />
+            <span class="overlay-badge">Après</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview comparaison -->
+      <div class="preview-block">
+        <div class="pv-title">Aperçu de la comparaison</div>
+        <div class="pv-grid">
+          <div class="pv-img-wrap">
+            <img src="https://picsum.photos/seed/before1/400/400" alt="Avant" />
+            <div class="pv-badge">Avant</div>
+          </div>
+          <div class="pv-arrow">
+            <i class="ph ph-arrow-right" style="font-size:16px;"></i>
+          </div>
+          <div class="pv-img-wrap">
+            <img src="https://picsum.photos/seed/after1/400/400" alt="Après" />
+            <div class="pv-badge">Après</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tip -->
+      <div class="tip">
+        <i class="ph ph-lightbulb tip-icon" style="font-size:15px;color:#7c3aed;margin-top:1px;"></i>
+        <p>Ces photos seront automatiquement intégrées dans une section "Transformation" sur ta page produit.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+  </div>
+
+  <div class="divider" style="max-width:760px;margin:48px auto;"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       DIRECTION B — SUBTLE GRADIENT
+  ════════════════════════════════════════════════════════════════ -->
+  <div style="max-width:760px;margin:0 auto;">
+
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+      <span style="background:#6d28d9;color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:99px;letter-spacing:0.06em;">DIRECTION B</span>
+      <span style="font-size:15px;font-weight:800;color:#1a1a2e;">Subtle Gradient</span>
+    </div>
+    <p class="section-desc">Les deux dropzones vivent à l'intérieur d'une <strong>bande dégradée</strong> violet pâle → blanc → violet pâle qui évoque visuellement la transformation. Badges pill discrets Avant / Après.</p>
+
+    <!-- STATE LABELS -->
+    <div class="states-row">
+      <div class="state-badge"><i class="ph ph-circle-dashed" style="font-size:12px;"></i> État vide</div>
+      <div class="state-badge filled-badge"><i class="ph ph-check-circle" style="font-size:12px;"></i> État rempli (+ aperçu)</div>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="wizard-card dir-b" style="margin-bottom:16px;">
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <h1 class="step-title">Photos Avant / Après</h1>
+      <p class="step-sub">Les comparaisons avant/après sont les preuves visuelles les plus persuasives.</p>
+
+      <div class="transformation-band">
+        <div class="grid-2">
+          <!-- Col AVANT -->
+          <div class="col-inner">
+            <div class="badge-header">
+              <div class="badge-dot before">1</div>
+              <span class="badge-text">Avant</span>
+            </div>
+            <div class="dropzone">
+              <div class="icon-wrap">
+                <i class="ph ph-camera" style="font-size:18px;color:#7c3aed;"></i>
+              </div>
+              <span class="dz-label">Photo avant</span>
+              <span class="dz-hint">Cliquez ou glissez</span>
+            </div>
+          </div>
+
+          <!-- Sep -->
+          <div class="sep-arrow">
+            <div class="sep-inner">
+              <i class="ph ph-arrow-right" style="font-size:12px;color:#7c3aed;"></i>
+            </div>
+          </div>
+
+          <!-- Col APRÈS -->
+          <div class="col-inner">
+            <div class="badge-header">
+              <div class="badge-dot after">2</div>
+              <span class="badge-text">Après</span>
+            </div>
+            <div class="dropzone">
+              <div class="icon-wrap">
+                <i class="ph ph-sparkle" style="font-size:18px;color:#7c3aed;"></i>
+              </div>
+              <span class="dz-label">Photo après</span>
+              <span class="dz-hint">Cliquez ou glissez</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tip -->
+      <div class="tip" style="margin-top:16px;">
+        <i class="ph ph-lightbulb" style="font-size:15px;color:#7c3aed;flex-shrink:0;margin-top:1px;"></i>
+        <p>Ces photos seront automatiquement intégrées dans une section "Transformation" sur ta page produit.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+
+    <!-- FILLED STATE -->
+    <div class="wizard-card dir-b">
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <h1 class="step-title">Photos Avant / Après</h1>
+      <p class="step-sub">Les comparaisons avant/après sont les preuves visuelles les plus persuasives.</p>
+
+      <div class="transformation-band">
+        <div class="grid-2">
+          <!-- Col AVANT filled -->
+          <div class="col-inner col-inner-filled">
+            <div class="badge-header">
+              <div class="badge-dot before">1</div>
+              <span class="badge-text">Avant</span>
+            </div>
+            <div class="dropzone filled" style="position:relative;">
+              <img src="https://picsum.photos/seed/skin-before/400/300" alt="Avant" />
+              <span class="overlay-badge">Avant</span>
+            </div>
+          </div>
+
+          <!-- Sep -->
+          <div class="sep-arrow">
+            <div class="sep-inner">
+              <i class="ph ph-arrow-right" style="font-size:12px;color:#7c3aed;"></i>
+            </div>
+          </div>
+
+          <!-- Col APRÈS filled -->
+          <div class="col-inner col-inner-filled">
+            <div class="badge-header">
+              <div class="badge-dot after">2</div>
+              <span class="badge-text">Après</span>
+            </div>
+            <div class="dropzone filled" style="position:relative;">
+              <img src="https://picsum.photos/seed/skin-after/400/300" alt="Après" />
+              <span class="overlay-badge">Après</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aperçu -->
+      <div class="compare-block">
+        <div class="compare-title">Aperçu de la comparaison</div>
+        <div class="compare-grid">
+          <div class="compare-img-wrap">
+            <img src="https://picsum.photos/seed/skin-before/400/400" alt="Avant" />
+            <div class="compare-badge">Avant</div>
+          </div>
+          <div class="compare-sep">
+            <i class="ph ph-arrow-right" style="font-size:16px;"></i>
+          </div>
+          <div class="compare-img-wrap">
+            <img src="https://picsum.photos/seed/skin-after/400/400" alt="Après" />
+            <div class="compare-badge">Après</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tip -->
+      <div class="tip" style="margin-top:16px;">
+        <i class="ph ph-lightbulb" style="font-size:15px;color:#7c3aed;flex-shrink:0;margin-top:1px;"></i>
+        <p>Ces photos seront automatiquement intégrées dans une section "Transformation" sur ta page produit.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+  </div>
+
+  <div class="divider" style="max-width:760px;margin:48px auto;"></div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       DIRECTION C — EDITORIAL CARDS
+  ════════════════════════════════════════════════════════════════ -->
+  <div style="max-width:760px;margin:0 auto;padding-bottom:80px;">
+
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+      <span style="background:#4c1d95;color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:99px;letter-spacing:0.06em;">DIRECTION C</span>
+      <span style="font-size:15px;font-weight:800;color:#1a1a2e;">Editorial Cards</span>
+    </div>
+    <p class="section-desc">Chaque zone est une <strong>carte éditorialée</strong> avec header propre (fond lavande, label typé, pastille numérotée). Feel "deck de cartes" premium — proche du pattern dashboard Konvert.</p>
+
+    <!-- STATE LABELS -->
+    <div class="states-row">
+      <div class="state-badge"><i class="ph ph-circle-dashed" style="font-size:12px;"></i> État vide</div>
+      <div class="state-badge filled-badge"><i class="ph ph-check-circle" style="font-size:12px;"></i> État rempli (+ aperçu)</div>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div class="wizard-card dir-c" style="margin-bottom:16px;">
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <h1 class="step-title">Photos Avant / Après</h1>
+      <p class="step-sub">Les comparaisons avant/après sont les preuves visuelles les plus persuasives.</p>
+
+      <div class="cards-outer">
+        <div class="cards-grid">
+          <!-- Card AVANT -->
+          <div class="edit-card">
+            <div class="card-header">
+              <div class="card-header-left">
+                <div class="card-step-dot before">01</div>
+                <div>
+                  <div class="card-step-label">Avant</div>
+                  <div class="card-step-sub">Situation initiale</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="dropzone">
+                <div class="icon-wrap">
+                  <i class="ph ph-camera" style="font-size:18px;color:#7c3aed;"></i>
+                </div>
+                <span class="dz-label">Uploader la photo</span>
+                <span class="dz-hint">JPG · PNG · WEBP</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card APRÈS -->
+          <div class="edit-card">
+            <div class="card-header">
+              <div class="card-header-left">
+                <div class="card-step-dot after">02</div>
+                <div>
+                  <div class="card-step-label">Après</div>
+                  <div class="card-step-sub">Résultat obtenu</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="dropzone">
+                <div class="icon-wrap">
+                  <i class="ph ph-sparkle" style="font-size:18px;color:#7c3aed;"></i>
+                </div>
+                <span class="dz-label">Uploader la photo</span>
+                <span class="dz-hint">JPG · PNG · WEBP</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Flèche centrale entre les 2 cartes -->
+        <div class="center-arrow">
+          <i class="ph ph-arrow-right" style="font-size:12px;color:#7c3aed;"></i>
+        </div>
+      </div>
+
+      <!-- Tip -->
+      <div class="tip">
+        <i class="ph ph-lightbulb" style="font-size:15px;color:#7c3aed;flex-shrink:0;margin-top:1px;"></i>
+        <p>Ces photos seront automatiquement intégrées dans une section "Transformation" sur ta page produit.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+
+    <!-- FILLED STATE -->
+    <div class="wizard-card dir-c">
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <h1 class="step-title">Photos Avant / Après</h1>
+      <p class="step-sub">Les comparaisons avant/après sont les preuves visuelles les plus persuasives.</p>
+
+      <div class="cards-outer">
+        <div class="cards-grid">
+          <!-- Card AVANT filled -->
+          <div class="edit-card">
+            <div class="card-header">
+              <div class="card-header-left">
+                <div class="card-step-dot before">01</div>
+                <div>
+                  <div class="card-step-label">Avant</div>
+                  <div class="card-step-sub">Situation initiale</div>
+                </div>
+              </div>
+              <!-- Checkmark filled indicator -->
+              <i class="ph ph-check-circle" style="font-size:16px;color:#7c3aed;"></i>
+            </div>
+            <div class="card-body" style="padding:0;">
+              <div class="dropzone filled" style="border-radius:0 0 14px 14px;">
+                <img src="https://picsum.photos/seed/prod-before/400/300" alt="Avant" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Card APRÈS filled -->
+          <div class="edit-card">
+            <div class="card-header">
+              <div class="card-header-left">
+                <div class="card-step-dot after">02</div>
+                <div>
+                  <div class="card-step-label">Après</div>
+                  <div class="card-step-sub">Résultat obtenu</div>
+                </div>
+              </div>
+              <i class="ph ph-check-circle" style="font-size:16px;color:#7c3aed;"></i>
+            </div>
+            <div class="card-body" style="padding:0;">
+              <div class="dropzone filled" style="border-radius:0 0 14px 14px;">
+                <img src="https://picsum.photos/seed/prod-after/400/300" alt="Après" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Flèche centrale -->
+        <div class="center-arrow">
+          <i class="ph ph-arrow-right" style="font-size:12px;color:#7c3aed;"></i>
+        </div>
+      </div>
+
+      <!-- Aperçu comparaison -->
+      <div class="compare-block">
+        <div class="compare-title">Aperçu de la comparaison</div>
+        <div class="compare-grid">
+          <div class="compare-img-wrap">
+            <img src="https://picsum.photos/seed/prod-before/400/400" alt="Avant" />
+            <div class="compare-badge">Avant</div>
+          </div>
+          <div class="compare-sep">
+            <i class="ph ph-arrow-right" style="font-size:16px;"></i>
+          </div>
+          <div class="compare-img-wrap">
+            <img src="https://picsum.photos/seed/prod-after/400/400" alt="Après" />
+            <div class="compare-badge">Après</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tip -->
+      <div class="tip">
+        <i class="ph ph-lightbulb" style="font-size:15px;color:#7c3aed;flex-shrink:0;margin-top:1px;"></i>
+        <p>Ces photos seront automatiquement intégrées dans une section "Transformation" sur ta page produit.</p>
+      </div>
+
+      <button class="skip-btn">Passer cette étape</button>
+    </div>
+
+  </div>
+
+</body>
+</html>

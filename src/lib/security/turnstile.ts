@@ -23,9 +23,14 @@ export interface TurnstileResult {
 export async function verifyTurnstile(token: unknown, ip?: string | null): Promise<TurnstileResult> {
   const secret = process.env.TURNSTILE_SECRET_KEY
 
-  // Pas configuré → on laisse passer (utile en dev / preview).
-  // En prod, ajoute la clé sinon le captcha n'a aucun effet.
-  if (!secret) return { ok: true }
+  // Pas configuré → bypass UNIQUEMENT en dev. En prod, fail-closed pour ne pas
+  // exposer /api/generate/public au spam si la clé est manquante (H-01 MADARA).
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      return { ok: false, error: 'Captcha non configuré' }
+    }
+    return { ok: true }
+  }
 
   if (!token || typeof token !== 'string' || token.length < 10) {
     return { ok: false, error: 'Captcha manquant' }

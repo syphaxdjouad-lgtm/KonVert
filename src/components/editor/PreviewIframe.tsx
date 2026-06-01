@@ -68,6 +68,7 @@ export default function PreviewIframe() {
   // Listen to postMessage from iframe (KVT_SECTION_SELECTED / DESELECTED)
   useEffect(() => {
     function onMessage(e: MessageEvent) {
+      if (e.origin !== window.location.origin) return
       if (!isKvtMessage(e.data)) return
       if (e.data.type === 'KVT_SECTION_SELECTED') {
         setSelectedSection(e.data.id)
@@ -83,7 +84,7 @@ export default function PreviewIframe() {
   // Send highlight to iframe whenever selectedSectionId changes
   useEffect(() => {
     const msg: KvtMessageOut = { type: 'KVT_HIGHLIGHT_SECTION', id: selectedSectionId }
-    iframeRef.current?.contentWindow?.postMessage(msg, '*')
+    iframeRef.current?.contentWindow?.postMessage(msg, window.location.origin)
   }, [selectedSectionId])
 
   return (

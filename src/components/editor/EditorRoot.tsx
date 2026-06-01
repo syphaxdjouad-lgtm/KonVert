@@ -29,17 +29,27 @@ interface Props {
     _editor_state?: unknown
   }
   defaultTemplateId?: string
+  // V3 — html déjà rendu serveur. Si présent, PreviewIframe l'utilise direct
+  // au lieu d'appeler renderTemplate côté client (qui ne connaît pas V3).
+  staticHtml?: string
   onSave?: (html: string, jsonForDb: object) => Promise<void>
   saving?: boolean
 }
 
-export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue', onSave, saving }: Props) {
+const V3_STYLE_IDS = new Set([
+  'soft', 'editorial', 'apple-clean', 'luxe-noir', 'organic',
+  'brutalist', 'warm-neutral', 'minimal-mono', 'vibrant', 'bold',
+])
+
+export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue', staticHtml, onSave, saving }: Props) {
   const hydrate = useEditorStore(s => s.hydrate)
+  const setStaticHtml = useEditorStore(s => s.setStaticHtml)
   const templateId = useEditorStore(s => s.templateId)
   const landingData = useEditorStore(s => s.landingData)
   const sectionOrder = useEditorStore(s => s.sectionOrder)
   const visualSettings = useEditorStore(s => s.visualSettings)
   const globalStyles = useEditorStore(s => s.globalStyles)
+  const storeStaticHtml = useEditorStore(s => s.staticHtml)
   const panelOpen = useEditorStore(s => s.panelOpen)
   const setPanelOpen = useEditorStore(s => s.setPanelOpen)
 
@@ -70,10 +80,26 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Sync staticHtml prop → store (re-runs si prop change après autosave)
+  useEffect(() => {
+    if (staticHtml) setStaticHtml(staticHtml)
+  }, [staticHtml, setStaticHtml])
+
   async function handleSave() {
     if (!onSave) return
-    const { renderTemplate } = await import('@/lib/templates')
-    const html = renderTemplate(templateId, landingData, { sectionOrder, visualSettings, globalStyles })
+    // V3 — renderTemplate côté client ne sait pas rendre les styleId V3.
+    // On utilise le html déjà rendu serveur (staticHtml du store ou prop).
+    let html: string
+    if (V3_STYLE_IDS.has(templateId)) {
+      html = storeStaticHtml || staticHtml || ''
+      if (!html) {
+        console.warn('[EditorRoot] V3 save: pas de staticHtml dispo, save annulé')
+        return
+      }
+    } else {
+      const { renderTemplate } = await import('@/lib/templates')
+      html = renderTemplate(templateId, landingData, { sectionOrder, visualSettings, globalStyles })
+    }
     const jsonForDb = {
       ...landingData,
       _template_slug: templateId,

@@ -35,6 +35,11 @@ interface EditorStore {
   selectedSectionId: string | null
   panelMode: PanelMode
   device: Device
+  // V3 — html rendu serveur (renderPageV3) pour bypass renderTemplate côté
+  // client. Set par EditorRoot via staticHtml prop quand engine V3 a généré
+  // la page (le client ne peut pas re-render les 13 sections V3, c'est serveur).
+  staticHtml: string
+  setStaticHtml: (html: string) => void
   // v2 panel state
   panelOpen: boolean
   subPanelEditOpen: boolean
@@ -70,6 +75,8 @@ export const useEditorStore = create<EditorStore>((set) => ({
   selectedSectionId: null,
   panelMode: 'sections',
   device: 'desktop',
+  staticHtml: '',
+  setStaticHtml: (html: string) => set({ staticHtml: html }),
   // v2 panel state
   panelOpen: false,
   subPanelEditOpen: false,

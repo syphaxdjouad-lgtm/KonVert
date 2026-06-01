@@ -42,6 +42,7 @@ export default function PreviewIframe() {
   const landingData = useEditorStore(s => s.landingData)
   const sectionOrder = useEditorStore(s => s.sectionOrder)
   const device = useEditorStore(s => s.device)
+  const staticHtml = useEditorStore(s => s.staticHtml)
   const selectedSectionId = useEditorStore(s => s.selectedSectionId)
   const setSelectedSection = useEditorStore(s => s.setSelectedSection)
   const setPanelOpen = useEditorStore(s => s.setPanelOpen)
@@ -52,16 +53,21 @@ export default function PreviewIframe() {
 
   // Compute render inputs — memoized to debounce only real changes
   const renderInputs = useMemo(() => ({
-    templateId, landingData, sectionOrder,
-  }), [templateId, landingData, sectionOrder])
+    templateId, landingData, sectionOrder, staticHtml,
+  }), [templateId, landingData, sectionOrder, staticHtml])
 
   useEffect(() => {
     if (!templateId) return
 
-    // ─── Path V3 — fetch html_content depuis DB ────────────────────────────
+    // ─── Path V3 — html rendu serveur (renderPageV3) ───────────────────────
     // renderTemplate côté client ne connaît pas les styleId V3 (apple-clean, etc.)
-    // → on récupère le html déjà rendu serveur via l'API pages.
+    // 1er essai : staticHtml du store (passé via EditorRoot prop après generate)
+    // Fallback : fetch html_content depuis Supabase via page_id de l'URL
     if (V3_STYLE_IDS.has(templateId)) {
+      if (staticHtml) {
+        setSrcdoc(staticHtml)
+        return
+      }
       const pageIdMatch = typeof window !== 'undefined'
         ? new URLSearchParams(window.location.search).get('page_id')
         : null

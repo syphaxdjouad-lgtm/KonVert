@@ -932,6 +932,7 @@ function NewPageInner() {
                   : undefined
               }
               defaultTemplateId={selectedStyle}
+              staticHtml={html}
               onSave={async (savedHtml) => {
                 // savePage gere son propre assemblage du json_content.
                 // Le jsonForDb du nouvel editeur sera utilise en C2+.

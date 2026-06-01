@@ -10,7 +10,8 @@ export const warmNeutralTokens: StyleTokens = {
     border:    'rgba(59,47,35,0.1)',
   },
   fonts: {
-    heading: '"PP Editorial New", Georgia, serif',
+    // PP Editorial New (Pangram) = propriétaire — swap par DM Serif Display (Google Fonts)
+    heading: '"DM Serif Display", Georgia, serif',
     body:    '"Inter", system-ui, sans-serif',
   },
   spacing: { section: '128px', card: '32px', gap: '24px' },

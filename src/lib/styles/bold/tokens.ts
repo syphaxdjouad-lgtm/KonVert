@@ -10,7 +10,8 @@ export const boldTokens: StyleTokens = {
     border:    '#0F0F0F',
   },
   fonts: {
-    heading: '"PP Neue Machina", "Arial Black", sans-serif',
+    // PP Neue Machina (Pangram) = propriétaire — swap par Space Grotesk (Google Fonts)
+    heading: '"Space Grotesk", "Arial Black", sans-serif',
     body:    '"Inter", system-ui, sans-serif',
   },
   spacing: { section: '120px', card: '32px', gap: '20px' },

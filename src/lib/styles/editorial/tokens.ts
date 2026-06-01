@@ -10,7 +10,8 @@ export const editorialTokens: StyleTokens = {
     border:    'rgba(10, 10, 10, 0.1)',
   },
   fonts: {
-    heading: '"Tiempos Headline", "Times New Roman", serif',
+    // Tiempos Headline (Klim) = propriétaire — swap par Playfair Display (Google Fonts)
+    heading: '"Playfair Display", "Times New Roman", serif',
     body:    '"Inter", system-ui, sans-serif',
   },
   spacing: { section: '160px', card: '40px', gap: '32px' },

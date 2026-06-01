@@ -46,6 +46,10 @@ export const howItWorksStepSchema = z.object({
 })
 
 export const deepseekV3OutputSchema = z.object({
+  // Brand name — affiché en haut du hero + dans le manifesto. Si l'user n'a
+  // pas saisi de nom, DeepSeek propose un nom cohérent avec le produit
+  // (ex: "Atelier Forêt" pour un sac en cuir artisanal). 2-40 chars.
+  brand: z.string().min(2).max(40).optional(),
   hero: heroSchema.optional(),
   why_we_love: z.string().min(1).optional(),
   features: z.array(featureSchema).optional(),

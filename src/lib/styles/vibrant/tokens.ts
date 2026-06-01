@@ -10,7 +10,9 @@ export const vibrantTokens: StyleTokens = {
     border:    '#1A1A1A',
   },
   fonts: {
-    heading: '"Clash Display", "Inter", sans-serif',
+    // Clash Display (Fontshare) = self-host à terme — pour Phase 4, swap par
+    // Space Grotesk (Google Fonts) qui a le même feeling display moderne.
+    heading: '"Space Grotesk", "Inter", sans-serif',
     body:    '"Inter", system-ui, sans-serif',
   },
   spacing: { section: '120px', card: '32px', gap: '24px' },

@@ -28,9 +28,13 @@ export const maxDuration = 90
  */
 function buildV3SystemPrompt(args: {
   tone: Exclude<CopyTone, 'auto'>
+  brand?: string
   product: { title: string; description: string; category?: string }
 }): string {
   const toneInstruction = TONE_PROMPTS[args.tone] || TONE_PROMPTS.friendly
+  const brandLine = args.brand
+    ? `- Nom de marque : ${args.brand} (à utiliser tel quel dans hero + manifesto)`
+    : `- Nom de marque : NON FOURNI — invente un nom court, élégant, cohérent avec le produit (ex: "Atelier Forêt" pour cuir artisanal, "Velura" pour skincare, "Halo" pour bijoux)`
 
   return `Tu es un copywriter DTC premium niveau Allbirds/Mejuri/Glossier.
 
@@ -40,14 +44,18 @@ Produit à valoriser :
 - Titre : ${args.product.title}
 - Description source : ${args.product.description}
 ${args.product.category ? `- Catégorie : ${args.product.category}` : ''}
+${brandLine}
 
-Génère un JSON STRICT respectant la structure suivante :
+OBLIGATOIRE : génère TOUTES les 12 sections ci-dessous, AUCUNE ne doit être omise. Une page sans press_quote / reviews_summary / how_it_works paraît vide et amateur.
+
+JSON STRICT à produire :
 
 {
+  "brand": "Nom de marque court (2-40 chars), tel que fourni ou inventé",
   "hero": { "tagline": "≤8 mots, accroche émotionnelle", "subtagline": "≤12 mots, complément" },
   "why_we_love": "3-4 lignes d'émotion authentique, JAMAIS de superlatifs creux",
   "features": [
-    { "name": "Nom propriétaire si possible (ex: TENCEL™)", "description": "≤15 mots, bénéfice concret", "isPropriety": false }
+    { "name": "Nom propriétaire si possible (ex: TENCEL™, SoftFit™)", "description": "≤15 mots, bénéfice concret", "isPropriety": false }
   ],
   "best_for": ["3-4 cas d'usage concrets, ≤2 mots chacun"],
   "materials": [
@@ -60,16 +68,26 @@ Génère un JSON STRICT respectant la structure suivante :
   "manifesto": {
     "headline": "≤6 mots, statement brand",
     "pillars": ["Pilier 1 court", "Pilier 2 court", "Pilier 3 court"]
-  }
+  },
+  "press_quote": { "quote": "Citation presse crédible ≤20 mots", "source": "Nom du média (ex: Vogue, GQ, Monocle, ELLE, Forbes)" },
+  "reviews_summary": "Résumé reviews 2-3 phrases (note moyenne + bénéfice clé + nombre d'avis)",
+  "how_it_works": [
+    { "step": 1, "title": "≤4 mots", "description": "≤15 mots" },
+    { "step": 2, "title": "≤4 mots", "description": "≤15 mots" },
+    { "step": 3, "title": "≤4 mots", "description": "≤15 mots" }
+  ]
 }
 
 Règles :
 - AUCUN emoji
 - AUCUN superlatif creux ("incroyable", "unique", "exceptionnel" sans preuve)
-- features : 3-5 features max, mots propriétaires bienvenus dans name (style "SoftFit™", "PureBlend")
+- features : 3-5 features, mots propriétaires bienvenus dans name (style "SoftFit™", "PureBlend")
 - best_for : 3-4 cas d'usage, ≤2 mots chacun
 - materials : 2-4 matériaux, confidence honest (0.9 = explicite dans desc, 0.4 = inféré)
 - faq : 4-5 questions
+- press_quote : invente une citation presse crédible (média réel, ton sobre)
+- reviews_summary : invente un résumé reviews crédible (4.7/5 sur 2400 avis style)
+- how_it_works : 3 étapes du parcours produit (de la commande à l'usage)
 - Retourne UNIQUEMENT le JSON, aucun texte avant/après`.trim()
 }
 
@@ -255,8 +273,14 @@ export async function POST(req: NextRequest) {
           : pickedTone
 
       // 3. Build system prompt + call DeepSeek.
+      // brand = user-provided via body.brand. Si absent, DeepSeek invente un
+      // nom de marque cohérent (instruction dans le prompt).
+      const brand = typeof body.brand === 'string' && body.brand.trim().length >= 2
+        ? body.brand.trim().slice(0, 40)
+        : undefined
       const systemPrompt = buildV3SystemPrompt({
         tone: resolvedTone,
+        brand,
         product: {
           title: product.title,
           description: product.description,
@@ -286,6 +310,7 @@ export async function POST(req: NextRequest) {
         },
         images: (body.images as string[] | undefined) ?? product.images,
         copy: {
+          brand: brand || aiOutput.brand,
           hero: aiOutput.hero,
           why_we_love: aiOutput.why_we_love,
           features: aiOutput.features,

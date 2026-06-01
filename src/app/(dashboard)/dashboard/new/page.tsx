@@ -214,6 +214,9 @@ function NewPageInner() {
   // l'instant (Phase 2 branchera engine V3 quand l'UI sera validée).
   const [styleMode, setStyleMode] = useState<'legacy' | 'v3'>('legacy')
   const [selectedTone,  setSelectedTone]  = useState('persuasif')
+  // Brand name affiché en haut du hero V3 + dans le manifesto. Optionnel —
+  // si vide, DeepSeek invente un nom cohérent avec le produit.
+  const [brand, setBrand] = useState('')
 
   // Step 6 — Plateforme cible
   const [platform, setPlatform] = useState('shopify')
@@ -561,6 +564,7 @@ function NewPageInner() {
       // L'engine V3 (AI SDK + Zod + 13 sections + renderPageV3) prend la main.
       // styleId = slug V3 direct (ex: 'apple-clean'), tone mappé vers les
       // 5 tones V3 via LEGACY_TONE_TO_V3, images du wizard transmises.
+      // brand = nom de marque user (string vide → DeepSeek invente un nom).
       if (styleMode === 'v3') {
         body = {
           ...body,
@@ -568,6 +572,7 @@ function NewPageInner() {
           styleId: selectedStyle,
           tone: LEGACY_TONE_TO_V3[selectedTone] || 'friendly',
           images: uploadedPhotos.length > 0 ? uploadedPhotos : undefined,
+          brand: brand.trim() || undefined,
         }
       }
 
@@ -1859,6 +1864,24 @@ function NewPageInner() {
                 </button>
               ))}
             </div>
+
+            {/* ── Champ Nom de marque (visible pour les 2 modes, utilisé surtout V3) ── */}
+            <label className="block text-[13px] font-bold mt-6 mb-3" style={{ color: '#1a1a2e' }}>
+              Nom de ta marque
+              <span className="ml-2 text-[11px] font-normal" style={{ color: '#8b8b9e' }}>(optionnel — laisse vide pour qu&apos;on en invente un)</span>
+            </label>
+            <input
+              type="text"
+              value={brand}
+              onChange={(e) => setBrand(e.target.value.slice(0, 40))}
+              placeholder="Ex : Atelier Forêt, Velura, Halo..."
+              className="w-full px-4 py-3 rounded-xl border-2 text-[14px] focus:outline-none transition-colors"
+              style={{ borderColor: brand ? '#7c3aed' : '#E3E3E8', background: '#fff', color: '#1a1a2e' }}
+              maxLength={40}
+            />
+            <p className="text-[11px] mt-1.5" style={{ color: '#8b8b9e' }}>
+              Affiché en haut du hero + dans le manifesto. 2-40 caractères.
+            </p>
           </div>
         )}
 

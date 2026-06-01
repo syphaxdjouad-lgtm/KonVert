@@ -32,6 +32,14 @@ export function renderHero(data: V3PageData, tokens: StyleTokens): string {
            style="width:100%;border-radius:${tokens.radius.image};display:block">
     </div>
     <div class="v3-hero__content" style="color:${tokens.colors.text}">
+      ${copy.brand
+        ? `<div style="
+            font-family:${tokens.fonts.body};
+            font-size:13px;font-weight:600;letter-spacing:0.18em;
+            text-transform:uppercase;color:${tokens.colors.accent};
+            margin:0 0 16px
+          ">${escapeHtml(copy.brand)}</div>`
+        : ''}
       <h1 style="
         font-family:${tokens.fonts.heading};
         font-size:clamp(40px,5vw,72px);

@@ -84,7 +84,7 @@ const V3_STYLES = [
   { id: 'soft',         name: 'Soft',         desc: 'Mejuri / Glossier vibe — rose poudré, sérif raffiné, intimité moderne',     emoji: '🌸',
     bg: '#FAF7F2', surface: '#F0E8DC', accent: '#C9A77E', text: '#1A1614', font: '"Cormorant Garamond", Georgia, serif', btnRadius: 999,
     brand: 'MEJURI', product: 'Demi Hoop Earrings', tagline: 'Designed to be worn always',
-    photo: 'https://images.unsplash.com/photo-1635767582909-345d2b65a6b3?w=600&q=80&auto=format&fit=crop',
+    photo: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=600&q=80&auto=format&fit=crop',
     bullets: ['Bijoux · Skincare · DTC luxe', 'Top conversion beauté féminine', 'Sérif raffiné Cormorant'] },
   { id: 'editorial',    name: 'Editorial',    desc: 'Magazine éditorial — typo généreuse, blanc + crème, storytelling premium',  emoji: '📰',
     bg: '#FFFFFF', surface: '#F8F6F2', accent: '#0A0A0A', text: '#0A0A0A', font: '"Playfair Display", "Times New Roman", serif', btnRadius: 0,
@@ -2033,10 +2033,9 @@ function NewPageInner() {
                         position: 'relative',
                         minWidth: 0,
                       }}>
-                        {/* Header : emoji + nom + V3 badge */}
+                        {/* Header : nom du style mis en valeur + V3 badge */}
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xl">{s.emoji}</span>
-                          <span className="text-[15px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
+                          <span className="text-[22px] font-black leading-none tracking-tight" style={{ color: '#0f0f1e' }}>{s.name}</span>
                           <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#ede9fe', color: '#6d28d9' }}>V3</span>
                         </div>
 

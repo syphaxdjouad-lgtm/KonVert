@@ -27,7 +27,8 @@ export const organizationSchema = {
     },
   ],
   sameAs: [
-    // À remplir au launch quand les comptes sociaux seront créés
+    'https://twitter.com/konvertapp',
+    'https://www.linkedin.com/company/lunanco',
   ],
 } as const
 

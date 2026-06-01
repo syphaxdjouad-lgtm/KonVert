@@ -233,7 +233,7 @@ function Slide1() {
               className="btn-shimmer btn-ripple inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg"
               onClick={addRipple}
             >
-              Essaie avec ton produit — gratuit <ArrowRight className="w-4 h-4" />
+              Génère ma première page — gratuit <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/demo"
@@ -1021,16 +1021,16 @@ function HeroSlider() {
 /* ═══════════════════════════════════════════════════════════════════════════
    TRUST BAR — Logo marquee style
 ═══════════════════════════════════════════════════════════════════════════ */
+// Partenaires technologiques officiels (intégrations live dès J0 — pas des clients)
 const TRUST_BRANDS = [
-  { name: 'SoundCloud',               style: { fontWeight: 700, fontSize: '17px', letterSpacing: '-0.3px' } },
-  { name: 'Harvard Business Review',  style: { fontWeight: 800, fontSize: '13px', lineHeight: '1.2', maxWidth: '90px', textAlign: 'center' as const } },
-  { name: 'CHOMPS',                   style: { fontWeight: 900, fontSize: '26px', letterSpacing: '1.5px' } },
-  { name: 'ebay',                     style: { fontWeight: 800, fontSize: '26px', letterSpacing: '-1px', color: '#4b5563' } },
-  { name: 'vimeo',                    style: { fontWeight: 700, fontSize: '22px', fontStyle: 'italic' } },
-  { name: 'Zapier',                   style: { fontWeight: 700, fontSize: '18px' } },
-  { name: 'Shopify',                  style: { fontWeight: 700, fontSize: '18px' } },
-  { name: 'Stripe',                   style: { fontWeight: 700, fontSize: '20px', letterSpacing: '-0.5px' } },
-  { name: 'Klaviyo',                  style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'Shopify',      style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'WooCommerce',  style: { fontWeight: 700, fontSize: '16px' } },
+  { name: 'Stripe',       style: { fontWeight: 700, fontSize: '20px', letterSpacing: '-0.5px' } },
+  { name: 'AliExpress',   style: { fontWeight: 700, fontSize: '16px' } },
+  { name: 'Klaviyo',      style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'Zapier',       style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'YouCan',       style: { fontWeight: 700, fontSize: '18px' } },
+  { name: 'DeepSeek',     style: { fontWeight: 700, fontSize: '18px' } },
 ]
 
 function TrustBar() {
@@ -1039,7 +1039,7 @@ function TrustBar() {
     <section style={{ background: '#f0eeff', borderTop: '1px solid #e4daff', borderBottom: '1px solid #e4daff' }}>
       <div className="py-3">
         <p className="text-center text-xs font-semibold uppercase tracking-widest mb-5" style={{ color: '#b8aee8' }}>
-          Utilisé par des marques qui convertissent
+          Intégrations natives disponibles dès J0
         </p>
         <div className="marquee-wrap">
           <div className="marquee-track">
@@ -1551,7 +1551,7 @@ function HowItWorks() {
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold text-sm transition-transform hover:scale-105"
                 style={{ background: 'linear-gradient(135deg,#7c3aed,#6d28d9)' }}
               >
-                Essayer maintenant — gratuit
+                Génère ma première page — gratuit
               </a>
             </div>
             <button
@@ -2913,7 +2913,7 @@ const PLANS = [
     name: 'Agency',
     monthly: 199,
     desc: 'Pour les agences SMMA',
-    features: ['Tout dans Pro', 'Multi-clients illimité', 'White-label (logo + couleurs)', 'Rapports clients', 'Accès API (bientôt)', 'Onboarding personnalisé'],
+    features: ['Tout dans Pro', 'Multi-clients illimité', 'White-label (logo + couleurs)', 'Rapports clients', 'Onboarding personnalisé'],
     cta: 'Contacter les ventes',
     highlighted: false,
   },

@@ -15,6 +15,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import type { LandingPageData } from '@/types'
 import { track } from '@/lib/analytics'
+import { PlatformLogo } from '@/components/ui/platform-logo'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _Palette = Palette
@@ -117,10 +118,10 @@ const LEGACY_TONE_TO_V3: Record<string, 'friendly' | 'premium' | 'bold' | 'story
 }
 
 const PLATFORMS = [
-  { id: 'shopify',      label: 'Shopify',         icon: '🟢' },
-  { id: 'woocommerce',  label: 'WooCommerce',      icon: '🟣' },
-  { id: 'youcan',       label: 'YouCan',           icon: '🟠' },
-  { id: 'standalone',   label: 'Page standalone',  icon: '🔗' },
+  { id: 'shopify',      label: 'Shopify' },
+  { id: 'woocommerce',  label: 'WooCommerce' },
+  { id: 'youcan',       label: 'YouCan' },
+  { id: 'standalone',   label: 'Page standalone' },
 ]
 
 const LANGUAGES = [
@@ -918,7 +919,6 @@ function NewPageInner() {
                       const isShopify = store.platform === 'shopify'
                       const isYouCan  = store.platform === 'youcan'
                       const color     = isShopify ? '#16a34a' : isYouCan ? '#f97316' : '#7c3aed'
-                      const icon      = isShopify ? '🟢' : isYouCan ? '🟠' : '🟣'
                       return (
                         <button
                           key={store.id}
@@ -926,7 +926,7 @@ function NewPageInner() {
                           disabled={!!publishing}
                           className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 disabled:opacity-50"
                         >
-                          <span>{icon}</span>
+                          <PlatformLogo platform={store.platform} size={20} />
                           <div className="flex-1 min-w-0">
                             <div className="text-[13px] font-bold truncate" style={{ color: '#111' }}>{store.name}</div>
                             <div className="text-[11px] font-semibold capitalize" style={{ color }}>{store.platform}</div>
@@ -1975,7 +1975,7 @@ function NewPageInner() {
                     : { borderColor: '#E3E3E8', background: '#fff' }
                   }
                 >
-                  <span className="text-3xl">{p.icon}</span>
+                  <PlatformLogo platform={p.id} size={36} />
                   <div className="flex-1">
                     <span className="text-[14px] font-bold" style={{ color: '#1a1a2e' }}>{p.label}</span>
                   </div>

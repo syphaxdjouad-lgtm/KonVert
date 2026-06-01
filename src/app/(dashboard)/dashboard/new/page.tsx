@@ -7,7 +7,7 @@ import { TEMPLATES, PRODUCT_TYPE_LABELS, type ProductType } from '@/lib/template
 import { detectProductType } from '@/lib/templates/detect-product-type'
 import {
   Link2, Pencil, Loader2, ArrowLeft, ArrowRight, Check,
-  Upload, Palette, Sparkles,
+  Upload, Palette, Sparkles, Camera, Lightbulb,
   Zap, X, ChevronRight, Send, ChevronDown, CheckCircle2, AlertCircle,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -1302,31 +1302,96 @@ function NewPageInner() {
           </div>
         )}
 
-        {/* ── STEP 4 : Photos Avant/Après ── */}
+        {/* ── STEP 4 : Photos Avant/Après — Direction A Premium Minimal ── */}
         {step === 4 && (
           <div>
             <h1 className="text-2xl font-black mb-1" style={{ color: '#1a1a2e' }}>Photos Avant / Après</h1>
             <p className="text-[14px] mb-6" style={{ color: '#8b8b9e' }}>Les comparaisons avant/après sont les preuves visuelles les plus persuasives.</p>
 
-            <div className="grid grid-cols-2 gap-4">
-              {/* AVANT */}
+            {/* Grid 3 colonnes : Avant | flèche centrale | Après */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 44px 1fr', gap: 0, alignItems: 'start' }}>
+
+              {/* ── Col AVANT ── */}
               <div>
+                {/* Header colonne */}
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-black" style={{ background: '#fee2e2', color: '#ef4444' }}>A</div>
+                  <span className="text-[11px] font-black tracking-widest" style={{ color: '#7c3aed', fontVariantNumeric: 'tabular-nums' }}>01</span>
+                  <div className="flex-1" style={{ height: '1px', background: '#f0ecff' }} />
                   <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>Avant</span>
                 </div>
+
+                {/* Dropzone AVANT */}
                 <div
-                  className="border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer mb-3"
-                  style={{ borderColor: '#fca5a5', background: '#fff5f5', minHeight: '140px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
-                  onClick={() => beforeInputRef.current?.click()}
+                  className="border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-200 relative overflow-hidden"
+                  style={{
+                    borderColor: beforePhotos.length > 0 ? '#ddd6fe' : '#c4b5fd',
+                    borderStyle: beforePhotos.length > 0 ? 'solid' : 'dashed',
+                    background: beforePhotos.length > 0 ? 'transparent' : '#faf9ff',
+                    minHeight: '148px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                  }}
+                  onClick={() => !uploading && beforeInputRef.current?.click()}
+                  onMouseEnter={e => {
+                    if (beforePhotos.length === 0) {
+                      (e.currentTarget as HTMLDivElement).style.borderColor = '#7c3aed'
+                      ;(e.currentTarget as HTMLDivElement).style.background = '#f5f1ff'
+                      ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(-1px)'
+                      ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 20px rgba(124,58,237,0.08)'
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (beforePhotos.length === 0) {
+                      (e.currentTarget as HTMLDivElement).style.borderColor = '#c4b5fd'
+                      ;(e.currentTarget as HTMLDivElement).style.background = '#faf9ff'
+                      ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
+                      ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
+                    }
+                  }}
                 >
                   {beforePhotos.length === 0 ? (
-                    <>
-                      <span className="text-3xl mb-1">📸</span>
-                      <p className="text-[12px] font-bold" style={{ color: '#ef4444' }}>Photo AVANT</p>
-                    </>
+                    uploading ? (
+                      <div className="flex flex-col items-center gap-2">
+                        <Loader2 className="w-5 h-5 animate-spin" style={{ color: '#7c3aed' }} />
+                        <span className="text-[11px]" style={{ color: '#8b8b9e' }}>Upload en cours...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: '#f3f0ff' }}>
+                          <Camera className="w-5 h-5" style={{ color: '#7c3aed' }} />
+                        </div>
+                        <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>Uploader la photo avant</span>
+                        <span className="text-[11px]" style={{ color: '#8b8b9e' }}>JPG, PNG · max 5MB</span>
+                      </>
+                    )
                   ) : (
-                    <img src={beforePhotos[0]} className="w-full rounded-xl object-cover" style={{ maxHeight: '100px' }} alt="Avant" />
+                    <>
+                      <img
+                        src={beforePhotos[0]}
+                        className="w-full object-cover rounded-[14px]"
+                        style={{ height: '148px' }}
+                        alt="Avant"
+                      />
+                      {/* Badge overlay */}
+                      <div
+                        className="absolute top-2 left-2 text-[10px] font-black tracking-wide uppercase px-2 py-1 rounded-md"
+                        style={{ background: 'rgba(10,8,20,0.65)', backdropFilter: 'blur(4px)', color: '#e9d5ff' }}
+                      >
+                        Avant
+                      </div>
+                      {/* Bouton supprimer */}
+                      <button
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center transition-opacity"
+                        style={{ background: 'rgba(0,0,0,0.6)' }}
+                        onClick={e => { e.stopPropagation(); setBeforePhotos([]) }}
+                        aria-label="Retirer la photo avant"
+                      >
+                        <X className="w-3 h-3 text-white" />
+                      </button>
+                    </>
                   )}
                   <input
                     ref={beforeInputRef}
@@ -1350,26 +1415,105 @@ function NewPageInner() {
                     }}
                   />
                 </div>
+                {/* Erreur upload sous la dropzone AVANT */}
+                {uploadError && beforePhotos.length === 0 && (
+                  <p className="text-[11px] mt-1" style={{ color: '#dc2626' }}>{uploadError}</p>
+                )}
               </div>
 
-              {/* APRÈS */}
+              {/* ── Flèche centrale ── */}
+              <div className="flex flex-col items-center justify-center gap-1.5 px-1" style={{ marginTop: '40px' }}>
+                <div style={{ width: '1px', height: '28px', background: 'linear-gradient(180deg, transparent, #c4b5fd)' }} />
+                <div
+                  className="flex items-center justify-center rounded-full"
+                  style={{ width: '28px', height: '28px', background: '#f3f0ff', border: '1px solid #ddd6fe', flexShrink: 0 }}
+                >
+                  <ArrowRight className="w-3 h-3" style={{ color: '#7c3aed' }} />
+                </div>
+                <div style={{ width: '1px', height: '28px', background: 'linear-gradient(180deg, #c4b5fd, transparent)' }} />
+              </div>
+
+              {/* ── Col APRÈS ── */}
               <div>
+                {/* Header colonne */}
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-black" style={{ background: '#dcfce7', color: '#16a34a' }}>A</div>
+                  <span className="text-[11px] font-black tracking-widest" style={{ color: '#7c3aed', fontVariantNumeric: 'tabular-nums' }}>02</span>
+                  <div className="flex-1" style={{ height: '1px', background: '#f0ecff' }} />
                   <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>Après</span>
                 </div>
+
+                {/* Dropzone APRÈS */}
                 <div
-                  className="border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer mb-3"
-                  style={{ borderColor: '#86efac', background: '#f0fdf4', minHeight: '140px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
-                  onClick={() => afterInputRef.current?.click()}
+                  className="border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-200 relative overflow-hidden"
+                  style={{
+                    borderColor: afterPhotos.length > 0 ? '#ddd6fe' : '#c4b5fd',
+                    borderStyle: afterPhotos.length > 0 ? 'solid' : 'dashed',
+                    background: afterPhotos.length > 0 ? 'transparent' : '#faf9ff',
+                    minHeight: '148px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                  }}
+                  onClick={() => !uploading && afterInputRef.current?.click()}
+                  onMouseEnter={e => {
+                    if (afterPhotos.length === 0) {
+                      (e.currentTarget as HTMLDivElement).style.borderColor = '#7c3aed'
+                      ;(e.currentTarget as HTMLDivElement).style.background = '#f5f1ff'
+                      ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(-1px)'
+                      ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 20px rgba(124,58,237,0.08)'
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (afterPhotos.length === 0) {
+                      (e.currentTarget as HTMLDivElement).style.borderColor = '#c4b5fd'
+                      ;(e.currentTarget as HTMLDivElement).style.background = '#faf9ff'
+                      ;(e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
+                      ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
+                    }
+                  }}
                 >
                   {afterPhotos.length === 0 ? (
-                    <>
-                      <span className="text-3xl mb-1">✨</span>
-                      <p className="text-[12px] font-bold" style={{ color: '#16a34a' }}>Photo APRÈS</p>
-                    </>
+                    uploading ? (
+                      <div className="flex flex-col items-center gap-2">
+                        <Loader2 className="w-5 h-5 animate-spin" style={{ color: '#7c3aed' }} />
+                        <span className="text-[11px]" style={{ color: '#8b8b9e' }}>Upload en cours...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: '#f3f0ff' }}>
+                          <Sparkles className="w-5 h-5" style={{ color: '#7c3aed' }} />
+                        </div>
+                        <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>Uploader la photo après</span>
+                        <span className="text-[11px]" style={{ color: '#8b8b9e' }}>JPG, PNG · max 5MB</span>
+                      </>
+                    )
                   ) : (
-                    <img src={afterPhotos[0]} className="w-full rounded-xl object-cover" style={{ maxHeight: '100px' }} alt="Après" />
+                    <>
+                      <img
+                        src={afterPhotos[0]}
+                        className="w-full object-cover rounded-[14px]"
+                        style={{ height: '148px' }}
+                        alt="Après"
+                      />
+                      {/* Badge overlay */}
+                      <div
+                        className="absolute top-2 left-2 text-[10px] font-black tracking-wide uppercase px-2 py-1 rounded-md"
+                        style={{ background: 'rgba(10,8,20,0.65)', backdropFilter: 'blur(4px)', color: '#e9d5ff' }}
+                      >
+                        Après
+                      </div>
+                      {/* Bouton supprimer */}
+                      <button
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center transition-opacity"
+                        style={{ background: 'rgba(0,0,0,0.6)' }}
+                        onClick={e => { e.stopPropagation(); setAfterPhotos([]) }}
+                        aria-label="Retirer la photo après"
+                      >
+                        <X className="w-3 h-3 text-white" />
+                      </button>
+                    </>
                   )}
                   <input
                     ref={afterInputRef}
@@ -1393,28 +1537,64 @@ function NewPageInner() {
                     }}
                   />
                 </div>
+                {/* Erreur upload sous la dropzone APRÈS */}
+                {uploadError && afterPhotos.length === 0 && (
+                  <p className="text-[11px] mt-1" style={{ color: '#dc2626' }}>{uploadError}</p>
+                )}
               </div>
             </div>
 
-            {/* Aperçu comparaison */}
+            {/* ── Aperçu comparaison (visible seulement si les 2 photos sont uploadées) ── */}
             {beforePhotos.length > 0 && afterPhotos.length > 0 && (
               <div className="mt-4 p-4 rounded-2xl" style={{ background: '#f8f8fc', border: '1px solid #E3E3E8' }}>
-                <p className="text-[12px] font-bold mb-3 text-center" style={{ color: '#5c5c7a' }}>Aperçu de la comparaison</p>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="relative">
-                    <img src={beforePhotos[0]} className="w-full rounded-xl object-cover" style={{ aspectRatio: '1/1' }} alt="Avant" />
-                    <div className="absolute top-2 left-2 px-2 py-1 rounded-lg text-[10px] font-black" style={{ background: '#ef4444', color: '#fff' }}>AVANT</div>
+                <p
+                  className="text-[11px] font-bold text-center mb-3 uppercase tracking-widest"
+                  style={{ color: '#5c5c7a' }}
+                >
+                  Aperçu de la comparaison
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 28px 1fr', gap: '10px', alignItems: 'center' }}>
+                  {/* Image AVANT */}
+                  <div className="relative rounded-xl overflow-hidden">
+                    <img
+                      src={beforePhotos[0]}
+                      className="w-full object-cover block"
+                      style={{ aspectRatio: '1/1' }}
+                      alt="Avant"
+                    />
+                    <div
+                      className="absolute bottom-2 left-2 text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-md"
+                      style={{ background: 'rgba(10,8,20,0.6)', backdropFilter: 'blur(4px)', color: '#e9d5ff' }}
+                    >
+                      01 · Avant
+                    </div>
                   </div>
-                  <div className="relative">
-                    <img src={afterPhotos[0]} className="w-full rounded-xl object-cover" style={{ aspectRatio: '1/1' }} alt="Après" />
-                    <div className="absolute top-2 left-2 px-2 py-1 rounded-lg text-[10px] font-black" style={{ background: '#16a34a', color: '#fff' }}>APRÈS</div>
+                  {/* Flèche centrale preview */}
+                  <div className="flex items-center justify-center" style={{ color: '#a78bfa' }}>
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                  {/* Image APRÈS */}
+                  <div className="relative rounded-xl overflow-hidden">
+                    <img
+                      src={afterPhotos[0]}
+                      className="w-full object-cover block"
+                      style={{ aspectRatio: '1/1' }}
+                      alt="Après"
+                    />
+                    <div
+                      className="absolute bottom-2 left-2 text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 rounded-md"
+                      style={{ background: 'rgba(10,8,20,0.6)', backdropFilter: 'blur(4px)', color: '#e9d5ff' }}
+                    >
+                      02 · Après
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
-            <div className="mt-4 p-3 rounded-xl flex items-start gap-3" style={{ background: '#faf9ff', border: '1px solid #ddd6fe' }}>
-              <span>💡</span>
+            {/* ── Tip Transformation ── */}
+            <div className="mt-4 p-3 rounded-xl flex items-start gap-2.5" style={{ background: '#faf9ff', border: '1px solid #ddd6fe' }}>
+              <Lightbulb className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#7c3aed' }} />
               <p className="text-[12px]" style={{ color: '#5b21b6' }}>Ces photos seront automatiquement intégrées dans une section "Transformation" sur ta page produit.</p>
             </div>
 

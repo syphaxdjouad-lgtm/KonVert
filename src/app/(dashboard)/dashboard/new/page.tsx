@@ -220,6 +220,64 @@ const TEMPLATE_PHOTOS: Record<string, string> = {
   'etec-natural':  'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80&auto=format&fit=crop',
 }
 
+// Dérive bg/surface/text/font/btnRadius pour chaque template etec-* à partir
+// de son id. On utilise des sets pré-définis pour identifier les templates
+// dark, serif, et mono — le reste fallback sur du blanc/Inter/rond.
+function deriveTemplateStyle(templateId: string, accent: string): {
+  bg: string; surface: string; text: string; font: string; btnRadius: number;
+} {
+  const DARK = new Set([
+    'etec-noir', 'etec-gold', 'etec-luxe', 'etec-jewel', 'etec-pulse',
+    'etec-supreme', 'etec-platina', 'etec-prestige',
+  ])
+  const SERIF = new Set([
+    'etec-rose', 'etec-blusho', 'etec-velvety', 'etec-cosmetix', 'etec-glow',
+    'etec-glowup', 'etec-casa', 'etec-homestyle', 'etec-artisan', 'etec-interior',
+    'etec-ella', 'etec-luxe', 'etec-jewel', 'etec-platina', 'etec-prestige',
+    'etec-gold', 'etec-sage', 'etec-aura', 'etec-natural',
+  ])
+  const MONO = new Set(['etec-pulse', 'etec-supreme', 'etec-quarter'])
+
+  const isDark = DARK.has(templateId)
+  return {
+    bg: isDark ? '#0F0F11' : '#FFFFFF',
+    surface: isDark ? `${accent}1A` : '#FAFAFA',
+    text: isDark ? '#F0F0F0' : '#1A1A1A',
+    font: MONO.has(templateId)
+      ? '"JetBrains Mono", "Courier New", monospace'
+      : SERIF.has(templateId)
+        ? '"Playfair Display", Georgia, serif'
+        : '"Inter", system-ui, sans-serif',
+    btnRadius: SERIF.has(templateId) || MONO.has(templateId) ? 0 : 999,
+  }
+}
+
+// Génère brand/product/tagline/bullets pour chaque template à partir de son
+// productType. Le nom du template sert de brand (uppercase).
+function getTemplateContent(template: { id: string; name: string }, productType: string | undefined): {
+  brand: string; product: string; tagline: string; bullets: string[];
+} {
+  const TYPE_DATA: Record<string, { product: string; tagline: string; bullets: string[] }> = {
+    skincare:  { product: 'Hydra Serum 30ml',    tagline: 'Pour peaux sensibles, sans parfum.',     bullets: ['Skincare · Cosmétique', 'Galerie UGC + reviews', 'Top conversion beauté'] },
+    beauty:    { product: 'Velvet Lip Tint',     tagline: 'Tenue 12h, fini velouté.',                bullets: ['Maquillage · Routine beauté', 'Swatches couleur interactifs', 'Storytelling cosmétique'] },
+    wellness:  { product: 'Daily Multi Pack',    tagline: 'Énergie + immunité, formule pure.',       bullets: ['Suppléments · Bien-être', 'Ingrédients cliniques', 'Subscribe & save'] },
+    tech:      { product: 'Pro Wireless Earbuds',tagline: 'Son cristallin, autonomie 36h.',          bullets: ['Tech · Électronique · Gadgets', 'Specs claires + glassmorphism', 'CTA tech-savvy'] },
+    jewelry:   { product: 'Atelier Hoop Earrings',tagline: 'Or 18 carats, fait main.',                bullets: ['Bijoux · Joaillerie · Premium', 'Photos packshot studio', 'Conversion luxe'] },
+    home:      { product: 'Linen Throw 130×170', tagline: 'Lin tissé main, lavable machine.',        bullets: ['Maison · Déco · Lifestyle', 'Lookbook ambiance cosy', 'Tons naturels chaleureux'] },
+    fashion:   { product: 'Cashmere Cardigan',   tagline: 'Cachemire Mongolie, coupe oversize.',     bullets: ['Mode · Vêtements · Lookbook', 'Galerie variantes couleur', 'UGC + storytelling'] },
+    pet:       { product: 'Eco Bamboo Brush',    tagline: 'Bambou + soies douces, zéro plastique.',  bullets: ['Animaux · Pet care', 'Avis par espèce', 'Sélecteur taille intuitif'] },
+    luxury:    { product: 'Diamond Solitaire',   tagline: 'Diamant éthique, certifié IGI.',          bullets: ['Ultra premium · Exclusivité', 'Dark mode + accents or', 'Storytelling artisanal'] },
+    universal: { product: 'Hero Product',        tagline: 'Adapté à tout type de produit.',          bullets: ['Universel · Multi-vertical', 'Design clean, rendu pro', 'Idéal pour débuter'] },
+  }
+  const data = TYPE_DATA[productType ?? 'universal'] || TYPE_DATA.universal
+  return {
+    brand: template.name.toUpperCase(),
+    product: data.product,
+    tagline: data.tagline,
+    bullets: data.bullets,
+  }
+}
+
 const PLATFORMS = [
   { id: 'shopify',      label: 'Shopify',         icon: '🟢' },
   { id: 'woocommerce',  label: 'WooCommerce',      icon: '🟣' },
@@ -1899,85 +1957,194 @@ function NewPageInner() {
               </button>
             </div>
 
-            {/* ── Liste Templates legacy (etec-*) — grid 2 cols compact ── */}
+            {/* ── Liste Templates legacy (etec-*) — 1 carte/ligne style V3 ── */}
             {styleMode === 'legacy' && (
-              <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="space-y-3 mb-6">
                 {STYLES.map(s => {
                   const tpl = TEMPLATES.find(t => t.id === s.id)
                   const isUniversal = tpl?.productType === 'universal' || tpl?.themed === false
                   const productLabel = tpl ? PRODUCT_TYPE_LABELS[tpl.productType] : null
                   const accent = tpl?.accent || '#7c3aed'
                   const photo = TEMPLATE_PHOTOS[s.id]
+                  const tokens = deriveTemplateStyle(s.id, accent)
+                  const content = getTemplateContent(s, tpl?.productType)
                   const isSelected = selectedStyle === s.id
+                  const isDarkBg = isColorDark(tokens.bg)
+                  const btnTextColor = isColorDark(accent) ? '#FFFFFF' : tokens.text
                   return (
                     <button
                       key={s.id}
                       onClick={() => setSelectedStyle(s.id)}
-                      className="text-left rounded-xl border-2 overflow-hidden transition-all hover:shadow-md"
+                      className="w-full text-left rounded-2xl border-2 overflow-hidden transition-all hover:shadow-md"
                       style={{
-                        height: 220,
+                        height: 200,
                         display: 'flex',
-                        flexDirection: 'column',
                         ...(isSelected
-                          ? { borderColor: '#7c3aed', boxShadow: '0 0 0 3px rgba(124,58,237,0.08)' }
+                          ? { borderColor: '#7c3aed', boxShadow: '0 0 0 4px rgba(124,58,237,0.08)' }
                           : { borderColor: '#E3E3E8', background: '#fff' }
                         ),
                       }}
                     >
-                      {/* Photo cover top (135px) — fallback gradient + emoji XL */}
+                      {/* ─── PARTIE 1 — Mini-site preview (gauche, 320px) ─── */}
                       <div style={{
-                        height: 135,
-                        position: 'relative',
-                        overflow: 'hidden',
-                        background: `linear-gradient(135deg, ${accent}22 0%, ${accent}44 100%)`,
+                        width: 320,
                         flexShrink: 0,
+                        background: tokens.bg,
+                        color: tokens.text,
+                        position: 'relative',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        borderRight: '1px solid #f0f0f3',
                       }}>
-                        {photo && (
-                          /* eslint-disable-next-line @next/next/no-img-element */
-                          <img
-                            src={photo}
-                            alt={s.name}
-                            loading="lazy"
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                            onError={(e) => { e.currentTarget.style.display = 'none' }}
-                          />
-                        )}
-                        {/* Emoji XL fallback (visible si photo absente) */}
+                        {/* Mini header brand + nav */}
                         <div style={{
-                          position: 'absolute',
-                          bottom: 8, left: 10,
-                          fontSize: 26,
-                          opacity: 0.55,
-                          pointerEvents: 'none',
-                          filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.15))',
-                        }}>{s.emoji}</div>
-                        {/* Badge accent en haut à gauche (color dot) */}
-                        <div style={{
-                          position: 'absolute',
-                          top: 10, left: 10,
-                          width: 12, height: 12,
-                          borderRadius: '50%',
-                          background: accent,
-                          boxShadow: '0 0 0 2px #fff',
-                        }} />
-                        {/* Badge POPULAIRE pour etec-blue */}
-                        {s.id === 'etec-blue' && (
+                          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                          padding: '8px 12px',
+                          borderBottom: `1px solid ${isDarkBg ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
+                          flexShrink: 0,
+                        }}>
                           <div style={{
-                            position: 'absolute',
-                            top: 10, right: 10,
-                            fontSize: 9, fontWeight: 700,
-                            padding: '3px 7px',
-                            borderRadius: 6,
-                            background: '#fef3c7',
-                            color: '#d97706',
-                            letterSpacing: '0.04em',
-                          }}>POPULAIRE</div>
-                        )}
+                            fontFamily: tokens.font, fontSize: 11, fontWeight: 700,
+                            letterSpacing: '0.06em', color: tokens.text,
+                          }}>{content.brand}</div>
+                          <div style={{
+                            display: 'flex', gap: 8, fontFamily: '"Inter", sans-serif',
+                            fontSize: 7, fontWeight: 500, opacity: 0.7,
+                            textTransform: 'uppercase', letterSpacing: '0.12em',
+                            color: tokens.text,
+                          }}>
+                            <span>Shop</span><span>Story</span><span style={{ marginLeft: 2 }}>⊕</span>
+                          </div>
+                        </div>
+
+                        {/* Hero 2 cols compact : photo + contenu */}
+                        <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+                          <div style={{
+                            width: '50%', position: 'relative', overflow: 'hidden',
+                            background: `linear-gradient(135deg, ${tokens.surface} 0%, ${tokens.bg} 100%)`,
+                            flexShrink: 0,
+                          }}>
+                            {photo && (
+                              /* eslint-disable-next-line @next/next/no-img-element */
+                              <img
+                                src={photo}
+                                alt={content.product}
+                                loading="lazy"
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                onError={(e) => { e.currentTarget.style.display = 'none' }}
+                              />
+                            )}
+                            <div style={{
+                              position: 'absolute', bottom: 6, left: 8,
+                              fontSize: 16, opacity: 0.5, pointerEvents: 'none',
+                            }}>{s.emoji}</div>
+                          </div>
+
+                          <div style={{
+                            flex: 1, padding: '10px 12px',
+                            display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 5,
+                            minWidth: 0,
+                          }}>
+                            <div style={{
+                              fontFamily: '"Inter", sans-serif',
+                              fontSize: 7, fontWeight: 700,
+                              letterSpacing: '0.18em', textTransform: 'uppercase',
+                              color: accent,
+                            }}>New · {content.brand}</div>
+                            <div style={{
+                              fontFamily: tokens.font,
+                              fontSize: 14, fontWeight: 600, lineHeight: 1.1,
+                              color: tokens.text,
+                              display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden', wordBreak: 'break-word',
+                            }}>{content.product}</div>
+                            <div style={{
+                              fontFamily: tokens.font, fontSize: 11, fontWeight: 600, color: tokens.text,
+                              opacity: 0.85, marginTop: 1,
+                            }}>€98 <span style={{ color: accent, fontSize: 8, marginLeft: 4 }}>★ 4.8</span></div>
+                            <div style={{
+                              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                              alignSelf: 'flex-start',
+                              fontFamily: '"Inter", sans-serif',
+                              fontSize: 8, fontWeight: 600,
+                              padding: '5px 10px', borderRadius: tokens.btnRadius,
+                              background: accent, color: btnTextColor,
+                              letterSpacing: '0.03em', marginTop: 3,
+                              textTransform: 'uppercase',
+                            }}>Ajouter</div>
+                          </div>
+                        </div>
+
+                        {/* Trust strip bas */}
+                        <div style={{
+                          display: 'flex', justifyContent: 'space-around',
+                          padding: '5px 10px',
+                          borderTop: `1px solid ${isDarkBg ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}`,
+                          background: isDarkBg ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.015)',
+                          flexShrink: 0,
+                        }}>
+                          {['Livraison 48h', 'Retours 30j', 'Garantie'].map((feat, i) => (
+                            <div key={i} style={{
+                              fontFamily: '"Inter", sans-serif',
+                              fontSize: 6, fontWeight: 500,
+                              letterSpacing: '0.08em', textTransform: 'uppercase',
+                              color: tokens.text, opacity: 0.6, whiteSpace: 'nowrap',
+                            }}>{feat}</div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* ─── PARTIE 2 — Info + bullets (droite) ─── */}
+                      <div style={{
+                        flex: 1,
+                        padding: '18px 20px',
+                        display: 'flex', flexDirection: 'column',
+                        justifyContent: 'center', gap: 10,
+                        background: '#fff',
+                        position: 'relative',
+                        minWidth: 0,
+                      }}>
+                        {/* Header : nom mis en valeur + badges */}
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-[22px] font-black leading-none tracking-tight" style={{ color: '#0f0f1e' }}>{s.name}</span>
+                          {s.id === 'etec-blue' && (
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#fef3c7', color: '#d97706' }}>POPULAIRE</span>
+                          )}
+                          {productLabel && (
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={isUniversal
+                              ? { background: '#ecfdf5', color: '#047857' }
+                              : { background: '#f3e8ff', color: '#6d28d9' }
+                            }>{productLabel}</span>
+                          )}
+                        </div>
+
+                        {/* Description courte */}
+                        <p className="text-[12px] leading-snug" style={{ color: '#5c5c7a', margin: 0 }}>{s.desc}</p>
+
+                        {/* 3 bullets points forts */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                          {content.bullets.map((b, i) => (
+                            <div key={i} className="flex items-start gap-1.5 text-[11px]" style={{ color: '#5c5c7a' }}>
+                              <span style={{ color: accent, fontWeight: 700, flexShrink: 0, marginTop: 1 }}>·</span>
+                              <span style={{ lineHeight: 1.3 }}>{b}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Swatch couleurs + font */}
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <span title="Background" style={{ width: 12, height: 12, borderRadius: 3, background: tokens.bg, border: '1px solid rgba(0,0,0,0.08)' }} />
+                          <span title="Accent" style={{ width: 12, height: 12, borderRadius: 3, background: accent, border: '1px solid rgba(0,0,0,0.08)' }} />
+                          <span title="Text" style={{ width: 12, height: 12, borderRadius: 3, background: tokens.text, border: '1px solid rgba(0,0,0,0.08)' }} />
+                          <span className="text-[10px] ml-1" style={{ color: '#a8a8b8' }}>
+                            {tokens.font.split(',')[0].replace(/['"]/g, '').trim()}
+                          </span>
+                        </div>
+
                         {/* Checkmark overlay si sélectionné */}
                         {isSelected && (
                           <div style={{
-                            position: 'absolute',
-                            top: 10, right: 10,
+                            position: 'absolute', top: 14, right: 16,
                             width: 22, height: 22, borderRadius: '50%',
                             background: '#7c3aed',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -1986,35 +2153,6 @@ function NewPageInner() {
                             <Check className="w-3.5 h-3.5 text-white" />
                           </div>
                         )}
-                      </div>
-
-                      {/* Info bas (85px) — nom + productType + desc 1 ligne */}
-                      <div style={{
-                        flex: 1,
-                        padding: '10px 14px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 4,
-                        background: '#fff',
-                        minWidth: 0,
-                      }}>
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-[16px] font-black tracking-tight" style={{ color: '#0f0f1e' }}>{s.name}</span>
-                          {productLabel && (
-                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={isUniversal
-                              ? { background: '#ecfdf5', color: '#047857' }
-                              : { background: '#f3e8ff', color: '#6d28d9' }
-                            }>{productLabel}</span>
-                          )}
-                        </div>
-                        <p className="text-[11px] leading-snug" style={{
-                          color: '#8b8b9e',
-                          margin: 0,
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                        }}>{s.desc}</p>
                       </div>
                     </button>
                   )

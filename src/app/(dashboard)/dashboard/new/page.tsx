@@ -162,6 +162,64 @@ function isColorDark(hex: string): boolean {
   return (r * 0.299 + g * 0.587 + b * 0.114) < 140
 }
 
+// Photos Unsplash par template legacy etec-*. Une URL par template, cohérente
+// avec son productType (skincare, tech, jewelry, home, fashion, etc.). Si une
+// URL fail à charger, fallback emoji XL via onError du <img>.
+// Format : photo-XXXXXXXXXX (ID Unsplash) + query w=600&q=80 pour optim mobile.
+const TEMPLATE_PHOTOS: Record<string, string> = {
+  // skincare / beauty
+  'etec-rose':     'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80&auto=format&fit=crop',
+  'etec-beauty':   'https://images.unsplash.com/photo-1607602132700-068258431c6c?w=600&q=80&auto=format&fit=crop',
+  'etec-velvety':  'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80&auto=format&fit=crop',
+  'etec-blusho':   'https://images.unsplash.com/photo-1556228852-80b6e5eeff06?w=600&q=80&auto=format&fit=crop',
+  'etec-cosmetix': 'https://images.unsplash.com/photo-1611080626919-7ea2acf4040f?w=600&q=80&auto=format&fit=crop',
+  'etec-glow':     'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80&auto=format&fit=crop',
+  'etec-glowup':   'https://images.unsplash.com/photo-1583241800698-9c2e54d6f6cd?w=600&q=80&auto=format&fit=crop',
+  // tech / électronique
+  'etec-noir':     'https://images.unsplash.com/photo-1593344484962-796055d4a3a4?w=600&q=80&auto=format&fit=crop',
+  'etec-gadget':   'https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=600&q=80&auto=format&fit=crop',
+  'etec-pulse':    'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80&auto=format&fit=crop',
+  'etec-techcase': 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&auto=format&fit=crop',
+  // jewelry / luxury
+  'etec-gold':     'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&q=80&auto=format&fit=crop',
+  'etec-luxe':     'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80&auto=format&fit=crop',
+  'etec-jewel':    'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=600&q=80&auto=format&fit=crop',
+  'etec-platina':  'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=600&q=80&auto=format&fit=crop',
+  'etec-prestige': 'https://images.unsplash.com/photo-1606503825008-909a67e63c3d?w=600&q=80&auto=format&fit=crop',
+  // home / déco
+  'etec-casa':     'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80&auto=format&fit=crop',
+  'etec-homestyle':'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80&auto=format&fit=crop',
+  'etec-artisan':  'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&q=80&auto=format&fit=crop',
+  'etec-interior': 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80&auto=format&fit=crop',
+  'etec-poterie':  'https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=600&q=80&auto=format&fit=crop',
+  // fashion / mode
+  'etec-style':    'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80&auto=format&fit=crop',
+  'etec-shopz':    'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80&auto=format&fit=crop',
+  'etec-trendy':   'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80&auto=format&fit=crop',
+  'etec-nordic':   'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&auto=format&fit=crop',
+  'etec-outfit':   'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&q=80&auto=format&fit=crop',
+  'etec-ella':     'https://images.unsplash.com/photo-1488161628813-04466f872be2?w=600&q=80&auto=format&fit=crop',
+  'etec-streetz':  'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80&auto=format&fit=crop',
+  'etec-supreme':  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&auto=format&fit=crop',
+  // wellness / supplements
+  'etec-sage':     'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=600&q=80&auto=format&fit=crop',
+  'etec-prime':    'https://images.unsplash.com/photo-1556228724-69d3e4be2c63?w=600&q=80&auto=format&fit=crop',
+  'etec-aura':     'https://images.unsplash.com/photo-1591534833032-d72d6a1c30c4?w=600&q=80&auto=format&fit=crop',
+  'etec-electro':  'https://images.unsplash.com/photo-1551244072-5d12893278ab?w=600&q=80&auto=format&fit=crop',
+  'etec-boost':    'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&q=80&auto=format&fit=crop',
+  // pet
+  'etec-pet':      'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=600&q=80&auto=format&fit=crop',
+  // universal / divers
+  'etec-blue':     'https://images.unsplash.com/photo-1604754742629-3e5728249d73?w=600&q=80&auto=format&fit=crop',
+  'etec-energy':   'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80&auto=format&fit=crop',
+  'etec-solo':     'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&q=80&auto=format&fit=crop',
+  'etec-starter':  'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&q=80&auto=format&fit=crop',
+  'etec-hue':      'https://images.unsplash.com/photo-1614633833026-0820552978b6?w=600&q=80&auto=format&fit=crop',
+  'etec-agency':   'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80&auto=format&fit=crop',
+  'etec-quarter':  'https://images.unsplash.com/photo-1574180566232-aaad1b5b8450?w=600&q=80&auto=format&fit=crop',
+  'etec-natural':  'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80&auto=format&fit=crop',
+}
+
 const PLATFORMS = [
   { id: 'shopify',      label: 'Shopify',         icon: '🟢' },
   { id: 'woocommerce',  label: 'WooCommerce',      icon: '🟣' },
@@ -1841,46 +1899,126 @@ function NewPageInner() {
               </button>
             </div>
 
-            {/* ── Liste Templates legacy (etec-*) ── */}
+            {/* ── Liste Templates legacy (etec-*) — grid 2 cols compact ── */}
             {styleMode === 'legacy' && (
-              <div className="space-y-2 mb-6">
+              <div className="grid grid-cols-2 gap-3 mb-6">
                 {STYLES.map(s => {
                   const tpl = TEMPLATES.find(t => t.id === s.id)
                   const isUniversal = tpl?.productType === 'universal' || tpl?.themed === false
                   const productLabel = tpl ? PRODUCT_TYPE_LABELS[tpl.productType] : null
+                  const accent = tpl?.accent || '#7c3aed'
+                  const photo = TEMPLATE_PHOTOS[s.id]
+                  const isSelected = selectedStyle === s.id
                   return (
-                  <button
-                    key={s.id}
-                    onClick={() => setSelectedStyle(s.id)}
-                    className="w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all"
-                    style={selectedStyle === s.id
-                      ? { borderColor: '#7c3aed', background: '#faf9ff' }
-                      : { borderColor: '#E3E3E8', background: '#fff' }
-                    }
-                  >
-                    <span className="text-2xl">{s.emoji}</span>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[13px] font-bold" style={{ color: '#1a1a2e' }}>{s.name}</span>
+                    <button
+                      key={s.id}
+                      onClick={() => setSelectedStyle(s.id)}
+                      className="text-left rounded-xl border-2 overflow-hidden transition-all hover:shadow-md"
+                      style={{
+                        height: 220,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        ...(isSelected
+                          ? { borderColor: '#7c3aed', boxShadow: '0 0 0 3px rgba(124,58,237,0.08)' }
+                          : { borderColor: '#E3E3E8', background: '#fff' }
+                        ),
+                      }}
+                    >
+                      {/* Photo cover top (135px) — fallback gradient + emoji XL */}
+                      <div style={{
+                        height: 135,
+                        position: 'relative',
+                        overflow: 'hidden',
+                        background: `linear-gradient(135deg, ${accent}22 0%, ${accent}44 100%)`,
+                        flexShrink: 0,
+                      }}>
+                        {photo && (
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img
+                            src={photo}
+                            alt={s.name}
+                            loading="lazy"
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                            onError={(e) => { e.currentTarget.style.display = 'none' }}
+                          />
+                        )}
+                        {/* Emoji XL fallback (visible si photo absente) */}
+                        <div style={{
+                          position: 'absolute',
+                          bottom: 8, left: 10,
+                          fontSize: 26,
+                          opacity: 0.55,
+                          pointerEvents: 'none',
+                          filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.15))',
+                        }}>{s.emoji}</div>
+                        {/* Badge accent en haut à gauche (color dot) */}
+                        <div style={{
+                          position: 'absolute',
+                          top: 10, left: 10,
+                          width: 12, height: 12,
+                          borderRadius: '50%',
+                          background: accent,
+                          boxShadow: '0 0 0 2px #fff',
+                        }} />
+                        {/* Badge POPULAIRE pour etec-blue */}
                         {s.id === 'etec-blue' && (
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#fef3c7', color: '#d97706' }}>POPULAIRE</span>
+                          <div style={{
+                            position: 'absolute',
+                            top: 10, right: 10,
+                            fontSize: 9, fontWeight: 700,
+                            padding: '3px 7px',
+                            borderRadius: 6,
+                            background: '#fef3c7',
+                            color: '#d97706',
+                            letterSpacing: '0.04em',
+                          }}>POPULAIRE</div>
                         )}
-                        {productLabel && (
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={isUniversal
-                            ? { background: '#ecfdf5', color: '#047857' }
-                            : { background: '#f3e8ff', color: '#6d28d9' }
-                          }>{productLabel}</span>
+                        {/* Checkmark overlay si sélectionné */}
+                        {isSelected && (
+                          <div style={{
+                            position: 'absolute',
+                            top: 10, right: 10,
+                            width: 22, height: 22, borderRadius: '50%',
+                            background: '#7c3aed',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 2px 8px rgba(124,58,237,0.4)',
+                          }}>
+                            <Check className="w-3.5 h-3.5 text-white" />
+                          </div>
                         )}
                       </div>
-                      <p className="text-[12px]" style={{ color: '#8b8b9e' }}>{s.desc}</p>
-                    </div>
-                    {selectedStyle === s.id && (
-                      <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: '#7c3aed' }}>
-                        <Check className="w-3 h-3 text-white" />
+
+                      {/* Info bas (85px) — nom + productType + desc 1 ligne */}
+                      <div style={{
+                        flex: 1,
+                        padding: '10px 14px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 4,
+                        background: '#fff',
+                        minWidth: 0,
+                      }}>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-[16px] font-black tracking-tight" style={{ color: '#0f0f1e' }}>{s.name}</span>
+                          {productLabel && (
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded" style={isUniversal
+                              ? { background: '#ecfdf5', color: '#047857' }
+                              : { background: '#f3e8ff', color: '#6d28d9' }
+                            }>{productLabel}</span>
+                          )}
+                        </div>
+                        <p className="text-[11px] leading-snug" style={{
+                          color: '#8b8b9e',
+                          margin: 0,
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                        }}>{s.desc}</p>
                       </div>
-                    )}
-                  </button>
-                )})}
+                    </button>
+                  )
+                })}
               </div>
             )}
 

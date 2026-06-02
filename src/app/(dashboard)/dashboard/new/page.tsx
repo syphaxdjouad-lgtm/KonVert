@@ -15,6 +15,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import type { LandingPageData } from '@/types'
 import { track } from '@/lib/analytics'
+import { PlatformLogo } from '@/components/ui/platform-logo'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _Palette = Palette
@@ -2514,9 +2515,9 @@ function NewPageInner() {
                     : { borderColor: '#E3E3E8', background: '#fff' }
                   }
                 >
-                  <span className="text-3xl">{p.icon}</span>
+                  <PlatformLogo platform={p.id} size={36} />
                   <div className="flex-1">
-                    <span className="text-[14px] font-bold" style={{ color: '#1a1a2e' }}>{p.label}</span>
+                    <span className="text-[16px] font-black tracking-tight" style={{ color: '#0f0f1e' }}>{p.label}</span>
                   </div>
                   {platform === p.id && (
                     <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: '#7c3aed' }}>

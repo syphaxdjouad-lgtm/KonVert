@@ -454,6 +454,7 @@ function NewPageInner() {
   // Publication vers store
   const [stores,         setStores]         = useState<any[]>([])
   const [publishOpen,    setPublishOpen]     = useState(false)
+  const [templatePickerOpen, setTemplatePickerOpen] = useState(false)
   const [publishing,     setPublishing]      = useState<string | null>(null)
   const [publishSuccess, setPublishSuccess]  = useState<{ name: string; url?: string } | null>(null)
   const [publishError,   setPublishError]    = useState<string | null>(null)
@@ -1095,18 +1096,56 @@ function NewPageInner() {
             />
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex gap-1">
-              {TEMPLATES.map(t => (
-                <button key={t.id} onClick={() => changeTemplate(t.id)}
-                  className="text-[12px] px-2.5 py-1 rounded-lg font-semibold transition-all"
-                  style={selectedStyle === t.id
-                    ? { background: '#7c3aed', color: '#fff' }
-                    : { color: '#5c5c7a', background: '#F6F6F7' }
-                  }
+            {/* Dropdown Changer de template — évite de déborder le header avec 42 chips */}
+            <div className="relative">
+              <button
+                onClick={() => setTemplatePickerOpen(o => !o)}
+                className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-lg transition-all"
+                style={{ background: '#F6F6F7', color: '#5c5c7a', border: '1px solid #E3E3E8' }}
+                aria-haspopup="listbox"
+                aria-expanded={templatePickerOpen}
+              >
+                <span className="text-[11px] uppercase tracking-wide" style={{ color: '#a8a8b8' }}>Template</span>
+                <span style={{ color: '#1a1a2e' }}>{TEMPLATES.find(t => t.id === selectedStyle)?.name || 'Choisir'}</span>
+                <ChevronDown className="w-3 h-3" />
+              </button>
+              {templatePickerOpen && (
+                <div
+                  className="absolute top-9 right-0 rounded-xl overflow-hidden z-50"
+                  style={{
+                    background: '#fff',
+                    border: '1px solid #e5e7eb',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                    width: 240,
+                    maxHeight: 360,
+                    overflowY: 'auto',
+                  }}
                 >
-                  {t.name}
-                </button>
-              ))}
+                  <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wide" style={{ color: '#9ca3af', borderBottom: '1px solid #f3f4f6' }}>
+                    Changer de template
+                  </div>
+                  {TEMPLATES.map(t => {
+                    const isCurrent = selectedStyle === t.id
+                    return (
+                      <button
+                        key={t.id}
+                        onClick={() => { changeTemplate(t.id); setTemplatePickerOpen(false) }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-[12px] text-left transition-colors hover:bg-purple-50"
+                        style={{ color: isCurrent ? '#7c3aed' : '#1a1a2e', fontWeight: isCurrent ? 700 : 500 }}
+                      >
+                        <span
+                          style={{
+                            width: 10, height: 10, borderRadius: '50%',
+                            background: t.accent, flexShrink: 0,
+                          }}
+                        />
+                        <span className="flex-1">{t.name}</span>
+                        {isCurrent && <Check className="w-3 h-3" style={{ color: '#7c3aed' }} />}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Bouton Publier */}
@@ -1241,6 +1280,7 @@ function NewPageInner() {
           </div>
         )}
         {publishOpen && <div className="fixed inset-0 z-40" onClick={() => setPublishOpen(false)} />}
+        {templatePickerOpen && <div className="fixed inset-0 z-40" onClick={() => setTemplatePickerOpen(false)} />}
       </div>
     )
   }

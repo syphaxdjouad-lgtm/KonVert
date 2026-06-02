@@ -133,11 +133,51 @@ const V3_STYLES = [
     bullets: ['Streetwear · Drops · Sneakers', 'Typo bold géante, FOMO max', 'Magenta accent statement'] },
 ]
 
+// Enrichi pour Phase 6 — chaque ton expose :
+// icon (emoji), accent (color signature), example (1 phrase voix réelle),
+// useCases (2 cas d'usage cibles). Le rendu carte est plus visuel et
+// permet à l'user de "sentir" la voix avant de choisir.
 const TONES = [
-  { id: 'persuasif',   label: 'Persuasif',     desc: 'Copy de vente direct, urgence, FOMO'           },
-  { id: 'premium',     label: 'Premium',       desc: 'Luxe, exclusivité, qualité supérieure'          },
-  { id: 'fun',         label: 'Fun & Viral',   desc: 'Casual, émotionnel, adapté réseaux sociaux'     },
-  { id: 'informatif',  label: 'Informatif',    desc: 'Factuel, technique, comparatif'                 },
+  {
+    id: 'persuasif',
+    label: 'Persuasif',
+    desc: 'Vente directe, urgence, FOMO',
+    icon: '⚡',
+    accent: '#FF6B35',
+    bgTint: '#FFF4ED',
+    example: 'Plus que 12 en stock — la dernière commande a été passée il y a 4 minutes.',
+    useCases: ['Dropshipping · Drops', 'Promotions flash'],
+  },
+  {
+    id: 'premium',
+    label: 'Premium',
+    desc: 'Luxe, exclusivité, qualité',
+    icon: '✦',
+    accent: '#9B7B3D',
+    bgTint: '#FAF6EE',
+    example: 'Façonné à la main dans notre atelier de Florence depuis 1962.',
+    useCases: ['Joaillerie · Maroquinerie', 'DTC haut de gamme'],
+  },
+  {
+    id: 'fun',
+    label: 'Fun & Viral',
+    desc: 'Casual, émotionnel, réseaux',
+    icon: '🎉',
+    accent: '#E14B8C',
+    bgTint: '#FFF0F6',
+    example: 'Tu vas l\'adorer (ou on te rembourse, promis juré).',
+    useCases: ['Kids · Pop culture', 'TikTok-first'],
+  },
+  {
+    id: 'informatif',
+    label: 'Informatif',
+    desc: 'Factuel, technique, comparatif',
+    icon: '◆',
+    accent: '#2A6FE0',
+    bgTint: '#EEF4FE',
+    example: 'Coton bio certifié GOTS, 220 g/m², tissé en France, livré en 48h.',
+    useCases: ['Tech · Suppléments', 'B2B · Pro'],
+  },
 ]
 
 // Mapping tone legacy (4 valeurs) → tone V3 (5 valeurs). Les tones V3 viennent
@@ -2358,21 +2398,83 @@ function NewPageInner() {
             )}
 
             <label className="block text-[13px] font-bold mb-3" style={{ color: '#1a1a2e' }}>Ton du copywriting IA</label>
-            <div className="grid grid-cols-2 gap-2">
-              {TONES.map(t => (
-                <button
-                  key={t.id}
-                  onClick={() => setSelectedTone(t.id)}
-                  className="p-3 rounded-xl border-2 text-left transition-all"
-                  style={selectedTone === t.id
-                    ? { borderColor: '#7c3aed', background: '#faf9ff' }
-                    : { borderColor: '#E3E3E8', background: '#fff' }
-                  }
-                >
-                  <div className="text-[13px] font-bold mb-0.5" style={{ color: selectedTone === t.id ? '#7c3aed' : '#1a1a2e' }}>{t.label}</div>
-                  <div className="text-[11px]" style={{ color: '#8b8b9e' }}>{t.desc}</div>
-                </button>
-              ))}
+            <div className="grid grid-cols-2 gap-3">
+              {TONES.map(t => {
+                const isSelected = selectedTone === t.id
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => setSelectedTone(t.id)}
+                    className="text-left rounded-xl border-2 overflow-hidden transition-all hover:shadow-md"
+                    style={{
+                      position: 'relative',
+                      ...(isSelected
+                        ? { borderColor: t.accent, boxShadow: `0 0 0 3px ${t.accent}22` }
+                        : { borderColor: '#E3E3E8', background: '#fff' }
+                      ),
+                    }}
+                  >
+                    {/* Strip color accent + icône en haut */}
+                    <div style={{
+                      padding: '12px 14px 10px',
+                      background: t.bgTint,
+                      borderBottom: `1px solid ${t.accent}22`,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                    }}>
+                      <div style={{
+                        width: 36, height: 36, borderRadius: 10,
+                        background: t.accent,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 18,
+                        color: '#fff',
+                        boxShadow: `0 2px 6px ${t.accent}44`,
+                      }}>{t.icon}</div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div className="text-[15px] font-black tracking-tight" style={{ color: '#0f0f1e', lineHeight: 1.1 }}>{t.label}</div>
+                        <div className="text-[10px] mt-0.5" style={{ color: '#7a7a8e' }}>{t.desc}</div>
+                      </div>
+                      {/* Checkmark si sélectionné */}
+                      {isSelected && (
+                        <div style={{
+                          width: 22, height: 22, borderRadius: '50%',
+                          background: t.accent,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          flexShrink: 0,
+                          boxShadow: `0 2px 6px ${t.accent}55`,
+                        }}>
+                          <Check className="w-3 h-3 text-white" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Corps : exemple de voix + cas d'usage */}
+                    <div style={{ padding: '10px 14px 12px', background: '#fff' }}>
+                      {/* Exemple voix réelle, italique avec quote */}
+                      <div style={{
+                        fontSize: 11,
+                        fontStyle: 'italic',
+                        color: '#3b3b4f',
+                        lineHeight: 1.4,
+                        paddingLeft: 8,
+                        borderLeft: `2px solid ${t.accent}55`,
+                        marginBottom: 8,
+                      }}>« {t.example} »</div>
+
+                      {/* Cas d'usage */}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                        {t.useCases.map((u, i) => (
+                          <div key={i} className="flex items-start gap-1.5 text-[10px]" style={{ color: '#7a7a8e' }}>
+                            <span style={{ color: t.accent, fontWeight: 700, flexShrink: 0 }}>·</span>
+                            <span style={{ lineHeight: 1.3 }}>{u}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </button>
+                )
+              })}
             </div>
 
             {/* ── Champ Nom de marque (visible pour les 2 modes, utilisé surtout V3) ── */}

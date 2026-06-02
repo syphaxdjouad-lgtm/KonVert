@@ -172,9 +172,9 @@ const TEMPLATE_PHOTOS: Record<string, string> = {
   'etec-beauty':   'https://images.unsplash.com/photo-1607602132700-068258431c6c?w=600&q=80&auto=format&fit=crop',
   'etec-velvety':  'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=600&q=80&auto=format&fit=crop',
   'etec-blusho':   'https://images.unsplash.com/photo-1556228852-80b6e5eeff06?w=600&q=80&auto=format&fit=crop',
-  'etec-cosmetix': 'https://images.unsplash.com/photo-1611080626919-7ea2acf4040f?w=600&q=80&auto=format&fit=crop',
+  'etec-cosmetix': 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=600&q=80&auto=format&fit=crop',
   'etec-glow':     'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80&auto=format&fit=crop',
-  'etec-glowup':   'https://images.unsplash.com/photo-1583241800698-9c2e54d6f6cd?w=600&q=80&auto=format&fit=crop',
+  'etec-glowup':   'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&q=80&auto=format&fit=crop',
   // tech / électronique
   'etec-noir':     'https://images.unsplash.com/photo-1593344484962-796055d4a3a4?w=600&q=80&auto=format&fit=crop',
   'etec-gadget':   'https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=600&q=80&auto=format&fit=crop',
@@ -203,8 +203,8 @@ const TEMPLATE_PHOTOS: Record<string, string> = {
   'etec-supreme':  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&auto=format&fit=crop',
   // wellness / supplements
   'etec-sage':     'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=600&q=80&auto=format&fit=crop',
-  'etec-prime':    'https://images.unsplash.com/photo-1556228724-69d3e4be2c63?w=600&q=80&auto=format&fit=crop',
-  'etec-aura':     'https://images.unsplash.com/photo-1591534833032-d72d6a1c30c4?w=600&q=80&auto=format&fit=crop',
+  'etec-prime':    'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&q=80&auto=format&fit=crop',
+  'etec-aura':     'https://images.unsplash.com/photo-1545389336-cf090694435e?w=600&q=80&auto=format&fit=crop',
   'etec-electro':  'https://images.unsplash.com/photo-1551244072-5d12893278ab?w=600&q=80&auto=format&fit=crop',
   'etec-boost':    'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=600&q=80&auto=format&fit=crop',
   // pet

@@ -5,6 +5,15 @@
 //
 // Le dossier reste nommé "anthropic/" pour ne pas casser les imports — la
 // migration est transparente pour les appelants (route /api/generate, etc.).
+//
+// PROMPT_VERSION v2.0-enriched-2026-06-05
+// Auteur : MINATO
+// Hypothèse : ajouter 5 champs CRO (photo_descriptions, payment_methods,
+//   press_logos, stock_signal, bundle_offer) pour atteindre parité PageFly/GemPages.
+// Coût additionnel estimé : +280 tokens input system + ~420 tokens output
+//   → +0.00007 €/req sur DeepSeek (deepseek-chat $0.27/1M input, $1.10/1M output)
+//   → +23% output tokens vs v1 — sous le seuil d'alerte +30%.
+// Feature-flag : KONVERT_PROMPT_VERSION=v1 pour forcer ancien comportement.
 
 import type { ScrapedProduct, LandingPageData } from '@/types'
 import { cleanProductName, sanitizeTitleFallback } from './product-name'
@@ -241,6 +250,103 @@ function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     out.final_pitch = escapeHtml(d.final_pitch)
   }
 
+  // ─── Champs CRO enrichis v2 ─────────────────────────────────────────────
+
+  // photo_descriptions
+  if (Array.isArray(d.photo_descriptions)) {
+    const VALID_SENTIMENTS = new Set(['before', 'during', 'after', 'lifestyle'])
+    out.photo_descriptions = d.photo_descriptions
+      .filter(
+        (p): p is NonNullable<(typeof d.photo_descriptions)>[number] =>
+          p != null &&
+          typeof p.context === 'string' &&
+          typeof p.customer_first_name === 'string' &&
+          VALID_SENTIMENTS.has(p.sentiment),
+      )
+      .map(p => ({
+        context: escapeHtml(p.context.slice(0, 200)),
+        customer_first_name: escapeHtml(p.customer_first_name.slice(0, 40)),
+        sentiment: p.sentiment,
+      }))
+  }
+
+  // payment_methods
+  const VALID_PAYMENT_METHODS = new Set([
+    'visa', 'mastercard', 'amex', 'paypal', 'apple_pay', 'google_pay', 'klarna', 'alma',
+  ])
+  if (Array.isArray(d.payment_methods) && d.payment_methods.length > 0) {
+    const filtered = d.payment_methods.filter(m => VALID_PAYMENT_METHODS.has(m))
+    // Si le LLM retourne des valeurs inconnues → on garde le défaut safe
+    out.payment_methods = filtered.length > 0
+      ? (filtered as LandingPageData['payment_methods'])
+      : ['visa', 'mastercard', 'paypal', 'apple_pay']
+  } else if (USE_V2_PROMPT) {
+    // v2 : toujours fournir un défaut si absent (ANNA attend ce champ)
+    out.payment_methods = ['visa', 'mastercard', 'paypal', 'apple_pay']
+  }
+
+  // press_logos
+  if (Array.isArray(d.press_logos)) {
+    out.press_logos = d.press_logos
+      .filter(
+        (p): p is NonNullable<(typeof d.press_logos)>[number] =>
+          p != null && typeof p.publication === 'string' && p.publication.trim().length > 0,
+      )
+      .map(p => ({
+        publication: escapeHtml(p.publication.slice(0, 80)),
+        ...(typeof p.quote_short === 'string' && p.quote_short.trim().length > 0
+          ? { quote_short: escapeHtml(p.quote_short.slice(0, 80)) }
+          : {}),
+      }))
+  }
+
+  // stock_signal
+  if (d.stock_signal != null) {
+    const VALID_STOCK_TYPES = new Set([
+      'limited_stock', 'high_demand', 'back_in_stock', 'limited_time',
+    ])
+    if (
+      d.stock_signal.type != null &&
+      VALID_STOCK_TYPES.has(d.stock_signal.type) &&
+      typeof d.stock_signal.message === 'string' &&
+      typeof d.stock_signal.cta_intensifier === 'string'
+    ) {
+      out.stock_signal = {
+        type: d.stock_signal.type,
+        message: escapeHtml(d.stock_signal.message.slice(0, 100)),
+        cta_intensifier: escapeHtml(d.stock_signal.cta_intensifier.slice(0, 60)),
+      }
+    } else {
+      out.stock_signal = null
+    }
+  } else if (d.stock_signal === null) {
+    out.stock_signal = null
+  }
+
+  // bundle_offer
+  if (d.bundle_offer != null) {
+    if (
+      typeof d.bundle_offer.title === 'string' &&
+      typeof d.bundle_offer.description === 'string' &&
+      Array.isArray(d.bundle_offer.products_to_pair) &&
+      typeof d.bundle_offer.discount_label === 'string'
+    ) {
+      out.bundle_offer = {
+        title: escapeHtml(d.bundle_offer.title.slice(0, 80)),
+        description: escapeHtml(d.bundle_offer.description.slice(0, 300)),
+        products_to_pair: d.bundle_offer.products_to_pair
+          .filter((p): p is string => typeof p === 'string' && p.trim().length > 0)
+          .slice(0, 5)
+          .map(p => escapeHtml(p.slice(0, 80))),
+        discount_label: escapeHtml(d.bundle_offer.discount_label.slice(0, 60)),
+      }
+    } else {
+      out.bundle_offer = null
+    }
+  } else if (d.bundle_offer === null) {
+    out.bundle_offer = null
+  }
+
   return out
 }
 
@@ -268,8 +374,49 @@ const TONE_INSTRUCTIONS: Record<string, string> = {
 // System prompt + schéma JSON sont 100% statiques pour une langue donnée
 // → DeepSeek les met en cache automatiquement côté serveur (TTL ~heures).
 // Au 2e appel, ~80% des tokens d'input sont facturés à 10% du prix.
+//
+// ARCHITECTURE CACHE :
+// - buildSystemPrompt(language) retourne un string PUREMENT STATIQUE pour
+//   une langue donnée. Aucun userId, aucune date, aucun contexte user ne
+//   doit jamais être injecté ici — tout ça va dans buildUserPrompt().
+// - Côté DeepSeek, le cache est activé automatiquement dès que le même
+//   system prompt est renvoyé dans les ~heures. Pas de header à ajouter.
 const buildSystemPrompt = (language: string): string => {
   const langName = LANGUAGE_NAMES[language] || 'français'
+
+  // Partie enrichie v2 : 5 nouveaux champs CRO.
+  // Séparée en constante pour pouvoir A/B tester v1 vs v2 via feature-flag.
+  const V2_SCHEMA_BLOCK = USE_V2_PROMPT ? `
+  "photo_descriptions": [
+    {
+      "context": "description visuelle en 1 phrase (genre apparent, âge, contexte d'usage, lumière) — ex: 'Femme 30-35 ans applique la crème devant le miroir de la salle de bain, lumière naturelle matinale'",
+      "customer_first_name": "prénom cohérent langue cible",
+      "sentiment": "before | during | after | lifestyle"
+    }
+  ],
+  "payment_methods": ["visa", "mastercard", "paypal", "apple_pay"],
+  "press_logos": [
+    { "publication": "Vogue", "quote_short": "Citation max 80 chars — OPTIONNEL" }
+  ],
+  "stock_signal": {
+    "type": "limited_stock | high_demand | back_in_stock | limited_time | null",
+    "message": "ex: 'Plus que 12 en stock' — max 100 chars",
+    "cta_intensifier": "ex: 'Commandez maintenant' — max 60 chars"
+  },
+  "bundle_offer": {
+    "title": "ex: 'Routine complète' — max 80 chars",
+    "description": "1-2 phrases",
+    "products_to_pair": ["Nom produit complémentaire 1", "Nom produit 2"],
+    "discount_label": "ex: '-15% sur le bundle' — max 60 chars"
+  }` : ''
+
+  const V2_RULES_BLOCK = USE_V2_PROMPT ? `
+26. photo_descriptions : 3 à 6 entrées. Décris une scène photo réaliste UGC pour chaque sentiment (before, during, after, lifestyle). Genre + âge apparent + contexte + lumière. Ces descriptions servent de prompts pour générateur d'images ou d'alt-text de placeholders.
+27. payment_methods : sélectionne parmi ["visa","mastercard","amex","paypal","apple_pay","google_pay","klarna","alma"]. Beauty/mode → ajoute "klarna" ou "alma". Tech → "apple_pay" en priorité. Si tu ne peux pas inférer la catégorie, retourne ["visa","mastercard","paypal","apple_pay"].
+28. press_logos : RÈGLE ANTI-HALLUCINATION STRICTE — ne mentionne QUE des publications qui couvrent réellement cette niche (beauty → Vogue, Marie Claire, Glamour, Elle, Grazia ; tech → Wired, TechCrunch, The Verge ; déco → AD, Côté Maison ; mode → Vogue, GQ, Madame Figaro). Si tu n'es pas certain qu'une publication couvre cette niche, NE L'INCLUS PAS. Retourne [] si aucune certitude. 2 à 5 entrées maximum.
+29. stock_signal : "limited_stock" si produit saisonnier/tendance/édition limitée. "high_demand" si produit viral/bestseller. "back_in_stock" si indisponible puis revenu (utilise si la description le suggère). "limited_time" uniquement si une promotion réelle est mentionnée. null si aucun signal d'urgence plausible. Ne jamais inventer de stock fictif non justifié.
+30. bundle_offer : propose 1 bundle logique si la catégorie est beauty/wellness/pet/mode/déco (2-3 produits complémentaires sensés). Retourne null si le produit est standalone et sans complémentaire évident (ex: un casque audio seul, un ustensile unique).` : ''
+
   return `Tu es un copywriter e-commerce d'élite, spécialiste de la conversion sur les landing pages produit (DTC, dropshipping, marques digitales).
 
 Tu maîtrises les frameworks éprouvés :
@@ -292,6 +439,32 @@ Tu connais les biais cognitifs : aversion à la perte, ancrage de prix, preuve s
 IMPORTANT : Tu génères TOUT le contenu textuel en ${langName}. Chaque mot du JSON doit être en ${langName}, témoignages et noms inclus (utilise des prénoms cohérents avec la langue/culture cible).
 
 Tu réponds UNIQUEMENT avec un JSON valide, sans markdown, sans explication, sans texte avant ou après.
+
+═══════════════════════════════════════════════
+FEW-SHOT EXAMPLES — calibration ton DTC-grade
+(extraits, pas à copier — juste le registre visé)
+═══════════════════════════════════════════════
+
+NICHE BEAUTÉ (sérum visage) — HEADLINES À ÉVITER vs PRIVILÉGIER :
+ÉVITER : "Découvrez notre sérum révolutionnaire aux actifs naturels"
+PRIVILÉGIER : "La peau qu'on vous a dit impossible à avoir après 35 ans"
+ÉVITER testimonial : "Super produit, très satisfaite !"
+PRIVILÉGIER testimonial : "J'ai arrêté de me cacher derrière le fond de teint — pour la première fois depuis mes 30 ans."
+
+NICHE MODE (sneakers) — HEADLINES :
+ÉVITER : "Des sneakers confortables et stylées pour toutes vos sorties"
+PRIVILÉGIER : "Enfilez-les, oubliez-les. Pensez à autre chose."
+photo_description UGC exemple : "Femme 25-30 ans, jean wide-leg + sneaker blanc, terrasse café Paris, lumière dorée fin de journée, sourire naturel non posé"
+
+NICHE DÉCO (bougie artisanale) :
+ÉVITER : "Bougies de qualité supérieure pour votre intérieur"
+PRIVILÉGIER : "Le dimanche soir qu'on cherchait depuis toujours"
+bundle_offer exemple : { "title": "Rituel Maison", "description": "Parce qu'une atmosphère se crée par couches.", "products_to_pair": ["Diffuseur céramique", "Spray textile lin"], "discount_label": "-12% sur les 3" }
+
+NICHE TECH (accessoire smartphone) — press_logos CORRECT vs INCORRECT :
+CORRECT : ["Wired", "TechCrunch", "The Verge"] — couvrent l'accessoire tech
+INCORRECT : ["Vogue", "Marie Claire"] — ne couvrent pas les accessoires smartphone
+═══════════════════════════════════════════════
 
 Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
 {
@@ -378,7 +551,7 @@ Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
     ],
     "total": "ex: '142€'",
     "you_pay": "ex: '49€'",
-    "savings": "ex: '93€ d'économie aujourd'hui'"
+    "savings": "ex: '93€ d\\'économie aujourd\\'hui'"
   },
   "guarantee": {
     "title": "ex: 'Satisfait ou remboursé'",
@@ -396,7 +569,7 @@ Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
     { "title": "string", "description": "string", "value": "string" }
   ],
   "objections": [
-    { "objection": "objection émotionnelle (ex: 'J'ai déjà essayé 10 produits sans résultat')", "response": "réponse rassurante 2-3 phrases qui désamorce" },
+    { "objection": "objection émotionnelle (ex: 'J\\'ai déjà essayé 10 produits sans résultat')", "response": "réponse rassurante 2-3 phrases qui désamorce" },
     { "objection": "string", "response": "string" },
     { "objection": "string", "response": "string" },
     { "objection": "string", "response": "string" },
@@ -417,12 +590,14 @@ Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
   "final_pitch": "string — paragraphe de fermeture émotionnel, 3-4 phrases, qui résume la transformation promise et invite à passer à l'action MAINTENANT",
   "cta": "verbe d'action + bénéfice, max 8 mots",
   "urgency": "urgence authentique courte, max 12 mots",
-  "product_name": "nom commercial court du produit"
+  "product_name": "nom commercial court du produit"${V2_SCHEMA_BLOCK ? ',' : ''}
+${V2_SCHEMA_BLOCK}
 }`
 }
 
-const buildUserPrompt = (product: ScrapedProduct, tone: string, priceLine: string): string => {
+const buildUserPrompt = (product: ScrapedProduct, tone: string, priceLine: string, language = 'fr'): string => {
   const toneInstruction = TONE_INSTRUCTIONS[tone] || TONE_INSTRUCTIONS['persuasif']
+  const langName = LANGUAGE_NAMES[language] || 'français'
   return `Génère une landing page de vente complète et haute conversion pour ce produit e-commerce.
 
 TON DE RÉDACTION : ${toneInstruction}
@@ -463,6 +638,11 @@ RÈGLES DE GÉNÉRATION :
 23. final_pitch : paragraphe de fermeture émotionnel qui résume la transformation et incite à l'action MAINTENANT
 24. CTA : verbe d'action + bénéfice immédiat
 25. Urgence : ${priceLine}
+${USE_V2_PROMPT ? `26. photo_descriptions : 3 à 6 descriptions UGC (genre apparent + âge + contexte + lumière). Couvre au moins 1 "before", 1 "during", 1 "after". Prénoms cohérents avec ${langName}.
+27. payment_methods : beauty/wellness → inclure "klarna" ou "alma". Tech premium → "apple_pay" en priorité. Défaut minimum : ["visa","mastercard","paypal","apple_pay"].
+28. press_logos : ANTI-HALLUCINATION — liste uniquement les publications qui couvrent vraiment la niche du produit. En cas de doute → retourne []. Max 5 entrées. quote_short optionnel, max 80 chars.
+29. stock_signal : évalue l'urgence appropriée (limited_stock / high_demand / back_in_stock / limited_time). Si aucun signal plausible → retourne null avec type: null.
+30. bundle_offer : beauty/wellness/pet/mode/déco → propose 1 bundle sensé (2-3 produits complémentaires). Standalone ou sans complémentaire évident → retourne null.` : ''}
 
 CRITIQUE : Remplis TOUS les champs du schema JSON, même si tu dois inventer du contenu plausible. Les champs vides cassent le rendu de la landing.
 
@@ -481,6 +661,12 @@ interface DeepSeekResponse {
     prompt_cache_miss_tokens?: number
   }
 }
+
+// ─── Versioning prompt ──────────────────────────────────────────────────────
+// KONVERT_PROMPT_VERSION=v1 → ancien schema sans champs CRO enrichis.
+// Non défini ou =v2 → schema v2 (défaut).
+export const PROMPT_VERSION = 'v2.0-enriched-2026-06-05'
+const USE_V2_PROMPT = (process.env.KONVERT_PROMPT_VERSION ?? 'v2') !== 'v1'
 
 export const GENERATION_MODEL = 'deepseek-chat'
 
@@ -517,7 +703,7 @@ export async function generateLandingPage(
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: buildSystemPrompt(language) },
-          { role: 'user', content: buildUserPrompt(product, tone, priceLine) },
+          { role: 'user', content: buildUserPrompt(product, tone, priceLine, language) },
         ],
       }),
       signal: AbortSignal.timeout(50000),

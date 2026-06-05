@@ -26,6 +26,8 @@ import { renderPressQuote } from './press-quote/render'
 import { renderCareInstructions } from './care-instructions/render'
 import { renderFaq } from './faq/render'
 import { renderBrandManifesto } from './brand-manifesto/render'
+import { renderStickyAddToCartMobile } from './shared/StickyAddToCartMobile'
+import { renderTrustBadgesPayment } from './shared/TrustBadgesPayment'
 
 // Map style -> tokens. Tous les 10 styles V3 sont enregistrés.
 const STYLE_TOKENS: Record<StyleId, StyleTokens> = {
@@ -80,6 +82,36 @@ export function renderPageV3(
     .filter(Boolean)
     .join('\n')
 
+  // Sticky add-to-cart mobile — auto-injecté sur tous les styles V3
+  // Déclenchement côté client par IntersectionObserver sur #main-cta.
+  // Infos produit extraites de V3PageData avec fallbacks gracieux.
+  const priceAmount = data.product.price ? parseFloat(data.product.price.replace(/[^0-9.]/g, '')) : 0
+  const stickyHtml = priceAmount > 0
+    ? renderStickyAddToCartMobile({
+        productName:  data.product.title,
+        productImage: data.images[0] ?? '',
+        price: {
+          amount:   priceAmount,
+          currency: 'EUR',
+        },
+        ctaLabel:    'Ajouter au panier',
+        ctaColor:    tokens.colors.accent,
+        fontFamily:  tokens.fonts.body,
+        bgColor:     tokens.colors.bg,
+        borderColor: tokens.colors.border,
+        showQty:     false,
+      })
+    : ''
+
+  // Trust badges footer — auto-injecté juste avant </body> pour les pages V3
+  const trustHtml = renderTrustBadgesPayment({
+    variant:     'footer',
+    accentColor: tokens.colors.textMuted,
+    bg:          tokens.colors.surface,
+    border:      tokens.colors.border,
+    fontFamily:  tokens.fonts.body,
+  })
+
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -92,6 +124,8 @@ export function renderPageV3(
 </head>
 <body style="margin:0;padding:0">
 ${sections}
+${trustHtml}
+${stickyHtml}
 </body>
 </html>`
 }

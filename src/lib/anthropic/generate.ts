@@ -67,7 +67,8 @@ export function normalizePrice(p: string | number | null | undefined): string | 
   return String(n)
 }
 
-function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
+// Exportée pour les tests unitaires — ne pas appeler directement depuis le front.
+export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
   const lang = typeof d.language === 'string' && ALLOWED_LANGS.has(d.language) ? d.language : 'fr'
 
   const out: LandingPageData = {

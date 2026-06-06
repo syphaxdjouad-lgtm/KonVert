@@ -187,7 +187,9 @@ describe('sanitizeLandingPageData — edge cases LLM malformé', () => {
         title: 'Bundle incomplet',
         // @ts-expect-error — simule LLM qui omet des champs requis
         description: undefined,
+        // @ts-expect-error — simule LLM qui omet products_to_pair
         products_to_pair: undefined,
+        // @ts-expect-error — simule LLM qui omet discount_label
         discount_label: undefined,
       },
     })

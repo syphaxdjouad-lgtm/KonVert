@@ -100,6 +100,21 @@ describe('renderStickyAddToCartMobile', () => {
     expect(html).toContain("getElementById('hero-cta-custom')")
   })
 
+  it('fallback scroll : script contient requestAnimationFrame + passive scroll quand target absent', () => {
+    // Quand #main-cta est absent (cas 43/43 templates etec), le script doit
+    // activer le fallback scroll (rAF + passive listener) plutôt que de return silencieusement.
+    // On vérifie la présence du code fallback dans l'HTML généré (le composant est SSR-string).
+    const html = renderStickyAddToCartMobile(BASE_OPTS)
+    // Le fallback scroll doit être présent dans le script inline
+    expect(html).toContain('requestAnimationFrame')
+    expect(html).toContain("passive: true")
+    expect(html).toContain('scrollFallback')
+    expect(html).toContain('window.scrollY > 300')
+    // Le cleanup pagehide doit être présent
+    expect(html).toContain('pagehide')
+    expect(html).toContain('removeEventListener')
+  })
+
   it('thumbnail produit a alt="" aria-hidden (image décorative)', () => {
     const html = renderStickyAddToCartMobile(BASE_OPTS)
     // Image décorative : alt vide + aria-hidden

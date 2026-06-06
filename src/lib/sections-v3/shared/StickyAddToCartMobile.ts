@@ -221,12 +221,39 @@ export function renderStickyAddToCartMobile(options: StickyAddToCartOptions): st
   var bar    = document.getElementById('kvt-sticky-cta');
   var target = document.getElementById('${mainCtaId}');
 
-  // Guard : si le composant sticky ou le CTA cible sont absents, no-op
-  if (!bar || !target) return;
+  // Guard : si le composant sticky lui-même est absent, no-op strict
+  if (!bar) return;
+
+  // Fallback scroll : #main-cta absent (0/43 templates etec le posent)
+  // On affiche le sticky dès que l'utilisateur a scrollé > 300px
+  if (!target) {
+    var ticking = false;
+    var scrollFallback = function() {
+      if (!ticking) {
+        requestAnimationFrame(function() {
+          if (window.scrollY > 300) {
+            bar.classList.add('kvt-visible');
+          } else {
+            bar.classList.remove('kvt-visible');
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', scrollFallback, { passive: true });
+    // Check initial (page déjà scrollée à la mount, ou reload mid-page)
+    scrollFallback();
+    // Cleanup au unload pour éviter les leaks sur SPA
+    window.addEventListener('pagehide', function() {
+      window.removeEventListener('scroll', scrollFallback);
+    }, { once: true });
+    return;
+  }
 
   // IntersectionObserver : s'affiche quand le CTA principal est hors du viewport
   if (!('IntersectionObserver' in window)) {
-    // Fallback dégradé : toujours visible sur mobile
+    // Fallback dégradé navigateur ancien : toujours visible sur mobile
     bar.classList.add('kvt-visible');
     return;
   }

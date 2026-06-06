@@ -241,6 +241,60 @@ export interface LandingPageData {
 
   // Copy de fermeture — paragraphe final avant le dernier CTA
   final_pitch?: string
+
+  // ─── Champs CRO enrichis v2 (2026-06-05) ────────────────────────────────
+  // Ces 5 champs débloqueront : UGC photo reviews, trust badges paiement,
+  // logos presse vectoriels, signal de stock/urgence, section bundle.
+  // ANNA consomme exactement ces noms/types — contrat d'interface figé.
+
+  /**
+   * Photos UGC simulées : descriptions textuelles que le frontend transforme
+   * en placeholders réalistes ou prompts d'image.
+   * 3 à 6 entrées. Toujours présent si testimonials est présent.
+   */
+  photo_descriptions?: Array<{
+    context: string              // "Femme 35 ans applique la crème devant son miroir, lumière naturelle"
+    customer_first_name: string
+    sentiment: 'before' | 'during' | 'after' | 'lifestyle'
+  }>
+
+  /**
+   * Méthodes de paiement à afficher dans les trust badges.
+   * Défaut si le LLM ne sait pas : ["visa","mastercard","paypal","apple_pay"]
+   */
+  payment_methods?: Array<
+    'visa' | 'mastercard' | 'amex' | 'paypal' | 'apple_pay' | 'google_pay' | 'klarna' | 'alma'
+  >
+
+  /**
+   * Logos presse à mentionner. Le rendu cherchera des logos correspondants
+   * côté front. Vide [] si aucune presse cohérente avec la niche.
+   */
+  press_logos?: Array<{
+    publication: string         // "Vogue", "Marie Claire", "Refinery29"
+    quote_short?: string        // max 80 chars — optionnel
+  }>
+
+  /**
+   * Signal stock/urgence pour pousser la scarcity sans mentir.
+   * null si non pertinent pour ce produit.
+   */
+  stock_signal?: {
+    type: 'limited_stock' | 'high_demand' | 'back_in_stock' | 'limited_time' | null
+    message: string             // "Plus que 12 en stock"
+    cta_intensifier: string     // "Commandez maintenant"
+  } | null
+
+  /**
+   * Bundle / cross-sell suggéré.
+   * null si bundle non pertinent (produit standalone, sans complémentaires évidents).
+   */
+  bundle_offer?: {
+    title: string               // "Routine complète" / "Trio découverte"
+    description: string         // 1-2 phrases
+    products_to_pair: string[]  // ["Sérum hydratant", "Crème de nuit"]
+    discount_label: string      // "-15% sur le bundle" / "Le 3e offert"
+  } | null
 }
 
 // ─── A/B TESTING ─────────────────────────────────────────────────────────────

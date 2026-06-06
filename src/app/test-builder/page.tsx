@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
+import { Check, ChevronDown } from 'lucide-react'
 import type { LandingPageData } from '@/types'
 import { TEMPLATES } from '@/lib/templates'
 
@@ -17,6 +18,7 @@ export default function TestBuilderPage() {
   const [html, setHtml]             = useState<string>('')
   const [genTime, setGenTime]       = useState<number | null>(null)
   const [error, setError]           = useState<string | null>(null)
+  const [pickerOpen, setPickerOpen] = useState(false)
 
   async function generate() {
     setGenerating(true)
@@ -126,21 +128,59 @@ export default function TestBuilderPage() {
           )}
         </div>
 
-        {/* Switch template en live */}
-        <div className="flex gap-1">
-          {TEMPLATES.map(t => (
-            <button
-              key={t.id}
-              onClick={() => changeTemplate(t.id)}
-              className={`text-xs px-3 py-1 rounded-lg font-semibold transition-all ${
-                templateId === t.id
-                  ? 'bg-purple-600 text-white'
-                  : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              {t.name}
-            </button>
-          ))}
+        {/* Dropdown Changer de template — évite le débordement des 43 chips */}
+        <div className="relative">
+          <button
+            onClick={() => setPickerOpen(o => !o)}
+            className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all"
+            style={{ background: '#F6F6F7', color: '#5c5c7a', border: '1px solid #E3E3E8' }}
+            aria-haspopup="listbox"
+            aria-expanded={pickerOpen}
+          >
+            <span className="text-[10px] uppercase tracking-wide" style={{ color: '#a8a8b8' }}>Template</span>
+            <span style={{ color: '#1a1a2e' }}>{TEMPLATES.find(t => t.id === templateId)?.name || 'Choisir'}</span>
+            <ChevronDown className="w-3 h-3" />
+          </button>
+          {pickerOpen && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setPickerOpen(false)} />
+              <div
+                className="absolute top-9 right-0 rounded-xl overflow-hidden z-50"
+                style={{
+                  background: '#fff',
+                  border: '1px solid #e5e7eb',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                  width: 240,
+                  maxHeight: 360,
+                  overflowY: 'auto',
+                }}
+              >
+                <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wide" style={{ color: '#9ca3af', borderBottom: '1px solid #f3f4f6' }}>
+                  Changer de template
+                </div>
+                {TEMPLATES.map(t => {
+                  const isCurrent = templateId === t.id
+                  return (
+                    <button
+                      key={t.id}
+                      onClick={() => { changeTemplate(t.id); setPickerOpen(false) }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-xs text-left transition-colors hover:bg-purple-50"
+                      style={{ color: isCurrent ? '#7c3aed' : '#1a1a2e', fontWeight: isCurrent ? 700 : 500 }}
+                    >
+                      <span
+                        style={{
+                          width: 10, height: 10, borderRadius: '50%',
+                          background: t.accent, flexShrink: 0,
+                        }}
+                      />
+                      <span className="flex-1">{t.name}</span>
+                      {isCurrent && <Check className="w-3 h-3" style={{ color: '#7c3aed' }} />}
+                    </button>
+                  )
+                })}
+              </div>
+            </>
+          )}
         </div>
       </div>
 

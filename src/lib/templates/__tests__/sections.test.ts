@@ -6,8 +6,8 @@ import { mockLandingDataPartial } from '../__fixtures__/mock-landing-data-partia
 import type { LandingPageData } from '@/types'
 
 describe('DEFAULT_ORDER', () => {
-  it('contient exactement 20 sections', () => {
-    expect(DEFAULT_ORDER).toHaveLength(20)
+  it('contient exactement 21 sections', () => {
+    expect(DEFAULT_ORDER).toHaveLength(21)
   })
 
   it('contient toutes les SectionKey attendues dans le bon ordre', () => {
@@ -28,6 +28,7 @@ describe('DEFAULT_ORDER', () => {
       'value_stack',
       'bonuses',
       'guarantee',
+      'trust_badges_payment',
       'risk_reversal',
       'objections',
       'community_callout',
@@ -45,12 +46,16 @@ describe('DEFAULT_ORDER', () => {
 })
 
 describe('renderRichSections', () => {
-  it('retourne "" quand toutes les sections sont absentes', () => {
+  it('rend uniquement trust_badges_payment quand toutes les autres sections sont absentes', () => {
+    // trust_badges_payment est "always-on" (fallback Visa/MC/PayPal/Apple Pay)
+    // => renderRichSections retourne au minimum le bloc trust badges, pas ''
     const emptyData = {
       headline: '', subtitle: '', benefits: [], faq: [],
       cta: '', urgency: '', product_name: '',
     } as LandingPageData
-    expect(renderRichSections(emptyData)).toBe('')
+    const html = renderRichSections(emptyData)
+    expect(html).toContain('Paiement sécurisé')
+    expect(html).not.toContain('undefined')
   })
 
   it('rend du HTML quand au moins une section a de la data', () => {
@@ -77,7 +82,12 @@ describe('renderRichSections', () => {
   it('skippe les clés inconnues sans throw', () => {
     const data = mockLandingDataFull
     const html = renderRichSections(data, undefined, ['UNKNOWN_KEY' as SectionKey])
-    expect(html).toBe('')
+    // Aucune section "rich" rendue (clé inconnue) — mais le sticky CTA peut être injecté
+    // si data.price est défini. On vérifie juste l'absence de throw et que les
+    // sections inconnues ne génèrent pas de HTML de section.
+    expect(html).not.toContain('undefined')
+    // Pas de <section data-kvt-* pour la clé inconnue
+    expect(html).not.toContain('UNKNOWN_KEY')
   })
 
   it('rend les ~10 sections présentes dans mockLandingDataPartial et skippe les autres', () => {

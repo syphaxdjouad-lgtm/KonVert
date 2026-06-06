@@ -8,6 +8,8 @@
 
 import type { LandingPageData } from '@/types'
 import type { SectionInstance } from '@/types/editor'
+import { renderTrustBadgesPayment, type PaymentMethod } from '@/lib/sections-v3/shared/TrustBadgesPayment'
+import { renderStickyAddToCartMobile } from '@/lib/sections-v3/shared/StickyAddToCartMobile'
 
 // ─── Section keys & ordre canonique ──────────────────────────────────────────
 // Liste exhaustive des sections rendues par renderRichSections, dans l'ordre
@@ -31,6 +33,7 @@ export type SectionKey =
   | 'value_stack'
   | 'bonuses'
   | 'guarantee'
+  | 'trust_badges_payment'
   | 'risk_reversal'
   | 'objections'
   | 'community_callout'
@@ -53,6 +56,7 @@ export const DEFAULT_ORDER: SectionKey[] = [
   'value_stack',
   'bonuses',
   'guarantee',
+  'trust_badges_payment',
   'risk_reversal',
   'objections',
   'community_callout',
@@ -847,6 +851,29 @@ ${mq('fp', `.fp-wrap{padding:60px 20px!important;}`)}
 </section>`
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 20. TRUST BADGES PAYMENT — bande paiement sécurisé (Quick win RICE 960)
+// Injectée juste après 'guarantee' dans DEFAULT_ORDER.
+// Utilise payment_methods depuis data (champ MINATO sprint 2).
+// Fallback gracieux : affiche Visa/Mastercard/PayPal/Apple Pay si absent.
+// ─────────────────────────────────────────────────────────────────────────────
+export function renderTrustBadgesPaymentSection(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
+  // Lecture du champ optionnel payment_methods injecté par MINATO
+  const raw = (d as LandingPageData & { payment_methods?: string[] }).payment_methods
+  const methods = Array.isArray(raw) && raw.length > 0
+    ? raw as PaymentMethod[]
+    : undefined // laisse le fallback par défaut dans renderTrustBadgesPayment
+
+  return renderTrustBadgesPayment({
+    methods,
+    variant:    'footer',
+    accentColor: t.textMuted,
+    bg:         t.bgAlt,
+    border:     t.border,
+    fontFamily: t.fontFamily,
+  })
+}
+
 // ─── renderGallery (chantier B) ─────────────────────────────────────────────
 // Section dédiée appelée par renderRichSections à la position 5 (après features).
 // Affichée uniquement si images.length >= 8 (grid 2x2 = 4 cases, après 4 du hero).
@@ -956,26 +983,27 @@ export function renderHeroThumbs(
 type SectionRenderer = (d: LandingPageData, t: SectionTheme) => string
 
 const SECTION_RENDERERS: Record<SectionKey, SectionRenderer> = {
-  social_proof_bar:      renderSocialProofBarV2,
-  story:                 renderStoryV2,
-  target_audience:       renderTargetAudience,
-  features:              renderFeatures,
-  gallery:               renderGallery,
-  unique_mechanism:      renderUniqueMechanism,
-  how_it_works:          renderHowItWorks,
-  before_after:          renderBeforeAfter,
-  comparison:            renderComparisonV2,
-  competitor_comparison: renderCompetitorComparison,
-  testimonials:          renderTestimonialsV2,
-  press_mentions:        renderPressMentions,
-  founder_note:          renderFounderNote,
-  value_stack:           renderValueStack,
-  bonuses:               renderBonusesV2,
-  guarantee:             renderGuaranteeV2,
-  risk_reversal:         renderRiskReversal,
-  objections:            renderObjections,
-  community_callout:     renderCommunityCallout,
-  final_pitch:           renderFinalPitch,
+  social_proof_bar:       renderSocialProofBarV2,
+  story:                  renderStoryV2,
+  target_audience:        renderTargetAudience,
+  features:               renderFeatures,
+  gallery:                renderGallery,
+  unique_mechanism:       renderUniqueMechanism,
+  how_it_works:           renderHowItWorks,
+  before_after:           renderBeforeAfter,
+  comparison:             renderComparisonV2,
+  competitor_comparison:  renderCompetitorComparison,
+  testimonials:           renderTestimonialsV2,
+  press_mentions:         renderPressMentions,
+  founder_note:           renderFounderNote,
+  value_stack:            renderValueStack,
+  bonuses:                renderBonusesV2,
+  guarantee:              renderGuaranteeV2,
+  trust_badges_payment:   renderTrustBadgesPaymentSection,
+  risk_reversal:          renderRiskReversal,
+  objections:             renderObjections,
+  community_callout:      renderCommunityCallout,
+  final_pitch:            renderFinalPitch,
 }
 
 // ─── click-to-edit injection helpers ────────────────────────────────────────
@@ -1054,10 +1082,36 @@ function wrapWithKvtId(html: string, id: string): string {
 }
 
 // ─── renderRichSections — l'API publique ────────────────────────────────────
-// Rend les 19 sections riches dans l'ordre voulu, en skippant celles dont la
+// Rend les sections riches dans l'ordre voulu, en skippant celles dont la
 // data est absente. Si KONVERT_RICH_SECTIONS=false (rollback prod), retourne
 // '' (aucune section).
 // editMode=true injecte data-kvt-section-id + script click-to-edit.
+//
+// Sticky add-to-cart mobile : auto-injecté en fin de rendu sur tous les templates
+// qui appellent renderRichSections. Désactivable via KONVERT_STICKY_CTA=false.
+
+/** Génère la sticky bar mobile à partir de LandingPageData + SectionTheme. */
+function buildStickyCta(data: LandingPageData, theme: SectionTheme): string {
+  if (process.env.KONVERT_STICKY_CTA === 'false') return ''
+  const priceAmount = data.price ? parseFloat(data.price.replace(/[^0-9.]/g, '')) : 0
+  if (!priceAmount) return ''
+  const productImage = data.images?.[0] ?? ''
+  return renderStickyAddToCartMobile({
+    productName:  data.product_name || data.headline,
+    productImage,
+    price: {
+      amount:    priceAmount,
+      currency:  'EUR',
+      compareAt: data.original_price ? parseFloat(data.original_price.replace(/[^0-9.]/g, '')) : undefined,
+    },
+    ctaLabel:    data.cta || 'Ajouter au panier',
+    ctaColor:    theme.primary,
+    fontFamily:  theme.fontFamily,
+    bgColor:     theme.bg,
+    borderColor: theme.border,
+    showQty:     false,
+  })
+}
 
 export function renderRichSections(
   data: LandingPageData,
@@ -1071,6 +1125,10 @@ export function renderRichSections(
   // editMode flag can also be passed via data._kvt_edit_mode
   const effectiveEditMode = editMode || Boolean((data as LandingPageData & { _kvt_edit_mode?: boolean })._kvt_edit_mode)
 
+  // En edit mode dans l'iframe, ne pas injecter le sticky (il interférerait avec
+  // l'interface Konvert qui a ses propres contrôles mobiles).
+  const stickyCta = effectiveEditMode ? '' : buildStickyCta(data, theme)
+
   // C1 : si data porte un _sectionOrder injecté par renderTemplate,
   // il prend priorité sur le param order (évite de modifier les 42+ templates).
   const dataSectionOrder = (data as LandingPageData & { _sectionOrder?: SectionInstance[] })._sectionOrder
@@ -1081,7 +1139,7 @@ export function renderRichSections(
     const sections = DEFAULT_ORDER
       .map(key => SECTION_RENDERERS[key]?.(data, theme) ?? '')
       .filter(html => html.trim().length > 0)
-    if (!effectiveEditMode) return sections.join('\n')
+    if (!effectiveEditMode) return sections.join('\n') + '\n' + stickyCta
     // In edit mode without instance ids: use key as pseudo-id
     return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + DEFAULT_ORDER
       .map(key => {
@@ -1109,7 +1167,7 @@ export function renderRichSections(
         return effectiveEditMode ? wrapWithKvtId(html, s.id) : html
       })
       .filter(html => html.trim().length > 0)
-    if (!effectiveEditMode) return rendered.join('\n')
+    if (!effectiveEditMode) return rendered.join('\n') + '\n' + stickyCta
     return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + rendered.join('\n')
   }
 
@@ -1123,7 +1181,7 @@ export function renderRichSections(
       return effectiveEditMode ? wrapWithKvtId(html, key) : html
     })
     .filter(html => html.trim().length > 0)
-  if (!effectiveEditMode) return rendered.join('\n')
+  if (!effectiveEditMode) return rendered.join('\n') + '\n' + stickyCta
   return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + rendered.join('\n')
 }
 

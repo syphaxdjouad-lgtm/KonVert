@@ -37,7 +37,7 @@ function safeImageUrl(url: string): boolean {
   return typeof url === 'string' && /^https?:\/\//i.test(url)
 }
 
-const ALLOWED_LANGS = new Set(['fr', 'en', 'es', 'de', 'it', 'pt', 'nl', 'ar', 'zh'])
+import { ALLOWED_LANGS, LANGUAGE_NAMES } from '@/lib/i18n/languages'
 
 function clampRating(n: unknown): number {
   const v = typeof n === 'number' ? n : Number(n)
@@ -353,17 +353,7 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
 
 // ─── Prompts ────────────────────────────────────────────────────────────────
 
-const LANGUAGE_NAMES: Record<string, string> = {
-  fr: 'français',
-  en: 'English',
-  es: 'español',
-  de: 'Deutsch',
-  it: 'italiano',
-  pt: 'português',
-  nl: 'Nederlands',
-  ar: 'العربية',
-  zh: '中文',
-}
+// LANGUAGE_NAMES / ALLOWED_LANGS importés depuis @/lib/i18n/languages
 
 const TONE_INSTRUCTIONS: Record<string, string> = {
   persuasif: 'Ton persuasif : crée de l\'émotion, joue sur les désirs et la peur de manquer, pousse à l\'action immédiate.',

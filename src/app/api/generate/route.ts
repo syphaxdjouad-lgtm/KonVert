@@ -15,6 +15,7 @@ import type { DeepSeekV3Output } from '@/lib/ai/v3-schema'
 import type { ScrapedProduct } from '@/types'
 import type { V3PageData, CopyTone } from '@/types/v3'
 import type { StyleId } from '@/lib/styles/types'
+import { resolveLanguage, languageName } from '@/lib/i18n/languages'
 
 // Vercel Pro + Fluid Compute = 90s — Bright Data AliExpress 50-65s + DeepSeek 18-22s
 export const maxDuration = 90
@@ -30,13 +31,17 @@ function buildV3SystemPrompt(args: {
   tone: Exclude<CopyTone, 'auto'>
   brand?: string
   product: { title: string; description: string; category?: string }
+  language: string
 }): string {
   const toneInstruction = TONE_PROMPTS[args.tone] || TONE_PROMPTS.friendly
   const brandLine = args.brand
     ? `- Nom de marque : ${args.brand} (à utiliser tel quel dans hero + manifesto)`
     : `- Nom de marque : NON FOURNI — invente un nom court, élégant, cohérent avec le produit (ex: "Atelier Forêt" pour cuir artisanal, "Velura" pour skincare, "Halo" pour bijoux)`
+  const langName = languageName(args.language)
 
   return `Tu es un copywriter DTC premium niveau Allbirds/Mejuri/Glossier.
+
+LANGUE DE SORTIE : ${langName}. TOUT le contenu textuel des champs JSON (brand, hero, why_we_love, features, best_for, materials, care, faq, manifesto, press_quote, reviews_summary, how_it_works) doit être rédigé EXCLUSIVEMENT en ${langName}. Les noms propres de marques inventées peuvent rester latins. Les clés JSON restent en anglais (ne pas traduire).
 
 ${toneInstruction}
 
@@ -285,6 +290,7 @@ export async function POST(req: NextRequest) {
           title: product.title,
           description: product.description,
         },
+        language: resolveLanguage(body.language),
       })
 
       let aiOutput: DeepSeekV3Output

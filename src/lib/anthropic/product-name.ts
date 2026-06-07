@@ -21,17 +21,7 @@ import type { ProductType } from '@/lib/templates'
 // Le `category` renvoyé sert aussi à valider le matching template :
 // si on détecte "Mode·Vêtements" mais que le template choisi est "Velvety
 // (Skincare)", on peut warn l'utilisateur (cf screenshot du bug).
-const LANGUAGE_NAMES: Record<string, string> = {
-  fr: 'français',
-  en: 'English',
-  es: 'español',
-  de: 'Deutsch',
-  it: 'italiano',
-  pt: 'português',
-  nl: 'Nederlands',
-  ar: 'العربية',
-  zh: '中文',
-}
+import { LANGUAGE_NAMES } from '@/lib/i18n/languages'
 
 // Mots-clés stuffés ultra-fréquents dans les titres AliExpress, en plusieurs
 // langues. La liste est volontairement courte : on ne veut pas un nettoyage

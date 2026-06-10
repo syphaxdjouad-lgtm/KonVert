@@ -351,6 +351,32 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
   return out
 }
 
+// ─── Whitelist press_logos / press_mentions ──────────────────────────────────
+//
+// Liste canonique de publications presse autorisées. Toute publication hors de
+// cette liste est strippée par le sanitizer, indépendamment de ce que le LLM
+// retourne. Défense en profondeur contre les hallucinations brand-based
+// (cf. audit 2026-06-06 : 58.5% hallucination sur golden set).
+//
+// Normalisation : .toLowerCase().trim() avant comparaison.
+// Mise à jour : passage obligatoire revue MADARA + OROCHIMARU avant ajout.
+const PRESS_LOGOS_WHITELIST: ReadonlySet<string> = new Set([
+  // Mode / Beauté FR + intl
+  'vogue', 'elle', 'marie claire', 'allure', "harper's bazaar", 'glamour',
+  'cosmopolitan', 'grazia', 'madame figaro', 'le figaro madame', 'refinery29',
+  // Déco / Maison
+  'elle décoration', 'marie claire maison', 'ad', 'côté maison',
+  // Tech / Business
+  'forbes', 'techcrunch', 'the verge', 'wired', 'fast company',
+  'business of fashion', 'gq',
+  // Sport / Wellness
+  "women's health", 'yoga journal',
+  // Animaux
+  "30 millions d'amis",
+  // Presse généraliste FR
+  'le monde', 'le figaro', 'les echos',
+])
+
 // ─── Prompts ────────────────────────────────────────────────────────────────
 
 // LANGUAGE_NAMES / ALLOWED_LANGS importés depuis @/lib/i18n/languages
@@ -656,7 +682,7 @@ interface DeepSeekResponse {
 // ─── Versioning prompt ──────────────────────────────────────────────────────
 // KONVERT_PROMPT_VERSION=v1 → ancien schema sans champs CRO enrichis.
 // Non défini ou =v2 → schema v2 (défaut).
-export const PROMPT_VERSION = 'v2.0-enriched-2026-06-05'
+export const PROMPT_VERSION = 'v2.1-brand-based-2026-06-11'
 const USE_V2_PROMPT = (process.env.KONVERT_PROMPT_VERSION ?? 'v2') !== 'v1'
 
 export const GENERATION_MODEL = 'deepseek-chat'

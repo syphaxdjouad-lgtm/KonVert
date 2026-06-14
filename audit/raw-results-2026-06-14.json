@@ -1,0 +1,518 @@
+{
+  "date": "2026-06-14",
+  "results": [
+    {
+      "product_id": "A01",
+      "category": "A",
+      "brand": "Allbirds",
+      "niche": "mode/chaussures",
+      "has_real_press": true,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 39923
+    },
+    {
+      "product_id": "A02",
+      "category": "A",
+      "brand": "Casper",
+      "niche": "literie/matelas",
+      "has_real_press": true,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 36507
+    },
+    {
+      "product_id": "A03",
+      "category": "A",
+      "brand": "Glossier",
+      "niche": "beauté/soins visage",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Le meilleur produit sourcil pour un look naturel."
+        },
+        {
+          "publication": "Allure",
+          "quote_short": "Un indispensable beauté."
+        },
+        {
+          "publication": "Refinery29",
+          "quote_short": "Le produit qui a changé notre routine sourcils."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Allure",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Refinery29",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 3,
+      "generation_ms": 39983
+    },
+    {
+      "product_id": "A04",
+      "category": "A",
+      "brand": "Dollar Shave Club",
+      "niche": "rasage/grooming homme",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Le Figaro",
+          "quote_short": "Le rasoir qui a révolutionné le marché du rasage."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Le Figaro",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 1,
+      "generation_ms": 33886
+    },
+    {
+      "product_id": "A05",
+      "category": "A",
+      "brand": "Away Travel",
+      "niche": "bagages/voyage",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "La valise la plus cool du moment."
+        },
+        {
+          "publication": "Forbes",
+          "quote_short": "Away a réinventé le bagage cabine."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Forbes",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 2,
+      "generation_ms": 36844
+    },
+    {
+      "product_id": "A06",
+      "category": "A",
+      "brand": "Warby Parker",
+      "niche": "lunettes/eyewear",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Les lunettes qui changent la donne."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 1,
+      "generation_ms": 32650
+    },
+    {
+      "product_id": "A07",
+      "category": "A",
+      "brand": "Oura Ring",
+      "niche": "tech/santé wearable",
+      "has_real_press": true,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 37322
+    },
+    {
+      "product_id": "A08",
+      "category": "A",
+      "brand": "Drunk Elephant",
+      "niche": "beauté/soins premium",
+      "has_real_press": true,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 43162
+    },
+    {
+      "product_id": "A09",
+      "category": "A",
+      "brand": "Peak Design",
+      "niche": "tech/accessoires photo",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Wired",
+          "quote_short": "Le meilleur sac photo que nous ayons testé."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Wired",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 1,
+      "generation_ms": 39932
+    },
+    {
+      "product_id": "A10",
+      "category": "A",
+      "brand": "Lululemon",
+      "niche": "sport/vêtements yoga",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Le legging culte qui a conquis le monde"
+        },
+        {
+          "publication": "Elle",
+          "quote_short": "Le confort absolu pour le sport et la ville"
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Elle",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 2,
+      "generation_ms": 41343
+    },
+    {
+      "product_id": "B01",
+      "category": "B",
+      "brand": "LuminaSkin (boutique Shopify inconnue)",
+      "niche": "beauté/soins",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Un sérum qui tient ses promesses"
+        },
+        {
+          "publication": "Marie Claire",
+          "quote_short": "L&#x27;éclat en flacon"
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Marie Claire",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 2,
+      "generation_ms": 40078
+    },
+    {
+      "product_id": "B02",
+      "category": "B",
+      "brand": "PetPaw Essentials (boutique Shopify inconnue)",
+      "niche": "animaux/accessoires chien",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 39783
+    },
+    {
+      "product_id": "B03",
+      "category": "B",
+      "brand": "HomeBliss Candles (boutique Etsy/Shopify inconnue)",
+      "niche": "déco/bougies artisanales",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 42845
+    },
+    {
+      "product_id": "B04",
+      "category": "B",
+      "brand": "FlexGrip Pro (boutique Shopify inconnue)",
+      "niche": "sport/accessoires fitness",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 36398
+    },
+    {
+      "product_id": "B05",
+      "category": "B",
+      "brand": "WildRoots Botanicals (boutique DTC inconnue)",
+      "niche": "beauté/cheveux naturels",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 37629
+    },
+    {
+      "product_id": "B06",
+      "category": "B",
+      "brand": "SlumberwellCo (boutique Shopify inconnue)",
+      "niche": "bien-être/sommeil",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 30865
+    },
+    {
+      "product_id": "B07",
+      "category": "B",
+      "brand": "TechNomad Gear (boutique Shopify inconnue)",
+      "niche": "tech/accessoires nomades",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 35476
+    },
+    {
+      "product_id": "B08",
+      "category": "B",
+      "brand": "CleanCo Kitchen (boutique DTC inconnue)",
+      "niche": "cuisine/ustensiles",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 38307
+    },
+    {
+      "product_id": "B09",
+      "category": "B",
+      "brand": "ActiveMom France (boutique Shopify inconnue)",
+      "niche": "mode/sport femme",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 0,
+      "error": "JSON invalide reçu de DeepSeek — réessaie"
+    },
+    {
+      "product_id": "B10",
+      "category": "B",
+      "brand": "NordLight Studio (boutique Shopify inconnue)",
+      "niche": "déco/affiches",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 38856
+    },
+    {
+      "product_id": "C01",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur FYJR Store",
+      "niche": "maison/lumières",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 35184
+    },
+    {
+      "product_id": "C02",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur GlobalKitch",
+      "niche": "cuisine/ustensiles",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 36379
+    },
+    {
+      "product_id": "C03",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur SportMax",
+      "niche": "sport/fitness",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 36706
+    },
+    {
+      "product_id": "C04",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur SkinCareDeals",
+      "niche": "beauté/soins visage",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 33325
+    },
+    {
+      "product_id": "C05",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur PetBuddy",
+      "niche": "animaux/chien",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 28977
+    },
+    {
+      "product_id": "C06",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur TechHub",
+      "niche": "tech/accessoires smartphone",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 28460
+    },
+    {
+      "product_id": "C07",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur HomeDeco",
+      "niche": "déco/maison",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 38086
+    },
+    {
+      "product_id": "C08",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur FashionDrops",
+      "niche": "mode/vêtements femme",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 37176
+    },
+    {
+      "product_id": "C09",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur WellnessStore",
+      "niche": "bien-être/massage",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 30754
+    },
+    {
+      "product_id": "C10",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur KidToys",
+      "niche": "enfants/jouets",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 31780
+    }
+  ]
+}

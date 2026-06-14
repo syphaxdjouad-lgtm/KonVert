@@ -200,8 +200,14 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     }
   }
 
+  // press_mentions — guardrail v2.1 : même whitelist que press_logos.
+  // press_mentions est un string[] (vs press_logos qui est { publication, quote_short? }[]).
   if (Array.isArray(d.press_mentions)) {
-    out.press_mentions = d.press_mentions.map(escapeHtml).filter(Boolean)
+    out.press_mentions = d.press_mentions
+      .filter(s => typeof s === 'string' && s.trim().length > 0)
+      .filter(s => PRESS_LOGOS_WHITELIST.has(s.toLowerCase().trim()))
+      .slice(0, 3)
+      .map(escapeHtml)
   }
 
   if (d.founder_note) {
@@ -286,13 +292,17 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     out.payment_methods = ['visa', 'mastercard', 'paypal', 'apple_pay']
   }
 
-  // press_logos
+  // press_logos — guardrail v2.1 : whitelist brand-based stricte
+  // Toute publication hors PRESS_LOGOS_WHITELIST est strippée silencieusement.
+  // Si le LLM hallucine "Parenting France" ou autre, on n'affiche jamais.
   if (Array.isArray(d.press_logos)) {
     out.press_logos = d.press_logos
       .filter(
         (p): p is NonNullable<(typeof d.press_logos)>[number] =>
           p != null && typeof p.publication === 'string' && p.publication.trim().length > 0,
       )
+      .filter(p => PRESS_LOGOS_WHITELIST.has(p.publication.toLowerCase().trim()))
+      .slice(0, 3)
       .map(p => ({
         publication: escapeHtml(p.publication.slice(0, 80)),
         ...(typeof p.quote_short === 'string' && p.quote_short.trim().length > 0
@@ -703,7 +713,7 @@ interface DeepSeekResponse {
 // ─── Versioning prompt ──────────────────────────────────────────────────────
 // KONVERT_PROMPT_VERSION=v1 → ancien schema sans champs CRO enrichis.
 // Non défini ou =v2 → schema v2 (défaut).
-export const PROMPT_VERSION = 'v2.1-brand-based-2026-06-11'
+export const PROMPT_VERSION = 'v2.1-brand-based-2026-06-14'
 const USE_V2_PROMPT = (process.env.KONVERT_PROMPT_VERSION ?? 'v2') !== 'v1'
 
 export const GENERATION_MODEL = 'deepseek-chat'

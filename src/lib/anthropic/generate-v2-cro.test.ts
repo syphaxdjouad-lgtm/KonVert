@@ -211,17 +211,22 @@ describe('sanitizeLandingPageData — edge cases LLM malformé', () => {
   })
 
   it('XSS dans les champs v2 → escape HTML appliqué', () => {
+    // Depuis v2.1, press_logos est filtré par la whitelist : un payload XSS dans
+    // `publication` est strippé (non whitelisté) — on place le XSS dans quote_short
+    // d'une publication whitelistée pour tester escapeHtml sur ce champ.
     const result = sanitizeLandingPageData({
       ...BASE,
-      press_logos: [{ publication: '<script>alert(1)</script>', quote_short: '<b>Bold</b>' }],
+      press_logos: [{ publication: 'Vogue', quote_short: '<b>Bold</b> <script>alert(1)</script>' }],
       stock_signal: {
         type: 'high_demand',
         message: '<img src=x onerror=alert(1)>',
         cta_intensifier: '<a href="evil">Click</a>',
       },
     })
-    expect(result.press_logos![0].publication).not.toContain('<script>')
-    expect(result.press_logos![0].publication).toContain('&lt;script&gt;')
+    expect(result.press_logos).toHaveLength(1)
+    expect(result.press_logos![0].publication).toBe('Vogue')
+    expect(result.press_logos![0].quote_short).not.toContain('<script>')
+    expect(result.press_logos![0].quote_short).not.toContain('<b>')
     expect(result.stock_signal!.message).not.toContain('<img')
     expect(result.stock_signal!.cta_intensifier).not.toContain('<a href')
   })

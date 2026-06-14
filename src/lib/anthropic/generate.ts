@@ -200,8 +200,14 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     }
   }
 
+  // press_mentions — guardrail v2.1 : même whitelist que press_logos.
+  // press_mentions est un string[] (vs press_logos qui est { publication, quote_short? }[]).
   if (Array.isArray(d.press_mentions)) {
-    out.press_mentions = d.press_mentions.map(escapeHtml).filter(Boolean)
+    out.press_mentions = d.press_mentions
+      .filter(s => typeof s === 'string' && s.trim().length > 0)
+      .filter(s => PRESS_LOGOS_WHITELIST.has(s.toLowerCase().trim()))
+      .slice(0, 3)
+      .map(escapeHtml)
   }
 
   if (d.founder_note) {
@@ -286,13 +292,17 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     out.payment_methods = ['visa', 'mastercard', 'paypal', 'apple_pay']
   }
 
-  // press_logos
+  // press_logos — guardrail v2.1 : whitelist brand-based stricte
+  // Toute publication hors PRESS_LOGOS_WHITELIST est strippée silencieusement.
+  // Si le LLM hallucine "Parenting France" ou autre, on n'affiche jamais.
   if (Array.isArray(d.press_logos)) {
     out.press_logos = d.press_logos
       .filter(
         (p): p is NonNullable<(typeof d.press_logos)>[number] =>
           p != null && typeof p.publication === 'string' && p.publication.trim().length > 0,
       )
+      .filter(p => PRESS_LOGOS_WHITELIST.has(p.publication.toLowerCase().trim()))
+      .slice(0, 3)
       .map(p => ({
         publication: escapeHtml(p.publication.slice(0, 80)),
         ...(typeof p.quote_short === 'string' && p.quote_short.trim().length > 0
@@ -351,6 +361,32 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
   return out
 }
 
+// ─── Whitelist press_logos / press_mentions ──────────────────────────────────
+//
+// Liste canonique de publications presse autorisées. Toute publication hors de
+// cette liste est strippée par le sanitizer, indépendamment de ce que le LLM
+// retourne. Défense en profondeur contre les hallucinations brand-based
+// (cf. audit 2026-06-06 : 58.5% hallucination sur golden set).
+//
+// Normalisation : .toLowerCase().trim() avant comparaison.
+// Mise à jour : passage obligatoire revue MADARA + OROCHIMARU avant ajout.
+const PRESS_LOGOS_WHITELIST: ReadonlySet<string> = new Set([
+  // Mode / Beauté FR + intl
+  'vogue', 'elle', 'marie claire', 'allure', "harper's bazaar", 'glamour',
+  'cosmopolitan', 'grazia', 'madame figaro', 'le figaro madame', 'refinery29',
+  // Déco / Maison
+  'elle décoration', 'marie claire maison', 'ad', 'côté maison',
+  // Tech / Business
+  'forbes', 'techcrunch', 'the verge', 'wired', 'fast company',
+  'business of fashion', 'gq',
+  // Sport / Wellness
+  "women's health", 'yoga journal',
+  // Animaux
+  "30 millions d'amis",
+  // Presse généraliste FR
+  'le monde', 'le figaro', 'les echos',
+])
+
 // ─── Prompts ────────────────────────────────────────────────────────────────
 
 // LANGUAGE_NAMES / ALLOWED_LANGS importés depuis @/lib/i18n/languages
@@ -404,7 +440,23 @@ const buildSystemPrompt = (language: string): string => {
   const V2_RULES_BLOCK = USE_V2_PROMPT ? `
 26. photo_descriptions : 3 à 6 entrées. Décris une scène photo réaliste UGC pour chaque sentiment (before, during, after, lifestyle). Genre + âge apparent + contexte + lumière. Ces descriptions servent de prompts pour générateur d'images ou d'alt-text de placeholders.
 27. payment_methods : sélectionne parmi ["visa","mastercard","amex","paypal","apple_pay","google_pay","klarna","alma"]. Beauty/mode → ajoute "klarna" ou "alma". Tech → "apple_pay" en priorité. Si tu ne peux pas inférer la catégorie, retourne ["visa","mastercard","paypal","apple_pay"].
-28. press_logos : RÈGLE ANTI-HALLUCINATION STRICTE — ne mentionne QUE des publications qui couvrent réellement cette niche (beauty → Vogue, Marie Claire, Glamour, Elle, Grazia ; tech → Wired, TechCrunch, The Verge ; déco → AD, Côté Maison ; mode → Vogue, GQ, Madame Figaro). Si tu n'es pas certain qu'une publication couvre cette niche, NE L'INCLUS PAS. Retourne [] si aucune certitude. 2 à 5 entrées maximum.
+28. press_logos : RÈGLE STRICTE ZÉRO TOLÉRANCE — retourne [] par défaut, TOUJOURS.
+    N'ajoute une publication QUE si les DEUX conditions sont réunies :
+    (a) la marque est une DTC mondialement établie (> 5 000 avis clients sur le produit)
+        ET ressort comme couverte historiquement par cette publication,
+    OU (b) le nom exact de la publication apparaît littéralement dans la
+        description produit fournie ("As seen in...", "Featured in...").
+    La publication DOIT figurer dans cette liste exacte (sinon → []) :
+    ["Vogue", "Elle", "Marie Claire", "Allure", "Harper's Bazaar", "Glamour",
+     "Cosmopolitan", "Grazia", "Elle Décoration", "Marie Claire Maison", "AD",
+     "Côté Maison", "Madame Figaro", "Le Figaro Madame", "Forbes", "TechCrunch",
+     "The Verge", "Wired", "Fast Company", "GQ", "Business of Fashion",
+     "Refinery29", "Women's Health", "Yoga Journal", "30 Millions d'Amis",
+     "Le Monde", "Le Figaro", "Les Echos"].
+    INTERDIT ABSOLU pour : tout produit AliExpress, dropshipping no-name,
+    boutique < 5 000 avis → press_logos = [] obligatoire.
+    En cas de doute minimal → []. Mieux vaut [] qu'halluciner.
+    Max 3 entrées si tu en mets.
 29. stock_signal : "limited_stock" si produit saisonnier/tendance/édition limitée. "high_demand" si produit viral/bestseller. "back_in_stock" si indisponible puis revenu (utilise si la description le suggère). "limited_time" uniquement si une promotion réelle est mentionnée. null si aucun signal d'urgence plausible. Ne jamais inventer de stock fictif non justifié.
 30. bundle_offer : propose 1 bundle logique si la catégorie est beauty/wellness/pet/mode/déco (2-3 produits complémentaires sensés). Retourne null si le produit est standalone et sans complémentaire évident (ex: un casque audio seul, un ustensile unique).` : ''
 
@@ -455,6 +507,9 @@ bundle_offer exemple : { "title": "Rituel Maison", "description": "Parce qu'une 
 NICHE TECH (accessoire smartphone) — press_logos CORRECT vs INCORRECT :
 CORRECT : ["Wired", "TechCrunch", "The Verge"] — couvrent l'accessoire tech
 INCORRECT : ["Vogue", "Marie Claire"] — ne couvrent pas les accessoires smartphone
+NICHE INCONNUE (boutique Shopify < 5000 avis OU AliExpress) :
+press_logos = [] OBLIGATOIRE. Aucune publication ne couvre les marques no-name.
+press_mentions = [] OBLIGATOIRE pour la même raison.
 ═══════════════════════════════════════════════
 
 Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
@@ -616,7 +671,9 @@ RÈGLES DE GÉNÉRATION :
 10. comparison : "Avec / Sans" 4 points symétriques, bénéfices concrets vs frustrations réelles
 11. competitor_comparison : 5 critères + nous + 2 concurrents GÉNÉRIQUES (pas de vraies marques, type "Marque pharmacie", "Marque luxe", "Marque drugstore") — toujours nous gagnant sur ≥3 critères sans tricher
 12. social_proof : chiffres précis et crédibles (jamais ronds : 12 847 plutôt que 12 000)
-13. press_mentions : 5 médias cohérents avec la langue/catégorie cible (jamais inventés)
+13. press_mentions : MÊME RÈGLE QUE press_logos (cf. règle 28). Liste vide [] par défaut.
+    Ne mentionne que des publications mondialement reconnues qui ont réellement couvert la marque
+    (DTC > 5 000 avis OU nom dans la description). 0 à 3 entrées max. Mieux vaut [] qu'halluciner.
 14. Témoignages : 3 prénoms cohérents avec la langue cible, détails concrets (pas générique), émotion vraie
 15. founder_note : prénom+nom de fondateur cohérent culture cible, message personnel et authentique (3-4 phrases)
 16. value_stack : produit + 3 bonus listés, total > prix final, économie chiffrée mise en avant
@@ -631,7 +688,7 @@ RÈGLES DE GÉNÉRATION :
 25. Urgence : ${priceLine}
 ${USE_V2_PROMPT ? `26. photo_descriptions : 3 à 6 descriptions UGC (genre apparent + âge + contexte + lumière). Couvre au moins 1 "before", 1 "during", 1 "after". Prénoms cohérents avec ${langName}.
 27. payment_methods : beauty/wellness → inclure "klarna" ou "alma". Tech premium → "apple_pay" en priorité. Défaut minimum : ["visa","mastercard","paypal","apple_pay"].
-28. press_logos : ANTI-HALLUCINATION — liste uniquement les publications qui couvrent vraiment la niche du produit. En cas de doute → retourne []. Max 5 entrées. quote_short optionnel, max 80 chars.
+28. press_logos : cf. règle 28 du system prompt — ZÉRO TOLÉRANCE, retourne [] par défaut. N'ajoute QUE si DTC > 5 000 avis + dans la whitelist, OU si le nom exact de la publication est dans la description. Max 3 entrées. En cas de doute → [].
 29. stock_signal : évalue l'urgence appropriée (limited_stock / high_demand / back_in_stock / limited_time). Si aucun signal plausible → retourne null avec type: null.
 30. bundle_offer : beauty/wellness/pet/mode/déco → propose 1 bundle sensé (2-3 produits complémentaires). Standalone ou sans complémentaire évident → retourne null.` : ''}
 
@@ -656,7 +713,7 @@ interface DeepSeekResponse {
 // ─── Versioning prompt ──────────────────────────────────────────────────────
 // KONVERT_PROMPT_VERSION=v1 → ancien schema sans champs CRO enrichis.
 // Non défini ou =v2 → schema v2 (défaut).
-export const PROMPT_VERSION = 'v2.0-enriched-2026-06-05'
+export const PROMPT_VERSION = 'v2.2-brand-based-reviews-gate-2026-06-14'
 const USE_V2_PROMPT = (process.env.KONVERT_PROMPT_VERSION ?? 'v2') !== 'v1'
 
 export const GENERATION_MODEL = 'deepseek-chat'
@@ -760,6 +817,22 @@ export async function generateLandingPage(
 
   if (product.images?.length > 0) {
     data.images = product.images
+  }
+
+  // ─── Gate v2.2 : reviews_count < 5000 → press_logos/mentions = [] ───────
+  // Défense en profondeur côté code : même si DeepSeek ignore la règle 28
+  // brand-based ("DTC > 5000 avis"), on stripe systématiquement les
+  // publications presse pour les boutiques no-name / dropshipping AliExpress.
+  // Whitelist seule (sanitizeLandingPageData) laisse passer Vogue/Marie Claire
+  // sans connaître la notoriété de la marque — ce gate la connaît.
+  // Threshold 5000 aligné sur la règle prompt v2.1 (cf. PROMPT_VERSION).
+  const SMALL_BRAND_THRESHOLD = 5000
+  if (
+    product.reviews_count != null &&
+    product.reviews_count < SMALL_BRAND_THRESHOLD
+  ) {
+    data.press_logos = []
+    data.press_mentions = []
   }
 
   data.language = language

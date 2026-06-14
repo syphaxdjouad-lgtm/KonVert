@@ -1,0 +1,28 @@
+[dotenv@17.3.1] injecting env (25) from .env.local -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+======================================================
+KONVERT — Audit hallucination press_logos — prompt v2
+Golden set : 30 produits
+Date : 2026-06-14
+======================================================
+
+[A01] Allbirds                                      press_logos=[Vogue, Forbes]   [WARN] Judge Haiku échoué pour A01: Anthropic 401: {"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"},"request_id":"req_011Cc3oHMW4Nm43zKy4g6XgP"}
+→ ok (H:0 V:0 U:2)
+[A02] Casper                                        press_logos=[TechCrunch]   [WARN] Judge Haiku échoué pour A02: Anthropic 401: {"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"},"request_id":"req_011Cc3oL1WrxyDx3XRVf5iaC"}
+→ ok (H:0 V:0 U:1)
+[A03] Glossier                                      press_logos=[] OK
+[A04] Dollar Shave Club                             press_logos=[] OK
+[A05] Away Travel                                   press_logos=[] OK
+[A06] Warby Parker                                  press_logos=[] OK
+[A07] Oura Ring                                     press_logos=[] OK
+[A08] Drunk Elephant                                press_logos=[Vogue, Allure]   [WARN] Judge Haiku échoué pour A08: Anthropic 401: {"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"},"request_id":"req_011Cc3obYYq29csuEypNsKfd"}
+→ ok (H:0 V:0 U:2)
+[A09] Peak Design                                   press_logos=[Wired, TechCrunch, The Verge]   [WARN] Judge Haiku échoué pour A09: Anthropic 401: {"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"},"request_id":"req_011Cc3ofCecX4DWC1K35qgMK"}
+→ ok (H:0 V:0 U:3)
+[A10] Lululemon                                     press_logos=[] OK
+[B01] LuminaSkin (boutique Shopify inconnue)        press_logos=[] OK
+[B02] PetPaw Essentials (boutique Shopify inconnue) press_logos=[] OK
+[B03] HomeBliss Candles (boutique Etsy/Shopify inco press_logos=[] OK
+[B04] FlexGrip Pro (boutique Shopify inconnue)      press_logos=[] OK
+[B05] WildRoots Botanicals (boutique DTC inconnue)  press_logos=[] OK
+[B06] SlumberwellCo (boutique Shopify inconnue)     press_logos=[] OK
+[B07] TechNomad Gear (boutique Shopify inconnue)    

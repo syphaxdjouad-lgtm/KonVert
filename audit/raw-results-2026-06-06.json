@@ -1,0 +1,893 @@
+{
+  "date": "2026-06-06",
+  "results": [
+    {
+      "product_id": "A01",
+      "category": "A",
+      "brand": "Allbirds",
+      "niche": "mode/chaussures",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Les sneakers les plus confortables de la saison."
+        },
+        {
+          "publication": "Wired",
+          "quote_short": "Le futur de la basket est là."
+        },
+        {
+          "publication": "Fast Company",
+          "quote_short": "Comment Allbirds a réinventé la chaussure."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Wired",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Fast Company",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 3,
+      "generation_ms": 33863
+    },
+    {
+      "product_id": "A02",
+      "category": "A",
+      "brand": "Casper",
+      "niche": "literie/matelas",
+      "has_real_press": true,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 27706
+    },
+    {
+      "product_id": "A03",
+      "category": "A",
+      "brand": "Glossier",
+      "niche": "beauté/soins visage",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Le produit sourcils culte qui a changé la routine de 2 millions de femmes."
+        },
+        {
+          "publication": "Elle",
+          "quote_short": "Indispensable pour un regard frais et naturel."
+        },
+        {
+          "publication": "Marie Claire",
+          "quote_short": "Le meilleur gel sourcils jamais testé."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Elle",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Marie Claire",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 3,
+      "generation_ms": 33660
+    },
+    {
+      "product_id": "A04",
+      "category": "A",
+      "brand": "Dollar Shave Club",
+      "niche": "rasage/grooming homme",
+      "has_real_press": true,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 28171
+    },
+    {
+      "product_id": "A05",
+      "category": "A",
+      "brand": "Away Travel",
+      "niche": "bagages/voyage",
+      "has_real_press": true,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 32884
+    },
+    {
+      "product_id": "A06",
+      "category": "A",
+      "brand": "Warby Parker",
+      "niche": "lunettes/eyewear",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "La marque qui change la donne des lunettes."
+        },
+        {
+          "publication": "GQ",
+          "quote_short": "Le rapport qualité-prix imbattable."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "GQ",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 2,
+      "generation_ms": 27532
+    },
+    {
+      "product_id": "A07",
+      "category": "A",
+      "brand": "Oura Ring",
+      "niche": "tech/santé wearable",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Forbes",
+          "quote_short": "Le tracker le plus intelligent que nous ayons testé."
+        },
+        {
+          "publication": "TechCrunch",
+          "quote_short": "Une prouesse technologique dans un anneau discret."
+        },
+        {
+          "publication": "The Verge",
+          "quote_short": "Un must pour la santé connectée."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Forbes",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "TechCrunch",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "The Verge",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 3,
+      "generation_ms": 34388
+    },
+    {
+      "product_id": "A08",
+      "category": "A",
+      "brand": "Drunk Elephant",
+      "niche": "beauté/soins premium",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Le sérum exfoliant le plus vendu en 2024"
+        },
+        {
+          "publication": "Elle",
+          "quote_short": "Révolutionnaire pour une peau lisse"
+        },
+        {
+          "publication": "Marie Claire",
+          "quote_short": "Un indispensable de la routine nuit"
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Elle",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Marie Claire",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 3,
+      "generation_ms": 30526
+    },
+    {
+      "product_id": "A09",
+      "category": "A",
+      "brand": "Peak Design",
+      "niche": "tech/accessoires photo",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Le sac qui a changé ma vie de photographe."
+        },
+        {
+          "publication": "GQ",
+          "quote_short": "Indispensable pour les créateurs nomades."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "GQ",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 2,
+      "generation_ms": 37773
+    },
+    {
+      "product_id": "A10",
+      "category": "A",
+      "brand": "Lululemon",
+      "niche": "sport/vêtements yoga",
+      "has_real_press": true,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue"
+        },
+        {
+          "publication": "Women&#x27;s Health"
+        },
+        {
+          "publication": "Yoga Journal"
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Women&#x27;s Health",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Yoga Journal",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 3,
+      "generation_ms": 27701
+    },
+    {
+      "product_id": "B01",
+      "category": "B",
+      "brand": "LuminaSkin (boutique Shopify inconnue)",
+      "niche": "beauté/soins",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Le sérum qui illumine sans compromis."
+        },
+        {
+          "publication": "Marie Claire",
+          "quote_short": "Un concentré d’éclat pour toutes les peaux."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Marie Claire",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 2,
+      "generation_ms": 28309
+    },
+    {
+      "product_id": "B02",
+      "category": "B",
+      "brand": "PetPaw Essentials (boutique Shopify inconnue)",
+      "niche": "animaux/accessoires chien",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Le Figaro",
+          "quote_short": "Un lit qui change la vie des chiens arthritiques"
+        },
+        {
+          "publication": "30 Millions d&#x27;Amis",
+          "quote_short": "PetPaw, le confort à prix accessible"
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Le Figaro",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "30 Millions d&#x27;Amis",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 2,
+      "generation_ms": 34092
+    },
+    {
+      "product_id": "B03",
+      "category": "B",
+      "brand": "HomeBliss Candles (boutique Etsy/Shopify inconnue)",
+      "niche": "déco/bougies artisanales",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 31654
+    },
+    {
+      "product_id": "B04",
+      "category": "B",
+      "brand": "FlexGrip Pro (boutique Shopify inconnue)",
+      "niche": "sport/accessoires fitness",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 27478
+    },
+    {
+      "product_id": "B05",
+      "category": "B",
+      "brand": "WildRoots Botanicals (boutique DTC inconnue)",
+      "niche": "beauté/cheveux naturels",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Le sérum capillaire qui fait parler de lui."
+        },
+        {
+          "publication": "Elle",
+          "quote_short": "Une formule naturelle aux résultats bluffants."
+        },
+        {
+          "publication": "Marie Claire",
+          "quote_short": "L&#x27;alternative naturelle aux traitements chimiques."
+        },
+        {
+          "publication": "Le Figaro Madame",
+          "quote_short": "Repousse garantie ou remboursée."
+        },
+        {
+          "publication": "Cosmopolitan",
+          "quote_short": "Le secret des cheveux plus denses."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Elle",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Marie Claire",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Le Figaro Madame",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Cosmopolitan",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 5,
+      "generation_ms": 33722
+    },
+    {
+      "product_id": "B06",
+      "category": "B",
+      "brand": "SlumberwellCo (boutique Shopify inconnue)",
+      "niche": "bien-être/sommeil",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "La couverture qui va changer vos nuits."
+        },
+        {
+          "publication": "Cosmopolitan",
+          "quote_short": "Le accessoire bien-être indispensable."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Cosmopolitan",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 2,
+      "generation_ms": 31437
+    },
+    {
+      "product_id": "B07",
+      "category": "B",
+      "brand": "TechNomad Gear (boutique Shopify inconnue)",
+      "niche": "tech/accessoires nomades",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "TechCrunch",
+          "quote_short": "Un chargeur compact qui tient toutes ses promesses."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "TechCrunch",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 1,
+      "generation_ms": 31432
+    },
+    {
+      "product_id": "B08",
+      "category": "B",
+      "brand": "CleanCo Kitchen (boutique DTC inconnue)",
+      "niche": "cuisine/ustensiles",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Elle",
+          "quote_short": "La poêle qui va changer votre routine cuisine."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Elle",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 1,
+      "generation_ms": 30946
+    },
+    {
+      "product_id": "B09",
+      "category": "B",
+      "brand": "ActiveMom France (boutique Shopify inconnue)",
+      "niche": "mode/sport femme",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Le legging qui sculpte sans effort."
+        },
+        {
+          "publication": "Elle",
+          "quote_short": "Le basique qui change tout."
+        },
+        {
+          "publication": "Marie Claire",
+          "quote_short": "L&#x27;allié silhouette des mamans actives."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Elle",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Marie Claire",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 3,
+      "generation_ms": 32360
+    },
+    {
+      "product_id": "B10",
+      "category": "B",
+      "brand": "NordLight Studio (boutique Shopify inconnue)",
+      "niche": "déco/affiches",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Elle Décoration",
+          "quote_short": "&quot;L&#x27;affiche qui change tout&quot;"
+        },
+        {
+          "publication": "Marie Claire Maison",
+          "quote_short": "&quot;Un concentré de nature pour vos murs&quot;"
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Elle Décoration",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Marie Claire Maison",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 2,
+      "generation_ms": 33938
+    },
+    {
+      "product_id": "C01",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur FYJR Store",
+      "niche": "maison/lumières",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 32903
+    },
+    {
+      "product_id": "C02",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur GlobalKitch",
+      "niche": "cuisine/ustensiles",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 29329
+    },
+    {
+      "product_id": "C03",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur SportMax",
+      "niche": "sport/fitness",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Men&#x27;s Health",
+          "quote_short": "Le meilleur rapport qualité-prix pour s&#x27;entraîner sans douleur."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Men&#x27;s Health",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 1,
+      "generation_ms": 33201
+    },
+    {
+      "product_id": "C04",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur SkinCareDeals",
+      "niche": "beauté/soins visage",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Le geste beauté qui change tout."
+        },
+        {
+          "publication": "Marie Claire",
+          "quote_short": "Indispensable pour une peau de rêve."
+        },
+        {
+          "publication": "Elle",
+          "quote_short": "Le rituel bien-être à adopter d&#x27;urgence."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Marie Claire",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Elle",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 3,
+      "generation_ms": 34500
+    },
+    {
+      "product_id": "C05",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur PetBuddy",
+      "niche": "animaux/chien",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 31618
+    },
+    {
+      "product_id": "C06",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur TechHub",
+      "niche": "tech/accessoires smartphone",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "TechCrunch",
+          "quote_short": "Un chargeur sans fil abordable qui tient ses promesses."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "TechCrunch",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 1,
+      "generation_ms": 31660
+    },
+    {
+      "product_id": "C07",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur HomeDeco",
+      "niche": "déco/maison",
+      "has_real_press": false,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 34468
+    },
+    {
+      "product_id": "C08",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur FashionDrops",
+      "niche": "mode/vêtements femme",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Elle",
+          "quote_short": "Le sweat tendance de la saison à prix mini."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Elle",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 1,
+      "generation_ms": 33008
+    },
+    {
+      "product_id": "C09",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur WellnessStore",
+      "niche": "bien-être/massage",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Vogue",
+          "quote_short": "Le meilleur rapport qualité-prix pour un soulagement efficace."
+        },
+        {
+          "publication": "Elle",
+          "quote_short": "Un indispensable pour les soirées détente."
+        },
+        {
+          "publication": "GQ",
+          "quote_short": "Le gadget bien-être qui change tout."
+        },
+        {
+          "publication": "Cosmopolitan",
+          "quote_short": "Adoptez-le pour des nuits paisibles."
+        },
+        {
+          "publication": "Le Figaro",
+          "quote_short": "Une innovation accessible contre les douleurs cervicales."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Vogue",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Elle",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "GQ",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Cosmopolitan",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Le Figaro",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 5,
+      "generation_ms": 31029
+    },
+    {
+      "product_id": "C10",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur KidToys",
+      "niche": "enfants/jouets",
+      "has_real_press": false,
+      "press_logos_returned": [
+        {
+          "publication": "Le Figaro",
+          "quote_short": "Le jouet qui fait l&#x27;unanimité chez les parents."
+        },
+        {
+          "publication": "Science &amp; Vie Junior",
+          "quote_short": "Un outil éducatif puissant, testé et approuvé."
+        },
+        {
+          "publication": "Parenting France",
+          "quote_short": "Les blocs magnétiques qui remplacent la tablette."
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Le Figaro",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Science &amp; Vie Junior",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Parenting France",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 3,
+      "generation_ms": 34811
+    }
+  ]
+}

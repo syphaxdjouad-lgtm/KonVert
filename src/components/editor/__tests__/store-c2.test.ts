@@ -141,6 +141,53 @@ describe('useEditorStore — C2 sectionData + visualSettings', () => {
       expect(useEditorStore.getState().saveStatus).toBe('saved')
       expect(useEditorStore.getState().lastSavedAt).toBeInstanceOf(Date)
     })
+
+    it('retry 1x après 2s si onSave échoue, succès au 2e essai → saveStatus=saved', async () => {
+      const onSave = vi.fn()
+        .mockRejectedValueOnce(new Error('network'))
+        .mockResolvedValueOnce(undefined)
+      useEditorStore.getState().scheduleAutoSave('page1', onSave)
+      await vi.advanceTimersByTimeAsync(3000) // debounce
+      // après debounce : 1er onSave appelé et rejeté, setTimeout(2000) scheduled
+      expect(onSave).toHaveBeenCalledTimes(1)
+      await vi.advanceTimersByTimeAsync(2000) // retry
+      expect(onSave).toHaveBeenCalledTimes(2)
+      expect(useEditorStore.getState().saveStatus).toBe('saved')
+    })
+
+    it('retry 1x échoue aussi → saveStatus=error', async () => {
+      const onSave = vi.fn().mockRejectedValue(new Error('network'))
+      useEditorStore.getState().scheduleAutoSave('page1', onSave)
+      await vi.advanceTimersByTimeAsync(3000)
+      await vi.advanceTimersByTimeAsync(2000)
+      expect(onSave).toHaveBeenCalledTimes(2)
+      expect(useEditorStore.getState().saveStatus).toBe('error')
+    })
+  })
+})
+
+describe('buildJsonForDb (chantier C2 T10)', () => {
+  it('assemble landingData + sectionData mergé + _editor_state', async () => {
+    const { buildJsonForDb } = await import('../store')
+    const result = buildJsonForDb({
+      landingData: { ...baseLandingData, headline: 'Original' },
+      sectionData: {
+        'sec-1': {
+          'headline': 'Modifié',
+          'features.0.title': 'Feat 1',
+        },
+      },
+      sectionOrder: [{ id: 'sec-1', key: 'story', visible: true }],
+      visualSettings: { 'sec-1': { padding: 'lg' } },
+      globalStyles: {},
+      templateId: 'etec-blue',
+    }) as Record<string, unknown> & { _editor_state: Record<string, unknown>; features?: Array<{ title?: string }> }
+
+    expect(result.headline).toBe('Modifié')
+    expect(result._template_slug).toBe('etec-blue')
+    expect(result._editor_state).toBeDefined()
+    expect((result._editor_state as { sectionOrder: SectionInstance[] }).sectionOrder).toHaveLength(1)
+    expect(result.features?.[0]?.title).toBe('Feat 1')
   })
 })
 

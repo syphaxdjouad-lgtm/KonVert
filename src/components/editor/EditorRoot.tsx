@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { useEditorStore, hydrateFromPage } from './store'
 import Fab from './Fab'
 import Panel from './Panel'
@@ -52,6 +52,9 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
   const storeStaticHtml = useEditorStore(s => s.staticHtml)
   const panelOpen = useEditorStore(s => s.panelOpen)
   const setPanelOpen = useEditorStore(s => s.setPanelOpen)
+  // C2 — auto-save trigger
+  const sectionData = useEditorStore(s => s.sectionData)
+  const scheduleAutoSave = useEditorStore(s => s.scheduleAutoSave)
 
   // Hydrate on mount only
   useEffect(() => {
@@ -84,6 +87,30 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
   useEffect(() => {
     if (staticHtml) setStaticHtml(staticHtml)
   }, [staticHtml, setStaticHtml])
+
+  // C2 — auto-save 3s après dernier changement sectionData ou visualSettings.
+  // Skip le mount initial (hydrate → setState ne doit pas déclencher save).
+  const isInitialAutoSaveMount = useRef(true)
+  useEffect(() => {
+    if (isInitialAutoSaveMount.current) {
+      isInitialAutoSaveMount.current = false
+      return
+    }
+    if (!onSave) return
+    scheduleAutoSave('', async (jsonForDb) => {
+      // V3 : pas de render côté client — reuse storeStaticHtml
+      let html: string
+      if (V3_STYLE_IDS.has(templateId)) {
+        html = storeStaticHtml || staticHtml || ''
+        if (!html) return
+      } else {
+        const { renderTemplate } = await import('@/lib/templates')
+        html = renderTemplate(templateId, landingData, { sectionOrder, visualSettings, globalStyles })
+      }
+      await onSave(html, jsonForDb)
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sectionData, visualSettings])
 
   async function handleSave() {
     if (!onSave) return

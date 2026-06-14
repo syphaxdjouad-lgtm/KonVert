@@ -13,8 +13,13 @@ describe('shouldRenderSection', () => {
   it('hero: always true (mandatory)', () => {
     expect(shouldRenderSection('hero', base)).toBe(true)
   })
-  it('gallery: needs >= 3 images', () => {
-    expect(shouldRenderSection('gallery', { ...base, images: ['a', 'b'] })).toBe(false)
+  // P0-3 : threshold gallery abaissé à 1 (était 3).
+  // 65% des produits AliExpress n'ont que 1-2 images scrapées → la gallery
+  // était systématiquement skippée → vide blanc 160px.
+  it('gallery: P0-3 — affiche dès 1 image (threshold abaissé de 3 à 1)', () => {
+    expect(shouldRenderSection('gallery', { ...base, images: [] })).toBe(false)
+    expect(shouldRenderSection('gallery', { ...base, images: ['a'] })).toBe(true)
+    expect(shouldRenderSection('gallery', { ...base, images: ['a', 'b'] })).toBe(true)
     expect(shouldRenderSection('gallery', { ...base, images: ['a', 'b', 'c'] })).toBe(true)
   })
   it('materials_breakdown: needs >= 2 materials with confidence >= 0.6', () => {

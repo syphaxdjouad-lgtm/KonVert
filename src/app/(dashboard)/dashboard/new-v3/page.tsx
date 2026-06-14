@@ -15,7 +15,7 @@
  *   6. Preview HTML rendu
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { StyleSummaryStep } from '../new/components/StyleSummaryStep'
 import { DataValidationStep, needsValidation } from '../new/components/DataValidationStep'
 import { ImageManager } from '../new/components/ImageManager'
@@ -40,6 +40,19 @@ export default function NewV3Page() {
   const [generatedData, setGeneratedData] = useState<V3PageData | null>(null)
   const [renderedHtml, setRenderedHtml] = useState<string>('')
   const [error, setError] = useState<string | null>(null)
+  // P0-3 (iframe) : hauteur dynamique via postMessage depuis le HTML V3 généré.
+  // Le script injecté dans renderPageV3 envoie 'kvt-height' après DOMContentLoaded + resize.
+  const [iframeHeight, setIframeHeight] = useState('calc(100vh - 60px)')
+
+  useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      if (e.data?.type === 'kvt-height' && typeof e.data.height === 'number') {
+        setIframeHeight(`${e.data.height + 24}px`)
+      }
+    }
+    window.addEventListener('message', handler)
+    return () => window.removeEventListener('message', handler)
+  }, [])
 
   async function handleScrape() {
     setScraping(true)
@@ -283,7 +296,7 @@ export default function NewV3Page() {
             srcDoc={renderedHtml}
             title="Preview page produit V3"
             className="w-full"
-            style={{ height: 'calc(100vh - 60px)', border: 0 }}
+            style={{ height: iframeHeight, border: 0, transition: 'height 0.2s ease' }}
           />
         </div>
       )}

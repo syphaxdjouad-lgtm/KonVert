@@ -12,8 +12,13 @@ export function shouldRenderSection(key: V3SectionKey, data: V3PageData): boolea
     case 'faq':
     case 'brand_manifesto':
       return true
+    // P0-3 : threshold abaissé de 3 à 1 — AliExpress retourne souvent 1-2 images.
+    // Avec l'ancien seuil, la gallery était skippée sur ~65% des produits réels,
+    // laissant un vide blanc de 160px entre hero et why_we_love (deux sections
+    // au padding-top identique, sans transition visuelle).
+    // renderGallery gère déjà le cas images=[] en retournant une section vide.
     case 'gallery':
-      return data.images.length >= 3
+      return data.images.length >= 1
     case 'materials_breakdown': {
       const m = data.copy.materials ?? []
       const highConf = m.filter(x => x.confidence >= CONFIDENCE_THRESHOLD)

@@ -112,6 +112,33 @@ export function renderPageV3(
     fontFamily:  tokens.fonts.body,
   })
 
+  // P0-3 (iframe) : script postMessage hauteur dynamique.
+  // Envoyé après DOMContentLoaded et après chaque resize (fonts async, images lazy).
+  // Le parent React écoute 'kvt-height' pour passer l'iframe en height auto.
+  // Sans ça, l'iframe reste à calc(100vh - 60px) → 80% des sections cachées.
+  const heightScript = `<script>
+(function() {
+  function sendHeight() {
+    var h = document.body ? document.body.scrollHeight : 0;
+    if (h > 0) {
+      window.parent.postMessage({ type: 'kvt-height', height: h }, '*');
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', sendHeight);
+  } else {
+    sendHeight();
+  }
+  // Re-envoie après le chargement des fonts/images (lazy)
+  window.addEventListener('load', sendHeight);
+  // Re-envoie si le contenu change de taille (ex: expand FAQ)
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(sendHeight);
+    ro.observe(document.body);
+  }
+}());
+<\/script>`
+
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -126,6 +153,7 @@ export function renderPageV3(
 ${sections}
 ${trustHtml}
 ${stickyHtml}
+${heightScript}
 </body>
 </html>`
 }

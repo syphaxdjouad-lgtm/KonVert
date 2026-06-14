@@ -39,6 +39,9 @@ export interface StickyAddToCartOptions {
   ctaColor?:     string
   ctaTextColor?: string
   showQty?:      boolean
+  // P1-1 : si false, le bloc prix est masqué (cas prix absent ou 0).
+  // Le CTA "Voir l'offre" est affiché sans chiffre — évite d'afficher "0,00 €".
+  showPrice?:    boolean
   mainCtaId?:    string
   fontFamily?:   string
   bgColor?:      string
@@ -62,6 +65,7 @@ export function renderStickyAddToCartMobile(options: StickyAddToCartOptions): st
     ctaColor    = '#1A1A1A',
     ctaTextColor = '#FFFFFF',
     showQty     = false,
+    showPrice   = true,
     mainCtaId   = 'main-cta',
     fontFamily  = 'Inter,sans-serif',
     bgColor     = '#FFFFFF',
@@ -189,10 +193,10 @@ export function renderStickyAddToCartMobile(options: StickyAddToCartOptions): st
     >
     <div style="min-width:0;">
       <p class="kvt-sticky-product-name">${productName}</p>
-      <div style="display:flex;align-items:baseline;gap:0;">
+      ${showPrice ? `<div style="display:flex;align-items:baseline;gap:0;">
         <span class="kvt-sticky-price">${priceFormatted}</span>
         ${compareFormatted ? `<span class="kvt-sticky-compare">${compareFormatted}</span>` : ''}
-      </div>
+      </div>` : ''}
     </div>
   </div>
 

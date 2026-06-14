@@ -126,4 +126,19 @@ describe('renderStickyAddToCartMobile', () => {
     const html = renderStickyAddToCartMobile(BASE_OPTS)
     expect(html).toContain('aria-label="Ajouter au panier — barre rapide"')
   })
+
+  // P1-1 : showPrice=false masque le bloc prix dans le DOM (pas le CSS selector).
+  // Le sélecteur CSS .kvt-sticky-price reste dans le <style> — on cherche le span dans le HTML.
+  it('P1-1 : showPrice=false masque le bloc prix dans le DOM', () => {
+    const html = renderStickyAddToCartMobile({ ...BASE_OPTS, showPrice: false })
+    // Le span prix ne doit PAS être dans le DOM (classe appliquée via HTML, pas CSS uniquement)
+    expect(html).not.toContain('<span class="kvt-sticky-price">')
+    // L'image et le nom produit restent visibles
+    expect(html).toContain('Sérum Renaissance')
+  })
+
+  it('P1-1 : showPrice=true (défaut) affiche bien le span prix dans le DOM', () => {
+    const html = renderStickyAddToCartMobile(BASE_OPTS)
+    expect(html).toContain('<span class="kvt-sticky-price">')
+  })
 })

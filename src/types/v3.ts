@@ -30,7 +30,7 @@ export interface V3PageData {
   images: string[]                       // ordre final, finalisé par user à l'étape Produit
   copy: {
     brand?: string  // affiché en haut du hero + dans le manifesto
-    hero?: { tagline: string; subtagline: string }
+    hero?: { tagline: string; subtagline: string; social_proof_fallback?: string }
     why_we_love?: string
     features?: Array<{ name: string; description: string; isPropriety?: boolean }>
     best_for?: string[]

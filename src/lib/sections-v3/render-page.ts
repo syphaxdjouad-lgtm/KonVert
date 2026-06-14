@@ -82,26 +82,30 @@ export function renderPageV3(
     .filter(Boolean)
     .join('\n')
 
-  // Sticky add-to-cart mobile — auto-injecté sur tous les styles V3
-  // Déclenchement côté client par IntersectionObserver sur #main-cta.
-  // Infos produit extraites de V3PageData avec fallbacks gracieux.
-  const priceAmount = data.product.price ? parseFloat(data.product.price.replace(/[^0-9.]/g, '')) : 0
-  const stickyHtml = priceAmount > 0
-    ? renderStickyAddToCartMobile({
-        productName:  data.product.title,
-        productImage: data.images[0] ?? '',
-        price: {
-          amount:   priceAmount,
-          currency: 'EUR',
-        },
-        ctaLabel:    'Ajouter au panier',
-        ctaColor:    tokens.colors.accent,
-        fontFamily:  tokens.fonts.body,
-        bgColor:     tokens.colors.bg,
-        borderColor: tokens.colors.border,
-        showQty:     false,
-      })
-    : ''
+  // P1-1 : Sticky add-to-cart mobile — toujours injecté, même si le prix est absent.
+  // Avant ce fix, le sticky n'apparaissait que si priceAmount > 0. AliExpress retourne
+  // souvent un prix null/vide → sticky CTA absent sur ~30% des pages V3.
+  // Fix : fallback prix à 0 → on affiche quand même la barre avec "Voir l'offre".
+  const priceAmount = data.product.price
+    ? parseFloat(data.product.price.replace(/[^0-9.]/g, ''))
+    : 0
+  const hasPriceData = Number.isFinite(priceAmount) && priceAmount > 0
+  const stickyHtml = renderStickyAddToCartMobile({
+    productName:  data.product.title,
+    productImage: data.images[0] ?? '',
+    price: {
+      amount:   hasPriceData ? priceAmount : 0,
+      currency: 'EUR',
+    },
+    // Si pas de prix valide : libellé "Voir l'offre" + prix masqué (évite "0,00 €")
+    ctaLabel:    hasPriceData ? 'Ajouter au panier' : 'Voir l\'offre',
+    showPrice:   hasPriceData,
+    ctaColor:    tokens.colors.accent,
+    fontFamily:  tokens.fonts.body,
+    bgColor:     tokens.colors.bg,
+    borderColor: tokens.colors.border,
+    showQty:     false,
+  })
 
   // Trust badges footer — auto-injecté juste avant </body> pour les pages V3
   const trustHtml = renderTrustBadgesPayment({
@@ -111,6 +115,33 @@ export function renderPageV3(
     border:      tokens.colors.border,
     fontFamily:  tokens.fonts.body,
   })
+
+  // P0-3 (iframe) : script postMessage hauteur dynamique.
+  // Envoyé après DOMContentLoaded et après chaque resize (fonts async, images lazy).
+  // Le parent React écoute 'kvt-height' pour passer l'iframe en height auto.
+  // Sans ça, l'iframe reste à calc(100vh - 60px) → 80% des sections cachées.
+  const heightScript = `<script>
+(function() {
+  function sendHeight() {
+    var h = document.body ? document.body.scrollHeight : 0;
+    if (h > 0) {
+      window.parent.postMessage({ type: 'kvt-height', height: h }, '*');
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', sendHeight);
+  } else {
+    sendHeight();
+  }
+  // Re-envoie après le chargement des fonts/images (lazy)
+  window.addEventListener('load', sendHeight);
+  // Re-envoie si le contenu change de taille (ex: expand FAQ)
+  if (window.ResizeObserver) {
+    var ro = new ResizeObserver(sendHeight);
+    ro.observe(document.body);
+  }
+}());
+<\/script>`
 
   return `<!DOCTYPE html>
 <html lang="fr">
@@ -126,6 +157,7 @@ export function renderPageV3(
 ${sections}
 ${trustHtml}
 ${stickyHtml}
+${heightScript}
 </body>
 </html>`
 }

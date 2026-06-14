@@ -62,7 +62,7 @@ JSON STRICT à produire :
   "features": [
     { "name": "Nom propriétaire si possible (ex: TENCEL™, SoftFit™)", "description": "≤15 mots, bénéfice concret", "isPropriety": false }
   ],
-  "best_for": ["3-4 cas d'usage concrets, ≤2 mots chacun"],
+  "best_for": ["3-4 BÉNÉFICES orientés usage, ≤6 mots chacun, formulés comme une promesse client. EXEMPLES pour écouteurs : 'Appels clairs en open space', 'Running sans fil qui glisse', 'Concerts sans fatiguer les oreilles'. INTERDIT : mots génériques sans bénéfice ('Musique', 'Sport', 'Travel'). OBLIGATOIRE : chaque item en ${langName}, jamais en anglais."],
   "materials": [
     { "name": "Matériau", "benefit": "≤12 mots", "confidence": 0.0 }
   ],
@@ -87,12 +87,13 @@ Règles :
 - AUCUN emoji
 - AUCUN superlatif creux ("incroyable", "unique", "exceptionnel" sans preuve)
 - features : 3-5 features, mots propriétaires bienvenus dans name (style "SoftFit™", "PureBlend")
-- best_for : 3-4 cas d'usage, ≤2 mots chacun
+- best_for : 3-4 bénéfices ≤6 mots, JAMAIS un mot générique seul ("Musique", "Sport", "Travel")
 - materials : 2-4 matériaux, confidence honest (0.9 = explicite dans desc, 0.4 = inféré)
 - faq : 4-5 questions
 - press_quote : invente une citation presse crédible (média réel, ton sobre)
 - reviews_summary : invente un résumé reviews crédible (4.7/5 sur 2400 avis style)
 - how_it_works : 3 étapes du parcours produit (de la commande à l'usage)
+- LANGUE STRICTE : TOUTE valeur string doit être en ${langName}, y compris les champs de ≤2 mots (best_for, manifesto.pillars, features.name). DeepSeek tend à sortir des mots en anglais sur les champs courts — c'est INTERDIT.
 - Retourne UNIQUEMENT le JSON, aucun texte avant/après`.trim()
 }
 

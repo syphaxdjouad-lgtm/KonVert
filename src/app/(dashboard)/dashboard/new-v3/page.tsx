@@ -209,7 +209,7 @@ export default function NewV3Page() {
             </div>
 
             <div>
-              <label className="text-xs uppercase tracking-wide text-neutral-500">Description (alimente l'AI)</label>
+              <label className="text-xs uppercase tracking-wide text-neutral-500">Description (alimente l&apos;AI)</label>
               <textarea
                 value={product.description}
                 onChange={(e) => setProduct({ ...product, description: e.target.value })}

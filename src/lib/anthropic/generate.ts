@@ -678,7 +678,7 @@ RÈGLES DE GÉNÉRATION :
 25. Urgence : ${priceLine}
 ${USE_V2_PROMPT ? `26. photo_descriptions : 3 à 6 descriptions UGC (genre apparent + âge + contexte + lumière). Couvre au moins 1 "before", 1 "during", 1 "after". Prénoms cohérents avec ${langName}.
 27. payment_methods : beauty/wellness → inclure "klarna" ou "alma". Tech premium → "apple_pay" en priorité. Défaut minimum : ["visa","mastercard","paypal","apple_pay"].
-28. press_logos : ANTI-HALLUCINATION — liste uniquement les publications qui couvrent vraiment la niche du produit. En cas de doute → retourne []. Max 5 entrées. quote_short optionnel, max 80 chars.
+28. press_logos : cf. règle 28 du system prompt — ZÉRO TOLÉRANCE, retourne [] par défaut. N'ajoute QUE si DTC > 5 000 avis + dans la whitelist, OU si le nom exact de la publication est dans la description. Max 3 entrées. En cas de doute → [].
 29. stock_signal : évalue l'urgence appropriée (limited_stock / high_demand / back_in_stock / limited_time). Si aucun signal plausible → retourne null avec type: null.
 30. bundle_offer : beauty/wellness/pet/mode/déco → propose 1 bundle sensé (2-3 produits complémentaires). Standalone ou sans complémentaire évident → retourne null.` : ''}
 

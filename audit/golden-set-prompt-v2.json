@@ -1,0 +1,587 @@
+{
+  "version": "1.0",
+  "created": "2026-06-06",
+  "purpose": "Golden set 30 produits pour mesurer taux hallucination press_logos — prompt v2.0-enriched-2026-06-05",
+  "categories": {
+    "A": "Grandes marques connues (10) — ont potentiellement de vraies couvertures presse",
+    "B": "Marques inconnues Shopify DTC (10) — petites boutiques sans couverture presse crédible",
+    "C": "Produits AliExpress génériques (10) — no-name, zéro couverture presse possible"
+  },
+  "expected_behavior": {
+    "A": "press_logos acceptables si publication cohérente avec la niche (Vogue pour beauté, etc.) — MAIS jamais inventé sans ancrage HTML",
+    "B": "press_logos devrait être [] ou quasi-vide — ces marques n'ont aucune couverture médiatique",
+    "C": "press_logos DOIT être [] — aucun média sérieux ne couvre du générique AliExpress"
+  },
+  "products": [
+    {
+      "id": "A01",
+      "category": "A",
+      "brand": "Allbirds",
+      "niche": "mode/chaussures",
+      "has_real_press": true,
+      "real_press_sources": ["TIME", "Fast Company", "Vogue", "Forbes"],
+      "product": {
+        "title": "Allbirds Men's Tree Runners",
+        "description": "The Men's Tree Runners are our lightest and most breathable shoes. Made with eucalyptus tree fiber, certified carbon neutral. Perfect for everyday wear. Lightweight, machine washable, and incredibly comfortable.",
+        "images": ["https://images.allbirds.com/product-tree-runner.jpg"],
+        "price": "98",
+        "original_price": null,
+        "variants": [{"name": "Size", "values": ["7", "8", "9", "10", "11", "12"]}, {"name": "Color", "values": ["White", "Black", "Grey"]}],
+        "rating": 4.6,
+        "reviews_count": 14823,
+        "source_url": "https://www.allbirds.com/products/mens-tree-runners"
+      }
+    },
+    {
+      "id": "A02",
+      "category": "A",
+      "brand": "Casper",
+      "niche": "literie/matelas",
+      "has_real_press": true,
+      "real_press_sources": ["New York Times", "GQ", "TechCrunch", "Fast Company"],
+      "product": {
+        "title": "Casper Original Foam Pillow",
+        "description": "The Casper Original Foam Pillow is designed to keep you cool and comfortable all night long. Featuring our patented Snow Technology for temperature regulation and a responsive foam fill that adjusts to your sleeping position.",
+        "images": ["https://casper.com/cdn/pillow-original.jpg"],
+        "price": "65",
+        "original_price": "80",
+        "variants": [{"name": "Size", "values": ["Standard", "King"]}],
+        "rating": 4.5,
+        "reviews_count": 8234,
+        "source_url": "https://casper.com/pillows/original-foam-pillow/"
+      }
+    },
+    {
+      "id": "A03",
+      "category": "A",
+      "brand": "Glossier",
+      "niche": "beauté/soins visage",
+      "has_real_press": true,
+      "real_press_sources": ["Vogue", "Elle", "Allure", "Refinery29", "Harper's Bazaar"],
+      "product": {
+        "title": "Glossier Boy Brow",
+        "description": "Boy Brow is a grooming pomade that fills, shapes, and fluffs brows for a naturally brushed-up look. Flexible, buildable hold. Available in 5 shades to match every hair color.",
+        "images": ["https://glossier.com/cdn/boy-brow.jpg"],
+        "price": "17",
+        "original_price": null,
+        "variants": [{"name": "Color", "values": ["Blond", "Brown", "Black", "Auburn", "Clear"]}],
+        "rating": 4.8,
+        "reviews_count": 32156,
+        "source_url": "https://www.glossier.com/products/boy-brow"
+      }
+    },
+    {
+      "id": "A04",
+      "category": "A",
+      "brand": "Dollar Shave Club",
+      "niche": "rasage/grooming homme",
+      "has_real_press": true,
+      "real_press_sources": ["Forbes", "Fast Company", "GQ", "Wall Street Journal"],
+      "product": {
+        "title": "Dollar Shave Club Executive Razor",
+        "description": "Our top-of-the-line Executive razor with 6 stainless steel blades, a precision trimmer, and a lubricating strip infused with aloe and vitamin E. Delivers the smoothest shave of your life.",
+        "images": ["https://dollarshaveclub.com/cdn/executive-razor.jpg"],
+        "price": "9",
+        "original_price": null,
+        "variants": [{"name": "Pack", "values": ["Starter Set", "Refill 4-pack", "Refill 8-pack"]}],
+        "rating": 4.4,
+        "reviews_count": 19847,
+        "source_url": "https://www.dollarshaveclub.com/products/executive-razor"
+      }
+    },
+    {
+      "id": "A05",
+      "category": "A",
+      "brand": "Away Travel",
+      "niche": "bagages/voyage",
+      "has_real_press": true,
+      "real_press_sources": ["GQ", "Vogue", "Travel + Leisure", "Forbes"],
+      "product": {
+        "title": "Away The Carry-On",
+        "description": "The Carry-On that started it all. Crafted from a proprietary polycarbonate shell that's lightweight yet durable. Features an ejectable battery, 360° spinner wheels, and a TSA-approved lock. Lifetime warranty.",
+        "images": ["https://awaytravel.com/cdn/carry-on-black.jpg"],
+        "price": "295",
+        "original_price": null,
+        "variants": [{"name": "Color", "values": ["Black", "Navy", "White", "Blush", "Dusty Rose"]}, {"name": "Size", "values": ["Carry-On"]}],
+        "rating": 4.7,
+        "reviews_count": 27431,
+        "source_url": "https://www.awaytravel.com/luggage/carry-on"
+      }
+    },
+    {
+      "id": "A06",
+      "category": "A",
+      "brand": "Warby Parker",
+      "niche": "lunettes/eyewear",
+      "has_real_press": true,
+      "real_press_sources": ["Fast Company", "Forbes", "Vogue", "GQ", "New York Times"],
+      "product": {
+        "title": "Warby Parker Durand Glasses",
+        "description": "The Durand is a timeless rectangular frame in premium acetate. Available with single-vision prescription lenses, progressives, or non-prescription. Home Try-On available — try 5 frames free for 5 days.",
+        "images": ["https://warbyparker.com/cdn/durand-tortoise.jpg"],
+        "price": "95",
+        "original_price": null,
+        "variants": [{"name": "Color", "values": ["Cognac Tortoise", "Jet Black", "Crystal"]}, {"name": "Lens", "values": ["Non-Prescription", "Single Vision", "Progressive"]}],
+        "rating": 4.6,
+        "reviews_count": 11203,
+        "source_url": "https://www.warbyparker.com/eyeglasses/durand"
+      }
+    },
+    {
+      "id": "A07",
+      "category": "A",
+      "brand": "Oura Ring",
+      "niche": "tech/santé wearable",
+      "has_real_press": true,
+      "real_press_sources": ["Wired", "TechCrunch", "The Verge", "Forbes"],
+      "product": {
+        "title": "Oura Ring Gen 3 Heritage",
+        "description": "The Oura Ring Gen 3 Heritage tracks over 20 health signals including heart rate, HRV, body temperature, blood oxygen, and activity. Lightweight titanium build. Up to 7 days battery life. No subscription required for basic features.",
+        "images": ["https://ouraring.com/cdn/gen3-heritage-silver.jpg"],
+        "price": "299",
+        "original_price": null,
+        "variants": [{"name": "Color", "values": ["Silver", "Gold", "Black", "Stealth"]}, {"name": "Size", "values": ["6", "7", "8", "9", "10", "11", "12", "13"]}],
+        "rating": 4.5,
+        "reviews_count": 34128,
+        "source_url": "https://ouraring.com/product/heritage-silver"
+      }
+    },
+    {
+      "id": "A08",
+      "category": "A",
+      "brand": "Drunk Elephant",
+      "niche": "beauté/soins premium",
+      "has_real_press": true,
+      "real_press_sources": ["Vogue", "Allure", "Harper's Bazaar", "Elle", "Glamour"],
+      "product": {
+        "title": "Drunk Elephant T.L.C. Framboos Glycolic Night Serum",
+        "description": "A resurfacing night serum powered by a 25% AHA/BHA blend (glycolic, tartaric, lactic, citric, and salicylic acids) to smooth and refine texture overnight. Leaves skin visibly firmer, brighter, and more even-toned.",
+        "images": ["https://drunkelephant.com/cdn/tlc-framboos-serum.jpg"],
+        "price": "90",
+        "original_price": null,
+        "variants": [{"name": "Size", "values": ["30ml", "50ml"]}],
+        "rating": 4.7,
+        "reviews_count": 18456,
+        "source_url": "https://www.drunkelephant.com/products/t-l-c-framboos-tm-glycolic-night-serum"
+      }
+    },
+    {
+      "id": "A09",
+      "category": "A",
+      "brand": "Peak Design",
+      "niche": "tech/accessoires photo",
+      "has_real_press": true,
+      "real_press_sources": ["Wired", "TechCrunch", "The Verge", "Popular Photography"],
+      "product": {
+        "title": "Peak Design Everyday Backpack 20L",
+        "description": "The original camera bag reinvented. FlexFold dividers adapt to any gear configuration. MagLatch closure for one-hand access. Built-in laptop sleeve (16\"). Weatherproof 400D nylon canvas. Carry-on compatible.",
+        "images": ["https://peakdesign.com/cdn/everyday-backpack-20l-black.jpg"],
+        "price": "299",
+        "original_price": null,
+        "variants": [{"name": "Color", "values": ["Black", "Midnight", "Sage", "Bone"]}, {"name": "Size", "values": ["20L", "30L"]}],
+        "rating": 4.8,
+        "reviews_count": 7892,
+        "source_url": "https://www.peakdesign.com/products/everyday-backpack?size=20L"
+      }
+    },
+    {
+      "id": "A10",
+      "category": "A",
+      "brand": "Lululemon",
+      "niche": "sport/vêtements yoga",
+      "has_real_press": true,
+      "real_press_sources": ["Forbes", "Vogue", "Business of Fashion", "GQ"],
+      "product": {
+        "title": "Lululemon Align High-Rise Pant",
+        "description": "Our softest, most-loved pant. The Align is made with Nulu fabric, which is so light and buttery that you'll forget you're wearing it. 4-way stretch, sweat-wicking, and no-dig waistband. Perfect for yoga, pilates, and everyday wear.",
+        "images": ["https://lululemon.com/cdn/align-pant-black.jpg"],
+        "price": "98",
+        "original_price": null,
+        "variants": [{"name": "Color", "values": ["Black", "Heathered Black", "Ombre", "White"]}, {"name": "Size", "values": ["XS", "S", "M", "L", "XL"]}],
+        "rating": 4.7,
+        "reviews_count": 45231,
+        "source_url": "https://shop.lululemon.com/p/pants/Align-Pant-2/_/prod8890272"
+      }
+    },
+    {
+      "id": "B01",
+      "category": "B",
+      "brand": "LuminaSkin (boutique Shopify inconnue)",
+      "niche": "beauté/soins",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "LuminaSkin Vitamin C Brightening Serum",
+        "description": "Our signature serum combines 20% stabilized Vitamin C with hyaluronic acid and niacinamide to brighten, hydrate, and reduce dark spots. Suitable for all skin types. Fragrance-free and cruelty-free.",
+        "images": ["https://luminaskin.co/cdn/vitamin-c-serum-30ml.jpg"],
+        "price": "34",
+        "original_price": "49",
+        "variants": [{"name": "Size", "values": ["30ml", "60ml"]}],
+        "rating": 4.3,
+        "reviews_count": 127,
+        "source_url": "https://luminaskin.co/products/vitamin-c-serum"
+      }
+    },
+    {
+      "id": "B02",
+      "category": "B",
+      "brand": "PetPaw Essentials (boutique Shopify inconnue)",
+      "niche": "animaux/accessoires chien",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "PetPaw Orthopedic Memory Foam Dog Bed",
+        "description": "Premium orthopedic dog bed with 4-inch memory foam base and anti-slip bottom. Removable, machine-washable cover. Waterproof inner lining protects the foam. Ideal for senior dogs and dogs with joint issues.",
+        "images": ["https://petpawessentials.com/cdn/ortho-dog-bed-large.jpg"],
+        "price": "79",
+        "original_price": "99",
+        "variants": [{"name": "Size", "values": ["S", "M", "L", "XL"]}],
+        "rating": 4.5,
+        "reviews_count": 312,
+        "source_url": "https://petpawessentials.com/products/orthopedic-dog-bed"
+      }
+    },
+    {
+      "id": "B03",
+      "category": "B",
+      "brand": "HomeBliss Candles (boutique Etsy/Shopify inconnue)",
+      "niche": "déco/bougies artisanales",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "HomeBliss Soy Wax Candle — Cedar & Bergamot",
+        "description": "Hand-poured 100% soy wax candle with premium fragrance oils. Cedar and bergamot scent profile. Cotton wick for clean burn. 45-hour burn time. Housed in a recycled glass jar.",
+        "images": ["https://homeblisscandles.com/cdn/cedar-bergamot-candle.jpg"],
+        "price": "28",
+        "original_price": null,
+        "variants": [{"name": "Size", "values": ["4oz", "8oz", "12oz"]}, {"name": "Scent", "values": ["Cedar & Bergamot", "Vanilla Oak", "Sea Salt Driftwood"]}],
+        "rating": 4.8,
+        "reviews_count": 89,
+        "source_url": "https://homeblisscandles.com/products/cedar-bergamot-soy-candle"
+      }
+    },
+    {
+      "id": "B04",
+      "category": "B",
+      "brand": "FlexGrip Pro (boutique Shopify inconnue)",
+      "niche": "sport/accessoires fitness",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "FlexGrip Pro Resistance Band Set",
+        "description": "5-level resistance band set (10-50 lbs) for full-body strength training. Made from natural latex, odor-free. Includes door anchor, handles, ankle straps, and exercise guide. Compact and travel-friendly.",
+        "images": ["https://flexgrippro.com/cdn/resistance-band-set.jpg"],
+        "price": "37",
+        "original_price": "55",
+        "variants": [{"name": "Kit", "values": ["Starter Kit", "Full Pro Kit"]}],
+        "rating": 4.2,
+        "reviews_count": 203,
+        "source_url": "https://flexgrippro.com/products/resistance-band-set"
+      }
+    },
+    {
+      "id": "B05",
+      "category": "B",
+      "brand": "WildRoots Botanicals (boutique DTC inconnue)",
+      "niche": "beauté/cheveux naturels",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "WildRoots Hair Growth Serum with Rosemary & Biotin",
+        "description": "Stimulate hair growth naturally with our concentrated rosemary leaf extract, biotin, and pumpkin seed oil formula. Apply 3-4 drops to scalp daily. Clinically tested. Visible results in 90 days or money back.",
+        "images": ["https://wildroots-botanicals.com/cdn/hair-growth-serum-50ml.jpg"],
+        "price": "45",
+        "original_price": "68",
+        "variants": [{"name": "Bundle", "values": ["1 bottle", "2 bottles", "3 bottles"]}],
+        "rating": 4.1,
+        "reviews_count": 458,
+        "source_url": "https://wildroots-botanicals.com/products/hair-growth-serum"
+      }
+    },
+    {
+      "id": "B06",
+      "category": "B",
+      "brand": "SlumberwellCo (boutique Shopify inconnue)",
+      "niche": "bien-être/sommeil",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "Slumberwell Weighted Blanket 7kg",
+        "description": "Our 7kg weighted blanket uses glass bead filling for even pressure distribution. 100% organic cotton cover. Machine washable. Helps reduce anxiety and improve sleep quality. Available in 5 colors.",
+        "images": ["https://slumberwellco.com/cdn/weighted-blanket-7kg-grey.jpg"],
+        "price": "89",
+        "original_price": "129",
+        "variants": [{"name": "Weight", "values": ["5kg", "7kg", "9kg"]}, {"name": "Color", "values": ["Grey", "Navy", "Sage", "White", "Blush"]}],
+        "rating": 4.6,
+        "reviews_count": 174,
+        "source_url": "https://slumberwellco.com/products/weighted-blanket-7kg"
+      }
+    },
+    {
+      "id": "B07",
+      "category": "B",
+      "brand": "TechNomad Gear (boutique Shopify inconnue)",
+      "niche": "tech/accessoires nomades",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "TechNomad 65W GaN USB-C Charger",
+        "description": "Ultra-compact 65W GaN charger with 2x USB-C PD and 1x USB-A ports. Charges MacBook, iPhone, and iPad simultaneously. 40% smaller than standard chargers. Foldable prongs. Universal voltage 100-240V.",
+        "images": ["https://technomadgear.com/cdn/gan-charger-65w-white.jpg"],
+        "price": "49",
+        "original_price": "69",
+        "variants": [{"name": "Plug", "values": ["US", "EU", "UK"]}],
+        "rating": 4.4,
+        "reviews_count": 291,
+        "source_url": "https://technomadgear.com/products/65w-gan-charger"
+      }
+    },
+    {
+      "id": "B08",
+      "category": "B",
+      "brand": "CleanCo Kitchen (boutique DTC inconnue)",
+      "niche": "cuisine/ustensiles",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "CleanCo Ceramic Non-Stick Pan 28cm",
+        "description": "Our signature 28cm skillet features a PFOA-free ceramic coating that's scratch-resistant and dishwasher safe. Induction compatible. Ergonomic stay-cool handle. Even heat distribution. Oven safe to 260°C.",
+        "images": ["https://cleancokitchen.com/cdn/ceramic-pan-28cm-cream.jpg"],
+        "price": "64",
+        "original_price": "89",
+        "variants": [{"name": "Size", "values": ["20cm", "24cm", "28cm"]}, {"name": "Color", "values": ["Cream", "Sage", "Terracotta"]}],
+        "rating": 4.3,
+        "reviews_count": 156,
+        "source_url": "https://cleancokitchen.com/products/ceramic-pan-28cm"
+      }
+    },
+    {
+      "id": "B09",
+      "category": "B",
+      "brand": "ActiveMom France (boutique Shopify inconnue)",
+      "niche": "mode/sport femme",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "ActiveMom High-Waist Legging Push-Up",
+        "description": "Legging taille haute sculpting effect avec technologie push-up intégrée. Tissu compressif 4 voies, anti-transpirant, opaque. 85% polyamide recyclé, 15% élasthanne. Coutures plates sans couture au milieu.",
+        "images": ["https://activemom.fr/cdn/legging-pushup-noir.jpg"],
+        "price": "42",
+        "original_price": "58",
+        "variants": [{"name": "Couleur", "values": ["Noir", "Marine", "Bordeaux"]}, {"name": "Taille", "values": ["XS", "S", "M", "L", "XL"]}],
+        "rating": 4.4,
+        "reviews_count": 387,
+        "source_url": "https://activemom.fr/products/legging-pushup"
+      }
+    },
+    {
+      "id": "B10",
+      "category": "B",
+      "brand": "NordLight Studio (boutique Shopify inconnue)",
+      "niche": "déco/affiches",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "NordLight Studio — Affiche Scandinave Forêt Minimale",
+        "description": "Affiche A3 impression Fine Art sur papier Hahnemühle 300g. Dessin original aquarelle. Impression avec encres pigmentées résistantes 100 ans. Non encadrée. Expédition sous tube protecteur.",
+        "images": ["https://nordlightstudio.com/cdn/affiche-foret-minimale-a3.jpg"],
+        "price": "29",
+        "original_price": null,
+        "variants": [{"name": "Format", "values": ["A4", "A3", "50x70cm"]}, {"name": "Avec cadre", "values": ["Sans cadre", "Cadre blanc", "Cadre chêne"]}],
+        "rating": 4.9,
+        "reviews_count": 63,
+        "source_url": "https://nordlightstudio.com/products/affiche-foret-minimale"
+      }
+    },
+    {
+      "id": "C01",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur FYJR Store",
+      "niche": "maison/lumières",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "LED Strip Lights 5M RGB Smart Bluetooth APP Control Bedroom Decoration Flexible Tape",
+        "description": "5M flexible LED strip with 16 million color options. Bluetooth app control. Self-adhesive backing. Waterproof IP65. 5V USB powered. Compatible with iOS and Android. Music sync mode. 3M adhesive tape included.",
+        "images": ["https://ae01.alicdn.com/kf/led-strip-lights.jpg"],
+        "price": "8",
+        "original_price": "19",
+        "variants": [{"name": "Length", "values": ["5M", "10M", "20M"]}, {"name": "Type", "values": ["Standard", "Waterproof"]}],
+        "rating": 4.2,
+        "reviews_count": 8945,
+        "source_url": "https://www.aliexpress.com/item/led-strip-lights-5m-rgb/1005003456789.html"
+      }
+    },
+    {
+      "id": "C02",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur GlobalKitch",
+      "niche": "cuisine/ustensiles",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "Kitchen Knife Set 5pcs Stainless Steel Chef Knife Professional Set Wooden Handle",
+        "description": "5-piece professional kitchen knife set. German high-carbon stainless steel blades. Ergonomic wooden handle for comfortable grip. Full tang construction. Includes chef knife, bread knife, utility knife, paring knife, and scissors.",
+        "images": ["https://ae01.alicdn.com/kf/knife-set-5pcs.jpg"],
+        "price": "22",
+        "original_price": "45",
+        "variants": [{"name": "Set", "values": ["5pcs", "7pcs", "10pcs"]}],
+        "rating": 4.1,
+        "reviews_count": 12567,
+        "source_url": "https://www.aliexpress.com/item/kitchen-knife-set-5pcs/1005004123456.html"
+      }
+    },
+    {
+      "id": "C03",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur SportMax",
+      "niche": "sport/fitness",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "Gym Gloves Men Wrist Wrap Weight Lifting Gloves Full Finger Fitness Workout Gloves",
+        "description": "Anti-slip gym gloves with built-in wrist support strap. Full-finger design with breathable mesh back. Reinforced palm padding. Silicone grip pattern on palms. Suitable for weightlifting, cross training, cycling.",
+        "images": ["https://ae01.alicdn.com/kf/gym-gloves-wrist-wrap.jpg"],
+        "price": "7",
+        "original_price": "14",
+        "variants": [{"name": "Size", "values": ["S", "M", "L", "XL"]}, {"name": "Color", "values": ["Black", "Blue", "Red"]}],
+        "rating": 4.0,
+        "reviews_count": 5678,
+        "source_url": "https://www.aliexpress.com/item/gym-gloves-men/1005002345678.html"
+      }
+    },
+    {
+      "id": "C04",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur SkinCareDeals",
+      "niche": "beauté/soins visage",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "Face Roller Gua Sha Set Jade Stone Facial Massage Tool Anti-Aging Skin Care",
+        "description": "Natural jade stone face roller with dual ends (large and small) plus gua sha scraping tool. Reduces puffiness, improves blood circulation, and minimizes fine lines. Keeps cool for soothing effect. Includes velvet pouch.",
+        "images": ["https://ae01.alicdn.com/kf/jade-gua-sha-set.jpg"],
+        "price": "5",
+        "original_price": "12",
+        "variants": [{"name": "Material", "values": ["Jade", "Rose Quartz", "Amethyst"]}],
+        "rating": 4.3,
+        "reviews_count": 19234,
+        "source_url": "https://www.aliexpress.com/item/face-roller-gua-sha-jade/1005001234567.html"
+      }
+    },
+    {
+      "id": "C05",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur PetBuddy",
+      "niche": "animaux/chien",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "Dog Harness No Pull Adjustable Reflective Breathable Mesh Pet Vest",
+        "description": "No-pull dog harness with front and back leash attachment. Adjustable chest and belly straps. Reflective strips for nighttime safety. Breathable mesh lining for comfort. Easy step-in design with quick-release buckles.",
+        "images": ["https://ae01.alicdn.com/kf/dog-harness-mesh.jpg"],
+        "price": "9",
+        "original_price": "18",
+        "variants": [{"name": "Size", "values": ["XS", "S", "M", "L", "XL"]}, {"name": "Color", "values": ["Black", "Pink", "Blue", "Orange"]}],
+        "rating": 4.2,
+        "reviews_count": 7123,
+        "source_url": "https://www.aliexpress.com/item/dog-harness-no-pull/1005005678901.html"
+      }
+    },
+    {
+      "id": "C06",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur TechHub",
+      "niche": "tech/accessoires smartphone",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "Wireless Charging Pad 15W Fast Charge Qi Certified for iPhone Samsung",
+        "description": "15W fast wireless charging pad compatible with all Qi-enabled devices. LED indicator light. Overcurrent, overvoltage, and temperature protection. Anti-slip surface. Includes USB-C cable. Foreign object detection.",
+        "images": ["https://ae01.alicdn.com/kf/wireless-charger-15w.jpg"],
+        "price": "11",
+        "original_price": "23",
+        "variants": [{"name": "Color", "values": ["Black", "White"]}, {"name": "Wattage", "values": ["10W", "15W"]}],
+        "rating": 4.1,
+        "reviews_count": 34512,
+        "source_url": "https://www.aliexpress.com/item/wireless-charging-pad-15w/1005006789012.html"
+      }
+    },
+    {
+      "id": "C07",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur HomeDeco",
+      "niche": "déco/maison",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "Floating Wall Shelves Set of 3 Rustic Wood Brackets Modern Industrial Style",
+        "description": "Set of 3 floating shelves in rustic reclaimed wood style. Steel L-brackets included. Each shelf holds up to 15kg. Easy wall mounting with included hardware. Suitable for books, plants, decor. Available in 3 sizes.",
+        "images": ["https://ae01.alicdn.com/kf/floating-shelves-wood.jpg"],
+        "price": "31",
+        "original_price": "55",
+        "variants": [{"name": "Size", "values": ["40cm", "60cm", "80cm"]}, {"name": "Wood", "values": ["Light Oak", "Dark Walnut", "White"]}],
+        "rating": 4.3,
+        "reviews_count": 6234,
+        "source_url": "https://www.aliexpress.com/item/floating-wall-shelves-set-3/1005007890123.html"
+      }
+    },
+    {
+      "id": "C08",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur FashionDrops",
+      "niche": "mode/vêtements femme",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "Women Oversized Cropped Hoodie Sweatshirt Solid Color Casual Long Sleeve Pullover Y2K",
+        "description": "Oversized crop hoodie in soft fleece fabric. Kangaroo pocket, ribbed cuffs and hem. Y2K inspired loose fit. Unisex style. Available in 12 colors. Machine washable. Spring/autumn weight.",
+        "images": ["https://ae01.alicdn.com/kf/oversized-crop-hoodie-y2k.jpg"],
+        "price": "14",
+        "original_price": "28",
+        "variants": [{"name": "Color", "values": ["Beige", "Black", "White", "Pink", "Grey", "Blue"]}, {"name": "Size", "values": ["XS", "S", "M", "L", "XL", "2XL"]}],
+        "rating": 4.0,
+        "reviews_count": 4521,
+        "source_url": "https://www.aliexpress.com/item/women-oversized-cropped-hoodie/1005008901234.html"
+      }
+    },
+    {
+      "id": "C09",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur WellnessStore",
+      "niche": "bien-être/massage",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "Electric Neck Massager with Heat Pulse Cervical Massage Pad EMS Muscle Relaxer",
+        "description": "EMS (Electrical Muscle Stimulation) neck massager with 6 massage modes and 15 intensity levels. Built-in heat function (40°C). USB rechargeable. Auto shut-off after 15 minutes. Suitable for neck, shoulder, and back.",
+        "images": ["https://ae01.alicdn.com/kf/ems-neck-massager-heat.jpg"],
+        "price": "29",
+        "original_price": "58",
+        "variants": [{"name": "Color", "values": ["White", "Black"]}, {"name": "Voltage", "values": ["EU", "US"]}],
+        "rating": 4.1,
+        "reviews_count": 11890,
+        "source_url": "https://www.aliexpress.com/item/electric-neck-massager-ems/1005009012345.html"
+      }
+    },
+    {
+      "id": "C10",
+      "category": "C",
+      "brand": "Générique AliExpress — vendeur KidToys",
+      "niche": "enfants/jouets",
+      "has_real_press": false,
+      "real_press_sources": [],
+      "product": {
+        "title": "Magnetic Building Blocks Set 64pcs Educational STEM Toys 3D Construction Kit for Kids",
+        "description": "64-piece magnetic building block set. Strong magnets for secure connections. BPA-free ABS plastic. Age 3+. Develops spatial reasoning, creativity, and fine motor skills. Includes storage bag. ASTM and CE certified.",
+        "images": ["https://ae01.alicdn.com/kf/magnetic-blocks-64pcs.jpg"],
+        "price": "24",
+        "original_price": "45",
+        "variants": [{"name": "Pieces", "values": ["32pcs", "64pcs", "120pcs"]}],
+        "rating": 4.5,
+        "reviews_count": 23456,
+        "source_url": "https://www.aliexpress.com/item/magnetic-building-blocks-64pcs/1005000123456.html"
+      }
+    }
+  ]
+}

@@ -12,7 +12,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 39923
+      "generation_ms": 33056
     },
     {
       "product_id": "A02",
@@ -25,7 +25,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 36507
+      "generation_ms": 34551
     },
     {
       "product_id": "A03",
@@ -36,54 +36,12 @@
       "press_logos_returned": [
         {
           "publication": "Vogue",
-          "quote_short": "Le meilleur produit sourcil pour un look naturel."
-        },
-        {
-          "publication": "Allure",
-          "quote_short": "Un indispensable beauté."
-        },
-        {
-          "publication": "Refinery29",
-          "quote_short": "Le produit qui a changé notre routine sourcils."
+          "quote_short": "Le produit sourcils culte de la décennie."
         }
       ],
       "judgments": [
         {
           "publication": "Vogue",
-          "verdict": "unverifiable",
-          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
-        },
-        {
-          "publication": "Allure",
-          "verdict": "unverifiable",
-          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
-        },
-        {
-          "publication": "Refinery29",
-          "verdict": "unverifiable",
-          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
-        }
-      ],
-      "hallucinated_count": 0,
-      "verified_count": 0,
-      "unverifiable_count": 3,
-      "generation_ms": 39983
-    },
-    {
-      "product_id": "A04",
-      "category": "A",
-      "brand": "Dollar Shave Club",
-      "niche": "rasage/grooming homme",
-      "has_real_press": true,
-      "press_logos_returned": [
-        {
-          "publication": "Le Figaro",
-          "quote_short": "Le rasoir qui a révolutionné le marché du rasage."
-        }
-      ],
-      "judgments": [
-        {
-          "publication": "Le Figaro",
           "verdict": "unverifiable",
           "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
         }
@@ -91,7 +49,20 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 1,
-      "generation_ms": 33886
+      "generation_ms": 34862
+    },
+    {
+      "product_id": "A04",
+      "category": "A",
+      "brand": "Dollar Shave Club",
+      "niche": "rasage/grooming homme",
+      "has_real_press": true,
+      "press_logos_returned": [],
+      "judgments": [],
+      "hallucinated_count": 0,
+      "verified_count": 0,
+      "unverifiable_count": 0,
+      "generation_ms": 29640
     },
     {
       "product_id": "A05",
@@ -99,32 +70,12 @@
       "brand": "Away Travel",
       "niche": "bagages/voyage",
       "has_real_press": true,
-      "press_logos_returned": [
-        {
-          "publication": "Vogue",
-          "quote_short": "La valise la plus cool du moment."
-        },
-        {
-          "publication": "Forbes",
-          "quote_short": "Away a réinventé le bagage cabine."
-        }
-      ],
-      "judgments": [
-        {
-          "publication": "Vogue",
-          "verdict": "unverifiable",
-          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
-        },
-        {
-          "publication": "Forbes",
-          "verdict": "unverifiable",
-          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
-        }
-      ],
+      "press_logos_returned": [],
+      "judgments": [],
       "hallucinated_count": 0,
       "verified_count": 0,
-      "unverifiable_count": 2,
-      "generation_ms": 36844
+      "unverifiable_count": 0,
+      "generation_ms": 30519
     },
     {
       "product_id": "A06",
@@ -135,7 +86,11 @@
       "press_logos_returned": [
         {
           "publication": "Vogue",
-          "quote_short": "Les lunettes qui changent la donne."
+          "quote_short": "Warby Parker a révolutionné l&#x27;industrie lunetière avec son modèle direct."
+        },
+        {
+          "publication": "GQ",
+          "quote_short": "Des montures stylées à prix accessibles, l&#x27;essai gratuit change tout."
         }
       ],
       "judgments": [
@@ -143,12 +98,17 @@
           "publication": "Vogue",
           "verdict": "unverifiable",
           "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "GQ",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
         }
       ],
       "hallucinated_count": 0,
       "verified_count": 0,
-      "unverifiable_count": 1,
-      "generation_ms": 32650
+      "unverifiable_count": 2,
+      "generation_ms": 33675
     },
     {
       "product_id": "A07",
@@ -156,12 +116,32 @@
       "brand": "Oura Ring",
       "niche": "tech/santé wearable",
       "has_real_press": true,
-      "press_logos_returned": [],
-      "judgments": [],
+      "press_logos_returned": [
+        {
+          "publication": "Forbes",
+          "quote_short": "&quot;The Oura Ring is the best fitness tracker you can wear.&quot;"
+        },
+        {
+          "publication": "Wired",
+          "quote_short": "&quot;A near-perfect sleep and activity tracker.&quot;"
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Forbes",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        },
+        {
+          "publication": "Wired",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
       "hallucinated_count": 0,
       "verified_count": 0,
-      "unverifiable_count": 0,
-      "generation_ms": 37322
+      "unverifiable_count": 2,
+      "generation_ms": 32532
     },
     {
       "product_id": "A08",
@@ -174,7 +154,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 43162
+      "generation_ms": 28046
     },
     {
       "product_id": "A09",
@@ -198,7 +178,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 1,
-      "generation_ms": 39932
+      "generation_ms": 34334
     },
     {
       "product_id": "A10",
@@ -206,32 +186,12 @@
       "brand": "Lululemon",
       "niche": "sport/vêtements yoga",
       "has_real_press": true,
-      "press_logos_returned": [
-        {
-          "publication": "Vogue",
-          "quote_short": "Le legging culte qui a conquis le monde"
-        },
-        {
-          "publication": "Elle",
-          "quote_short": "Le confort absolu pour le sport et la ville"
-        }
-      ],
-      "judgments": [
-        {
-          "publication": "Vogue",
-          "verdict": "unverifiable",
-          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
-        },
-        {
-          "publication": "Elle",
-          "verdict": "unverifiable",
-          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
-        }
-      ],
+      "press_logos_returned": [],
+      "judgments": [],
       "hallucinated_count": 0,
       "verified_count": 0,
-      "unverifiable_count": 2,
-      "generation_ms": 41343
+      "unverifiable_count": 0,
+      "generation_ms": 32710
     },
     {
       "product_id": "B01",
@@ -239,32 +199,12 @@
       "brand": "LuminaSkin (boutique Shopify inconnue)",
       "niche": "beauté/soins",
       "has_real_press": false,
-      "press_logos_returned": [
-        {
-          "publication": "Vogue",
-          "quote_short": "Un sérum qui tient ses promesses"
-        },
-        {
-          "publication": "Marie Claire",
-          "quote_short": "L&#x27;éclat en flacon"
-        }
-      ],
-      "judgments": [
-        {
-          "publication": "Vogue",
-          "verdict": "unverifiable",
-          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
-        },
-        {
-          "publication": "Marie Claire",
-          "verdict": "unverifiable",
-          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
-        }
-      ],
+      "press_logos_returned": [],
+      "judgments": [],
       "hallucinated_count": 0,
       "verified_count": 0,
-      "unverifiable_count": 2,
-      "generation_ms": 40078
+      "unverifiable_count": 0,
+      "generation_ms": 32922
     },
     {
       "product_id": "B02",
@@ -277,7 +217,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 39783
+      "generation_ms": 32790
     },
     {
       "product_id": "B03",
@@ -290,7 +230,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 42845
+      "generation_ms": 34576
     },
     {
       "product_id": "B04",
@@ -303,7 +243,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 36398
+      "generation_ms": 33528
     },
     {
       "product_id": "B05",
@@ -316,7 +256,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 37629
+      "generation_ms": 29144
     },
     {
       "product_id": "B06",
@@ -329,7 +269,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 30865
+      "generation_ms": 33927
     },
     {
       "product_id": "B07",
@@ -342,7 +282,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 35476
+      "generation_ms": 37045
     },
     {
       "product_id": "B08",
@@ -355,7 +295,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 38307
+      "generation_ms": 35139
     },
     {
       "product_id": "B09",
@@ -368,8 +308,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 0,
-      "error": "JSON invalide reçu de DeepSeek — réessaie"
+      "generation_ms": 34864
     },
     {
       "product_id": "B10",
@@ -382,7 +321,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 38856
+      "generation_ms": 36405
     },
     {
       "product_id": "C01",
@@ -395,7 +334,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 35184
+      "generation_ms": 26877
     },
     {
       "product_id": "C02",
@@ -408,7 +347,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 36379
+      "generation_ms": 29939
     },
     {
       "product_id": "C03",
@@ -421,7 +360,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 36706
+      "generation_ms": 28314
     },
     {
       "product_id": "C04",
@@ -434,7 +373,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 33325
+      "generation_ms": 31896
     },
     {
       "product_id": "C05",
@@ -447,7 +386,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 28977
+      "generation_ms": 31306
     },
     {
       "product_id": "C06",
@@ -460,7 +399,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 28460
+      "generation_ms": 33562
     },
     {
       "product_id": "C07",
@@ -468,12 +407,23 @@
       "brand": "Générique AliExpress — vendeur HomeDeco",
       "niche": "déco/maison",
       "has_real_press": false,
-      "press_logos_returned": [],
-      "judgments": [],
+      "press_logos_returned": [
+        {
+          "publication": "Elle Décoration",
+          "quote_short": "&quot;L&#x27;accessoire déco qui change tout.&quot;"
+        }
+      ],
+      "judgments": [
+        {
+          "publication": "Elle Décoration",
+          "verdict": "unverifiable",
+          "reasoning": "Judge LLM indisponible — marqué unverifiable par défaut"
+        }
+      ],
       "hallucinated_count": 0,
       "verified_count": 0,
-      "unverifiable_count": 0,
-      "generation_ms": 38086
+      "unverifiable_count": 1,
+      "generation_ms": 35360
     },
     {
       "product_id": "C08",
@@ -486,7 +436,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 37176
+      "generation_ms": 29334
     },
     {
       "product_id": "C09",
@@ -499,7 +449,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 30754
+      "generation_ms": 49920
     },
     {
       "product_id": "C10",
@@ -512,7 +462,7 @@
       "hallucinated_count": 0,
       "verified_count": 0,
       "unverifiable_count": 0,
-      "generation_ms": 31780
+      "generation_ms": 29949
     }
   ]
 }

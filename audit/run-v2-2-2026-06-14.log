@@ -5,4 +5,46 @@ Golden set : 30 produits
 Date : 2026-06-14
 ======================================================
 
-[A01] Allbirds                                      
+[A01] Allbirds                                      press_logos=[] OK
+[A02] Casper                                        press_logos=[] OK
+[A03] Glossier                                      press_logos=[Vogue]   [WARN] Judge Haiku échoué pour A03: Anthropic 401: {"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"},"request_id":"req_011Cc3tHVmj1GGWGbifFpvUU"}
+→ ok (H:0 V:0 U:1)
+[A04] Dollar Shave Club                             press_logos=[] OK
+[A05] Away Travel                                   press_logos=[] OK
+[A06] Warby Parker                                  press_logos=[Vogue, GQ]   [WARN] Judge Haiku échoué pour A06: Anthropic 401: {"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"},"request_id":"req_011Cc3tQuMVmQ8S4Yoz2va5z"}
+→ ok (H:0 V:0 U:2)
+[A07] Oura Ring                                     press_logos=[Forbes, Wired]   [WARN] Judge Haiku échoué pour A07: Anthropic 401: {"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"},"request_id":"req_011Cc3tTUkVCwBzP9BKEErMc"}
+→ ok (H:0 V:0 U:2)
+[A08] Drunk Elephant                                press_logos=[] OK
+[A09] Peak Design                                   press_logos=[Wired]   [WARN] Judge Haiku échoué pour A09: Anthropic 401: {"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"},"request_id":"req_011Cc3tYQ84qoBmWYyBKk7Hk"}
+→ ok (H:0 V:0 U:1)
+[A10] Lululemon                                     press_logos=[] OK
+[B01] LuminaSkin (boutique Shopify inconnue)        press_logos=[] OK
+[B02] PetPaw Essentials (boutique Shopify inconnue) press_logos=[] OK
+[B03] HomeBliss Candles (boutique Etsy/Shopify inco press_logos=[] OK
+[B04] FlexGrip Pro (boutique Shopify inconnue)      press_logos=[] OK
+[B05] WildRoots Botanicals (boutique DTC inconnue)  press_logos=[] OK
+[B06] SlumberwellCo (boutique Shopify inconnue)     press_logos=[] OK
+[B07] TechNomad Gear (boutique Shopify inconnue)    press_logos=[] OK
+[B08] CleanCo Kitchen (boutique DTC inconnue)       press_logos=[] OK
+[B09] ActiveMom France (boutique Shopify inconnue)  press_logos=[] OK
+[B10] NordLight Studio (boutique Shopify inconnue)  press_logos=[] OK
+[C01] Générique AliExpress — vendeur FYJR Store     press_logos=[] OK
+[C02] Générique AliExpress — vendeur GlobalKitch    press_logos=[] OK
+[C03] Générique AliExpress — vendeur SportMax       press_logos=[] OK
+[C04] Générique AliExpress — vendeur SkinCareDeals  press_logos=[] OK
+[C05] Générique AliExpress — vendeur PetBuddy       press_logos=[] OK
+[C06] Générique AliExpress — vendeur TechHub        press_logos=[] OK
+[C07] Générique AliExpress — vendeur HomeDeco       press_logos=[Elle Décoration]   [WARN] Judge Haiku échoué pour C07: Anthropic 401: {"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"},"request_id":"req_011Cc3uLcBPdj8W6h6JrVG9R"}
+→ ok (H:0 V:0 U:1)
+[C08] Générique AliExpress — vendeur FashionDrops   press_logos=[] OK
+[C09] Générique AliExpress — vendeur WellnessStore  press_logos=[] OK
+[C10] Générique AliExpress — vendeur KidToys        press_logos=[] OK
+
+======================================================
+RÉSULTAT : Taux hallucination global = 0.0%
+RECOMMANDATION : GUARDRAIL_LIGHT
+Coût estimé : ~2.1 centimes d'€
+Rapport : /Users/mac/nexara/konvert/audit/PROMPT_V2_HALLUCINATION_REPORT_2026-06-14.md
+Raw JSON : /Users/mac/nexara/konvert/audit/raw-results-2026-06-14.json
+======================================================

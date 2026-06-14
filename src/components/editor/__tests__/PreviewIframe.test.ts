@@ -54,4 +54,20 @@ describe('PreviewIframe', () => {
     const wrapper = document.querySelector('[data-testid="preview-wrapper"]')
     expect(wrapper?.getAttribute('style')).toContain('390px')
   })
+
+  it('cable visualSettings : bgColor injectee dans le srcdoc apres debounce (chantier C2)', async () => {
+    const firstSectionId = useEditorStore.getState().sectionOrder[0]!.id
+    useEditorStore.setState({
+      visualSettings: { [firstSectionId]: { bgColor: '#ABCDEF' } },
+    })
+    vi.useFakeTimers()
+    render(React.createElement(PreviewIframe))
+    const iframe = document.querySelector('iframe')!
+    vi.advanceTimersByTime(250)
+    vi.useRealTimers()
+    await waitFor(() => {
+      const srcdoc = iframe.getAttribute('srcdoc') || iframe.getAttribute('srcDoc') || ''
+      expect(srcdoc.toLowerCase()).toContain('#abcdef')
+    })
+  })
 })

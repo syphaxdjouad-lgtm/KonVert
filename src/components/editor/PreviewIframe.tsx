@@ -41,6 +41,7 @@ export default function PreviewIframe() {
   const templateId = useEditorStore(s => s.templateId)
   const landingData = useEditorStore(s => s.landingData)
   const sectionOrder = useEditorStore(s => s.sectionOrder)
+  const visualSettings = useEditorStore(s => s.visualSettings)
   const device = useEditorStore(s => s.device)
   const staticHtml = useEditorStore(s => s.staticHtml)
   const selectedSectionId = useEditorStore(s => s.selectedSectionId)
@@ -52,9 +53,10 @@ export default function PreviewIframe() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Compute render inputs — memoized to debounce only real changes
+  // C2 : visualSettings inclus pour re-render quand on tweak padding/bg/align
   const renderInputs = useMemo(() => ({
-    templateId, landingData, sectionOrder, staticHtml,
-  }), [templateId, landingData, sectionOrder, staticHtml])
+    templateId, landingData, sectionOrder, visualSettings, staticHtml,
+  }), [templateId, landingData, sectionOrder, visualSettings, staticHtml])
 
   useEffect(() => {
     if (!templateId) return
@@ -104,6 +106,7 @@ export default function PreviewIframe() {
       try {
         const html = renderTemplate(templateId, landingData, {
           sectionOrder,
+          visualSettings,
           editMode: true,
         })
         setSrcdoc(html)

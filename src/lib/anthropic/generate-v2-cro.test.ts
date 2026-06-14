@@ -130,6 +130,7 @@ describe('sanitizeLandingPageData — champs optionnels null et tableaux vides',
 })
 
 // ─── 3. EDGE CASES — LLM retourne forme invalide → fallback gracieux ─────────
+
 describe('sanitizeLandingPageData — edge cases LLM malformé', () => {
   it('payment_methods avec valeur inconnue → défaut safe', () => {
     const result = sanitizeLandingPageData({
@@ -229,5 +230,88 @@ describe('sanitizeLandingPageData — edge cases LLM malformé', () => {
     expect(result.press_logos![0].quote_short).not.toContain('<b>')
     expect(result.stock_signal!.message).not.toContain('<img')
     expect(result.stock_signal!.cta_intensifier).not.toContain('<a href')
+  })
+})
+
+// ─── 4. GUARDRAIL v2.1 — whitelist brand-based press_logos & press_mentions ──
+describe('sanitizeLandingPageData — guardrail v2.1 whitelist press_logos', () => {
+  it('strippe les press_logos hors whitelist (ex: "Parenting France" inventé)', () => {
+    const result = sanitizeLandingPageData({
+      ...BASE,
+      press_logos: [
+        { publication: 'Vogue' },
+        { publication: 'Parenting France' },          // inventé → strip
+        { publication: 'Science & Vie Junior' },      // hors whitelist → strip
+      ],
+    })
+    expect(result.press_logos).toHaveLength(1)
+    expect(result.press_logos![0].publication).toBe('Vogue')
+  })
+
+  it('préserve les publications whitelistées (Vogue, Marie Claire, TechCrunch)', () => {
+    const result = sanitizeLandingPageData({
+      ...BASE,
+      press_logos: [
+        { publication: 'Vogue', quote_short: 'Excellent.' },
+        { publication: 'Marie Claire' },
+        { publication: 'TechCrunch' },
+      ],
+    })
+    expect(result.press_logos).toHaveLength(3)
+    expect(result.press_logos!.map(p => p.publication)).toEqual([
+      'Vogue', 'Marie Claire', 'TechCrunch',
+    ])
+  })
+
+  it('normalisation lowercase + trim : "  VOGUE  " est accepté', () => {
+    const result = sanitizeLandingPageData({
+      ...BASE,
+      press_logos: [
+        { publication: '  VOGUE  ' },
+        { publication: 'elle' },
+      ],
+    })
+    expect(result.press_logos).toHaveLength(2)
+    // escapeHtml + slice préservent la casse fournie côté output
+    expect(result.press_logos![0].publication).toContain('VOGUE')
+  })
+
+  it('cap à 3 entrées même si le LLM en retourne plus', () => {
+    const result = sanitizeLandingPageData({
+      ...BASE,
+      press_logos: [
+        { publication: 'Vogue' },
+        { publication: 'Elle' },
+        { publication: 'Marie Claire' },
+        { publication: 'Allure' },
+        { publication: 'Glamour' },
+      ],
+    })
+    expect(result.press_logos).toHaveLength(3)
+  })
+
+  it('press_mentions : whitelist appliquée (string[] vs object[])', () => {
+    const result = sanitizeLandingPageData({
+      ...BASE,
+      press_mentions: ['Vogue', 'Marie Claire', 'Parenting France', 'Random Magazine'],
+    })
+    expect(result.press_mentions).toEqual(['Vogue', 'Marie Claire'])
+  })
+
+  it('press_logos tableau vide reste vide (cas le plus fréquent v2.1)', () => {
+    const result = sanitizeLandingPageData({ ...BASE, press_logos: [] })
+    expect(result.press_logos).toEqual([])
+  })
+
+  it('press_logos avec UNIQUEMENT des entrées hors whitelist → tableau vide', () => {
+    const result = sanitizeLandingPageData({
+      ...BASE,
+      press_logos: [
+        { publication: 'Parenting France' },
+        { publication: 'Random Inventé' },
+        { publication: 'Cosmétiques Daily' },
+      ],
+    })
+    expect(result.press_logos).toEqual([])
   })
 })

@@ -4,7 +4,7 @@ import { useEffect, useCallback, useRef } from 'react'
 import { useEditorStore, hydrateFromPage } from './store'
 import Fab from './Fab'
 import Panel from './Panel'
-import SubPanelEdit from './SubPanelEdit'
+import { PanelRight } from './PanelRight'
 import PreviewIframe from './PreviewIframe'
 import DeviceSwitcher from './DeviceSwitcher'
 import { IconArrowLeft, IconSave, IconCheckCircle } from './Icons'
@@ -284,8 +284,8 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
         {/* Panel slide-in — overlay on preview */}
         <Panel />
 
-        {/* Sub-panel Edit — slide from right */}
-        <SubPanelEdit />
+        {/* C2 PanelRight — slide from right pour éditer la section sélectionnée */}
+        <PanelRight />
       </div>
     </div>
   )

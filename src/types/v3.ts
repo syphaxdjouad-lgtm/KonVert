@@ -6,8 +6,23 @@ export type CopyTone =
 export type V3SectionKey =
   | 'hero' | 'gallery' | 'why_we_love' | 'thoughtfully_designed'
   | 'best_for' | 'materials_breakdown' | 'how_it_works'
-  | 'compare_variants' | 'reviews_ai_summary' | 'press_quote'
+  | 'compare_variants' | 'reviews_ai_summary' | 'reviews' | 'press_quote'
   | 'care_instructions' | 'faq' | 'brand_manifesto'
+
+// Sprint 2 — Reviews avec photos (P3)
+// photo_url: null pour le MVP (les vraies photos UGC viennent d'une phase ultérieure)
+// verified: true pour la majorité, rating: 4-5 pour 80% des reviews
+export interface V3Review {
+  author:    string
+  initials:  string
+  rating:    1 | 2 | 3 | 4 | 5
+  title:     string
+  text:      string
+  date:      string      // "il y a 3 jours" — texte généré, en français
+  photo_url?: string     // URL image UGC (null pour MVP — out-of-scope vraies photos)
+  variant?:  string      // "Noir mat", "Blanc perle", etc.
+  verified:  boolean
+}
 
 export interface MaterialEntry {
   name: string
@@ -57,5 +72,7 @@ export interface V3PageData {
     press_quote?: { quote: string; source: string }
     reviews_summary?: string
     how_it_works?: Array<{ step: number; title: string; description: string }>
+    // Sprint 2 — avis clients individuels avec photos UGC optionnelles
+    reviews?: V3Review[]
   }
 }

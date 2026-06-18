@@ -51,7 +51,7 @@ Produit à valoriser :
 ${args.product.category ? `- Catégorie : ${args.product.category}` : ''}
 ${brandLine}
 
-OBLIGATOIRE : génère TOUTES les 12 sections ci-dessous, AUCUNE ne doit être omise. Une page sans press_quote / reviews_summary / how_it_works paraît vide et amateur.
+OBLIGATOIRE : génère TOUTES les 13 sections ci-dessous, AUCUNE ne doit être omise. Une page sans press_quote / reviews_summary / how_it_works / reviews paraît vide et amateur.
 
 JSON STRICT à produire :
 
@@ -80,6 +80,19 @@ JSON STRICT à produire :
     { "step": 1, "title": "≤4 mots", "description": "≤15 mots" },
     { "step": 2, "title": "≤4 mots", "description": "≤15 mots" },
     { "step": 3, "title": "≤4 mots", "description": "≤15 mots" }
+  ],
+  "reviews": [
+    {
+      "author": "Prénom N. (ex: Marie L., Thomas D., Sarah M., Adrien P.) — noms génériques français/internationaux, JAMAIS de célébrité ni de marque tierce",
+      "initials": "2 lettres majuscules (ex: ML, TD)",
+      "rating": 5,
+      "title": "Courte accroche entre guillemets ≤8 mots",
+      "text": "Avis authentique 2-3 phrases, bénéfice concret, ton naturel",
+      "date": "Texte français naturel : 'il y a 3 jours', 'la semaine dernière', 'il y a 2 semaines', 'il y a 1 mois'",
+      "photo_url": null,
+      "variant": "Variante si produit multi-variantes (ex: 'Noir mat'), sinon null",
+      "verified": true
+    }
   ]
 }
 
@@ -93,6 +106,7 @@ Règles :
 - press_quote : invente une citation presse crédible (média réel, ton sobre)
 - reviews_summary : invente un résumé reviews crédible (4.7/5 sur 2400 avis style)
 - how_it_works : 3 étapes du parcours produit (de la commande à l'usage)
+- reviews : 4 à 6 avis clients. rating 4 ou 5 pour 80% des avis (crédible mais positif). verified: true pour la majorité. photo_url: TOUJOURS null (MVP). Noms d'auteurs : prénoms français/internationaux courants + initiale nom (ex: Marie L., Thomas D., Sarah M., Adrien P., Camille V., Lucas M.) — JAMAIS de célébrité, JAMAIS de nom de marque tierce. Texte de l'avis en ${langName}, bénéfice concret, ton naturel de vrai client.
 - LANGUE STRICTE : TOUTE valeur string doit être en ${langName}, y compris les champs de ≤2 mots (best_for, manifesto.pillars, features.name). DeepSeek tend à sortir des mots en anglais sur les champs courts — c'est INTERDIT.
 - Retourne UNIQUEMENT le JSON, aucun texte avant/après`.trim()
 }
@@ -329,6 +343,13 @@ export async function POST(req: NextRequest) {
           press_quote: aiOutput.press_quote,
           reviews_summary: aiOutput.reviews_summary,
           how_it_works: aiOutput.how_it_works,
+          // Sprint 2 — reviews avec photos MVP
+          // Guard : strip toute photo_url non-null générée par DeepSeek (sécurité MVP)
+          reviews: aiOutput.reviews?.map(r => ({
+            ...r,
+            photo_url: undefined,  // force null/undefined — vraies photos UGC hors-scope
+            variant: r.variant ?? undefined,
+          })),
         },
       }
 

@@ -2,6 +2,93 @@ import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { renderTrustBadgesPayment } from '@/lib/sections-v3/shared/TrustBadgesPayment'
 
+// Sprint 2 T1 — génère la rangée de thumbnails + dot indicators sous l'image principale.
+// CSS natif : scroll-snap-type x mandatory + scroll-snap-align start sur chaque thumb.
+// Dot indicators : highlight du 1er dot via opacity (CSS only pour état initial).
+// Counter overlay injecté dans renderHero directement (position:absolute sur l'image).
+// JS inline minimal : click thumb → switch image principale + highlight thumb + counter.
+// Affiché uniquement si images.length >= 2.
+function renderHeroThumbnails(images: string[], tokens: StyleTokens, productTitle: string): string {
+  if (images.length < 2) return ''
+
+  const totalCount = images.length
+  const short = tokens.motion.durationShort ?? '120ms'
+
+  // Rangée de thumbnails — scroll-snap horizontal
+  const thumbs = images.map((src, i) =>
+    `<div class="kvt-hero-thumb" data-idx="${i}" style="
+      flex:0 0 auto;
+      width:64px;height:64px;
+      border-radius:${tokens.radius.image};
+      overflow:hidden;
+      scroll-snap-align:start;
+      border:2px solid ${i === 0 ? tokens.colors.accent : 'transparent'};
+      opacity:${i === 0 ? '1' : '0.65'};
+      cursor:pointer;
+      transition:opacity ${short} ${tokens.motion.ease},
+                 border-color ${short} ${tokens.motion.ease};
+    " onclick="kvtHeroSetActive(${i})">
+      <img src="${src}"
+           alt="${escapeHtml(productTitle)} — vue ${i + 1}"
+           style="width:100%;height:100%;object-fit:cover;display:block"
+           loading="${i === 0 ? 'eager' : 'lazy'}">
+    </div>`
+  ).join('')
+
+  // Dot indicators — 1 dot par image, le 1er est plein (CSS only pour l'état initial)
+  const dots = images.map((_, i) =>
+    `<span class="kvt-hero-dot" data-idx="${i}" style="
+      display:inline-block;
+      width:6px;height:6px;border-radius:50%;
+      background:${tokens.colors.text};
+      opacity:${i === 0 ? '1' : '0.25'};
+      transition:opacity ${short} ${tokens.motion.ease};
+      cursor:pointer;
+    " onclick="kvtHeroSetActive(${i})"></span>`
+  ).join('')
+
+  // JS inline minimal : gestion click/keyboard thumb → switch image + highlight + counter + dots
+  const thumbScript = `<script>
+(function(){
+  var srcs=${JSON.stringify(images)};
+  var accent=${JSON.stringify(tokens.colors.accent)};
+  function kvtHeroSetActive(idx){
+    var thumbs=document.querySelectorAll('.kvt-hero-thumb');
+    var dots=document.querySelectorAll('.kvt-hero-dot');
+    var mainImg=document.getElementById('kvt-hero-main-img');
+    var counter=document.getElementById('kvt-hero-counter');
+    thumbs.forEach(function(t,i){
+      t.style.opacity=i===idx?'1':'0.65';
+      t.style.borderColor=i===idx?accent:'transparent';
+    });
+    dots.forEach(function(d,i){
+      d.style.opacity=i===idx?'1':'0.25';
+    });
+    if(mainImg)mainImg.src=srcs[idx]||'';
+    if(counter)counter.textContent=(idx+1)+' / ${totalCount}';
+  }
+  window.kvtHeroSetActive=kvtHeroSetActive;
+}());
+<\/script>`
+
+  return `
+  <div class="kvt-hero-thumbs" style="
+    display:flex;gap:8px;margin-top:10px;
+    overflow-x:auto;scroll-snap-type:x mandatory;
+    scrollbar-width:none;-ms-overflow-style:none;
+    padding-bottom:4px;
+    touch-action:pan-x;
+  ">
+    ${thumbs}
+  </div>
+  <div class="kvt-hero-dots" style="
+    display:flex;gap:6px;justify-content:center;margin-top:10px;
+  ">
+    ${dots}
+  </div>
+  ${thumbScript}`
+}
+
 export function renderHero(data: V3PageData, tokens: StyleTokens): string {
   const { product, images, copy } = data
   const heroImage = images[0] ?? ''
@@ -55,6 +142,9 @@ export function renderHero(data: V3PageData, tokens: StyleTokens): string {
       fontFamily: tokens.fonts.body,
     })}`
 
+  // T1 — thumbnails galerie sous l'image principale
+  const thumbnailsHtml = renderHeroThumbnails(images, tokens, product.title)
+
   return `
 <section class="v3-hero" style="
   background:${tokens.colors.bg};
@@ -67,9 +157,22 @@ export function renderHero(data: V3PageData, tokens: StyleTokens): string {
     align-items:center;
   ">
     <div class="v3-hero__image">
-      <img src="${heroImage}"
-           alt="${escapeHtml(product.title)}"
-           style="width:100%;border-radius:${tokens.radius.image};display:block">
+      <div style="position:relative">
+        <img id="kvt-hero-main-img"
+             src="${heroImage}"
+             alt="${escapeHtml(product.title)}"
+             style="width:100%;border-radius:${tokens.radius.image};display:block">
+        ${thumbnailsHtml ? `<div id="kvt-hero-counter" style="
+          position:absolute;bottom:10px;right:10px;
+          background:rgba(0,0,0,0.45);color:#fff;
+          font-size:12px;font-weight:600;
+          padding:4px 10px;border-radius:4px;
+          backdrop-filter:blur(4px);
+          pointer-events:none;
+          font-family:${tokens.fonts.body};
+        ">1 / ${images.length}</div>` : ''}
+      </div>
+      ${thumbnailsHtml}
     </div>
     <div class="v3-hero__content" style="color:${tokens.colors.text}">
       ${copy.brand

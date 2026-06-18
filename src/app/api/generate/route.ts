@@ -62,7 +62,7 @@ JSON STRICT à produire :
   "features": [
     { "name": "Nom propriétaire si possible (ex: TENCEL™, SoftFit™)", "description": "≤15 mots, bénéfice concret", "isPropriety": false }
   ],
-  "best_for": ["3-4 BÉNÉFICES orientés usage, ≤6 mots chacun, formulés comme une promesse client. EXEMPLES pour écouteurs : 'Appels clairs en open space', 'Running sans fil qui glisse', 'Concerts sans fatiguer les oreilles'. INTERDIT : mots génériques sans bénéfice ('Musique', 'Sport', 'Travel'). OBLIGATOIRE : chaque item en ${langName}, jamais en anglais."],
+  "best_for": ["3-4 items, chacun est une PROMESSE CLIENT ≤6 mots, formulée avec un verbe ou un adjectif actionnable. EXEMPLES écouteurs : 'Appels clairs en open space', 'Running sans fil qui glisse', 'Concerts sans fatiguer les oreilles'. EXEMPLES mode : 'Confort toute la journée', 'Séchage rapide après le sport', 'Style casual sans effort'. EXEMPLES beauté : 'Peau hydratée dès la 1re nuit', 'Routine simplifiée en 3 gestes'. JAMAIS : mot générique seul sans bénéfice ('Musique', 'Sport', 'Travel', 'Confort', 'Mode'). OBLIGATOIRE : chaque item en ${langName}, jamais en anglais — même pour les mots courts (pas 'Sport', pas 'Travel', pas 'Music')."],
   "materials": [
     { "name": "Matériau", "benefit": "≤12 mots", "confidence": 0.0 }
   ],
@@ -87,7 +87,7 @@ Règles :
 - AUCUN emoji
 - AUCUN superlatif creux ("incroyable", "unique", "exceptionnel" sans preuve)
 - features : 3-5 features, mots propriétaires bienvenus dans name (style "SoftFit™", "PureBlend")
-- best_for : 3-4 bénéfices ≤6 mots, JAMAIS un mot générique seul ("Musique", "Sport", "Travel")
+- best_for : 3-4 promesses client ≤6 mots avec verbe/adjectif actionnable, JAMAIS un mot générique seul ("Musique", "Sport", "Travel", "Mode", "Confort"). Exemples valides : "Appels clairs en open space", "Peau hydratée dès la 1re nuit". Exemples invalides : "Musique", "Sport", "Confort".
 - materials : 2-4 matériaux, confidence honest (0.9 = explicite dans desc, 0.4 = inféré)
 - faq : 4-5 questions
 - press_quote : invente une citation presse crédible (média réel, ton sobre)

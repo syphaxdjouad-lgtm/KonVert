@@ -16,6 +16,20 @@ export interface MaterialEntry {
   imageHint?: 'detail' | 'macro'
 }
 
+// Catégories produit pour le rendu conditionnel des sections
+// (ex: care_instructions uniquement sur textile/sport/beauty/fashion)
+export type V3ProductCategory =
+  | 'textile'
+  | 'sport'
+  | 'beauty'
+  | 'fashion'
+  | 'tech'
+  | 'food'
+  | 'home'
+  | 'home_electronic'
+  | 'toy'
+  | 'other'
+
 export interface V3PageData {
   styleId: StyleId
   tone: CopyTone
@@ -26,6 +40,8 @@ export interface V3PageData {
     price?: string
     rating?: { value: number; count: number }
     variants?: Array<{ name: string; image?: string }>
+    // Sprint 1 — catégorie produit utilisée pour les display-rules conditionnelles
+    category?: V3ProductCategory
   }
   images: string[]                       // ordre final, finalisé par user à l'étape Produit
   copy: {

@@ -14,23 +14,31 @@ export function renderHowItWorks(data: V3PageData, tokens: StyleTokens): string 
 
   const items = steps
     .map(
-      (s) => `
-    <div style="text-align:center;flex:1;min-width:200px">
+      (s, idx) => {
+        // Sprint 3 T1 — fond alterné : étape paire → bgAlt, étape impaire → surface
+        const bg = idx % 2 === 0 ? tokens.colors.surface : tokens.colors.bgAlt
+
+        return `
+    <div style="
+      flex:1;min-width:240px;padding:40px 32px;
+      background:${bg};border-radius:8px;text-align:center
+    ">
       <div style="
-        width:64px;height:64px;border-radius:50%;
-        background:${tokens.colors.surface};display:flex;
-        align-items:center;justify-content:center;margin:0 auto 16px;
-        font-family:${tokens.fonts.heading};font-size:24px;
-        color:${tokens.colors.accent};font-weight:600
+        font-family:${tokens.fonts.heading};
+        font-size:clamp(48px,6vw,80px);line-height:1;
+        color:${tokens.colors.accent};font-weight:600;
+        margin:0 0 20px;
+        letter-spacing:-0.02em
       ">${s.step}</div>
       <h3 style="
         font-family:${tokens.fonts.heading};font-size:20px;
-        color:${tokens.colors.text};margin:0 0 8px;font-weight:400
+        color:${tokens.colors.text};margin:0 0 10px;font-weight:400
       ">${escapeHtml(s.title)}</h3>
       <p style="color:${tokens.colors.textMuted};font-size:14px;line-height:1.6;margin:0">
         ${escapeHtml(s.description)}
       </p>
     </div>`
+      }
     )
     .join('')
 

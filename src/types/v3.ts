@@ -54,7 +54,7 @@ export interface V3PageData {
     description: string
     price?: string
     rating?: { value: number; count: number }
-    variants?: Array<{ name: string; image?: string }>
+    variants?: Array<{ name: string; image?: string; recommended?: boolean }>
     // Sprint 1 — catégorie produit utilisée pour les display-rules conditionnelles
     category?: V3ProductCategory
   }

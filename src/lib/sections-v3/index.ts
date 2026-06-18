@@ -13,6 +13,7 @@ export const DEFAULT_SECTION_ORDER_V3: readonly V3SectionKey[] = [
   'how_it_works',
   'compare_variants',
   'reviews_ai_summary',
+  'reviews',          // Sprint 2 — section reviews individuelle (P3) après le résumé AI
   'press_quote',
   'care_instructions',
   'faq',

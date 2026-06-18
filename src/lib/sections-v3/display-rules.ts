@@ -48,6 +48,10 @@ export function shouldRenderSection(key: V3SectionKey, data: V3PageData): boolea
       return (data.product.variants?.length ?? 0) >= 2
     case 'reviews_ai_summary':
       return Boolean(data.copy.reviews_summary)
+    // Sprint 2 — reviews individuelles : minimum 3 pour un rendu crédible visuellement.
+    // Moins de 3 cards → la grid paraît vide et le bloc de distribution n'a pas de sens.
+    case 'reviews':
+      return Array.isArray(data.copy.reviews) && data.copy.reviews.length >= 3
     case 'press_quote':
       return Boolean(data.copy.press_quote)
     default:

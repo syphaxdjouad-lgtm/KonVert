@@ -118,4 +118,65 @@ describe('renderHero', () => {
     // Le bloc compact est présent
     expect(html).toContain('role="group"')
   })
+
+  // Sprint 2 T1 — thumbnails galerie hero
+  describe('T1 : thumbnails swipe scroll-snap + dot indicators + counter', () => {
+    it('T1 : thumbnails absentes si images.length < 2', () => {
+      const singleImage: V3PageData = { ...baseData, images: ['hero.jpg'] }
+      const html = renderHero(singleImage, softTokens)
+      expect(html).not.toContain('kvt-hero-thumbs')
+      expect(html).not.toContain('kvt-hero-dots')
+      expect(html).not.toContain('kvt-hero-counter')
+    })
+
+    it('T1 : thumbnails présentes si images.length >= 2', () => {
+      const html = renderHero(baseData, softTokens)  // baseData.images = ['hero.jpg', 'detail.jpg']
+      expect(html).toContain('kvt-hero-thumbs')
+    })
+
+    it('T1 : dot indicators présents si images.length >= 2', () => {
+      const html = renderHero(baseData, softTokens)
+      expect(html).toContain('kvt-hero-dots')
+      expect(html).toContain('kvt-hero-dot')
+    })
+
+    it('T1 : counter overlay présent si images.length >= 2', () => {
+      const html = renderHero(baseData, softTokens)
+      expect(html).toContain('kvt-hero-counter')
+      expect(html).toContain(`1 / ${baseData.images.length}`)
+    })
+
+    it('T1 : image principale a l\'id kvt-hero-main-img', () => {
+      const html = renderHero(baseData, softTokens)
+      expect(html).toContain('id="kvt-hero-main-img"')
+    })
+
+    it('T1 : scroll-snap-type x mandatory sur la rangée de thumbs', () => {
+      const html = renderHero(baseData, softTokens)
+      expect(html).toContain('scroll-snap-type:x mandatory')
+    })
+
+    it('T1 : touch-action:pan-x pour swipe mobile', () => {
+      const html = renderHero(baseData, softTokens)
+      expect(html).toContain('touch-action:pan-x')
+    })
+
+    it('T1 : nombre de dots = nombre d\'images', () => {
+      const threeImages: V3PageData = { ...baseData, images: ['a.jpg', 'b.jpg', 'c.jpg'] }
+      const html = renderHero(threeImages, softTokens)
+      const dotMatches = html.match(/class="kvt-hero-dot"/g) ?? []
+      expect(dotMatches.length).toBe(3)
+    })
+
+    it('T1 : 1er dot opaque (opacity:1), suivants discrets (opacity:0.25)', () => {
+      const html = renderHero(baseData, softTokens)
+      expect(html).toMatch(/kvt-hero-dot[^>]*opacity:1/)
+      expect(html).toMatch(/kvt-hero-dot[^>]*opacity:0\.25/)
+    })
+
+    it('T1 : JS inline kvtHeroSetActive présent', () => {
+      const html = renderHero(baseData, softTokens)
+      expect(html).toContain('kvtHeroSetActive')
+    })
+  })
 })

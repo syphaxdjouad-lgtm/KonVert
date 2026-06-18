@@ -6,8 +6,16 @@ export function renderReviewsAiSummary(data: V3PageData, tokens: StyleTokens): s
   if (!summary) return ''
   const rating = data.product.rating
 
+  // Sprint 2 T7 — si la section reviews suit immédiatement (>= 3 avis), on réduit
+  // le padding-bottom de ce bloc pour créer un effet "header + contenu" continu.
+  // Sans ça, les deux sections s'affichent avec ~128px de vide blanc entre elles.
+  const hasReviewsSection =
+    Array.isArray(data.copy.reviews) && data.copy.reviews.length >= 3
+  const paddingBottom = hasReviewsSection ? '32px' : tokens.spacing.section
+  const paddingTop    = tokens.spacing.section
+
   return `
-<section style="background:${tokens.colors.bg};padding:${tokens.spacing.section} 24px">
+<section style="background:${tokens.colors.bg};padding:${paddingTop} 24px ${paddingBottom}">
   <div style="max-width:880px;margin:0 auto;text-align:center">
     ${rating ? `
       <div style="margin-bottom:32px">

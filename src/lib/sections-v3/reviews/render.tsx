@@ -78,6 +78,17 @@ function renderReviewCard(review: V3Review, index: number, tokens: StyleTokens):
     ? `<span style="font-size:11px;color:${tokens.colors.textMuted};background:${tokens.colors.bg};padding:3px 8px;border-radius:4px;border:1px solid ${tokens.colors.border};white-space:nowrap">${escapeHtml(review.variant)}</span>`
     : ''
 
+  // Photo UGC — affichée en haut de la card quand photo_url est fourni.
+  // Ratio 4:3, object-fit:cover pour cohérence visuelle entre les cards.
+  const photoHtml = review.photo_url
+    ? `<div style="aspect-ratio:4/3;overflow:hidden">
+        <img src="${review.photo_url}"
+             alt="Photo de ${escapeHtml(review.author)}"
+             style="width:100%;height:100%;object-fit:cover;display:block"
+             loading="lazy">
+       </div>`
+    : ''
+
   return `
 <article class="kvt-review-card" style="
   background:${tokens.colors.surface};
@@ -90,6 +101,7 @@ function renderReviewCard(review: V3Review, index: number, tokens: StyleTokens):
              transform ${tokens.motion.durationShort ?? '120ms'} ${tokens.motion.ease};
 " onmouseenter="this.style.boxShadow='${tokens.shadows.hover}';this.style.transform='translateY(-2px)'"
    onmouseleave="this.style.boxShadow='${tokens.shadows.card}';this.style.transform='translateY(0)'">
+  ${photoHtml}
   <div style="padding:${review.photo_url ? '16px' : '20px'};flex:1;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <span style="font-size:14px;letter-spacing:1px;line-height:1">${starsHtml}</span>

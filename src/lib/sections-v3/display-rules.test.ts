@@ -86,4 +86,62 @@ describe('shouldRenderSection', () => {
       expect(shouldRenderSection('care_instructions', d)).toBe(false)
     })
   })
+
+  // Sprint 4 T11-T14 — reviews display-rules explicites
+  // T11 : care_instructions affichée pour {textile, sport, beauty, fashion} — déjà couvert ci-dessus.
+  // T12 : care_instructions masquée pour tech — déjà couvert ci-dessus.
+  // T13 & T14 : reviews length gate
+  describe('reviews: Sprint 4 — gate length >= 3', () => {
+    it('T13 : reviews undefined → shouldRenderSection retourne false', () => {
+      expect(shouldRenderSection('reviews', base)).toBe(false)
+    })
+
+    it('T13b : reviews = [] → shouldRenderSection retourne false', () => {
+      expect(shouldRenderSection('reviews', { ...base, copy: { reviews: [] } })).toBe(false)
+    })
+
+    it('T14 : reviews.length === 2 (< 3) → shouldRenderSection retourne false', () => {
+      const twoReviews: V3PageData = { ...base, copy: { reviews: [
+        { author: 'A', initials: 'AA', rating: 5 as const, title: 'Top', text: 'OK', date: 'J-1', verified: true },
+        { author: 'B', initials: 'BB', rating: 4 as const, title: 'Bien', text: 'OK', date: 'J-2', verified: false },
+      ]}}
+      expect(shouldRenderSection('reviews', twoReviews)).toBe(false)
+    })
+
+    it('T13c : reviews.length === 3 (>= 3) → shouldRenderSection retourne true', () => {
+      const threeReviews: V3PageData = { ...base, copy: { reviews: [
+        { author: 'A', initials: 'AA', rating: 5 as const, title: 'Top', text: 'OK', date: 'J-1', verified: true },
+        { author: 'B', initials: 'BB', rating: 4 as const, title: 'Bien', text: 'OK', date: 'J-2', verified: false },
+        { author: 'C', initials: 'CC', rating: 5 as const, title: 'Parfait', text: 'OK', date: 'J-3', verified: true },
+      ]}}
+      expect(shouldRenderSection('reviews', threeReviews)).toBe(true)
+    })
+  })
+
+  // Sprint 4 T15 — compare_variants highlight : shouldRenderSection passe dès 2 variants,
+  // le highlight "recommended" est une responsabilité du renderer (testé dans render.test.ts).
+  // Ici on vérifie que la rule n'est pas cassée par la présence du flag recommended.
+  describe('compare_variants: Sprint 4 — highlight recommended', () => {
+    it('T15 : >= 1 variant avec recommended:true → shouldRenderSection retourne true', () => {
+      const d: V3PageData = {
+        ...base,
+        product: {
+          ...base.product,
+          variants: [
+            { name: 'Standard' },
+            { name: 'Premium', recommended: true },
+          ],
+        },
+      }
+      expect(shouldRenderSection('compare_variants', d)).toBe(true)
+    })
+
+    it('T15b : variants sans recommended → shouldRenderSection retourne true si >= 2', () => {
+      const d: V3PageData = {
+        ...base,
+        product: { ...base.product, variants: [{ name: 'A' }, { name: 'B' }] },
+      }
+      expect(shouldRenderSection('compare_variants', d)).toBe(true)
+    })
+  })
 })

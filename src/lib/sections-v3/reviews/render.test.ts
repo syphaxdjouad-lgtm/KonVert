@@ -119,6 +119,44 @@ describe('renderReviews', () => {
     expect(html).toContain('avis vérifiés')
   })
 
+  // Sprint 4 — T4 : 5 reviews sans photo_url (valeur exacte du brief)
+  it('Sprint 4 T4 : 5 reviews sans photo_url → section présente, aucune balise img UGC', () => {
+    const reviews = Array.from({ length: 5 }, (_, i) =>
+      makeReview({ author: `User ${i}`, initials: `U${i}`, rating: 5 })
+    )
+    const html = renderReviews({ ...base, copy: { reviews } }, softTokens)
+
+    expect(html).toContain('kvt-reviews')
+    reviews.forEach(r => expect(html).toContain(r.author))
+    // Aucune balise img avec URL http (pas de photo_url → pas de bloc UGC)
+    const ugcImgs = html.match(/<img[^>]+src="http/g) ?? []
+    expect(ugcImgs.length).toBe(0)
+  })
+
+  // Sprint 4 — T5 : 6 reviews dont 2 avec photo_url (valeur exacte du brief)
+  it('Sprint 4 T5 : 6 reviews dont 2 photo_url → 2 cards avec img UGC + 4 sans', () => {
+    const reviews = [
+      makeReview({ author: 'Alice',  initials: 'AL', photo_url: 'https://cdn.example.com/ugcA.jpg' }),
+      makeReview({ author: 'Bruno',  initials: 'BR' }),
+      makeReview({ author: 'Carla',  initials: 'CA', photo_url: 'https://cdn.example.com/ugcB.jpg' }),
+      makeReview({ author: 'Denis',  initials: 'DE' }),
+      makeReview({ author: 'Elise',  initials: 'EL', rating: 4 }),
+      makeReview({ author: 'Fabien', initials: 'FA', verified: false }),
+    ]
+    const html = renderReviews({ ...base, copy: { reviews } }, softTokens)
+
+    expect(html).toContain('kvt-reviews')
+    reviews.forEach(r => expect(html).toContain(r.author))
+
+    // Les 2 reviews avec photo_url sont rendues avec leurs images
+    expect(html).toContain('ugcA.jpg')
+    expect(html).toContain('ugcB.jpg')
+
+    // Exactement 2 références UGC dans le HTML (pas davantage)
+    const ugcCount = (html.match(/ugc[AB]\.jpg/g) ?? []).length
+    expect(ugcCount).toBe(2)
+  })
+
   it('utilise les tokens couleurs (bgAlt, star, border)', () => {
     const reviews = Array.from({ length: 3 }, () => makeReview())
     const html = renderReviews({ ...base, copy: { reviews } }, softTokens)

@@ -46,4 +46,27 @@ describe('renderHowItWorks', () => {
     const html = renderHowItWorks({ ...base, copy: { how_it_works: [] } }, softTokens)
     expect(html).toBeDefined()
   })
+
+  // Sprint 3 T1 — fond alterné + numéros grands
+  it('alternates surface/bgAlt backgrounds across steps', () => {
+    const steps = [
+      { step: 1, title: 'A', description: 'desc A' },
+      { step: 2, title: 'B', description: 'desc B' },
+    ]
+    const html = renderHowItWorks({ ...base, copy: { how_it_works: steps } }, softTokens)
+    expect(html).toContain(softTokens.colors.surface)
+    expect(html).toContain(softTokens.colors.bgAlt)
+  })
+
+  it('renders step numbers with large font-size clamp', () => {
+    const steps = [{ step: 1, title: 'A', description: 'B' }]
+    const html = renderHowItWorks({ ...base, copy: { how_it_works: steps } }, softTokens)
+    expect(html).toContain('clamp(48px,6vw,80px)')
+  })
+
+  it('renders step numbers in accent color', () => {
+    const steps = [{ step: 1, title: 'A', description: 'B' }]
+    const html = renderHowItWorks({ ...base, copy: { how_it_works: steps } }, softTokens)
+    expect(html).toContain(softTokens.colors.accent)
+  })
 })

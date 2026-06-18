@@ -24,6 +24,7 @@ describe('renderCompareVariants', () => {
     expect(html).toContain('black.jpg')
     expect(html).toContain('cognac.jpg')
   })
+
   it('renders variants without images (text only)', () => {
     const html = renderCompareVariants({
       ...base, product: { ...base.product, variants: [{ name: 'Small' }, { name: 'Large' }] }
@@ -31,8 +32,45 @@ describe('renderCompareVariants', () => {
     expect(html).toContain('Small')
     expect(html).toContain('Large')
   })
+
   it('handles empty variants gracefully', () => {
     const html = renderCompareVariants(base, softTokens)
     expect(html).toBeDefined()
+  })
+
+  // Sprint 3 T5 — highlight variante recommandée
+  it('shows Recommandé badge when recommended:true', () => {
+    const variants = [
+      { name: 'Standard', image: 'a.jpg' },
+      { name: 'Premium', image: 'b.jpg', recommended: true },
+    ]
+    const html = renderCompareVariants({
+      ...base, product: { ...base.product, variants }
+    }, softTokens)
+    expect(html).toContain('Recommandé')
+  })
+
+  it('uses success color for recommended badge', () => {
+    const variants = [{ name: 'Pro', recommended: true }]
+    const html = renderCompareVariants({
+      ...base, product: { ...base.product, variants }
+    }, softTokens)
+    expect(html).toContain(softTokens.colors.success)
+  })
+
+  it('does not show badge when recommended is false or absent', () => {
+    const variants = [{ name: 'Basic' }, { name: 'Standard', recommended: false }]
+    const html = renderCompareVariants({
+      ...base, product: { ...base.product, variants }
+    }, softTokens)
+    expect(html).not.toContain('Recommandé')
+  })
+
+  it('applies bgAlt background to recommended variant card', () => {
+    const variants = [{ name: 'Top', recommended: true }]
+    const html = renderCompareVariants({
+      ...base, product: { ...base.product, variants }
+    }, softTokens)
+    expect(html).toContain(softTokens.colors.bgAlt)
   })
 })

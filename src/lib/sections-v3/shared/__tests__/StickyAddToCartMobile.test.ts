@@ -13,7 +13,13 @@ describe('renderStickyAddToCartMobile', () => {
     expect(html.trim().length).toBeGreaterThan(0)
   })
 
-  it('contient l\'id principal #kvt-sticky-cta', () => {
+  // Sprint 1 T6 : le wrapper est maintenant #kvt-sticky-wrapper (pas #kvt-sticky-cta)
+  it('contient le wrapper principal #kvt-sticky-wrapper', () => {
+    const html = renderStickyAddToCartMobile(BASE_OPTS)
+    expect(html).toContain('id="kvt-sticky-wrapper"')
+  })
+
+  it('contient l\'inner bar #kvt-sticky-cta', () => {
     const html = renderStickyAddToCartMobile(BASE_OPTS)
     expect(html).toContain('id="kvt-sticky-cta"')
   })
@@ -140,5 +146,107 @@ describe('renderStickyAddToCartMobile', () => {
   it('P1-1 : showPrice=true (défaut) affiche bien le span prix dans le DOM', () => {
     const html = renderStickyAddToCartMobile(BASE_OPTS)
     expect(html).toContain('<span class="kvt-sticky-price">')
+  })
+
+  // ─── Sprint 1 T6 — stockSignal ───────────────────────────────────────────
+  describe('T6 stockSignal', () => {
+    it('stockSignal low : bandeau ambre #kvt-stock-signal présent', () => {
+      const html = renderStickyAddToCartMobile({
+        ...BASE_OPTS,
+        stockSignal: { type: 'low', count: 5 },
+      })
+      expect(html).toContain('id="kvt-stock-signal"')
+      // Couleur warning ambre
+      expect(html).toContain('#D97706')
+      expect(html).toContain('5')
+    })
+
+    it('stockSignal critical : couleur danger rouge', () => {
+      const html = renderStickyAddToCartMobile({
+        ...BASE_OPTS,
+        stockSignal: { type: 'critical', count: 2 },
+      })
+      expect(html).toContain('id="kvt-stock-signal"')
+      expect(html).toContain('#DC2626')
+      expect(html).toContain('2')
+    })
+
+    it('stockSignal avec label personnalisé', () => {
+      const html = renderStickyAddToCartMobile({
+        ...BASE_OPTS,
+        stockSignal: { type: 'low', label: 'Dernières pièces en stock' },
+      })
+      expect(html).toContain('Dernières pièces en stock')
+    })
+
+    it('stockSignal sans count ni label : fallback texte générique', () => {
+      const html = renderStickyAddToCartMobile({
+        ...BASE_OPTS,
+        stockSignal: { type: 'low' },
+      })
+      expect(html).toContain('Stock limité')
+    })
+
+    it('sans stockSignal : pas de bandeau #kvt-stock-signal', () => {
+      const html = renderStickyAddToCartMobile(BASE_OPTS)
+      expect(html).not.toContain('id="kvt-stock-signal"')
+    })
+  })
+
+  // ─── Sprint 1 T6 — flashSale ─────────────────────────────────────────────
+  describe('T6 flashSale', () => {
+    it('flashSale : bandeau rouge #kvt-flash-sale présent', () => {
+      const html = renderStickyAddToCartMobile({
+        ...BASE_OPTS,
+        flashSale: { endsAt: '2026-12-31T23:59:00Z' },
+      })
+      expect(html).toContain('id="kvt-flash-sale"')
+      // data-ends-at doit être présent pour le countdown JS
+      expect(html).toContain('data-ends-at="2026-12-31T23:59:00Z"')
+      // Couleur rouge danger
+      expect(html).toContain('#DC2626')
+    })
+
+    it('flashSale : timer countdown element #kvt-flash-timer présent', () => {
+      const html = renderStickyAddToCartMobile({
+        ...BASE_OPTS,
+        flashSale: { endsAt: '2026-12-31T23:59:00Z' },
+      })
+      expect(html).toContain('id="kvt-flash-timer"')
+    })
+
+    it('flashSale : script countdown injecté (tick function)', () => {
+      const html = renderStickyAddToCartMobile({
+        ...BASE_OPTS,
+        flashSale: { endsAt: '2026-12-31T23:59:00Z' },
+      })
+      expect(html).toContain('function tick()')
+      expect(html).toContain('setTimeout(tick, 1000)')
+    })
+
+    it('flashSale : label personnalisé respecté', () => {
+      const html = renderStickyAddToCartMobile({
+        ...BASE_OPTS,
+        flashSale: { endsAt: '2026-12-31T23:59:00Z', label: 'Promo expire dans' },
+      })
+      expect(html).toContain('Promo expire dans')
+    })
+
+    it('flashSale a la priorité sur stockSignal si les deux sont fournis', () => {
+      const html = renderStickyAddToCartMobile({
+        ...BASE_OPTS,
+        flashSale:   { endsAt: '2026-12-31T23:59:00Z' },
+        stockSignal: { type: 'low', count: 3 },
+      })
+      // Flash sale doit être présent
+      expect(html).toContain('id="kvt-flash-sale"')
+      // Stock signal ne doit pas être présent (flashSale a la priorité)
+      expect(html).not.toContain('id="kvt-stock-signal"')
+    })
+
+    it('sans flashSale : pas de bandeau #kvt-flash-sale', () => {
+      const html = renderStickyAddToCartMobile(BASE_OPTS)
+      expect(html).not.toContain('id="kvt-flash-sale"')
+    })
   })
 })

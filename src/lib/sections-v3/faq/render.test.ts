@@ -33,4 +33,33 @@ describe('renderFaq', () => {
     expect(html).toContain('<details')
     expect(html).toContain('<summary')
   })
+
+  // Sprint 3 T4 — animation CSS max-height + icône +/×
+  it('injects kvt-faq CSS classes for animation', () => {
+    const html = renderFaq({ ...base, copy: { faq: [{ q: 'Q', a: 'A' }] } }, softTokens)
+    expect(html).toContain('kvt-faq-body')
+    expect(html).toContain('kvt-faq-icon')
+  })
+
+  it('includes grid-template-rows transition for smooth open/close', () => {
+    const html = renderFaq({ ...base, copy: { faq: [{ q: 'Q', a: 'A' }] } }, softTokens)
+    expect(html).toContain('grid-template-rows')
+    expect(html).toContain('transition')
+  })
+
+  it('includes details[open] selector for open state icon rotation', () => {
+    const html = renderFaq({ ...base, copy: { faq: [{ q: 'Q', a: 'A' }] } }, softTokens)
+    expect(html).toContain('details[open]')
+    expect(html).toContain('rotate(45deg)')
+  })
+
+  it('includes prefers-reduced-motion guard', () => {
+    const html = renderFaq({ ...base, copy: { faq: [{ q: 'Q', a: 'A' }] } }, softTokens)
+    expect(html).toContain('prefers-reduced-motion')
+  })
+
+  it('uses durationShort token from motion', () => {
+    const html = renderFaq({ ...base, copy: { faq: [{ q: 'Q', a: 'A' }] } }, softTokens)
+    expect(html).toContain(softTokens.motion.durationShort)
+  })
 })

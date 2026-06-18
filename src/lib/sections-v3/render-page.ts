@@ -145,6 +145,24 @@ export function renderPageV3(
 }());
 <\/script>`
 
+  // Sprint 3 T6 — animation fadeInUp globale CSS.
+  // Disponible via la classe .kvt-fade-up sur n'importe quel élément.
+  // NOT appliquée massivement ici pour éviter le CLS — les renderers individuels
+  // peuvent l'utiliser de façon ciblée avec animation-delay pour cascade.
+  // Guard prefers-reduced-motion obligatoire.
+  const globalAnimationStyle = `<style>
+@keyframes kvtFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.kvt-fade-up {
+  animation: kvtFadeUp 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kvt-fade-up { animation: none; }
+}
+</style>`
+
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -154,6 +172,7 @@ export function renderPageV3(
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&family=DM+Serif+Display&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap">
+${globalAnimationStyle}
 </head>
 <body style="margin:0;padding:0">
 ${sections}

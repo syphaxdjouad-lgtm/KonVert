@@ -1,5 +1,6 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
+import { renderTrustBadgesPayment } from '@/lib/sections-v3/shared/TrustBadgesPayment'
 
 export function renderHero(data: V3PageData, tokens: StyleTokens): string {
   const { product, images, copy } = data
@@ -45,7 +46,14 @@ export function renderHero(data: V3PageData, tokens: StyleTokens): string {
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         Paiement sécurisé
       </span>
-    </div>`
+    </div>
+    ${renderTrustBadgesPayment({
+      variant:    'compact',
+      bg:         'transparent',
+      border:     tokens.colors.border,
+      accentColor: tokens.colors.textMuted,
+      fontFamily: tokens.fonts.body,
+    })}`
 
   return `
 <section class="v3-hero" style="

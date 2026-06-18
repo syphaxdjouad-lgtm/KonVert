@@ -101,4 +101,21 @@ describe('renderHero', () => {
     expect(html).toContain(softTokens.colors.bg)
     expect(html).toContain(softTokens.colors.accent)
   })
+
+  // Sprint 1 T5 — logos de paiement compacts (variant 'compact') injectés dans le hero
+  it('T5 : trust badges paiement compacts présents dans le hero (Visa, PayPal)', () => {
+    const html = renderHero(baseData, softTokens)
+    // Le variant compact du renderTrustBadgesPayment doit être injecté sous le CTA
+    expect(html).toContain('Moyens de paiement acceptés')
+    expect(html).toContain('Visa')
+    expect(html).toContain('PayPal')
+  })
+
+  it('T5 : les logos de paiement n\'utilisent pas de src= externe (SVG inline)', () => {
+    const html = renderHero(baseData, softTokens)
+    // Aucune image externe pour les logos paiement
+    expect(html).not.toMatch(/src="http[^"]*payment/)
+    // Le bloc compact est présent
+    expect(html).toContain('role="group"')
+  })
 })

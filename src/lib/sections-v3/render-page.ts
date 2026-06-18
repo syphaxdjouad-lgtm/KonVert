@@ -22,6 +22,7 @@ import { renderMaterialsBreakdown } from './materials-breakdown/render'
 import { renderHowItWorks } from './how-it-works/render'
 import { renderCompareVariants } from './compare-variants/render'
 import { renderReviewsAiSummary } from './reviews-ai-summary/render'
+import { renderReviews } from './reviews/render'
 import { renderPressQuote } from './press-quote/render'
 import { renderCareInstructions } from './care-instructions/render'
 import { renderFaq } from './faq/render'
@@ -43,7 +44,7 @@ const STYLE_TOKENS: Record<StyleId, StyleTokens> = {
   'vibrant':      vibrantTokens,
 }
 
-// Map section -> renderer. Tous les 13 renderers V3 sont enregistrés ici.
+// Map section -> renderer. Tous les 14 renderers V3 sont enregistrés ici.
 type SectionRendererFn = (data: V3PageData, tokens: StyleTokens) => string
 
 const SECTION_RENDERERS: Record<V3SectionKey, SectionRendererFn> = {
@@ -56,6 +57,7 @@ const SECTION_RENDERERS: Record<V3SectionKey, SectionRendererFn> = {
   'how_it_works':          renderHowItWorks,
   'compare_variants':      renderCompareVariants,
   'reviews_ai_summary':    renderReviewsAiSummary,
+  'reviews':               renderReviews,     // Sprint 2 — reviews individuelles avec photos
   'press_quote':           renderPressQuote,
   'care_instructions':     renderCareInstructions,
   'faq':                   renderFaq,

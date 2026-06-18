@@ -46,4 +46,44 @@ describe('shouldRenderSection', () => {
     expect(shouldRenderSection('compare_variants', oneVar)).toBe(false)
     expect(shouldRenderSection('compare_variants', twoVar)).toBe(true)
   })
+
+  // Sprint 1 T4 — care_instructions conditionnel par catégorie
+  describe('care_instructions: Sprint 1 — conditionnel par catégorie', () => {
+    it('affiché si category est textile', () => {
+      const d = { ...base, product: { ...base.product, category: 'textile' as const } }
+      expect(shouldRenderSection('care_instructions', d)).toBe(true)
+    })
+    it('affiché si category est sport', () => {
+      const d = { ...base, product: { ...base.product, category: 'sport' as const } }
+      expect(shouldRenderSection('care_instructions', d)).toBe(true)
+    })
+    it('affiché si category est beauty', () => {
+      const d = { ...base, product: { ...base.product, category: 'beauty' as const } }
+      expect(shouldRenderSection('care_instructions', d)).toBe(true)
+    })
+    it('affiché si category est fashion', () => {
+      const d = { ...base, product: { ...base.product, category: 'fashion' as const } }
+      expect(shouldRenderSection('care_instructions', d)).toBe(true)
+    })
+    it('masqué si category est tech', () => {
+      const d = { ...base, product: { ...base.product, category: 'tech' as const } }
+      expect(shouldRenderSection('care_instructions', d)).toBe(false)
+    })
+    it('masqué si category est food', () => {
+      const d = { ...base, product: { ...base.product, category: 'food' as const } }
+      expect(shouldRenderSection('care_instructions', d)).toBe(false)
+    })
+    it('masqué si category est home_electronic', () => {
+      const d = { ...base, product: { ...base.product, category: 'home_electronic' as const } }
+      expect(shouldRenderSection('care_instructions', d)).toBe(false)
+    })
+    it('fallback conservateur : affiché si category est absent (produits sans catégorie)', () => {
+      // Ne pas casser les anciens produits générés sans champ category
+      expect(shouldRenderSection('care_instructions', base)).toBe(true)
+    })
+    it('masqué si category est other', () => {
+      const d = { ...base, product: { ...base.product, category: 'other' as const } }
+      expect(shouldRenderSection('care_instructions', d)).toBe(false)
+    })
+  })
 })

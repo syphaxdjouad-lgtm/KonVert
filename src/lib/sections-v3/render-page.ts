@@ -27,6 +27,7 @@ import { renderPressQuote } from './press-quote/render'
 import { renderCareInstructions } from './care-instructions/render'
 import { renderFaq } from './faq/render'
 import { renderBrandManifesto } from './brand-manifesto/render'
+import { renderNav } from './nav/render'
 import { renderStickyAddToCartMobile } from './shared/StickyAddToCartMobile'
 import { renderTrustBadgesPayment } from './shared/TrustBadgesPayment'
 
@@ -75,13 +76,18 @@ export function renderPageV3(
   const tokens = STYLE_TOKENS[styleId]
   const order = sectionOrder ?? DEFAULT_SECTION_ORDER_V3
 
-  const sections = order
+  const sectionsRaw = order
     .filter(key => shouldRenderSection(key, data))
     .map(key => {
       const renderer = SECTION_RENDERERS[key]
       return renderer(data, tokens)
     })
     .filter(Boolean)
+
+  // T3 Sprint 4 — injecter id="main-content" sur la première section
+  // afin que le skip link du nav ("Aller au contenu") y pointe correctement.
+  const sections = sectionsRaw
+    .map((html, idx) => idx === 0 ? html.replace('<section', '<section id="main-content"') : html)
     .join('\n')
 
   // P1-1 : Sticky add-to-cart mobile — toujours injecté, même si le prix est absent.
@@ -163,6 +169,12 @@ export function renderPageV3(
 }
 </style>`
 
+  // T3 Sprint 4 — nav header sticky injecté avant le hero.
+  // N'est PAS dans SECTION_RENDERERS : c'est un élément de chrome (header global),
+  // pas une section de contenu produit. Il ne peut ni être réordonné ni filtré
+  // par display-rules — il est toujours présent sur toutes les pages V3.
+  const navHtml = renderNav(data, tokens)
+
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -175,6 +187,7 @@ export function renderPageV3(
 ${globalAnimationStyle}
 </head>
 <body style="margin:0;padding:0">
+${navHtml}
 ${sections}
 ${trustHtml}
 ${stickyHtml}

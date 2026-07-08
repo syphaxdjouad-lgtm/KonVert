@@ -74,5 +74,11 @@ export interface V3PageData {
     how_it_works?: Array<{ step: number; title: string; description: string }>
     // Sprint 2 — avis clients individuels avec photos UGC optionnelles
     reviews?: V3Review[]
+    // Sprint 4 T4 — stock signal wording générique SANS chiffre (décision founder juridique)
+    // Jamais de count numérique — risque art. L122-1 pratiques commerciales trompeuses.
+    stock_signal?: {
+      label: string  // ex: "Stock limité", "Dernières pièces", "Ne tardez pas"
+      tone:  'low' | 'critical'
+    }
   }
 }

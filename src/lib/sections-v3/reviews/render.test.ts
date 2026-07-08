@@ -39,8 +39,9 @@ describe('renderReviews', () => {
     expect(html).toBe('')
   })
 
-  // Cas limite : < 3 reviews → section absente (seuil MVP = 3)
-  it('Cas limite : 2 reviews → renvoie chaîne vide (seuil = 3)', () => {
+  // Sprint 4 T6 — seuil relevé de 3 à 5 (KISAME QW-3).
+  // 4 reviews ou moins → section absente (grid trop creuse sur mobile).
+  it('Cas limite : 2 reviews → renvoie chaîne vide (seuil = 5)', () => {
     const html = renderReviews(
       { ...base, copy: { reviews: [makeReview(), makeReview()] } },
       softTokens,
@@ -48,9 +49,15 @@ describe('renderReviews', () => {
     expect(html).toBe('')
   })
 
-  // Cas 2 — 4 reviews sans photo_url → grid sans images UGC
-  it('Cas 2 : 4 reviews sans photo_url → section présente, aucune balise img UGC', () => {
-    const reviews = Array.from({ length: 4 }, (_, i) =>
+  it('Cas limite bis : 4 reviews → renvoie chaîne vide (seuil = 5)', () => {
+    const reviews = Array.from({ length: 4 }, () => makeReview())
+    const html = renderReviews({ ...base, copy: { reviews } }, softTokens)
+    expect(html).toBe('')
+  })
+
+  // Cas 2 — 5 reviews sans photo_url (seuil minimum) → section présente
+  it('Cas 2 : 5 reviews sans photo_url → section présente, aucune balise img UGC', () => {
+    const reviews = Array.from({ length: 5 }, (_, i) =>
       makeReview({ author: `User ${i}`, initials: `U${i}`, rating: 5 })
     )
     const html = renderReviews({ ...base, copy: { reviews } }, softTokens)
@@ -59,7 +66,7 @@ describe('renderReviews', () => {
     expect(html).toContain('kvt-reviews')
     expect(html).toContain('kvt-reviews__grid')
 
-    // Les 4 auteurs apparaissent
+    // Les 5 auteurs apparaissent
     reviews.forEach(r => expect(html).toContain(r.author))
 
     // Aucune balise img UGC (pas de photo_url)
@@ -97,9 +104,12 @@ describe('renderReviews', () => {
   })
 
   // Vérifications supplémentaires sur le rendu riche (summary bar, distribution, filtres)
+  // Seuil 5 obligatoire depuis Sprint 4 T6
   it('rendu riche : summary bar avec note moyenne, distribution et filtres présents', () => {
     const reviews = [
       makeReview({ rating: 5 }),
+      makeReview({ rating: 5 }),
+      makeReview({ rating: 4 }),
       makeReview({ rating: 5 }),
       makeReview({ rating: 4 }),
     ]
@@ -119,8 +129,46 @@ describe('renderReviews', () => {
     expect(html).toContain('avis vérifiés')
   })
 
+  // Sprint 4 — T4 : 5 reviews sans photo_url (valeur exacte du brief)
+  it('Sprint 4 T4 : 5 reviews sans photo_url → section présente, aucune balise img UGC', () => {
+    const reviews = Array.from({ length: 5 }, (_, i) =>
+      makeReview({ author: `User ${i}`, initials: `U${i}`, rating: 5 })
+    )
+    const html = renderReviews({ ...base, copy: { reviews } }, softTokens)
+
+    expect(html).toContain('kvt-reviews')
+    reviews.forEach(r => expect(html).toContain(r.author))
+    // Aucune balise img avec URL http (pas de photo_url → pas de bloc UGC)
+    const ugcImgs = html.match(/<img[^>]+src="http/g) ?? []
+    expect(ugcImgs.length).toBe(0)
+  })
+
+  // Sprint 4 — T5 : 6 reviews dont 2 avec photo_url (valeur exacte du brief)
+  it('Sprint 4 T5 : 6 reviews dont 2 photo_url → 2 cards avec img UGC + 4 sans', () => {
+    const reviews = [
+      makeReview({ author: 'Alice',  initials: 'AL', photo_url: 'https://cdn.example.com/ugcA.jpg' }),
+      makeReview({ author: 'Bruno',  initials: 'BR' }),
+      makeReview({ author: 'Carla',  initials: 'CA', photo_url: 'https://cdn.example.com/ugcB.jpg' }),
+      makeReview({ author: 'Denis',  initials: 'DE' }),
+      makeReview({ author: 'Elise',  initials: 'EL', rating: 4 }),
+      makeReview({ author: 'Fabien', initials: 'FA', verified: false }),
+    ]
+    const html = renderReviews({ ...base, copy: { reviews } }, softTokens)
+
+    expect(html).toContain('kvt-reviews')
+    reviews.forEach(r => expect(html).toContain(r.author))
+
+    // Les 2 reviews avec photo_url sont rendues avec leurs images
+    expect(html).toContain('ugcA.jpg')
+    expect(html).toContain('ugcB.jpg')
+
+    // Exactement 2 références UGC dans le HTML (pas davantage)
+    const ugcCount = (html.match(/ugc[AB]\.jpg/g) ?? []).length
+    expect(ugcCount).toBe(2)
+  })
+
   it('utilise les tokens couleurs (bgAlt, star, border)', () => {
-    const reviews = Array.from({ length: 3 }, () => makeReview())
+    const reviews = Array.from({ length: 5 }, () => makeReview())
     const html = renderReviews({ ...base, copy: { reviews } }, softTokens)
 
     // bgAlt pour le fond de section
@@ -132,6 +180,8 @@ describe('renderReviews', () => {
   it('échappe les caractères HTML dans le texte et le titre des reviews', () => {
     const reviews = [
       makeReview({ title: '<b>Excellent</b>', text: 'Super & rapide' }),
+      makeReview(),
+      makeReview(),
       makeReview(),
       makeReview(),
     ]

@@ -27,6 +27,7 @@ import { renderPressQuote } from './press-quote/render'
 import { renderCareInstructions } from './care-instructions/render'
 import { renderFaq } from './faq/render'
 import { renderBrandManifesto } from './brand-manifesto/render'
+import { renderNav } from './nav/render'
 import { renderStickyAddToCartMobile } from './shared/StickyAddToCartMobile'
 import { renderTrustBadgesPayment } from './shared/TrustBadgesPayment'
 
@@ -75,13 +76,18 @@ export function renderPageV3(
   const tokens = STYLE_TOKENS[styleId]
   const order = sectionOrder ?? DEFAULT_SECTION_ORDER_V3
 
-  const sections = order
+  const sectionsRaw = order
     .filter(key => shouldRenderSection(key, data))
     .map(key => {
       const renderer = SECTION_RENDERERS[key]
       return renderer(data, tokens)
     })
     .filter(Boolean)
+
+  // T3 Sprint 4 — injecter id="main-content" sur la première section
+  // afin que le skip link du nav ("Aller au contenu") y pointe correctement.
+  const sections = sectionsRaw
+    .map((html, idx) => idx === 0 ? html.replace('<section', '<section id="main-content"') : html)
     .join('\n')
 
   // P1-1 : Sticky add-to-cart mobile — toujours injecté, même si le prix est absent.
@@ -92,6 +98,17 @@ export function renderPageV3(
     ? parseFloat(data.product.price.replace(/[^0-9.]/g, ''))
     : 0
   const hasPriceData = Number.isFinite(priceAmount) && priceAmount > 0
+  // Sprint 4 T4 — mapper stock_signal vers le sticky CTA mobile.
+  // data.copy.stock_signal est le signal sanitisé (sans chiffre, gate anti-count
+  // appliqué dans route.ts). Le composant gère low/critical avec les couleurs
+  // warning/danger, et affiche le label textuel seul (jamais de count).
+  const stockSignalForSticky = data.copy.stock_signal
+    ? {
+        type:  data.copy.stock_signal.tone,  // 'low' | 'critical'
+        label: data.copy.stock_signal.label, // toujours sans chiffre
+      } as const
+    : undefined
+
   const stickyHtml = renderStickyAddToCartMobile({
     productName:  data.product.title,
     productImage: data.images[0] ?? '',
@@ -107,6 +124,7 @@ export function renderPageV3(
     bgColor:     tokens.colors.bg,
     borderColor: tokens.colors.border,
     showQty:     false,
+    stockSignal: stockSignalForSticky,
   })
 
   // Trust badges footer — auto-injecté juste avant </body> pour les pages V3
@@ -163,6 +181,12 @@ export function renderPageV3(
 }
 </style>`
 
+  // T3 Sprint 4 — nav header sticky injecté avant le hero.
+  // N'est PAS dans SECTION_RENDERERS : c'est un élément de chrome (header global),
+  // pas une section de contenu produit. Il ne peut ni être réordonné ni filtré
+  // par display-rules — il est toujours présent sur toutes les pages V3.
+  const navHtml = renderNav(data, tokens)
+
   return `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -175,6 +199,7 @@ export function renderPageV3(
 ${globalAnimationStyle}
 </head>
 <body style="margin:0;padding:0">
+${navHtml}
 ${sections}
 ${trustHtml}
 ${stickyHtml}

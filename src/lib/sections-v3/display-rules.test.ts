@@ -108,13 +108,37 @@ describe('shouldRenderSection', () => {
       expect(shouldRenderSection('reviews', twoReviews)).toBe(false)
     })
 
-    it('T13c : reviews.length === 3 (>= 3) → shouldRenderSection retourne true', () => {
+    // Sprint 4 T6 — seuil relevé à 5 : 3 reviews n'est plus suffisant
+    it('T13c : reviews.length === 3 (< 5, seuil Sprint 4) → shouldRenderSection retourne false', () => {
       const threeReviews: V3PageData = { ...base, copy: { reviews: [
         { author: 'A', initials: 'AA', rating: 5 as const, title: 'Top', text: 'OK', date: 'J-1', verified: true },
         { author: 'B', initials: 'BB', rating: 4 as const, title: 'Bien', text: 'OK', date: 'J-2', verified: false },
         { author: 'C', initials: 'CC', rating: 5 as const, title: 'Parfait', text: 'OK', date: 'J-3', verified: true },
       ]}}
-      expect(shouldRenderSection('reviews', threeReviews)).toBe(true)
+      expect(shouldRenderSection('reviews', threeReviews)).toBe(false)
+    })
+  })
+
+  // Sprint 4 T13bis/T14bis — gate reviews relevé de 3 à 5 (KISAME QW-3, T6)
+  describe('reviews: Sprint 4 T6 — gate relevé à >= 5 (était >= 3)', () => {
+    it('T6a : reviews.length === 3 (< 5) → shouldRenderSection retourne false', () => {
+      const threeReviews: V3PageData = { ...base, copy: { reviews: [
+        { author: 'A', initials: 'AA', rating: 5 as const, title: 'Top', text: 'OK', date: 'J-1', verified: true },
+        { author: 'B', initials: 'BB', rating: 4 as const, title: 'Bien', text: 'OK', date: 'J-2', verified: false },
+        { author: 'C', initials: 'CC', rating: 5 as const, title: 'Parfait', text: 'OK', date: 'J-3', verified: true },
+      ]}}
+      expect(shouldRenderSection('reviews', threeReviews)).toBe(false)
+    })
+
+    it('T6b : reviews.length === 5 (>= 5) → shouldRenderSection retourne true', () => {
+      const fiveReviews: V3PageData = { ...base, copy: { reviews: [
+        { author: 'A', initials: 'AA', rating: 5 as const, title: 'Top', text: 'OK', date: 'J-1', verified: true },
+        { author: 'B', initials: 'BB', rating: 4 as const, title: 'Bien', text: 'OK', date: 'J-2', verified: false },
+        { author: 'C', initials: 'CC', rating: 5 as const, title: 'Parfait', text: 'OK', date: 'J-3', verified: true },
+        { author: 'D', initials: 'DD', rating: 5 as const, title: 'Super', text: 'OK', date: 'J-4', verified: true },
+        { author: 'E', initials: 'EE', rating: 4 as const, title: 'Bon', text: 'OK', date: 'J-5', verified: true },
+      ]}}
+      expect(shouldRenderSection('reviews', fiveReviews)).toBe(true)
     })
   })
 

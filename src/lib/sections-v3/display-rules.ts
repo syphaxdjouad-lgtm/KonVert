@@ -48,10 +48,12 @@ export function shouldRenderSection(key: V3SectionKey, data: V3PageData): boolea
       return (data.product.variants?.length ?? 0) >= 2
     case 'reviews_ai_summary':
       return Boolean(data.copy.reviews_summary)
-    // Sprint 2 — reviews individuelles : minimum 3 pour un rendu crédible visuellement.
-    // Moins de 3 cards → la grid paraît vide et le bloc de distribution n'a pas de sens.
+    // Sprint 4 T6 — reviews individuelles : seuil relevé de 3 à 5 (KISAME QW-3).
+    // 3-4 reviews → grid creuse sur mobile (1 rangée ou 1.5), visuellement peu crédible.
+    // 5 reviews → 2 rangées complètes sur mobile 1-col = densité et crédibilité sociale.
+    // Le prompt demande maintenant EXACTEMENT 5 reviews, le seuil est cohérent.
     case 'reviews':
-      return Array.isArray(data.copy.reviews) && data.copy.reviews.length >= 3
+      return Array.isArray(data.copy.reviews) && data.copy.reviews.length >= 5
     case 'press_quote':
       return Boolean(data.copy.press_quote)
     default:

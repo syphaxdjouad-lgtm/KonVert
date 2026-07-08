@@ -130,7 +130,9 @@ function renderReviewCard(review: V3Review, index: number, tokens: StyleTokens):
 
 export function renderReviews(data: V3PageData, tokens: StyleTokens): string {
   const reviews = data.copy.reviews
-  if (!reviews || reviews.length < 3) return ''
+  // Sprint 4 T6 — seuil relevé de 3 à 5 (aligné avec display-rules.ts).
+  // 5 reviews = 2 rangées complètes mobile → crédibilité visuelle suffisante.
+  if (!reviews || reviews.length < 5) return ''
 
   const starColor    = tokens.colors.star    ?? CRO_DEFAULTS.star
   const bgAlt        = tokens.colors.bgAlt   ?? CRO_DEFAULTS.bgAlt

@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { rateLimitAsync } from '@/lib/security/ratelimit'
+import { sendEmail } from '@/lib/email'
+import { escapeHtmlText } from '@/lib/security/sanitize'
+
+const TEAM_EMAIL = process.env.CONTACT_TEAM_EMAIL || 'hello@konvertpilot.com'
 
 export async function POST(req: NextRequest) {
   try {
@@ -36,12 +40,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Champ trop long' }, { status: 400 })
     }
 
+    const trimmedName    = name.trim()
+    const trimmedEmail   = email.trim().toLowerCase()
+    const trimmedSubject = subject.trim()
+    const trimmedMessage = message.trim()
+
     // Stocker en DB
     const { error } = await supabaseAdmin.from('contact_messages').insert({
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      subject: subject.trim(),
-      message: message.trim(),
+      name: trimmedName,
+      email: trimmedEmail,
+      subject: trimmedSubject,
+      message: trimmedMessage,
     })
 
     if (error) {
@@ -51,14 +60,41 @@ export async function POST(req: NextRequest) {
       // brut (le scrubber ferait le job côté Sentry mais autant être propre
       // côté code aussi : on log juste un hash de l'email pour dédup analytics).
       console.error('[contact] DB insert error:', error.message)
-      Sentry.captureMessage('[contact] DB insert failed — fallback log', {
-        level: 'warning',
+      Sentry.captureMessage('[contact] DB insert failed', {
+        level: 'error',
         extra: {
-          domain: email.split('@')[1] ?? 'unknown',
-          subject_len: subject.length,
-          message_len: message.length,
+          domain: trimmedEmail.split('@')[1] ?? 'unknown',
+          subject_len: trimmedSubject.length,
+          message_len: trimmedMessage.length,
         },
       })
+      // Le message n'a pas été persisté — on ne peut pas garantir qu'il sera
+      // traité (SEC-05). On renvoie une vraie erreur plutôt qu'un faux ok:true.
+      return NextResponse.json(
+        { error: 'Erreur lors de l\'envoi. Réessaie ou écris directement à hello@konvertpilot.com.' },
+        { status: 500 }
+      )
+    }
+
+    // Notifier l'équipe par email — avant ça, seule la table contact_messages
+    // recevait la demande (personne n'était notifié en temps réel, cf SEC-05).
+    // Best-effort : un échec Resend ne doit pas faire échouer la requête
+    // puisque le message est déjà stocké en DB.
+    try {
+      await sendEmail({
+        to: TEAM_EMAIL,
+        subject: `[Contact] ${trimmedSubject}`,
+        html: `
+          <p><strong>Nom :</strong> ${escapeHtmlText(trimmedName)}</p>
+          <p><strong>Email :</strong> ${escapeHtmlText(trimmedEmail)}</p>
+          <p><strong>Sujet :</strong> ${escapeHtmlText(trimmedSubject)}</p>
+          <p><strong>Message :</strong></p>
+          <p>${escapeHtmlText(trimmedMessage).replace(/\n/g, '<br>')}</p>
+        `,
+      })
+    } catch (emailErr) {
+      console.error('[contact] team notification email failed:', emailErr)
+      Sentry.captureMessage('[contact] team notification email failed', { level: 'warning' })
     }
 
     return NextResponse.json({ ok: true })

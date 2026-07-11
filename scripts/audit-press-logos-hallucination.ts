@@ -20,7 +20,7 @@
 import { config } from 'dotenv'
 config({ path: '.env.local' })
 
-import { generateLandingPage } from '../src/lib/anthropic/generate'
+import { generateLandingPage } from '../src/lib/generation/generate'
 import * as fs from 'fs'
 import * as path from 'path'
 

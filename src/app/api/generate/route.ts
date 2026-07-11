@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateLandingPage, GENERATION_MODEL } from '@/lib/anthropic/generate'
+import { generateLandingPage, GENERATION_MODEL } from '@/lib/generation/generate'
 import { scrapeProduct, cleanProduct, looksHallucinated, ScrapeError } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import { createClient } from '@/lib/supabase/server'

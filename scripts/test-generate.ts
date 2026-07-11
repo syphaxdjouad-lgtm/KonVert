@@ -5,7 +5,7 @@
 import { config } from 'dotenv'
 config({ path: '.env.local' })
 
-import { generateLandingPage, GENERATION_MODEL } from '../src/lib/anthropic/generate'
+import { generateLandingPage, GENERATION_MODEL } from '../src/lib/generation/generate'
 import { MOCK_PRODUCT } from '../src/lib/mock/product'
 
 async function main() {

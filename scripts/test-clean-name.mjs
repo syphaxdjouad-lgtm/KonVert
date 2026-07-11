@@ -6,7 +6,7 @@
 // Pas un test automatisé — vérification manuelle de la qualité de sortie.
 
 import { config } from 'dotenv'
-import { cleanProductName } from '../src/lib/anthropic/product-name.ts'
+import { cleanProductName } from '../src/lib/generation/product-name.ts'
 
 config({ path: '.env.local' })
 

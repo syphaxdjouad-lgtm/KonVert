@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
-import { generateLandingPage } from '@/lib/anthropic/generate'
+import { generateLandingPage } from '@/lib/generation/generate'
 import { scrapeProduct, cleanProduct, looksHallucinated } from '@/lib/scraper'
 import { MOCK_PRODUCT } from '@/lib/mock/product'
 import { templateEtecBlue } from '@/lib/templates/etec-blue'

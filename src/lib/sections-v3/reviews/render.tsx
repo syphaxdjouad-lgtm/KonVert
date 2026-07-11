@@ -1,6 +1,6 @@
 import type { V3PageData, V3Review } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
-import { escapeHtml } from '@/lib/utils/html'
+import { escapeHtml, escapeAttr } from '@/lib/utils/html'
 
 // Tokens sémantiques Sprint 1 — fallbacks identiques aux valeurs design system
 const CRO_DEFAULTS = {
@@ -83,7 +83,7 @@ function renderReviewCard(review: V3Review, index: number, tokens: StyleTokens):
   // Ratio 4:3, object-fit:cover pour cohérence visuelle entre les cards.
   const photoHtml = review.photo_url
     ? `<div style="aspect-ratio:4/3;overflow:hidden">
-        <img src="${review.photo_url}"
+        <img src="${escapeAttr(review.photo_url)}"
              alt="Photo de ${escapeHtml(review.author)}"
              style="width:100%;height:100%;object-fit:cover;display:block"
              loading="lazy">

@@ -1,7 +1,7 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { buildImagePool, getImage } from '@/lib/images/pool'
-import { escapeHtml } from '@/lib/utils/html'
+import { escapeHtml, escapeAttr } from '@/lib/utils/html'
 
 export function renderBrandManifesto(data: V3PageData, tokens: StyleTokens): string {
   const m = data.copy.manifesto ?? {
@@ -29,7 +29,7 @@ export function renderBrandManifesto(data: V3PageData, tokens: StyleTokens): str
     display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center
   ">
     <div>
-      ${lifestyle ? `<img src="${lifestyle}" alt=""
+      ${lifestyle ? `<img src="${escapeAttr(lifestyle)}" alt=""
         style="width:100%;border-radius:${tokens.radius.image};aspect-ratio:4/5;object-fit:cover">` : ''}
     </div>
     <div>

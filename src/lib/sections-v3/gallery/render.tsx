@@ -1,6 +1,6 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
-import { escapeHtml } from '@/lib/utils/html'
+import { escapeHtml, escapeAttr } from '@/lib/utils/html'
 
 export function renderGallery(data: V3PageData, tokens: StyleTokens): string {
   if (data.images.length === 0) {
@@ -22,7 +22,7 @@ export function renderGallery(data: V3PageData, tokens: StyleTokens): string {
       position:relative;
     ">
       <img
-        src="${src}"
+        src="${escapeAttr(src)}"
         alt="${escapeHtml(data.product.title)} - vue ${i + 1}"
         style="width:100%;height:auto;display:block"
         loading="lazy"

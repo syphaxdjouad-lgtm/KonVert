@@ -82,8 +82,25 @@ export async function GET(req: NextRequest) {
      winner  → { test_id, winner }                   (auth)
      status  → { test_id, status }                   (auth)
 ───────────────────────────────────────────────────────────────── */
+interface AbPostBody {
+  action?: 'log' | 'create' | 'winner' | 'status'
+  variant_id?: string
+  visitor_id?: string
+  event_type?: string
+  page_id?: string
+  variant_b_content?: unknown
+  test_id?: string
+  winner?: string
+  status?: string
+}
+
 export async function POST(req: NextRequest) {
-  const body = await req.json()
+  let body: AbPostBody
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'invalid_json' }, { status: 400 })
+  }
   const { action } = body
 
   /* ── Log event (public) ───────────────────────────────────────── */
@@ -217,7 +234,7 @@ export async function POST(req: NextRequest) {
   if (action === 'winner') {
     const { test_id, winner } = body
 
-    if (!test_id || !['A', 'B'].includes(winner)) {
+    if (!test_id || !winner || !['A', 'B'].includes(winner)) {
       return NextResponse.json({ error: 'test_id et winner (A|B) requis' }, { status: 400 })
     }
 
@@ -246,7 +263,7 @@ export async function POST(req: NextRequest) {
     const { test_id, status } = body
     const allowed = ['running', 'paused', 'completed']
 
-    if (!test_id || !allowed.includes(status)) {
+    if (!test_id || !status || !allowed.includes(status)) {
       return NextResponse.json({ error: 'test_id et status valide requis' }, { status: 400 })
     }
 

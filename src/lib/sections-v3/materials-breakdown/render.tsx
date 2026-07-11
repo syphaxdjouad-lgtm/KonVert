@@ -2,16 +2,9 @@ import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { buildImagePool, getImage } from '@/lib/images/pool'
 import type { ImageSlot } from '@/lib/images/pool'
+import { escapeHtml } from '@/lib/utils/html'
 
 const CONFIDENCE_THRESHOLD = 0.6
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}
 
 function imageHintToSlot(hint: string | undefined): ImageSlot {
   // 'detail' maps directly, 'macro' has no Angle equivalent → fallback to 'any'

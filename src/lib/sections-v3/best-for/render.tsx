@@ -1,5 +1,6 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
+import { escapeHtml } from '@/lib/utils/html'
 
 // ─── Fallback pour les tokens sémantiques (cas où le style ne les définit pas) ──
 const CRO_DEFAULTS = {
@@ -120,6 +121,3 @@ export function renderBestFor(data: V3PageData, tokens: StyleTokens): string {
 </section>`.trim()
 }
 
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-}

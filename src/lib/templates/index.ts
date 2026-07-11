@@ -181,6 +181,11 @@ export const TEMPLATES = [
   { id: 'etec-natural',  name: 'Natural',  category: 'organic' as const, fn: templateEtecNatural,  label: 'Eco · Premium · Allbirds-style minimaliste', accent: '#A8B5A0', badge: 'Nouveau',     productType: 'universal' as ProductType, themed: false },
 ]
 
+// Nombre réel de templates disponibles — source unique pour tout affichage
+// marketing (home, pricing). Ne jamais hardcoder ce chiffre ailleurs (cf U-01,
+// AUDIT_FABLE5.md : 38/42/50 selon la page avant ce fix).
+export const TEMPLATE_COUNT = TEMPLATES.length
+
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 
 /**

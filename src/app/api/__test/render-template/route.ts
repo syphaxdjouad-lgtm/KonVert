@@ -11,10 +11,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Not available in prod' }, { status: 404 })
   }
 
-  const { templateId, data } = (await req.json()) as {
-    templateId: string
-    data: LandingPageData
+  let body: { templateId: string; data: LandingPageData }
+  try {
+    body = (await req.json()) as { templateId: string; data: LandingPageData }
+  } catch {
+    return NextResponse.json({ error: 'invalid_json' }, { status: 400 })
   }
+  const { templateId, data } = body
 
   const html = renderTemplate(templateId, data)
 

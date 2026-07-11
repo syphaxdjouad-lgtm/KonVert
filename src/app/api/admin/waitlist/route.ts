@@ -1,19 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'crypto'
 import { supabaseAdmin as supabase } from '@/lib/supabase/admin'
-
-// Protection admin — comparaison timing-safe pour éviter les timing attacks.
-// On hash les deux secrets en SHA-256 avant compare : longueur identique,
-// pas de leak de la longueur du secret (le `&& length === length` précédent
-// court-circuitait après timingSafeEqual et faisait fuiter cette info).
-function isAdmin(req: NextRequest) {
-  const secret = req.headers.get('x-admin-secret')
-  const expected = process.env.ADMIN_SECRET
-  if (!secret || !expected) return false
-  const a = crypto.createHash('sha256').update(secret).digest()
-  const b = crypto.createHash('sha256').update(expected).digest()
-  return crypto.timingSafeEqual(a, b)
-}
+import { isAdmin } from '@/lib/security/admin-auth'
 
 export async function GET(req: NextRequest) {
   if (!isAdmin(req)) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
@@ -34,7 +21,13 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   if (!isAdmin(req)) return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
 
-  const { email, waitlist_id } = await req.json()
+  let body: { email?: string; waitlist_id?: string }
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'invalid_json' }, { status: 400 })
+  }
+  const { email, waitlist_id } = body
   if (!email) return NextResponse.json({ error: 'Email requis' }, { status: 400 })
 
   // Crée l'invitation

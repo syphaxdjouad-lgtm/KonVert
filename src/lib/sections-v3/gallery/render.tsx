@@ -1,5 +1,6 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
+import { escapeHtml } from '@/lib/utils/html'
 
 export function renderGallery(data: V3PageData, tokens: StyleTokens): string {
   if (data.images.length === 0) {
@@ -119,10 +120,3 @@ export function renderGallery(data: V3PageData, tokens: StyleTokens): string {
 </section>`.trim()
 }
 
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}

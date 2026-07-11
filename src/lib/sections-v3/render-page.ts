@@ -1,5 +1,6 @@
 import type { V3PageData, V3SectionKey } from '@/types/v3'
 import type { StyleId, StyleTokens } from '@/lib/styles/types'
+import { escapeHtml } from '@/lib/utils/html'
 import { STYLE_IDS } from '@/lib/styles'
 import { DEFAULT_SECTION_ORDER_V3 } from './index'
 import { shouldRenderSection } from './display-rules'
@@ -206,8 +207,4 @@ ${stickyHtml}
 ${heightScript}
 </body>
 </html>`
-}
-
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }

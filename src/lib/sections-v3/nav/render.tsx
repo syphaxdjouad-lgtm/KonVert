@@ -17,6 +17,7 @@
 
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
+import { escapeHtml } from '@/lib/utils/html'
 
 const NAV_MAX_CHARS_DESKTOP = 30
 const NAV_MAX_CHARS_MOBILE  = 20
@@ -24,14 +25,6 @@ const NAV_MAX_CHARS_MOBILE  = 20
 function truncate(str: string, max: number): string {
   if (str.length <= max) return str
   return str.slice(0, max).trimEnd() + '…'
-}
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
 }
 
 /**

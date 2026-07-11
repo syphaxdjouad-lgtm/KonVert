@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'crypto'
 import Stripe from 'stripe'
+import { isAdmin } from '@/lib/security/admin-auth'
 
 // Preflight Stripe pour le launch — vérifie en prod :
 //   - mode de la clé (live vs test)
@@ -15,15 +15,6 @@ import Stripe from 'stripe'
 export const runtime = 'nodejs'
 export const maxDuration = 15
 export const dynamic = 'force-dynamic'
-
-function isAdmin(req: NextRequest): boolean {
-  const provided = req.headers.get('x-admin-secret')
-  const expected = process.env.ADMIN_SECRET
-  if (!provided || !expected) return false
-  const a = crypto.createHash('sha256').update(provided).digest()
-  const b = crypto.createHash('sha256').update(expected).digest()
-  return crypto.timingSafeEqual(a, b)
-}
 
 function detectMode(secret: string | undefined): 'live' | 'test' | 'missing' | 'invalid' {
   if (!secret) return 'missing'

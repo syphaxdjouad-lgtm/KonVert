@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { track } from '@/lib/analytics'
 import { launchEventSchema, jsonLd } from '@/lib/schema'
 import { getLaunchDate } from '@/lib/launch'
+import { TEMPLATE_COUNT } from '@/lib/templates'
 
 // Page de pré-launch — countdown vers J-Day puis bascule "We're live!" une
 // fois le launch passé. Date paramétrable via NEXT_PUBLIC_LAUNCH_DATE (ISO
@@ -221,7 +222,7 @@ function LaunchDayContent() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
             {[
               { icon: Zap, label: 'Génération 30s' },
-              { icon: Sparkles, label: '42+ templates' },
+              { icon: Sparkles, label: `${TEMPLATE_COUNT}+ templates` },
               { icon: Rocket, label: 'A/B testing' },
               { icon: Check, label: 'Shopify natif' },
             ].map(({ icon: Icon, label }) => (

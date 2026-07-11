@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { track } from '@/lib/analytics'
 import { pixels } from '@/lib/tracking/pixels'
 import { launchEventSchema, jsonLd } from '@/lib/schema'
+import { TEMPLATE_COUNT } from '@/lib/templates'
 
 // Landing dédiée trafic ProductHunt — exposée via le post PH du jour J et
 // le QR code dans les communautés. Offre exclusive 50% off premier mois.
@@ -18,7 +19,7 @@ import { launchEventSchema, jsonLd } from '@/lib/schema'
 
 const FEATURES = [
   'Génération en 30 secondes',
-  '42+ templates haute conversion',
+  `${TEMPLATE_COUNT}+ templates haute conversion`,
   'A/B testing intégré',
   'Connexion Shopify, WooCommerce, YouCan',
   'Copy IA optimisée 8 langues',

@@ -15,13 +15,20 @@ export const luxeNoirTokens: StyleTokens = {
     text:      '#F5F0E8',
     textMuted: '#A89E91',
     border:    'rgba(245, 240, 232, 0.1)',
+    // Sprint 1 — tokens sémantiques CRO adaptés au fond sombre
+    // NB : seul style où bg est sombre (dark warm #14110F), autorisé par exception fondateur
+    bgAlt:   '#2A2420',   // fond alterné légèrement plus clair que #14110F
+    success: '#4ADE80',   // vert lumineux lisible sur fond sombre
+    warning: '#FBBF24',   // ambre clair lisible sur fond sombre
+    danger:  '#F87171',   // rouge clair lisible sur fond sombre
+    star:    '#FBBF24',   // or clair, cohérent avec accent or #C9A84C
   },
   fonts: {
     heading: '"Playfair Display", "Times New Roman", serif',
     body:    '"Inter", system-ui, sans-serif',
   },
-  spacing: { section: '140px', card: '32px', gap: '24px' },
+  spacing: { section: '140px', sectionMobile: '72px', card: '32px', gap: '24px' },
   radius:  { card: '2px', button: '0px', image: '2px' },
   shadows: { card: 'none', hover: '0 0 24px rgba(201, 168, 76, 0.3)' },
-  motion:  { ease: 'cubic-bezier(0.4, 0, 0.2, 1)', duration: '500ms' },
+  motion:  { ease: 'cubic-bezier(0.4, 0, 0.2, 1)', duration: '500ms', durationShort: '120ms', easeSpring: 'cubic-bezier(0.32, 0.72, 0, 1)' },
 }

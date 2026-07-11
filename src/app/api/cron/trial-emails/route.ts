@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { timingSafeEqual } from 'crypto'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import * as Sentry from '@sentry/nextjs'
 import { sendEmail } from '@/lib/email'
 import { emailDay1, emailDay3, emailDay7, emailDay10, emailDay12, emailDay13, emailDay14 } from '@/lib/email/templates'
+import { safeCompare } from '@/lib/security/safe-compare'
 
 // Vercel Pro = 60s, Hobby = 10s. Sans cette ligne, Vercel coupait le cron
 // silencieusement à mi-batch (~10s) et les emails de la fin n'étaient jamais
@@ -26,11 +26,6 @@ function getEmailForDay(day: TrialDay, name: string) {
     case 13: return emailDay13(name)
     case 14: return emailDay14(name)
   }
-}
-
-function safeCompare(a: string, b: string): boolean {
-  if (a.length !== b.length) return false
-  return timingSafeEqual(Buffer.from(a), Buffer.from(b))
 }
 
 // Protection cron : vérifie le header Vercel

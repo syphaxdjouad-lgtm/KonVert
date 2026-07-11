@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { TEMPLATE_COUNT } from '@/lib/templates'
 
 export const metadata: Metadata = {
   title: 'Conditions Générales de Vente — Konvert',
@@ -43,7 +44,7 @@ export default function CGVPage() {
                 <tr className="border-b border-gray-100">
                   <td className="py-3 pr-4 font-semibold">Starter</td>
                   <td className="py-3 pr-4">39 euros/mois</td>
-                  <td className="py-3">75 pages/mois, 2 boutiques, 42+ templates, export HTML</td>
+                  <td className="py-3">75 pages/mois, 2 boutiques, {TEMPLATE_COUNT}+ templates, export HTML</td>
                 </tr>
                 <tr className="border-b border-gray-100">
                   <td className="py-3 pr-4 font-semibold">Pro</td>

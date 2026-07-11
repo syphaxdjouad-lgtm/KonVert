@@ -15,9 +15,23 @@ describe('renderPageV3', () => {
     expect(html).toContain('Sac vintage')
     expect(html).toContain('v3-hero')
   })
-  it('skips gallery when images < 3', () => {
+  // P0-3 : threshold gallery abaissé de 3 à 1 — la gallery s'affiche dès 1 image.
+  // L'ancien test assertait que gallery était skippée avec 1 image, c'est maintenant le bon comportement.
+  it('P0-3 : gallery présente dès 1 image (threshold abaissé de 3 à 1)', () => {
     const html = renderPageV3('soft', data)
+    expect(html).toContain('v3-gallery')
+  })
+  it('P0-3 : gallery absente quand aucune image', () => {
+    const noImages = { ...data, images: [] }
+    const html = renderPageV3('soft', noImages)
+    // renderGallery retourne une section vide (<section> sans contenu) pour images=[]
+    // shouldRenderSection retourne false si images.length === 0
     expect(html).not.toContain('v3-gallery')
+  })
+  it('P0-3 : html généré contient le script kvt-height (hauteur dynamique iframe)', () => {
+    const html = renderPageV3('soft', data)
+    expect(html).toContain('kvt-height')
+    expect(html).toContain('postMessage')
   })
   it('respects custom sectionOrder', () => {
     const html = renderPageV3('soft', data, ['hero'])

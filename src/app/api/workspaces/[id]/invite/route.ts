@@ -26,7 +26,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   if (!workspace) return NextResponse.json({ error: 'Workspace introuvable' }, { status: 404 })
 
-  const { email, role = 'viewer' } = await req.json()
+  let body: { email?: string; role?: string }
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'invalid_json' }, { status: 400 })
+  }
+  const { email, role = 'viewer' } = body
   if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: 'Email invalide' }, { status: 400 })
   }

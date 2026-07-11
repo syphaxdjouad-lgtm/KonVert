@@ -181,6 +181,11 @@ export const TEMPLATES = [
   { id: 'etec-natural',  name: 'Natural',  category: 'organic' as const, fn: templateEtecNatural,  label: 'Eco · Premium · Allbirds-style minimaliste', accent: '#A8B5A0', badge: 'Nouveau',     productType: 'universal' as ProductType, themed: false },
 ]
 
+// Nombre réel de templates disponibles — source unique pour tout affichage
+// marketing (home, pricing). Ne jamais hardcoder ce chiffre ailleurs (cf U-01,
+// AUDIT_FABLE5.md : 38/42/50 selon la page avant ce fix).
+export const TEMPLATE_COUNT = TEMPLATES.length
+
 // ─── RENDER ───────────────────────────────────────────────────────────────────
 
 /**
@@ -188,7 +193,8 @@ export const TEMPLATES = [
  *
  * @field sectionOrder - Chantier C1 : ordre + visibility des sections riches.
  *   Lu par renderRichSections via injection _sectionOrder dans data.
- * @field visualSettings - RESERVE Chantier C2. Ignore en C1, warning dev si fourni.
+ * @field visualSettings - Chantier C2 : réglages visuels (couleurs, densité...)
+ *   du Settings Panel éditeur. Lu via injection _visualSettings dans data.
  * @field globalStyles - RESERVE Chantier C5. Ignore en C1, warning dev si fourni.
  * @field editMode - Editor v2 : active injection data-kvt-section-id +
  *   script click-to-edit postMessage dans l'iframe. Faux en prod.

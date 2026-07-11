@@ -51,7 +51,7 @@ Produit à valoriser :
 ${args.product.category ? `- Catégorie : ${args.product.category}` : ''}
 ${brandLine}
 
-OBLIGATOIRE : génère TOUTES les 12 sections ci-dessous, AUCUNE ne doit être omise. Une page sans press_quote / reviews_summary / how_it_works paraît vide et amateur.
+OBLIGATOIRE : génère TOUTES les 13 sections ci-dessous, AUCUNE ne doit être omise. Une page sans press_quote / reviews_summary / how_it_works / reviews paraît vide et amateur.
 
 JSON STRICT à produire :
 
@@ -62,7 +62,7 @@ JSON STRICT à produire :
   "features": [
     { "name": "Nom propriétaire si possible (ex: TENCEL™, SoftFit™)", "description": "≤15 mots, bénéfice concret", "isPropriety": false }
   ],
-  "best_for": ["3-4 cas d'usage concrets, ≤2 mots chacun"],
+  "best_for": ["3-4 items, chacun est une PROMESSE CLIENT ≤6 mots, formulée avec un verbe ou un adjectif actionnable. EXEMPLES écouteurs : 'Appels clairs en open space', 'Running sans fil qui glisse', 'Concerts sans fatiguer les oreilles'. EXEMPLES mode : 'Confort toute la journée', 'Séchage rapide après le sport', 'Style casual sans effort'. EXEMPLES beauté : 'Peau hydratée dès la 1re nuit', 'Routine simplifiée en 3 gestes'. JAMAIS : mot générique seul sans bénéfice ('Musique', 'Sport', 'Travel', 'Confort', 'Mode'). OBLIGATOIRE : chaque item en ${langName}, jamais en anglais — même pour les mots courts (pas 'Sport', pas 'Travel', pas 'Music')."],
   "materials": [
     { "name": "Matériau", "benefit": "≤12 mots", "confidence": 0.0 }
   ],
@@ -80,6 +80,27 @@ JSON STRICT à produire :
     { "step": 1, "title": "≤4 mots", "description": "≤15 mots" },
     { "step": 2, "title": "≤4 mots", "description": "≤15 mots" },
     { "step": 3, "title": "≤4 mots", "description": "≤15 mots" }
+  ],
+  "reviews": [
+    {
+      "author": "Prénom N. (ex: Marie L., Thomas D., Sarah M., Adrien P.) — noms génériques français/internationaux, JAMAIS de célébrité ni de marque tierce",
+      "initials": "2 lettres majuscules (ex: ML, TD)",
+      "rating": 5,
+      "title": "Courte accroche entre guillemets ≤8 mots",
+      "text": "Avis authentique 2-3 phrases, bénéfice concret, ton naturel",
+      "date": "Texte français naturel : 'il y a 3 jours', 'la semaine dernière', 'il y a 2 semaines', 'il y a 1 mois'",
+      "photo_url": "URL image optionnelle — UNIQUEMENT https://images.unsplash.com/... ou https://cdn.shopify.com/... Pour 1 ou 2 reviews max, choisis une photo générique et pertinente (personne en train d'utiliser ce type de produit). Pour les autres reviews, mets null.",
+      "variant": "Variante si produit multi-variantes (ex: 'Noir mat'), sinon null",
+      "verified": true
+    }
+  ],
+  "stock_signal": {
+    "label": "Phrase courte SANS chiffre (ex: 'Stock limité', 'Dernières pièces disponibles', 'Ne tardez pas')",
+    "tone": "low"
+  },
+  "variants_meta": [
+    { "name": "Nom de la variante (identique à la liste des variantes)", "recommended": false },
+    { "name": "Meilleure variante", "recommended": true }
   ]
 }
 
@@ -87,12 +108,16 @@ Règles :
 - AUCUN emoji
 - AUCUN superlatif creux ("incroyable", "unique", "exceptionnel" sans preuve)
 - features : 3-5 features, mots propriétaires bienvenus dans name (style "SoftFit™", "PureBlend")
-- best_for : 3-4 cas d'usage, ≤2 mots chacun
+- best_for : 3-4 promesses client ≤6 mots avec verbe/adjectif actionnable, JAMAIS un mot générique seul ("Musique", "Sport", "Travel", "Mode", "Confort"). Exemples valides : "Appels clairs en open space", "Peau hydratée dès la 1re nuit". Exemples invalides : "Musique", "Sport", "Confort".
 - materials : 2-4 matériaux, confidence honest (0.9 = explicite dans desc, 0.4 = inféré)
 - faq : 4-5 questions
 - press_quote : invente une citation presse crédible (média réel, ton sobre)
 - reviews_summary : invente un résumé reviews crédible (4.7/5 sur 2400 avis style)
 - how_it_works : 3 étapes du parcours produit (de la commande à l'usage)
+- reviews : EXACTEMENT 5 avis clients, jamais moins. rating 4 ou 5 pour 80% des avis (crédible mais positif). verified: true pour la majorité. photo_url : propose une URL https://images.unsplash.com/... générique et pertinente sur 1 ou 2 reviews maximum (montre une personne utilisant ce type de produit) — JAMAIS une vraie marque, JAMAIS une célébrité, JAMAIS une URL inventée en dehors de unsplash.com ou cdn.shopify.com. Mets null sur les autres. Noms d'auteurs : prénoms français/internationaux courants + initiale nom (ex: Marie L., Thomas D., Sarah M., Adrien P., Camille V., Lucas M.) — JAMAIS de célébrité, JAMAIS de nom de marque tierce. Texte de l'avis en ${langName}, bénéfice concret, ton naturel de vrai client.
+- stock_signal : génère ce champ UNIQUEMENT si le titre ou la description produit évoque explicitement un article populaire, en édition limitée, ou saisonnier. label DOIT être une phrase courte SANS aucun chiffre (ex: "Stock limité", "Dernières pièces disponibles", "Commandez avant rupture"). tone = "critical" pour les articles très saisonniers, "low" pour le reste. Si aucun indice de scarcité dans les données produit → omets complètement le champ stock_signal (null / absent).
+- variants_meta : si le produit a des variantes, liste-les TOUTES dans le même ordre avec recommended:true sur UNE SEULE (celle qui offre le meilleur rapport qualité/prix ou la plus populaire). Si une seule variante ou aucune variante → omets ce champ.
+- LANGUE STRICTE : TOUTE valeur string doit être en ${langName}, y compris les champs de ≤2 mots (best_for, manifesto.pillars, features.name). DeepSeek tend à sortir des mots en anglais sur les champs courts — c'est INTERDIT.
 - Retourne UNIQUEMENT le JSON, aucun texte avant/après`.trim()
 }
 
@@ -302,6 +327,26 @@ export async function POST(req: NextRequest) {
       }
 
       // 4. Assemble V3PageData — images can be overridden by the caller.
+      // Sprint 4 T6 — whitelist domaines autorisés pour photo_url reviews
+      // Seuls Unsplash et Shopify CDN sont acceptés (images génériques safe).
+      // Toute autre URL (marque inventée, NSFW, copyright) → undefined.
+      const PHOTO_URL_WHITELIST = /^https:\/\/(images\.unsplash\.com|cdn\.shopify\.com)\//i
+      function sanitizePhotoUrl(url: unknown): string | undefined {
+        if (typeof url !== 'string' || !url) return undefined
+        return PHOTO_URL_WHITELIST.test(url) ? url : undefined
+      }
+
+      // Sprint 4 T4 — gate anti-count : si le LLM produit un label avec chiffre
+      // (ex: "Seulement 3 unités"), on strip ou on supprime le stock_signal.
+      // Défense en profondeur contre dérive LLM malgré l'instruction SANS chiffre.
+      const DIGIT_REGEX = /\d/
+      const rawStockSignal = aiOutput.stock_signal
+      const sanitizedStockSignal = rawStockSignal
+        ? DIGIT_REGEX.test(rawStockSignal.label)
+          ? undefined  // label contient un chiffre → on supprime le signal entier
+          : rawStockSignal
+        : undefined
+
       const v3Data: V3PageData = {
         styleId,
         tone: resolvedTone,
@@ -312,7 +357,17 @@ export async function POST(req: NextRequest) {
           rating: product.rating != null
             ? { value: product.rating, count: product.reviews_count ?? 0 }
             : undefined,
-          variants: product.variants.map(v => ({ name: v.name })),
+          // Sprint 4 T5 — mapper le champ recommended depuis le LLM.
+          // Avant ce fix, route.ts ne mappait que v.name → le badge "Recommandé"
+          // du composant compare-variants n'était jamais affiché en prod.
+          // aiOutput.variants_meta[idx].recommended vs product.variants : les variants
+          // produits viennent du scraper (noms réels) et la recommandation vient du LLM.
+          // Le LLM renvoie recommended dans les items de compare_variants directement.
+          variants: product.variants.map((v, idx) => ({
+            name: v.name,
+            recommended: (aiOutput as unknown as { variants_meta?: Array<{ recommended?: boolean }> })
+              .variants_meta?.[idx]?.recommended ?? false,
+          })),
         },
         images: (body.images as string[] | undefined) ?? product.images,
         copy: {
@@ -328,6 +383,15 @@ export async function POST(req: NextRequest) {
           press_quote: aiOutput.press_quote,
           reviews_summary: aiOutput.reviews_summary,
           how_it_works: aiOutput.how_it_works,
+          // Sprint 2+4 — reviews avec photo_url whitelist Unsplash/Shopify CDN.
+          // Les URLs hors-whitelist sont supprimées (copyright/marques/URLs inventées).
+          reviews: aiOutput.reviews?.map(r => ({
+            ...r,
+            photo_url: sanitizePhotoUrl(r.photo_url),
+            variant: r.variant ?? undefined,
+          })),
+          // Sprint 4 T4 — stock_signal sans chiffre
+          stock_signal: sanitizedStockSignal,
         },
       }
 

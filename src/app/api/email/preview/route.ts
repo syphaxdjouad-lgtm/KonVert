@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { timingSafeEqual } from 'crypto'
 import { sendEmail } from '@/lib/email'
 import {
   emailPreviewDelivery,
@@ -8,11 +7,7 @@ import {
   emailPreviewDay5,
   emailPreviewDay7,
 } from '@/lib/email/preview-templates'
-
-function safeCompare(a: string, b: string): boolean {
-  if (a.length !== b.length) return false
-  return timingSafeEqual(Buffer.from(a), Buffer.from(b))
-}
+import { safeCompare } from '@/lib/security/safe-compare'
 
 type PreviewStep = 0 | 1 | 3 | 5 | 7
 

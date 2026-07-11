@@ -713,7 +713,7 @@ interface DeepSeekResponse {
 // ─── Versioning prompt ──────────────────────────────────────────────────────
 // KONVERT_PROMPT_VERSION=v1 → ancien schema sans champs CRO enrichis.
 // Non défini ou =v2 → schema v2 (défaut).
-export const PROMPT_VERSION = 'v2.1-brand-based-2026-06-14'
+export const PROMPT_VERSION = 'v2.2-brand-based-reviews-gate-2026-06-14'
 const USE_V2_PROMPT = (process.env.KONVERT_PROMPT_VERSION ?? 'v2') !== 'v1'
 
 export const GENERATION_MODEL = 'deepseek-chat'
@@ -817,6 +817,22 @@ export async function generateLandingPage(
 
   if (product.images?.length > 0) {
     data.images = product.images
+  }
+
+  // ─── Gate v2.2 : reviews_count < 5000 → press_logos/mentions = [] ───────
+  // Défense en profondeur côté code : même si DeepSeek ignore la règle 28
+  // brand-based ("DTC > 5000 avis"), on stripe systématiquement les
+  // publications presse pour les boutiques no-name / dropshipping AliExpress.
+  // Whitelist seule (sanitizeLandingPageData) laisse passer Vogue/Marie Claire
+  // sans connaître la notoriété de la marque — ce gate la connaît.
+  // Threshold 5000 aligné sur la règle prompt v2.1 (cf. PROMPT_VERSION).
+  const SMALL_BRAND_THRESHOLD = 5000
+  if (
+    product.reviews_count != null &&
+    product.reviews_count < SMALL_BRAND_THRESHOLD
+  ) {
+    data.press_logos = []
+    data.press_mentions = []
   }
 
   data.language = language

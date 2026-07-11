@@ -45,7 +45,18 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const body = await req.json()
+  let body: {
+    name?: string
+    client_name?: string
+    client_email?: string
+    brand_name?: string
+    brand_color?: string
+  }
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'invalid_json' }, { status: 400 })
+  }
   const { name, client_name, client_email, brand_name, brand_color } = body
 
   if (!name || typeof name !== 'string' || name.trim().length === 0) {

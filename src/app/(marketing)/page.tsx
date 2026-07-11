@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { templateEtecBeauty } from '@/lib/templates'
+import { templateEtecBeauty, TEMPLATE_COUNT } from '@/lib/templates'
+import { PLAN_LIMITS } from '@/types'
 import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
 import KonvertEasterEgg from '@/components/marketing/KonvertEasterEgg'
 import BeforeAfter from '@/components/marketing/BeforeAfter'
@@ -516,7 +517,7 @@ function Slide2() {
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
             <Palette className="w-3.5 h-3.5" />
-            38+ templates premium
+            {TEMPLATE_COUNT}+ templates premium
           </div>
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
             Tes visiteurs jugent ta page{' '}
@@ -525,7 +526,7 @@ function Slide2() {
             </span>
           </h2>
           <p className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0">
-            38+ templates premium — chaque design suit les tendances mondiales et est calibré pour déclencher l&apos;achat. Mode, Tech, Beauté, Luxe, Streetwear, Joaillerie et plus.
+            {TEMPLATE_COUNT}+ templates premium — chaque design suit les tendances mondiales et est calibré pour déclencher l&apos;achat. Mode, Tech, Beauté, Luxe, Streetwear, Joaillerie et plus.
           </p>
           <Link
             href="/templates"
@@ -1066,10 +1067,10 @@ function TrustBar() {
    Pas de compteurs animés depuis 0 (= mauvais signal de confiance au scroll).
 ═══════════════════════════════════════════════════════════════════════════ */
 const PROOF_STATS = [
-  { value: '< 30s',    label: 'pour générer une page complète' },
-  { value: '50+',      label: 'templates optimisés conversion' },
-  { value: '3',        label: 'plateformes : Shopify, WooCommerce, YouCan' },
-] as const
+  { value: '< 30s',              label: 'pour générer une page complète' },
+  { value: `${TEMPLATE_COUNT}+`, label: 'templates optimisés conversion' },
+  { value: '3',                  label: 'plateformes : Shopify, WooCommerce, YouCan' },
+]
 
 function ProofSection() {
   return (
@@ -1136,9 +1137,9 @@ const FEATURES = [
     Icon: Palette,
     color: '#f97316',
     bg: 'rgba(249,115,22,0.08)',
-    title: '42+ templates qui convertissent',
+    title: `${TEMPLATE_COUNT}+ templates qui convertissent`,
     desc: 'Chaque template suit les tendances mondiales. Tech, Beauté, Luxe, Streetwear, Joaillerie, Maison — le bon design pour chaque niche.',
-    tooltip: '42 designs optimisés par niche e-commerce',
+    tooltip: `${TEMPLATE_COUNT} designs optimisés par niche e-commerce`,
   },
   {
     Icon: ChartBar,
@@ -2719,7 +2720,7 @@ function TemplatesPreview() {
             Chaque niche a son template.
           </h2>
           <p className="reveal delay-2 text-lg text-gray-500 max-w-xl mx-auto">
-            38+ designs calibrés pour convertir — Tech, Beauté, Luxe, Streetwear, Joaillerie, Maison et plus. Le bon design pour le bon produit, immédiatement.
+            {TEMPLATE_COUNT}+ designs calibrés pour convertir — Tech, Beauté, Luxe, Streetwear, Joaillerie, Maison et plus. Le bon design pour le bon produit, immédiatement.
           </p>
         </div>
 
@@ -2897,7 +2898,7 @@ const PLANS = [
     name: 'Starter',
     monthly: 39,
     desc: 'Pour démarrer et tester',
-    features: ['5 pages / mois', '42+ templates', 'Analytics basique', 'Export HTML'],
+    features: [`${PLAN_LIMITS.starter.pages} pages / mois`, `${TEMPLATE_COUNT}+ templates`, 'Analytics basique', 'Export HTML'],
     cta: 'Démarrer',
     highlighted: false,
   },
@@ -2905,7 +2906,7 @@ const PLANS = [
     name: 'Pro',
     monthly: 79,
     desc: 'Pour scaler votre e-commerce',
-    features: ['Pages illimitées', '38+ templates premium', 'Analytics avancé', 'A/B Testing', 'Publish Shopify & Woo', 'Support email prioritaire'],
+    features: ['Pages illimitées', `${TEMPLATE_COUNT}+ templates premium`, 'Analytics avancé', 'A/B Testing', 'Publish Shopify & Woo', 'Support email prioritaire'],
     cta: 'Choisir Pro',
     highlighted: true,
   },

@@ -45,10 +45,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# previews
-homepage-preview.html
-section-demo-preview.html
-preview-noir.mjs
+# previews (scratch files — cf docs/audits/ pour l'historique des audits/plans)
+docs/audits/homepage-preview.html
+docs/audits/section-demo-preview.html
+docs/audits/preview-noir.mjs
 
 # video subdir
 video/

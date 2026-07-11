@@ -66,3 +66,51 @@ describe('renderTemplate — overrides.sectionOrder (chantier C1)', () => {
     expect(guaranteeIdx).toBeLessThan(storyIdx)
   })
 })
+
+describe('renderRichSections — overrides.visualSettings (chantier C2)', () => {
+  const sectionOrder: SectionInstance[] = [
+    { id: 'sec-1', key: 'story', visible: true },
+  ]
+
+  it('padding lg → wrapper applique un padding accru sur la section', () => {
+    const html = renderRichSections(mockLandingDataFull, DEFAULT_THEME, sectionOrder, false, {
+      'sec-1': { padding: 'lg' },
+    })
+    expect(html).toMatch(/padding[^"]*120px/)
+  })
+
+  it('bgColor → wrapper applique background sur la section', () => {
+    const html = renderRichSections(mockLandingDataFull, DEFAULT_THEME, sectionOrder, false, {
+      'sec-1': { bgColor: '#FFEE00' },
+    })
+    expect(html.toLowerCase()).toContain('#ffee00')
+  })
+
+  it('alignment center → wrapper applique text-align:center', () => {
+    const html = renderRichSections(mockLandingDataFull, DEFAULT_THEME, sectionOrder, false, {
+      'sec-1': { alignment: 'center' },
+    })
+    expect(html).toMatch(/text-align[^"]*center/)
+  })
+
+  it('section sans visualSettings → comportement inchange (pas de wrapper)', () => {
+    const htmlWith = renderRichSections(mockLandingDataFull, DEFAULT_THEME, sectionOrder, false, {})
+    const htmlWithout = renderRichSections(mockLandingDataFull, DEFAULT_THEME, sectionOrder)
+    expect(htmlWith).toContain(mockLandingDataFull.story!.problem)
+    expect(htmlWithout).toContain(mockLandingDataFull.story!.problem)
+    expect(htmlWith).not.toMatch(/data-kvt-visual-settings/)
+  })
+})
+
+describe('renderTemplate — overrides.visualSettings (chantier C2)', () => {
+  it('passe visualSettings au renderRichSections via _visualSettings', () => {
+    const sectionOrder: SectionInstance[] = [
+      { id: 'sec-1', key: 'story', visible: true },
+    ]
+    const html = renderTemplate('etec-blue', mockLandingDataFull, {
+      sectionOrder,
+      visualSettings: { 'sec-1': { bgColor: '#FFEE00' } },
+    })
+    expect(html.toLowerCase()).toContain('#ffee00')
+  })
+})

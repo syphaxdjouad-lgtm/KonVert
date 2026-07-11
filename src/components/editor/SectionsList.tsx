@@ -184,9 +184,9 @@ function SectionRow({ section, isOverlay = false }: SectionRowProps) {
             <IconDragHandle size={16} />
           </button>
 
-          {/* Label */}
+          {/* Label — C2 : clic ouvre aussi PanelRight pour éditer la section */}
           <button
-            onClick={() => { setSelectedSection(section.id); setPanelOpen(true) }}
+            onClick={() => { setSelectedSection(section.id); setPanelOpen(true); openSubPanelEdit(section.id) }}
             aria-label={`Selectionner ${label}`}
             style={{
               flex: 1,

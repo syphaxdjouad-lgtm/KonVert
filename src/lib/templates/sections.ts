@@ -1113,11 +1113,55 @@ function buildStickyCta(data: LandingPageData, theme: SectionTheme): string {
   })
 }
 
+// C2 : VisualSettings est définie dans @/types/editor. On la retape ici localement
+// pour éviter le cycle d'import (editor → sections). Forme identique.
+type VisualSettingsRecord = {
+  [sectionId: string]: {
+    padding?: 'sm' | 'md' | 'lg'
+    bgColor?: string
+    alignment?: 'left' | 'center' | 'right'
+    hiddenElements?: string[]
+  }
+}
+
+// Map preset padding → valeur pixel pour le wrapper de section (chantier C2).
+const PADDING_PX: Record<'sm' | 'md' | 'lg', string> = {
+  sm: '60px',
+  md: '80px',
+  lg: '120px',
+}
+
+// Wrap le HTML d'une section avec un div qui applique les visualSettings.
+// Si pas de settings pour cette id (ou aucune option utile), retourne le HTML original
+// inchangé pour préserver le comportement legacy.
+function wrapWithVisualSettings(
+  html: string,
+  sectionId: string,
+  visualSettings?: VisualSettingsRecord,
+): string {
+  const settings = visualSettings?.[sectionId]
+  if (!settings) return html
+  const styles: string[] = []
+  if (settings.padding) {
+    const px = PADDING_PX[settings.padding]
+    styles.push(`padding-top:${px}`, `padding-bottom:${px}`)
+  }
+  if (settings.bgColor) {
+    styles.push(`background:${settings.bgColor}`)
+  }
+  if (settings.alignment) {
+    styles.push(`text-align:${settings.alignment}`)
+  }
+  if (styles.length === 0) return html
+  return `<div data-kvt-visual-settings="${sectionId}" style="${styles.join(';')}">${html}</div>`
+}
+
 export function renderRichSections(
   data: LandingPageData,
   theme: SectionTheme = DEFAULT_THEME,
   order?: SectionKey[] | SectionInstance[],
   editMode = false,
+  visualSettings?: VisualSettingsRecord,
 ): string {
   // Feature flag rollback (spec § 3.6)
   if (process.env.KONVERT_RICH_SECTIONS === 'false') return ''
@@ -1133,6 +1177,10 @@ export function renderRichSections(
   // il prend priorité sur le param order (évite de modifier les 42+ templates).
   const dataSectionOrder = (data as LandingPageData & { _sectionOrder?: SectionInstance[] })._sectionOrder
   if (dataSectionOrder) order = dataSectionOrder
+
+  // C2 : visualSettings peut aussi venir de data._visualSettings (injecté par renderTemplate)
+  const dataVisualSettings = (data as LandingPageData & { _visualSettings?: VisualSettingsRecord })._visualSettings
+  const effectiveVisualSettings = visualSettings ?? dataVisualSettings
 
   // Cas 1 : pas d'order → DEFAULT_ORDER (comportement legacy chantier A)
   if (!order) {
@@ -1162,9 +1210,11 @@ export function renderRichSections(
     const rendered = (order as SectionInstance[])
       .filter(s => s.visible)
       .map(s => {
-        const html = SECTION_RENDERERS[s.key]?.(data, theme) ?? ''
-        if (!html.trim()) return ''
-        return effectiveEditMode ? wrapWithKvtId(html, s.id) : html
+        const raw = SECTION_RENDERERS[s.key]?.(data, theme) ?? ''
+        if (!raw.trim()) return ''
+        // C2 : wrap visualSettings AVANT le wrap edit-mode pour que les 2 cohabitent
+        const withVisual = wrapWithVisualSettings(raw, s.id, effectiveVisualSettings)
+        return effectiveEditMode ? wrapWithKvtId(withVisual, s.id) : withVisual
       })
       .filter(html => html.trim().length > 0)
     if (!effectiveEditMode) return rendered.join('\n') + '\n' + stickyCta

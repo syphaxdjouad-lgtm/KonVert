@@ -193,7 +193,8 @@ export const TEMPLATE_COUNT = TEMPLATES.length
  *
  * @field sectionOrder - Chantier C1 : ordre + visibility des sections riches.
  *   Lu par renderRichSections via injection _sectionOrder dans data.
- * @field visualSettings - RESERVE Chantier C2. Ignore en C1, warning dev si fourni.
+ * @field visualSettings - Chantier C2 : réglages visuels (couleurs, densité...)
+ *   du Settings Panel éditeur. Lu via injection _visualSettings dans data.
  * @field globalStyles - RESERVE Chantier C5. Ignore en C1, warning dev si fourni.
  * @field editMode - Editor v2 : active injection data-kvt-section-id +
  *   script click-to-edit postMessage dans l'iframe. Faux en prod.
@@ -207,20 +208,19 @@ export interface TemplateOverrides {
 
 export function renderTemplate(templateId: string, data: LandingPageData, overrides?: TemplateOverrides): string {
   // C1 : injection de sectionOrder dans data via _sectionOrder (champ privé).
+  // C2 : injection de visualSettings dans data via _visualSettings (idem stratégie).
   // Editor v2 : injection de _kvt_edit_mode pour activer click-to-edit dans iframe.
   // Stratégie : évite de modifier la signature des 42+ fonctions template.
   const renderData: LandingPageData = {
     ...data,
     ...(overrides?.sectionOrder ? { _sectionOrder: overrides.sectionOrder } : {}),
+    ...(overrides?.visualSettings ? { _visualSettings: overrides.visualSettings } : {}),
     ...(overrides?.editMode ? { _kvt_edit_mode: true } : {}),
   } as LandingPageData
 
-  // Detection des overrides non encore supportes (C2/C5) — warning dev pour
-  // eviter les faux positifs silencieux ("ca marche pas mais pas d'erreur").
+  // C5 globalStyles toujours pas supporte — warning dev pour eviter les faux
+  // positifs silencieux ("ca marche pas mais pas d'erreur").
   if (process.env.NODE_ENV !== 'production' && overrides) {
-    if (overrides.visualSettings && Object.keys(overrides.visualSettings).length > 0) {
-      console.warn('[renderTemplate] overrides.visualSettings est ignore en C1 (supporte en C2)')
-    }
     if (overrides.globalStyles && Object.keys(overrides.globalStyles).length > 0) {
       console.warn('[renderTemplate] overrides.globalStyles est ignore en C1 (supporte en C5)')
     }

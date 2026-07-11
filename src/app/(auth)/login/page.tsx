@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Loader2, ArrowRight, Zap, Star, TrendingUp, MousePointerClick } from 'lucide-react'
 import { toast } from 'sonner'
 import { track } from '@/lib/analytics'
@@ -173,13 +174,20 @@ export default function LoginPage() {
                 app.konvertpilot.com/dashboard
               </div>
             </div>
-            <img
-              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&h=400&fit=crop&q=80"
-              alt="Dashboard KONVERT"
-              className="w-full object-cover"
+            <div
+              className="relative w-full"
               style={{ height: '220px', background: 'linear-gradient(135deg, #1e1b4b, #312e81)' }}
-              onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
-            />
+            >
+              <Image
+                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&h=400&fit=crop&q=80"
+                alt="Dashboard KONVERT"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 448px"
+                className="object-cover"
+                onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+              />
+            </div>
           </div>
 
           {/* Métriques */}

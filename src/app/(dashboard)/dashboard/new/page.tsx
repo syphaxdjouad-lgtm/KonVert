@@ -12,6 +12,7 @@ import {
   Video, Film, TrendingUp, Plus, Music2,
 } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import type { LandingPageData } from '@/types'
 import { track } from '@/lib/analytics'
@@ -205,7 +206,7 @@ function isColorDark(hex: string): boolean {
 
 // Photos Unsplash par template legacy etec-*. Une URL par template, cohérente
 // avec son productType (skincare, tech, jewelry, home, fashion, etc.). Si une
-// URL fail à charger, fallback emoji XL via onError du <img>.
+// URL fail à charger, fallback emoji XL via onError du next/image.
 // Format : photo-XXXXXXXXXX (ID Unsplash) + query w=600&q=80 pour optim mobile.
 const TEMPLATE_PHOTOS: Record<string, string> = {
   // skincare / beauty
@@ -1464,7 +1465,7 @@ function NewPageInner() {
               <div className="grid grid-cols-4 gap-3 mt-4">
                 {uploadedPhotos.map((photo, i) => (
                   <div key={i} className="relative aspect-square rounded-xl overflow-hidden" style={{ border: '1px solid #e9e5ff' }}>
-                    <img src={photo} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                    <Image src={photo} alt={`Photo ${i + 1}`} fill sizes="(max-width: 768px) 25vw, 150px" className="object-cover" />
                     <button
                       onClick={() => removePhoto(i)}
                       className="absolute top-1.5 right-1.5 flex items-center justify-center rounded-[6px]"
@@ -1670,7 +1671,7 @@ function NewPageInner() {
                     borderColor: beforePhotos.length > 0 ? '#ddd6fe' : '#c4b5fd',
                     borderStyle: beforePhotos.length > 0 ? 'solid' : 'dashed',
                     background: beforePhotos.length > 0 ? 'transparent' : '#faf9ff',
-                    minHeight: '148px',
+                    height: '148px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -1712,10 +1713,11 @@ function NewPageInner() {
                     )
                   ) : (
                     <>
-                      <img
+                      <Image
                         src={beforePhotos[0]}
-                        className="w-full object-cover rounded-[14px]"
-                        style={{ height: '148px' }}
+                        fill
+                        sizes="(max-width: 768px) 45vw, 320px"
+                        className="object-cover rounded-[14px]"
                         alt="Avant"
                       />
                       {/* Badge overlay */}
@@ -1792,7 +1794,7 @@ function NewPageInner() {
                     borderColor: afterPhotos.length > 0 ? '#ddd6fe' : '#c4b5fd',
                     borderStyle: afterPhotos.length > 0 ? 'solid' : 'dashed',
                     background: afterPhotos.length > 0 ? 'transparent' : '#faf9ff',
-                    minHeight: '148px',
+                    height: '148px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -1834,10 +1836,11 @@ function NewPageInner() {
                     )
                   ) : (
                     <>
-                      <img
+                      <Image
                         src={afterPhotos[0]}
-                        className="w-full object-cover rounded-[14px]"
-                        style={{ height: '148px' }}
+                        fill
+                        sizes="(max-width: 768px) 45vw, 320px"
+                        className="object-cover rounded-[14px]"
                         alt="Après"
                       />
                       {/* Badge overlay */}
@@ -1898,11 +1901,12 @@ function NewPageInner() {
                 </p>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 28px 1fr', gap: '10px', alignItems: 'center' }}>
                   {/* Image AVANT */}
-                  <div className="relative rounded-xl overflow-hidden">
-                    <img
+                  <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: '1/1' }}>
+                    <Image
                       src={beforePhotos[0]}
-                      className="w-full object-cover block"
-                      style={{ aspectRatio: '1/1' }}
+                      fill
+                      sizes="(max-width: 768px) 40vw, 200px"
+                      className="object-cover"
                       alt="Avant"
                     />
                     <div
@@ -1917,11 +1921,12 @@ function NewPageInner() {
                     <ArrowRight className="w-4 h-4" />
                   </div>
                   {/* Image APRÈS */}
-                  <div className="relative rounded-xl overflow-hidden">
-                    <img
+                  <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: '1/1' }}>
+                    <Image
                       src={afterPhotos[0]}
-                      className="w-full object-cover block"
-                      style={{ aspectRatio: '1/1' }}
+                      fill
+                      sizes="(max-width: 768px) 40vw, 200px"
+                      className="object-cover"
                       alt="Après"
                     />
                     <div
@@ -2052,12 +2057,12 @@ function NewPageInner() {
                             flexShrink: 0,
                           }}>
                             {photo && (
-                              /* eslint-disable-next-line @next/next/no-img-element */
-                              <img
+                              <Image
                                 src={photo}
                                 alt={content.product}
-                                loading="lazy"
-                                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                fill
+                                sizes="180px"
+                                style={{ objectFit: 'cover' }}
                                 onError={(e) => { e.currentTarget.style.display = 'none' }}
                               />
                             )}
@@ -2257,12 +2262,12 @@ function NewPageInner() {
                             background: `linear-gradient(135deg, ${s.surface} 0%, ${s.bg} 100%)`,
                             flexShrink: 0,
                           }}>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
+                            <Image
                               src={s.photo}
                               alt={s.product}
-                              loading="lazy"
-                              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                              fill
+                              sizes="180px"
+                              style={{ objectFit: 'cover' }}
                               onError={(e) => { e.currentTarget.style.display = 'none' }}
                             />
                             <div style={{

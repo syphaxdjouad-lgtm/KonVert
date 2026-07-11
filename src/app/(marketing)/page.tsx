@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { templateEtecBeauty, TEMPLATE_COUNT } from '@/lib/templates'
 import { PLAN_LIMITS } from '@/types'
@@ -296,11 +297,13 @@ function Slide1() {
               className="relative flex flex-col justify-end"
               style={{ height: '195px', overflow: 'hidden' }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700&q=85"
                 alt="Air Jordan Pro"
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+                fill
+                priority
+                sizes="(max-width: 640px) 90vw, 384px"
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
               {/* Overlay gradient sombre en bas */}
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 55%, transparent 100%)' }} />
@@ -592,11 +595,12 @@ function Slide2() {
                 className="mx-3 mt-1.5 rounded-xl relative overflow-hidden"
                 style={{ height: '72px', background: t.heroColor }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={t.img}
                   alt={t.name}
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+                  fill
+                  sizes="280px"
+                  style={{ objectFit: 'cover', objectPosition: 'center top' }}
                 />
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 60%, transparent 100%)' }} />
                 {/* Badge label */}
@@ -1316,10 +1320,11 @@ function ABTestingSection() {
                 </div>
                 {/* Image produit */}
                 <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', zIndex: 2 }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80"
                     alt="Air Max Pro sneaker"
+                    width={140}
+                    height={80}
                     style={{ width: 140, height: 80, objectFit: 'contain', filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.3))' }}
                   />
                 </div>
@@ -2286,12 +2291,13 @@ function BuilderSection() {
                     style={{ background: '#ffffff' }}
                   >
                     {/* Hero bannière produit — image réelle headphone */}
-                    <div style={{ position: 'relative', overflow: 'hidden', minHeight: 90 }}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                    <div style={{ position: 'relative', overflow: 'hidden', minHeight: 90, height: 90 }}>
+                      <Image
                         src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=85"
                         alt="Casque Pro Studio X"
-                        style={{ width: '100%', height: 90, objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+                        fill
+                        sizes="(max-width: 640px) 90vw, 400px"
+                        style={{ objectFit: 'cover', objectPosition: 'center' }}
                       />
                       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(26,10,78,0.88) 0%, rgba(91,71,245,0.55) 100%)' }} />
                       <div style={{ position: 'absolute', inset: 0, padding: '10px 14px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -2736,10 +2742,12 @@ function TemplatesPreview() {
                 style={{ background: t.gradient }}
               >
                 {t.img && (
-                  <img
+                  <Image
                     src={t.img}
                     alt={t.name}
-                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                    fill
+                    sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 220px"
+                    className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-300"
                   />
                 )}
                 <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%)' }} />

@@ -1,5 +1,6 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
+import { escapeHtml } from '@/lib/utils/html'
 
 export function renderReviewsAiSummary(data: V3PageData, tokens: StyleTokens): string {
   const summary = data.copy.reviews_summary
@@ -39,10 +40,3 @@ export function renderReviewsAiSummary(data: V3PageData, tokens: StyleTokens): s
 </section>`.trim()
 }
 
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}

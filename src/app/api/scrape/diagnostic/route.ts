@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'crypto'
 import { scrapeProduct, cleanProduct, looksHallucinated, ScrapeError } from '@/lib/scraper'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
+import { isAdmin } from '@/lib/security/admin-auth'
 
 // GET /api/scrape/diagnostic?url=https://...
 //   Header requis : `x-admin-secret: <ADMIN_SECRET>`
@@ -15,16 +15,6 @@ import { validateScrapeUrl } from '@/lib/security/url-allow'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
-
-function isAdmin(req: NextRequest): boolean {
-  const provided = req.headers.get('x-admin-secret')
-  const expected = process.env.ADMIN_SECRET
-  if (!provided || !expected) return false
-  // Hash + timingSafeEqual : pas de leak de longueur via court-circuit du `===`.
-  const a = crypto.createHash('sha256').update(provided).digest()
-  const b = crypto.createHash('sha256').update(expected).digest()
-  return crypto.timingSafeEqual(a, b)
-}
 
 export async function GET(req: NextRequest) {
   if (!isAdmin(req)) {

@@ -1,18 +1,11 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
+import { escapeHtml } from '@/lib/utils/html'
 
 const DEFAULT_FAQ: Array<{ q: string; a: string }> = [
   { q: 'Combien de temps pour la livraison ?', a: '24 à 48h ouvrées en France.' },
   { q: 'Puis-je retourner le produit ?', a: 'Oui, sous 30 jours, retour gratuit.' },
 ]
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}
 
 export function renderFaq(data: V3PageData, tokens: StyleTokens): string {
   const items = data.copy.faq ?? DEFAULT_FAQ

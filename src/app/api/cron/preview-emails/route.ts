@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { timingSafeEqual } from 'crypto'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import * as Sentry from '@sentry/nextjs'
 import { sendEmail } from '@/lib/email'
@@ -9,6 +8,7 @@ import {
   emailPreviewDay5,
   emailPreviewDay7,
 } from '@/lib/email/preview-templates'
+import { safeCompare } from '@/lib/security/safe-compare'
 
 // Vercel Pro = 60s. Sans maxDuration explicite, la fonction peut être coupée
 // à 10s (Hobby) en cas de downgrade plan, ce qui interromprait silencieusement
@@ -34,11 +34,6 @@ function getEmailForDay(
     case 5: return emailPreviewDay5(name, previewUrl, email)
     case 7: return emailPreviewDay7(name, previewUrl, productTitle, email)
   }
-}
-
-function safeCompare(a: string, b: string): boolean {
-  if (a.length !== b.length) return false
-  return timingSafeEqual(Buffer.from(a), Buffer.from(b))
 }
 
 function isAuthorized(req: NextRequest): boolean {

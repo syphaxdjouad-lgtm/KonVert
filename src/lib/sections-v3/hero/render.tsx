@@ -1,6 +1,7 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { renderTrustBadgesPayment } from '@/lib/sections-v3/shared/TrustBadgesPayment'
+import { escapeHtml } from '@/lib/utils/html'
 
 // Sprint 2 T1 — génère la rangée de thumbnails + dot indicators sous l'image principale.
 // CSS natif : scroll-snap-type x mandatory + scroll-snap-align start sur chaque thumb.
@@ -211,10 +212,3 @@ export function renderHero(data: V3PageData, tokens: StyleTokens): string {
 </section>`.trim()
 }
 
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}

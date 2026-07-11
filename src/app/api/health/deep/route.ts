@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'crypto'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
+import { isAdmin } from '@/lib/security/admin-auth'
 
 // Health check approfondi — destination monitoring externe (UptimeRobot,
 // BetterUptime). Contrairement à /api/health qui retourne juste `ok`, celui-ci
@@ -13,15 +13,6 @@ import { createClient } from '@supabase/supabase-js'
 export const runtime = 'nodejs'
 export const maxDuration = 30
 export const dynamic = 'force-dynamic'
-
-function isAdmin(req: NextRequest): boolean {
-  const provided = req.headers.get('x-admin-secret')
-  const expected = process.env.ADMIN_SECRET
-  if (!provided || !expected) return false
-  const a = crypto.createHash('sha256').update(provided).digest()
-  const b = crypto.createHash('sha256').update(expected).digest()
-  return crypto.timingSafeEqual(a, b)
-}
 
 type CheckResult = {
   name: string

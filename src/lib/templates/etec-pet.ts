@@ -24,7 +24,7 @@ const C = {
   text:     '#1E1206',
   muted:    '#7A6355',
   border:   '#EDE0D4',
-  dark:     '#1A0F05',
+  dark:     '#5C2C0D',
   gold:     '#F0A500',
 }
 
@@ -347,27 +347,27 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
 <nav class="nav">
   <div class="nav-logo">🐾 PetCo</div>
   <div class="nav-links">
-    <a class="nav-link" href="javascript:void(0)">Why We're Different</a>
-    <a class="nav-link" href="javascript:void(0)">Reviews</a>
-    <a class="nav-link" href="javascript:void(0)">Sizes</a>
+    <a class="nav-link" href="javascript:void(0)">Nos avantages</a>
+    <a class="nav-link" href="javascript:void(0)">Avis</a>
+    <a class="nav-link" href="javascript:void(0)">Tailles</a>
     <a class="nav-link" href="javascript:void(0)">FAQ</a>
   </div>
-  <a class="nav-cta" href="javascript:void(0)">Shop Now 🐾</a>
+  <a class="nav-cta" href="javascript:void(0)">Commander 🐾</a>
 </nav>
 
 <div class="announce">
-  🐾 Free shipping on all orders · 30-day money-back guarantee · Vet approved
+  🐾 Livraison gratuite sur toutes les commandes · Garantie satisfait ou remboursé 30 jours · Approuvé par des vétérinaires
 </div>
 
 <section class="hero">
   <div class="hero-left">
-    <div class="hero-badge">🏥 Vet Approved</div>
+    <div class="hero-badge">🏥 Approuvé vétérinaire</div>
     <h1 class="hero-h1">${headline}</h1>
     <p class="hero-sub">${subtitle}</p>
     <ul class="hero-list">${benefitsHTML}</ul>
     <div class="hero-rating">
       <div class="hero-stars">${stars(5)}</div>
-      <span class="hero-rating-text"><strong>4.9/5</strong> · 12,000+ happy pets</span>
+      <span class="hero-rating-text"><strong>4,9/5</strong> · 12 000+ animaux comblés</span>
     </div>
     <div class="hero-urgency">${urgency}</div>
     <a href="javascript:void(0)" class="hero-cta">${ctaText}</a>
@@ -377,15 +377,15 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
     ${renderHeroThumbs(data.images ?? [], PET_THEME, 'kvt-hero-img-etec-pet')}
     <div class="hero-chip">
       <div class="hero-chip-emoji">🐾</div>
-      <div class="hero-chip-text">12,000+</div>
-      <div class="hero-chip-sub">happy pets</div>
+      <div class="hero-chip-text">12 000+</div>
+      <div class="hero-chip-sub">animaux comblés</div>
     </div>
   </div>
 </section>
 
 <div class="media-bar">
   <div class="media-inner">
-    <span class="media-label">As seen in</span>
+    <span class="media-label">Vu dans</span>
     <span class="media-logo">Cosmopolitan Pets</span>
     <span class="media-logo">BuzzFeed</span>
     <span class="media-logo">Good Morning America</span>
@@ -396,8 +396,8 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
 
 <section class="ben-section">
   <div class="ben-inner">
-    <div class="section-eyebrow">Why Pets Love It</div>
-    <h2 class="section-h">Everything your pet needs. Nothing they don't.</h2>
+    <div class="section-eyebrow">Pourquoi les animaux adorent</div>
+    <h2 class="section-h">Tout ce dont votre animal a besoin. Rien de superflu.</h2>
     <div class="ben-grid">${benefitsGridHTML}</div>
   </div>
 </section>
@@ -410,21 +410,21 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
     </div>
     <div>
       <div class="prod-name">${productName}</div>
-      <div class="prod-sub">Natural · Vet Approved · Ultra Durable</div>
+      <div class="prod-sub">Naturel · Approuvé vétérinaire · Ultra résistant</div>
       <div class="prod-rating">
         <div class="prod-stars">${stars(5)}</div>
-        <span class="prod-rating-text">4.9 · 12,000+ reviews</span>
+        <span class="prod-rating-text">4,9 · 12 000+ avis</span>
       </div>
-      <div class="size-label">Size: <span id="size-selected">M</span> <a href="javascript:void(0)" class="size-guide">Size guide →</a></div>
+      <div class="size-label">Taille : <span id="size-selected">M</span> <a href="javascript:void(0)" class="size-guide">Guide des tailles →</a></div>
       <div class="sizes">${sizesHTML}</div>
       <div class="price-row">
         <span class="price-main">$${price.replace(/[^0-9.]/g,'')}</span>
         <span class="price-orig">$${originalPrice.replace(/[^0-9.]/g,'')}</span>
-        <span class="price-save">Save ${priceSave}%</span>
+        <span class="price-save">Économisez ${priceSave}%</span>
       </div>
-      <p class="price-note">Free shipping · 30-day guarantee</p>
+      <p class="price-note">Livraison gratuite · Garantie 30 jours</p>
       <div class="qty-row">
-        <span class="qty-label">Qty</span>
+        <span class="qty-label">Qté</span>
         <div class="qty-ctrl">
           <button class="qty-btn" onclick="changeQty(-1)">${ICON_MINUS}</button>
           <span class="qty-val" id="qty">1</span>
@@ -432,11 +432,11 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
         </div>
       </div>
       <button class="add-btn">${ctaText}</button>
-      <button class="wish-btn">${ICON_HEART} Add to Wishlist</button>
+      <button class="wish-btn">${ICON_HEART} Ajouter aux favoris</button>
       <div class="trust-row">
-        <div class="trust-item">${ICON_TRUCK} Free shipping</div>
-        <div class="trust-item">${ICON_SHIELD} 30-day guarantee</div>
-        <div class="trust-item">${ICON_LEAF} Natural materials</div>
+        <div class="trust-item">${ICON_TRUCK} Livraison gratuite</div>
+        <div class="trust-item">${ICON_SHIELD} Garantie 30 jours</div>
+        <div class="trust-item">${ICON_LEAF} Matériaux naturels</div>
       </div>
     </div>
   </div>
@@ -446,9 +446,9 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
   <div class="how-inner" style="max-width:1000px;margin:0 auto">
     <img src="${img(1)}" alt="Happy pet" class="how-img">
     <div>
-      <div class="section-eyebrow" style="color:${C.orange}">How It Works</div>
-      <h2 style="font-size:clamp(28px,3vw,40px);font-weight:800;color:#fff;letter-spacing:-0.03em;margin-bottom:12px">Happy pet in 3 steps.</h2>
-      <p style="font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:40px;line-height:1.6">No assembly. No complicated instructions. Just pure joy for your furry friend.</p>
+      <div class="section-eyebrow" style="color:${C.orange}">Comment ça marche</div>
+      <h2 style="font-size:clamp(28px,3vw,40px);font-weight:800;color:#fff;letter-spacing:-0.03em;margin-bottom:12px">Un animal comblé en 3 étapes.</h2>
+      <p style="font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:40px;line-height:1.6">Aucun montage. Aucune instruction compliquée. Juste du bonheur pour votre compagnon.</p>
       <div class="how-steps">${stepsHTML}</div>
     </div>
   </div>
@@ -456,8 +456,8 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
 
 <section class="reviews-section">
   <div class="reviews-inner">
-    <div class="section-eyebrow">Reviews</div>
-    <h2 class="section-h">12,000+ happy pets can't be wrong.</h2>
+    <div class="section-eyebrow">Avis</div>
+    <h2 class="section-h">12 000+ animaux comblés ne peuvent pas se tromper.</h2>
     <div class="reviews-grid">${reviewsHTML}</div>
   </div>
 </section>
@@ -465,12 +465,12 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
 <div class="guarantee">
   <div class="guar-inner">
     <span class="guar-emoji">🛡️</span>
-    <h2 class="guar-title">30-Day Pet Happiness Guarantee</h2>
-    <p class="guar-text">If your pet doesn't absolutely love it — for any reason — contact us within 30 days and we'll give you a full refund. No photos needed. No hassle. We trust you.</p>
+    <h2 class="guar-title">Garantie satisfaction 30 jours</h2>
+    <p class="guar-text">Si votre animal ne l'adore pas absolument — pour quelque raison que ce soit — contactez-nous sous 30 jours et nous vous remboursons intégralement. Sans photo. Sans tracas. On vous fait confiance.</p>
     <div class="guar-tags">
-      <div class="guar-tag">${ICON_CHECK} Full refund</div>
-      <div class="guar-tag">${ICON_CHECK} No return required</div>
-      <div class="guar-tag">${ICON_CHECK} No questions asked</div>
+      <div class="guar-tag">${ICON_CHECK} Remboursement intégral</div>
+      <div class="guar-tag">${ICON_CHECK} Aucun retour nécessaire</div>
+      <div class="guar-tag">${ICON_CHECK} Sans justification</div>
     </div>
   </div>
 </div>
@@ -478,49 +478,52 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
 <section class="faq-section">
   <div class="faq-inner">
     <div class="section-eyebrow">FAQ</div>
-    <h2 style="font-size:clamp(24px,2.5vw,36px);font-weight:800;letter-spacing:-0.03em;margin-bottom:36px">Common questions.</h2>
+    <h2 style="font-size:clamp(24px,2.5vw,36px);font-weight:800;letter-spacing:-0.03em;margin-bottom:36px">Questions fréquentes.</h2>
     ${faqHTML}
   </div>
 </section>
 
 <div class="cta-section">
-  <h2 class="cta-title">Your pet is waiting. 🐾</h2>
-  <p class="cta-sub">Join 12,000+ pet parents who made the switch. Free shipping, 30-day guarantee.</p>
+  <h2 class="cta-title">Votre animal vous attend. 🐾</h2>
+  <p class="cta-sub">Rejoignez 12 000+ maîtres qui ont fait le choix. Livraison gratuite, garantie 30 jours.</p>
   <a href="javascript:void(0)" class="cta-btn">${ctaText}</a>
 </div>
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderRichSections(data, PET_THEME)}
 
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-top">
       <div>
         <div class="footer-brand">🐾 PetCo</div>
-        <p class="footer-tagline">Premium pet products made by pet parents, for pet parents.</p>
+        <p class="footer-tagline">Produits premium pour animaux, conçus par des maîtres, pour des maîtres.</p>
       </div>
       <div>
-        <div class="footer-col-title">Products</div>
-        <a class="footer-link" href="javascript:void(0)">Toys</a>
-        <a class="footer-link" href="javascript:void(0)">Accessories</a>
+        <div class="footer-col-title">Produit</div>
+        <a class="footer-link" href="javascript:void(0)">Jouets</a>
+        <a class="footer-link" href="javascript:void(0)">Accessoires</a>
         <a class="footer-link" href="javascript:void(0)">Nutrition</a>
-        <a class="footer-link" href="javascript:void(0)">Bundles</a>
+        <a class="footer-link" href="javascript:void(0)">Packs</a>
       </div>
       <div>
-        <div class="footer-col-title">Company</div>
-        <a class="footer-link" href="javascript:void(0)">About Us</a>
-        <a class="footer-link" href="javascript:void(0)">Our Story</a>
-        <a class="footer-link" href="javascript:void(0)">Reviews</a>
-        <a class="footer-link" href="javascript:void(0)">Affiliates</a>
+        <div class="footer-col-title">Entreprise</div>
+        <a class="footer-link" href="javascript:void(0)">À propos</a>
+        <a class="footer-link" href="javascript:void(0)">Notre histoire</a>
+        <a class="footer-link" href="javascript:void(0)">Avis</a>
+        <a class="footer-link" href="javascript:void(0)">Affiliation</a>
       </div>
       <div>
-        <div class="footer-col-title">Support</div>
+        <div class="footer-col-title">Assistance</div>
         <a class="footer-link" href="javascript:void(0)">FAQ</a>
-        <a class="footer-link" href="javascript:void(0)">Shipping</a>
-        <a class="footer-link" href="javascript:void(0)">Returns</a>
+        <a class="footer-link" href="javascript:void(0)">Livraison</a>
+        <a class="footer-link" href="javascript:void(0)">Retours</a>
         <a class="footer-link" href="javascript:void(0)">Contact</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">© ${new Date().getFullYear()} PetCo. All rights reserved.</span>
-      <span class="footer-copy">Vet Approved · Natural Materials · Made with ❤️</span>
+      <span class="footer-copy">© ${new Date().getFullYear()} PetCo. Tous droits réservés.</span>
+      <span class="footer-copy">Approuvé vétérinaire · Matériaux naturels · Fait avec ❤️</span>
     </div>
   </div>
 </footer>
@@ -554,9 +557,6 @@ window.addEventListener('scroll', () => {
   document.querySelector('.nav').style.boxShadow = window.scrollY > 10 ? '0 2px 16px rgba(30,18,6,0.08)' : 'none';
 });
 </script>
-
-<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderRichSections(data, PET_THEME)}
 
 </body>
 </html>`

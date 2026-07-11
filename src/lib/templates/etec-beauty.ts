@@ -15,7 +15,7 @@ const FALLBACK_IMGS = [
 const C = {
   bg:     '#FBF8F3',
   cream:  '#FFF3D0',
-  dark:   '#2C2C2C',
+  dark:   '#63273A',
   orange: '#E8622A',
   text:   '#1A1A1A',
   muted:  '#6B6B6B',
@@ -83,25 +83,25 @@ export function templateEtecBeauty(data: LandingPageData): string {
     {
       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${C.white}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
       bg: '#7C5CBF',
-      title: data.features?.[0]?.title || data.unique_mechanism || 'Premium Quality',
+      title: data.features?.[0]?.title || data.unique_mechanism || 'Qualité premium',
       desc: data.benefits[0] || `${data.product_name} est formulé pour des résultats visibles et durables.`,
     },
     {
       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${C.white}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
       bg: C.orange,
-      title: data.features?.[1]?.title || 'Sustainable',
+      title: data.features?.[1]?.title || 'Durable',
       desc: data.benefits[1] || `${data.product_name} — un choix responsable et durable.`,
     },
     {
       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${C.white}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>`,
       bg: C.orange,
-      title: data.features?.[2]?.title || 'Advanced Formula',
+      title: data.features?.[2]?.title || 'Formule avancée',
       desc: data.benefits[2] || `${data.product_name} — une formulation avancée pour des résultats visibles dès la première utilisation.`,
     },
     {
       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${C.white}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
       bg: '#2D7D46',
-      title: data.features?.[3]?.title || 'Transparency',
+      title: data.features?.[3]?.title || 'Transparence',
       desc: data.benefits[3] || `Composition transparente. Chaque composant de ${data.product_name} est sélectionné avec soin.`,
     },
   ]
@@ -133,7 +133,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>${data.product_name} — Hair Care Premium</title>
+<title>${data.product_name} — Soin capillaire premium</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -198,10 +198,10 @@ export function templateEtecBeauty(data: LandingPageData): string {
 
     <!-- Liens centre -->
     <div class="nav-links" style="display:flex;align-items:center;gap:32px;">
-      <a href="#why" class="nav-link">Ingredients</a>
-      <a href="#products" class="nav-link">Store</a>
-      <a href="#testimonials" class="nav-link">Blog</a>
-      <a href="#subscribe" class="nav-link">About Us</a>
+      <a href="#why" class="nav-link">Avantages</a>
+      <a href="#products" class="nav-link">Produit</a>
+      <a href="#testimonials" class="nav-link">Avis</a>
+      <a href="#subscribe" class="nav-link">Newsletter</a>
     </div>
 
     <!-- Icônes droite -->
@@ -256,7 +256,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
 
       <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
         <button class="btn-orange">
-          Buy Now &nbsp;|&nbsp; ${price}€
+          Commander &nbsp;|&nbsp; ${price}€
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
         ${savePct > 0 ? `<span style="font-size:13px;font-weight:700;color:${C.orange};font-family:'DM Sans',sans-serif;">-${savePct}% aujourd'hui</span>` : ''}
@@ -301,7 +301,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
 
     <!-- Meta droite : DESIGN / SIZE / COLOR -->
     <div class="hero-meta" style="display:flex;flex-direction:column;gap:20px;align-items:flex-start;z-index:2;padding-right:8px;">
-      ${['DESIGN', 'SIZE', 'COLOR'].map(label => `
+      ${['DESIGN', 'TAILLE', 'COULEUR'].map(label => `
         <div style="writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);">
           <span style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};font-family:'DM Sans',sans-serif;">${label}</span>
         </div>
@@ -320,11 +320,11 @@ export function templateEtecBeauty(data: LandingPageData): string {
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
     <div class="stats-bar" style="display:flex;align-items:stretch;">
       ${[
-        { label: 'QUALITY', value: data.hero_badges?.[0] || 'Premium' },
-        { label: 'FORMULA', value: data.unique_mechanism || 'Certifié' },
-        { label: 'VARIANTS', value: data.hero_badges?.[1] || data.benefits[0]?.split(' ').slice(0,2).join(' ') || 'Multi-usage' },
+        { label: 'QUALITÉ', value: data.hero_badges?.[0] || 'Premium' },
+        { label: 'FORMULE', value: data.unique_mechanism || 'Certifié' },
+        { label: 'VARIANTES', value: data.hero_badges?.[1] || data.benefits[0]?.split(' ').slice(0,2).join(' ') || 'Multi-usage' },
         { label: 'FORMAT', value: data.hero_badges?.[2] || 'Optimal' },
-        { label: 'DELIVERY', value: 'Free' },
+        { label: 'LIVRAISON', value: 'Gratuite' },
       ].map((s, i) => `
         <div style="flex:1;padding:28px 20px;border-right:${i < 4 ? '1px solid rgba(255,255,255,0.08)' : 'none'};text-align:center;">
           <p style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;margin-bottom:8px;">${s.label}</p>
@@ -343,8 +343,8 @@ export function templateEtecBeauty(data: LandingPageData): string {
 
     <!-- Header centré -->
     <div style="text-align:center;margin-bottom:72px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:14px;">The Difference</p>
-      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Why Choose ${data.product_name}?</h2>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:14px;">La différence</p>
+      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Pourquoi choisir ${data.product_name} ?</h2>
       <p style="color:${C.muted};font-size:16px;max-width:520px;margin:0 auto;font-family:'DM Sans',sans-serif;line-height:1.75;">${data.subtitle || 'Une formule d\'exception conçue par des experts pour des résultats visibles et durables.'}</p>
     </div>
 
@@ -398,7 +398,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
     <!-- Header -->
     <div style="text-align:center;margin-bottom:56px;">
       <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Collection</p>
-      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Our Products</h2>
+      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Nos produits</h2>
       <p style="color:${C.muted};font-size:16px;max-width:480px;margin:0 auto;font-family:'DM Sans',sans-serif;">${data.subtitle || `Une gamme complète autour de ${data.product_name}.`}</p>
     </div>
 
@@ -417,7 +417,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
             <h3 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;font-weight:600;color:${C.text};margin-bottom:6px;">${card.title}</h3>
             <p style="font-size:13px;color:${C.muted};line-height:1.7;font-family:'DM Sans',sans-serif;margin-bottom:14px;">${card.desc}</p>
             <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;font-weight:700;color:${C.orange};font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:6px;transition:gap .2s;" onmouseover="this.style.gap='10px'" onmouseout="this.style.gap='6px'">
-              Order Now
+              Commander
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
           </div>
@@ -436,7 +436,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
     <!-- Header -->
     <div style="text-align:center;margin-bottom:56px;">
       <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Témoignages</p>
-      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Testimonial</h2>
+      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Ce qu'elles en pensent</h2>
       <p style="color:${C.muted};font-size:16px;max-width:480px;margin:0 auto;font-family:'DM Sans',sans-serif;">Ce que nos clientes disent vraiment de ${data.product_name}.</p>
     </div>
 
@@ -506,6 +506,10 @@ ${data.faq && data.faq.length > 0 ? `
 </section>` : ''}
 
 
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderRichSections(data, BEAUTY_THEME)}
+
+
 <!-- ══════════════════════════════════════════════════════════════════════════
      SUBSCRIBE
 ══════════════════════════════════════════════════════════════════════════ -->
@@ -515,7 +519,7 @@ ${data.faq && data.faq.length > 0 ? `
 
       <!-- Texte gauche -->
       <div style="flex:1;">
-        <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;color:${C.white};margin-bottom:10px;line-height:1.15;">Subscribe for Updates</h2>
+        <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;color:${C.white};margin-bottom:10px;line-height:1.15;">Restez informé</h2>
         <p style="font-size:14px;color:rgba(255,255,255,0.55);font-family:'DM Sans',sans-serif;line-height:1.75;max-width:380px;">${data.final_pitch || `Recevez les nouveautés, promotions exclusives et conseils sur ${data.product_name} en avant-première.`}</p>
       </div>
 
@@ -528,7 +532,7 @@ ${data.faq && data.faq.length > 0 ? `
             style="flex:1;background:none;border:none;outline:none;padding:14px 20px;font-size:14px;color:${C.white};font-family:'DM Sans',sans-serif;"
           />
           <button class="btn-orange" style="border-radius:40px;padding:14px 24px;white-space:nowrap;font-size:14px;">
-            Subscribe
+            S'inscrire
           </button>
         </div>
         <p style="font-size:11px;color:rgba(255,255,255,0.35);font-family:'DM Sans',sans-serif;margin-top:10px;padding-left:20px;">Pas de spam. Désabonnement en 1 clic.</p>
@@ -569,9 +573,9 @@ ${data.faq && data.faq.length > 0 ? `
       <!-- 4 colonnes liens -->
       ${[
         { title: 'Blog', links: ['Conseils capillaires', 'Tendances 2026', 'Routines beauté', 'Interviews experts', 'Tutoriels vidéo'] },
-        { title: 'About', links: ['Notre histoire', 'Nos valeurs', 'Équipe', 'Presse', 'Carrières'] },
-        { title: 'Product', links: ['Gamme complète', 'Nouveautés', 'Bestsellers', 'Coffrets cadeaux', 'Abonnement'] },
-        { title: 'Download App', links: ['App Store', 'Google Play', 'Suivre ma commande', 'Aide & Support', 'Contact'] },
+        { title: 'À propos', links: ['Notre histoire', 'Nos valeurs', 'Équipe', 'Presse', 'Carrières'] },
+        { title: 'Produit', links: ['Gamme complète', 'Nouveautés', 'Bestsellers', 'Coffrets cadeaux', 'Abonnement'] },
+        { title: 'Application', links: ['App Store', 'Google Play', 'Suivre ma commande', 'Aide & Support', 'Contact'] },
       ].map(col => `
         <div class="footer-col" style="flex:1;min-width:120px;">
           <p style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${C.white};font-family:'DM Sans',sans-serif;margin-bottom:18px;">${col.title}</p>
@@ -596,10 +600,6 @@ ${data.faq && data.faq.length > 0 ? `
 
   </div>
 </footer>
-
-
-<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderRichSections(data, BEAUTY_THEME)}
 
 </body>
 </html>`

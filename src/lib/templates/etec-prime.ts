@@ -20,6 +20,7 @@ const C = {
   bg:         '#F8F7F4',
   white:      '#FFFFFF',
   dark:       '#0A0F0A',
+  darkBg:     '#0F3D1F',
   darkCard:   '#111811',
   green:      '#2D7A22',
   greenBright:'#3CB043',
@@ -269,7 +270,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
   /* ── HERO ────────────────────────────────────────────────── */
-  .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 64px); margin-top: 64px; background: ${C.dark}; }
+  .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 64px); margin-top: 64px; background: ${C.darkBg}; }
   .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 80px 60px 80px 80px; }
   .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(168,230,61,0.12); border: 1px solid rgba(168,230,61,0.25); color: ${C.greenGlow}; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 24px; width: fit-content; }
   .hero-headline { font-size: clamp(36px, 4.5vw, 58px); font-weight: 900; line-height: 1.07; color: #fff; letter-spacing: -0.03em; margin-bottom: 20px; }
@@ -305,7 +306,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .media-logo:first-of-type { border-left: none; }
 
   /* ── STATS ───────────────────────────────────────────────── */
-  .stats-section { background: ${C.dark}; padding: 64px 40px; }
+  .stats-section { background: ${C.darkBg}; padding: 64px 40px; }
   .stats-inner { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; }
   .stat-item { background: #111811; padding: 40px 24px; text-align: center; }
   .stat-value { font-size: 42px; font-weight: 900; color: ${C.lime}; letter-spacing: -0.03em; line-height: 1; margin-bottom: 8px; }
@@ -352,7 +353,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .qty-btn { width: 36px; height: 36px; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: ${C.text}; transition: background .15s; }
   .qty-btn:hover { background: #F5F5F5; }
   .qty-val { width: 40px; text-align: center; font-size: 15px; font-weight: 700; color: ${C.text}; border: none; outline: none; }
-  .add-btn { width: 100%; padding: 18px; background: ${C.dark}; color: #fff; font-size: 16px; font-weight: 900; border: none; border-radius: 14px; cursor: pointer; transition: all .2s; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .add-btn { width: 100%; padding: 18px; background: ${C.darkBg}; color: #fff; font-size: 16px; font-weight: 900; border: none; border-radius: 14px; cursor: pointer; transition: all .2s; letter-spacing: -0.01em; margin-bottom: 12px; }
   .add-btn:hover { background: #1F2E1F; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
   .wishlist-btn { width: 100%; padding: 15px; background: transparent; color: ${C.text}; font-size: 14px; font-weight: 600; border: 1.5px solid ${C.border}; border-radius: 14px; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 24px; }
   .wishlist-btn:hover { border-color: ${C.text}; }
@@ -378,7 +379,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .ingredient-benefit svg { color: ${C.greenBright}; flex-shrink: 0; margin-top: 2px; }
 
   /* ── HOW IT WORKS ────────────────────────────────────────── */
-  .how-section { background: ${C.dark}; padding: 100px 40px; }
+  .how-section { background: ${C.darkBg}; padding: 100px 40px; }
   .how-inner { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
   .how-img { border-radius: 24px; width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
   .how-steps { display: flex; flex-direction: column; gap: 36px; }
@@ -428,7 +429,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .faq-a p { font-size: 14px; color: ${C.muted}; line-height: 1.7; }
 
   /* ── FINAL CTA ───────────────────────────────────────────── */
-  .final-cta { background: ${C.dark}; padding: 100px 40px; text-align: center; }
+  .final-cta { background: ${C.darkBg}; padding: 100px 40px; text-align: center; }
   .final-inner { max-width: 600px; margin: 0 auto; }
   .final-title { font-size: clamp(32px, 4vw, 52px); font-weight: 900; color: #fff; letter-spacing: -0.04em; line-height: 1.08; margin-bottom: 20px; }
   .final-title span { color: ${C.lime}; }
@@ -483,31 +484,31 @@ export function templateEtecPrime(data: LandingPageData): string {
   <div class="nav-logo">◆ ${productName.split(' ')[0]}</div>
   <div class="nav-links">
     <a class="nav-link" href="javascript:void(0)">Science</a>
-    <a class="nav-link" href="javascript:void(0)">Ingredients</a>
-    <a class="nav-link" href="javascript:void(0)">Reviews</a>
+    <a class="nav-link" href="javascript:void(0)">Avantages</a>
+    <a class="nav-link" href="javascript:void(0)">Avis</a>
     <a class="nav-link" href="javascript:void(0)">FAQ</a>
   </div>
-  <a class="nav-cta" href="javascript:void(0)">Get Started →</a>
+  <a class="nav-cta" href="javascript:void(0)">Commencer →</a>
 </nav>
 
 <!-- TICKER -->
 <div class="ticker" style="margin-top:64px">
   <div class="ticker-track">
-    <span>✦ Free shipping on all orders</span>
-    <span>✦ 30-day money-back guarantee</span>
-    <span>✦ 12,000+ five-star reviews</span>
-    <span>✦ NSF Certified & Third-Party Tested</span>
-    <span>✦ Free shipping on all orders</span>
-    <span>✦ 30-day money-back guarantee</span>
-    <span>✦ 12,000+ five-star reviews</span>
-    <span>✦ NSF Certified & Third-Party Tested</span>
+    <span>✦ Livraison gratuite sur toutes les commandes</span>
+    <span>✦ Garantie satisfait ou remboursé 30 jours</span>
+    <span>✦ 12 000+ avis 5 étoiles</span>
+    <span>✦ Certifié NSF & testé par des tiers</span>
+    <span>✦ Livraison gratuite sur toutes les commandes</span>
+    <span>✦ Garantie satisfait ou remboursé 30 jours</span>
+    <span>✦ 12 000+ avis 5 étoiles</span>
+    <span>✦ Certifié NSF & testé par des tiers</span>
   </div>
 </div>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <div class="hero-badge">${ICON_LEAF} Science-Backed Formula</div>
+    <div class="hero-badge">${ICON_LEAF} Formule validée scientifiquement</div>
     <h1 class="hero-headline">${headline.replace(/(every|extraordinary|thrive|daily)/gi, '<span>$1</span>')}</h1>
     <p class="hero-subtitle">${subtitle}</p>
     <ul class="hero-benefits-list">
@@ -515,13 +516,13 @@ export function templateEtecPrime(data: LandingPageData): string {
     </ul>
     <div class="hero-rating">
       <div class="hero-stars">${stars(5)}</div>
-      <span class="hero-rating-text"><strong>4.9/5</strong> · 12,000+ verified reviews</span>
+      <span class="hero-rating-text"><strong>4.9/5</strong> · 12 000+ avis vérifiés</span>
     </div>
     <div class="hero-urgency">${urgency}</div>
     <div style="height:16px"></div>
     <div class="hero-cta">
       <a href="javascript:void(0)" class="hero-btn">${ctaText}</a>
-      <p class="hero-sub">Free shipping · Cancel anytime · 30-day guarantee</p>
+      <p class="hero-sub">Livraison gratuite · Résiliable à tout moment · Garantie 30 jours</p>
     </div>
   </div>
   <div class="hero-right">
@@ -529,9 +530,9 @@ export function templateEtecPrime(data: LandingPageData): string {
     ${renderHeroThumbs(data.images ?? [], PRIME_THEME, 'kvt-hero-img-etec-prime')}
     <div class="hero-overlay"></div>
     <div class="hero-float-badge">
-      <div class="hero-float-title">CLINICAL DOSING</div>
+      <div class="hero-float-title">DOSAGE CLINIQUE</div>
       <div class="hero-float-val">75</div>
-      <div class="hero-float-sub">science-backed nutrients</div>
+      <div class="hero-float-sub">nutriments validés scientifiquement</div>
     </div>
   </div>
 </section>
@@ -539,7 +540,7 @@ export function templateEtecPrime(data: LandingPageData): string {
 <!-- MEDIA -->
 <div class="media-section">
   <div class="media-inner">
-    <span class="media-as">As seen in</span>
+    <span class="media-as">Vu dans</span>
     ${mediaHTML}
   </div>
 </div>
@@ -553,9 +554,9 @@ export function templateEtecPrime(data: LandingPageData): string {
 <section class="benefits-section">
   <div style="max-width:1000px;margin:0 auto">
     <div class="section-header">
-      <div class="section-label">Why Prime Works</div>
-      <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
-      <p class="section-subtitle">Built from the ground up with clinically studied ingredients at doses that actually make a difference.</p>
+      <div class="section-label">Pourquoi Prime fonctionne</div>
+      <h2 class="section-title">Tout ce dont vous avez besoin.<br>Rien de superflu.</h2>
+      <p class="section-subtitle">Conçu de A à Z avec des ingrédients étudiés cliniquement, à des dosages qui font vraiment la différence.</p>
     </div>
     <div class="benefits-grid">${benefitsHTML}</div>
   </div>
@@ -574,7 +575,7 @@ export function templateEtecPrime(data: LandingPageData): string {
       <div class="product-thumbs">
         ${Array.from({length:4}, (_,i) => `
         <div class="product-thumb${i===0?' active':''}" onclick="switchImg(this,'${img(i)}')" >
-          <img src="${img(i)}" alt="View ${i+1}">
+          <img src="${img(i)}" alt="Vue ${i+1}">
         </div>`).join('')}
       </div>
     </div>
@@ -583,15 +584,15 @@ export function templateEtecPrime(data: LandingPageData): string {
       <p class="product-tagline">${data.hero_badges?.join(' · ') || 'Supplément quotidien · Qualité premium'}</p>
       <div class="product-rating-row">
         <div class="product-stars">${stars(5)}</div>
-        <span class="product-rating-text">4.9 (12,847 reviews)</span>
+        <span class="product-rating-text">4.9 (12 847 avis)</span>
       </div>
 
       <div class="plan-toggle">
         <button class="plan-btn active" onclick="setPlan(this,'subscribe')">
-          Subscribe &amp; Save <span class="plan-save">−20%</span>
+          Abonnement &amp; économies <span class="plan-save">−20%</span>
         </button>
         <button class="plan-btn" onclick="setPlan(this,'once')">
-          One-time purchase
+          Achat unique
         </button>
       </div>
 
@@ -599,10 +600,10 @@ export function templateEtecPrime(data: LandingPageData): string {
         <span class="price-main" id="price-main">${price.includes('$') ? price : '$' + price}</span>
         <span class="price-orig" id="price-orig">${originalPrice.includes('$') ? originalPrice : '$' + originalPrice}</span>
       </div>
-      <p class="price-note" id="price-note">Billed monthly · Free shipping · Cancel anytime</p>
+      <p class="price-note" id="price-note">Facturation mensuelle · Livraison gratuite · Résiliable à tout moment</p>
 
       <div class="qty-row">
-        <span class="qty-label">Qty</span>
+        <span class="qty-label">Qté</span>
         <div class="qty-ctrl">
           <button class="qty-btn" onclick="changeQty(-1)">${ICON_MINUS}</button>
           <span class="qty-val" id="qty-val">1</span>
@@ -610,13 +611,13 @@ export function templateEtecPrime(data: LandingPageData): string {
         </div>
       </div>
 
-      <button class="add-btn">Add to Cart — $${price.replace(/[^0-9.]/g, '')}/mo</button>
-      <button class="wishlist-btn">${ICON_HEART} Save to Wishlist</button>
+      <button class="add-btn">Ajouter au panier — $${price.replace(/[^0-9.]/g, '')}/mois</button>
+      <button class="wishlist-btn">${ICON_HEART} Ajouter aux favoris</button>
 
       <div class="trust-row">
-        <div class="trust-item">${ICON_TRUCK} Free shipping</div>
-        <div class="trust-item">${ICON_LOCK} Secure checkout</div>
-        <div class="trust-item">${ICON_SHIELD} 30-day guarantee</div>
+        <div class="trust-item">${ICON_TRUCK} Livraison gratuite</div>
+        <div class="trust-item">${ICON_LOCK} Paiement sécurisé</div>
+        <div class="trust-item">${ICON_SHIELD} Garantie 30 jours</div>
       </div>
     </div>
   </div>
@@ -626,9 +627,9 @@ export function templateEtecPrime(data: LandingPageData): string {
 <section class="ingredients-section">
   <div style="max-width:1000px;margin:0 auto">
     <div class="section-header">
-      <div class="section-label">Transparent Formula</div>
-      <h2 class="section-title">Every ingredient. Every dose. No secrets.</h2>
-      <p class="section-subtitle">We show you exactly what's in each capsule — and why it's there.</p>
+      <div class="section-label">Formule transparente</div>
+      <h2 class="section-title">Chaque ingrédient. Chaque dose. Aucun secret.</h2>
+      <p class="section-subtitle">Nous vous montrons exactement ce qu'il y a dans chaque capsule — et pourquoi.</p>
     </div>
     <div class="ingredients-grid">${ingredientsHTML}</div>
   </div>
@@ -637,11 +638,11 @@ export function templateEtecPrime(data: LandingPageData): string {
 <!-- HOW IT WORKS -->
 <section class="how-section">
   <div class="how-inner" style="max-width:1000px;margin:0 auto">
-    <img class="how-img" src="${img(1)}" alt="How it works">
+    <img class="how-img" src="${img(1)}" alt="Comment ça marche">
     <div>
-      <div class="section-label" style="color:${C.lime}">How It Works</div>
-      <h2 class="section-title" style="color:#fff;margin-bottom:12px">Simple routine.<br>Real results.</h2>
-      <p class="section-subtitle" style="color:rgba(255,255,255,0.4);margin-bottom:48px">No complicated protocols. No 12-step morning routine. Just 2 capsules and you're done.</p>
+      <div class="section-label" style="color:${C.lime}">Comment ça marche</div>
+      <h2 class="section-title" style="color:#fff;margin-bottom:12px">Routine simple.<br>Résultats concrets.</h2>
+      <p class="section-subtitle" style="color:rgba(255,255,255,0.4);margin-bottom:48px">Pas de protocole compliqué. Pas de routine du matin en 12 étapes. Juste 2 capsules et c'est fait.</p>
       <div class="how-steps">${stepsHTML}</div>
     </div>
   </div>
@@ -654,10 +655,10 @@ export function templateEtecPrime(data: LandingPageData): string {
       <div class="reviews-big-num">4.9</div>
       <div class="reviews-score-right">
         <div class="reviews-stars-big">${stars(5)}</div>
-        <div class="reviews-count">Based on 12,847 reviews</div>
+        <div class="reviews-count">Basé sur 12 847 avis</div>
       </div>
     </div>
-    <a href="javascript:void(0)" style="font-size:13px;font-weight:700;color:${C.greenBright};text-decoration:none">Read all reviews →</a>
+    <a href="javascript:void(0)" style="font-size:13px;font-weight:700;color:${C.greenBright};text-decoration:none">Voir tous les avis →</a>
   </div>
   <div class="reviews-grid">${reviewsHTML}</div>
 </section>
@@ -666,12 +667,12 @@ export function templateEtecPrime(data: LandingPageData): string {
 <section class="guarantee-section">
   <div class="guarantee-inner">
     <div class="guarantee-badge">🛡️</div>
-    <h2 class="guarantee-title">30-Day Money-Back Guarantee</h2>
+    <h2 class="guarantee-title">Garantie satisfait ou remboursé 30 jours</h2>
     <p class="guarantee-text">${data.guarantee?.description || `Essayez ${productName} pendant un mois complet. Si vous n'êtes pas entièrement satisfait — pour quelque raison que ce soit — nous vous remboursons intégralement. Sans condition.`}</p>
     <div class="guarantee-tags">
-      <div class="guarantee-tag">${ICON_CHECK} Full refund</div>
-      <div class="guarantee-tag">${ICON_CHECK} No return required</div>
-      <div class="guarantee-tag">${ICON_CHECK} No questions asked</div>
+      <div class="guarantee-tag">${ICON_CHECK} Remboursement intégral</div>
+      <div class="guarantee-tag">${ICON_CHECK} Aucun retour requis</div>
+      <div class="guarantee-tag">${ICON_CHECK} Sans justification</div>
     </div>
   </div>
 </section>
@@ -685,7 +686,7 @@ ${renderRichSections(data, PRIME_THEME)}
   <div class="faq-inner">
     <div class="section-header">
       <div class="section-label">FAQ</div>
-      <h2 class="section-title">Common questions</h2>
+      <h2 class="section-title">Questions fréquentes</h2>
     </div>
     ${faqHTML}
   </div>
@@ -694,10 +695,10 @@ ${renderRichSections(data, PRIME_THEME)}
 <!-- FINAL CTA -->
 <section class="final-cta">
   <div class="final-inner">
-    <h2 class="final-title">Ready to feel <span>extraordinary?</span></h2>
+    <h2 class="final-title">Prêt à vous sentir <span>extraordinaire ?</span></h2>
     <p class="final-sub">${data.final_pitch || `Rejoignez des milliers de personnes qui ont fait de ${productName} leur routine quotidienne. Votre meilleur vous commence ici.`}</p>
     <a href="javascript:void(0)" class="final-btn">${ctaText}</a>
-    <p class="final-note">Free shipping · 30-day guarantee · Cancel anytime</p>
+    <p class="final-note">Livraison gratuite · Garantie 30 jours · Résiliable à tout moment</p>
   </div>
 </section>
 
@@ -710,33 +711,33 @@ ${renderRichSections(data, PRIME_THEME)}
         <p class="footer-tagline">${data.subtitle || 'Qualité premium pour ceux qui refusent la médiocrité.'}</p>
       </div>
       <div>
-        <div class="footer-col-title">Product</div>
-        <a class="footer-link" href="javascript:void(0)">Daily Formula</a>
-        <a class="footer-link" href="javascript:void(0)">Ingredients</a>
+        <div class="footer-col-title">Produit</div>
+        <a class="footer-link" href="javascript:void(0)">Formule quotidienne</a>
+        <a class="footer-link" href="javascript:void(0)">Ingrédients</a>
         <a class="footer-link" href="javascript:void(0)">Certifications</a>
-        <a class="footer-link" href="javascript:void(0)">Subscribe & Save</a>
+        <a class="footer-link" href="javascript:void(0)">Abonnement & économies</a>
       </div>
       <div>
-        <div class="footer-col-title">Company</div>
-        <a class="footer-link" href="javascript:void(0)">Our Science</a>
-        <a class="footer-link" href="javascript:void(0)">About Us</a>
-        <a class="footer-link" href="javascript:void(0)">Reviews</a>
-        <a class="footer-link" href="javascript:void(0)">Affiliates</a>
+        <div class="footer-col-title">Entreprise</div>
+        <a class="footer-link" href="javascript:void(0)">Notre science</a>
+        <a class="footer-link" href="javascript:void(0)">À propos</a>
+        <a class="footer-link" href="javascript:void(0)">Avis</a>
+        <a class="footer-link" href="javascript:void(0)">Affiliation</a>
       </div>
       <div>
-        <div class="footer-col-title">Support</div>
+        <div class="footer-col-title">Assistance</div>
         <a class="footer-link" href="javascript:void(0)">FAQ</a>
-        <a class="footer-link" href="javascript:void(0)">Shipping</a>
-        <a class="footer-link" href="javascript:void(0)">Returns</a>
-        <a class="footer-link" href="javascript:void(0)">Contact Us</a>
+        <a class="footer-link" href="javascript:void(0)">Livraison</a>
+        <a class="footer-link" href="javascript:void(0)">Retours</a>
+        <a class="footer-link" href="javascript:void(0)">Nous contacter</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">© ${new Date().getFullYear()} ${productName}. All rights reserved.</span>
+      <span class="footer-copy">© ${new Date().getFullYear()} ${productName}. Tous droits réservés.</span>
       <div class="footer-certs">
-        <span class="footer-cert">NSF Certified</span>
-        <span class="footer-cert">GMP Facility</span>
-        <span class="footer-cert">Third-Party Tested</span>
+        <span class="footer-cert">Certifié NSF</span>
+        <span class="footer-cert">Site GMP</span>
+        <span class="footer-cert">Testé par des tiers</span>
       </div>
     </div>
   </div>
@@ -766,12 +767,12 @@ ${renderRichSections(data, PRIME_THEME)}
       pm.textContent = '$' + basePrice;
       po.textContent = '$' + origPrice;
       po.style.display = '';
-      pn.textContent = 'Billed monthly · Free shipping · Cancel anytime';
+      pn.textContent = 'Facturation mensuelle · Livraison gratuite · Résiliable à tout moment';
     } else {
       const oneTime = Math.round(parseFloat(origPrice));
       pm.textContent = '$' + oneTime;
       po.style.display = 'none';
-      pn.textContent = 'One-time purchase · Free shipping';
+      pn.textContent = 'Achat unique · Livraison gratuite';
     }
   }
 

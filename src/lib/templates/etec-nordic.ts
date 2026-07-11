@@ -16,7 +16,7 @@ const C = {
   bg:          '#FAFAF8',
   bgAlt:       '#F2EFE9',
   card:        '#FFFFFF',
-  accent:      '#2C2C2C',
+  accent:      '#3E3226',
   accentWarm:  '#8B7355',
   accentLight: '#EDE8E0',
   text:        '#1A1A1A',
@@ -51,7 +51,7 @@ export function templateEtecNordic(data: LandingPageData): string {
 
   const productName = data.product_name   || 'Nordic Object'
   const subtitle    = data.subtitle       || 'Designed for quiet living.'
-  const ctaText     = data.cta            || 'Shop Now'
+  const ctaText     = data.cta            || 'Commander'
   const price       = data.price          || null
   const origPrice   = data.original_price || null
   const urgency     = data.urgency        || null
@@ -82,7 +82,7 @@ export function templateEtecNordic(data: LandingPageData): string {
       <div class="ov-nd" style="position:absolute;inset:0;background:rgba(26,26,26,.58);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;opacity:0;transition:opacity .25s;">
         <span style="color:#fff;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;text-align:center;padding:0 16px;">${colNames[i]}</span>
         <span style="color:${C.sand};font-family:'Manrope',sans-serif;font-size:12px;">${colPrices[i]}</span>
-        <a href="javascript:void(0)" onclick="event.preventDefault()" style="background:transparent;border:1px solid rgba(255,255,255,.6);color:#fff;font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;padding:7px 20px;text-decoration:none;">Add</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()" style="background:transparent;border:1px solid rgba(255,255,255,.6);color:#fff;font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;padding:7px 20px;text-decoration:none;">Ajouter</a>
       </div>
     </div>`).join('')
 
@@ -178,7 +178,7 @@ export function templateEtecNordic(data: LandingPageData): string {
 <nav style="background:${C.card};border-bottom:1px solid ${C.border};position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 64px;height:64px;gap:32px;">
   <span style="font-family:'Fraunces',serif;font-size:22px;font-weight:400;color:${C.text};letter-spacing:.3em;text-transform:uppercase;flex-shrink:0;">NORDIC</span>
   <div class="nav-links-nd" style="display:flex;align-items:center;gap:36px;">
-    ${['Objects','Living','Stories','About'].map(l => `<a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;color:${C.muted};letter-spacing:.15em;text-transform:uppercase;transition:color .2s;" onmouseover="this.style.color='${C.text}'" onmouseout="this.style.color='${C.muted}'">${l}</a>`).join('')}
+    ${['Objets','Univers','Histoires','À propos'].map(l => `<a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;color:${C.muted};letter-spacing:.15em;text-transform:uppercase;transition:color .2s;" onmouseover="this.style.color='${C.text}'" onmouseout="this.style.color='${C.muted}'">${l}</a>`).join('')}
   </div>
   <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:${C.accent};border:1px solid ${C.accent};padding:9px 20px;flex-shrink:0;transition:background .2s,color .2s;" onmouseover="this.style.background='${C.accent}';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='${C.accent}'">${ctaText}</a>
 </nav>
@@ -187,8 +187,8 @@ export function templateEtecNordic(data: LandingPageData): string {
 <section class="hero-nd" style="display:flex;min-height:90vh;overflow:hidden;">
   <div class="hero-left-nd" style="flex:0 0 40%;display:flex;flex-direction:column;justify-content:center;padding:80px 64px;position:relative;">
     <span style="font-family:'Fraunces',serif;font-size:120px;font-weight:300;color:${C.text};opacity:.07;line-height:1;position:absolute;top:40px;left:48px;pointer-events:none;user-select:none;" aria-hidden="true">01</span>
-    <div style="display:inline-flex;align-items:center;gap:8px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:${C.accentWarm};margin-bottom:28px;"><span style="display:block;width:20px;height:1px;background:${C.accentWarm};"></span>Slow Design · Made to Last</div>
-    <h1 class="hero-h1-nd" style="font-family:'Fraunces',serif;font-size:68px;font-weight:400;line-height:1.05;letter-spacing:-.02em;color:${C.text};margin-bottom:24px;">Objects That Tell<br>Your Story</h1>
+    <div style="display:inline-flex;align-items:center;gap:8px;font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:${C.accentWarm};margin-bottom:28px;"><span style="display:block;width:20px;height:1px;background:${C.accentWarm};"></span>Design lent · Fait pour durer</div>
+    <h1 class="hero-h1-nd" style="font-family:'Fraunces',serif;font-size:68px;font-weight:400;line-height:1.05;letter-spacing:-.02em;color:${C.text};margin-bottom:24px;">Des objets qui<br>racontent une histoire</h1>
     <p style="font-family:'Manrope',sans-serif;font-size:15px;color:${C.muted};line-height:1.75;max-width:340px;margin-bottom:40px;">${subtitle}</p>
     <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-block;background:${C.accent};color:#fff;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:14px 32px;transition:opacity .2s;" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">${ctaText}</a>
   </div>
@@ -199,14 +199,14 @@ export function templateEtecNordic(data: LandingPageData): string {
 
 <!-- VALUES -->
 <div class="values-nd" style="background:${C.accentLight};padding:28px 64px;display:flex;align-items:center;justify-content:center;">
-  ${['Handcrafted','Sustainable','Timeless','Minimal'].map(v => `
+  ${['Fait main','Durable','Intemporel','Minimal'].map(v => `
   <div class="val-item-nd" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 32px;border-right:1px solid ${C.border};">
     <div style="width:24px;height:1px;background:${C.accentWarm};"></div>
     <span style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:${C.text};">${v}</span>
   </div>`).join('')}
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 32px;">
     <div style="width:24px;height:1px;background:${C.accentWarm};"></div>
-    <span style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:${C.text};">Natural</span>
+    <span style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:${C.text};">Naturel</span>
   </div>
 </div>
 
@@ -220,11 +220,11 @@ export function templateEtecNordic(data: LandingPageData): string {
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">${thumbsHTML}</div>
     </div>
     <div>
-      <p style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;color:${C.muted};text-transform:uppercase;margin-bottom:12px;">Ref. 00${Math.floor(Math.random() * 99) + 1}</p>
+      <p style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:500;letter-spacing:.12em;color:${C.muted};text-transform:uppercase;margin-bottom:12px;">Réf. 00${Math.floor(Math.random() * 99) + 1}</p>
       <h2 style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;line-height:1.15;color:${C.text};margin-bottom:14px;">${productName}</h2>
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
         <div>${starsNd(4)}</div>
-        <span style="font-family:'Manrope',sans-serif;font-size:12px;color:${C.muted};">4.0 · 847 reviews</span>
+        <span style="font-family:'Manrope',sans-serif;font-size:12px;color:${C.muted};">4.0 · 847 avis</span>
       </div>
       <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
         ${price    ? `<span style="font-family:'Fraunces',serif;font-size:28px;font-weight:400;color:${C.text};">${price}€</span>` : ''}
@@ -235,7 +235,7 @@ export function templateEtecNordic(data: LandingPageData): string {
       <p style="font-family:'Manrope',sans-serif;font-size:14px;color:${C.muted};line-height:1.8;margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid ${C.border};">${subtitle}</p>
       ${urgency ? `<p style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;color:${C.accentWarm};letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px;">${urgency}</p>` : ''}
       <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:${C.accent};color:#fff;font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:16px 32px;margin-bottom:10px;transition:opacity .2s;" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">${ctaText}</a>
-      <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:transparent;color:${C.text};font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:14px 32px;border:1px solid ${C.border};margin-bottom:24px;transition:border-color .2s,color .2s;" onmouseover="this.style.borderColor='${C.accent}';this.style.color='${C.accent}'" onmouseout="this.style.borderColor='${C.border}';this.style.color='${C.text}'">Save for later</a>
+      <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:transparent;color:${C.text};font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:14px 32px;border:1px solid ${C.border};margin-bottom:24px;transition:border-color .2s,color .2s;" onmouseover="this.style.borderColor='${C.accent}';this.style.color='${C.accent}'" onmouseout="this.style.borderColor='${C.border}';this.style.color='${C.text}'">Enregistrer pour plus tard</a>
       <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
         <div style="display:flex;align-items:center;gap:6px;color:${C.muted};"><span style="color:${C.accentWarm};">${ico.truck(14)}</span><span style="font-family:'Manrope',sans-serif;font-size:11px;">Livraison offerte</span></div>
         <div style="display:flex;align-items:center;gap:6px;color:${C.muted};"><span style="color:${C.accentWarm};">${ico.return(14)}</span><span style="font-family:'Manrope',sans-serif;font-size:11px;">Retour 30 jours</span></div>
@@ -247,15 +247,15 @@ export function templateEtecNordic(data: LandingPageData): string {
 
 <!-- CRAFTS -->
 <section class="section-pad-nd" style="background:${C.bgAlt};padding:96px 64px;">
-  <h2 style="font-family:'Fraunces',serif;font-size:40px;font-weight:400;color:${C.text};margin-bottom:64px;text-align:center;">Crafted with Intention</h2>
+  <h2 style="font-family:'Fraunces',serif;font-size:40px;font-weight:400;color:${C.text};margin-bottom:64px;text-align:center;">Façonné avec intention</h2>
   <div style="max-width:1100px;margin:0 auto;">${craftsHTML}</div>
 </section>
 
 <!-- COLLECTION -->
 <section class="section-pad-nd" style="padding:96px 64px;background:${C.bg};">
   <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;max-width:1280px;margin-left:auto;margin-right:auto;">
-    <h2 style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;color:${C.text};">Complete the Look</h2>
-    <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:${C.muted};border-bottom:1px solid ${C.border};padding-bottom:2px;" onmouseover="this.style.color='${C.text}'" onmouseout="this.style.color='${C.muted}'">View all</a>
+    <h2 style="font-family:'Fraunces',serif;font-size:36px;font-weight:400;color:${C.text};">Complétez l'ensemble</h2>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Manrope',sans-serif;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:${C.muted};border-bottom:1px solid ${C.border};padding-bottom:2px;" onmouseover="this.style.color='${C.text}'" onmouseout="this.style.color='${C.muted}'">Voir tout</a>
   </div>
   <div class="col-grid-nd" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1280px;margin:0 auto;">${collectionHTML}</div>
 </section>
@@ -263,7 +263,7 @@ export function templateEtecNordic(data: LandingPageData): string {
 <!-- QUOTE -->
 <section class="section-pad-nd" style="background:${C.bgAlt};padding:100px 64px;text-align:center;">
   <blockquote style="font-family:'Fraunces',serif;font-size:32px;font-weight:300;font-style:italic;line-height:1.5;color:${C.text};max-width:760px;margin:0 auto 36px;">
-    Good design is about making things that last, not things that trend.
+    Le bon design consiste à créer des objets qui durent, pas des objets qui suivent une tendance.
   </blockquote>
   <div style="width:40px;height:1px;background:${C.accentWarm};margin:0 auto;"></div>
 </section>
@@ -271,8 +271,8 @@ export function templateEtecNordic(data: LandingPageData): string {
 <!-- REVIEWS -->
 <section class="section-pad-nd" style="padding:96px 64px;background:${C.bg};">
   <div style="text-align:center;margin-bottom:52px;">
-    <h2 style="font-family:'Fraunces',serif;font-size:40px;font-weight:400;color:${C.text};margin-bottom:10px;">What Our Customers Say</h2>
-    <p style="font-family:'Manrope',sans-serif;font-size:14px;color:${C.muted};">4.8 out of 5 · 847 reviews</p>
+    <h2 style="font-family:'Fraunces',serif;font-size:40px;font-weight:400;color:${C.text};margin-bottom:10px;">Ce que disent nos clients</h2>
+    <p style="font-family:'Manrope',sans-serif;font-size:14px;color:${C.muted};">4.8 sur 5 · 847 avis</p>
     <div style="display:flex;align-items:center;justify-content:center;gap:2px;margin-top:8px;">${starsNd(5)}</div>
   </div>
   <div class="rev-grid-nd" style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;max-width:1100px;margin:0 auto;">${reviewsHTML}</div>
@@ -292,11 +292,11 @@ ${renderRichSections(data, NORDIC_THEME)}
 
 <!-- NEWSLETTER -->
 <section class="section-pad-nd" style="background:${C.accent};padding:80px 64px;text-align:center;">
-  <h2 style="font-family:'Fraunces',serif;font-size:34px;font-weight:400;color:#fff;margin-bottom:12px;">Stay in the Loop</h2>
+  <h2 style="font-family:'Fraunces',serif;font-size:34px;font-weight:400;color:#fff;margin-bottom:12px;">Restez informé</h2>
   <p style="font-family:'Manrope',sans-serif;font-size:14px;color:rgba(255,255,255,.6);margin-bottom:32px;">Nouvelles collections, histoires d'artisans, parutions éditoriales.</p>
   <form style="display:flex;max-width:460px;margin:0 auto;" onsubmit="event.preventDefault()">
     <input type="email" placeholder="votre@email.com" style="flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-right:none;color:#fff;font-family:'Manrope',sans-serif;font-size:13px;padding:14px 20px;outline:none;" autocomplete="email"/>
-    <button type="submit" style="background:${C.sand};color:${C.text};font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:14px 22px;border:1px solid ${C.sand};cursor:pointer;white-space:nowrap;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Subscribe</button>
+    <button type="submit" style="background:${C.sand};color:${C.text};font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:14px 22px;border:1px solid ${C.sand};cursor:pointer;white-space:nowrap;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">S'inscrire</button>
   </form>
 </section>
 
@@ -305,9 +305,9 @@ ${renderRichSections(data, NORDIC_THEME)}
   <div class="footer-nd" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:1px solid ${C.border};margin-bottom:28px;">
     <div>
       <p style="font-family:'Fraunces',serif;font-size:20px;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:${C.text};margin-bottom:12px;">NORDIC</p>
-      <p style="font-family:'Manrope',sans-serif;font-size:13px;color:${C.muted};line-height:1.7;max-width:220px;">Objects designed for quiet living. Made to last, made with intention.</p>
+      <p style="font-family:'Manrope',sans-serif;font-size:13px;color:${C.muted};line-height:1.7;max-width:220px;">Des objets pensés pour une vie sereine. Faits pour durer, faits avec intention.</p>
     </div>
-    ${[['Collection',['Objects','Living','Papeterie','New arrivals']],['Informations',['À propos','Livraison','Retours','FAQ']],['Contact',['Instagram','Pinterest','Newsletter','hello@nordic.studio']]].map(([title, links]) => `
+    ${[['Collection',['Objets','Univers','Papeterie','Nouveautés']],['Informations',['À propos','Livraison','Retours','FAQ']],['Contact',['Instagram','Pinterest','Newsletter','hello@nordic.studio']]].map(([title, links]) => `
     <div>
       <p style="font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:${C.text};margin-bottom:16px;">${title}</p>
       <div style="display:flex;flex-direction:column;gap:10px;">
@@ -316,9 +316,9 @@ ${renderRichSections(data, NORDIC_THEME)}
     </div>`).join('')}
   </div>
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-    <p style="font-family:'Manrope',sans-serif;font-size:11px;color:${C.muted};">© ${new Date().getFullYear()} Nordic Studio. All rights reserved.</p>
+    <p style="font-family:'Manrope',sans-serif;font-size:11px;color:${C.muted};">© ${new Date().getFullYear()} Nordic Studio. Tous droits réservés.</p>
     <div style="display:flex;gap:20px;">
-      ${['Privacy','Terms'].map(l => `<a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Manrope',sans-serif;font-size:11px;color:${C.muted};transition:color .2s;" onmouseover="this.style.color='${C.text}'" onmouseout="this.style.color='${C.muted}'">${l}</a>`).join('')}
+      ${['Confidentialité','Mentions légales'].map(l => `<a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Manrope',sans-serif;font-size:11px;color:${C.muted};transition:color .2s;" onmouseover="this.style.color='${C.text}'" onmouseout="this.style.color='${C.muted}'">${l}</a>`).join('')}
     </div>
   </div>
 </footer>

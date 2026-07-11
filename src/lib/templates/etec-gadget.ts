@@ -17,6 +17,7 @@ const C = {
   bg:       '#F5F5F7',
   white:    '#FFFFFF',
   dark:     '#1D1D1F',
+  darkBg:   '#1B2A4A',
   blue:     '#0066CC',
   blueHov:  '#0055AA',
   cyan:     '#00C7BE',
@@ -38,40 +39,40 @@ function stars(n: number) {
 }
 
 const SPECS_FALLBACK = [
-  { label: 'Battery Life',   value: '36h',     unit: 'continuous' },
-  { label: 'Weight',         value: '28g',      unit: 'ultra-light' },
-  { label: 'Water Resist.',  value: 'Certified', unit: 'protection' },
-  { label: 'Connectivity',   value: 'BT',       unit: 'ultra-low latency' },
-  { label: 'Charging',       value: '45min',    unit: 'to full charge' },
-  { label: 'Warranty',       value: '2 years',  unit: 'worldwide' },
+  { label: 'Autonomie',      value: '36h',       unit: 'en continu' },
+  { label: 'Poids',          value: '28g',       unit: 'ultra-léger' },
+  { label: 'Étanchéité',     value: 'Certifiée', unit: 'protection' },
+  { label: 'Connectivité',   value: 'BT',        unit: 'latence ultra-faible' },
+  { label: 'Charge',         value: '45min',     unit: 'charge complète' },
+  { label: 'Garantie',       value: '2 ans',     unit: 'monde entier' },
 ]
 
 const FEATURES_FALLBACK = [
-  { icon: ICON_BOLT,   title: 'Unmatched Performance', desc: 'Next-gen design delivers superior performance with optimal efficiency.' },
-  { icon: ICON_SHIELD, title: 'Built to Last',          desc: 'Military-grade durability. Tested to survive drops, dust, and water.' },
-  { icon: ICON_TRUCK,  title: 'Precision Engineered',   desc: 'Every component crafted for perfect fit and feel.' },
+  { icon: ICON_BOLT,   title: 'Performance inégalée', desc: 'Un design nouvelle génération pour une performance supérieure et une efficacité optimale.' },
+  { icon: ICON_SHIELD, title: 'Conçu pour durer',       desc: 'Robustesse de qualité militaire. Testé pour résister aux chutes, à la poussière et à l\'eau.' },
+  { icon: ICON_TRUCK,  title: 'Ingénierie de précision', desc: 'Chaque composant conçu pour un ajustement et un confort parfaits.' },
 ]
 
 const COLORS = [
-  { name: 'Midnight Black', hex: '#1D1D1F' },
-  { name: 'Arctic White',   hex: '#F5F5F7' },
-  { name: 'Ocean Blue',     hex: '#0066CC' },
+  { name: 'Noir Minuit',   hex: '#1D1D1F' },
+  { name: 'Blanc Arctique', hex: '#F5F5F7' },
+  { name: 'Bleu Océan',    hex: '#0066CC' },
 ]
 
 const COMPARE = [
-  { feature: 'Battery Life',        ours: '36h',    comp1: '20h',   comp2: '24h'   },
-  { feature: 'Water Resistance',    ours: 'IP68',   comp1: 'IP54',  comp2: 'IP67'  },
-  { feature: 'Charging Speed',      ours: '45min',  comp1: '2h',    comp2: '90min' },
-  { feature: 'Warranty',            ours: '2 years',comp1: '1 year',comp2: '1 year'},
-  { feature: 'App Compatibility',   ours: '✓',      comp1: '✓',     comp2: '✗'     },
-  { feature: 'Price',               ours: 'Best',   comp1: '+20%',  comp2: '+35%'  },
+  { feature: 'Autonomie',            ours: '36h',    comp1: '20h',    comp2: '24h'    },
+  { feature: 'Étanchéité',           ours: 'IP68',   comp1: 'IP54',   comp2: 'IP67'   },
+  { feature: 'Vitesse de charge',    ours: '45min',  comp1: '2h',     comp2: '90min'  },
+  { feature: 'Garantie',             ours: '2 ans',  comp1: '1 an',   comp2: '1 an'   },
+  { feature: 'Compatibilité appli',  ours: '✓',      comp1: '✓',      comp2: '✗'      },
+  { feature: 'Prix',                 ours: 'Meilleur',comp1: '+20%',  comp2: '+35%'   },
 ]
 
 const REVIEWS_FALLBACK = [
-  { name: 'Alex T.',    rating: 5, text: 'The battery life is absolutely insane. 3 days without charging on normal use. Never seen anything like it.' },
-  { name: 'Sarah M.',   rating: 5, text: 'I dropped it on concrete twice. Not a scratch. The build quality is exceptional.' },
-  { name: 'James K.',   rating: 5, text: 'Setup took 30 seconds. Connection is rock solid — no dropouts. My previous pair cut out constantly.' },
-  { name: 'Priya S.',   rating: 5, text: 'Genuinely impressive for the price point. Competitors charge 2x for less.' },
+  { name: 'Alex T.',    rating: 5, text: 'L\'autonomie est vraiment impressionnante. 3 jours sans recharge en usage normal. Je n\'avais jamais vu ça.' },
+  { name: 'Sarah M.',   rating: 5, text: 'Je l\'ai fait tomber sur du béton deux fois. Pas une rayure. La qualité de fabrication est exceptionnelle.' },
+  { name: 'James K.',   rating: 5, text: 'Installation en 30 secondes. Connexion ultra stable — aucune coupure. Ma précédente paire décrochait sans arrêt.' },
+  { name: 'Priya S.',   rating: 5, text: 'Vraiment impressionnant pour ce prix. Les concurrents facturent 2 fois plus pour moins bien.' },
 ]
 
 const GADGET_THEME: SectionTheme = {
@@ -90,28 +91,28 @@ export function templateEtecGadget(data: LandingPageData): string {
   const img = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
 
   const productName   = data.product_name   || 'ProTech Ultra'
-  const headline      = data.headline       || 'Technology that disappears. Performance that doesn\'t.'
-  const subtitle      = data.subtitle       || 'The most advanced wearable tech we\'ve ever built. Engineered to the millimeter. Designed to last a decade.'
-  const ctaText       = data.cta            || 'Order Now — Ships in 24h'
-  const urgency       = data.urgency        || '⚡ Launch offer — Save 30% · Only 247 units left'
+  const headline      = data.headline       || 'La technologie qui s\'efface. La performance qui reste.'
+  const subtitle      = data.subtitle       || 'La tech portable la plus avancée que nous ayons conçue. Pensée au millimètre. Faite pour durer dix ans.'
+  const ctaText       = data.cta            || 'Commander — Expédié sous 24h'
+  const urgency       = data.urgency        || '⚡ Offre de lancement — 30% de réduction · Plus que 247 unités'
   const price         = data.price          || '149'
   const originalPrice = data.original_price || '219'
 
   const benefitsRaw = data.benefits || []
   const benefitsList = [
-    benefitsRaw[0] || 'Exceptional battery life — charge less, use more',
-    benefitsRaw[1] || 'Waterproof & dustproof — built for any condition',
-    benefitsRaw[2] || 'Military-grade drop protection — tested to the extreme',
-    benefitsRaw[3] || 'Ultra-stable wireless connection — zero dropouts',
-    benefitsRaw[4] || '2-year worldwide warranty included',
+    benefitsRaw[0] || 'Autonomie exceptionnelle — chargez moins, utilisez plus',
+    benefitsRaw[1] || 'Étanche et anti-poussière — conçu pour toutes les conditions',
+    benefitsRaw[2] || 'Protection anti-chute qualité militaire — testé dans l\'extrême',
+    benefitsRaw[3] || 'Connexion sans fil ultra-stable — zéro coupure',
+    benefitsRaw[4] || 'Garantie 2 ans monde entier incluse',
   ]
 
   const faqRaw = data.faq || []
   const faqs = faqRaw.length > 0 ? faqRaw : [
-    { question: 'Which devices is it compatible with?', answer: 'Works with iOS 14+ and Android 8+. Full feature support on both platforms via our free companion app.' },
-    { question: 'How long does the warranty last?',     answer: '2 years worldwide warranty. If anything goes wrong, we replace it — no questions asked.' },
-    { question: 'What\'s the return policy?',           answer: '30-day risk-free trial. Don\'t love it? Return for a full refund. Free return shipping included.' },
-    { question: 'How fast is shipping?',                answer: 'Express shipping in 1–3 business days. Order before 2pm for same-day dispatch.' },
+    { question: 'Avec quels appareils est-ce compatible ?', answer: 'Compatible iOS 14+ et Android 8+. Toutes les fonctionnalités sont disponibles sur les deux plateformes via notre application gratuite.' },
+    { question: 'Quelle est la durée de la garantie ?',     answer: 'Garantie 2 ans monde entier. En cas de problème, nous remplaçons le produit — sans question.' },
+    { question: 'Quelle est la politique de retour ?',      answer: 'Essai sans risque de 30 jours. Pas convaincu ? Retournez-le pour un remboursement intégral. Frais de retour offerts.' },
+    { question: 'Quels sont les délais de livraison ?',     answer: 'Livraison express en 1 à 3 jours ouvrés. Commandez avant 14h pour un envoi le jour même.' },
   ]
 
   const specsHTML = SPECS_FALLBACK.map(s => `
@@ -150,7 +151,7 @@ export function templateEtecGadget(data: LandingPageData): string {
           <div class="review-name">${r.name}</div>
           <div class="review-stars">${stars(r.rating)}</div>
         </div>
-        <div class="review-verified">${ICON_CHECK} Verified</div>
+        <div class="review-verified">${ICON_CHECK} Vérifié</div>
       </div>
       <p class="review-text">"${r.text}"</p>
     </div>`).join('')
@@ -160,7 +161,7 @@ export function templateEtecGadget(data: LandingPageData): string {
 
   const thumbsHTML = Array.from({length:4}, (_,i) => `
     <div class="thumb${i===0?' active':''}" onclick="selectImg(this,'${img(i)}')" role="button" tabindex="0">
-      <img src="${img(i)}" alt="View ${i+1}" loading="lazy">
+      <img src="${img(i)}" alt="Vue ${i+1}" loading="lazy">
     </div>`).join('')
 
   const benefitsHTML = benefitsList.map(b => `<li class="hero-benefit">${ICON_CHECK} ${b}</li>`).join('')
@@ -194,7 +195,7 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 .nav-cta:hover{background:${C.blueHov}}
 
 /* ANNOUNCE */
-.announce{background:${C.dark};color:#fff;text-align:center;padding:10px;font-size:12px;font-weight:500;margin-top:56px}
+.announce{background:${C.darkBg};color:#fff;text-align:center;padding:10px;font-size:12px;font-weight:500;margin-top:56px}
 .announce span{color:${C.cyan}}
 
 /* HERO */
@@ -220,7 +221,7 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 .hero-right{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:${C.white}}
 .hero-img{width:85%;max-width:480px;object-fit:contain;display:block;transition:transform .4s ease;filter:drop-shadow(0 32px 64px rgba(0,0,0,0.15))}
 .hero-img:hover{transform:scale(1.03)}
-.hero-chip{position:absolute;bottom:40px;right:32px;background:${C.dark};color:#fff;border-radius:16px;padding:14px 20px}
+.hero-chip{position:absolute;bottom:40px;right:32px;background:${C.darkBg};color:#fff;border-radius:16px;padding:14px 20px}
 .hero-chip-price{font-size:26px;font-weight:700;letter-spacing:-0.03em}
 .hero-chip-orig{font-size:12px;color:rgba(255,255,255,0.4);text-decoration:line-through}
 .hero-chip-save{font-size:11px;font-weight:700;color:${C.cyan};margin-top:2px}
@@ -238,7 +239,7 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 .feature-desc{font-size:13.5px;color:${C.muted};line-height:1.6}
 
 /* SPECS */
-.specs-section{background:${C.dark};padding:80px 40px}
+.specs-section{background:${C.darkBg};padding:80px 40px}
 .specs-inner{max-width:960px;margin:0 auto}
 .specs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.08);border-radius:20px;overflow:hidden;margin-top:48px}
 .spec-card{background:#2C2C2E;padding:36px 24px;text-align:center}
@@ -318,7 +319,7 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 .cta-strip a:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.15)}
 
 /* FOOTER */
-.footer{background:${C.dark};padding:56px 40px 28px}
+.footer{background:${C.darkBg};padding:56px 40px 28px}
 .footer-inner{max-width:960px;margin:0 auto}
 .footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
 .footer-brand{font-size:17px;font-weight:700;color:#fff;margin-bottom:10px;letter-spacing:-0.02em}
@@ -352,12 +353,12 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 <nav class="nav">
   <div class="nav-logo">${productName.split(' ')[0]}</div>
   <div class="nav-links">
-    <a class="nav-link" href="javascript:void(0)">Features</a>
-    <a class="nav-link" href="javascript:void(0)">Specs</a>
-    <a class="nav-link" href="javascript:void(0)">Reviews</a>
-    <a class="nav-link" href="javascript:void(0)">Compare</a>
+    <a class="nav-link" href="javascript:void(0)">Avantages</a>
+    <a class="nav-link" href="javascript:void(0)">Caractéristiques</a>
+    <a class="nav-link" href="javascript:void(0)">Avis</a>
+    <a class="nav-link" href="javascript:void(0)">Comparatif</a>
   </div>
-  <a class="nav-cta" href="javascript:void(0)">Order Now</a>
+  <a class="nav-cta" href="javascript:void(0)">Commander</a>
 </nav>
 
 <div class="announce">
@@ -366,18 +367,18 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 
 <section class="hero">
   <div class="hero-left">
-    <div class="hero-badge">${ICON_BOLT} 2025 Award Winner</div>
+    <div class="hero-badge">${ICON_BOLT} Lauréat 2025</div>
     <h1 class="hero-h1">${headline}</h1>
     <p class="hero-sub">${subtitle}</p>
     <ul class="hero-benefits">${benefitsHTML}</ul>
     <div class="hero-rating">
       <div class="hero-stars">${stars(5)}</div>
-      <span class="hero-rating-text"><strong>4.9/5</strong> · 8,400+ verified reviews</span>
+      <span class="hero-rating-text"><strong>4.9/5</strong> · 8 400+ avis vérifiés</span>
     </div>
     <div class="hero-urgency">${urgency}</div>
     <div class="hero-btns">
       <a href="javascript:void(0)" class="btn-primary">${ctaText}</a>
-      <a href="javascript:void(0)" class="btn-secondary">See Full Specs</a>
+      <a href="javascript:void(0)" class="btn-secondary">Voir toutes les caractéristiques</a>
     </div>
   </div>
   <div class="hero-right">
@@ -386,23 +387,23 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
     <div class="hero-chip">
       <div class="hero-chip-price">$${price.replace(/[^0-9.]/g,'')}</div>
       <div class="hero-chip-orig">$${originalPrice.replace(/[^0-9.]/g,'')}</div>
-      <div class="hero-chip-save">Save ${Math.round((1-parseFloat(price.replace(/[^0-9.]/g,''))/parseFloat(originalPrice.replace(/[^0-9.]/g,'')||'1'))*100)}%</div>
+      <div class="hero-chip-save">-${Math.round((1-parseFloat(price.replace(/[^0-9.]/g,''))/parseFloat(originalPrice.replace(/[^0-9.]/g,'')||'1'))*100)}%</div>
     </div>
   </div>
 </section>
 
 <section class="features-section">
   <div class="features-inner">
-    <div class="section-label">Why It's Different</div>
-    <h2 class="section-title">Engineered for the extraordinary.</h2>
+    <div class="section-label">Ce qui fait la différence</div>
+    <h2 class="section-title">Conçu pour l'extraordinaire.</h2>
     <div class="features-grid">${featuresHTML}</div>
   </div>
 </section>
 
 <section class="specs-section">
   <div class="specs-inner">
-    <div class="section-label" style="color:${C.cyan};text-align:center">Technical Specs</div>
-    <h2 class="section-title" style="color:#fff;text-align:center">The numbers speak for themselves.</h2>
+    <div class="section-label" style="color:${C.cyan};text-align:center">Caractéristiques techniques</div>
+    <h2 class="section-title" style="color:#fff;text-align:center">Les chiffres parlent d'eux-mêmes.</h2>
     <div class="specs-grid">${specsHTML}</div>
   </div>
 </section>
@@ -415,25 +416,25 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
     </div>
     <div class="gallery-right">
       <div class="product-name">${productName}</div>
-      <div class="product-sub">Next-generation performance · Built to last</div>
+      <div class="product-sub">Performance nouvelle génération · Conçu pour durer</div>
       <div class="rating-row">
         <div class="stars">${stars(5)}</div>
-        <span class="rating-text">4.9 · 8,400+ reviews</span>
+        <span class="rating-text">4.9 · 8 400+ avis</span>
       </div>
       <div class="color-row">
-        <div class="color-label">Color: <span id="color-name-display">${COLORS[0].name}</span></div>
+        <div class="color-label">Couleur : <span id="color-name-display">${COLORS[0].name}</span></div>
         <div class="color-swatches">${colorsHTML}</div>
       </div>
       <div class="price-block">
         <span class="price-main">$${price.replace(/[^0-9.]/g,'')}</span>
         <span class="price-orig">$${originalPrice.replace(/[^0-9.]/g,'')}</span>
-        <span class="price-save">Save ${Math.round((1-parseFloat(price.replace(/[^0-9.]/g,''))/parseFloat(originalPrice.replace(/[^0-9.]/g,'')||'1'))*100)}%</span>
+        <span class="price-save">-${Math.round((1-parseFloat(price.replace(/[^0-9.]/g,''))/parseFloat(originalPrice.replace(/[^0-9.]/g,'')||'1'))*100)}%</span>
       </div>
       <button class="add-btn">${ctaText}</button>
       <div class="trust-badges">
-        <div class="trust-badge">${ICON_TRUCK} Free shipping</div>
-        <div class="trust-badge">${ICON_SHIELD} 2-year warranty</div>
-        <div class="trust-badge">${ICON_CHECK} 30-day returns</div>
+        <div class="trust-badge">${ICON_TRUCK} Livraison offerte</div>
+        <div class="trust-badge">${ICON_SHIELD} Garantie 2 ans</div>
+        <div class="trust-badge">${ICON_CHECK} Retours sous 30 jours</div>
       </div>
     </div>
   </div>
@@ -441,15 +442,15 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 
 <section class="compare-section">
   <div class="compare-inner">
-    <div class="section-label" style="text-align:center">Comparison</div>
-    <h2 class="section-title" style="text-align:center">See why we win.</h2>
+    <div class="section-label" style="text-align:center">Comparatif</div>
+    <h2 class="section-title" style="text-align:center">Pourquoi on gagne.</h2>
     <table class="compare-table">
       <thead>
         <tr>
-          <th style="text-align:left">Feature</th>
+          <th style="text-align:left">Caractéristique</th>
           <th class="ours">${productName.split(' ')[0]}</th>
-          <th>Competitor A</th>
-          <th>Competitor B</th>
+          <th>Concurrent A</th>
+          <th>Concurrent B</th>
         </tr>
       </thead>
       <tbody>${compareHTML}</tbody>
@@ -459,8 +460,8 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 
 <section class="reviews-section">
   <div style="max-width:900px;margin:0 auto">
-    <div class="section-label" style="text-align:center">Reviews</div>
-    <h2 class="section-title" style="text-align:center">8,400+ happy customers.</h2>
+    <div class="section-label" style="text-align:center">Avis</div>
+    <h2 class="section-title" style="text-align:center">8 400+ clients satisfaits.</h2>
     <div class="reviews-grid">${reviewsHTML}</div>
   </div>
 </section>
@@ -468,49 +469,52 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 <section class="faq-section">
   <div class="faq-inner">
     <div class="section-label" style="text-align:center">FAQ</div>
-    <h2 class="section-title" style="text-align:center;margin-bottom:40px">Common questions.</h2>
+    <h2 class="section-title" style="text-align:center;margin-bottom:40px">Questions fréquentes.</h2>
     ${faqHTML}
   </div>
 </section>
 
 <div class="cta-strip">
-  <h2>Ready to upgrade?</h2>
-  <p>Join 200,000+ customers who made the switch. Free shipping, 30-day returns, 2-year warranty.</p>
+  <h2>Prêt à passer à la vitesse supérieure ?</h2>
+  <p>Rejoignez 200 000+ clients qui ont fait le choix. Livraison offerte, retours sous 30 jours, garantie 2 ans.</p>
   <a href="javascript:void(0)">${ctaText}</a>
 </div>
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderRichSections(data, GADGET_THEME)}
 
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-top">
       <div>
         <div class="footer-brand">${productName.split(' ')[0]}</div>
-        <p class="footer-tagline">Technology engineered for real life. No compromises.</p>
+        <p class="footer-tagline">Une technologie pensée pour la vraie vie. Sans compromis.</p>
       </div>
       <div>
-        <div class="footer-col-title">Product</div>
-        <a class="footer-link" href="javascript:void(0)">Features</a>
-        <a class="footer-link" href="javascript:void(0)">Specs</a>
-        <a class="footer-link" href="javascript:void(0)">Compare</a>
-        <a class="footer-link" href="javascript:void(0)">Accessories</a>
+        <div class="footer-col-title">Produit</div>
+        <a class="footer-link" href="javascript:void(0)">Avantages</a>
+        <a class="footer-link" href="javascript:void(0)">Caractéristiques</a>
+        <a class="footer-link" href="javascript:void(0)">Comparatif</a>
+        <a class="footer-link" href="javascript:void(0)">Accessoires</a>
       </div>
       <div>
-        <div class="footer-col-title">Company</div>
-        <a class="footer-link" href="javascript:void(0)">About</a>
+        <div class="footer-col-title">Entreprise</div>
+        <a class="footer-link" href="javascript:void(0)">À propos</a>
         <a class="footer-link" href="javascript:void(0)">Blog</a>
-        <a class="footer-link" href="javascript:void(0)">Press</a>
-        <a class="footer-link" href="javascript:void(0)">Careers</a>
+        <a class="footer-link" href="javascript:void(0)">Presse</a>
+        <a class="footer-link" href="javascript:void(0)">Carrières</a>
       </div>
       <div>
-        <div class="footer-col-title">Support</div>
+        <div class="footer-col-title">Assistance</div>
         <a class="footer-link" href="javascript:void(0)">FAQ</a>
-        <a class="footer-link" href="javascript:void(0)">Shipping</a>
-        <a class="footer-link" href="javascript:void(0)">Returns</a>
-        <a class="footer-link" href="javascript:void(0)">Warranty</a>
+        <a class="footer-link" href="javascript:void(0)">Livraison</a>
+        <a class="footer-link" href="javascript:void(0)">Retours</a>
+        <a class="footer-link" href="javascript:void(0)">Garantie</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">© ${new Date().getFullYear()} ${productName}. All rights reserved.</span>
-      <span class="footer-copy">${data.hero_badges?.join(' · ') || 'Certified · Tested · Guaranteed'}</span>
+      <span class="footer-copy">© ${new Date().getFullYear()} ${productName}. Tous droits réservés.</span>
+      <span class="footer-copy">${data.hero_badges?.join(' · ') || 'Certifié · Testé · Garanti'}</span>
     </div>
   </div>
 </footer>
@@ -540,9 +544,6 @@ window.addEventListener('scroll', () => {
   document.querySelector('.nav').style.boxShadow = window.scrollY > 10 ? '0 2px 20px rgba(0,0,0,0.08)' : 'none';
 });
 </script>
-
-<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderRichSections(data, GADGET_THEME)}
 
 </body>
 </html>`

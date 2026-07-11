@@ -120,7 +120,7 @@ const C = {
   promo:      '#8B6914',
   pink:       '#D63370',
   star:       '#F59E0B',
-  footer:     '#1A1A1A',
+  footer:     '#1F3D2B',
 }
 
 const ICON_SEARCH      = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`
@@ -162,10 +162,10 @@ const REVIEW_DIST = [
 ]
 
 const RELATED_PRODUCTS = [
-  { name: 'Essential Collection Vol.1', price: '$98',  orig: '$129', badge: 'New Arrivals', rating: '4.8', reviews: '143' },
-  { name: 'Essential Collection Vol.2', price: '$76',  orig: '$99',  badge: 'New Arrivals', rating: '4.9', reviews: '201' },
-  { name: 'Signature Edition',          price: '$115', orig: '$149', badge: null,           rating: '4.7', reviews: '87'  },
-  { name: 'Premium Bundle',             price: '$89',  orig: '$119', badge: 'New Arrivals', rating: '4.9', reviews: '312' },
+  { name: 'Collection Essentielle Vol.1', price: '$98',  orig: '$129', badge: 'Nouveauté', rating: '4.8', reviews: '143' },
+  { name: 'Collection Essentielle Vol.2', price: '$76',  orig: '$99',  badge: 'Nouveauté', rating: '4.9', reviews: '201' },
+  { name: 'Édition Signature',            price: '$115', orig: '$149', badge: null,        rating: '4.7', reviews: '87'  },
+  { name: 'Pack Premium',                 price: '$89',  orig: '$119', badge: 'Nouveauté', rating: '4.9', reviews: '312' },
 ]
 
 const SHOPZ_THEME: SectionTheme = {
@@ -185,19 +185,19 @@ export function templateEtecShopz(data: LandingPageData): string {
   const img    = (i: number) => data.images?.[i] || IMGS_FALLBACK[i % IMGS_FALLBACK.length]
   const relImg = (i: number) => RELATED_FALLBACK[i % RELATED_FALLBACK.length]
 
-  const productName   = data.product_name   || 'Premium Product'
-  const subtitle      = data.subtitle       || 'A carefully crafted product designed for quality and everyday comfort.'
+  const productName   = data.product_name   || 'Produit Premium'
+  const subtitle      = data.subtitle       || 'Un produit conçu avec soin pour la qualité et le confort au quotidien.'
   const price         = data.price          || '$122'
   const originalPrice = data.original_price || '$156'
-  const ctaText       = data.cta            || 'Add to Cart'
+  const ctaText       = data.cta            || 'Ajouter au panier'
 
   const rawTestimonials = data.faq?.slice(0, 5) || []
   const testimonials = [
-    { author: rawTestimonials[0]?.question || 'James Gouse',       rating: 5, text: rawTestimonials[0]?.answer || 'Exactly as described. High quality and very comfortable for all-day use.' },
-    { author: rawTestimonials[1]?.question || 'Guy Hawkins',        rating: 5, text: rawTestimonials[1]?.answer || 'Great product, the quality is excellent and it arrived quickly. Very happy with this purchase.' },
-    { author: rawTestimonials[2]?.question || 'Brooklyn Simmons',   rating: 5, text: rawTestimonials[2]?.answer || 'Love the quality. It is so well made. I already ordered two more for friends.' },
-    { author: rawTestimonials[3]?.question || 'Courtney Henry',     rating: 5, text: rawTestimonials[3]?.answer || 'Really pleased with this. The quality is top notch and gets compliments every time.' },
-    { author: rawTestimonials[4]?.question || 'Cameron Williamson', rating: 5, text: rawTestimonials[4]?.answer || 'Outstanding product. Does exactly what it promises and the build quality is superb.' },
+    { author: rawTestimonials[0]?.question || 'James Gouse',       rating: 5, text: rawTestimonials[0]?.answer || 'Conforme à la description. Excellente qualité et très confortable au quotidien.' },
+    { author: rawTestimonials[1]?.question || 'Guy Hawkins',        rating: 5, text: rawTestimonials[1]?.answer || 'Super produit, la qualité est excellente et la livraison rapide. Très satisfait de cet achat.' },
+    { author: rawTestimonials[2]?.question || 'Brooklyn Simmons',   rating: 5, text: rawTestimonials[2]?.answer || 'J\'adore la qualité. C\'est très bien fabriqué. J\'en ai déjà recommandé deux pour des amis.' },
+    { author: rawTestimonials[3]?.question || 'Courtney Henry',     rating: 5, text: rawTestimonials[3]?.answer || 'Vraiment ravi. La qualité est irréprochable et ça reçoit des compliments à chaque fois.' },
+    { author: rawTestimonials[4]?.question || 'Cameron Williamson', rating: 5, text: rawTestimonials[4]?.answer || 'Produit exceptionnel. Il tient toutes ses promesses et la finition est superbe.' },
   ]
 
   const thumbsHTML = Array.from({ length: 5 }, (_, i) => {
@@ -611,6 +611,9 @@ export function templateEtecShopz(data: LandingPageData): string {
     <div class="related-grid">${relatedHTML}</div>
   </section>
 
+  <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+  ${renderRichSections(data, SHOPZ_THEME)}
+
   <footer class="footer">
     <div class="footer-top">
       <div>
@@ -721,9 +724,6 @@ export function templateEtecShopz(data: LandingPageData): string {
     }, { threshold: 0.3 });
     var rp = document.querySelector('.reviews-right'); if (rp) io.observe(rp);
   </script>
-
-<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderRichSections(data, SHOPZ_THEME)}
 
 </body>
 </html>`

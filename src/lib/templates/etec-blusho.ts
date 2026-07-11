@@ -152,7 +152,7 @@ const C = {
   border:      '#E5E7EB',
   sale:        '#C8A96E',
   star:        '#F59E0B',
-  footer:      '#1A1A1A',
+  footer:      '#3D2E52',
 }
 
 // ─── SVG ICONS ───────────────────────────────────────────────────────────────
@@ -764,6 +764,9 @@ export function templateEtecBlusho(data: LandingPageData): string {
   </div>
 </section>
 
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderRichSections(data, BLUSHO_THEME)}
+
 <!-- ══════════════════════════════════════════════════════════ -->
 <!-- 11. NEWSLETTER                                              -->
 <!-- ══════════════════════════════════════════════════════════ -->
@@ -882,9 +885,6 @@ export function templateEtecBlusho(data: LandingPageData): string {
 
 })();
 </script>
-
-<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderRichSections(data, BLUSHO_THEME)}
 
 </body>
 </html>`

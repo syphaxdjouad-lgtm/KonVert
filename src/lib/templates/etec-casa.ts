@@ -30,7 +30,7 @@ const C = {
   text:     '#1C1510',
   muted:    '#7A6A5A',
   border:   '#E5DDD4',
-  dark:     '#1A1009',
+  dark:     '#5C2A0F',
   gold:     '#D4A853',
 }
 
@@ -47,23 +47,23 @@ function stars(n: number) {
 }
 
 const MATERIALS = [
-  { icon: '🪵', name: 'Natural Wood',   desc: 'Solid oak and walnut sourced from sustainable FSC-certified forests. Each piece is unique.' },
-  { icon: '🪡', name: 'Linen & Cotton', desc: 'OEKO-TEX certified fabric — soft, breathable, and designed to age beautifully over time.' },
-  { icon: '🏺', name: 'Handmade Ceramic', desc: 'Hand-thrown by artisans. Slight variations in glaze make every piece one of a kind.' },
+  { icon: '🪵', name: 'Bois naturel',   desc: 'Chêne et noyer massifs, issus de forêts durables certifiées FSC. Chaque pièce est unique.' },
+  { icon: '🪡', name: 'Lin & coton', desc: 'Tissu certifié OEKO-TEX — doux, respirant, conçu pour bien vieillir au fil du temps.' },
+  { icon: '🏺', name: 'Céramique artisanale', desc: 'Façonnée à la main par des artisans. De légères variations d\'émail rendent chaque pièce unique.' },
 ]
 
 const REASSURANCE = [
-  { icon: ICON_TRUCK,   label: 'Free Delivery',    sub: 'On all orders' },
-  { icon: ICON_LEAF,    label: 'Handcrafted',      sub: 'By artisans' },
-  { icon: ICON_RECYCLE, label: 'Eco Packaging',    sub: '100% recyclable' },
-  { icon: ICON_SHIELD,  label: '30-Day Returns',   sub: 'No hassle' },
+  { icon: ICON_TRUCK,   label: 'Livraison offerte',    sub: 'Sur toutes les commandes' },
+  { icon: ICON_LEAF,    label: 'Fait main',      sub: 'Par des artisans' },
+  { icon: ICON_RECYCLE, label: 'Emballage éco',    sub: '100% recyclable' },
+  { icon: ICON_SHIELD,  label: 'Retours 30 jours',   sub: 'Sans tracas' },
 ]
 
 const REVIEWS_DATA = [
-  { name: 'Marie L.',    rating: 5, text: 'The quality is beyond anything I expected. It transformed my living room completely. Friends keep asking where I got it.' },
-  { name: 'Thomas B.',   rating: 5, text: 'Packaging was incredible — zero plastic, all recycled kraft. The piece arrived perfectly. Will order again.' },
-  { name: 'Sophie R.',   rating: 5, text: 'I\'ve been searching for this style for years. Slow living, timeless design. This is exactly it. Worth every cent.' },
-  { name: 'Lucas M.',    rating: 5, text: 'The grain of the wood is stunning in real life. Photos don\'t do it justice. This is true craftsmanship.' },
+  { name: 'Marie L.',    rating: 5, text: 'La qualité dépasse tout ce que j\'espérais. Ça a complètement transformé mon salon. Mes amis me demandent sans cesse où je l\'ai trouvé.' },
+  { name: 'Thomas B.',   rating: 5, text: 'L\'emballage était incroyable — zéro plastique, tout en kraft recyclé. La pièce est arrivée parfaite. Je recommande.' },
+  { name: 'Sophie R.',   rating: 5, text: 'Je cherchais ce style depuis des années. Slow living, design intemporel. C\'est exactement ça. Chaque centime en valait la peine.' },
+  { name: 'Lucas M.',    rating: 5, text: 'Le veinage du bois est magnifique en vrai. Les photos ne lui rendent pas justice. C\'est du vrai savoir-faire artisanal.' },
 ]
 
 const CASA_THEME: SectionTheme = {
@@ -81,29 +81,29 @@ const CASA_THEME: SectionTheme = {
 export function templateEtecCasa(data: LandingPageData): string {
   const img = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
 
-  const productName   = data.product_name   || 'Artisan Oak Side Table'
-  const headline      = data.headline       || 'Your home should tell your story.'
-  const subtitle      = data.subtitle       || 'Handcrafted from sustainably sourced oak. Designed to last a lifetime — and look better with every year that passes.'
-  const ctaText       = data.cta            || 'Shop Now — Free Delivery'
-  const urgency       = data.urgency        || '🌿 Limited batch — Handcrafted in small quantities'
+  const productName   = data.product_name   || 'Table d\'appoint en chêne artisanale'
+  const headline      = data.headline       || 'Votre intérieur devrait raconter votre histoire.'
+  const subtitle      = data.subtitle       || 'Fabriquée à la main en chêne issu de forêts durables. Conçue pour durer toute une vie — et pour s\'embellir au fil des années.'
+  const ctaText       = data.cta            || 'Commander — Livraison offerte'
+  const urgency       = data.urgency        || '🌿 Série limitée — fabriquée à la main en petite quantité'
   const price         = data.price          || '189'
   const originalPrice = data.original_price || '249'
 
   const benefitsRaw = data.benefits || []
   const benefitsList = [
-    benefitsRaw[0] || 'Sustainably sourced FSC-certified wood',
-    benefitsRaw[1] || 'Handcrafted by skilled artisans — no mass production',
-    benefitsRaw[2] || 'Unique grain pattern — every piece is one of a kind',
-    benefitsRaw[3] || 'Ships fully assembled — ready to place in your home',
-    benefitsRaw[4] || '30-day return policy — no questions asked',
+    benefitsRaw[0] || 'Bois certifié FSC, issu de forêts durables',
+    benefitsRaw[1] || 'Fait main par des artisans qualifiés — aucune production de masse',
+    benefitsRaw[2] || 'Veinage unique — chaque pièce est unique en son genre',
+    benefitsRaw[3] || 'Livré entièrement assemblé — prêt à installer chez vous',
+    benefitsRaw[4] || 'Retours sous 30 jours — sans question posée',
   ]
 
   const faqRaw = data.faq || []
   const faqs = faqRaw.length > 0 ? faqRaw : [
-    { question: 'Where is it made?',           answer: 'Handcrafted in our atelier in Portugal by a team of 12 artisans. Each piece takes 3–4 hours to complete.' },
-    { question: 'How is it shipped?',           answer: 'Ships fully assembled in plastic-free packaging. Delivered in 5–8 days with white-glove delivery option.' },
-    { question: 'Can I return it?',             answer: '30-day hassle-free returns. Just contact us and we\'ll arrange a free pickup.' },
-    { question: 'Are dimensions customizable?', answer: 'Yes! Custom sizes available with a 3–4 week lead time. Contact us for a quote.' },
+    { question: 'Où est-ce fabriqué ?',           answer: 'Fabriqué à la main dans notre atelier au Portugal par une équipe de 12 artisans. Chaque pièce demande 3 à 4 heures de travail.' },
+    { question: 'Comment est-ce livré ?',           answer: 'Livré entièrement assemblé dans un emballage sans plastique. Livraison en 5 à 8 jours, avec option livraison premium.' },
+    { question: 'Puis-je le retourner ?',             answer: 'Retours sans tracas sous 30 jours. Contactez-nous simplement et nous organiserons un enlèvement gratuit.' },
+    { question: 'Les dimensions sont-elles personnalisables ?', answer: 'Oui ! Des tailles sur mesure sont disponibles avec un délai de 3 à 4 semaines. Contactez-nous pour un devis.' },
   ]
 
   const materialsHTML = MATERIALS.map(m => `
@@ -128,7 +128,7 @@ export function templateEtecCasa(data: LandingPageData): string {
           <div class="review-name">${r.name}</div>
           <div class="review-stars">${stars(r.rating)}</div>
         </div>
-        <div class="review-badge">${ICON_CHECK} Verified</div>
+        <div class="review-badge">${ICON_CHECK} Vérifié</div>
       </div>
       <p class="review-text">"${r.text}"</p>
     </div>`).join('')
@@ -334,27 +334,27 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
   <div class="nav-logo">Casa</div>
   <div class="nav-links">
     <a class="nav-link" href="javascript:void(0)">Collection</a>
-    <a class="nav-link" href="javascript:void(0)">Materials</a>
-    <a class="nav-link" href="javascript:void(0)">Reviews</a>
-    <a class="nav-link" href="javascript:void(0)">About</a>
+    <a class="nav-link" href="javascript:void(0)">Matériaux</a>
+    <a class="nav-link" href="javascript:void(0)">Avis</a>
+    <a class="nav-link" href="javascript:void(0)">À propos</a>
   </div>
-  <a class="nav-cta" href="javascript:void(0)">Shop Now</a>
+  <a class="nav-cta" href="javascript:void(0)">Commander</a>
 </nav>
 
 <section class="hero">
   <div class="hero-left">
-    <div class="hero-badge">🪵 Handcrafted</div>
+    <div class="hero-badge">🪵 Fait main</div>
     <h1 class="hero-h1">${headline}</h1>
     <p class="hero-sub">${subtitle}</p>
     <ul class="hero-list">${benefitsHTML}</ul>
     <div class="hero-rating">
       <div class="hero-stars">${stars(5)}</div>
-      <span class="hero-rating-text"><strong>4.8/5</strong> · 2,400+ happy homes</span>
+      <span class="hero-rating-text"><strong>4.8/5</strong> · 2 400+ foyers conquis</span>
     </div>
     <div class="hero-urgency">${urgency}</div>
     <div class="hero-btns">
       <a href="javascript:void(0)" class="btn-main">${ctaText}</a>
-      <a href="javascript:void(0)" class="btn-sec">View Details</a>
+      <a href="javascript:void(0)" class="btn-sec">Voir les détails</a>
     </div>
   </div>
   <div class="hero-right">
@@ -364,7 +364,7 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
       <div class="hero-chip-name">${productName}</div>
       <div class="hero-chip-price">€${price.replace(/[^0-9.]/g,'')}</div>
       <div class="hero-chip-orig">€${originalPrice.replace(/[^0-9.]/g,'')}</div>
-      <div class="hero-chip-save">Save ${priceSave}%</div>
+      <div class="hero-chip-save">Économisez ${priceSave}%</div>
     </div>
   </div>
 </section>
@@ -375,8 +375,8 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
 
 <section class="mat-section">
   <div class="mat-inner">
-    <div class="section-eyebrow">Our Materials</div>
-    <h2 class="section-h">Only the finest natural materials.</h2>
+    <div class="section-eyebrow">Nos matériaux</div>
+    <h2 class="section-h">Rien que les plus belles matières naturelles.</h2>
     <div class="mat-grid">${materialsHTML}</div>
   </div>
 </section>
@@ -389,23 +389,23 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
     </div>
     <div>
       <div class="prod-name">${productName}</div>
-      <div class="prod-sub">Handcrafted · Sustainably sourced · Ships assembled</div>
+      <div class="prod-sub">Fait main · Bois durable · Livré assemblé</div>
       <div class="prod-rating">
         <div class="prod-stars">${stars(5)}</div>
-        <span class="prod-rating-text">4.8 · 2,400+ reviews</span>
+        <span class="prod-rating-text">4.8 · 2 400+ avis</span>
       </div>
       <div class="price-row">
         <span class="price-main">€${price.replace(/[^0-9.]/g,'')}</span>
         <span class="price-orig">€${originalPrice.replace(/[^0-9.]/g,'')}</span>
         <span class="price-save">−${priceSave}%</span>
       </div>
-      <p class="price-note">Free delivery · Fully assembled · 30-day returns</p>
+      <p class="price-note">Livraison offerte · Entièrement assemblé · Retours sous 30 jours</p>
       <button class="add-btn">${ctaText}</button>
-      <button class="sec-btn">Add to Wishlist</button>
+      <button class="sec-btn">Ajouter à ma liste d'envies</button>
       <div class="trust-row">
-        <div class="trust-item">${ICON_TRUCK} Free delivery</div>
-        <div class="trust-item">${ICON_LEAF} FSC certified</div>
-        <div class="trust-item">${ICON_SHIELD} 30-day returns</div>
+        <div class="trust-item">${ICON_TRUCK} Livraison offerte</div>
+        <div class="trust-item">${ICON_LEAF} Certifié FSC</div>
+        <div class="trust-item">${ICON_SHIELD} Retours 30 jours</div>
       </div>
     </div>
   </div>
@@ -413,20 +413,20 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
 
 <section class="lifestyle-section">
   <div class="lifestyle-inner">
-    <div class="section-eyebrow">In Your Home</div>
-    <h2 class="section-h" style="margin-bottom:32px">See how it transforms a space.</h2>
+    <div class="section-eyebrow">Chez vous</div>
+    <h2 class="section-h" style="margin-bottom:32px">Découvrez comment ça transforme un espace.</h2>
     <div class="lifestyle-grid">
       <div class="lifestyle-wrap">
-        <img src="${LIFESTYLE_IMGS[0]}" alt="Lifestyle 1" class="lifestyle-img lifestyle-img-main">
-        <span class="lifestyle-tag">Living Room</span>
+        <img src="${LIFESTYLE_IMGS[0]}" alt="Ambiance 1" class="lifestyle-img lifestyle-img-main">
+        <span class="lifestyle-tag">Salon</span>
       </div>
       <div class="lifestyle-wrap">
-        <img src="${LIFESTYLE_IMGS[1]}" alt="Lifestyle 2" class="lifestyle-img">
-        <span class="lifestyle-tag">Bedroom</span>
+        <img src="${LIFESTYLE_IMGS[1]}" alt="Ambiance 2" class="lifestyle-img">
+        <span class="lifestyle-tag">Chambre</span>
       </div>
       <div class="lifestyle-wrap">
-        <img src="${LIFESTYLE_IMGS[2]}" alt="Lifestyle 3" class="lifestyle-img">
-        <span class="lifestyle-tag">Study</span>
+        <img src="${LIFESTYLE_IMGS[2]}" alt="Ambiance 3" class="lifestyle-img">
+        <span class="lifestyle-tag">Bureau</span>
       </div>
     </div>
   </div>
@@ -434,35 +434,35 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
 
 <section class="reviews-section">
   <div style="max-width:900px;margin:0 auto">
-    <div class="section-eyebrow">Reviews</div>
-    <h2 class="section-h">2,400+ happy homes.</h2>
+    <div class="section-eyebrow">Avis</div>
+    <h2 class="section-h">2 400+ foyers conquis.</h2>
     <div class="reviews-grid">${reviewsHTML}</div>
   </div>
 </section>
 
 <section class="bundle-section">
   <div class="bundle-inner">
-    <div class="section-eyebrow">Bundles</div>
-    <h2 class="section-h">Better together.</h2>
+    <div class="section-eyebrow">Lots</div>
+    <h2 class="section-h">Mieux ensemble.</h2>
     <div class="bundle-grid">
       <div class="bundle-card">
         <div class="bundle-name">${productName}</div>
-        <div class="bundle-desc">Single piece · Ready to ship</div>
+        <div class="bundle-desc">Pièce unique · Prête à expédier</div>
         <div>
           <span class="bundle-price">€${price.replace(/[^0-9.]/g,'')}</span>
           <span class="bundle-orig">€${originalPrice.replace(/[^0-9.]/g,'')}</span>
         </div>
-        <button class="bundle-btn outline">Add to Cart</button>
+        <button class="bundle-btn outline">Ajouter au panier</button>
       </div>
       <div class="bundle-card featured">
-        <div class="bundle-badge">Best Value</div>
+        <div class="bundle-badge">Meilleure offre</div>
         <div class="bundle-name">${productName} Duo</div>
-        <div class="bundle-desc">2 pieces · Matching set · Extra saving</div>
+        <div class="bundle-desc">2 pièces · Set assorti · Économie supplémentaire</div>
         <div>
           <span class="bundle-price">€${Math.round(parseFloat(price.replace(/[^0-9.]/g,'')||'189') * 1.7)}</span>
           <span class="bundle-orig">€${Math.round(parseFloat(price.replace(/[^0-9.]/g,'')||'189') * 2)}</span>
         </div>
-        <button class="bundle-btn">Get the Duo</button>
+        <button class="bundle-btn">Choisir le Duo</button>
       </div>
     </div>
   </div>
@@ -471,43 +471,46 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
 <section class="faq-section">
   <div class="faq-inner">
     <div class="section-eyebrow">FAQ</div>
-    <h2 class="section-h" style="margin-bottom:36px">Frequently asked.</h2>
+    <h2 class="section-h" style="margin-bottom:36px">Questions fréquentes.</h2>
     ${faqHTML}
   </div>
 </section>
+
+<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
+${renderRichSections(data, CASA_THEME)}
 
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-top">
       <div>
         <div class="footer-brand">Casa</div>
-        <p class="footer-tagline">Handcrafted pieces for homes that tell a story.</p>
+        <p class="footer-tagline">Des pièces artisanales pour des intérieurs qui racontent une histoire.</p>
       </div>
       <div>
-        <div class="footer-col-title">Shop</div>
-        <a class="footer-link" href="javascript:void(0)">Furniture</a>
+        <div class="footer-col-title">Produit</div>
+        <a class="footer-link" href="javascript:void(0)">Mobilier</a>
         <a class="footer-link" href="javascript:void(0)">Textiles</a>
-        <a class="footer-link" href="javascript:void(0)">Ceramics</a>
-        <a class="footer-link" href="javascript:void(0)">Bundles</a>
+        <a class="footer-link" href="javascript:void(0)">Céramiques</a>
+        <a class="footer-link" href="javascript:void(0)">Lots</a>
       </div>
       <div>
-        <div class="footer-col-title">About</div>
-        <a class="footer-link" href="javascript:void(0)">Our Story</a>
-        <a class="footer-link" href="javascript:void(0)">Materials</a>
+        <div class="footer-col-title">À propos</div>
+        <a class="footer-link" href="javascript:void(0)">Notre histoire</a>
+        <a class="footer-link" href="javascript:void(0)">Matériaux</a>
         <a class="footer-link" href="javascript:void(0)">Artisans</a>
-        <a class="footer-link" href="javascript:void(0)">Press</a>
+        <a class="footer-link" href="javascript:void(0)">Presse</a>
       </div>
       <div>
-        <div class="footer-col-title">Help</div>
+        <div class="footer-col-title">Aide</div>
         <a class="footer-link" href="javascript:void(0)">FAQ</a>
-        <a class="footer-link" href="javascript:void(0)">Delivery</a>
-        <a class="footer-link" href="javascript:void(0)">Returns</a>
+        <a class="footer-link" href="javascript:void(0)">Livraison</a>
+        <a class="footer-link" href="javascript:void(0)">Retours</a>
         <a class="footer-link" href="javascript:void(0)">Contact</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span class="footer-copy">© ${new Date().getFullYear()} Casa. All rights reserved.</span>
-      <span class="footer-copy">FSC Certified · OEKO-TEX · Handmade in EU</span>
+      <span class="footer-copy">© ${new Date().getFullYear()} Casa. Tous droits réservés.</span>
+      <span class="footer-copy">Certifié FSC · OEKO-TEX · Fabriqué en UE</span>
     </div>
   </div>
 </footer>
@@ -531,9 +534,6 @@ window.addEventListener('scroll', () => {
   document.querySelector('.nav').style.boxShadow = window.scrollY > 10 ? '0 2px 16px rgba(28,21,16,0.08)' : 'none';
 });
 </script>
-
-<!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderRichSections(data, CASA_THEME)}
 
 </body>
 </html>`

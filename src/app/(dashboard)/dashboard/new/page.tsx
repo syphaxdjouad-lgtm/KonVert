@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect, Suspense } from 'react'
+import { useState, useRef, useEffect, useMemo, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { TEMPLATES, PRODUCT_TYPE_LABELS, type ProductType } from '@/lib/templates'
@@ -433,6 +433,16 @@ function NewPageInner() {
   // Brand name affiché en haut du hero V3 + dans le manifesto. Optionnel —
   // si vide, DeepSeek invente un nom cohérent avec le produit.
   const [brand, setBrand] = useState('')
+
+  // Détection produit pré-génération (Step 5) — keyword-based sur le titre/
+  // sous-titre déjà connus dans `manual` (rempli par le scrape ou la saisie
+  // manuelle). Purement indicatif : sert à trier/badger les templates, ne
+  // présélectionne rien et ne bloque jamais la génération. Le mismatch check
+  // "dur" post-génération (ligne ~900+) reste la source de vérité (LLM-based).
+  const detectedProductType = useMemo(
+    () => detectProductType({ title: manual.product_name, description: manual.subtitle }),
+    [manual.product_name, manual.subtitle]
+  )
 
   // Step 6 — Plateforme cible
   const [platform, setPlatform] = useState('shopify')
@@ -1987,9 +1997,21 @@ function NewPageInner() {
             {/* ── Liste Templates legacy (etec-*) — 1 carte/ligne style V3 ── */}
             {styleMode === 'legacy' && (
               <div className="space-y-3 mb-6">
-                {STYLES.map(s => {
+                {/* Suggestion non-bloquante : si le produit est détecté (titre/
+                    sous-titre déjà saisis), on remonte les templates themed qui
+                    matchent en tête de liste. Pas de réordonnancement si le
+                    produit est indétecté — ordre STYLES inchangé. */}
+                {(detectedProductType
+                  ? [...STYLES].sort((a, b) => {
+                      const aMatch = TEMPLATES.find(t => t.id === a.id)?.productType === detectedProductType ? 1 : 0
+                      const bMatch = TEMPLATES.find(t => t.id === b.id)?.productType === detectedProductType ? 1 : 0
+                      return bMatch - aMatch
+                    })
+                  : STYLES
+                ).map(s => {
                   const tpl = TEMPLATES.find(t => t.id === s.id)
                   const isUniversal = tpl?.productType === 'universal' || tpl?.themed === false
+                  const isRecommended = !!(tpl && detectedProductType && tpl.productType === detectedProductType)
                   const productLabel = tpl ? PRODUCT_TYPE_LABELS[tpl.productType] : null
                   const accent = tpl?.accent || '#7c3aed'
                   const photo = TEMPLATE_PHOTOS[s.id]
@@ -2136,6 +2158,9 @@ function NewPageInner() {
                           <span className="text-[22px] font-black leading-none tracking-tight" style={{ color: '#0f0f1e' }}>{s.name}</span>
                           {s.id === 'etec-blue' && (
                             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#fef3c7', color: '#d97706' }}>POPULAIRE</span>
+                          )}
+                          {isRecommended && (
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#dcfce7', color: '#15803d' }}>✓ Recommandé pour ton produit</span>
                           )}
                           {productLabel && (
                             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={isUniversal

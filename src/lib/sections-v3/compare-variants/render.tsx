@@ -1,6 +1,6 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
-import { escapeHtml } from '@/lib/utils/html'
+import { escapeHtml, escapeAttr } from '@/lib/utils/html'
 
 export function renderCompareVariants(data: V3PageData, tokens: StyleTokens): string {
   const variants = data.product.variants ?? []
@@ -42,7 +42,7 @@ export function renderCompareVariants(data: V3PageData, tokens: StyleTokens): st
         aspect-ratio:1;background:${tokens.colors.surface};
         border-radius:${tokens.radius.image};overflow:hidden;margin-bottom:12px
       ">
-        <img src="${v.image}" alt="${escapeHtml(v.name)}"
+        <img src="${escapeAttr(v.image)}" alt="${escapeHtml(v.name)}"
              style="width:100%;height:100%;object-fit:cover">
       </div>` : ''}
       <span style="font-family:${tokens.fonts.body};color:${tokens.colors.text};font-size:14px;font-weight:500">

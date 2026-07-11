@@ -1,7 +1,7 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { buildImagePool, getImage } from '@/lib/images/pool'
-import { escapeHtml } from '@/lib/utils/html'
+import { escapeHtml, escapeAttr } from '@/lib/utils/html'
 
 // Sprint 3 T3 — stats génériques pour la trust bar de fallback
 const TRUST_STATS: Array<{ icon: string; label: string }> = [
@@ -62,7 +62,7 @@ export function renderPressQuote(data: V3PageData, tokens: StyleTokens): string 
 <section style="position:relative;padding:${tokens.spacing.section} 24px;overflow:hidden">
   ${lifestyleImg ? `
     <div style="position:absolute;inset:0;z-index:0">
-      <img src="${lifestyleImg}" alt=""
+      <img src="${escapeAttr(lifestyleImg)}" alt=""
            style="width:100%;height:100%;object-fit:cover;opacity:0.35">
       <div style="position:absolute;inset:0;background:${tokens.colors.bg};opacity:0.8"></div>
     </div>` : ''}

@@ -1,7 +1,7 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { renderTrustBadgesPayment } from '@/lib/sections-v3/shared/TrustBadgesPayment'
-import { escapeHtml } from '@/lib/utils/html'
+import { escapeHtml, escapeAttr } from '@/lib/utils/html'
 
 // Sprint 2 T1 — génère la rangée de thumbnails + dot indicators sous l'image principale.
 // CSS natif : scroll-snap-type x mandatory + scroll-snap-align start sur chaque thumb.
@@ -29,7 +29,7 @@ function renderHeroThumbnails(images: string[], tokens: StyleTokens, productTitl
       transition:opacity ${short} ${tokens.motion.ease},
                  border-color ${short} ${tokens.motion.ease};
     " onclick="kvtHeroSetActive(${i})">
-      <img src="${src}"
+      <img src="${escapeAttr(src)}"
            alt="${escapeHtml(productTitle)} — vue ${i + 1}"
            style="width:100%;height:100%;object-fit:cover;display:block"
            loading="${i === 0 ? 'eager' : 'lazy'}">
@@ -160,7 +160,7 @@ export function renderHero(data: V3PageData, tokens: StyleTokens): string {
     <div class="v3-hero__image">
       <div style="position:relative">
         <img id="kvt-hero-main-img"
-             src="${heroImage}"
+             src="${escapeAttr(heroImage)}"
              alt="${escapeHtml(product.title)}"
              style="width:100%;border-radius:${tokens.radius.image};display:block">
         ${thumbnailsHtml ? `<div id="kvt-hero-counter" style="

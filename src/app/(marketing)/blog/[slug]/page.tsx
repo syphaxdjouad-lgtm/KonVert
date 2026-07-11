@@ -9,6 +9,11 @@ import { safeJsonLd } from '@/lib/security/json-ld'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
+// ISR : contenu quasi-statique (articles en dur dans le code), revalidate
+// court surtout utile pour les nouveaux slugs ajoutés après déploiement
+// sans rebuild complet (perf audit P-04).
+export const revalidate = 300
+
 /* ── Static params for SSG ────────────────────────────────────────────────── */
 
 export function generateStaticParams() {

@@ -7,6 +7,12 @@ import BlogListClient from './BlogListClient'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
 
+// ISR : le contenu (allArticles) ne change qu'au déploiement aujourd'hui,
+// mais on cache le HTML rendu 1h pour amortir le coût de rendu du blog
+// listing + JSON-LD si ça bascule un jour sur une source dynamique (perf
+// audit P-04).
+export const revalidate = 3600
+
 /* ── Metadata ─────────────────────────────────────────────────────────────── */
 
 export const metadata: Metadata = {

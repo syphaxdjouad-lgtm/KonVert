@@ -11,6 +11,7 @@ import { Check, ChevronDown, ArrowRight, Lock, CreditCard, ShieldCheck } from 'l
 import { Suspense } from 'react'
 import Link from 'next/link'
 import TrustBadges from '@/components/marketing/TrustBadges'
+import { TEMPLATE_COUNT } from '@/lib/templates'
 
 function addRipple(e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) {
   const el = e.currentTarget
@@ -39,7 +40,7 @@ const PLANS = [
     features: [
       '75 pages / mois',
       '2 stores connectés',
-      '42+ templates',
+      `${TEMPLATE_COUNT}+ templates`,
       'Génération copy AI',
       'Export HTML',
       'Support email',
@@ -582,7 +583,7 @@ function PricingContent() {
             {[
               { feature: 'Pages / mois',     values: ['75', '300', 'Illimitées', 'Illimitées'] },
               { feature: 'Stores connectés', values: ['2', '7', 'Illimités', 'Illimités'] },
-              { feature: 'Templates',        values: ['42+', 'Tous', 'Tous', 'Tous'] },
+              { feature: 'Templates',        values: [`${TEMPLATE_COUNT}+`, 'Tous', 'Tous', 'Tous'] },
               { feature: 'Copy AI',          values: [true, true, true, true] },
               { feature: 'Export HTML',      values: [true, true, true, true] },
               { feature: 'Analytics',        values: [false, true, true, true] },

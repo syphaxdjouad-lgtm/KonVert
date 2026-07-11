@@ -7,6 +7,7 @@ import {
   Lightning, ShieldCheck, Clock, Check, Sparkle, TrendUp, ArrowRight
 } from '@phosphor-icons/react'
 import Tooltip from '@/components/ui/Tooltip'
+import { TEMPLATE_COUNT } from '@/lib/templates'
 
 const GLOBAL_CSS = `
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
@@ -52,18 +53,18 @@ const FEATURES_MAIN = [
   {
     id: 'templates',
     icon: Palette,
-    badge: '42 Templates',
-    title: '42 Templates Premium',
+    badge: `${TEMPLATE_COUNT} Templates`,
+    title: `${TEMPLATE_COUNT} Templates Premium`,
     subtitle: 'Un design pour chaque niche.',
-    desc: "42 templates conçus par des experts e-commerce et testés sur des milliers de boutiques. Mode, Tech, Beauté, Sport, Gaming, Alimentation, Animaux... Chaque template est optimisé pour maximiser les conversions dans sa niche.",
+    desc: `${TEMPLATE_COUNT} templates conçus par des experts e-commerce et testés sur des milliers de boutiques. Mode, Tech, Beauté, Sport, Gaming, Alimentation, Animaux... Chaque template est optimisé pour maximiser les conversions dans sa niche.`,
     details: [
-      '42 templates niches exclusifs',
+      `${TEMPLATE_COUNT} templates niches exclusifs`,
       'Testé sur +50 000 pages générées',
       'Personnalisable dans le builder',
       'Nouveaux templates chaque mois',
     ],
     stats: [
-      { value: '42', label: 'Templates' },
+      { value: String(TEMPLATE_COUNT), label: 'Templates' },
       { value: '12', label: 'Niches' },
       { value: '+4.8%', label: 'CVR moyen' },
     ],

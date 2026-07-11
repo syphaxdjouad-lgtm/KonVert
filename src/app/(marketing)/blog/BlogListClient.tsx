@@ -113,11 +113,13 @@ export default function BlogListClient({ articles, categories }: Props) {
 
             {/* Colonne illustration SVG */}
             <div className="hidden lg:flex justify-center items-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="/images/blog-hero.svg"
                 alt="Dashboard e-commerce avec graphiques de croissance"
-                className="w-full max-w-[580px]"
+                width={1600}
+                height={800}
+                priority
+                className="w-full max-w-[580px] h-auto"
                 style={{ filter: 'drop-shadow(0 20px 40px rgba(91,71,245,0.12))' }}
               />
             </div>
@@ -138,12 +140,16 @@ export default function BlogListClient({ articles, categories }: Props) {
               href={`/blog/${featured.slug}`}
               className="group grid lg:grid-cols-2 gap-0 rounded-3xl overflow-hidden border border-gray-100 hover:shadow-2xl hover:shadow-[#5B47F5]/10 transition-all duration-300"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={featured.image}
-                alt={featured.imageAlt}
-                className="w-full h-64 lg:h-auto object-cover group-hover:scale-[1.02] transition-transform duration-500"
-              />
+              <div className="relative w-full h-64 lg:h-auto">
+                <Image
+                  src={featured.image}
+                  alt={featured.imageAlt}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                />
+              </div>
               <div className="flex flex-col justify-center p-8 lg:p-12">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#5B47F5] text-white">
@@ -230,12 +236,15 @@ export default function BlogListClient({ articles, categories }: Props) {
                   className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:shadow-[#5B47F5]/8 transition-all duration-300 hover:-translate-y-0.5 flex flex-col"
                 >
                   {/* Image */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={article.image}
-                    alt={article.imageAlt}
-                    className="w-full h-44 object-cover group-hover:scale-[1.02] transition-transform duration-500"
-                  />
+                  <div className="relative w-full h-44">
+                    <Image
+                      src={article.image}
+                      alt={article.imageAlt}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                    />
+                  </div>
 
                   {/* Contenu */}
                   <div className="p-5 flex flex-col flex-1">

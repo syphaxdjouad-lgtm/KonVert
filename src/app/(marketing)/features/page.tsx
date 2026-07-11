@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   Robot, Palette, ChartBar, LinkSimple, Flask, Globe,
   Lightning, ShieldCheck, Clock, Check, Sparkle, TrendUp, ArrowRight
@@ -313,11 +314,12 @@ function FeatureVisualContent({ id, accent }: { id: string; accent: string }) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, flex: 1 }}>
           {cards.map((c) => (
             <div key={c.niche} style={{ borderRadius: 10, overflow: 'hidden', position: 'relative', height: 100 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={c.img}
                 alt={c.niche}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                fill
+                sizes="(max-width: 640px) 30vw, 180px"
+                style={{ objectFit: 'cover' }}
               />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%)' }} />
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '6px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>

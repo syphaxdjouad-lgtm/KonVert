@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Target, Heart, Zap, Globe, Users, TrendingUp, Store, Building2, Bot, Mail, type LucideIcon } from 'lucide-react'
 
 const GLOBAL_CSS = `
@@ -367,12 +368,13 @@ export default function AboutPage() {
 
             {/* Case study 1 — Décoration */}
             <div className="reveal delay-1 rounded-3xl overflow-hidden border border-[#ede8ff]" style={{ boxShadow: '0 4px 20px rgba(91,71,245,0.07)' }}>
-              <div className="h-40 overflow-hidden">
-                <img
+              <div className="h-40 relative overflow-hidden">
+                <Image
                   src="https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=800"
                   alt="Boutique décoration maison"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                  className="object-cover"
                 />
               </div>
               <div className="p-6">
@@ -409,12 +411,13 @@ export default function AboutPage() {
 
             {/* Case study 2 — Agence SMMA */}
             <div className="reveal delay-2 rounded-3xl overflow-hidden border border-[#ede8ff]" style={{ boxShadow: '0 4px 20px rgba(91,71,245,0.07)' }}>
-              <div className="h-40 overflow-hidden">
-                <img
+              <div className="h-40 relative overflow-hidden">
+                <Image
                   src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800"
                   alt="Agence SMMA croissance"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                  className="object-cover"
                 />
               </div>
               <div className="p-6">

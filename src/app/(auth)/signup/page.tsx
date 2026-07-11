@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Check, Lock, Sparkles, ArrowRight, Loader2 } from 'lucide-react'
 import { track } from '@/lib/analytics'
 import { readUtmCookie } from '@/lib/analytics/utm'
@@ -298,12 +299,15 @@ function SignupContent() {
                   </div>
                 </div>
                 {/* Hero image */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80"
-                  alt="Produits cosmétiques beauté"
-                  className="w-full h-32 object-cover"
-                />
+                <div className="relative w-full h-32">
+                  <Image
+                    src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&q=80"
+                    alt="Produits cosmétiques beauté"
+                    fill
+                    sizes="260px"
+                    className="object-cover"
+                  />
+                </div>
                 {/* Content */}
                 <div className="p-3 flex-1">
                   <p className="text-[8px] text-rose-400 font-semibold mb-0.5">BEAUTE & SOIN</p>
@@ -355,13 +359,16 @@ function SignupContent() {
                   <span className="text-[7px] text-white font-semibold">Livraison GRATUITE — Offre limitee</span>
                 </div>
                 {/* Product image */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80"
-                  alt="Montre design minimaliste"
-                  className="w-full h-28 object-cover"
-                  style={{ objectPosition: 'center 30%' }}
-                />
+                <div className="relative w-full h-28">
+                  <Image
+                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80"
+                    alt="Montre design minimaliste"
+                    fill
+                    sizes="280px"
+                    className="object-cover"
+                    style={{ objectPosition: 'center 30%' }}
+                  />
+                </div>
                 {/* Content */}
                 <div className="p-3 flex-1 flex flex-col">
                   <div className="flex items-center gap-1 mb-1">
@@ -416,12 +423,15 @@ function SignupContent() {
                   </div>
                 </div>
                 {/* Product image */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&q=80"
-                  alt="Ecouteurs sans fil tech"
-                  className="w-full h-28 object-cover"
-                />
+                <div className="relative w-full h-28">
+                  <Image
+                    src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&q=80"
+                    alt="Ecouteurs sans fil tech"
+                    fill
+                    sizes="240px"
+                    className="object-cover"
+                  />
+                </div>
                 {/* Content dark */}
                 <div className="p-3 flex-1">
                   <p className="text-[8px] font-semibold mb-0.5" style={{ color: '#a78bfa' }}>BEST-SELLER</p>

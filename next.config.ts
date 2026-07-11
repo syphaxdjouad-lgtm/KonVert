@@ -93,6 +93,10 @@ const nextConfig: NextConfig = {
       // Unsplash (templates, blog, marketing)
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'plus.unsplash.com' },
+      // Pexels (about/page.tsx case studies)
+      { protocol: 'https', hostname: 'images.pexels.com' },
+      // Supabase Storage (produits uploadés par l'utilisateur, dashboard/new)
+      { protocol: 'https', hostname: '**.supabase.co' },
     ],
   },
 };

@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { ArrowLeft, Clock, ArrowRight, Calendar, Tag } from 'lucide-react'
 import { getArticleBySlug, getRelatedArticles, getAllSlugs } from '@/lib/blog'
@@ -7,6 +8,11 @@ import { generateArticleJsonLd, generateBreadcrumbJsonLd, generateFaqJsonLd } fr
 import { safeJsonLd } from '@/lib/security/json-ld'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://konvertpilot.com'
+
+// ISR : contenu quasi-statique (articles en dur dans le code), revalidate
+// court surtout utile pour les nouveaux slugs ajoutés après déploiement
+// sans rebuild complet (perf audit P-04).
+export const revalidate = 300
 
 /* ── Static params for SSG ────────────────────────────────────────────────── */
 
@@ -159,12 +165,14 @@ export default async function BlogArticlePage({
 
       {/* ── HERO IMAGE ───────────────────────────────────────────────────── */}
       <section className="bg-white">
-        <div className="max-w-4xl mx-auto px-5 sm:px-8 -mt-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+        <div className="max-w-4xl mx-auto px-5 sm:px-8 -mt-0 relative h-64 sm:h-96">
+          <Image
             src={article.image}
             alt={article.imageAlt}
-            className="w-full h-64 sm:h-96 object-cover rounded-b-3xl shadow-lg"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 896px"
+            className="object-cover rounded-b-3xl shadow-lg"
           />
         </div>
       </section>
@@ -242,12 +250,15 @@ export default async function BlogArticlePage({
                   href={`/blog/${r.slug}`}
                   className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl hover:shadow-[#5B47F5]/8 transition-all duration-300 hover:-translate-y-0.5"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={r.image}
-                    alt={r.imageAlt}
-                    className="w-full h-36 object-cover"
-                  />
+                  <div className="relative w-full h-36">
+                    <Image
+                      src={r.image}
+                      alt={r.imageAlt}
+                      fill
+                      sizes="(max-width: 640px) 100vw, 33vw"
+                      className="object-cover"
+                    />
+                  </div>
                   <div className="p-5">
                     <span className="text-xs font-semibold text-[#5B47F5] mb-2 block">
                       {r.category}

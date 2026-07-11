@@ -35,13 +35,27 @@ export default function ABTestPage() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push('/login'); return }
 
-    // Page
-    const { data: pageData, error: pageErr } = await supabase
-      .from('pages')
-      .select('id, title, status')
-      .eq('id', pageId)
-      .eq('user_id', user.id)
-      .maybeSingle()
+    // Page + test actif : requêtes indépendantes (aucune ne dépend du
+    // résultat de l'autre), parallélisées pour éviter le waterfall
+    // (~600ms → ~200ms, audit perf P-03).
+    const [
+      { data: pageData, error: pageErr },
+      { data: testData },
+    ] = await Promise.all([
+      supabase
+        .from('pages')
+        .select('id, title, status')
+        .eq('id', pageId)
+        .eq('user_id', user.id)
+        .maybeSingle(),
+      supabase
+        .from('ab_tests')
+        .select('*')
+        .eq('page_id', pageId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+    ])
 
     if (pageErr || !pageData) {
       setError('Page introuvable')
@@ -49,15 +63,6 @@ export default function ABTestPage() {
       return
     }
     setPage(pageData)
-
-    // Test actif
-    const { data: testData } = await supabase
-      .from('ab_tests')
-      .select('*')
-      .eq('page_id', pageId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
 
     setAbTest(testData ?? null)
 

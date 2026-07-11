@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 
 interface Props {
   images: string[]
@@ -91,10 +92,12 @@ export function ImageManager({ images, onChange }: Props) {
                 isDragged ? 'opacity-40' : ''
               }`}
             >
-              <img
+              <Image
                 src={src}
                 alt={`Image ${i + 1}`}
-                className="w-full h-full object-cover pointer-events-none"
+                fill
+                sizes="(max-width: 768px) 33vw, 20vw"
+                className="object-cover pointer-events-none"
               />
               <button
                 onClick={() => removeAt(i)}

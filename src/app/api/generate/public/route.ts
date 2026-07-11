@@ -191,6 +191,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Email J+0 — livraison immédiate (fire & forget)
+    // AbortSignal.timeout évite qu'une socket reste ouverte indéfiniment si
+    // /api/email/preview ne répond jamais (perf audit P-05).
     fetch(`${req.nextUrl.origin}/api/email/preview`, {
       method: 'POST',
       headers: {
@@ -204,6 +206,7 @@ export async function POST(req: NextRequest) {
         product_title: product.title,
         step: 0,
       }),
+      signal: AbortSignal.timeout(10_000),
     }).catch(() => {})
 
     return NextResponse.json({

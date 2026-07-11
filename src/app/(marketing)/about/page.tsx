@@ -1,22 +1,8 @@
-'use client'
-
-import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Target, Heart, Zap, Globe, Users, TrendingUp, Store, Building2, Bot, Mail, type LucideIcon } from 'lucide-react'
-
-const GLOBAL_CSS = `
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  .delay-1 { transition-delay: .1s }
-  .delay-2 { transition-delay: .2s }
-  .delay-3 { transition-delay: .3s }
-  .delay-4 { transition-delay: .4s }
-  @keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
-  .btn-shimmer { background: linear-gradient(90deg, #5B47F5 0%, #7c6af7 40%, #5B47F5 60%, #4a38e0 100%); background-size: 200% 100%; animation: shimmer 2.4s linear infinite; }
-  .btn-shimmer:hover { animation-play-state: paused; }
-  @keyframes count-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-`
+import RevealController from '@/components/marketing/shared/RevealController'
+import StatsRow from '@/components/marketing/about/StatsRow'
 
 const VALUES = [
   {
@@ -77,13 +63,6 @@ const TEAM_NEW: { Icon: LucideIcon; iconBg: string; iconColor: string; name: str
   },
 ]
 
-const STATS_DATA = [
-  { raw: 50000, display: '50 000+', label: 'pages générées', suffix: '+' },
-  { raw: 2800, display: '2 800+', label: 'boutiques connectées', suffix: '+' },
-  { raw: 40, display: '+40%', label: 'de conversion en moyenne', prefix: '+', suffix: '%' },
-  { raw: 8, display: '8', label: 'langues supportées', suffix: '' },
-]
-
 const VISION_CARDS: { Icon: LucideIcon; title: string; desc: string; color: string; bg: string }[] = [
   {
     Icon: TrendingUp,
@@ -108,81 +87,10 @@ const VISION_CARDS: { Icon: LucideIcon; title: string; desc: string; color: stri
   },
 ]
 
-// Animated counter hook
-function useCounter(target: number, started: boolean, duration = 1500) {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    if (!started) return
-    let start = 0
-    const step = target / (duration / 16)
-    const timer = setInterval(() => {
-      start += step
-      if (start >= target) {
-        setCount(target)
-        clearInterval(timer)
-      } else {
-        setCount(Math.floor(start))
-      }
-    }, 16)
-    return () => clearInterval(timer)
-  }, [started, target, duration])
-
-  return count
-}
-
-function StatCard({ raw, display, label, prefix, suffix }: { raw: number; display: string; label: string; prefix?: string; suffix?: string }) {
-  const [started, setStarted] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
-  const count = useCounter(raw, started)
-
-  useEffect(() => {
-    if (!ref.current) return
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { setStarted(true); obs.disconnect() }
-    }, { threshold: 0.5 })
-    obs.observe(ref.current)
-    return () => obs.disconnect()
-  }, [])
-
-  const formatNum = (n: number) => {
-    if (raw >= 1000) return n.toLocaleString('fr-FR')
-    return n.toString()
-  }
-
-  return (
-    <div ref={ref} className="text-center">
-      <p className="text-3xl font-black text-[#5B47F5] mb-1" style={{ animation: started ? 'count-up .4s ease forwards' : 'none' }}>
-        {started ? `${prefix ?? ''}${formatNum(count)}${suffix ?? ''}` : display}
-      </p>
-      <p className="text-sm text-gray-500">{label}</p>
-    </div>
-  )
-}
-
 export default function AboutPage() {
-  useEffect(() => {
-    const style = document.createElement('style')
-    style.textContent = GLOBAL_CSS
-    document.head.appendChild(style)
-    return () => { document.head.removeChild(style) }
-  }, [])
-
-  useEffect(() => {
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') })
-    }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' })
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el))
-    // Timeout de sécurité : si l'observer ne fire pas après 800ms,
-    // on révèle tout (page déjà scrollée ou problème de viewport)
-    const safetyTimeout = setTimeout(() => {
-      document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'))
-    }, 800)
-    return () => { obs.disconnect(); clearTimeout(safetyTimeout) }
-  }, [])
-
   return (
     <>
+      <RevealController />
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="pt-32 pb-20 bg-slate-50">
         <div className="max-w-4xl mx-auto px-5 sm:px-8 text-center">
@@ -208,9 +116,7 @@ export default function AboutPage() {
       <section className="py-14 bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
-            {STATS_DATA.map((s) => (
-              <StatCard key={s.label} {...s} />
-            ))}
+            <StatsRow />
           </div>
         </div>
       </section>

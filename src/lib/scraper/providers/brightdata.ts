@@ -1,6 +1,51 @@
 import type { ScrapedProduct } from '@/types'
 import { ProviderError, isGenericDomainTitle, parseProductFromHtml } from './_shared'
 
+type PartialProduct = Omit<ScrapedProduct, 'source_url'>
+
+// ─── Fusion HTML (og/JSON-LD) + window.runParams (AliExpress) ────────────────
+// AliExpress est un cas particulier : le TITRE est fiable via og:title (curated
+// pour le partage social), mais le PRIX, la NOTE et la GALERIE ne vivent QUE
+// dans window.runParams (objet JS inline, ni og:price ni JSON-LD côté HTML).
+//
+// L'ancien code renvoyait dès que parseProductFromHtml trouvait un og:title →
+// il n'atteignait JAMAIS parseAliExpressRunParams et perdait prix/note/images.
+// On extrait donc les DEUX sources puis on fusionne champ par champ :
+//   - titre / description : og/JSON-LD prioritaire (curated), fallback runParams
+//   - prix / note / avis  : runParams prioritaire (og n'en a pas), fallback parsed
+//   - images              : union dédupliquée (galerie runParams souvent + riche)
+export function extractProductFromHtml(html: string): {
+  product: PartialProduct | null
+  merged: PartialProduct
+} {
+  const parsed = parseProductFromHtml(html)
+  const runParams = parseAliExpressRunParams(html)
+
+  const parsedTitleOk = !!parsed?.title && !isGenericDomainTitle(parsed.title)
+  const runTitleOk = !!runParams?.title && !isGenericDomainTitle(runParams.title)
+
+  const title = parsedTitleOk ? parsed!.title : runTitleOk ? runParams!.title : ''
+
+  // Union dédupliquée : galerie produit (runParams) d'abord, puis og:image.
+  const images = Array.from(
+    new Set([...(runParams?.images ?? []), ...(parsed?.images ?? [])]),
+  ).slice(0, 8)
+
+  const merged: PartialProduct = {
+    title,
+    description: parsed?.description || runParams?.description || '',
+    images,
+    price: runParams?.price ?? parsed?.price ?? null,
+    original_price: runParams?.original_price ?? parsed?.original_price ?? null,
+    variants: [],
+    rating: runParams?.rating ?? parsed?.rating ?? null,
+    reviews_count: runParams?.reviews_count ?? parsed?.reviews_count ?? null,
+  }
+
+  // Produit "valide" = titre exploitable (non vide, non générique).
+  return { product: title ? merged : null, merged }
+}
+
 export type BrightDataOpts = {
   /** Nom de la zone Web Unlocker créée dans le dashboard Bright Data */
   zone: string
@@ -59,45 +104,31 @@ export async function scrapeViaBrightData(
     throw new ProviderError(`Bright Data — réponse HTML vide ou trop courte (${html?.length ?? 0} bytes)`)
   }
 
-  // Parser standard (JSON-LD prioritaire, puis og:title, h1, <title>)
-  const parsed = parseProductFromHtml(html)
+  // Fusion og/JSON-LD (titre curated) + window.runParams (prix/note/galerie
+  // AliExpress). Voir extractProductFromHtml pour le détail du merge.
+  const { product, merged } = extractProductFromHtml(html)
 
-  if (parsed?.title && !isGenericDomainTitle(parsed.title)) {
-    return { ...parsed, source_url: url }
+  if (product) {
+    return { ...product, source_url: url }
   }
 
-  // Fallback AliExpress : window.runParams.data — pattern propre à AliExpress
-  // qui n'expose ni og:title ni JSON-LD côté HTML. Les données produit vivent
-  // dans un objet JS inline qu'on parse à la regex (extraction non-DOM safe car
-  // l'objet contient des fonctions JS, on ne peut pas JSON.parse).
-  const aliexpressData = parseAliExpressRunParams(html)
-  if (aliexpressData?.title && !isGenericDomainTitle(aliexpressData.title)) {
-    return { ...aliexpressData, source_url: url }
-  }
-
-  // Aggrège tout ce qu'on a vu pour le mode dégradé
-  const safeTitle = (t?: string) => (t && !isGenericDomainTitle(t)) ? t : ''
-  const partial: ScrapedProduct = {
-    title:          safeTitle(parsed?.title) || safeTitle(aliexpressData?.title) || '',
-    description:    parsed?.description || aliexpressData?.description || '',
-    images:         (parsed?.images?.length ? parsed.images : (aliexpressData?.images || [])).slice(0, 8),
-    price:          parsed?.price || aliexpressData?.price || null,
-    original_price: parsed?.original_price || aliexpressData?.original_price || null,
-    variants:       [],
-    rating:         parsed?.rating || aliexpressData?.rating || null,
-    reviews_count:  parsed?.reviews_count || aliexpressData?.reviews_count || null,
-    source_url:     url,
-  }
-
-  const reason = parsed?.title && isGenericDomainTitle(parsed.title)
-    ? `page bloquée par anti-bot (titre extrait = "${parsed.title}", générique)`
+  // Titre inexploitable : page anti-bot ou HTML squelette. On throw en attachant
+  // le meilleur partial vu (le mode dégradé de l'orchestrator le récupère si un
+  // titre OU une image a survécu).
+  const reason = merged.images.length > 0
+    ? 'page anti-bot / HTML non hydraté (titre absent mais images trouvées)'
     : 'aucun titre exploitable dans HTML, JSON-LD, og:title ou window.runParams'
-  throw new ProviderError(`Bright Data — ${reason}`, partial)
+  throw new ProviderError(`Bright Data — ${reason}`, { ...merged, source_url: url })
 }
 
 // Wrapper standard pour l'orchestrator. Web Unlocker AliExpress prend 15-35s
 // (rotation résidentielle + CAPTCHA solving si nécessaire). Abort 38s pour
 // laisser 22s à DeepSeek (60s Vercel total).
+//
+// Pays du proxy résidentiel épinglé (défaut 'fr') : sans ça, Bright Data route
+// via un pays aléatoire → AliExpress sert le produit dans une locale random
+// (titres en arabe/russe/etc. vus en prod). Un SaaS FR/EU veut un titre FR +
+// des prix en EUR. Override possible via BRIGHTDATA_COUNTRY.
 export async function scrapeWithBrightData(
   url: string,
   apiToken: string,
@@ -106,6 +137,7 @@ export async function scrapeWithBrightData(
   return scrapeViaBrightData(url, apiToken, {
     zone,
     abortMs: 38000,
+    countryCode: process.env.BRIGHTDATA_COUNTRY || 'fr',
   })
 }
 

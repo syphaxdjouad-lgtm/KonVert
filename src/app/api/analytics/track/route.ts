@@ -60,6 +60,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Page introuvable' }, { status: 404 })
     }
 
+    // Audit Fable 5 SEC-04 : le rate-limit 30/min/IP ci-dessus ralentit un
+    // spam mais n'empêche pas un script tiers de gonfler durablement le
+    // compteur "vues" (métrique la plus visible côté dashboard) en rejouant
+    // 'view' depuis la même IP sur la durée. cta_click/scroll_* ne sont PAS
+    // dédupliqués ici : un vrai visiteur peut légitimement re-cliquer un CTA
+    // ou re-scroller plusieurs fois dans une même session.
+    // 1 'view' compté par (page_id, IP) toutes les 30 min — réutilise le
+    // rate-limiter Upstash existant comme dédup léger, pas de requête DB
+    // supplémentaire à chaque insert.
+    if (event_type === 'view' && ip !== 'unknown') {
+      const dedup = await rateLimitAsync(`analytics-view-dedup:${page_id}:${ip}`, 1, 30 * 60_000)
+      if (!dedup.allowed) {
+        return NextResponse.json({ ok: true }, { headers: CORS_HEADERS })
+      }
+    }
+
     // Hash de l'IP pour anonymat RGPD — réutilise l'IP déjà extraite pour le
     // rate limit, sauf si elle vaut 'unknown' (pas d'IP réelle disponible).
     const ipHash = ip !== 'unknown' ? await hashIp(ip) : null

@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient as createServerClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { rateLimitAsync } from '@/lib/security/ratelimit'
+
+function getClientIp(req: NextRequest): string {
+  return (
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    req.headers.get('x-real-ip') ||
+    'unknown'
+  )
+}
 
 /* ─────────────────────────────────────────────────────────────────
    HASH visitor_id → variante A ou B (déterministe)
@@ -149,6 +158,20 @@ export async function POST(req: NextRequest) {
 
       if (existing) {
         return NextResponse.json({ ok: true, skipped: true })
+      }
+
+      // Audit Fable 5 SEC-04 : la dédup ci-dessus se base sur visitor_id,
+      // une valeur fournie par le client — un script adverse peut en générer
+      // un nouveau à chaque appel et la contourner totalement. On ajoute une
+      // dédup IP-based (1 'view' comptée par variante/IP toutes les 30 min)
+      // en défense en profondeur, sans remplacer la dédup visitor_id (utile
+      // pour les vrais visiteurs qui changent d'IP entre 2 vues légitimes).
+      const ip = getClientIp(req)
+      if (ip !== 'unknown') {
+        const dedup = await rateLimitAsync(`ab-view-dedup:${variant_id}:${ip}`, 1, 30 * 60_000)
+        if (!dedup.allowed) {
+          return NextResponse.json({ ok: true, skipped: true })
+        }
       }
     }
 

@@ -11,6 +11,7 @@ import { suggestStyle } from '@/lib/styles/auto-pick'
 import { autoPickTone } from '@/lib/ai/auto-pick-tone'
 import { TONE_PROMPTS } from '@/lib/ai/tone-prompts'
 import { generateV3Copy } from '@/lib/ai/deepseek-v3'
+import { sanitizeDeep } from '@/lib/security/sanitize'
 import type { DeepSeekV3Output } from '@/lib/ai/v3-schema'
 import type { ScrapedProduct } from '@/types'
 import type { V3PageData, CopyTone } from '@/types/v3'
@@ -320,7 +321,13 @@ export async function POST(req: NextRequest) {
 
       let aiOutput: DeepSeekV3Output
       try {
-        aiOutput = await generateV3Copy(systemPrompt)
+        const rawAiOutput = await generateV3Copy(systemPrompt)
+        // Defense-in-depth contre une éventuelle prompt injection : DeepSeek peut
+        // recopier du HTML adverse depuis title/description même après cleanProduct
+        // (le LLM est libre de réécrire). Même traitement que /api/generate/public
+        // (cf sanitizeDeep) — on escape récursivement TOUTES les strings de l'output
+        // avant qu'elles n'atteignent v3Data / le renderer / la DB.
+        aiOutput = sanitizeDeep(rawAiOutput)
       } catch (genErr) {
         await rollbackQuota()
         throw genErr

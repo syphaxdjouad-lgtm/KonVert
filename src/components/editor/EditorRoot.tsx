@@ -187,9 +187,21 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
     <div
       data-panel-open={panelOpen ? 'true' : 'false'}
       style={{
+        // Plein viewport, indépendant du flux — l'éditeur n'est monté qu'en
+        // mode 'editor' (cf /dashboard/new), donc ça ne touche jamais le
+        // wizard. Sans ça, ce conteneur reste dans le flux SOUS la chrome
+        // (dashboard)/layout.tsx (sidebar/header/bottom-nav, z-index max 50)
+        // et sous la topbar "Publier" de /dashboard/new — sa propre topbar
+        // (TOPBAR_H) ne se retrouve alors plus à top:0 du viewport, ce qui
+        // désaligne Panel/PanelRight/Fab (position:fixed, calculés depuis
+        // TOPBAR_H en supposant top:0) et les fait remonter par-dessus.
+        // zIndex 1000 > tout ce que pose la chrome dashboard (max observé: 50).
+        position: 'fixed',
+        inset: 0,
+        zIndex: 1000,
         display: 'flex',
         flexDirection: 'column',
-        height: '100vh',
+        height: '100dvh',
         background: '#FAFAF7',
         fontFamily: 'Inter, -apple-system, sans-serif',
         WebkitFontSmoothing: 'antialiased',

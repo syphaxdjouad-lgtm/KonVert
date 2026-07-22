@@ -6,7 +6,11 @@ import PricingHeroAndPlans from '@/components/marketing/pricing/PricingHeroAndPl
 import PricingFaqAccordion from '@/components/marketing/pricing/PricingFaqAccordion'
 
 /* ─── COMPARE ROWS — KONVERT vs DIY vs Freelance ────────────────────── */
+// "Délai de mise en ligne" en premier — cf. `06-ZARA-reecriture-hero-pricing.md`
+// Section 3.3 : c'est l'argument JTBD prioritaire pour Marie/Thomas, pas le
+// prix (qui vient en confirmation, en second).
 const COMPARE_ROWS = [
+  { label: 'Délai de mise en ligne',  konvert: '30 secondes',      diy: 'Dépend de ta charge (souvent plusieurs jours)', freelance: '3 à 10 jours en moyenne' },
   { label: 'Temps par page produit',  konvert: '30 secondes',      diy: '2-4 heures',        freelance: '2-5 jours' },
   { label: 'Coût par page',           konvert: '< 0,15€',          diy: 'Temps = argent',     freelance: '150-500€' },
   { label: 'Qualité copy',            konvert: 'IA e-commerce',    diy: 'Variable',            freelance: 'Variable selon profil' },
@@ -17,27 +21,31 @@ const COMPARE_ROWS = [
   { label: 'Support',                 konvert: 'Dédié inclus',     diy: 'Seul',               freelance: 'Hors contrat' },
 ]
 
-/* ─── FAQ CONTENT (réutilisé par UI + Schema FAQPage) ─────────────────── */
+/* ─── FAQ CONTENT (réutilisé par UI + Schema FAQPage) ─────────────────────
+   Remplacée par les 5 questions pro qui lèvent les vraies objections
+   Marie/Thomas — cf. `06-ZARA-reecriture-hero-pricing.md` Section 3.4.
+   Volontairement sans "adapté aux débutants" (déplacée en bas de la FAQ
+   générale, cf. FAQ.tsx). ──────────────────────────────────────────────── */
 const PRICING_FAQ = [
   {
-    q: 'Puis-je changer de plan à tout moment ?',
-    a: 'Oui. Tu peux upgrader ou downgrader depuis ton dashboard à tout moment. Le changement prend effet immédiatement et le prorata est calculé automatiquement par Stripe.',
+    q: 'Est-ce que les pages générées ont l\'air premium, ou ça ressemble à un générateur IA générique ?',
+    a: 'KONVERT ne remplit pas un template générique avec du texte automatique. Il structure une page conversion à partir des infos réelles de ton produit — titre, bénéfices, FAQ, visuels. Tu gardes la main pour ajuster chaque section avant publication.',
   },
   {
-    q: 'Comment fonctionne la facturation annuelle ?',
-    a: 'En choisissant le plan annuel, tu paies 12 mois en avance et bénéficies d\'une réduction de 25%. Une seule facture est émise au moment du paiement.',
+    q: 'Est-ce que je peux annuler à tout moment si ça ne marche pas pour mon cas ?',
+    a: 'Oui. Aucun engagement longue durée. Tu changes de plan ou tu annules depuis ton compte, sans appel commercial ni justification à donner.',
   },
   {
-    q: 'Que se passe-t-il si je dépasse mon quota mensuel ?',
-    a: 'La génération est temporairement suspendue jusqu\'à la prochaine période de facturation. Tu peux upgrader ton plan à tout moment pour débloquer immédiatement plus de pages.',
+    q: 'Comment KONVERT s\'intègre à ma boutique Shopify/WooCommerce existante ?',
+    a: 'Tu génères la page, tu la colles dans ton thème existant. Pas de migration, pas de refonte de boutique — KONVERT produit une page, pas une nouvelle plateforme.',
   },
   {
-    q: 'Y a-t-il une période d\'essai gratuite ?',
-    a: 'Oui — tu peux générer 1 page produit gratuitement sans créer de compte. Aucune carte bancaire, résultat immédiat. Si la page te convainc, tu choisis un plan pour l\'utiliser sur ta boutique.',
+    q: 'Quelle est la différence entre Pro et Agency si je gère juste plusieurs produits pour ma propre marque ?',
+    a: 'Pro est pensé pour une équipe qui gère une marque et plusieurs lancements. Agency ajoute la gestion multi-comptes clients (facturation séparée, organisation par client) — utile seulement si tu factures des clients externes, pas pour une seule marque en interne.',
   },
   {
-    q: 'Comment annuler mon abonnement ?',
-    a: 'Tu peux annuler depuis Paramètres → Abonnement dans ton dashboard, en quelques clics. L\'accès est maintenu jusqu\'à la fin de ta période payée.',
+    q: 'Si mon volume de pages dépasse ce que prévoit mon plan, qu\'est-ce qui se passe ?',
+    a: 'Tu passes au plan supérieur en un clic, sans perdre tes pages existantes. Pour un volume qui dépasse Agency, l\'équipe construit une offre Enterprise sur mesure — parle-nous de ton besoin.',
   },
 ]
 
@@ -245,7 +253,7 @@ export default function PricingPage() {
           className="focus-konvert inline-flex items-center gap-2 font-bold px-10 py-4 rounded-lg text-white text-base transition-colors"
           style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 4px 20px rgba(91,71,245,0.35)' }}
         >
-          Générer ma première page — gratuit
+          Génère ta première page (30s, sans compte)
           <ArrowRight className="w-4 h-4" />
         </Link>
         <p className="mt-3 text-sm text-slate-400">

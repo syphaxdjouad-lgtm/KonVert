@@ -34,7 +34,8 @@ const PLANS = [
     badge:        null,
     popular:      false,
     enterprise:   false,
-    desc:         'Pour démarrer et tester rapidement.',
+    tagline:      'Pour valider un produit, vite.',
+    desc:         'Publie tes premières pages produit sans mobiliser ton équipe design. De quoi valider si un produit mérite un vrai budget ad avant d\'investir plus loin.',
     features: [
       '75 pages / mois',
       '2 stores connectés',
@@ -43,7 +44,7 @@ const PLANS = [
       'Export HTML',
       'Support email',
     ],
-    cta: 'Démarrer avec Starter',
+    cta: 'Démarre avec Starter',
   },
   {
     id:           'pro',
@@ -53,7 +54,8 @@ const PLANS = [
     badge:        'Populaire',
     popular:      true,
     enterprise:   false,
-    desc:         'Pour les e-commerçants qui veulent scaler.',
+    tagline:      'Pour scaler au rythme de tes campagnes.',
+    desc:         'Publie autant de pages que tes campagnes l\'exigent, avec analytics et A/B test intégrés. Ton time-to-market arrête de dépendre du planning de quelqu\'un d\'autre.',
     features: [
       '300 pages / mois',
       '7 stores connectés',
@@ -63,7 +65,7 @@ const PLANS = [
       'Support email prioritaire',
       'Export HTML',
     ],
-    cta: 'Démarrer avec Pro',
+    cta: 'Démarre avec Pro',
   },
   {
     id:           'agency',
@@ -73,7 +75,8 @@ const PLANS = [
     badge:        'White-label',
     popular:      false,
     enterprise:   false,
-    desc:         'Pour les agences avec plusieurs clients.',
+    tagline:      'Pour livrer plus vite que tes concurrents facturés à l\'heure.',
+    desc:         'Produis des pages pour plusieurs clients sans embaucher un designer de plus. Ce que tu factures en "délai de livraison" devient ton avantage concurrentiel, pas ton goulot d\'étranglement.',
     features: [
       'Pages illimitées',
       'Stores illimités',
@@ -83,7 +86,7 @@ const PLANS = [
       'Rapports clients',
       'Onboarding personnalisé',
     ],
-    cta: 'Démarrer avec Agency',
+    cta: 'Démarre avec Agency',
   },
   {
     id:           'enterprise',
@@ -93,7 +96,8 @@ const PLANS = [
     badge:        'Sur mesure',
     popular:      false,
     enterprise:   true,
-    desc:         'Pour les grandes structures avec des besoins spécifiques.',
+    tagline:      'Pour les volumes et les besoins qu\'aucun plan standard ne couvre.',
+    desc:         'Volume sur-mesure, intégrations spécifiques, accompagnement dédié. Un interlocuteur, pas un ticket support.',
     features: [
       'Tout ce qu\'inclut Agency',
       'Intégrations sur demande',
@@ -103,7 +107,7 @@ const PLANS = [
       'Multi-utilisateurs',
       'Facturation personnalisée',
     ],
-    cta: 'Nous contacter',
+    cta: 'Parle à l\'équipe',
   },
 ]
 
@@ -207,10 +211,10 @@ function PricingHeroAndPlansContent() {
             Tarifs
           </p>
           <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4" style={{ letterSpacing: '-0.02em' }}>
-            Simple et transparent
+            Le prix d&apos;une page qui ne fait pas attendre ton lancement.
           </h1>
           <p className="text-gray-500 text-lg mb-8">
-            Génère des landing pages qui convertissent, sans te ruiner
+            Starter pour tester, Pro pour scaler, Agency pour tes clients. Vois le résultat avant de payer, sur chaque plan.
           </p>
 
           {/* Toggle mensuel / annuel */}
@@ -325,7 +329,7 @@ function PricingHeroAndPlansContent() {
                     </div>
                   )}
 
-                  {/* Nom + description */}
+                  {/* Nom + tagline + value prop */}
                   <div className="mb-5">
                     <div
                       className="font-black text-lg mb-1"
@@ -334,7 +338,13 @@ function PricingHeroAndPlansContent() {
                       {plan.name}
                     </div>
                     <div
-                      className="text-sm"
+                      className="text-sm font-semibold mb-1.5"
+                      style={{ color: plan.enterprise ? 'rgba(255,255,255,0.75)' : '#5B47F5' }}
+                    >
+                      {plan.tagline}
+                    </div>
+                    <div
+                      className="text-xs leading-relaxed"
                       style={{ color: plan.enterprise ? 'rgba(255,255,255,0.5)' : '#9ca3af' }}
                     >
                       {plan.desc}
@@ -440,7 +450,8 @@ function PricingHeroAndPlansContent() {
             <TrustBadges />
           </div>
 
-          {/* Satisfait ou remboursé */}
+          {/* Ligne anti-risque — cf. `06-ZARA-reecriture-hero-pricing.md` Section 4 :
+              reformulation honnête de la garantie, cohérente avec le hero. */}
           <div className="mt-6 flex justify-center">
             <div
               className="inline-flex items-center gap-3 px-6 py-3.5 rounded-2xl"
@@ -448,8 +459,8 @@ function PricingHeroAndPlansContent() {
             >
               <ShieldCheck className="w-5 h-5 text-green-600 flex-shrink-0" aria-hidden="true" />
               <p className="text-sm font-semibold text-green-800">
-                Satisfait ou remboursé 30 jours —{' '}
-                <span className="font-normal text-green-700">Sans question</span>
+                Tu testes avant de payer.{' '}
+                <span className="font-normal text-green-700">Pas l&apos;inverse.</span>
               </p>
             </div>
           </div>

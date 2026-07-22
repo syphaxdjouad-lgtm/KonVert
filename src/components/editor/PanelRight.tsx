@@ -50,7 +50,7 @@ export function PanelRight() {
         top: '52px',
         right: 0,
         width: '360px',
-        height: 'calc(100vh - 52px)',
+        height: 'calc(100dvh - 52px)',
         background: '#FFFFFF',
         borderLeft: '1px solid #EAEAEA',
         boxShadow: '-4px 0 16px rgba(0,0,0,0.04)',

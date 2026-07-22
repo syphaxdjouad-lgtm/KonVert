@@ -6,11 +6,9 @@
 // Whitelist exacte des hosts e-commerce supportés.
 // Pas de includes() ni endsWith() — sinon "amazon.attacker.com" passerait.
 const ALLOWED_HOSTS = new Set([
-  // AliExpress
-  'aliexpress.com', 'fr.aliexpress.com', 'www.aliexpress.com',
-  'es.aliexpress.com', 'pt.aliexpress.com', 'de.aliexpress.com',
-  'it.aliexpress.com', 'nl.aliexpress.com', 'ru.aliexpress.com',
-  'aliexpress.us', 'www.aliexpress.us',
+  // AliExpress — hosts nus seulement, les sous-domaines régionaux
+  // (fr., ar., he., ko., www., etc.) passent par ALLOWED_SUFFIXES ci-dessous.
+  'aliexpress.com', 'aliexpress.us',
   // Alibaba
   'alibaba.com', 'www.alibaba.com', 'french.alibaba.com',
   // Amazon (toutes régions courantes)
@@ -44,6 +42,8 @@ const ALLOWED_HOSTS = new Set([
 // Vérification stricte par endsWith précédé d'un point pour éviter
 // "myshopify.com.attacker.com".
 const ALLOWED_SUFFIXES = [
+  '.aliexpress.com',  // AliExpress : tous les sous-domaines régionaux (fr., ar., he., ko., www., etc.)
+  '.aliexpress.us',   // AliExpress US : www.aliexpress.us, etc.
   '.myshopify.com',   // Shopify : mystore.myshopify.com
   '.shopify.com',     // Shopify : assets / pages annexes
   '.bigcartel.com',   // BigCartel

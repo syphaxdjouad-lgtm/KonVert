@@ -999,7 +999,13 @@ function NewPageInner() {
     }
   }
 
-  async function savePage(savedHtml: string) {
+  // `redirect` (défaut true) distingue un save manuel (bouton Sauvegarder —
+  // redirige vers /dashboard/pages, comportement historique) d'un auto-save
+  // silencieux (EditorRoot C2, redirect:false) qui ne doit jamais faire
+  // naviguer l'user hors de l'éditeur (bug prod : auto-save fantôme au mount
+  // éjectait l'user avant qu'il ait pu éditer quoi que ce soit).
+  async function savePage(savedHtml: string, options?: { redirect?: boolean }) {
+    const { redirect = true } = options ?? {}
     setSaving(true)
     try {
       const supabase = createClient()
@@ -1038,7 +1044,7 @@ function NewPageInner() {
         if (insertErr) throw new Error(`Sauvegarde echouee : ${insertErr.message}`)
         if (inserted?.id) setPageId(inserted.id)
       }
-      router.push('/dashboard/pages')
+      if (redirect) router.push('/dashboard/pages')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur sauvegarde')
     } finally {
@@ -1153,10 +1159,10 @@ function NewPageInner() {
               }
               defaultTemplateId={selectedStyle}
               staticHtml={html}
-              onSave={async (savedHtml) => {
+              onSave={async (savedHtml, _jsonForDb, options) => {
                 // savePage gere son propre assemblage du json_content.
                 // Le jsonForDb du nouvel editeur sera utilise en C2+.
-                await savePage(savedHtml)
+                await savePage(savedHtml, options)
               }}
               saving={saving}
             />

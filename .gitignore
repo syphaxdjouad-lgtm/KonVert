@@ -65,3 +65,7 @@ supabase/.temp/
 
 # Brainstorming visual companion (mockups persistants)
 .superpowers/
+
+# batch outreach — résultats CSV générés localement (pas de prod)
+/scripts/output/
+/scripts/outreach-urls.txt

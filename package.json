@@ -14,7 +14,8 @@
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "refactor:rich-sections": "tsx scripts/refactor-templates-rich-sections.ts",
-    "refactor:hero-gallery": "tsx scripts/refactor-templates-hero-gallery.ts"
+    "refactor:hero-gallery": "tsx scripts/refactor-templates-hero-gallery.ts",
+    "outreach:batch": "tsx scripts/batch-outreach-pages.ts"
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^2.0.35",

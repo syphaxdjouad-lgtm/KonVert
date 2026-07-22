@@ -1,0 +1,6 @@
+# Une URL produit par ligne. Les lignes vides et celles commençant par # sont ignorées.
+# Copie ce fichier (ex: scripts/outreach-urls.txt) et remplace par tes vraies URLs prospects.
+
+https://fr.aliexpress.com/item/1005006543210987.html
+https://www.amazon.fr/dp/B0EXAMPLE01
+https://exemple-boutique-shopify.myshopify.com/products/produit-demo

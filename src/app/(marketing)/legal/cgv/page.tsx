@@ -98,7 +98,7 @@ export default function CGVPage() {
             commencé avec l&apos;accord du consommateur.
           </p>
           <p className="text-gray-600 leading-relaxed mb-6">
-            Toutefois, Luna Corporation LTD propose une <strong>garantie satisfait ou remboursé de 14 jours</strong> à compter
+            Toutefois, Luna Corporation LTD propose une <strong>garantie satisfait ou remboursé de 30 jours</strong> à compter
             de la première souscription. Si le Client n&apos;est pas satisfait du Service, il peut demander un remboursement
             intégral en contactant <a href="mailto:contact@konvertpilot.com" className="text-[#5B47F5] font-semibold hover:underline">contact@konvertpilot.com</a>.
           </p>

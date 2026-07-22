@@ -32,7 +32,10 @@ interface Props {
   // V3 — html déjà rendu serveur. Si présent, PreviewIframe l'utilise direct
   // au lieu d'appeler renderTemplate côté client (qui ne connaît pas V3).
   staticHtml?: string
-  onSave?: (html: string, jsonForDb: object) => Promise<void>
+  // `options.redirect` distingue l'origine de l'appel : bouton Sauvegarder
+  // (redirect: true, comportement historique) vs auto-save silencieux
+  // (redirect: false — un auto-save ne doit JAMAIS faire naviguer l'user).
+  onSave?: (html: string, jsonForDb: object, options?: { redirect: boolean }) => Promise<void>
   saving?: boolean
 }
 
@@ -55,6 +58,10 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
   // C2 — auto-save trigger
   const sectionData = useEditorStore(s => s.sectionData)
   const scheduleAutoSave = useEditorStore(s => s.scheduleAutoSave)
+
+  // Armé à la fin de l'effet d'hydratation ci-dessous, consommé par le run
+  // suivant de l'effet auto-save (cf commentaire détaillé plus bas).
+  const hydrationEchoSkipRef = useRef(false)
 
   // Hydrate on mount only
   useEffect(() => {
@@ -80,6 +87,9 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
         globalStyles: {},
       })
     }
+    // hydrate() ci-dessus va faire muter sectionData/visualSettings dans un
+    // prochain render — ignorer ce changement dans l'effet auto-save.
+    hydrationEchoSkipRef.current = true
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -89,11 +99,32 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
   }, [staticHtml, setStaticHtml])
 
   // C2 — auto-save 3s après dernier changement sectionData ou visualSettings.
-  // Skip le mount initial (hydrate → setState ne doit pas déclencher save).
-  const isInitialAutoSaveMount = useRef(true)
+  //
+  // Bug prod (fix/editor-autosave-ejects-on-open) : hydrater une page
+  // existante appelle hydrate(state) dans l'effet ci-dessus, ce qui remplace
+  // sectionData/visualSettings par de NOUVELLES références (même si le
+  // contenu est identique). Ça relance CET effet une 2e fois — après que le
+  // garde "1er run" ait déjà été consommé par le run de montage — et arme
+  // un auto-save fantôme qui persiste puis (avant le fix savePage) éjectait
+  // l'user vers /dashboard/pages avant qu'il ait pu éditer quoi que ce soit.
+  //
+  // Deux gardes indépendants, chacun consommé une seule fois, pour un total
+  // déterministe (pas un compteur de runs) :
+  // - initialMountSkipRef : le tout premier run de cet effet a toujours lieu
+  //   avec les valeurs pré-hydratation du store → toujours ignoré.
+  // - hydrationEchoSkipRef : armé de façon synchrone au moment exact où
+  //   hydrate() est appelé (fin de l'effet d'hydratation ci-dessus).
+  //   Consommé par le run SUIVANT de cet effet, quel qu'il soit — le
+  //   setState déclenché par hydrate() arrive dans son propre render/commit,
+  //   après le run de montage.
+  const initialMountSkipRef = useRef(true)
   useEffect(() => {
-    if (isInitialAutoSaveMount.current) {
-      isInitialAutoSaveMount.current = false
+    if (initialMountSkipRef.current) {
+      initialMountSkipRef.current = false
+      return
+    }
+    if (hydrationEchoSkipRef.current) {
+      hydrationEchoSkipRef.current = false
       return
     }
     if (!onSave) return
@@ -107,7 +138,8 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
         const { renderTemplate } = await import('@/lib/templates')
         html = renderTemplate(templateId, landingData, { sectionOrder, visualSettings, globalStyles })
       }
-      await onSave(html, jsonForDb)
+      // redirect:false — un auto-save silencieux ne doit jamais faire naviguer.
+      await onSave(html, jsonForDb, { redirect: false })
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionData, visualSettings])
@@ -132,7 +164,8 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
       _template_slug: templateId,
       _editor_state: { sectionOrder, visualSettings, globalStyles },
     }
-    await onSave(html, jsonForDb)
+    // redirect:true — save manuel via le bouton, comportement historique conservé.
+    await onSave(html, jsonForDb, { redirect: true })
   }
 
   // Close panel when clicking outside (on preview area) — handled via postMessage

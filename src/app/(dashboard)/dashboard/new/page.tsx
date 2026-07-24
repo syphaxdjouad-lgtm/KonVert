@@ -1081,76 +1081,84 @@ function NewPageInner() {
 
   // ── Vue éditeur ──
   if (mode === 'editor') {
+    // Le nouvel éditeur (EditorRoot) est plein écran (position:fixed) et
+    // embarque désormais sa propre topbar avec titre éditable + Publier —
+    // cf EditorRoot.tsx. Ce wrapper "outer" (topbar h-14 + Retour vers le
+    // wizard) ne sert donc plus que pour l'ancien éditeur GrapesJS
+    // (BuilderLoader), qui n'a pas sa propre chrome.
+    const useNewEditor = process.env.NEXT_PUBLIC_KONVERT_NEW_EDITOR === 'true'
     return (
       <div className="flex flex-col h-full">
-        <div className="h-14 flex items-center justify-between px-4 border-b bg-white flex-shrink-0" style={{ borderColor: '#E3E3E8' }}>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setMode('wizard')}
-              className="flex items-center gap-1.5 text-[13px] font-medium transition-colors"
-              style={{ color: '#8b8b9e' }}
-            >
-              <ArrowLeft className="w-3.5 h-3.5" /> Retour
-            </button>
-            <div className="w-px h-4 bg-gray-200" />
-            <input
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              className="text-[13px] font-bold bg-transparent focus:outline-none border-b border-transparent focus:border-purple-400"
-              style={{ color: '#1a1a2e' }}
-              placeholder="Titre de la page"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            {/* Bouton Publier */}
-            {stores.length > 0 && pageId && (
-              <div className="relative">
-                <button
-                  onClick={() => setPublishOpen(o => !o)}
-                  className="flex items-center gap-1.5 text-[12px] font-bold px-3 py-1.5 rounded-lg transition-all"
-                  style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', color: '#fff' }}
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  Publier
-                  <ChevronDown className="w-3 h-3" />
-                </button>
-                {publishOpen && (
-                  <div
-                    className="absolute top-9 right-0 rounded-xl overflow-hidden z-50 min-w-[200px]"
-                    style={{ background: '#fff', border: '1px solid #e5e7eb', boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}
+        {!useNewEditor && (
+          <div className="h-14 flex items-center justify-between px-4 border-b bg-white flex-shrink-0" style={{ borderColor: '#E3E3E8' }}>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setMode('wizard')}
+                className="flex items-center gap-1.5 text-[13px] font-medium transition-colors"
+                style={{ color: '#8b8b9e' }}
+              >
+                <ArrowLeft className="w-3.5 h-3.5" /> Retour
+              </button>
+              <div className="w-px h-4 bg-gray-200" />
+              <input
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                className="text-[13px] font-bold bg-transparent focus:outline-none border-b border-transparent focus:border-purple-400"
+                style={{ color: '#1a1a2e' }}
+                placeholder="Titre de la page"
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              {/* Bouton Publier */}
+              {stores.length > 0 && pageId && (
+                <div className="relative">
+                  <button
+                    onClick={() => setPublishOpen(o => !o)}
+                    className="flex items-center gap-1.5 text-[12px] font-bold px-3 py-1.5 rounded-lg transition-all"
+                    style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)', color: '#fff' }}
                   >
-                    <div className="px-3 py-2 text-[11px] font-bold uppercase tracking-wide" style={{ color: '#9ca3af', borderBottom: '1px solid #f3f4f6' }}>
-                      Choisir un store
+                    <Send className="w-3.5 h-3.5" />
+                    Publier
+                    <ChevronDown className="w-3 h-3" />
+                  </button>
+                  {publishOpen && (
+                    <div
+                      className="absolute top-9 right-0 rounded-xl overflow-hidden z-50 min-w-[200px]"
+                      style={{ background: '#fff', border: '1px solid #e5e7eb', boxShadow: '0 8px 24px rgba(0,0,0,0.12)' }}
+                    >
+                      <div className="px-3 py-2 text-[11px] font-bold uppercase tracking-wide" style={{ color: '#9ca3af', borderBottom: '1px solid #f3f4f6' }}>
+                        Choisir un store
+                      </div>
+                      {stores.map(store => {
+                        const isShopify = store.platform === 'shopify'
+                        const isYouCan  = store.platform === 'youcan'
+                        const color     = isShopify ? '#16a34a' : isYouCan ? '#f97316' : '#7c3aed'
+                        const icon      = isShopify ? '🟢' : isYouCan ? '🟠' : '🟣'
+                        return (
+                          <button
+                            key={store.id}
+                            onClick={() => publishToStore(store)}
+                            disabled={!!publishing}
+                            className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 disabled:opacity-50"
+                          >
+                            <span>{icon}</span>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-[13px] font-bold truncate" style={{ color: '#111' }}>{store.name}</div>
+                              <div className="text-[11px] font-semibold capitalize" style={{ color }}>{store.platform}</div>
+                            </div>
+                            {publishing === store.id && <Loader2 className="w-3.5 h-3.5 animate-spin" style={{ color }} />}
+                          </button>
+                        )
+                      })}
                     </div>
-                    {stores.map(store => {
-                      const isShopify = store.platform === 'shopify'
-                      const isYouCan  = store.platform === 'youcan'
-                      const color     = isShopify ? '#16a34a' : isYouCan ? '#f97316' : '#7c3aed'
-                      const icon      = isShopify ? '🟢' : isYouCan ? '🟠' : '🟣'
-                      return (
-                        <button
-                          key={store.id}
-                          onClick={() => publishToStore(store)}
-                          disabled={!!publishing}
-                          className="w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 disabled:opacity-50"
-                        >
-                          <span>{icon}</span>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-[13px] font-bold truncate" style={{ color: '#111' }}>{store.name}</div>
-                            <div className="text-[11px] font-semibold capitalize" style={{ color }}>{store.platform}</div>
-                          </div>
-                          {publishing === store.id && <Loader2 className="w-3.5 h-3.5 animate-spin" style={{ color }} />}
-                        </button>
-                      )
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         <div className="flex-1 overflow-hidden">
-          {process.env.NEXT_PUBLIC_KONVERT_NEW_EDITOR === 'true' ? (
+          {useNewEditor ? (
             <EditorRoot
               jsonContent={
                 landingData
@@ -1165,18 +1173,37 @@ function NewPageInner() {
                 await savePage(savedHtml, options)
               }}
               saving={saving}
+              // Retour contextuel vers le wizard (pas l'historique brut —
+              // cf ancien bouton "Retour" du wrapper, même comportement).
+              onBack={() => setMode('wizard')}
+              title={title}
+              onTitleChange={setTitle}
+              // Publier vers store — état/handlers possédés ici, EditorRoot
+              // se contente de les câbler dans sa propre topbar.
+              publish={{
+                stores,
+                pageId,
+                open: publishOpen,
+                onOpenChange: setPublishOpen,
+                publishingId: publishing,
+                onPublish: publishToStore,
+              }}
             />
           ) : (
             <BuilderLoader html={html} onSave={savePage} />
           )}
         </div>
+        {/* z-[2000] — au-dessus du z-index:1000 du nouvel éditeur plein
+            écran (EditorRoot), pour que ces toasts restent visibles quand
+            useNewEditor est actif. Sans impact sur le chemin BuilderLoader
+            (pas de fixed haut z-index en dessous). */}
         {error && (
-          <div className="fixed bottom-4 right-4 bg-red-50 border border-red-200 text-red-700 rounded-xl p-3 text-sm">
+          <div className="fixed bottom-4 right-4 z-[2000] bg-red-50 border border-red-200 text-red-700 rounded-xl p-3 text-sm">
             {error}
           </div>
         )}
         {partialWarning && (
-          <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-xl bg-amber-50 border border-amber-200 text-amber-900 rounded-xl px-4 py-3 text-sm shadow-lg flex items-start gap-2">
+          <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[2000] max-w-xl bg-amber-50 border border-amber-200 text-amber-900 rounded-xl px-4 py-3 text-sm shadow-lg flex items-start gap-2">
             <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
             <span className="flex-1">{partialWarning}</span>
             <button onClick={() => setPartialWarning(null)} className="text-amber-600 hover:text-amber-900" aria-label="Fermer">
@@ -1185,14 +1212,14 @@ function NewPageInner() {
           </div>
         )}
         {saving && (
-          <div className="fixed bottom-4 right-4 bg-white border border-gray-200 rounded-xl p-3 text-sm flex items-center gap-2">
+          <div className="fixed bottom-4 right-4 z-[2000] bg-white border border-gray-200 rounded-xl p-3 text-sm flex items-center gap-2">
             <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
             Sauvegarde...
           </div>
         )}
         {publishSuccess && (
           <div
-            className="fixed bottom-4 right-4 flex items-start gap-3 rounded-xl px-4 py-3 text-sm max-w-sm shadow-lg"
+            className="fixed bottom-4 right-4 z-[2000] flex items-start gap-3 rounded-xl px-4 py-3 text-sm max-w-sm shadow-lg"
             style={{ background: '#fff', border: '1px solid rgba(22,163,74,0.3)', color: '#166534' }}
           >
             <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#16a34a' }} />
@@ -1225,7 +1252,7 @@ function NewPageInner() {
         )}
         {publishError && (
           <div
-            className="fixed bottom-4 right-4 flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold"
+            className="fixed bottom-4 right-4 z-[2000] flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold"
             style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.2)', color: '#dc2626' }}
             onClick={() => setPublishError(null)}
           >
@@ -1233,7 +1260,10 @@ function NewPageInner() {
             {publishError}
           </div>
         )}
-        {publishOpen && <div className="fixed inset-0 z-40" onClick={() => setPublishOpen(false)} />}
+        {/* Backdrop click-outside du dropdown Publier — uniquement pour le
+            wrapper legacy ci-dessus. En mode useNewEditor, EditorRoot gère
+            son propre backdrop interne pour le même state publishOpen. */}
+        {!useNewEditor && publishOpen && <div className="fixed inset-0 z-40" onClick={() => setPublishOpen(false)} />}
       </div>
     )
   }

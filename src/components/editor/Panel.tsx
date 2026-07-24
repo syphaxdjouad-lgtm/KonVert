@@ -53,7 +53,7 @@ export default function Panel() {
         left: 0,
         top: TOPBAR_H,
         width: PANEL_W,
-        height: `calc(100vh - ${TOPBAR_H}px)`,
+        height: `calc(100dvh - ${TOPBAR_H}px)`,
         background: '#FFFFFF',
         borderRight: '1px solid #EDE8DF',
         boxShadow: '4px 0 24px rgba(0,0,0,0.04), 1px 0 4px rgba(0,0,0,0.03)',

@@ -7,21 +7,43 @@ import Panel from './Panel'
 import { PanelRight } from './PanelRight'
 import PreviewIframe from './PreviewIframe'
 import DeviceSwitcher from './DeviceSwitcher'
-import { IconArrowLeft, IconSave, IconCheckCircle } from './Icons'
+import {
+  IconArrowLeft, IconSave, IconCheckCircle, IconSend, IconChevronDown, IconLoader,
+} from './Icons'
 import type { LandingPageData } from '@/types'
 import type { SectionInstance, VisualSettings, GlobalStyles } from '@/types/editor'
 
 // Labels i18n inline
 const T = {
-  fr: { back: 'Retour', save: 'Sauvegarder', saved: 'Sauvegardé', saving: '...', editor: 'Konvert' },
-  en: { back: 'Back', save: 'Save', saved: 'Saved', saving: '...', editor: 'Konvert' },
-  ar: { back: 'رجوع', save: 'حفظ', saved: 'تم الحفظ', saving: '...', editor: 'Konvert' },
-  es: { back: 'Volver', save: 'Guardar', saved: 'Guardado', saving: '...', editor: 'Konvert' },
+  fr: { back: 'Retour', save: 'Sauvegarder', saved: 'Sauvegardé', saving: '...', editor: 'Konvert', publish: 'Publier', chooseStore: 'Choisir un store', titlePlaceholder: 'Titre de la page' },
+  en: { back: 'Back', save: 'Save', saved: 'Saved', saving: '...', editor: 'Konvert', publish: 'Publish', chooseStore: 'Choose a store', titlePlaceholder: 'Page title' },
+  ar: { back: 'رجوع', save: 'حفظ', saved: 'تم الحفظ', saving: '...', editor: 'Konvert', publish: 'نشر', chooseStore: 'اختر متجر', titlePlaceholder: 'عنوان الصفحة' },
+  es: { back: 'Volver', save: 'Guardar', saved: 'Guardado', saving: '...', editor: 'Konvert', publish: 'Publicar', chooseStore: 'Elegir tienda', titlePlaceholder: 'Título de la página' },
 } as const
 const lang = 'fr'
 const t = T[lang]
 
 const TOPBAR_H = 52
+
+// Store connecté (Shopify/WooCommerce/YouCan) — sous-ensemble de la ligne
+// `stores` en DB nécessaire à l'UI de publication.
+interface PublishStoreInfo {
+  id: string
+  name: string
+  platform: string
+  store_url?: string
+}
+
+// Publication vers store — état + handlers possédés par le call site
+// (dashboard/new/page.tsx) et simplement câblés ici, pas dupliqués.
+interface PublishProps {
+  stores: PublishStoreInfo[]
+  pageId: string | null
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  publishingId: string | null
+  onPublish: (store: PublishStoreInfo) => void
+}
 
 interface Props {
   jsonContent?: LandingPageData & {
@@ -37,6 +59,15 @@ interface Props {
   // (redirect: false — un auto-save ne doit JAMAIS faire naviguer l'user).
   onSave?: (html: string, jsonForDb: object, options?: { redirect: boolean }) => Promise<void>
   saving?: boolean
+  // Retour — par défaut window.history.back(). Le call site passe en général
+  // un retour contextuel (ex: vers le wizard) plutôt que l'historique brut.
+  onBack?: () => void
+  // Titre de page (métadonnée DB, distincte de landingData.product_name).
+  // Sans onTitleChange, le champ passe en lecture seule (usage isolé/tests).
+  title?: string
+  onTitleChange?: (title: string) => void
+  // Publication vers store — absent = bouton Publier non rendu.
+  publish?: PublishProps
 }
 
 const V3_STYLE_IDS = new Set([
@@ -44,7 +75,10 @@ const V3_STYLE_IDS = new Set([
   'brutalist', 'warm-neutral', 'minimal-mono', 'vibrant', 'bold',
 ])
 
-export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue', staticHtml, onSave, saving }: Props) {
+export default function EditorRoot({
+  jsonContent, defaultTemplateId = 'etec-blue', staticHtml, onSave, saving,
+  onBack, title, onTitleChange, publish,
+}: Props) {
   const hydrate = useEditorStore(s => s.hydrate)
   const setStaticHtml = useEditorStore(s => s.setStaticHtml)
   const templateId = useEditorStore(s => s.templateId)
@@ -187,9 +221,21 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
     <div
       data-panel-open={panelOpen ? 'true' : 'false'}
       style={{
+        // Plein viewport, indépendant du flux — l'éditeur n'est monté qu'en
+        // mode 'editor' (cf /dashboard/new), donc ça ne touche jamais le
+        // wizard. Sans ça, ce conteneur reste dans le flux SOUS la chrome
+        // (dashboard)/layout.tsx (sidebar/header/bottom-nav, z-index max 50)
+        // et sous la topbar "Publier" de /dashboard/new — sa propre topbar
+        // (TOPBAR_H) ne se retrouve alors plus à top:0 du viewport, ce qui
+        // désaligne Panel/PanelRight/Fab (position:fixed, calculés depuis
+        // TOPBAR_H en supposant top:0) et les fait remonter par-dessus.
+        // zIndex 1000 > tout ce que pose la chrome dashboard (max observé: 50).
+        position: 'fixed',
+        inset: 0,
+        zIndex: 1000,
         display: 'flex',
         flexDirection: 'column',
-        height: '100vh',
+        height: '100dvh',
         background: '#FAFAF7',
         fontFamily: 'Inter, -apple-system, sans-serif',
         WebkitFontSmoothing: 'antialiased',
@@ -211,11 +257,11 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
           position: 'relative',
         }}
       >
-        {/* Left: back + product name */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        {/* Left: back + title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0, flex: '1 1 auto' }}>
           <button
             aria-label={t.back}
-            onClick={() => window.history.back()}
+            onClick={() => (onBack ? onBack() : window.history.back())}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -229,43 +275,61 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
               border: 'none',
               cursor: 'pointer',
               fontFamily: 'inherit',
+              flexShrink: 0,
               transition: 'color 150ms ease, background 150ms ease',
             }}
             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#2D2D2D'; (e.currentTarget as HTMLElement).style.background = '#FAFAF7' }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#8B8680'; (e.currentTarget as HTMLElement).style.background = 'none' }}
           >
             <IconArrowLeft size={14} />
-            {t.back}
+            <span className="hidden sm:inline">{t.back}</span>
           </button>
 
-          <div style={{ width: 1, height: 18, background: '#EDE8DF' }} aria-hidden="true" />
+          <div style={{ width: 1, height: 18, background: '#EDE8DF', flexShrink: 0 }} aria-hidden="true" />
 
-          <span
+          {/* Titre de page — éditable quand onTitleChange est fourni (cas
+              réel /dashboard/new), sinon lecture seule avec fallback sur le
+              nom produit (cas isolé/tests, comportement d'avant inchangé). */}
+          <input
+            value={title ?? landingData.product_name ?? ''}
+            onChange={e => onTitleChange?.(e.target.value)}
+            readOnly={!onTitleChange}
+            aria-label={t.titlePlaceholder}
+            placeholder={landingData.product_name || t.editor}
             style={{
               fontFamily: '\'Playfair Display\', Georgia, serif',
               fontSize: 16,
               fontStyle: 'italic',
               fontWeight: 400,
               color: '#2D2D2D',
-              maxWidth: 200,
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
+              minWidth: 0,
+              width: '100%',
+              maxWidth: 260,
+              background: 'transparent',
+              border: 'none',
+              borderBottom: '1px solid transparent',
+              outline: 'none',
+              padding: '2px 0',
+              cursor: onTitleChange ? 'text' : 'default',
             }}
-          >
-            {landingData.product_name || t.editor}
-          </span>
+            onFocus={e => { if (onTitleChange) (e.target as HTMLInputElement).style.borderBottomColor = '#A8B5A0' }}
+            onBlur={e => { (e.target as HTMLInputElement).style.borderBottomColor = 'transparent' }}
+          />
         </div>
 
-        {/* Center: device switcher */}
-        <DeviceSwitcher />
+        {/* Center: device switcher — masqué sur mobile pour laisser la
+            place au titre + Publier + Sauvegarder sur une topbar étroite. */}
+        <div className="hidden sm:flex" style={{ flexShrink: 0 }}>
+          <DeviceSwitcher />
+        </div>
 
-        {/* Right: save button */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        {/* Right: save + publish */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
           {onSave && (
             <button
               onClick={handleSave}
               disabled={saving}
+              aria-label={saving ? t.saving : t.save}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -286,10 +350,112 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'none'; (e.currentTarget as HTMLButtonElement).style.borderColor = '#DDD8CF' }}
             >
               {saving
-                ? <><IconCheckCircle size={14} />{t.saving}</>
-                : <><IconSave size={14} />{t.save}</>
+                ? <><IconCheckCircle size={14} /><span className="hidden sm:inline">{t.saving}</span></>
+                : <><IconSave size={14} /><span className="hidden sm:inline">{t.save}</span></>
               }
             </button>
+          )}
+
+          {publish && publish.stores.length > 0 && publish.pageId && (
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => publish.onOpenChange(!publish.open)}
+                aria-expanded={publish.open}
+                aria-haspopup="true"
+                aria-label={t.publish}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: '#FFFFFF',
+                  border: 'none',
+                  padding: '7px 14px',
+                  borderRadius: 8,
+                  background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+                  cursor: 'pointer',
+                  fontFamily: 'inherit',
+                  transition: 'opacity 150ms ease',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '0.9' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}
+              >
+                <IconSend size={14} />
+                <span className="hidden sm:inline">{t.publish}</span>
+                <IconChevronDown size={12} />
+              </button>
+
+              {publish.open && (
+                <>
+                  {/* Backdrop click-outside — local à EditorRoot (stacking
+                      context déjà au-dessus de toute la chrome dashboard). */}
+                  <div
+                    style={{ position: 'fixed', inset: 0, zIndex: 1 }}
+                    onClick={() => publish.onOpenChange(false)}
+                    aria-hidden="true"
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: 'calc(100% + 6px)',
+                      right: 0,
+                      minWidth: 200,
+                      background: '#FFFFFF',
+                      border: '1px solid #EDE8DF',
+                      borderRadius: 12,
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                      overflow: 'hidden',
+                      zIndex: 2,
+                    }}
+                  >
+                    <div style={{ padding: '8px 12px', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.02em', color: '#8B8680', borderBottom: '1px solid #EDE8DF' }}>
+                      {t.chooseStore}
+                    </div>
+                    {publish.stores.map(store => {
+                      const isShopify = store.platform === 'shopify'
+                      const isYouCan  = store.platform === 'youcan'
+                      const color     = isShopify ? '#16a34a' : isYouCan ? '#f97316' : '#7c3aed'
+                      const icon      = isShopify ? '🟢' : isYouCan ? '🟠' : '🟣'
+                      return (
+                        <button
+                          key={store.id}
+                          onClick={() => publish.onPublish(store)}
+                          disabled={!!publish.publishingId}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 10,
+                            width: '100%',
+                            padding: '10px 12px',
+                            textAlign: 'left',
+                            background: 'none',
+                            border: 'none',
+                            cursor: publish.publishingId ? 'not-allowed' : 'pointer',
+                            opacity: publish.publishingId && publish.publishingId !== store.id ? 0.5 : 1,
+                            fontFamily: 'inherit',
+                            transition: 'background 120ms ease',
+                          }}
+                          onMouseEnter={e => { if (!publish.publishingId) (e.currentTarget as HTMLButtonElement).style.background = '#FAFAF7' }}
+                          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'none' }}
+                        >
+                          <span aria-hidden="true">{icon}</span>
+                          <span style={{ flex: 1, minWidth: 0 }}>
+                            <span style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#2D2D2D', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {store.name}
+                            </span>
+                            <span style={{ display: 'block', fontSize: 11, fontWeight: 600, textTransform: 'capitalize', color }}>
+                              {store.platform}
+                            </span>
+                          </span>
+                          {publish.publishingId === store.id && <IconLoader size={14} className="animate-spin" />}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
           )}
         </div>
       </header>

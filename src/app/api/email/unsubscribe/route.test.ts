@@ -16,14 +16,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { NextRequest } from 'next/server'
 
-// ── Setup env avant tout import ─────────────────────────────────────────────
+// ── Setup env avant tout import ────────────────────────────────────
 
 const TEST_ENCRYPTION_KEY = 'test-secret-key-for-unsubscribe-route-tests-32c'
 
 vi.stubEnv('ENCRYPTION_KEY', TEST_ENCRYPTION_KEY)
 vi.stubEnv('NEXT_PUBLIC_APP_URL', 'https://konvertpilot.com')
 
-// ── Mock supabaseAdmin (évite toute connexion Supabase en test) ─────────────
+// ── Mock supabaseAdmin (évite toute connexion Supabase en test) ───────────
 
 vi.mock('@/lib/supabase/admin', () => ({
   supabaseAdmin: {
@@ -33,14 +33,12 @@ vi.mock('@/lib/supabase/admin', () => ({
   },
 }))
 
-// ── Mock rateLimitAsync — expose un compteur pour simuler le dépassement ────
+// ── Mock rateLimitAsync — simule le dépassement de quota ────────────────
 
-let rateLimitCallCount = 0
 let rateLimitShouldBlock = false
 
 vi.mock('@/lib/security/ratelimit', () => ({
-  rateLimitAsync: vi.fn(async (_key: string, _limit: number, _windowMs: number) => {
-    rateLimitCallCount++
+  rateLimitAsync: vi.fn(async () => {
     if (rateLimitShouldBlock) {
       return { allowed: false, remaining: 0, retryAfterMs: 30_000 }
     }
@@ -48,12 +46,12 @@ vi.mock('@/lib/security/ratelimit', () => ({
   }),
 }))
 
-// ── Import du handler APRES les mocks ──────────────────────────────────────
+// ── Import du handler APRES les mocks ───────────────────────────
 
 import { POST, GET } from './route'
 import { generateUnsubscribeToken } from '@/lib/email/unsubscribe-token'
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
+// ── Helpers ─────────────────────────────────────────────────
 
 function makePostRequest(body: Record<string, unknown>, ip = '1.2.3.4'): NextRequest {
   return new NextRequest('http://localhost/api/email/unsubscribe', {
@@ -75,10 +73,9 @@ function makeGetRequest(params: Record<string, string>, ip = '1.2.3.4'): NextReq
   })
 }
 
-// ── Tests ────────────────────────────────────────────────────────────────────
+// ── Tests ────────────────────────────────────────────────────
 
 beforeEach(() => {
-  rateLimitCallCount = 0
   rateLimitShouldBlock = false
 })
 
@@ -122,7 +119,7 @@ describe('POST /api/email/unsubscribe', () => {
     expect(res.status).toBe(200)
   })
 
-  it('retourne 429 quand le rate limit est depassé', async () => {
+  it('retourne 429 quand le rate limit est depasse', async () => {
     rateLimitShouldBlock = true
     const email = 'user@example.com'
     const token = generateUnsubscribeToken(email)
@@ -156,7 +153,7 @@ describe('GET /api/email/unsubscribe', () => {
     expect(res.headers.get('location')).toContain('unsubscribe?ok=1')
   })
 
-  it('retourne 429 quand le rate limit est depassé sur GET', async () => {
+  it('retourne 429 quand le rate limit est depasse sur GET', async () => {
     rateLimitShouldBlock = true
     const req = makeGetRequest({ email: 'x@x.com', token: 'any' }, '8.8.8.8')
     const res = await GET(req)

@@ -6,7 +6,7 @@ import { cookies } from 'next/headers'
 // GET /api/shopify/callback?code=...&hmac=...&shop=...&state=...
 export async function GET(req: NextRequest) {
   const params = Object.fromEntries(req.nextUrl.searchParams.entries())
-  const { shop, code, state, hmac } = params
+  const { shop, code, state } = params
 
   // 0. Valider le format du shop domain
   if (!shop || !/^[a-z0-9][a-z0-9-]*\.myshopify\.com$/.test(shop)) {

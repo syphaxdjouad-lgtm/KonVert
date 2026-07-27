@@ -1,7 +1,6 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import type { LandingPageData } from '@/types'
 
 // GrapesJS DOIT être importé en client-side uniquement — pas de SSR
 const GrapesEditor = dynamic(() => import('./GrapesEditor'), {

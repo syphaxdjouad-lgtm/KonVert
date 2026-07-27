@@ -19,11 +19,10 @@ describe('assignVariant', () => {
   })
 
   it('repartit a peu pres 50/50 sur 1000 visitors random', () => {
-    let countA = 0, countB = 0
+    let countA = 0
     for (let i = 0; i < 1000; i++) {
       const id = `v_${Math.random().toString(36).slice(2)}`
       if (assignVariant(id) === 'A') countA++
-      else countB++
     }
     // Une déviation > 15 % indiquerait un biais important du hash
     const ratioA = countA / 1000

@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       status: 'error',
       mode,
-      detail: 'STRIPE_SECRET_KEY absent ou mal formaté en prod',
+      detail: 'STRIPE_SECRET_KEY absent ou mal formate en prod',
     })
   }
 
@@ -162,6 +162,7 @@ export async function GET(req: NextRequest) {
     'invoice.payment_failed',
     'invoice.payment_succeeded',
   ]
+  let webhook_endpoints_error: string | null = null
   try {
     const eps = await stripe.webhookEndpoints.list({ limit: 20 })
     webhook_endpoints = eps.data.map((ep) => {
@@ -180,7 +181,9 @@ export async function GET(req: NextRequest) {
     })
   } catch (err) {
     webhook_endpoints = []
-    // détail logué ci-dessous via webhook_endpoints_error
+    // Le commentaire d'origine promettait ce détail sans jamais le capturer
+    // (variable inexistante) — l'erreur était silencieusement perdue.
+    webhook_endpoints_error = err instanceof Error ? err.message.slice(0, 200) : String(err)
   }
 
   const konvert_endpoint = webhook_endpoints.find((e) => e.targets_konvert && e.livemode === (mode === 'live') && e.status === 'enabled')
@@ -247,6 +250,7 @@ export async function GET(req: NextRequest) {
       prices,
       webhook_secret,
       webhook_endpoints,
+      webhook_endpoints_error,
       konvert_endpoint_ok: webhookEndpointOk,
       konvert_endpoint: konvert_endpoint ?? null,
       payment_method_types,

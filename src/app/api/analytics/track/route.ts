@@ -30,7 +30,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true }, { headers: CORS_HEADERS })
     }
 
-    const { page_id, event_type, meta } = await req.json()
+    // `meta` peut être envoyé par le script de tracking mais la table
+    // analytics_events n'a pas de colonne pour le stocker (cf supabase/schema.sql) —
+    // ignoré ici plutôt que gardé comme variable morte.
+    const { page_id, event_type } = await req.json()
 
     if (!page_id || !event_type) {
       return NextResponse.json({ error: 'page_id et event_type requis' }, { status: 400 })

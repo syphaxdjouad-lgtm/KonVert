@@ -22,7 +22,7 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import type { SectionInstance } from '@/types/editor'
-import { IconDragHandle, IconEye, IconEyeOff, IconKebab, IconPlus } from './Icons'
+import { IconDragHandle, IconEye, IconEyeOff, IconKebab } from './Icons'
 import KebabMenu from './KebabMenu'
 
 // Labels i18n inline
@@ -272,7 +272,6 @@ function SectionRow({ section, isOverlay = false }: SectionRowProps) {
 
       {/* Kebab menu rendered via portal-style (fixed) */}
       <KebabMenu
-        sectionId={section.id}
         sectionLabel={label}
         anchorRef={kebabRef}
         isOpen={kebabOpen}

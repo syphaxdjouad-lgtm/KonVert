@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import Link from 'next/link'
-import { Zap, ArrowRight, Check, Shield, Globe, Palette, BarChart3, Copy, ExternalLink, Sparkles, Clock, AlertCircle, Link2, Bot, Rocket } from 'lucide-react'
+import { Zap, ArrowRight, Check, Shield, Globe, Palette, Copy, Sparkles, AlertCircle, Link2, Bot, Rocket } from 'lucide-react'
 
 /* ── TEMPLATES DISPONIBLES ─────────────────────────────────────────────────── */
 const DEMO_TEMPLATES = [
@@ -26,10 +26,7 @@ const DEMO_URLS = [
 ]
 
 /* ── GÉNÉRER UN APERÇU FICTIF ───────────────────────────────────────────────── */
-function generateMockPage(url: string, templateId: string, lang: string) {
-  const isAliExpress = url.includes('aliexpress')
-  const isAmazon     = url.includes('amazon')
-
+function generateMockPage(url: string) {
   const products: Record<string, { title: string; price: string; desc: string; benefits: string[]; faq: { q: string; a: string }[] }> = {
     'aliexpress.com/item/bluetooth': {
       title:    'Écouteurs Bluetooth Pro 5.0 — Son Stéréo HD 40h Autonomie',
@@ -98,7 +95,7 @@ export default function DemoPage() {
     }
 
     await new Promise((r) => setTimeout(r, 300))
-    const mockResult = generateMockPage(url, selectedTpl, selectedLang)
+    const mockResult = generateMockPage(url)
     setResult(mockResult)
     setStep('result')
     setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)

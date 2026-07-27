@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Mail, MessageSquare, Phone, MapPin, ArrowRight, Check, Clock, Zap, Building2 } from 'lucide-react'
+import { Mail, MessageSquare, MapPin, ArrowRight, Check, Clock, Zap, Building2 } from 'lucide-react'
 
 const GLOBAL_CSS = `
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }

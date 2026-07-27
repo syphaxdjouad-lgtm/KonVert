@@ -603,7 +603,7 @@ function Slide3() {
                 <span className="text-[11px] font-semibold" style={{ color: 'rgba(255,255,255,0.4)' }}>Conversions — 7 derniers jours</span>
               </div>
               <div className="flex items-end gap-2" style={{ height: '80px' }}>
-                {[40, 65, 50, 80, 60, 90, 75].map((h, i) => (
+                {bars.map((h, i) => (
                   <div key={i} className="flex-1 flex flex-col items-center gap-1">
                     <div
                       className="w-full rounded-md"

@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, cleanup } from '@testing-library/react'
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import KebabMenu from '../KebabMenu'
 
 // Wrapper qui fournit un anchorRef avec un vrai element DOM attache
@@ -13,21 +13,19 @@ function KebabMenuWithAnchor(props: {
   onDelete: () => void
 }) {
   const anchorRef = useRef<HTMLButtonElement | null>(null)
-  return React.createElement('div', null,
-    React.createElement('button', {
-      ref: anchorRef,
-      'data-testid': 'anchor-btn',
-    }, '...'),
-    React.createElement(KebabMenu, {
-      sectionId: 'sec-1',
-      sectionLabel: 'Hero',
-      anchorRef,
-      isOpen: props.isOpen,
-      onClose: props.onClose,
-      onEdit: props.onEdit,
-      onDuplicate: props.onDuplicate,
-      onDelete: props.onDelete,
-    }),
+  return (
+    <div>
+      <button ref={anchorRef} data-testid="anchor-btn">...</button>
+      <KebabMenu
+        sectionLabel="Hero"
+        anchorRef={anchorRef}
+        isOpen={props.isOpen}
+        onClose={props.onClose}
+        onEdit={props.onEdit}
+        onDuplicate={props.onDuplicate}
+        onDelete={props.onDelete}
+      />
+    </div>
   )
 }
 
@@ -45,7 +43,7 @@ describe('KebabMenu', () => {
 
   it('rend les 3 actions quand isOpen=true', () => {
     const props = { isOpen: true, onClose: vi.fn(), onEdit: vi.fn(), onDuplicate: vi.fn(), onDelete: vi.fn() }
-    render(React.createElement(KebabMenuWithAnchor, props))
+    render(<KebabMenuWithAnchor {...props} />)
     // hidden:true car le menu peut etre visuellement hors viewport dans jsdom
     expect(screen.getByRole('menuitem', { name: /editer/i, hidden: true })).toBeDefined()
     expect(screen.getByRole('menuitem', { name: /dupliquer/i, hidden: true })).toBeDefined()
@@ -54,7 +52,7 @@ describe('KebabMenu', () => {
 
   it('click Editer appelle onEdit puis onClose', () => {
     const props = { isOpen: true, onClose: vi.fn(), onEdit: vi.fn(), onDuplicate: vi.fn(), onDelete: vi.fn() }
-    render(React.createElement(KebabMenuWithAnchor, props))
+    render(<KebabMenuWithAnchor {...props} />)
     fireEvent.click(screen.getByRole('menuitem', { name: /editer/i, hidden: true }))
     expect(props.onEdit).toHaveBeenCalledOnce()
     expect(props.onClose).toHaveBeenCalledOnce()
@@ -62,7 +60,7 @@ describe('KebabMenu', () => {
 
   it('click Dupliquer appelle onDuplicate puis onClose', () => {
     const props = { isOpen: true, onClose: vi.fn(), onEdit: vi.fn(), onDuplicate: vi.fn(), onDelete: vi.fn() }
-    render(React.createElement(KebabMenuWithAnchor, props))
+    render(<KebabMenuWithAnchor {...props} />)
     fireEvent.click(screen.getByRole('menuitem', { name: /dupliquer/i, hidden: true }))
     expect(props.onDuplicate).toHaveBeenCalledOnce()
     expect(props.onClose).toHaveBeenCalledOnce()
@@ -70,7 +68,7 @@ describe('KebabMenu', () => {
 
   it('click Supprimer appelle onDelete puis onClose', () => {
     const props = { isOpen: true, onClose: vi.fn(), onEdit: vi.fn(), onDuplicate: vi.fn(), onDelete: vi.fn() }
-    render(React.createElement(KebabMenuWithAnchor, props))
+    render(<KebabMenuWithAnchor {...props} />)
     fireEvent.click(screen.getByRole('menuitem', { name: /supprimer/i, hidden: true }))
     expect(props.onDelete).toHaveBeenCalledOnce()
     expect(props.onClose).toHaveBeenCalledOnce()
@@ -78,14 +76,14 @@ describe('KebabMenu', () => {
 
   it('ESC appelle onClose', () => {
     const props = { isOpen: true, onClose: vi.fn(), onEdit: vi.fn(), onDuplicate: vi.fn(), onDelete: vi.fn() }
-    render(React.createElement(KebabMenuWithAnchor, props))
+    render(<KebabMenuWithAnchor {...props} />)
     fireEvent.keyDown(document, { key: 'Escape' })
     expect(props.onClose).toHaveBeenCalledOnce()
   })
 
   it('click sur l\'overlay appelle onClose', () => {
     const props = { isOpen: true, onClose: vi.fn(), onEdit: vi.fn(), onDuplicate: vi.fn(), onDelete: vi.fn() }
-    render(React.createElement(KebabMenuWithAnchor, props))
+    render(<KebabMenuWithAnchor {...props} />)
     // L'overlay a onMouseDown=onClose. Peut etre appele plusieurs fois (double-listener jsdom)
     const allDivs = document.querySelectorAll('div[style*="inset"]')
     if (allDivs.length > 0) {
@@ -99,7 +97,7 @@ describe('KebabMenu', () => {
 
   it('isOpen=false : le menu a opacity=0 et pointerEvents=none', () => {
     const props = { isOpen: false, onClose: vi.fn(), onEdit: vi.fn(), onDuplicate: vi.fn(), onDelete: vi.fn() }
-    render(React.createElement(KebabMenuWithAnchor, props))
+    render(<KebabMenuWithAnchor {...props} />)
     const menu = screen.getByRole('menu', { hidden: true })
     const style = (menu as HTMLElement).style
     expect(style.opacity).toBe('0')

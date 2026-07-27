@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Check, Users, BarChart3, Zap, Shield, Globe, FileText, Building2, Star } from 'lucide-react'
+import { ArrowRight, Users, BarChart3, Zap, Shield, Globe, FileText, Building2, Star } from 'lucide-react'
 
 const FEATURES_AGENCE = [
   {

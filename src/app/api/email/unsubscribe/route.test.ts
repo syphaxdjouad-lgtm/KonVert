@@ -33,14 +33,12 @@ vi.mock('@/lib/supabase/admin', () => ({
   },
 }))
 
-// ── Mock rateLimitAsync — expose un compteur pour simuler le dépassement ────
+// ── Mock rateLimitAsync — simule le dépassement de quota ────────────────────
 
-let rateLimitCallCount = 0
 let rateLimitShouldBlock = false
 
 vi.mock('@/lib/security/ratelimit', () => ({
-  rateLimitAsync: vi.fn(async (_key: string, _limit: number, _windowMs: number) => {
-    rateLimitCallCount++
+  rateLimitAsync: vi.fn(async () => {
     if (rateLimitShouldBlock) {
       return { allowed: false, remaining: 0, retryAfterMs: 30_000 }
     }
@@ -78,7 +76,6 @@ function makeGetRequest(params: Record<string, string>, ip = '1.2.3.4'): NextReq
 // ── Tests ────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
-  rateLimitCallCount = 0
   rateLimitShouldBlock = false
 })
 

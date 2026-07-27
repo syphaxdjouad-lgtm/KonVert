@@ -3,9 +3,9 @@
 import { useState, useEffect, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Plus, Trash2, CheckCircle, AlertCircle, Zap, ExternalLink, Link2, X } from 'lucide-react'
-import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { PlatformLogo } from '@/components/ui/platform-logo'
+import type { Store } from '@/types'
 
 /* ── Modale de confirmation ─────────────────────────────────────────────── */
 function ConfirmModal({
@@ -72,7 +72,7 @@ function ConfirmModal({
 
 /* ── Contenu principal ──────────────────────────────────────────────────── */
 function StoresContent() {
-  const [stores, setStores]               = useState<any[]>([])
+  const [stores, setStores]               = useState<Store[]>([])
   const [loading, setLoading]             = useState(true)
   const [wooForm, setWooForm]             = useState(false)
   const [wooData, setWooData]             = useState({ store_url: '', consumer_key: '', consumer_secret: '' })
@@ -445,7 +445,7 @@ function StoresContent() {
   )
 }
 
-function StoreCard({ store, onDelete }: { store: any; onDelete: () => void }) {
+function StoreCard({ store, onDelete }: { store: Store; onDelete: () => void }) {
   const isShopify  = store.platform === 'shopify'
   const isYouCan   = store.platform === 'youcan'
   const color      = isShopify ? '#16a34a' : isYouCan ? '#f97316' : '#7c3aed'

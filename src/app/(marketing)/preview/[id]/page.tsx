@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { Lock, Sparkles, Clock, ArrowRight, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { track } from '@/lib/analytics'
@@ -39,7 +39,6 @@ function useCountdown(expiresAt: string | null) {
 
 export default function PreviewPage() {
   const { id } = useParams<{ id: string }>()
-  const router = useRouter()
   const [data, setData] = useState<PreviewData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

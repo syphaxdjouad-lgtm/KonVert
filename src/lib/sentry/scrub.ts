@@ -1,4 +1,4 @@
-import type { ErrorEvent, EventHint } from '@sentry/nextjs'
+import type { ErrorEvent } from '@sentry/nextjs'
 
 // Masque les patterns sensibles connus dans les chaînes envoyées à Sentry.
 // Volontairement large : on préfère perdre du contexte qu'envoyer du PII.
@@ -48,7 +48,11 @@ export function scrubValue(v: unknown, depth = 0): unknown {
 
 // Hook beforeSend Sentry : on traverse les champs susceptibles de contenir du PII
 // (message, breadcrumbs, request, extra, tags, contexts) et on masque.
-export function scrubEvent(event: ErrorEvent, _hint?: EventHint): ErrorEvent {
+// Signature compatible avec Sentry.init({ beforeSend }) même si le 2e
+// paramètre (hint) n'est pas consommé ici — non câblé dans une config Sentry
+// pour le moment (recherche du 27/07 : aucun beforeSend ne référence
+// scrubEvent), à vérifier séparément avec SASORI/MADARA.
+export function scrubEvent(event: ErrorEvent): ErrorEvent {
   if (event.message) event.message = scrubString(event.message)
 
   if (event.breadcrumbs) {

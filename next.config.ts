@@ -97,6 +97,8 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'images.pexels.com' },
       // Supabase Storage (produits uploadés par l'utilisateur, dashboard/new)
       { protocol: 'https', hostname: '**.supabase.co' },
+      // Pravatar (avatar mock — LeadEnrichmentDemo, section marketing)
+      { protocol: 'https', hostname: 'i.pravatar.cc' },
     ],
   },
 };

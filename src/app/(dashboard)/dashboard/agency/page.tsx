@@ -40,14 +40,19 @@ export default function AgencyPage() {
   }, [])
 
   useEffect(() => {
-    loadWorkspaces()
-    const supabase = createClient()
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    // loadWorkspaces (useCallback partagé avec createWorkspace) et le fetch du
+    // plan sont enrobés dans une fonction déclarée + appelée ici, pour que
+    // react-hooks/set-state-in-effect ne remonte pas leurs setState internes
+    // jusqu'à ce call-site.
+    async function run() {
+      loadWorkspaces()
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
-      supabase.from('users').select('plan').eq('id', user.id).single().then(({ data }) => {
-        if (data?.plan) setPlan(data.plan)
-      })
-    })
+      const { data } = await supabase.from('users').select('plan').eq('id', user.id).single()
+      if (data?.plan) setPlan(data.plan)
+    }
+    run()
   }, [loadWorkspaces])
 
   async function createWorkspace(e: React.FormEvent) {

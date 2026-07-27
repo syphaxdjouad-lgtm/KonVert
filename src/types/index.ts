@@ -37,7 +37,10 @@ export interface Subscription {
 
 // ─── STORE ───────────────────────────────────────────────────────────────────
 
-export type StorePlatform = 'shopify' | 'woocommerce'
+// 'youcan' ajouté après coup — la colonne DB et PlatformLogo l'acceptent déjà,
+// ce type ne reflétait pas cette 3e plateforme (d'où les `any` de contournement
+// dans les pages stores/publish).
+export type StorePlatform = 'shopify' | 'woocommerce' | 'youcan'
 
 export interface Store {
   id: string

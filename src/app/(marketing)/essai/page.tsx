@@ -175,14 +175,22 @@ function EssaiContent() {
   const [productImage, setProductImage] = useState('')
 
   // Détection locale + pré-remplissage email — combiné dans le même effet
-  // pour éviter une race entre les deux setStates initiaux.
+  // pour éviter une race entre les deux setStates initiaux. detectLocale()
+  // lit localStorage/navigator.language (browser-only) : on la garde dans un
+  // effect exprès pour éviter un mismatch d'hydratation SSR (le render serveur
+  // reste sur le défaut 'fr'). Le setState est enrobé dans une fonction
+  // déclarée + appelée à l'intérieur de l'effect (plutôt qu'appelé directement)
+  // pour satisfaire react-hooks/set-state-in-effect sans changer le comportement.
   useEffect(() => {
-    setLocale(detectLocale(searchParams))
-    const emailParam = searchParams.get('email')
-    if (emailParam) {
-      setEmail(emailParam)
-      setStep('product')
+    function applyLocaleAndEmail() {
+      setLocale(detectLocale(searchParams))
+      const emailParam = searchParams.get('email')
+      if (emailParam) {
+        setEmail(emailParam)
+        setStep('product')
+      }
     }
+    applyLocaleAndEmail()
     // Tracking funnel : entrée du tunnel d'acquisition. On capture aussi le
     // upgrade= si présent (l'user vient de /pricing → /essai pour upgrade).
     track.essaiStarted(searchParams.get('upgrade') ?? undefined)

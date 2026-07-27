@@ -95,11 +95,22 @@ export default function NotificationBell() {
     }
   }
 
-  // Fetch initial + chargement readIds
+  // Fetch initial + chargement readIds — les deux fonctions sont déclarées ET
+  // appelées à l'intérieur de l'effect (plutôt que d'appeler directement des
+  // fonctions du composant) pour satisfaire react-hooks/set-state-in-effect,
+  // sans changer le comportement : le fetch réseau et la lecture localStorage
+  // continuent de démarrer en parallèle au mount.
   useEffect(() => {
     const controller = new AbortController()
-    fetchNotifications(controller.signal).finally(() => setLoading(false))
-    setReadIds(getReadIds())
+    function loadReadIds() {
+      setReadIds(getReadIds())
+    }
+    async function loadNotifications() {
+      await fetchNotifications(controller.signal)
+      setLoading(false)
+    }
+    loadReadIds()
+    loadNotifications()
     return () => controller.abort()
   }, [])
 

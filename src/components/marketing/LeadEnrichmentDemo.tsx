@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import { BarChart2 } from 'lucide-react'
 
 /* ─── Données mockup dashboard ─────────────────────────────────────────── */
@@ -317,7 +318,7 @@ export default function LeadEnrichmentDemo() {
 
               {/* Avatar + identité */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                <img
+                <Image
                   src="https://i.pravatar.cc/48?img=12"
                   alt="Alexandre Martin"
                   width={48}

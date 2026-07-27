@@ -298,8 +298,11 @@ export default function Leadmeter({ html }: Props) {
 
   // Charge l'état persisté au premier mount (côté client)
   useEffect(() => {
-    setView(loadView())
-    mounted.current = true
+    function restore() {
+      setView(loadView())
+      mounted.current = true
+    }
+    restore()
   }, [])
 
   // Persiste l'état

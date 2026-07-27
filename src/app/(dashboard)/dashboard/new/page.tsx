@@ -14,7 +14,11 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import type { LandingPageData } from '@/types'
+import type { LandingPageData, Store } from '@/types'
+
+// Sélection partielle de la table stores (uniquement les colonnes utilisées
+// par le sélecteur de publication) — plutôt qu'un `any` de contournement.
+type StoreOption = Pick<Store, 'id' | 'name' | 'platform' | 'store_url'>
 import { track } from '@/lib/analytics'
 import { PlatformLogo } from '@/components/ui/platform-logo'
 
@@ -453,7 +457,7 @@ function NewPageInner() {
   const [saving,      setSaving]      = useState(false)
 
   // Publication vers store
-  const [stores,         setStores]         = useState<any[]>([])
+  const [stores,         setStores]         = useState<StoreOption[]>([])
   const [publishOpen,    setPublishOpen]     = useState(false)
   const [publishing,     setPublishing]      = useState<string | null>(null)
   const [publishSuccess, setPublishSuccess]  = useState<{ name: string; url?: string } | null>(null)
@@ -610,7 +614,7 @@ function NewPageInner() {
   }, [])
 
   // ── Publication vers store ──
-  async function publishToStore(store: any) {
+  async function publishToStore(store: StoreOption) {
     if (!pageId) return
     setPublishing(store.id)
     setPublishError(null)
@@ -681,7 +685,7 @@ function NewPageInner() {
   // n'est pas dimensionné pour des MP4 multi-MB côté MVP. L'utilisateur peut
   // toujours coller des liens YouTube/TikTok via l'onglet "Liens externes".
   // (cf bug #4 audit lancement)
-  function handleVideoUpload(_e: React.ChangeEvent<HTMLInputElement>) {
+  function handleVideoUpload() {
     setUploadError('L\'upload vidéo est temporairement indisponible — utilise l\'onglet "Liens externes" (YouTube, TikTok…)')
   }
 
@@ -1061,22 +1065,10 @@ function NewPageInner() {
     }
   }
 
-  function changeTemplate(id: string) {
-    setSelectedStyle(id)
-    // Styles V3 (soft, editorial, apple-clean, etc.) ne sont pas rendus
-    // côté client : renderPageV3 vit en serveur. L'user doit re-générer
-    // (clic sur Régénérer) — preview du nouveau style impossible inline.
-    const isV3Style = V3_STYLES.some(s => s.id === id)
-    if (isV3Style) {
-      setError('Style V3 sélectionné. Pour appliquer le rendu, regénère la page (l\'éditeur ne preview pas les V3 inline).')
-      return
-    }
-    if (landingData) {
-      import('@/lib/templates').then(({ renderTemplate }) => {
-        setHtml(renderTemplate(id, landingData))
-      })
-    }
-  }
+  // Note : changeTemplate (switch de template inline post-génération) était
+  // définie mais jamais appelée depuis aucun élément UI — supprimée comme code
+  // mort. Si un sélecteur de template inline était prévu, à réintroduire avec
+  // son point d'entrée UI (cf KISAME/spec produit avant de la reconstruire).
 
   // ── Chargement page existante ──
   if (loadingPage) {

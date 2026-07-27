@@ -180,7 +180,7 @@ const COMPARE_ROWS = [
   { label: 'Support', konvert: '24h, en français', diy: 'Forum, articles, YouTube', freelance: 'Selon dispo' },
 ]
 
-function FeatureVisualContent({ id, accent }: { id: string; accent: string }) {
+function FeatureVisualContent({ id }: { id: string }) {
   // ── IA ──────────────────────────────────────────────────────────────────────
   if (id === 'ia') {
     return (
@@ -538,7 +538,6 @@ export default function FeaturesPage() {
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 space-y-24">
           {FEATURES_MAIN.map((f) => {
-            const { icon: Icon } = f
             return (
               <div key={f.id} id={f.id} className={`grid lg:grid-cols-2 gap-14 items-center ${f.reversed ? 'lg:grid-flow-dense' : ''}`}>
 
@@ -573,7 +572,7 @@ export default function FeaturesPage() {
                 {/* Visual */}
                 <div className={`reveal delay-2 ${f.reversed ? 'lg:col-start-1 lg:row-start-1' : ''} rounded-3xl relative overflow-hidden`}
                      style={{ background: `linear-gradient(135deg, ${f.accent}15 0%, ${f.accent}06 100%)`, minHeight: '320px' }}>
-                  <FeatureVisualContent id={f.id} accent={f.accent} />
+                  <FeatureVisualContent id={f.id} />
                 </div>
               </div>
             )

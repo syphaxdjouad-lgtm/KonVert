@@ -27,8 +27,10 @@ export default function OnboardingChecklist({ pagesCount, storesCount, published
   const [collapsed, setCollapsed] = useState(false)
 
   useEffect(() => {
-    const d = localStorage.getItem(DISMISS_KEY) === '1'
-    setDismissed(d)
+    function restoreDismissed() {
+      setDismissed(localStorage.getItem(DISMISS_KEY) === '1')
+    }
+    restoreDismissed()
   }, [])
 
   const steps: Step[] = [

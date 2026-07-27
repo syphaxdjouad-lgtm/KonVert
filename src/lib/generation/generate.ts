@@ -437,28 +437,13 @@ const buildSystemPrompt = (language: string): string => {
     "discount_label": "ex: '-15% sur le bundle' — max 60 chars"
   }` : ''
 
-  const V2_RULES_BLOCK = USE_V2_PROMPT ? `
-26. photo_descriptions : 3 à 6 entrées. Décris une scène photo réaliste UGC pour chaque sentiment (before, during, after, lifestyle). Genre + âge apparent + contexte + lumière. Ces descriptions servent de prompts pour générateur d'images ou d'alt-text de placeholders.
-27. payment_methods : sélectionne parmi ["visa","mastercard","amex","paypal","apple_pay","google_pay","klarna","alma"]. Beauty/mode → ajoute "klarna" ou "alma". Tech → "apple_pay" en priorité. Si tu ne peux pas inférer la catégorie, retourne ["visa","mastercard","paypal","apple_pay"].
-28. press_logos : RÈGLE STRICTE ZÉRO TOLÉRANCE — retourne [] par défaut, TOUJOURS.
-    N'ajoute une publication QUE si les DEUX conditions sont réunies :
-    (a) la marque est une DTC mondialement établie (> 5 000 avis clients sur le produit)
-        ET ressort comme couverte historiquement par cette publication,
-    OU (b) le nom exact de la publication apparaît littéralement dans la
-        description produit fournie ("As seen in...", "Featured in...").
-    La publication DOIT figurer dans cette liste exacte (sinon → []) :
-    ["Vogue", "Elle", "Marie Claire", "Allure", "Harper's Bazaar", "Glamour",
-     "Cosmopolitan", "Grazia", "Elle Décoration", "Marie Claire Maison", "AD",
-     "Côté Maison", "Madame Figaro", "Le Figaro Madame", "Forbes", "TechCrunch",
-     "The Verge", "Wired", "Fast Company", "GQ", "Business of Fashion",
-     "Refinery29", "Women's Health", "Yoga Journal", "30 Millions d'Amis",
-     "Le Monde", "Le Figaro", "Les Echos"].
-    INTERDIT ABSOLU pour : tout produit AliExpress, dropshipping no-name,
-    boutique < 5 000 avis → press_logos = [] obligatoire.
-    En cas de doute minimal → []. Mieux vaut [] qu'halluciner.
-    Max 3 entrées si tu en mets.
-29. stock_signal : "limited_stock" si produit saisonnier/tendance/édition limitée. "high_demand" si produit viral/bestseller. "back_in_stock" si indisponible puis revenu (utilise si la description le suggère). "limited_time" uniquement si une promotion réelle est mentionnée. null si aucun signal d'urgence plausible. Ne jamais inventer de stock fictif non justifié.
-30. bundle_offer : propose 1 bundle logique si la catégorie est beauty/wellness/pet/mode/déco (2-3 produits complémentaires sensés). Retourne null si le produit est standalone et sans complémentaire évident (ex: un casque audio seul, un ustensile unique).` : ''
+  // Note : les règles 26-30 (photo_descriptions/payment_methods/press_logos/
+  // stock_signal/bundle_offer) sont définies plus bas, inline dans le prompt
+  // (cf. USE_V2_PROMPT ? ... vers la ligne 690) — c'est cette version qui est
+  // réellement interpolée. Un bloc V2_RULES_BLOCK dupliquant ces mêmes règles
+  // existait ici mais n'était jamais interpolé dans le prompt final (variable
+  // assignée puis jamais lue) ; supprimé pour éviter la confusion entre les
+  // deux versions du guardrail anti-hallucination press_logos.
 
   return `Tu es un copywriter e-commerce d'élite, spécialiste de la conversion sur les landing pages produit (DTC, dropshipping, marques digitales).
 

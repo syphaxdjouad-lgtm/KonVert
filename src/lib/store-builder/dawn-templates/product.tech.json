@@ -1,0 +1,504 @@
+{
+  "sections": {
+    "konvert-urgency-bar": {
+      "type": "konvert-urgency-bar",
+      "settings": {
+        "message_default": "Commande avant 17h : expédition le jour même",
+        "message_with_stock": "Il reste [count] en stock — commande avant rupture",
+        "show_stock_count": true,
+        "only_show_when_low_stock": false,
+        "stock_threshold": 10,
+        "show_countdown": false,
+        "countdown_minutes": 15,
+        "color_scheme": "scheme-1",
+        "background_color": "#FFF4E5",
+        "text_color": "#7A4A00",
+        "accent_color": "#E8590C"
+      }
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
+          "type": "title"
+        },
+        "caption": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.metafields.descriptors.subtitle.value }}",
+            "text_style": "subtitle"
+          }
+        },
+        "price": {
+          "type": "price"
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector"
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "description": {
+          "type": "description"
+        },
+        "collapsible-row-0": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Materials",
+            "icon": "leather",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible-row-1": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Returns",
+            "icon": "truck",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible-row-2": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Dimensions",
+            "icon": "ruler",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible-row-3": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Care Instructions",
+            "icon": "heart",
+            "content": "",
+            "page": ""
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "caption",
+        "price",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "description",
+        "collapsible-row-0",
+        "collapsible-row-1",
+        "collapsible-row-2",
+        "collapsible-row-3",
+        "share"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "gallery_layout": "stacked",
+        "media_size": "large",
+        "constrain_to_viewport": true,
+        "mobile_thumbnails": "hide",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 12
+      }
+    },
+    "konvert-comparison-table": {
+      "type": "konvert-comparison-table",
+      "blocks": {
+        "row-0": {
+          "type": "comparison_row",
+          "settings": {
+            "label": "Compatibilité",
+            "us_value": "custom",
+            "us_text": "[Listez les appareils/OS réellement compatibles, ex. iOS et Android]",
+            "them_value": "custom",
+            "them_text": "[Variable]"
+          }
+        },
+        "row-1": {
+          "type": "comparison_row",
+          "settings": {
+            "label": "Autonomie / performance",
+            "us_value": "custom",
+            "us_text": "[Précisez votre chiffre réel, ex. 20h d'écoute continue]",
+            "them_value": "custom",
+            "them_text": "[Variable]"
+          }
+        },
+        "row-2": {
+          "type": "comparison_row",
+          "settings": {
+            "label": "Garantie",
+            "us_value": "custom",
+            "us_text": "[Précisez votre durée réelle, ex. 2 ans]",
+            "them_value": "custom",
+            "them_text": "[Souvent 6 mois ou moins]"
+          }
+        },
+        "row-3": {
+          "type": "comparison_row",
+          "settings": {
+            "label": "Prix",
+            "us_value": "custom",
+            "us_text": "[Précisez votre prix réel ou positionnement, ex. \"prix juste, sans intermédiaire\"]",
+            "them_value": "custom",
+            "them_text": "[Variable]"
+          }
+        }
+      },
+      "block_order": ["row-0", "row-1", "row-2", "row-3"],
+      "settings": {
+        "heading": "Pourquoi choisir [Nom de votre marque]",
+        "subheading": "Comparé à un accessoire premier prix",
+        "criteria_column_label": "Critère",
+        "us_column_label": "[Nom de votre marque]",
+        "them_column_label": "Marque générique",
+        "color_scheme": "scheme-1",
+        "heading_color": "#1A1A1A",
+        "us_column_color": "#EFF7EE",
+        "us_accent_color": "#2F8132",
+        "border_color": "#E5E5E5"
+      }
+    },
+    "konvert-testimonials-carousel": {
+      "type": "konvert-testimonials-carousel",
+      "blocks": {
+        "testimonial-0": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "[Remplacez par un prénom/nom de client réel]",
+            "rating": 0,
+            "date": "",
+            "quote": "[Remplacez par un avis client réel — ne publiez jamais un témoignage fictif]"
+          }
+        },
+        "testimonial-1": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "[Remplacez par un prénom/nom de client réel]",
+            "rating": 0,
+            "date": "",
+            "quote": "[Remplacez par un avis client réel — ne publiez jamais un témoignage fictif]"
+          }
+        },
+        "testimonial-2": {
+          "type": "testimonial",
+          "settings": {
+            "author_name": "[Remplacez par un prénom/nom de client réel]",
+            "rating": 0,
+            "date": "",
+            "quote": "[Remplacez par un avis client réel — ne publiez jamais un témoignage fictif]"
+          }
+        }
+      },
+      "block_order": ["testimonial-0", "testimonial-1", "testimonial-2"],
+      "settings": {
+        "heading": "Ce qu'en disent nos utilisateurs",
+        "color_scheme": "scheme-1",
+        "background_color": "#FFFFFF",
+        "text_color": "#1A1A1A",
+        "star_color": "#E8590C",
+        "accent_color": "#1A1A1A"
+      }
+    },
+    "konvert-social-proof": {
+      "type": "konvert-social-proof",
+      "settings": {
+        "proof_type": "custom_text",
+        "proof_number": "",
+        "proof_label": "",
+        "custom_text": "[Complétez avec un chiffre réel, ex. « 3 000+ appareils livrés et garantis »]",
+        "color_scheme": "scheme-1",
+        "text_color": "#1A1A1A",
+        "number_color": "#1A1A1A"
+      }
+    },
+    "konvert-founder-story": {
+      "type": "konvert-founder-story",
+      "settings": {
+        "heading": "Pourquoi on a créé [Nom de votre marque]",
+        "story": "<p>Tout a commencé quand [décrivez le déclic réel : un accessoire qui a lâché trop vite, une compatibilité jamais annoncée clairement, un SAV injoignable ailleurs].</p><p>On a voulu des produits [décrivez votre exigence réelle : testés, garantis, avec un vrai support après achat] — sans le prix gonflé des grandes marques ni la fragilité du premier prix.</p><p>Aujourd'hui, [décrivez où vous en êtes et votre mission actuelle].</p>",
+        "founder_name": "",
+        "founder_role": "Fondateur",
+        "enable_video_looping": false,
+        "media_position": "left",
+        "color_scheme": "scheme-1",
+        "heading_color": "#1A1A1A",
+        "text_color": "#3A3A3A",
+        "accent_color": "#1A1A1A"
+      }
+    },
+    "konvert-faq-rich": {
+      "type": "konvert-faq-rich",
+      "blocks": {
+        "question-0": {
+          "type": "question",
+          "settings": {
+            "question": "Est-ce compatible avec mon téléphone / appareil ?",
+            "answer": "<p>[Listez les appareils, marques ou systèmes réellement compatibles, ex. iOS 15+ et Android 10+.] En cas de doute, contactez-nous avant commande.</p>"
+          }
+        },
+        "question-1": {
+          "type": "question",
+          "settings": {
+            "question": "Combien de temps dure la batterie / l'autonomie ?",
+            "answer": "<p>[Précisez votre chiffre réel testé, ex. \"20h d'autonomie en utilisation continue\".] Le temps de charge complet est de [durée réelle, ex. 1h30].</p>"
+          }
+        },
+        "question-2": {
+          "type": "question",
+          "settings": {
+            "question": "Que contient exactement la boîte ?",
+            "answer": "<p>[Listez le contenu réel du packaging : produit, câble, notice, accessoires inclus.]</p>"
+          }
+        },
+        "question-3": {
+          "type": "question",
+          "settings": {
+            "question": "Le produit est-il garanti ?",
+            "answer": "<p>[Précisez votre durée de garantie réelle, ex. 2 ans] contre les défauts de fabrication. [Ajoutez la procédure réelle en cas de panne : contact SAV, échange, remboursement.]</p>"
+          }
+        },
+        "question-4": {
+          "type": "question",
+          "settings": {
+            "question": "Quel est le délai de livraison ?",
+            "answer": "<p>Votre commande est traitée sous [délai de traitement réel] puis expédiée. Le délai de livraison est de [délai réel, ex. 3 à 7 jours ouvrés] selon votre pays. Vous recevez un numéro de suivi par email dès l'expédition.</p>"
+          }
+        },
+        "question-5": {
+          "type": "question",
+          "settings": {
+            "question": "Que faire si le produit ne fonctionne pas à la réception ?",
+            "answer": "<p>[Décrivez votre procédure SAV réelle : contact, délai de réponse, échange ou remboursement.] Contactez-nous avant tout retour pour un diagnostic rapide.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question-0",
+        "question-1",
+        "question-2",
+        "question-3",
+        "question-4",
+        "question-5"
+      ],
+      "settings": {
+        "heading": "Questions fréquentes",
+        "open_first_item": false,
+        "color_scheme": "scheme-1",
+        "heading_color": "#1A1A1A",
+        "accent_color": "#1A1A1A",
+        "border_color": "#E5E5E5"
+      }
+    },
+    "konvert-sticky-atc-mobile": {
+      "type": "konvert-sticky-atc-mobile",
+      "settings": {
+        "show_thumbnail": true,
+        "add_to_cart_label": "Ajouter au panier",
+        "sold_out_label": "Rupture de stock",
+        "color_scheme": "scheme-1",
+        "background_color": "#FFFFFF",
+        "text_color": "#1A1A1A",
+        "border_color": "#E5E5E5"
+      }
+    },
+    "konvert-guarantees": {
+      "type": "konvert-guarantees",
+      "blocks": {
+        "guarantee-0": {
+          "type": "guarantee",
+          "settings": {
+            "icon": "check_mark",
+            "title": "Garantie [durée réelle, ex. 2 ans]",
+            "text": "<p>Un défaut de fabrication ? Vous êtes couvert pendant [durée réelle]. [Précisez la procédure réelle : échange, réparation, remboursement.]</p>"
+          }
+        },
+        "guarantee-1": {
+          "type": "guarantee",
+          "settings": {
+            "icon": "truck",
+            "title": "Livraison suivie",
+            "text": "<p>Votre commande est expédiée sous [délai de traitement réel] avec un numéro de suivi envoyé par email.</p>"
+          }
+        },
+        "guarantee-2": {
+          "type": "guarantee",
+          "settings": {
+            "icon": "chat_bubble",
+            "title": "SAV réactif",
+            "text": "<p>Un souci technique ? Notre équipe répond sous [délai réel, ex. 24h] et vous accompagne jusqu'à la résolution.</p>"
+          }
+        },
+        "guarantee-3": {
+          "type": "guarantee",
+          "settings": {
+            "icon": "lock",
+            "title": "Paiement 100% sécurisé",
+            "text": "<p>Vos données bancaires sont protégées. Paiement via [moyens réellement activés, ex. Shopify Payments, PayPal].</p>"
+          }
+        }
+      },
+      "block_order": ["guarantee-0", "guarantee-1", "guarantee-2", "guarantee-3"],
+      "settings": {
+        "heading": "Nos garanties",
+        "columns_desktop": 4,
+        "scroll_on_mobile": true,
+        "color_scheme": "scheme-1",
+        "heading_color": "#1A1A1A",
+        "icon_color": "#1A1A1A",
+        "title_color": "#1A1A1A",
+        "text_color": "#5C5C5C"
+      }
+    },
+    "image-with-text": {
+      "type": "image-with-text",
+      "blocks": {
+        "image-with-text-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "Image with text",
+            "heading_size": "h1"
+          }
+        },
+        "image-with-text-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "image-with-text-0",
+        "image-with-text-1"
+      ],
+      "settings": {
+        "height": "small",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "color_scheme": "scheme-2",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "multicolumn": {
+      "type": "multicolumn",
+      "blocks": {
+        "column-0": {
+          "type": "column",
+          "settings": {
+            "title": "Free Shipping",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column-1": {
+          "type": "column",
+          "settings": {
+            "title": "Hassle-Free Exchanges",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column-0",
+        "column-1"
+      ],
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 2,
+        "column_alignment": "left",
+        "background_style": "none",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_mobile": false,
+        "color_scheme": "scheme-1",
+        "columns_mobile": "1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "columns_desktop": 4,
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "columns_mobile": "2",
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    },
+    "konvert-exit-intent": {
+      "type": "konvert-exit-intent",
+      "settings": {
+        "heading": "Avant de partir...",
+        "text": "<p>[Nom du produit] pourrait ne plus être en stock la prochaine fois. [Ajoutez votre offre réelle ici si vous en avez une.]</p>",
+        "promo_code": "",
+        "cta_label": "Je finalise ma commande",
+        "cta_link": "",
+        "color_scheme": "scheme-1",
+        "background_color": "#FFFFFF",
+        "text_color": "#1A1A1A",
+        "accent_color": "#1A1A1A"
+      }
+    }
+  },
+  "order": [
+    "konvert-urgency-bar",
+    "main",
+    "konvert-sticky-atc-mobile",
+    "konvert-guarantees",
+    "konvert-comparison-table",
+    "konvert-testimonials-carousel",
+    "konvert-social-proof",
+    "konvert-founder-story",
+    "image-with-text",
+    "multicolumn",
+    "konvert-faq-rich",
+    "related-products",
+    "konvert-exit-intent"
+  ]
+}

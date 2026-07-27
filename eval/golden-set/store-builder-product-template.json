@@ -1,0 +1,104 @@
+{
+  "_comment": "Golden set Store Builder Sprint 7 — spec MINATO §7.1. Pas de sortie 'attendue' figée (générateur, pas extracteur) : l'éval porte sur les critères automatiques (schema Zod, detectSuspiciousClaims, latence) exécutés par scripts/eval-store-builder.ts. NON EXÉCUTÉ dans cet environnement (pas de réseau/DEEPSEEK_API_KEY) — à lancer par le founder.",
+  "cases": [
+    {
+      "id": "case-1-dropshipping-poor-description",
+      "notes_annotateur": "Cas le plus fréquent en volume : gadget wow AliExpress générique, description scrapée pauvre → forte tentation d'halluciner pour combler. Risque ciblé : placeholders vs invention.",
+      "input": {
+        "vertical": "dropshipping",
+        "product": {
+          "title": "2026 New Portable Mini Neck Fan USB Rechargeable Silent Cooling Fan",
+          "description": "Portable neck fan, USB rechargeable, 3 speed levels, lightweight design.",
+          "images": ["https://example.com/img1.jpg"],
+          "price": "14.99",
+          "original_price": "29.99",
+          "variants": [{ "name": "Couleur", "values": ["Noir", "Blanc", "Rose"] }],
+          "rating": null,
+          "reviews_count": null,
+          "source_url": "https://www.aliexpress.com/item/1005006123456789.html"
+        }
+      }
+    },
+    {
+      "id": "case-2-dropshipping-high-social-proof",
+      "notes_annotateur": "Produit avec vraie note/nombre d'avis élevé (>5000) dans le scrape. Vérifie que rating/reviews_count ne fuient jamais vers description_html/faq malgré leur présence en contexte. Risque ciblé : fuite preuve sociale hors scope.",
+      "input": {
+        "vertical": "dropshipping",
+        "product": {
+          "title": "Ergonomic Lumbar Support Cushion for Office Chair",
+          "description": "Memory foam lumbar cushion, breathable mesh cover, adjustable strap, fits most office and car seats.",
+          "images": ["https://example.com/img2.jpg"],
+          "price": "24.90",
+          "original_price": null,
+          "variants": [],
+          "rating": 4.7,
+          "reviews_count": 8342,
+          "source_url": "https://www.amazon.fr/dp/B0EXAMPLE1"
+        }
+      }
+    },
+    {
+      "id": "case-3-beaute-inci-partielle",
+      "notes_annotateur": "Sérum/soin avec liste INCI partielle dans la description. Zone réglementaire sensible (allégations cosmétiques UE 1223/2009). Risque ciblé : allégation de résultat non vérifiable.",
+      "input": {
+        "vertical": "beaute",
+        "product": {
+          "title": "Sérum Vitamine C 20% Anti-Taches Éclat",
+          "description": "Sérum concentré à la vitamine C (acide ascorbique), acide hyaluronique et vitamine E. Texture légère, absorption rapide. Flacon 30ml.",
+          "images": ["https://example.com/img3.jpg"],
+          "price": "34.00",
+          "original_price": "49.00",
+          "variants": [],
+          "rating": 4.3,
+          "reviews_count": 156,
+          "source_url": "https://www.aliexpress.com/item/1005006987654321.html"
+        }
+      }
+    },
+    {
+      "id": "case-4-tech-specs-precises",
+      "notes_annotateur": "Accessoire avec specs techniques précises dans la description (autonomie, norme). Vérifie la RÈGLE 3 (reprise fidèle du fourni) sans extrapolation (ex. ne pas passer de 'Bluetooth' mentionné à 'Bluetooth 5.3' inventé). Risque ciblé : extrapolation de spec technique.",
+      "input": {
+        "vertical": "tech",
+        "product": {
+          "title": "Écouteurs Sans Fil Bluetooth Réduction de Bruit",
+          "description": "Écouteurs intra-auriculaires Bluetooth, autonomie 20h avec boîtier de charge, résistance à l'eau IPX5, réduction de bruit active.",
+          "images": ["https://example.com/img4.jpg"],
+          "price": "39.99",
+          "original_price": "59.99",
+          "variants": [{ "name": "Couleur", "values": ["Noir", "Blanc"] }],
+          "rating": 4.1,
+          "reviews_count": 412,
+          "source_url": "https://www.aliexpress.com/item/1005006112233445.html"
+        }
+      }
+    },
+    {
+      "id": "case-5-merchant-facts-complets",
+      "notes_annotateur": "merchant_facts complet fourni (délais, garantie, SAV réels). Vérifie que le générateur utilise les vraies données fournies au lieu de placeholders quand elles existent (RÈGLE 2, cas positif). Risque ciblé : sous-utilisation des données réelles disponibles.",
+      "input": {
+        "vertical": "tech",
+        "product": {
+          "title": "Chargeur Rapide USB-C 65W PD",
+          "description": "Chargeur GaN compact, USB-C Power Delivery 65W, compatible laptop/tablette/smartphone.",
+          "images": ["https://example.com/img5.jpg"],
+          "price": "22.50",
+          "original_price": null,
+          "variants": [],
+          "rating": 4.6,
+          "reviews_count": 231,
+          "source_url": "https://www.amazon.fr/dp/B0EXAMPLE2"
+        },
+        "merchant_facts": {
+          "processing_delay": "24h ouvrées",
+          "shipping_delay": "3 à 5 jours ouvrés en France métropolitaine",
+          "return_policy": "Retour gratuit sous 30 jours, produit non ouvert",
+          "warranty_duration": "2 ans",
+          "support_response_time": "sous 24h en semaine",
+          "payment_methods": ["Carte bancaire", "PayPal", "Apple Pay"],
+          "brand_name": "Voltra"
+        }
+      }
+    }
+  ]
+}

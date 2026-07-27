@@ -13,7 +13,10 @@ export default function TikTokPixel() {
 
   useEffect(() => {
     if (!pixelId) return
-    setEnabled(getConsent() === 'accepted')
+    function syncConsent() {
+      setEnabled(getConsent() === 'accepted')
+    }
+    syncConsent()
     return onConsentChange((v) => setEnabled(v === 'accepted'))
   }, [pixelId])
 

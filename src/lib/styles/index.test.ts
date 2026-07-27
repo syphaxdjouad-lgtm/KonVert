@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { STYLE_IDS, type StyleId } from './index'
+import { STYLE_IDS } from './index'
 
 describe('STYLE_IDS', () => {
   it('contains exactly 10 styles', () => {

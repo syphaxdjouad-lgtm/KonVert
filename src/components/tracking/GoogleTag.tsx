@@ -14,7 +14,10 @@ export default function GoogleTag() {
 
   useEffect(() => {
     if (tagIds.length === 0) return
-    setEnabled(getConsent() === 'accepted')
+    function syncConsent() {
+      setEnabled(getConsent() === 'accepted')
+    }
+    syncConsent()
     return onConsentChange((v) => setEnabled(v === 'accepted'))
   }, [tagIds.length])
 

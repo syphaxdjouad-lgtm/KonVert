@@ -1,4 +1,4 @@
-// ─── PLANS ───────────────────────────────────────────────────────────────────
+// ─── PLANS ────────────────────────────────────────────────────────
 
 // 'free' = compte sans abonnement (tunnel "1 page gratuite", abonnement annulé,
 // trial expiré). Quota 1 page/mois pour rester cohérent avec le tunnel public.
@@ -11,7 +11,7 @@ export const PLAN_LIMITS: Record<PlanType, { pages: number; stores: number; whit
   agency:  { pages: 9999, stores: 99, whiteLabel: true  },
 }
 
-// ─── USER ────────────────────────────────────────────────────────────────────
+// ─── USER ───────────────────────────────────────────────────────
 
 export interface UserProfile {
   id: string
@@ -23,7 +23,7 @@ export interface UserProfile {
   created_at: string
 }
 
-// ─── SUBSCRIPTION ────────────────────────────────────────────────────────────
+// ─── SUBSCRIPTION ───────────────────────────────────────────────
 
 export interface Subscription {
   id: string
@@ -35,9 +35,12 @@ export interface Subscription {
   current_period_end: string
 }
 
-// ─── STORE ───────────────────────────────────────────────────────────────────
+// ─── STORE ───────────────────────────────────────────────────────
 
-export type StorePlatform = 'shopify' | 'woocommerce'
+// 'youcan' ajouté après coup — la colonne DB et PlatformLogo l'acceptent déjà,
+// ce type ne reflétait pas cette 3e plateforme (d'où les `any` de contournement
+// dans les pages stores/publish).
+export type StorePlatform = 'shopify' | 'woocommerce' | 'youcan'
 
 export interface Store {
   id: string
@@ -49,7 +52,7 @@ export interface Store {
   created_at: string
 }
 
-// ─── PAGE ────────────────────────────────────────────────────────────────────
+// ─── PAGE ───────────────────────────────────────────────────────
 
 export type PageStatus = 'draft' | 'published' | 'archived'
 
@@ -71,7 +74,7 @@ export interface Page {
   updated_at: string
 }
 
-// ─── TEMPLATE ────────────────────────────────────────────────────────────────
+// ─── TEMPLATE ───────────────────────────────────────────────────
 
 export interface Template {
   id: string
@@ -81,7 +84,7 @@ export interface Template {
   category: 'dark' | 'light' | 'bold' | 'luxury' | 'mobile'
 }
 
-// ─── IA — GENERATED CONTENT ──────────────────────────────────────────────────
+// ─── IA — GENERATED CONTENT ─────────────────────────────────────────
 
 export interface LandingPageData {
   headline: string
@@ -242,7 +245,7 @@ export interface LandingPageData {
   // Copy de fermeture — paragraphe final avant le dernier CTA
   final_pitch?: string
 
-  // ─── Champs CRO enrichis v2 (2026-06-05) ────────────────────────────────
+  // ─── Champs CRO enrichis v2 (2026-06-05) ─────────────────────────────
   // Ces 5 champs débloqueront : UGC photo reviews, trust badges paiement,
   // logos presse vectoriels, signal de stock/urgence, section bundle.
   // ANNA consomme exactement ces noms/types — contrat d'interface figé.
@@ -297,7 +300,7 @@ export interface LandingPageData {
   } | null
 }
 
-// ─── A/B TESTING ─────────────────────────────────────────────────────────────
+// ─── A/B TESTING ───────────────────────────────────────────────
 
 export type ABTestStatus = 'running' | 'paused' | 'completed'
 export type ABVariantLetter = 'A' | 'B'
@@ -330,7 +333,7 @@ export interface ABEvent {
   created_at: string
 }
 
-// ─── SCRAPER ─────────────────────────────────────────────────────────────────
+// ─── SCRAPER ─────────────────────────────────────────────────────
 
 export interface ScrapedProduct {
   title: string

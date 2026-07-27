@@ -16,6 +16,16 @@ export function getShopifyAppUrl(): string {
 // Sera retiré une fois tous les call sites migrés.
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
+// Partagé par tous les flows OAuth Shopify de ce repo (page-builder ET
+// Store Builder) — ne JAMAIS valider un shop domain avec un pattern plus
+// permissif : un domaine arbitraire accepté ici pourrait être utilisé pour
+// rediriger un échange de token vers un tiers.
+export const SHOP_DOMAIN_REGEX = /^[a-z0-9][a-z0-9-]*\.myshopify\.com$/
+
+export function isValidShopDomain(shop: string): boolean {
+  return SHOP_DOMAIN_REGEX.test(shop)
+}
+
 // ─── OAuth helpers ────────────────────────────────────────────────────────────
 
 export function buildOAuthUrl(shop: string, state: string): string {
@@ -49,13 +59,23 @@ export function verifyHmac(query: Record<string, string>, secret: string): boole
 
 // ─── Échange code → access token ─────────────────────────────────────────────
 
-export async function exchangeCodeForToken(shop: string, code: string): Promise<string> {
+// Générique (paramétrable par client_id/secret) — utilisé par le flow
+// page-builder ci-dessous ET par le flow OAuth dédié Store Builder
+// (src/lib/shopify/store-builder/oauth.ts), qui a besoin de connaître le
+// `scope` réellement accordé par Shopify (pas supposé côté app) pour le
+// stocker en DB et détecter un scope manquant sans attendre un 403 API.
+export async function exchangeCodeForTokenWithCredentials(
+  shop: string,
+  code: string,
+  clientId: string,
+  clientSecret: string
+): Promise<{ accessToken: string; scope: string }> {
   const res = await fetch(`https://${shop}/admin/oauth/access_token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      client_id:     SHOPIFY_API_KEY,
-      client_secret: SHOPIFY_API_SECRET,
+      client_id:     clientId,
+      client_secret: clientSecret,
       code,
     }),
   })
@@ -66,7 +86,20 @@ export async function exchangeCodeForToken(shop: string, code: string): Promise<
   }
 
   const data = await res.json()
-  return data.access_token
+  return { accessToken: data.access_token, scope: data.scope ?? '' }
+}
+
+// Backward-compat page-builder — identique au comportement précédent
+// (mêmes identifiants, ne renvoie que le token). Ne pas toucher : c'est le
+// flow OAuth déjà en prod.
+export async function exchangeCodeForToken(shop: string, code: string): Promise<string> {
+  const { accessToken } = await exchangeCodeForTokenWithCredentials(
+    shop,
+    code,
+    SHOPIFY_API_KEY,
+    SHOPIFY_API_SECRET
+  )
+  return accessToken
 }
 
 // ─── Chiffrement du token ─────────────────────────────────────────────────────

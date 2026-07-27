@@ -25,9 +25,9 @@ import {
   TrendUp as TrendUpBadge,
 } from '@phosphor-icons/react'
 
-/* ═════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════════════════════
    HOOK — useSlider
-═════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════════════════════════ */
 function useSlider(count: number, autoPlayMs: number) {
   const [slide, setSlide] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -102,7 +102,7 @@ function Slide1() {
             </Link>
           </div>
 
-          {/* ── Trust signals (réels uniquement) ────────────────── */}
+          {/* ── Trust signals (réels uniquement) ───────────────────── */}
           <div
             className="mt-6 flex flex-col items-center lg:items-start gap-2.5"
             style={{ animation: 'slideUp .7s .35s cubic-bezier(.16,1,.3,1) both' }}
@@ -767,9 +767,9 @@ function Slide5() {
     </div>
   )
 }
-/* ═════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════════════════════
    HERO SLIDER PRINCIPAL
-═════════════════════════════════════════════════════ */
+═══════════════════════════════════════════════════════════════════════════ */
 const SLIDES = [Slide1, Slide2, Slide3, Slide4, Slide5]
 
 export default function HeroSlider() {
@@ -812,7 +812,7 @@ export default function HeroSlider() {
           opacity: 0.07,
         }}
       />
-      {/* Grain overlay très subtile */}
+      {/* Grain overlay très subtil */}
       <div
         className="absolute inset-0 pointer-events-none opacity-30"
         style={{

@@ -29,6 +29,12 @@ import { getAppUrl } from '@/lib/env'
 // write_publications — cf. question ouverte dans scopes.ts).
 export const STORE_BUILDER_SCOPES = 'write_themes,write_products,read_products'
 
+// Scope élargi demandé UNIQUEMENT à la création du 1er test A/B (cf.
+// scopes.ts AB_TEST_REQUIRED_SCOPE et spec KAKASHI §A.3) — jamais au connect
+// initial, pour ne pas alourdir l'onboarding des marchands qui n'utilisent
+// pas l'A/B testing.
+export const AB_TEST_OAUTH_SCOPE = 'read_orders'
+
 // ─── Cookie state CSRF ────────────────────────────────────────────────────
 
 // Nom dédié, différent de 'shopify_oauth_state' (page-builder, cf.
@@ -62,11 +68,12 @@ export function getStoreBuilderApiSecret(): string {
 
 // ─── URL d'autorisation ───────────────────────────────────────────────────
 
-export function buildStoreBuilderOAuthUrl(shop: string, state: string): string {
+export function buildStoreBuilderOAuthUrl(shop: string, state: string, extraScopes: string[] = []): string {
   const redirectUri = `${getAppUrl()}/api/shopify/store-builder/callback`
+  const scope = extraScopes.length ? `${STORE_BUILDER_SCOPES},${extraScopes.join(',')}` : STORE_BUILDER_SCOPES
   const params = new URLSearchParams({
     client_id: getStoreBuilderApiKey(),
-    scope: STORE_BUILDER_SCOPES,
+    scope,
     redirect_uri: redirectUri,
     state,
     'grant_options[]': 'per-user',

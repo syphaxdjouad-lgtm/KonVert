@@ -46,3 +46,18 @@ export function missingStoreBuilderScopes(grantedScopes: string | null | undefin
   const granted = parseScopes(grantedScopes)
   return STORE_BUILDER_REQUIRED_SCOPES.filter((scope) => !granted.has(scope))
 }
+
+// ─── Scope élargi — A/B test natif (Sprint 8) ──────────────────────────────
+//
+// `read_orders` n'est PAS demandé au connect initial (cf. spec KAKASHI §A.3
+// "Scope OAuth requis en plus") — seulement au moment où le marchand crée
+// son 1er test A/B, pour ne pas alourdir l'onboarding Store Builder des
+// marchands qui n'utilisent jamais l'A/B testing. Une connexion existante
+// sans ce scope doit se reconnecter via /api/shopify/store-builder/connect
+// (le flow OAuth redemande alors STORE_BUILDER_SCOPES + AB_TEST_SCOPE, cf.
+// oauth.ts) avant de pouvoir créer un test.
+export const AB_TEST_REQUIRED_SCOPE = 'read_orders'
+
+export function hasReadOrdersScope(grantedScopes: string | null | undefined): boolean {
+  return parseScopes(grantedScopes).has(AB_TEST_REQUIRED_SCOPE)
+}

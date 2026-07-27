@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { hasRequiredStoreBuilderScopes, missingStoreBuilderScopes, parseScopes } from '../scopes'
+import { hasRequiredStoreBuilderScopes, hasReadOrdersScope, missingStoreBuilderScopes, parseScopes } from '../scopes'
 
 describe('parseScopes', () => {
   it('parse une liste CSV en Set, en trimant les espaces', () => {
@@ -48,5 +48,21 @@ describe('missingStoreBuilderScopes', () => {
 
   it('renvoie un tableau vide si tout est présent', () => {
     expect(missingStoreBuilderScopes('write_themes,write_products,read_products')).toEqual([])
+  })
+})
+
+describe('hasReadOrdersScope', () => {
+  it('true quand read_orders est présent', () => {
+    expect(hasReadOrdersScope('write_themes,write_products,read_products,read_orders')).toBe(true)
+  })
+
+  it('false quand read_orders est absent (cas standard post-connect initial)', () => {
+    expect(hasReadOrdersScope('write_themes,write_products,read_products')).toBe(false)
+  })
+
+  it('false pour null/undefined/chaîne vide', () => {
+    expect(hasReadOrdersScope(null)).toBe(false)
+    expect(hasReadOrdersScope(undefined)).toBe(false)
+    expect(hasReadOrdersScope('')).toBe(false)
   })
 })

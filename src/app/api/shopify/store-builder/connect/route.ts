@@ -18,7 +18,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { generateState, isValidShopDomain } from '@/lib/shopify'
-import { buildStoreBuilderOAuthUrl, STORE_BUILDER_STATE_COOKIE } from '@/lib/shopify/store-builder/oauth'
+import { AB_TEST_OAUTH_SCOPE, buildStoreBuilderOAuthUrl, STORE_BUILDER_STATE_COOKIE } from '@/lib/shopify/store-builder/oauth'
 
 export async function GET(req: NextRequest) {
   const shopParam = req.nextUrl.searchParams.get('shop')
@@ -31,6 +31,12 @@ export async function GET(req: NextRequest) {
     )
   }
 
+  // `upgrade=ab_test` : reconnexion déclenchée depuis la création du 1er test
+  // A/B (cf. spec KAKASHI §A.3) — redemande le scope `read_orders` en plus
+  // des scopes Store Builder standards, jamais au connect initial.
+  const upgrade = req.nextUrl.searchParams.get('upgrade')
+  const extraScopes = upgrade === 'ab_test' ? [AB_TEST_OAUTH_SCOPE] : []
+
   const state = generateState()
   const cookieStore = await cookies()
   cookieStore.set(STORE_BUILDER_STATE_COOKIE, state, {
@@ -41,5 +47,5 @@ export async function GET(req: NextRequest) {
     path: '/',
   })
 
-  return NextResponse.redirect(buildStoreBuilderOAuthUrl(shop, state))
+  return NextResponse.redirect(buildStoreBuilderOAuthUrl(shop, state, extraScopes))
 }

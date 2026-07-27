@@ -1,6 +1,8 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { escapeHtml } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 // Sprint 3 T2 — icônes SVG distinctes par index (cycle sur 6)
 const FEATURE_ICONS: string[] = [
@@ -19,6 +21,7 @@ const FEATURE_ICONS: string[] = [
 ]
 
 export function renderThoughtfullyDesigned(data: V3PageData, tokens: StyleTokens): string {
+  const lang = resolveLanguage(data.language)
   const features = data.copy.features ?? []
 
   const items = features.map((f, idx) => {
@@ -52,7 +55,7 @@ export function renderThoughtfullyDesigned(data: V3PageData, tokens: StyleTokens
       font-family:${tokens.fonts.heading};
       font-size:clamp(28px,3vw,40px);color:${tokens.colors.text};
       margin:0 0 8px;font-weight:400
-    ">Conçu avec soin</h2>
+    ">${escapeHtml(t(lang, 'thoughtfullyDesigned.title'))}</h2>
     <ul style="list-style:none;padding:0;margin:0">${items}</ul>
   </div>
 </section>`.trim()

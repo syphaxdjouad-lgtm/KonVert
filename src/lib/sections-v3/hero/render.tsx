@@ -2,6 +2,8 @@ import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { renderTrustBadgesPayment } from '@/lib/sections-v3/shared/TrustBadgesPayment'
 import { escapeHtml, escapeAttr } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 // Sprint 2 T1 — génère la rangée de thumbnails + dot indicators sous l'image principale.
 // CSS natif : scroll-snap-type x mandatory + scroll-snap-align start sur chaque thumb.
@@ -9,7 +11,7 @@ import { escapeHtml, escapeAttr } from '@/lib/utils/html'
 // Counter overlay injecté dans renderHero directement (position:absolute sur l'image).
 // JS inline minimal : click thumb → switch image principale + highlight thumb + counter.
 // Affiché uniquement si images.length >= 2.
-function renderHeroThumbnails(images: string[], tokens: StyleTokens, productTitle: string): string {
+function renderHeroThumbnails(images: string[], tokens: StyleTokens, productTitle: string, lang: string): string {
   if (images.length < 2) return ''
 
   const totalCount = images.length
@@ -30,7 +32,7 @@ function renderHeroThumbnails(images: string[], tokens: StyleTokens, productTitl
                  border-color ${short} ${tokens.motion.ease};
     " onclick="kvtHeroSetActive(${i})">
       <img src="${escapeAttr(src)}"
-           alt="${escapeHtml(productTitle)} — vue ${i + 1}"
+           alt="${escapeHtml(productTitle)} — ${escapeHtml(t(lang, 'image.viewAlt', { n: i + 1 }))}"
            style="width:100%;height:100%;object-fit:cover;display:block"
            loading="${i === 0 ? 'eager' : 'lazy'}">
     </div>`
@@ -91,6 +93,7 @@ function renderHeroThumbnails(images: string[], tokens: StyleTokens, productTitl
 }
 
 export function renderHero(data: V3PageData, tokens: StyleTokens): string {
+  const lang = resolveLanguage(data.language)
   const { product, images, copy } = data
   const heroImage = images[0] ?? ''
 
@@ -103,12 +106,12 @@ export function renderHero(data: V3PageData, tokens: StyleTokens): string {
 
   // P1-2 : social proof above the fold — rating scrappé ou fallback textuel.
   // Le fallback est paramétrable via copy.hero.social_proof_fallback (optionnel).
-  const socialProofFallback = copy.hero?.social_proof_fallback ?? '★★★★★ Plus de 10 000 clients satisfaits'
+  const socialProofFallback = copy.hero?.social_proof_fallback ?? t(lang, 'hero.socialProofFallback')
   const ratingBlock = product.rating
     ? `
       <div class="v3-hero__rating" style="color:${tokens.colors.textMuted};font-size:14px;margin:0 0 24px">
         <span style="color:${tokens.colors.accent}">★</span>
-        ${product.rating.value} / 5 &nbsp;·&nbsp; ${product.rating.count} avis
+        ${product.rating.value} / 5 &nbsp;·&nbsp; ${escapeHtml(t(lang, 'hero.reviewsSuffix', { n: product.rating.count }))}
       </div>`
     : `
       <div class="v3-hero__rating" style="color:${tokens.colors.textMuted};font-size:13px;margin:0 0 24px">
@@ -124,15 +127,15 @@ export function renderHero(data: V3PageData, tokens: StyleTokens): string {
     ">
       <span style="font-size:12px;color:${tokens.colors.textMuted};display:flex;align-items:center;gap:5px">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Garantie 30 jours
+        ${escapeHtml(t(lang, 'hero.guarantee30'))}
       </span>
       <span style="font-size:12px;color:${tokens.colors.textMuted};display:flex;align-items:center;gap:5px">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        Livraison rapide
+        ${escapeHtml(t(lang, 'hero.fastShipping'))}
       </span>
       <span style="font-size:12px;color:${tokens.colors.textMuted};display:flex;align-items:center;gap:5px">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Paiement sécurisé
+        ${escapeHtml(t(lang, 'hero.securePayment'))}
       </span>
     </div>
     ${renderTrustBadgesPayment({
@@ -141,10 +144,11 @@ export function renderHero(data: V3PageData, tokens: StyleTokens): string {
       border:     tokens.colors.border,
       accentColor: tokens.colors.textMuted,
       fontFamily: tokens.fonts.body,
+      lang,
     })}`
 
   // T1 — thumbnails galerie sous l'image principale
-  const thumbnailsHtml = renderHeroThumbnails(images, tokens, product.title)
+  const thumbnailsHtml = renderHeroThumbnails(images, tokens, product.title, lang)
 
   return `
 <section class="v3-hero" style="
@@ -205,7 +209,7 @@ export function renderHero(data: V3PageData, tokens: StyleTokens): string {
         padding:18px 40px;border:0;border-radius:${tokens.radius.button};
         font-family:${tokens.fonts.body};font-size:16px;font-weight:500;
         cursor:pointer;transition:transform ${tokens.motion.duration} ${tokens.motion.ease}
-      ">Ajouter au panier</button>
+      ">${escapeHtml(t(lang, 'cta.addToCart'))}</button>
       ${heroBadges}
     </div>
   </div>

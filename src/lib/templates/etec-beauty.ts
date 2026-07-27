@@ -1,4 +1,5 @@
 import type { LandingPageData } from '@/types'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -22,11 +23,11 @@ const C = {
   white:  '#FFFFFF',
 }
 
-// ── SVG spark étoile orange ──────────────────────────────────────────────────
+// ── SVG spark étoile orange ───────────────────────────────────────────────────
 const SPARK = `<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 2L15.8 10.2L24 12L15.8 13.8L14 22L12.2 13.8L4 12L12.2 10.2L14 2Z" fill="${C.orange}" opacity="0.9"/></svg>`
 const SPARK_SM = `<svg width="18" height="18" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 2L15.8 10.2L24 12L15.8 13.8L14 22L12.2 13.8L4 12L12.2 10.2L14 2Z" fill="${C.orange}" opacity="0.75"/></svg>`
 
-// ── Badge prix étoile (clip-path) ────────────────────────────────────────────
+// ── Badge prix étoile (clip-path) ──────────────────────────────────────────────
 function starBadge(price: string, bg: string): string {
   return `
     <div style="position:absolute;top:14px;right:14px;width:58px;height:58px;background:${bg};clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);display:flex;align-items:center;justify-content:center;z-index:2;">
@@ -47,6 +48,7 @@ const BEAUTY_THEME: SectionTheme = {
 }
 
 export function templateEtecBeauty(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? [];
   const imgs = _real.length >= 1
     ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length])
@@ -60,7 +62,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
     ? Math.round((1 - parseFloat(data.price) / parseFloat(data.original_price)) * 100)
     : 0
 
-  // ── Bénéfices FAQ accordion ───────────────────────────────────────────────
+  // ── Bénéfices FAQ accordion ───────────────────────────────────
   const faqHTML = data.faq && data.faq.length > 0
     ? data.faq.map((item, i) => `
     <div style="border-bottom:1px solid rgba(255,255,255,0.08);">
@@ -78,7 +80,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
     </div>`).join('')
     : ''
 
-  // ── 4 features Why Choose ─────────────────────────────────────────────────
+  // ── 4 features Why Choose ───────────────────────────────────────────
   const featureItems = [
     {
       icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${C.white}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
@@ -106,7 +108,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
     },
   ]
 
-  // ── 4 produits cards grille 2x2 ───────────────────────────────────────────
+  // ── 4 produits cards grille 2x2 ────────────────────────────────
   const productCards = [
     { img: imgs[0], title: data.product_name, desc: data.subtitle || data.benefits[0] || 'Version essentielle', price: price, starBg: '#7C5CBF' },
     { img: imgs[1], title: `${data.product_name} Pro`, desc: data.benefits[1] || 'Version intensive', price: String(Math.round(parseFloat(price) * 1.3)), starBg: C.orange },
@@ -114,7 +116,7 @@ export function templateEtecBeauty(data: LandingPageData): string {
     { img: imgs[3], title: `${data.product_name} Night`, desc: data.benefits[3] || 'Version nuit', price: String(Math.round(parseFloat(price) * 1.15)), starBg: '#2D7D46' },
   ]
 
-  // ── Témoignages ───────────────────────────────────────────────────────────
+  // ── Témoignages ──────────────────────────────────────────────────
   const testimonials = [
     {
       name: 'Sophie L.',
@@ -187,9 +189,9 @@ export function templateEtecBeauty(data: LandingPageData): string {
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      NAV
-══════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <nav style="background:${C.bg};border-bottom:1px solid rgba(0,0,0,0.07);position:sticky;top:0;z-index:100;">
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
 
@@ -198,10 +200,10 @@ export function templateEtecBeauty(data: LandingPageData): string {
 
     <!-- Liens centre -->
     <div class="nav-links" style="display:flex;align-items:center;gap:32px;">
-      <a href="#why" class="nav-link">Ingredients</a>
+      <a href="#why" class="nav-link">${trans(lang, 'bespoke.nav.ingredients')}</a>
       <a href="#products" class="nav-link">Store</a>
-      <a href="#testimonials" class="nav-link">Blog</a>
-      <a href="#subscribe" class="nav-link">About Us</a>
+      <a href="#testimonials" class="nav-link">${trans(lang, 'bespoke.nav.blog')}</a>
+      <a href="#subscribe" class="nav-link">${trans(lang, 'bespoke.nav.about')}</a>
     </div>
 
     <!-- Icônes droite -->
@@ -220,9 +222,9 @@ export function templateEtecBeauty(data: LandingPageData): string {
 </nav>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      HERO
-══════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.bg};overflow:hidden;position:relative;">
   <div class="hero-grid" style="max-width:1200px;margin:0 auto;padding:56px 32px 80px;display:flex;align-items:center;gap:0;position:relative;">
 
@@ -313,9 +315,9 @@ export function templateEtecBeauty(data: LandingPageData): string {
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      STATS BAR
-══════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.dark};">
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
     <div class="stats-bar" style="display:flex;align-items:stretch;">
@@ -335,9 +337,9 @@ export function templateEtecBeauty(data: LandingPageData): string {
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      WHY CHOOSE
-══════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section id="why" style="background:${C.white};padding:96px 0;">
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
 
@@ -389,15 +391,15 @@ export function templateEtecBeauty(data: LandingPageData): string {
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      OUR PRODUCTS
-══════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section id="products" style="background:${C.bg};padding:96px 0;">
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
 
     <!-- Header -->
     <div style="text-align:center;margin-bottom:56px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Collection</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:14px;">${trans(lang, 'bespoke.nav.collection')}</p>
       <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Our Products</h2>
       <p style="color:${C.muted};font-size:16px;max-width:480px;margin:0 auto;font-family:'DM Sans',sans-serif;">${data.subtitle || `Une gamme complète autour de ${data.product_name}.`}</p>
     </div>
@@ -427,15 +429,15 @@ export function templateEtecBeauty(data: LandingPageData): string {
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      TESTIMONIALS
-══════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section id="testimonials" style="background:${C.white};padding:96px 0;">
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
 
     <!-- Header -->
     <div style="text-align:center;margin-bottom:56px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Témoignages</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:14px;">${trans(lang, 'reviews.eyebrow')}</p>
       <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:600;line-height:1.1;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Testimonial</h2>
       <p style="color:${C.muted};font-size:16px;max-width:480px;margin:0 auto;font-family:'DM Sans',sans-serif;">Ce que nos clientes disent vraiment de ${data.product_name}.</p>
     </div>
@@ -476,10 +478,10 @@ export function templateEtecBeauty(data: LandingPageData): string {
     <!-- Trust stats -->
     <div style="display:flex;align-items:center;justify-content:center;gap:48px;margin-top:60px;flex-wrap:wrap;">
       ${[
-        { value: '2 400+', label: 'Avis clients' },
-        { value: '4.9/5', label: 'Note moyenne' },
-        { value: '98%', label: 'Clients satisfaits' },
-        { value: '30j', label: 'Garantie remboursement' },
+        { value: '2 400+', label: trans(lang, 'reviews.eyebrow') },
+        { value: '4.9/5', label: trans(lang, 'legacy.socialProof.rating') },
+        { value: '98%', label: trans(lang, 'legacy.socialProof.customers') },
+        { value: '30j', label: trans(lang, 'bespoke.badge.moneyBackGuarantee') },
       ].map(s => `
         <div style="text-align:center;">
           <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:32px;font-weight:600;color:${C.orange};margin-bottom:4px;">${s.value}</p>
@@ -491,24 +493,24 @@ export function templateEtecBeauty(data: LandingPageData): string {
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      FAQ (si présente)
-══════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 ${data.faq && data.faq.length > 0 ? `
 <section style="background:${C.dark};padding:80px 0;">
   <div style="max-width:760px;margin:0 auto;padding:0 32px;">
     <div style="text-align:center;margin-bottom:48px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:14px;">FAQ</p>
-      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;color:${C.white};">Questions fréquentes</h2>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.orange};font-family:'DM Sans',sans-serif;margin-bottom:14px;">${trans(lang, 'bespoke.faqShort')}</p>
+      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;color:${C.white};">${trans(lang, 'faqV3.title')}</h2>
     </div>
     ${faqHTML}
   </div>
 </section>` : ''}
 
 
-<!-- ══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      SUBSCRIBE
-══════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section id="subscribe" style="background:${C.dark};padding:72px 0;border-top:1px solid rgba(255,255,255,0.06);">
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
     <div class="sub-inner" style="display:flex;align-items:center;justify-content:space-between;gap:48px;">
@@ -539,9 +541,9 @@ ${data.faq && data.faq.length > 0 ? `
 </section>
 
 
-<!-- ══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      FOOTER
-══════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <footer style="background:${C.dark};border-top:1px solid rgba(255,255,255,0.06);padding:64px 0 32px;">
   <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
 

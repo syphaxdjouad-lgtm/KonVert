@@ -72,7 +72,7 @@ export const SECTION_LABELS: Record<string, string> = {
   final_pitch:           'Pitch final',
 }
 
-// ─── SectionRow ───────────────────────────────────────────────────────────
+// ─── SectionRow ──────────────────────────────────────────────────────────────
 
 interface SectionRowProps {
   section: SectionInstance
@@ -284,7 +284,7 @@ function SectionRow({ section, isOverlay = false }: SectionRowProps) {
   )
 }
 
-// ─── SectionsList ───────────────────────────────────────────────────────────
+// ─── SectionsList ─────────────────────────────────────────────────────────────
 
 export default function SectionsList() {
   const sectionOrder = useEditorStore(s => s.sectionOrder)

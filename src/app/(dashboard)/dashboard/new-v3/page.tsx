@@ -57,25 +57,56 @@ export default function NewV3Page() {
   async function handleScrape() {
     setScraping(true)
     setError(null)
+
+    // Le scraping des marketplaces (AliExpress/Amazon…) est bloqué par
+    // intermittence par les anti-bots : une même URL échoue puis passe au
+    // retry quelques secondes plus tard. On tente donc 2 fois avant de basculer
+    // sur la saisie manuelle. Retry CÔTÉ CLIENT (nouvelle invocation lambda)
+    // plutôt que serveur, pour ne pas flirter avec maxDuration 90s.
+    const MAX_ATTEMPTS = 2
+    let lastErr: unknown = null
+
     try {
-      const res = await fetch('/api/scrape', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
-      })
-      if (!res.ok) throw new Error(`Scraping failed (${res.status})`)
-      const data = await res.json()
-      const scraped: ScrapedProduct = {
-        title: data.title ?? data.name ?? 'Produit',
-        description: data.description ?? '',
-        price: data.price,
-        images: data.images ?? [],
+      for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        try {
+          const res = await fetch('/api/scrape', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url }),
+          })
+          if (!res.ok) throw new Error(`Scraping failed (${res.status})`)
+          const json = await res.json()
+          // L'API /api/scrape renvoie le produit sous `data` :
+          // { success, data: { title, description, price, images }, partial, warning }
+          const p = json.data ?? {}
+          const scraped: ScrapedProduct = {
+            title: p.title ?? 'Produit',
+            description: p.description ?? '',
+            price: p.price,
+            images: p.images ?? [],
+          }
+          setProduct(scraped)
+          setImages(scraped.images)
+          setStep('product')
+          return
+        } catch (e) {
+          lastErr = e
+          // Pause avant le retry — laisse l'anti-bot se relâcher.
+          if (attempt < MAX_ATTEMPTS) await new Promise((r) => setTimeout(r, 1500))
+        }
       }
-      setProduct(scraped)
-      setImages(scraped.images)
+
+      // Toutes les tentatives ont échoué → FILET : on bascule en saisie manuelle.
+      // On vide `url` pour que /api/generate n'essaie PAS de re-scraper (il ne
+      // lit body.product que si body.url est absent) et ne re-plante donc pas.
+      console.warn('[scrape] échec après retries:', lastErr)
+      setProduct({ title: '', description: '', price: '', images: [] })
+      setImages([])
+      setUrl('')
       setStep('product')
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Erreur scraping')
+      setError(
+        "On n'a pas réussi à lire ce lien automatiquement — beaucoup de sites bloquent les robots. Pas de souci : complète les infos ci-dessous à la main (nom + description suffisent), la génération marchera.",
+      )
     } finally {
       setScraping(false)
     }

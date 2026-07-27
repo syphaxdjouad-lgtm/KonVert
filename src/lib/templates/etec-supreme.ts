@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const SUPREME_THEME: SectionTheme = {
 }
 
 export function templateEtecSupreme(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
@@ -50,7 +52,7 @@ export function templateEtecSupreme(data: LandingPageData): string {
 .sp-btn-alt{background:transparent;color:#fff;border:1px solid #555;border-radius:0;padding:15px 40px;font-family:'Inconsolata',monospace;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;transition:all .3s;}.sp-btn-alt:hover{border-color:#FE0100;color:#FE0100;}
 @media(max-width:768px){.sp-hero{flex-direction:column!important;}.sp-hero-img{width:100%!important;height:460px!important;}.sp-hero-info{width:100%!important;padding:32px 20px!important;}.sp-grid3{grid-template-columns:1fr!important;}.sp-compare{flex-direction:column!important;}.sp-reviews{grid-template-columns:1fr!important;}}</style></head><body>
 <div style="background:#FE0100;color:#fff;text-align:center;padding:11px 20px;font-family:'Inconsolata',monospace;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;">${data.urgency || 'Exclusive drop — Members only'}</div>
-<nav style="background:#000;border-bottom:1px solid #222;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-family:'Inconsolata',monospace;font-size:12px;color:#555;">Home</span><span style="font-size:12px;color:#333;">›</span><span style="font-family:'Inconsolata',monospace;font-size:12px;color:#555;">Drop</span><span style="font-size:12px;color:#333;">›</span><span style="font-family:'Inconsolata',monospace;font-size:12px;color:#fff;font-weight:700;">${data.product_name}</span></div></nav>
+<nav style="background:#000;border-bottom:1px solid #222;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-family:'Inconsolata',monospace;font-size:12px;color:#555;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#333;">›</span><span style="font-family:'Inconsolata',monospace;font-size:12px;color:#555;">Drop</span><span style="font-size:12px;color:#333;">›</span><span style="font-family:'Inconsolata',monospace;font-size:12px;color:#fff;font-weight:700;">${data.product_name}</span></div></nav>
 <section style="background:#000;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="sp-hero">
 <div style="width:55%;position:relative;background:#111;overflow:hidden;" class="sp-hero-img"><img id="mi-sp" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
       ${renderHeroThumbs(_real ?? imgs ?? [], SUPREME_THEME, 'mi-sp')}
@@ -62,11 +64,11 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#FE
 <p style="font-size:15px;color:#777;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-family:'Inconsolata',monospace;font-size:42px;font-weight:900;color:#fff;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#555;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="color:#FE0100;font-family:'Inconsolata',monospace;font-size:14px;font-weight:700;">→</span><span style="font-size:14px;color:#AAA;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="sp-btn" style="flex:1;text-align:center;">${data.cta || 'Cop now'}</button><button class="sp-btn-alt" style="flex:1;text-align:center;">Details</button></div>
+<div style="display:flex;gap:12px;"><button class="sp-btn" style="flex:1;text-align:center;">${data.cta || 'Cop now'}</button><button class="sp-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.nav.details')}</button></div>
 <div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #222;"><span style="font-family:'Inconsolata',monospace;font-size:11px;color:#555;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Express</span><span style="font-family:'Inconsolata',monospace;font-size:11px;color:#555;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Secure</span><span style="font-family:'Inconsolata',monospace;font-size:11px;color:#555;display:flex;align-items:center;gap:5px;">${ico.return(14)} Returns</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#111;"><div style="max-width:1100px;margin:0 auto;">
-<p style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;letter-spacing:0.2em;color:#FE0100;text-align:center;text-transform:uppercase;margin-bottom:8px;">Details</p>
+<p style="font-family:'Inconsolata',monospace;font-size:11px;font-weight:700;letter-spacing:0.2em;color:#FE0100;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.nav.details')}</p>
 <h2 style="font-family:'Inconsolata',monospace;font-size:32px;font-weight:900;color:#fff;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:56px;">Why this piece</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="sp-grid3">${[
   { t: benefits[0]||'Premium materials', d: 'Heavyweight fabric, built to last through every season' },
@@ -74,7 +76,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#FE
   { t: benefits[2]||'Exclusive design', d: 'Original artwork and graphics you will not find anywhere else' },
 ].map(s => `<div style="background:#1A1A1A;padding:36px 28px;text-align:center;border:1px solid #333;"><h3 style="font-family:'Inconsolata',monospace;font-size:16px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px;">${s.t}</h3><p style="font-size:14px;color:#777;line-height:1.7;">${s.d}</p></div>`).join('')}</div></div></section>
 <section style="padding:80px 24px;background:#000;"><div style="max-width:1000px;margin:0 auto;">
-<h2 style="font-family:'Inconsolata',monospace;font-size:32px;font-weight:900;color:#fff;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:48px;">Lookbook</h2>
+<h2 style="font-family:'Inconsolata',monospace;font-size:32px;font-weight:900;color:#fff;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:48px;">${trans(lang, 'bespoke.nav.lookbook')}</h2>
 <div style="display:flex;gap:20px;" class="sp-compare"><div style="flex:1;position:relative;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Look 1"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.8));"><p style="color:#fff;font-family:'Inconsolata',monospace;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Street</p></div></div><div style="flex:1;position:relative;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Look 2"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.8));"><p style="color:#fff;font-family:'Inconsolata',monospace;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;">Night</p></div></div></div></div></section>
 <section style="padding:80px 24px;background:#111;"><div style="max-width:1100px;margin:0 auto;">
 <h2 style="font-family:'Inconsolata',monospace;font-size:32px;font-weight:900;color:#fff;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:48px;">Community</h2>
@@ -83,7 +85,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#FE
   { name:'Jordan W.', text:'The fabric weight is crazy. Feels premium from the second you put it on. 10/10.', date:'5 jours' },
   { name:'Chris M.', text:'Shipped fast, packed clean. This piece is a grail. Already waiting for the next drop.', date:'1 semaine' },
 ].map(r => `<div style="background:#1A1A1A;padding:28px 24px;border:1px solid #333;"><div style="color:#FE0100;font-family:'Inconsolata',monospace;font-size:13px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div><p style="font-size:14px;color:#AAA;line-height:1.75;margin-bottom:20px;">"${r.text}"</p><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:#FE0100;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Inconsolata',monospace;font-weight:700;font-size:14px;">${r.name[0]}</div><div><p style="font-family:'Inconsolata',monospace;font-size:13px;font-weight:700;color:#fff;">${r.name}</p><p style="font-family:'Inconsolata',monospace;font-size:11px;color:#555;">Il y a ${r.date}</p></div></div></div>`).join('')}</div></div></section>
-<section style="padding:80px 24px;background:#000;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Inconsolata',monospace;font-size:32px;font-weight:900;color:#fff;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:48px;">FAQ</h2><div style="background:#111;padding:8px 32px;border:1px solid #222;">${faqHtml}</div></div></section>
+<section style="padding:80px 24px;background:#000;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Inconsolata',monospace;font-size:32px;font-weight:900;color:#fff;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:48px;">${trans(lang, 'bespoke.faqShort')}</h2><div style="background:#111;padding:8px 32px;border:1px solid #222;">${faqHtml}</div></div></section>
 <section style="padding:100px 24px;background:#FE0100;"><div style="max-width:700px;margin:0 auto;text-align:center;">
 <h2 style="font-family:'Inconsolata',monospace;font-size:44px;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:36px;">${data.subtitle}</p>

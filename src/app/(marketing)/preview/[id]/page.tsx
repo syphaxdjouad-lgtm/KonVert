@@ -102,7 +102,7 @@ export default function PreviewPage() {
   return (
     <div style={{ background: '#0d0d1a', minHeight: '100vh' }}>
 
-      {/* ── Barre de conversion (sticky top) ──────────────────────── */}
+      {/* ── Barre de conversion (sticky top) ──────────────────────────── */}
       <div
         className="sticky top-0 z-50 px-4 py-3"
         style={{
@@ -164,7 +164,7 @@ export default function PreviewPage() {
         </div>
       </div>
 
-      {/* ── Preview iframe ────────────────────────────────────────────── */}
+      {/* ── Preview iframe ──────────────────────────────────────────────── */}
       {/* Sandbox stricte :
          - allow-scripts : l'HTML généré peut exécuter du JS (animations, swiper…)
          - allow-popups + allow-popups-to-escape-sandbox : laisse le CTA "Voir
@@ -187,7 +187,7 @@ export default function PreviewPage() {
         />
       </div>
 
-      {/* ── Barre CTA bas (sticky bottom) ──────────────────────── */}
+      {/* ── Barre CTA bas (sticky bottom) ──────────────────────────────── */}
       <div
         className="fixed bottom-0 left-0 right-0 z-50 px-4 py-4"
         style={{

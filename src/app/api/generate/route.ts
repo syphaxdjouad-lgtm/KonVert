@@ -24,7 +24,7 @@ import { getSectionPolicy, policyToV3Keys } from '@/lib/generation/section-polic
 // Vercel Pro + Fluid Compute = 90s — Bright Data AliExpress 50-65s + DeepSeek 18-22s
 export const maxDuration = 90
 
-// ─── Adaptive sections (V3) ────────────────────────────────────────
+// ─── Adaptive sections (V3) ────────────────────────────────────────────────
 // Garde-fou de rendu indépendant de l'IA : retire les sections discouraged de
 // l'ordre par défaut puis tronque à `max`, en priorisant les sections
 // recommandées par la policy. Appliqué même si DeepSeek ignore la consigne du
@@ -196,7 +196,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // ─── V3 path ────────────────────────────────
+    // ─── V3 path ────────────────────────────────────────────────
     // Activated when `engine === 'v3'` is explicitly passed in the request body.
     // Everything below is additive — legacy callers (no engine field) are unaffected.
     if (body.engine === 'v3') {
@@ -368,7 +368,7 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // ─── Legacy path (engine !== 'v3') — untouched ──────────────────────────
+    // ─── Legacy path (engine !== 'v3') — untouched ────────────────────────────
     let landingPage
     try {
       landingPage = await generateLandingPage(product, {
@@ -376,7 +376,7 @@ export async function POST(req: NextRequest) {
         tone: body.tone,
       })
     } catch (genErr) {
-      // Rollback : DeepSeek timeout ou JSON invalide — ne pas brûler le quota.
+      // Rollback : DeepSeek timeout ou JSON invalide → ne pas brûler le quota.
       await rollbackQuota()
       throw genErr
     }

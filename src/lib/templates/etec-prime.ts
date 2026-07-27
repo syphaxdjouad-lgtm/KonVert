@@ -1,11 +1,12 @@
 import type { LandingPageData } from '@/types'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
   renderHeroThumbs,
   type SectionTheme,
 } from './sections'
-// ─── FALLBACK IMAGES — health / supplements premium ───────────────────────────
+// ─── FALLBACK IMAGES — health / supplements premium ────────────────────
 
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&q=80',
@@ -104,6 +105,7 @@ const PRIME_THEME: SectionTheme = {
 }
 
 export function templateEtecPrime(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const img  = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
 
   const productName   = data.product_name   || 'Daily Prime Formula'
@@ -248,7 +250,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   html { scroll-behavior: smooth; }
   body { font-family: -apple-system, 'Inter', 'Helvetica Neue', sans-serif; background: ${C.bg}; color: ${C.text}; line-height: 1.6; }
 
-  /* ── NAV ────────────────────────────────────────────────── */
+  /* ── NAV ────────────────────────────────── */
   .nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     background: rgba(10,15,10,0.95); backdrop-filter: blur(12px);
@@ -263,12 +265,12 @@ export function templateEtecPrime(data: LandingPageData): string {
   .nav-cta { background: ${C.greenBright}; color: #fff; font-weight: 700; font-size: 13px; padding: 8px 20px; border-radius: 8px; text-decoration: none; transition: opacity .2s; }
   .nav-cta:hover { opacity: 0.85; }
 
-  /* ── TICKER ─────────────────────────────────────────────── */
+  /* ── TICKER ────────────────────────────────── */
   .ticker { background: ${C.greenBright}; color: #fff; text-align: center; padding: 10px 16px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; overflow: hidden; }
   .ticker-track { display: inline-flex; gap: 80px; animation: ticker 22s linear infinite; white-space: nowrap; }
   @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-  /* ── HERO ────────────────────────────────────────────────── */
+  /* ── HERO ────────────────────────────────── */
   .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 64px); margin-top: 64px; background: ${C.dark}; }
   .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 80px 60px 80px 80px; }
   .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(168,230,61,0.12); border: 1px solid rgba(168,230,61,0.25); color: ${C.greenGlow}; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 24px; width: fit-content; }
@@ -288,7 +290,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .hero-sub { font-size: 12px; color: rgba(255,255,255,0.3); text-align: center; }
   .hero-urgency { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); color: #F59E0B; font-size: 12px; font-weight: 600; padding: 8px 16px; border-radius: 8px; text-align: center; }
 
-  /* ── HERO RIGHT ─────────────────────────────────────────── */
+  /* ── HERO RIGHT ────────────────────────── */
   .hero-right { position: relative; overflow: hidden; }
   .hero-img-main { width: 100%; height: 100%; object-fit: cover; display: block; }
   .hero-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(10,15,10,0.4) 0%, transparent 60%); }
@@ -297,21 +299,21 @@ export function templateEtecPrime(data: LandingPageData): string {
   .hero-float-val { font-size: 28px; font-weight: 900; color: ${C.lime}; line-height: 1; }
   .hero-float-sub { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
 
-  /* ── MEDIA ───────────────────────────────────────────────── */
+  /* ── MEDIA ────────────────────────────────── */
   .media-section { background: ${C.cream}; border-bottom: 1px solid ${C.border}; padding: 28px 40px; }
   .media-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; gap: 32px; justify-content: center; flex-wrap: wrap; }
   .media-as { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: ${C.muted}; flex-shrink: 0; }
   .media-logo { font-size: 14px; font-weight: 700; color: #9CA3AF; letter-spacing: -0.01em; padding: 0 12px; border-left: 1px solid ${C.border}; }
   .media-logo:first-of-type { border-left: none; }
 
-  /* ── STATS ───────────────────────────────────────────────── */
+  /* ── STATS ────────────────────────────────── */
   .stats-section { background: ${C.dark}; padding: 64px 40px; }
   .stats-inner { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; }
   .stat-item { background: #111811; padding: 40px 24px; text-align: center; }
   .stat-value { font-size: 42px; font-weight: 900; color: ${C.lime}; letter-spacing: -0.03em; line-height: 1; margin-bottom: 8px; }
   .stat-label { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.5; }
 
-  /* ── BENEFITS ────────────────────────────────────────────── */
+  /* ── BENEFITS ──────────────────────────────── */
   .benefits-section { background: ${C.bg}; padding: 100px 40px; }
   .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: ${C.greenBright}; margin-bottom: 12px; }
   .section-title { font-size: clamp(28px, 3vw, 40px); font-weight: 900; letter-spacing: -0.03em; color: ${C.text}; line-height: 1.15; margin-bottom: 16px; }
@@ -323,7 +325,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .benefit-title { font-size: 16px; font-weight: 800; color: ${C.text}; margin-bottom: 8px; letter-spacing: -0.01em; }
   .benefit-desc { font-size: 13.5px; color: ${C.muted}; line-height: 1.65; }
 
-  /* ── PRODUCT SECTION ─────────────────────────────────────── */
+  /* ── PRODUCT SECTION ───────────────────────── */
   .product-section { background: ${C.white}; padding: 100px 40px; }
   .product-grid { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
   .product-gallery { position: relative; }
@@ -360,13 +362,13 @@ export function templateEtecPrime(data: LandingPageData): string {
   .trust-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: ${C.muted}; }
   .trust-item svg { color: ${C.greenBright}; }
 
-  /* ── CERTS ───────────────────────────────────────────────── */
+  /* ── CERTS ────────────────────────────────── */
   .certs-bar { background: ${C.greenLight}; border-top: 1px solid rgba(45,122,34,0.15); border-bottom: 1px solid rgba(45,122,34,0.15); padding: 20px 40px; }
   .certs-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; }
   .cert-badge { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: ${C.green}; }
   .cert-icon { color: ${C.greenBright}; }
 
-  /* ── INGREDIENTS ─────────────────────────────────────────── */
+  /* ── INGREDIENTS ─────────────────────────── */
   .ingredients-section { background: ${C.bg}; padding: 100px 40px; }
   .ingredients-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 1000px; margin: 0 auto; }
   .ingredient-card { border-radius: 16px; padding: 24px; border: 1px solid rgba(0,0,0,0.06); transition: transform .2s; }
@@ -377,7 +379,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .ingredient-benefit { font-size: 12.5px; color: ${C.muted}; display: flex; align-items: flex-start; gap: 6px; line-height: 1.5; }
   .ingredient-benefit svg { color: ${C.greenBright}; flex-shrink: 0; margin-top: 2px; }
 
-  /* ── HOW IT WORKS ────────────────────────────────────────── */
+  /* ── HOW IT WORKS ────────────────────────── */
   .how-section { background: ${C.dark}; padding: 100px 40px; }
   .how-inner { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
   .how-img { border-radius: 24px; width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
@@ -387,7 +389,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .step-title { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 6px; letter-spacing: -0.01em; }
   .step-desc { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.65; }
 
-  /* ── REVIEWS ─────────────────────────────────────────────── */
+  /* ── REVIEWS ───────────────────────────────── */
   .reviews-section { background: ${C.bg}; padding: 100px 40px; }
   .reviews-header { max-width: 1000px; margin: 0 auto 48px; display: flex; align-items: flex-end; justify-content: space-between; }
   .reviews-score { display: flex; align-items: center; gap: 16px; }
@@ -407,7 +409,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .review-verified svg { color: ${C.greenBright}; }
   .review-text { font-size: 13.5px; color: ${C.muted}; line-height: 1.7; font-style: italic; }
 
-  /* ── GUARANTEE ───────────────────────────────────────────── */
+  /* ── GUARANTEE ───────────────────────────── */
   .guarantee-section { background: ${C.greenLight}; border-top: 1px solid rgba(45,122,34,0.15); border-bottom: 1px solid rgba(45,122,34,0.15); padding: 80px 40px; }
   .guarantee-inner { max-width: 700px; margin: 0 auto; text-align: center; }
   .guarantee-badge { font-size: 64px; margin-bottom: 20px; }
@@ -417,7 +419,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .guarantee-tag { display: flex; align-items: center; gap: 6px; background: rgba(45,122,34,0.12); color: ${C.green}; font-size: 12px; font-weight: 700; padding: 8px 16px; border-radius: 100px; }
   .guarantee-tag svg { color: ${C.greenBright}; }
 
-  /* ── FAQ ─────────────────────────────────────────────────── */
+  /* ── FAQ ───────────────────────────────── */
   .faq-section { background: ${C.white}; padding: 100px 40px; }
   .faq-inner { max-width: 720px; margin: 0 auto; }
   .faq-item { border-bottom: 1px solid ${C.border}; }
@@ -427,7 +429,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .faq-a { padding-bottom: 20px; }
   .faq-a p { font-size: 14px; color: ${C.muted}; line-height: 1.7; }
 
-  /* ── FINAL CTA ───────────────────────────────────────────── */
+  /* ── FINAL CTA ─────────────────────────── */
   .final-cta { background: ${C.dark}; padding: 100px 40px; text-align: center; }
   .final-inner { max-width: 600px; margin: 0 auto; }
   .final-title { font-size: clamp(32px, 4vw, 52px); font-weight: 900; color: #fff; letter-spacing: -0.04em; line-height: 1.08; margin-bottom: 20px; }
@@ -437,7 +439,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   .final-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(168,230,61,0.5); }
   .final-note { margin-top: 16px; font-size: 12px; color: rgba(255,255,255,0.2); }
 
-  /* ── FOOTER ─────────────────────────────────────────────── */
+  /* ── FOOTER ───────────────────────────── */
   .footer { background: #060B06; padding: 60px 40px 32px; }
   .footer-inner { max-width: 1000px; margin: 0 auto; }
   .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
@@ -451,11 +453,11 @@ export function templateEtecPrime(data: LandingPageData): string {
   .footer-certs { display: flex; gap: 16px; }
   .footer-cert { font-size: 11px; color: rgba(255,255,255,0.2); }
 
-  /* ── SECTION WRAPPERS ─────────────────────────────────────── */
+  /* ── SECTION WRAPPERS ─────────────────────── */
   .section-header { text-align: center; margin-bottom: 56px; }
   .section-header.left { text-align: left; }
 
-  /* ── RESPONSIVE ─────────────────────────────────────────── */
+  /* ── RESPONSIVE ───────────────────────── */
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; }
     .hero-left { padding: 60px 28px; }
@@ -482,10 +484,10 @@ export function templateEtecPrime(data: LandingPageData): string {
 <nav class="nav">
   <div class="nav-logo">◆ ${productName.split(' ')[0]}</div>
   <div class="nav-links">
-    <a class="nav-link" href="javascript:void(0)">Science</a>
-    <a class="nav-link" href="javascript:void(0)">Ingredients</a>
-    <a class="nav-link" href="javascript:void(0)">Reviews</a>
-    <a class="nav-link" href="javascript:void(0)">FAQ</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.science')}</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.ingredients')}</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.reviewsShort')}</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.faqShort')}</a>
   </div>
   <a class="nav-cta" href="javascript:void(0)">Get Started →</a>
 </nav>
@@ -539,7 +541,7 @@ export function templateEtecPrime(data: LandingPageData): string {
 <!-- MEDIA -->
 <div class="media-section">
   <div class="media-inner">
-    <span class="media-as">As seen in</span>
+    <span class="media-as">${trans(lang, 'legacy.pressMentions.eyebrow')}</span>
     ${mediaHTML}
   </div>
 </div>
@@ -602,7 +604,7 @@ export function templateEtecPrime(data: LandingPageData): string {
       <p class="price-note" id="price-note">Billed monthly · Free shipping · Cancel anytime</p>
 
       <div class="qty-row">
-        <span class="qty-label">Qty</span>
+        <span class="qty-label">${trans(lang, 'qty.srLabel')}</span>
         <div class="qty-ctrl">
           <button class="qty-btn" onclick="changeQty(-1)">${ICON_MINUS}</button>
           <span class="qty-val" id="qty-val">1</span>
@@ -639,7 +641,7 @@ export function templateEtecPrime(data: LandingPageData): string {
   <div class="how-inner" style="max-width:1000px;margin:0 auto">
     <img class="how-img" src="${img(1)}" alt="How it works">
     <div>
-      <div class="section-label" style="color:${C.lime}">How It Works</div>
+      <div class="section-label" style="color:${C.lime}">${trans(lang, 'legacy.howItWorks.title')}</div>
       <h2 class="section-title" style="color:#fff;margin-bottom:12px">Simple routine.<br>Real results.</h2>
       <p class="section-subtitle" style="color:rgba(255,255,255,0.4);margin-bottom:48px">No complicated protocols. No 12-step morning routine. Just 2 capsules and you're done.</p>
       <div class="how-steps">${stepsHTML}</div>
@@ -684,7 +686,7 @@ ${renderRichSections(data, PRIME_THEME)}
 <section class="faq-section">
   <div class="faq-inner">
     <div class="section-header">
-      <div class="section-label">FAQ</div>
+      <div class="section-label">${trans(lang, 'bespoke.faqShort')}</div>
       <h2 class="section-title">Common questions</h2>
     </div>
     ${faqHTML}
@@ -710,24 +712,24 @@ ${renderRichSections(data, PRIME_THEME)}
         <p class="footer-tagline">${data.subtitle || 'Qualité premium pour ceux qui refusent la médiocrité.'}</p>
       </div>
       <div>
-        <div class="footer-col-title">Product</div>
+        <div class="footer-col-title">${trans(lang, 'bespoke.nav.product')}</div>
         <a class="footer-link" href="javascript:void(0)">Daily Formula</a>
-        <a class="footer-link" href="javascript:void(0)">Ingredients</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.ingredients')}</a>
         <a class="footer-link" href="javascript:void(0)">Certifications</a>
         <a class="footer-link" href="javascript:void(0)">Subscribe & Save</a>
       </div>
       <div>
-        <div class="footer-col-title">Company</div>
+        <div class="footer-col-title">${trans(lang, 'bespoke.nav.company')}</div>
         <a class="footer-link" href="javascript:void(0)">Our Science</a>
-        <a class="footer-link" href="javascript:void(0)">About Us</a>
-        <a class="footer-link" href="javascript:void(0)">Reviews</a>
-        <a class="footer-link" href="javascript:void(0)">Affiliates</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.about')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.reviewsShort')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.affiliates')}</a>
       </div>
       <div>
-        <div class="footer-col-title">Support</div>
-        <a class="footer-link" href="javascript:void(0)">FAQ</a>
-        <a class="footer-link" href="javascript:void(0)">Shipping</a>
-        <a class="footer-link" href="javascript:void(0)">Returns</a>
+        <div class="footer-col-title">${trans(lang, 'bespoke.nav.support')}</div>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.faqShort')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'care.shippingTitle')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'care.returnsTitle')}</a>
         <a class="footer-link" href="javascript:void(0)">Contact Us</a>
       </div>
     </div>

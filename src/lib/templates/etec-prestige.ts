@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const PRESTIGE_THEME: SectionTheme = {
 }
 
 export function templateEtecPrestige(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -86,9 +88,9 @@ body{font-family:'DM Sans',sans-serif;background:#FDFBF7;color:#2E2A39;}
 <!-- BREADCRUMB -->
 <nav style="background:#FDFBF7;border-bottom:1px solid rgba(46,42,57,0.08);padding:14px 24px;">
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:10px;">
-    <span style="font-size:11px;color:#999;letter-spacing:0.06em;">Accueil</span>
+    <span style="font-size:11px;color:#999;letter-spacing:0.06em;">${trans(lang, 'bespoke.nav.home')}</span>
     <span style="font-size:11px;color:#DDD;">·</span>
-    <span style="font-size:11px;color:#999;letter-spacing:0.06em;">Collection</span>
+    <span style="font-size:11px;color:#999;letter-spacing:0.06em;">${trans(lang, 'bespoke.nav.collection')}</span>
     <span style="font-size:11px;color:#DDD;">·</span>
     <span style="font-size:11px;color:#2E2A39;font-weight:600;letter-spacing:0.06em;">${data.product_name}</span>
   </div>
@@ -139,7 +141,7 @@ body{font-family:'DM Sans',sans-serif;background:#FDFBF7;color:#2E2A39;}
           ${data.cta || 'Ajouter au panier'}
         </button>
         <button class="pr-btn-ghost" style="flex:1;text-align:center;">
-          En savoir plus
+          ${trans(lang, 'bespoke.cta.learnMore')}
         </button>
       </div>
 
@@ -221,7 +223,7 @@ body{font-family:'DM Sans',sans-serif;background:#FDFBF7;color:#2E2A39;}
   <div style="max-width:1100px;margin:0 auto;">
     <div style="text-align:center;margin-bottom:48px;">
       <div style="width:40px;height:2px;background:#DD1D1D;margin:0 auto 16px;"></div>
-      <p style="font-size:11px;font-weight:700;letter-spacing:0.18em;color:#DD1D1D;text-transform:uppercase;margin-bottom:8px;">Témoignages</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:0.18em;color:#DD1D1D;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'reviews.eyebrow')}</p>
       <h2 style="font-family:'DM Serif Display',serif;font-size:34px;color:#2E2A39;">Nos clients témoignent</h2>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="pr-reviews-grid">
@@ -254,7 +256,7 @@ ${renderRichSections(data, PRESTIGE_THEME)}
   <div style="max-width:700px;margin:0 auto;">
     <div style="text-align:center;margin-bottom:48px;">
       <div style="width:40px;height:2px;background:#DD1D1D;margin:0 auto 16px;"></div>
-      <h2 style="font-family:'DM Serif Display',serif;font-size:34px;color:#2E2A39;">Questions fréquentes</h2>
+      <h2 style="font-family:'DM Serif Display',serif;font-size:34px;color:#2E2A39;">${trans(lang, 'faqV3.title')}</h2>
     </div>
     <div style="background:#FDFBF7;padding:8px 36px;">${faqHtml}</div>
   </div>

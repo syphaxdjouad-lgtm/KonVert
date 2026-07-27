@@ -95,5 +95,23 @@ export function validateScrapeUrl(input: unknown): UrlValidationResult {
     }
   }
 
+  normalizeAliExpressHost(parsed)
+
   return { ok: true, parsed }
+}
+
+// Les sous-domaines régionaux AliExpress (ar., fr., he., ru., ko., ...) renvoient
+// la page dans la langue régionale, ce qui pollue la génération de copy.
+// On normalise systématiquement vers www.aliexpress.{com,us} en conservant
+// le path et la query string — mutation en place sur l'objet URL déjà validé.
+function normalizeAliExpressHost(parsed: URL): void {
+  const host = parsed.hostname
+  const isAliexpressCom = host === 'aliexpress.com' || host.endsWith('.aliexpress.com')
+  const isAliexpressUs = host === 'aliexpress.us' || host.endsWith('.aliexpress.us')
+
+  if (isAliexpressCom && host !== 'www.aliexpress.com') {
+    parsed.hostname = 'www.aliexpress.com'
+  } else if (isAliexpressUs && host !== 'www.aliexpress.us') {
+    parsed.hostname = 'www.aliexpress.us'
+  }
 }

@@ -187,6 +187,14 @@ export default function EditorRoot({ jsonContent, defaultTemplateId = 'etec-blue
     <div
       data-panel-open={panelOpen ? 'true' : 'false'}
       style={{
+        // Plein écran par-dessus la chrome dashboard — sans ça, ce conteneur
+        // reste dans le flux SOUS le header sticky (z-10) et la bottom nav
+        // mobile (z-40) de (dashboard)/layout.tsx, ce qui empile 2 barres en
+        // haut et fait déborder l'éditeur. zIndex 1000 > tout ce que pose la
+        // chrome dashboard (max observé : 40).
+        position: 'fixed',
+        inset: 0,
+        zIndex: 1000,
         display: 'flex',
         flexDirection: 'column',
         height: '100vh',

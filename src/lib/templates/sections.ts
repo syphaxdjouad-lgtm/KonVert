@@ -14,7 +14,7 @@ import { renderStickyAddToCartMobile } from '@/lib/sections-v3/shared/StickyAddT
 // de ce fichier — un import nommé `t` entrerait en collision.
 import { t as trans } from '@/lib/i18n/ui-labels'
 
-// ─── Section keys & ordre canonique ─────────────────────────────────
+// ─── Section keys & ordre canonique ────────────────────────────────────
 // Liste exhaustive des sections rendues par renderRichSections, dans l'ordre
 // psychologique e-com DTC validé en brainstorming (spec § 3.2).
 // `hero_badges` n'est PAS dans cette liste — il reste dans le hero du template.
@@ -90,11 +90,11 @@ export const DEFAULT_THEME: SectionTheme = {
   radius: '16px',
 }
 
-// ═════════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════════════════════
 // V2 PREMIUM SECTIONS (OBITO design 2026-05-23) + 13 nouvelles sections
-// ═════════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════════════════════
 
-// ─── Helpers ───────────────────────────────────────
+// ─── Helpers ─────────────────────────────────────────────────────
 
 /** Génère le bloc <style> responsive injecté une seule fois par section. */
 function mq(sectionId: string, rules: string): string {
@@ -110,9 +110,9 @@ function starsSvg(rating: number, color: string): string {
   }).join('')
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 1. SOCIAL PROOF BAR V2 — bandeau horizontal 3 chiffres clés
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderSocialProofBarV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.social_proof) return ''
   const sp = d.social_proof
@@ -142,9 +142,9 @@ ${mq('spb', `.spb-inner{flex-direction:column!important;} .spb-item{border-right
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 2. STORY V2 — timeline verticale PAS (SVG — zéro emoji icône principale)
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderStoryV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.story) return ''
   const s = d.story
@@ -221,9 +221,9 @@ ${mq('stv2', `.stv2-wrap{padding:60px 20px!important;}`)}
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 3. TESTIMONIALS V2 — grid 3 cards reviews avec étoiles SVG
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderTestimonialsV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.testimonials || d.testimonials.length === 0) return ''
   const lang = d.language
@@ -265,9 +265,9 @@ ${mq('tmv2', `.tmv2-grid{grid-template-columns:1fr!important;} .tmv2-wrap{paddin
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 4. COMPARISON V2 — 2 colonnes sans/avec (rouge/vert hardcodés — autorisé)
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderComparisonV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.comparison) return ''
   const c = d.comparison
@@ -305,9 +305,9 @@ ${mq('cpv2', `.cpv2-grid{grid-template-columns:1fr!important;} .cpv2-wrap{paddin
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 5. BONUSES V2 — cards empilées avec ribbon "OFFERT" + numéro SVG
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderBonusesV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.bonuses || d.bonuses.length === 0) return ''
   const lang = d.language
@@ -342,9 +342,9 @@ ${mq('bnv2', `.bnv2-wrap{padding:60px 20px!important;}`)}
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 6. GUARANTEE V2 — section centrale, shield SVG premium
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderGuaranteeV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.guarantee) return ''
   const g = d.guarantee
@@ -367,9 +367,9 @@ ${mq('grv2', `.grv2-wrap{padding:60px 20px!important;}`)}
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 7. TARGET AUDIENCE — grid 3 cards profils ICP
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderTargetAudience(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.target_audience || d.target_audience.length === 0) return ''
   const lang = d.language
@@ -404,9 +404,9 @@ ${mq('tau', `.tau-grid{grid-template-columns:1fr!important;} .tau-wrap{padding:6
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 8. FEATURES — grid 3×2 features avec icônes (emoji → badge, SVG générique si nom d'icône)
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderFeatures(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.features || d.features.length === 0) return ''
   const lang = d.language
@@ -446,9 +446,9 @@ ${mq('fts', `.fts-grid{grid-template-columns:1fr!important;} .fts-wrap{padding:6
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 9. UNIQUE MECHANISM — split asymétrique texte + panneau preuve visuelle
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderUniqueMechanism(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.unique_mechanism) return ''
   const um = d.unique_mechanism
@@ -506,9 +506,9 @@ ${mq('umch', `.umch-grid{flex-direction:column!important;} .umch-proof{margin-to
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 10. HOW IT WORKS — timeline horizontale numérotée 4 étapes
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderHowItWorks(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.how_it_works || d.how_it_works.length === 0) return ''
   const lang = d.language
@@ -541,9 +541,9 @@ ${mq('hiw', `.hiw-grid{flex-direction:column!important;gap:32px!important;} .hiw
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 11. BEFORE AFTER — 2 colonnes côte à côte, texte uniquement
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderBeforeAfter(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.before_after || d.before_after.length === 0) return ''
   const lang = d.language
@@ -574,9 +574,9 @@ ${mq('bafr', `.bafr-row{flex-direction:column!important;} .bafr-row>div:nth-chil
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 12. COMPETITOR COMPARISON — table scrollable (vert/rouge hardcodés — autorisé)
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderCompetitorComparison(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.competitor_comparison) return ''
   const cc = d.competitor_comparison
@@ -633,9 +633,9 @@ ${mq('cmpv', `.cmpv-wrap{padding:60px 20px!important;} .cmpv-scroll{overflow-x:a
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 13. PRESS MENTIONS — bandeau monochrome logos textuels
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderPressMentions(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.press_mentions || d.press_mentions.length === 0) return ''
   const lang = d.language
@@ -657,11 +657,11 @@ ${mq('prss', `.prss-wrap{padding:40px 20px!important;} .prss-scroll{gap:10px!imp
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 14. FOUNDER NOTE — split asymétrique avatar circulaire + citation
 // Décision design : split 40/60 (avatar à gauche, message à droite) — plus
 // intime que centré, signature humaine dans un univers marchand.
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderFounderNote(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.founder_note) return ''
   const fn = d.founder_note
@@ -693,9 +693,9 @@ ${mq('fnd', `.fnd-grid{flex-direction:column!important;align-items:center!import
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 15. VALUE STACK — table valeur barrée + prix final mis en évidence
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderValueStack(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.value_stack) return ''
   const vs = d.value_stack
@@ -734,9 +734,9 @@ ${mq('vls', `.vls-wrap{padding:60px 20px!important;} .vls-inner{padding:32px 24p
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 16. RISK REVERSAL — grid 3 cards livraison / retour / support
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderRiskReversal(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.risk_reversal || d.risk_reversal.length === 0) return ''
   const lang = d.language
@@ -786,9 +786,9 @@ ${mq('rrv', `.rrv-grid{grid-template-columns:1fr!important;} .rrv-wrap{padding:6
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 17. OBJECTIONS — accordéon inline JS (pattern FAQ etec-blue.ts)
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderObjections(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.objections || d.objections.length === 0) return ''
   const lang = d.language
@@ -817,9 +817,9 @@ ${mq('obj', `.obj-wrap{padding:60px 20px!important;}`)}
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 18. COMMUNITY CALLOUT — banner CTA réseaux sociaux
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderCommunityCallout(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.community_callout) return ''
   const cc = d.community_callout
@@ -852,9 +852,9 @@ ${mq('comu', `.comu-inner{flex-direction:column!important;text-align:center!impo
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 19. FINAL PITCH — paragraphe central + CTA bouton
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderFinalPitch(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.final_pitch) return ''
   const lang = d.language
@@ -875,12 +875,12 @@ ${mq('fp', `.fp-wrap{padding:60px 20px!important;}`)}
 </section>`
 }
 
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 20. TRUST BADGES PAYMENT — bande paiement sécurisé (Quick win RICE 960)
 // Injectée juste après 'guarantee' dans DEFAULT_ORDER.
 // Utilise payment_methods depuis data (champ MINATO sprint 2).
 // Fallback gracieux : affiche Visa/Mastercard/PayPal/Apple Pay si absent.
-// ───────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderTrustBadgesPaymentSection(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   // Lecture du champ optionnel payment_methods injecté par MINATO
   const raw = (d as LandingPageData & { payment_methods?: string[] }).payment_methods
@@ -899,7 +899,7 @@ export function renderTrustBadgesPaymentSection(d: LandingPageData, t: SectionTh
   })
 }
 
-// ─── renderGallery (chantier B) ────────────────────────────────
+// ─── renderGallery (chantier B) ───────────────────────────────────────
 // Section dédiée appelée par renderRichSections à la position 5 (après features).
 // Affichée uniquement si images.length >= 8 (grid 2x2 = 4 cases, après 4 du hero).
 // Feature flag KONVERT_GALLERY=false → return ''.
@@ -938,7 +938,7 @@ export function renderGallery(
 `.trim()
 }
 
-// ─── renderHeroThumbs (chantier B) ──────────────────────────────────
+// ─── renderHeroThumbs (chantier B) ──────────────────────────────────────
 // Helper hero appelé directement par les 42 templates etec-*.ts dans leur
 // HTML hero, juste après leur <img> principal. Rend 2-4 thumbnails cliquables
 // + un <script> global qui swap le src de l'image principale via mainImgId.
@@ -993,7 +993,7 @@ export function renderHeroThumbs(
 `.trim()
 }
 
-// ─── Section renderers map ──────────────────────────────────────
+// ─── Section renderers map ────────────────────────────────────────────
 // Map qui associe chaque SectionKey à son renderer V2. Utilisée par
 // renderRichSections pour itérer dans l'ordre voulu.
 
@@ -1023,7 +1023,7 @@ const SECTION_RENDERERS: Record<SectionKey, SectionRenderer> = {
   final_pitch:            renderFinalPitch,
 }
 
-// ─── click-to-edit injection helpers ───────────────────
+// ─── click-to-edit injection helpers ─────────────────────────────
 
 /**
  * Script injected once in edit mode — listens for clicks on sections,
@@ -1098,7 +1098,7 @@ function wrapWithKvtId(html: string, id: string): string {
   return `<section data-kvt-section-id="${id}">${html}</section>`
 }
 
-// ─── renderRichSections — l'API publique ──────────────────────
+// ─── renderRichSections — l'API publique ────────────────────────────────
 // Rend les sections riches dans l'ordre voulu, en skippant celles dont la
 // data est absente. Si KONVERT_RICH_SECTIONS=false (rollback prod), retourne
 // '' (aucune section).
@@ -1267,7 +1267,7 @@ export function renderRichSections(
   return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + rendered.join('\n')
 }
 
-// ─── Backward compat ─────────────────────────────────
+// ─── Backward compat ───────────────────────────────────────────────
 // Les noms V1 sont conservés comme aliases vers les versions V2 refondues.
 // Permet à du code externe (ou aux 41 templates pas encore migrés pendant le
 // rollout) de continuer à fonctionner.

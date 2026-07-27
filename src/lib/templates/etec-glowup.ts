@@ -64,8 +64,8 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#D4
 <p style="font-size:15px;color:#999;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 <div style="background:#FFF0F5;border-radius:20px;padding:16px 24px;display:inline-flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-size:36px;font-weight:700;color:#D4508B;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#CCC;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="width:20px;height:20px;border-radius:50%;background:#FFF0F5;color:#D4508B;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✓</span><span style="font-size:14px;color:#555;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="gu-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="gu-btn-alt" style="flex:1;text-align:center;">Voir les avis</button></div>
-<div style="display:flex;gap:20px;margin-top:20px;justify-content:center;"><span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.truck(13)} Offerte</span><span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.lock(13)} Sécurisé</span><span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.return(13)} Retour 30j</span></div>
+<div style="display:flex;gap:12px;"><button class="gu-btn" style="flex:1;text-align:center;">${data.cta || trans(lang, 'cta.addToCart')}</button><button class="gu-btn-alt" style="flex:1;text-align:center;">Voir les avis</button></div>
+<div style="display:flex;gap:20px;margin-top:20px;justify-content:center;"><span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.truck(13)} ${trans(lang, 'trust.offeredShort')}</span><span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.lock(13)} ${trans(lang, 'trust.securedShort')}</span><span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.return(13)} ${trans(lang, 'trust.returnDays', { n: 30 })}</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#FFF0F5;"><div style="max-width:1000px;margin:0 auto;">
 <p style="font-size:11px;font-weight:600;letter-spacing:0.12em;color:#D4508B;text-align:center;text-transform:uppercase;margin-bottom:8px;">Résultats</p>
@@ -91,7 +91,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#D4
 <p style="font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:36px;">${data.subtitle}</p>
 ${data.price ? `<p style="font-size:52px;font-weight:700;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#fff;color:#D4508B;border:none;border-radius:20px;padding:18px 52px;font-family:'Work Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Je craque maintenant'}</button>
-<p style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:20px;">Livraison offerte · Satisfaite ou remboursée · Paiement sécurisé</p>
+<p style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:20px;">${[trans(lang, 'trust.freeShippingOffered'), trans(lang, 'trust.satisfiedOrRefundedFem'), trans(lang, 'hero.securePayment')].join(' · ')}</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, GLOWUP_THEME)}

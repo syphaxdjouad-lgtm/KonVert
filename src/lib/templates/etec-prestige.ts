@@ -138,7 +138,7 @@ body{font-family:'DM Sans',sans-serif;background:#FDFBF7;color:#2E2A39;}
       <!-- CTAs -->
       <div style="display:flex;gap:12px;">
         <button class="pr-btn" style="flex:1;text-align:center;">
-          ${data.cta || 'Ajouter au panier'}
+          ${data.cta || trans(lang, 'cta.addToCart')}
         </button>
         <button class="pr-btn-ghost" style="flex:1;text-align:center;">
           ${trans(lang, 'bespoke.cta.learnMore')}
@@ -147,9 +147,9 @@ body{font-family:'DM Sans',sans-serif;background:#FDFBF7;color:#2E2A39;}
 
       <!-- TRUST -->
       <div style="display:flex;gap:24px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(46,42,57,0.08);">
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.04em;">${ico.shield(14)} Authentique</span>
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.04em;">${ico.truck(14)} Express</span>
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.04em;">${ico.return(14)} 30 jours</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.04em;">${ico.shield(14)} ${trans(lang, 'trust.authenticShort')}</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.04em;">${ico.truck(14)} ${trans(lang, 'trust.expressShort')}</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.04em;">${ico.return(14)} ${trans(lang, 'trust.returnDaysBare', { n: 30 })}</span>
       </div>
     </div>
   </div>
@@ -180,15 +180,15 @@ body{font-family:'DM Sans',sans-serif;background:#FDFBF7;color:#2E2A39;}
     <div style="display:flex;gap:0;margin-bottom:32px;">
       ${[
         { id: 'tab-pr-craft', label: 'Fabrication', content: `<p style="font-size:14px;color:#777;line-height:1.8;margin:0;">Chaque pièce est fabriquée avec un savoir-faire d'exception. Nos artisans sélectionnent les matériaux les plus nobles et appliquent des techniques éprouvées pour garantir une qualité irréprochable.</p>` },
-        { id: 'tab-pr-garantie', label: 'Garantie', content: `<p style="font-size:14px;color:#777;line-height:1.8;margin:0;">Garantie satisfait ou remboursé pendant 30 jours. Garantie fabricant 2 ans. Notre service client premium est disponible 7j/7 pour vous accompagner.</p>` },
-        { id: 'tab-pr-livraison', label: 'Livraison', content: `<p style="font-size:14px;color:#777;line-height:1.8;margin:0;">Livraison express offerte. Emballage cadeau premium inclus. Suivi en temps réel. Livraison en Europe sous 2-4 jours ouvrés.</p>` },
+        { id: 'tab-pr-garantie', label: trans(lang, 'style.footer_guarantee'), content: `<p style="font-size:14px;color:#777;line-height:1.8;margin:0;">${trans(lang, 'bespoke.prestige.tabGuaranteeBody')}</p>` },
+        { id: 'tab-pr-livraison', label: trans(lang, 'trust.shippingLabel'), content: `<p style="font-size:14px;color:#777;line-height:1.8;margin:0;">${trans(lang, 'bespoke.prestige.tabShippingBody')}</p>` },
       ].map((t, i) => `
       <button onclick="(function(){document.querySelectorAll('.tp-pr').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tbtn-pr').forEach(function(b,j){b.style.background=j===${i}?'#2E2A39':'transparent';b.style.color=j===${i}?'#FDFBF7':'#999';});})()" class="tbtn-pr" style="padding:12px 28px;background:${i===0?'#2E2A39':'transparent'};color:${i===0?'#FDFBF7':'#999'};border:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;">${t.label}</button>`).join('')}
     </div>
     ${[
       { id: 'tab-pr-craft', content: `<p style="font-size:14px;color:#777;line-height:1.8;margin:0;">Chaque pièce est fabriquée avec un savoir-faire d'exception. Nos artisans sélectionnent les matériaux les plus nobles et appliquent des techniques éprouvées pour garantir une qualité irréprochable.</p>` },
-      { id: 'tab-pr-garantie', content: `<p style="font-size:14px;color:#777;line-height:1.8;margin:0;">Garantie satisfait ou remboursé pendant 30 jours. Garantie fabricant 2 ans. Notre service client premium est disponible 7j/7 pour vous accompagner.</p>` },
-      { id: 'tab-pr-livraison', content: `<p style="font-size:14px;color:#777;line-height:1.8;margin:0;">Livraison express offerte. Emballage cadeau premium inclus. Suivi en temps réel. Livraison en Europe sous 2-4 jours ouvrés.</p>` },
+      { id: 'tab-pr-garantie', content: `<p style="font-size:14px;color:#777;line-height:1.8;margin:0;">${trans(lang, 'bespoke.prestige.tabGuaranteeBody')}</p>` },
+      { id: 'tab-pr-livraison', content: `<p style="font-size:14px;color:#777;line-height:1.8;margin:0;">${trans(lang, 'bespoke.prestige.tabShippingBody')}</p>` },
     ].map((t, i) => `
     <div id="${t.id}" class="tp-pr" style="display:${i===0?'block':'none'};">${t.content}</div>`).join('')}
   </div>
@@ -270,7 +270,7 @@ ${renderRichSections(data, PRESTIGE_THEME)}
     <p style="font-size:15px;color:rgba(253,251,247,0.5);margin-bottom:36px;line-height:1.7;">${data.subtitle}</p>
     ${data.price ? `<p style="font-family:'DM Serif Display',serif;font-size:52px;color:#FDFBF7;margin-bottom:36px;">${data.price}€</p>` : ''}
     <button class="pr-btn" style="font-size:14px;padding:20px 56px;">${data.cta || 'Acquérir maintenant'}</button>
-    <p style="font-size:11px;color:rgba(253,251,247,0.3);margin-top:24px;letter-spacing:0.06em;">Livraison premium offerte · Garantie 2 ans · Retour 30 jours</p>
+    <p style="font-size:11px;color:rgba(253,251,247,0.3);margin-top:24px;letter-spacing:0.06em;">${[trans(lang, 'trust.freeShippingOffered'), trans(lang, 'trust.warrantyYears', { n: 2 }), trans(lang, 'trust.returnDays', { n: 30 })].join(' · ')}</p>
   </div>
 </section>
 

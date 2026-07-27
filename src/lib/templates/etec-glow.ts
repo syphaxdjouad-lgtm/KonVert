@@ -83,7 +83,7 @@ body{font-family:'Nunito Sans',sans-serif;background:#FFF9F5;color:#111;}
 
 <!-- TOP BAR — SOFT PINK -->
 <div style="background:linear-gradient(90deg,#EF4A65,#D63953);color:#fff;text-align:center;padding:11px 20px;font-size:12px;font-weight:600;letter-spacing:0.04em;">
-  ${data.urgency || 'Offre beauté — Livraison offerte + échantillon gratuit'}
+  ${data.urgency || trans(lang, 'bespoke.glow.urgencyFallback')}
 </div>
 
 <!-- BREADCRUMB -->
@@ -143,7 +143,7 @@ body{font-family:'Nunito Sans',sans-serif;background:#FFF9F5;color:#111;}
       <!-- CTAs -->
       <div style="display:flex;flex-direction:column;gap:10px;">
         <button class="gl-btn" style="width:100%;text-align:center;font-size:16px;padding:18px;">
-          ${data.cta || 'Ajouter au panier'} ✨
+          ${data.cta || trans(lang, 'cta.addToCart')} ✨
         </button>
         <button class="gl-btn-soft" style="width:100%;text-align:center;">
           Offrir en cadeau
@@ -153,9 +153,9 @@ body{font-family:'Nunito Sans',sans-serif;background:#FFF9F5;color:#111;}
       <!-- TRUST -->
       <div style="display:flex;gap:20px;margin-top:20px;justify-content:center;">
         <span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.leaf(13)} Clean</span>
-        <span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.shield(13)} Certifié</span>
-        <span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.truck(13)} Offerte</span>
-        <span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.return(13)} 30j</span>
+        <span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.shield(13)} ${trans(lang, 'trust.certifiedShort')}</span>
+        <span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.truck(13)} ${trans(lang, 'trust.offeredShort')}</span>
+        <span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.return(13)} ${trans(lang, 'trust.returnDaysShort', { n: 30 })}</span>
       </div>
     </div>
   </div>
@@ -251,7 +251,7 @@ ${renderRichSections(data, GLOW_THEME)}
     <p style="font-size:15px;color:rgba(255,255,255,0.75);margin-bottom:36px;line-height:1.6;">${data.subtitle}</p>
     ${data.price ? `<p style="font-size:52px;font-weight:800;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
     <button style="background:#fff;color:#EF4A65;border:none;border-radius:15px;padding:20px 56px;font-family:'Nunito Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.15);transition:transform .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">${data.cta || 'Révéler mon éclat'} ✨</button>
-    <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:20px;">Clean beauty · Livraison offerte · Satisfait ou remboursé</p>
+    <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:20px;">Clean beauty · ${trans(lang, 'trust.freeShippingOffered')} · ${trans(lang, 'trust.satisfiedOrRefunded')}</p>
   </div>
 </section>
 

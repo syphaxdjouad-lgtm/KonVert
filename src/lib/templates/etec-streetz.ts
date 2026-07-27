@@ -65,7 +65,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#E1
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-family:'Bebas Neue',sans-serif;font-size:42px;color:#111;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#CCC;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="color:#E11D48;font-size:14px;font-weight:800;">→</span><span style="font-size:14px;color:#555;">${b}</span></li>`).join('')}</ul>
 <div style="display:flex;gap:12px;"><button class="sz-btn" style="flex:1;text-align:center;">${data.cta || 'Cop maintenant'}</button><button class="sz-btn-alt" style="flex:1;text-align:center;">Size Guide</button></div>
-<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:2px solid #E5E5E5;"><span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Express</span><span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Sécurisé</span><span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.return(14)} Échange</span></div>
+<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:2px solid #E5E5E5;"><span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.expressShort')}</span><span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.lock(14)} ${trans(lang, 'trust.securedShort')}</span><span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.return(14)} ${trans(lang, 'trust.exchangeShort')}</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#111;"><div style="max-width:1100px;margin:0 auto;">
 <p style="font-size:11px;font-weight:700;letter-spacing:0.16em;color:#E11D48;text-align:center;text-transform:uppercase;margin-bottom:8px;">Le game</p>
@@ -91,7 +91,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#E1
 <p style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:36px;">${data.subtitle}</p>
 ${data.price ? `<p style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#fff;color:#E11D48;border:none;padding:18px 52px;font-family:'Barlow',sans-serif;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;">${data.cta || 'Cop maintenant'}</button>
-<p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;">Édition limitée · Livraison express · Échanges gratuits</p>
+<p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;">Édition limitée · ${trans(lang, 'trust.expressShipping')} · ${trans(lang, 'trust.freeExchanges')}</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, STREETZ_THEME)}

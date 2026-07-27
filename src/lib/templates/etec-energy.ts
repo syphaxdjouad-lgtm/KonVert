@@ -246,7 +246,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
 
       <!-- CTA secondaire -->
       <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:transparent;color:${C.text};padding:14px 32px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;border:2px solid ${C.border};margin-bottom:20px;font-family:'Barlow',sans-serif;transition:border-color .15s;" onmouseover="this.style.borderColor='${C.accent}';this.style.color='${C.accent}';" onmouseout="this.style.borderColor='${C.border}';this.style.color='${C.text}';">
-        Ajouter au panier
+        ${trans(lang, 'cta.addToCart')}
       </a>
 
       <!-- Urgence + COUNTDOWN TIMER — élément unique Energy -->
@@ -277,9 +277,9 @@ export function templateEtecEnergy(data: LandingPageData): string {
       <!-- Trust badges -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:${C.border};border:1px solid ${C.border};margin-bottom:22px;">
         ${[
-          [ico.trophy(22), 'Certifié', 'Anti-dopage'],
-          [ico.truck(22), 'Livraison', 'Express 48h'],
-          [ico.return(22), 'Retour', '30 jours'],
+          [ico.trophy(22), trans(lang, 'trust.certifiedShort'), 'Anti-dopage'],
+          [ico.truck(22), trans(lang, 'trust.shippingLabel'), trans(lang, 'trust.expressHours', { n: 48 })],
+          [ico.return(22), trans(lang, 'trust.returnLabel'), trans(lang, 'trust.returnDaysBare', { n: 30 })],
         ].map(([icon, title, sub]) => `
           <div style="background:${C.card};padding:12px 8px;text-align:center;">
             <div style="color:${C.accent};display:flex;justify-content:center;margin-bottom:5px;">${icon}</div>
@@ -288,10 +288,10 @@ export function templateEtecEnergy(data: LandingPageData): string {
           </div>`).join('')}
       </div>
 
-      <!-- Tabs Garantie / Livraison / Support -->
+      <!-- Tabs Warranty / Shipping / Support -->
       <div style="border:2px solid ${C.border};">
         <div style="display:flex;border-bottom:2px solid ${C.border};">
-          ${['Garantie', 'Livraison', 'Support'].map((tab, i) => `
+          ${[trans(lang, 'style.footer_guarantee'), trans(lang, 'trust.shippingLabel'), trans(lang, 'bespoke.nav.support')].map((tab, i) => `
             <button
               onclick="document.querySelectorAll('.tp6').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tb6').forEach(function(b,j){b.style.background=j===${i}?'${C.accentLight}':'transparent';b.style.color=j===${i}?'${C.accent}':'${C.muted}';b.style.fontWeight=j===${i}?'700':'500';b.style.borderBottom=j===${i}?'3px solid ${C.accent}':'3px solid transparent';});"
               class="tb6"
@@ -302,7 +302,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
           <strong style="color:${C.text};">Satisfait ou remboursé 30 jours.</strong> Si tu ne vois pas de résultats après 30 jours d'utilisation conforme, on te rembourse intégralement. Sans question, sans frais. Notre confiance en nos produits est totale.
         </div>
         <div class="tp6" style="padding:16px;font-size:13px;color:${C.muted};line-height:1.8;display:none;background:${C.card};font-family:'Barlow',sans-serif;">
-          Livraison <strong style="color:${C.text};">express 24–48h</strong> partout en France. Commande avant 14h = expédition le jour même. Suivi en temps réel par SMS. <strong style="color:${C.text};">Offerte dès 50€.</strong>
+          ${trans(lang, 'trust.shippingLabel')} <strong style="color:${C.text};">express 24–48h</strong> partout en France. Commande avant 14h = expédition le jour même. Suivi en temps réel par SMS. <strong style="color:${C.text};">${trans(lang, 'trust.freeShippingOffered')} ${trans(lang, 'trust.fromAmount', { n: 50 })}.</strong>
         </div>
         <div class="tp6" style="padding:16px;font-size:13px;color:${C.muted};line-height:1.8;display:none;background:${C.card};font-family:'Barlow',sans-serif;">
           Notre équipe de coachs est disponible <strong style="color:${C.text};">7j/7</strong>. Conseils personnalisés, protocoles d'entraînement, suivi nutrition. Répond en moins d'1h en semaine.
@@ -400,7 +400,7 @@ ${renderRichSections(data, ENERGY_THEME)}
   <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-block;background:#fff;color:${C.accent};padding:20px 56px;border-radius:100px;font-size:18px;font-weight:900;text-decoration:none;font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 8px 32px rgba(0,0,0,0.25);transition:transform .15s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
     ${data.cta || 'COMMANDER MAINTENANT'} →
   </a>
-  <p style="margin-top:24px;font-size:13px;color:rgba(255,255,255,.5);font-family:'Barlow',sans-serif;">Paiement sécurisé · Livraison express · Retour 30 jours · Certifié anti-dopage</p>
+  <p style="margin-top:24px;font-size:13px;color:rgba(255,255,255,.5);font-family:'Barlow',sans-serif;">${trans(lang, 'hero.securePayment')} · ${trans(lang, 'trust.expressShipping')} · ${trans(lang, 'trust.returnDays', { n: 30 })} · ${trans(lang, 'trust.certifiedShort')} anti-dopage</p>
 </div>
 
 <!-- ═══ COUNTDOWN JS ══════════════════════════════════════════════════ -->

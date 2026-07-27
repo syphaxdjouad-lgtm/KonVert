@@ -64,8 +64,8 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#B8
 <p style="font-size:15px;color:#999;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid #E8E4DC;">${data.price ? `<span style="font-size:36px;font-weight:600;color:#2D2D2D;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#CCC;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="color:#B8860B;font-size:14px;">✓</span><span style="font-size:14px;color:#555;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="pl-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="pl-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.nav.sizeGuide')}</button></div>
-<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #E8E4DC;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Écrin offert</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Sécurisé</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.shield(14)} Certifié</span></div>
+<div style="display:flex;gap:12px;"><button class="pl-btn" style="flex:1;text-align:center;">${data.cta || trans(lang, 'cta.addToCart')}</button><button class="pl-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.nav.sizeGuide')}</button></div>
+<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #E8E4DC;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.giftBoxOffered')}</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.lock(14)} ${trans(lang, 'trust.securedShort')}</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.shield(14)} ${trans(lang, 'trust.certifiedShort')}</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#F7F5EF;"><div style="max-width:1100px;margin:0 auto;">
 <p style="font-size:11px;font-weight:600;letter-spacing:0.16em;color:#B8860B;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.nav.craftsmanship')}</p>
@@ -91,7 +91,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#B8
 <p style="font-size:15px;color:rgba(253,253,251,0.5);margin-bottom:36px;">${data.subtitle}</p>
 ${data.price ? `<p style="font-size:48px;font-weight:600;color:#B8860B;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button class="pl-btn" style="font-size:14px;padding:18px 52px;">${data.cta || 'Offrir ce bijou'}</button>
-<p style="font-size:12px;color:rgba(253,253,251,0.3);margin-top:20px;">Écrin offert · Certificat d'authenticité · Retour gratuit</p>
+<p style="font-size:12px;color:rgba(253,253,251,0.3);margin-top:20px;">${[trans(lang, 'trust.giftBoxOffered'), trans(lang, 'trust.certificateOfAuthenticity'), trans(lang, 'trust.freeReturn')].join(' · ')}</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, PLATINA_THEME)}

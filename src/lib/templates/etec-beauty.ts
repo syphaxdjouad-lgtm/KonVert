@@ -589,9 +589,9 @@ ${data.faq && data.faq.length > 0 ? `
 
     <!-- Copyright -->
     <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <p style="font-size:12px;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;">© 2026 ${data.product_name}. Tous droits réservés.</p>
+      <p style="font-size:12px;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;">© 2026 ${data.product_name}. ${trans(lang, 'style.footer_copyright')}</p>
       <div style="display:flex;gap:20px;">
-        ${['Politique de confidentialité', 'CGV', 'Cookies'].map(link => `
+        ${[trans(lang, 'style.footer_privacy'), trans(lang, 'footer.cgv'), trans(lang, 'footer.cookiesShort')].map(link => `
           <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:12px;color:rgba(255,255,255,0.3);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">${link}</a>`).join('')}
       </div>
     </div>

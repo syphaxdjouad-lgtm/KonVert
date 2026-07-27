@@ -47,9 +47,9 @@ export function templateEtecBlue(data: LandingPageData): string {
     </div>`).join('')
 
   const tabContents = [
-    { id: 'tab1-garantie', label: 'Garantie', content: `<p style="font-size:14px;color:#6E6E73;line-height:1.7;margin:0;">Satisfait ou remboursé pendant 30 jours. Si vous n'êtes pas entièrement satisfait de votre achat, retournez-le dans son emballage d'origine pour un remboursement complet. Garantie fabricant 12 mois incluse.</p>` },
-    { id: 'tab1-livraison', label: 'Livraison', content: `<p style="font-size:14px;color:#6E6E73;line-height:1.7;margin:0;">Livraison gratuite dès 50€. Expédition sous 24–48h ouvrées. Livraison standard 3–5 jours, express 24h disponible. Suivi en temps réel par SMS et email. Livraison dans toute l'Europe.</p>` },
-    { id: 'tab1-support', label: 'Support', content: `<p style="font-size:14px;color:#6E6E73;line-height:1.7;margin:0;">Notre équipe support est disponible du lundi au samedi, 9h–19h. Chat en ligne, email sous 2h, téléphone disponible. Nous parlons français, anglais et espagnol.</p>` },
+    { id: 'tab1-garantie', label: trans(lang, 'style.footer_guarantee'), content: `<p style="font-size:14px;color:#6E6E73;line-height:1.7;margin:0;">${trans(lang, 'bespoke.blue.tabGuaranteeBody')}</p>` },
+    { id: 'tab1-livraison', label: trans(lang, 'trust.shippingLabel'), content: `<p style="font-size:14px;color:#6E6E73;line-height:1.7;margin:0;">${trans(lang, 'bespoke.blue.tabShippingBody')}</p>` },
+    { id: 'tab1-support', label: trans(lang, 'bespoke.nav.support'), content: `<p style="font-size:14px;color:#6E6E73;line-height:1.7;margin:0;">Notre équipe support est disponible du lundi au samedi, 9h–19h. Chat en ligne, email sous 2h, téléphone disponible. Nous parlons français, anglais et espagnol.</p>` },
   ]
 
   const specItems = [
@@ -149,18 +149,18 @@ body{font-family:'Inter',sans-serif;background:#FAFAFA;color:#1D1D1F;}
       <!-- CTAs -->
       <div style="display:flex;flex-direction:column;gap:12px;">
         <button class="blue-btn-primary" style="width:100%;justify-content:center;font-size:16px;padding:18px 32px;">
-          ${data.cta || 'Ajouter au panier'} →
+          ${data.cta || trans(lang, 'cta.addToCart')} →
         </button>
         <button class="blue-btn-secondary" style="width:100%;justify-content:center;">
-          Acheter maintenant
+          ${trans(lang, 'cta.buyNow')}
         </button>
       </div>
 
       <!-- TRUST MINI -->
       <div style="display:flex;gap:20px;margin-top:20px;padding-top:16px;border-top:1px solid #E8E8ED;" class="blue-trust-grid">
-        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">${ico.truck(16)} Livraison offerte</span>
-        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">${ico.lock(16)} Paiement sécurisé</span>
-        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">${ico.return(16)} Retour 30j</span>
+        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">${ico.truck(16)} ${trans(lang, 'trust.freeShippingOffered')}</span>
+        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">${ico.lock(16)} ${trans(lang, 'hero.securePayment')}</span>
+        <span style="font-size:12px;color:#6E6E73;display:flex;align-items:center;gap:6px;">${ico.return(16)} ${trans(lang, 'trust.returnDays', { n: 30 })}</span>
       </div>
     </div>
   </div>
@@ -229,8 +229,8 @@ ${renderRichSections(data, BLUE_THEME)}
     <h2 style="font-size:36px;font-weight:900;color:#fff;letter-spacing:-0.03em;margin-bottom:16px;">${data.headline}</h2>
     <p style="font-size:16px;color:rgba(255,255,255,0.8);margin-bottom:32px;">${data.subtitle}</p>
     ${data.price ? `<p style="font-size:48px;font-weight:900;color:#fff;margin-bottom:32px;">${data.price}€</p>` : ''}
-    <button style="background:#fff;color:#0055D4;border:none;border-radius:12px;padding:18px 48px;font-family:'Inter',sans-serif;font-size:17px;font-weight:800;cursor:pointer;">${data.cta || 'Commander maintenant'} →</button>
-    <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:16px;">Livraison gratuite · Paiement sécurisé · Retour 30 jours</p>
+    <button style="background:#fff;color:#0055D4;border:none;border-radius:12px;padding:18px 48px;font-family:'Inter',sans-serif;font-size:17px;font-weight:800;cursor:pointer;">${data.cta || trans(lang, 'cta.orderNow')} →</button>
+    <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-top:16px;">${[trans(lang, 'trust.freeShippingOffered'), trans(lang, 'hero.securePayment'), trans(lang, 'trust.returnDays', { n: 30 })].join(' · ')}</p>
   </div>
 </section>
 

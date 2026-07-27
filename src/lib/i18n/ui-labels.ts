@@ -1311,6 +1311,363 @@ export const UI_LABELS: Record<string, LabelDict> = {
     fr: 'Galerie produit', en: 'Product gallery', es: 'Galería del producto', de: 'Produktgalerie',
     it: 'Galleria del prodotto', pt: 'Galeria do produto', nl: 'Productgalerij', ar: 'معرض المنتج', zh: '产品图库',
   },
+
+  // ── Fix résiduel J-2 : CTA secondaire + mini trust-row (etec-*.ts) ──────
+  // Chasse i18n post-PR#44 — ces libellés restaient codés en dur en FR dans
+  // les fallbacks `data.cta || '...'` et les badges confiance sous le CTA
+  // hero (Livraison/Paiement/Retour), quelle que soit la langue choisie.
+  'cta.buyNow': {
+    fr: 'Acheter maintenant', en: 'Buy now', es: 'Comprar ahora', de: 'Jetzt kaufen',
+    it: 'Acquista ora', pt: 'Comprar agora', nl: 'Nu kopen', ar: 'اشتر الآن', zh: '立即购买',
+  },
+  'trust.freeShippingOffered': {
+    fr: 'Livraison offerte', en: 'Free shipping', es: 'Envío gratis', de: 'Kostenloser Versand',
+    it: 'Spedizione gratuita', pt: 'Envio grátis', nl: 'Gratis verzending', ar: 'شحن مجاني', zh: '免费送货',
+  },
+  'trust.returnDays': {
+    fr: 'Retour {n}j', en: '{n}-day return', es: 'Devolución {n}d', de: '{n} Tage Rückgabe',
+    it: 'Reso {n}g', pt: 'Devolução {n}d', nl: '{n} dagen retour', ar: 'إرجاع خلال {n} يومًا', zh: '{n}天退货',
+  },
+  'trust.returnDaysBare': {
+    fr: '{n} jours', en: '{n} days', es: '{n} días', de: '{n} Tage',
+    it: '{n} giorni', pt: '{n} dias', nl: '{n} dagen', ar: '{n} أيام', zh: '{n} 天',
+  },
+  'trust.returnDaysShort': {
+    fr: '{n}j', en: '{n}d', es: '{n}d', de: '{n}T', it: '{n}g',
+    pt: '{n}d', nl: '{n}d', ar: '{n} ي', zh: '{n}天',
+  },
+  'trust.freeReturn': {
+    fr: 'Retour gratuit', en: 'Free returns', es: 'Devolución gratis', de: 'Kostenlose Rückgabe',
+    it: 'Reso gratuito', pt: 'Devolução grátis', nl: 'Gratis retour', ar: 'إرجاع مجاني', zh: '免费退货',
+  },
+  'trust.freeExchanges': {
+    fr: 'Échanges gratuits', en: 'Free exchanges', es: 'Cambios gratis', de: 'Kostenloser Umtausch',
+    it: 'Cambi gratuiti', pt: 'Trocas grátis', nl: 'Gratis omruilen', ar: 'استبدال مجاني', zh: '免费换货',
+  },
+  'trust.exchangeShort': {
+    fr: 'Échange', en: 'Exchange', es: 'Cambio', de: 'Umtausch', it: 'Cambio',
+    pt: 'Troca', nl: 'Omruilen', ar: 'استبدال', zh: '换货',
+  },
+  'trust.securedShort': {
+    fr: 'Sécurisé', en: 'Secure', es: 'Seguro', de: 'Sicher', it: 'Sicuro',
+    pt: 'Seguro', nl: 'Veilig', ar: 'آمن', zh: '安全',
+  },
+  'trust.offeredShort': {
+    fr: 'Offerte', en: 'Free', es: 'Gratis', de: 'Kostenlos', it: 'Gratis',
+    pt: 'Grátis', nl: 'Gratis', ar: 'مجاناً', zh: '免费',
+  },
+  'trust.expressShort': {
+    fr: 'Express', en: 'Express', es: 'Exprés', de: 'Express', it: 'Express',
+    pt: 'Expresso', nl: 'Express', ar: 'سريع', zh: '快递',
+  },
+  'trust.expressHours': {
+    fr: 'Express {n}h', en: 'Express {n}h', es: 'Exprés {n}h', de: 'Express {n}Std',
+    it: 'Express {n}h', pt: 'Expresso {n}h', nl: 'Express {n}u', ar: 'سريع خلال {n} ساعة', zh: '{n}小时特快',
+  },
+  'trust.certifiedShort': {
+    fr: 'Certifié', en: 'Certified', es: 'Certificado', de: 'Zertifiziert', it: 'Certificato',
+    pt: 'Certificado', nl: 'Gecertificeerd', ar: 'معتمد', zh: '认证',
+  },
+  'trust.guaranteedShort': {
+    fr: 'Garanti', en: 'Guaranteed', es: 'Garantizado', de: 'Garantiert', it: 'Garantito',
+    pt: 'Garantido', nl: 'Gegarandeerd', ar: 'مضمون', zh: '有保障',
+  },
+  'trust.inStockShort': {
+    fr: 'En stock', en: 'In stock', es: 'En stock', de: 'Auf Lager', it: 'Disponibile',
+    pt: 'Em stock', nl: 'Op voorraad', ar: 'متوفر', zh: '现货',
+  },
+  'trust.carefulShipping': {
+    fr: 'Livraison soignée', en: 'Careful shipping', es: 'Envío cuidado', de: 'Sorgfältiger Versand',
+    it: 'Spedizione curata', pt: 'Envio cuidadoso', nl: 'Zorgvuldige verzending', ar: 'شحن معتنى به', zh: '精心配送',
+  },
+  'trust.giftBoxOffered': {
+    fr: 'Écrin offert', en: 'Gift box included', es: 'Estuche incluido', de: 'Geschenkbox inklusive',
+    it: 'Cofanetto incluso', pt: 'Estojo incluído', nl: 'Geschenkdoos inbegrepen', ar: 'علبة هدية مجانية', zh: '赠送礼盒',
+  },
+  'trust.carefulShort': {
+    fr: 'Soigné', en: 'Handmade', es: 'Artesanal', de: 'Handgefertigt', it: 'Artigianale',
+    pt: 'Artesanal', nl: 'Handgemaakt', ar: 'مصنوع يدوياً', zh: '精心制作',
+  },
+  'trust.naturalShort': {
+    fr: 'Naturel', en: 'Natural', es: 'Natural', de: 'Natürlich', it: 'Naturale',
+    pt: 'Natural', nl: 'Natuurlijk', ar: 'طبيعي', zh: '天然',
+  },
+  'trust.fromAmount': {
+    fr: "Dès {n}€ d'achat", en: 'From €{n} purchase', es: 'Desde {n}€ de compra', de: 'Ab {n}€ Einkauf',
+    it: 'Da {n}€ di spesa', pt: 'A partir de {n}€ de compra', nl: 'Vanaf {n}€ aankoop', ar: 'من {n}€ للشراء', zh: '满{n}欧元起',
+  },
+  'trust.satisfiedOrRefundedFem': {
+    fr: 'Satisfaite ou remboursée', en: 'Satisfied or refunded', es: 'Satisfecha o reembolsada',
+    de: 'Zufrieden oder Geld zurück', it: 'Soddisfatta o rimborsata', pt: 'Satisfeita ou reembolsada',
+    nl: 'Tevreden of terugbetaald', ar: 'راضية أو استرداد المبلغ', zh: '满意或退款',
+  },
+  'trust.noFees': {
+    fr: 'Sans frais', en: 'No fees', es: 'Sin gastos', de: 'Ohne Gebühren', it: 'Senza costi',
+    pt: 'Sem taxas', nl: 'Zonder kosten', ar: 'بدون رسوم', zh: '无手续费',
+  },
+  'trust.shippingLabel': {
+    fr: 'Livraison', en: 'Shipping', es: 'Envío', de: 'Versand', it: 'Spedizione',
+    pt: 'Envio', nl: 'Verzending', ar: 'شحن', zh: '配送',
+  },
+  'trust.returnLabel': {
+    fr: 'Retour', en: 'Returns', es: 'Devolución', de: 'Rückgabe', it: 'Reso',
+    pt: 'Devolução', nl: 'Retour', ar: 'إرجاع', zh: '退货',
+  },
+  'trust.returnLabelPlural': {
+    fr: 'Retours', en: 'Returns', es: 'Devoluciones', de: 'Rückgaben', it: 'Resi',
+    pt: 'Devoluções', nl: 'Retourneren', ar: 'المرتجعات', zh: '退货',
+  },
+  'footer.cgv': {
+    fr: 'CGV', en: 'Terms', es: 'Términos', de: 'AGB', it: 'Termini',
+    pt: 'Termos', nl: 'Voorwaarden', ar: 'الشروط', zh: '条款',
+  },
+  'footer.cookiesShort': {
+    fr: 'Cookies', en: 'Cookies', es: 'Cookies', de: 'Cookies', it: 'Cookie',
+    pt: 'Cookies', nl: 'Cookies', ar: 'ملفات تعريف الارتباط', zh: 'Cookie设置',
+  },
+  'footer.legalNotice': {
+    fr: 'Mentions légales', en: 'Legal notice', es: 'Aviso legal', de: 'Impressum',
+    it: 'Note legali', pt: 'Aviso legal', nl: 'Juridische mededelingen', ar: 'إشعار قانوني', zh: '法律声明',
+  },
+  'trust.expressShippingAvailable': {
+    fr: 'Livraison express disponible', en: 'Express shipping available', es: 'Envío exprés disponible',
+    de: 'Expressversand verfügbar', it: 'Spedizione express disponibile', pt: 'Envio expresso disponível',
+    nl: 'Expresverzending beschikbaar', ar: 'الشحن السريع متاح', zh: '可选特快配送',
+  },
+  'trust.warrantyYears': {
+    fr: 'Garantie {n} ans', en: '{n}-year warranty', es: 'Garantía de {n} años', de: '{n} Jahre Garantie',
+    it: 'Garanzia di {n} anni', pt: 'Garantia de {n} anos', nl: '{n} jaar garantie', ar: 'ضمان {n} سنوات', zh: '{n}年保修',
+  },
+  'trust.authenticShort': {
+    fr: 'Authentique', en: 'Authentic', es: 'Auténtico', de: 'Authentisch', it: 'Autentico',
+    pt: 'Autêntico', nl: 'Authentiek', ar: 'أصلي', zh: '正品',
+  },
+  'trust.organicShort': {
+    fr: 'Bio', en: 'Organic', es: 'Ecológico', de: 'Bio', it: 'Bio',
+    pt: 'Biológico', nl: 'Bio', ar: 'عضوي', zh: '有机',
+  },
+  'trust.testedShort': {
+    fr: 'Testé', en: 'Tested', es: 'Probado', de: 'Getestet', it: 'Testato',
+    pt: 'Testado', nl: 'Getest', ar: 'مُختبَر', zh: '已测试',
+  },
+
+  // ── Fix résiduel J-2 round 2 : caption finale sous le CTA + bandeaux
+  // urgence + contenu des onglets Garantie/Livraison (etec-*.ts) ──────────
+  'trust.satisfiedOrRefunded': {
+    fr: 'Satisfait ou remboursé', en: 'Satisfied or refunded', es: 'Satisfecho o reembolsado',
+    de: 'Zufrieden oder Geld zurück', it: 'Soddisfatto o rimborsato', pt: 'Satisfeito ou reembolsado',
+    nl: 'Tevreden of terugbetaald', ar: 'راضٍ أو استرداد المبلغ', zh: '满意或退款',
+  },
+  'trust.satisfactionGuaranteed': {
+    fr: 'Satisfaction garantie', en: 'Satisfaction guaranteed', es: 'Satisfacción garantizada',
+    de: 'Zufriedenheit garantiert', it: 'Soddisfazione garantita', pt: 'Satisfação garantida',
+    nl: 'Tevredenheid gegarandeerd', ar: 'الرضا مضمون', zh: '满意保证',
+  },
+  'trust.dedicatedSupport': {
+    fr: 'Support dédié', en: 'Dedicated support', es: 'Soporte dedicado', de: 'Persönlicher Support',
+    it: 'Assistenza dedicata', pt: 'Suporte dedicado', nl: 'Toegewijde support', ar: 'دعم مخصص', zh: '专属客服',
+  },
+  'trust.expressShipping': {
+    fr: 'Livraison express', en: 'Express shipping', es: 'Envío exprés', de: 'Expressversand',
+    it: 'Spedizione express', pt: 'Envio expresso', nl: 'Expresverzending', ar: 'شحن سريع', zh: '快递配送',
+  },
+  'trust.secureShipping': {
+    fr: 'Livraison sécurisée', en: 'Secure shipping', es: 'Envío seguro', de: 'Sicherer Versand',
+    it: 'Spedizione sicura', pt: 'Envio seguro', nl: 'Veilige verzending', ar: 'شحن آمن', zh: '安全配送',
+  },
+  'trust.certificateOfAuthenticity': {
+    fr: "Certificat d'authenticité", en: 'Certificate of authenticity', es: 'Certificado de autenticidad',
+    de: 'Echtheitszertifikat', it: 'Certificato di autenticità', pt: 'Certificado de autenticidade',
+    nl: 'Echtheidscertificaat', ar: 'شهادة أصالة', zh: '真品证书',
+  },
+  'trust.carefulPackaging': {
+    fr: 'Emballage soigné', en: 'Careful packaging', es: 'Embalaje cuidado', de: 'Sorgfältige Verpackung',
+    it: 'Confezione curata', pt: 'Embalagem cuidada', nl: 'Zorgvuldige verpakking', ar: 'تغليف عناية', zh: '精心包装',
+  },
+  'bespoke.artisan.urgencyFallback': {
+    fr: 'Fait main avec amour — Livraison offerte dès 35€', en: 'Handmade with love — Free shipping from €35',
+    es: 'Hecho a mano con amor — Envío gratis desde 35€', de: 'Mit Liebe handgefertigt — Kostenloser Versand ab 35€',
+    it: 'Fatto a mano con amore — Spedizione gratuita da 35€', pt: 'Feito à mão com amor — Envio grátis a partir de 35€',
+    nl: 'Met liefde handgemaakt — Gratis verzending vanaf €35', ar: 'صُنع يدويًا بحب — شحن مجاني من 35€', zh: '匠心手作 — 满35欧元免运费',
+  },
+  'bespoke.cosmetix.urgencyFallback': {
+    fr: "Offre exclusive — Livraison offerte aujourd'hui", en: 'Exclusive offer — Free shipping today',
+    es: 'Oferta exclusiva — Envío gratis hoy', de: 'Exklusives Angebot — Heute kostenloser Versand',
+    it: 'Offerta esclusiva — Spedizione gratuita oggi', pt: 'Oferta exclusiva — Envio grátis hoje',
+    nl: 'Exclusieve aanbieding — Vandaag gratis verzending', ar: 'عرض حصري — شحن مجاني اليوم', zh: '独家优惠 — 今日免运费',
+  },
+  'bespoke.glow.urgencyFallback': {
+    fr: 'Offre beauté — Livraison offerte + échantillon gratuit', en: 'Beauty offer — Free shipping + free sample',
+    es: 'Oferta de belleza — Envío gratis + muestra gratis', de: 'Beauty-Angebot — Kostenloser Versand + Gratisprobe',
+    it: 'Offerta beauty — Spedizione gratuita + campione omaggio', pt: 'Oferta de beleza — Envio grátis + amostra grátis',
+    nl: 'Beauty-aanbieding — Gratis verzending + gratis monster', ar: 'عرض جمال — شحن مجاني + عينة مجانية', zh: '美妆优惠 — 免运费+赠送试用装',
+  },
+  'bespoke.homestyle.urgencyFallback': {
+    fr: 'Livraison offerte — Pièces artisanales en édition limitée', en: 'Free shipping — Limited edition handcrafted pieces',
+    es: 'Envío gratis — Piezas artesanales de edición limitada', de: 'Kostenloser Versand — Handgefertigte Stücke in limitierter Auflage',
+    it: 'Spedizione gratuita — Pezzi artigianali in edizione limitata', pt: 'Envio grátis — Peças artesanais em edição limitada',
+    nl: 'Gratis verzending — Handgemaakte stukken in beperkte oplage', ar: 'شحن مجاني — قطع حرفية بإصدار محدود', zh: '免运费 — 限量手工制品',
+  },
+  'bespoke.outfit.urgencyFallback': {
+    fr: 'Nouvelle collection — Livraison offerte dès 80€', en: 'New collection — Free shipping from €80',
+    es: 'Nueva colección — Envío gratis desde 80€', de: 'Neue Kollektion — Kostenloser Versand ab 80€',
+    it: 'Nuova collezione — Spedizione gratuita da 80€', pt: 'Nova coleção — Envio grátis a partir de 80€',
+    nl: 'Nieuwe collectie — Gratis verzending vanaf €80', ar: 'مجموعة جديدة — شحن مجاني من 80€', zh: '新品系列 — 满80欧元免运费',
+  },
+  'bespoke.quarter.urgencyFallback': {
+    fr: 'Nouvelle collection disponible — Livraison offerte', en: 'New collection available — Free shipping',
+    es: 'Nueva colección disponible — Envío gratis', de: 'Neue Kollektion verfügbar — Kostenloser Versand',
+    it: 'Nuova collezione disponibile — Spedizione gratuita', pt: 'Nova coleção disponível — Envio grátis',
+    nl: 'Nieuwe collectie beschikbaar — Gratis verzending', ar: 'مجموعة جديدة متاحة — شحن مجاني', zh: '新品系列上市 — 免运费',
+  },
+  'bespoke.starter.urgencyFallback': {
+    fr: "Offre spéciale — Livraison offerte aujourd'hui", en: 'Special offer — Free shipping today',
+    es: 'Oferta especial — Envío gratis hoy', de: 'Sonderangebot — Heute kostenloser Versand',
+    it: 'Offerta speciale — Spedizione gratuita oggi', pt: 'Oferta especial — Envio grátis hoje',
+    nl: 'Speciale aanbieding — Vandaag gratis verzending', ar: 'عرض خاص — شحن مجاني اليوم', zh: '特别优惠 — 今日免运费',
+  },
+  'bespoke.techcase.urgencyFallback': {
+    fr: 'Livraison gratuite — Commandez avant 14h, expédié aujourd\'hui', en: 'Free shipping — Order before 2pm, shipped today',
+    es: 'Envío gratis — Pide antes de las 14h, se envía hoy', de: 'Kostenloser Versand — Bestelle vor 14 Uhr, heute versandt',
+    it: 'Spedizione gratuita — Ordina prima delle 14, spedito oggi', pt: 'Envio grátis — Encomende antes das 14h, enviado hoje',
+    nl: 'Gratis verzending — Bestel voor 14u, vandaag verzonden', ar: 'شحن مجاني — اطلب قبل الساعة 2 ظهرًا، يُشحن اليوم', zh: '免运费 — 下午2点前下单，当日发货',
+  },
+  'bespoke.blue.tabGuaranteeBody': {
+    fr: "Satisfait ou remboursé pendant 30 jours. Si vous n'êtes pas entièrement satisfait de votre achat, retournez-le dans son emballage d'origine pour un remboursement complet. Garantie fabricant 12 mois incluse.",
+    en: "Satisfied or refunded for 30 days. If you are not fully satisfied with your purchase, return it in its original packaging for a full refund. 12-month manufacturer warranty included.",
+    es: 'Satisfecho o reembolsado durante 30 días. Si no está completamente satisfecho con su compra, devuélvala en su embalaje original para un reembolso completo. Garantía del fabricante de 12 meses incluida.',
+    de: 'Zufrieden oder Geld zurück für 30 Tage. Wenn Sie mit Ihrem Kauf nicht vollständig zufrieden sind, senden Sie ihn in der Originalverpackung zurück für eine vollständige Rückerstattung. 12 Monate Herstellergarantie inklusive.',
+    it: "Soddisfatto o rimborsato per 30 giorni. Se non sei pienamente soddisfatto del tuo acquisto, restituiscilo nella confezione originale per un rimborso completo. Garanzia del produttore di 12 mesi inclusa.",
+    pt: 'Satisfeito ou reembolsado durante 30 dias. Se não estiver totalmente satisfeito com a sua compra, devolva-a na embalagem original para um reembolso total. Garantia do fabricante de 12 meses incluída.',
+    nl: 'Tevreden of geld terug gedurende 30 dagen. Als u niet volledig tevreden bent met uw aankoop, stuur het terug in de originele verpakking voor een volledige terugbetaling. 12 maanden fabrieksgarantie inbegrepen.',
+    ar: 'راضٍ أو استرداد المبلغ خلال 30 يومًا. إذا لم تكن راضيًا تمامًا عن مشترياتك، أعدها في عبوتها الأصلية لاسترداد كامل المبلغ. ضمان الشركة المصنعة لمدة 12 شهرًا مشمول.',
+    zh: '30天满意保证或退款。如果您对购买不完全满意，请以原包装退回以获得全额退款。含12个月厂商保修。',
+  },
+  'bespoke.blue.tabShippingBody': {
+    fr: "Livraison gratuite dès 50€. Expédition sous 24–48h ouvrées. Livraison standard 3–5 jours, express 24h disponible. Suivi en temps réel par SMS et email. Livraison dans toute l'Europe.",
+    en: 'Free shipping from €50. Shipped within 24–48 business hours. Standard delivery 3–5 days, 24h express available. Real-time SMS and email tracking. Delivery throughout Europe.',
+    es: 'Envío gratis desde 50€. Envío en 24-48h laborables. Entrega estándar 3-5 días, exprés 24h disponible. Seguimiento en tiempo real por SMS y email. Entrega en toda Europa.',
+    de: 'Kostenloser Versand ab 50€. Versand innerhalb von 24-48 Werkstunden. Standardlieferung 3-5 Tage, Express 24h verfügbar. Echtzeit-Verfolgung per SMS und E-Mail. Lieferung in ganz Europa.',
+    it: 'Spedizione gratuita da 50€. Spedito entro 24-48 ore lavorative. Consegna standard 3-5 giorni, express 24h disponibile. Tracciamento in tempo reale via SMS ed email. Consegna in tutta Europa.',
+    pt: 'Envio grátis a partir de 50€. Enviado em 24-48h úteis. Entrega padrão 3-5 dias, expresso 24h disponível. Rastreamento em tempo real por SMS e email. Entrega em toda a Europa.',
+    nl: 'Gratis verzending vanaf €50. Verzonden binnen 24-48 werkuren. Standaardlevering 3-5 dagen, express 24u beschikbaar. Realtime tracking via sms en e-mail. Levering in heel Europa.',
+    ar: 'شحن مجاني من 50€. يُشحن خلال 24-48 ساعة عمل. توصيل عادي 3-5 أيام، سريع خلال 24 ساعة متاح. تتبع فوري عبر الرسائل والبريد الإلكتروني. توصيل إلى جميع أنحاء أوروبا.',
+    zh: '满50欧元免运费。24-48个工作小时内发货。标准配送3-5天，可选24小时特快。短信和邮件实时追踪。配送覆盖全欧洲。',
+  },
+  'bespoke.cosmetix.tabGuaranteeBody': {
+    fr: "Satisfait ou remboursé pendant 30 jours. Retournez le produit dans son emballage d'origine pour un remboursement intégral.",
+    en: 'Satisfied or refunded for 30 days. Return the product in its original packaging for a full refund.',
+    es: 'Satisfecho o reembolsado durante 30 días. Devuelva el producto en su embalaje original para un reembolso completo.',
+    de: 'Zufrieden oder Geld zurück für 30 Tage. Senden Sie das Produkt in der Originalverpackung zurück für eine vollständige Rückerstattung.',
+    it: 'Soddisfatto o rimborsato per 30 giorni. Restituisci il prodotto nella confezione originale per un rimborso completo.',
+    pt: 'Satisfeito ou reembolsado durante 30 dias. Devolva o produto na embalagem original para um reembolso total.',
+    nl: 'Tevreden of geld terug gedurende 30 dagen. Stuur het product terug in de originele verpakking voor een volledige terugbetaling.',
+    ar: 'راضٍ أو استرداد المبلغ خلال 30 يومًا. أعد المنتج في عبوته الأصلية لاسترداد كامل المبلغ.',
+    zh: '30天满意保证或退款。请以原包装退回产品以获得全额退款。',
+  },
+  'bespoke.cosmetix.tabShippingBody': {
+    fr: 'Livraison offerte dès 40€. Expédition sous 24h en jours ouvrés. Emballage recyclable et éco-responsable. Suivi en temps réel par email.',
+    en: 'Free shipping from €40. Shipped within 24 business hours. Recyclable and eco-friendly packaging. Real-time email tracking.',
+    es: 'Envío gratis desde 40€. Envío en 24h laborables. Embalaje reciclable y ecológico. Seguimiento en tiempo real por email.',
+    de: 'Kostenloser Versand ab 40€. Versand innerhalb von 24 Werkstunden. Recycelbare und umweltfreundliche Verpackung. Echtzeit-Tracking per E-Mail.',
+    it: 'Spedizione gratuita da 40€. Spedito entro 24 ore lavorative. Confezione riciclabile ed eco-responsabile. Tracciamento in tempo reale via email.',
+    pt: 'Envio grátis a partir de 40€. Enviado em 24h úteis. Embalagem reciclável e ecológica. Rastreamento em tempo real por email.',
+    nl: 'Gratis verzending vanaf €40. Verzonden binnen 24 werkuren. Recyclebare en milieuvriendelijke verpakking. Realtime tracking via e-mail.',
+    ar: 'شحن مجاني من 40€. يُشحن خلال 24 ساعة عمل. تغليف قابل لإعادة التدوير وصديق للبيئة. تتبع فوري عبر البريد الإلكتروني.',
+    zh: '满40欧元免运费。24个工作小时内发货。可回收环保包装。邮件实时追踪。',
+  },
+  'bespoke.homestyle.tabShippingBody': {
+    fr: 'Livraison offerte en France métropolitaine. Emballage renforcé sur mesure. Installation possible (supplément). Délai : 5-10 jours ouvrés.',
+    en: 'Free shipping within mainland France. Custom reinforced packaging. Installation available (extra fee). Delivery: 5-10 business days.',
+    es: 'Envío gratis en la Francia continental. Embalaje reforzado a medida. Instalación disponible (con suplemento). Plazo: 5-10 días laborables.',
+    de: 'Kostenloser Versand im französischen Mutterland. Maßgeschneiderte verstärkte Verpackung. Montage möglich (gegen Aufpreis). Lieferzeit: 5-10 Werktage.',
+    it: 'Spedizione gratuita in Francia continentale. Imballaggio rinforzato su misura. Installazione disponibile (a pagamento). Consegna: 5-10 giorni lavorativi.',
+    pt: 'Envio grátis na França continental. Embalagem reforçada sob medida. Instalação disponível (com custo extra). Prazo: 5-10 dias úteis.',
+    nl: 'Gratis verzending binnen het Franse vasteland. Op maat gemaakte verstevigde verpakking. Installatie mogelijk (meerprijs). Levertijd: 5-10 werkdagen.',
+    ar: 'شحن مجاني داخل فرنسا القارية. تغليف مقوى مخصص. إمكانية التركيب (برسوم إضافية). مدة التوصيل: 5-10 أيام عمل.',
+    zh: '法国本土免运费。定制加固包装。可提供安装服务（需额外付费）。配送时间：5-10个工作日。',
+  },
+  'bespoke.noir.tabGuaranteeBody': {
+    fr: 'Satisfait ou remboursé pendant 30 jours. Garantie constructeur 12 mois couvrant tous les défauts de fabrication. Support technique prioritaire inclus.',
+    en: 'Satisfied or refunded for 30 days. 12-month manufacturer warranty covering all manufacturing defects. Priority technical support included.',
+    es: 'Satisfecho o reembolsado durante 30 días. Garantía del fabricante de 12 meses que cubre todos los defectos de fabricación. Soporte técnico prioritario incluido.',
+    de: 'Zufrieden oder Geld zurück für 30 Tage. 12 Monate Herstellergarantie, die alle Fabrikationsfehler abdeckt. Prioritärer technischer Support inklusive.',
+    it: 'Soddisfatto o rimborsato per 30 giorni. Garanzia del produttore di 12 mesi che copre tutti i difetti di fabbricazione. Supporto tecnico prioritario incluso.',
+    pt: 'Satisfeito ou reembolsado durante 30 dias. Garantia do fabricante de 12 meses cobrindo todos os defeitos de fabrico. Suporte técnico prioritário incluído.',
+    nl: 'Tevreden of geld terug gedurende 30 dagen. 12 maanden fabrieksgarantie die alle fabricagefouten dekt. Prioritaire technische ondersteuning inbegrepen.',
+    ar: 'راضٍ أو استرداد المبلغ خلال 30 يومًا. ضمان الشركة المصنعة لمدة 12 شهرًا يغطي جميع عيوب التصنيع. دعم فني ذو أولوية مشمول.',
+    zh: '30天满意保证或退款。12个月厂商保修，涵盖所有制造缺陷。含优先技术支持。',
+  },
+  'bespoke.prestige.tabGuaranteeBody': {
+    fr: 'Garantie satisfait ou remboursé pendant 30 jours. Garantie fabricant 2 ans. Notre service client premium est disponible 7j/7 pour vous accompagner.',
+    en: '30-day satisfied-or-refunded guarantee. 2-year manufacturer warranty. Our premium customer service is available 7 days a week to assist you.',
+    es: 'Garantía de satisfecho o reembolsado durante 30 días. Garantía del fabricante de 2 años. Nuestro servicio de atención al cliente premium está disponible los 7 días de la semana.',
+    de: '30 Tage Zufrieden-oder-Geld-zurück-Garantie. 2 Jahre Herstellergarantie. Unser Premium-Kundenservice steht Ihnen 7 Tage die Woche zur Verfügung.',
+    it: 'Garanzia soddisfatto o rimborsato per 30 giorni. Garanzia del produttore di 2 anni. Il nostro servizio clienti premium è disponibile 7 giorni su 7 per assisterti.',
+    pt: 'Garantia de satisfeito ou reembolsado durante 30 dias. Garantia do fabricante de 2 anos. O nosso serviço de apoio ao cliente premium está disponível 7 dias por semana.',
+    nl: '30 dagen tevreden-of-geld-terug-garantie. 2 jaar fabrieksgarantie. Onze premium klantenservice is 7 dagen per week beschikbaar om u te helpen.',
+    ar: 'ضمان الرضا أو استرداد المبلغ لمدة 30 يومًا. ضمان الشركة المصنعة لمدة سنتين. خدمة العملاء المميزة لدينا متاحة 7 أيام في الأسبوع لمساعدتك.',
+    zh: '30天满意保证或退款。2年厂商保修。我们的高级客服每周7天为您服务。',
+  },
+  'bespoke.prestige.tabShippingBody': {
+    fr: 'Livraison express offerte. Emballage cadeau premium inclus. Suivi en temps réel. Livraison en Europe sous 2-4 jours ouvrés.',
+    en: 'Free express shipping. Premium gift packaging included. Real-time tracking. Delivery in Europe within 2-4 business days.',
+    es: 'Envío exprés gratis. Embalaje de regalo premium incluido. Seguimiento en tiempo real. Entrega en Europa en 2-4 días laborables.',
+    de: 'Kostenloser Expressversand. Premium-Geschenkverpackung inklusive. Echtzeit-Tracking. Lieferung in Europa innerhalb von 2-4 Werktagen.',
+    it: 'Spedizione express gratuita. Confezione regalo premium inclusa. Tracciamento in tempo reale. Consegna in Europa entro 2-4 giorni lavorativi.',
+    pt: 'Envio expresso grátis. Embalagem de presente premium incluída. Rastreamento em tempo real. Entrega na Europa em 2-4 dias úteis.',
+    nl: 'Gratis expresverzending. Premium cadeauverpakking inbegrepen. Realtime tracking. Levering in Europa binnen 2-4 werkdagen.',
+    ar: 'شحن سريع مجاني. تغليف هدية فاخر مشمول. تتبع فوري. توصيل في أوروبا خلال 2-4 أيام عمل.',
+    zh: '免费快递配送。含高级礼品包装。实时追踪。欧洲境内2-4个工作日送达。',
+  },
+  'bespoke.techcase.tabShippingBody': {
+    fr: 'Expédié sous 24h jours ouvrés. Livraison gratuite en France métropolitaine. Express 24h disponible. Suivi en temps réel. Retour gratuit sous 30 jours.',
+    en: 'Shipped within 24 business hours. Free shipping within mainland France. 24h express available. Real-time tracking. Free returns within 30 days.',
+    es: 'Enviado en 24h laborables. Envío gratis en la Francia continental. Exprés 24h disponible. Seguimiento en tiempo real. Devolución gratis en 30 días.',
+    de: 'Versand innerhalb von 24 Werkstunden. Kostenloser Versand im französischen Mutterland. Express 24h verfügbar. Echtzeit-Tracking. Kostenlose Rückgabe innerhalb von 30 Tagen.',
+    it: 'Spedito entro 24 ore lavorative. Spedizione gratuita in Francia continentale. Express 24h disponibile. Tracciamento in tempo reale. Reso gratuito entro 30 giorni.',
+    pt: 'Enviado em 24h úteis. Envio grátis na França continental. Expresso 24h disponível. Rastreamento em tempo real. Devolução grátis em 30 dias.',
+    nl: 'Verzonden binnen 24 werkuren. Gratis verzending binnen het Franse vasteland. Express 24u beschikbaar. Realtime tracking. Gratis retour binnen 30 dagen.',
+    ar: 'يُشحن خلال 24 ساعة عمل. شحن مجاني داخل فرنسا القارية. سريع خلال 24 ساعة متاح. تتبع فوري. إرجاع مجاني خلال 30 يومًا.',
+    zh: '24个工作小时内发货。法国本土免运费。可选24小时特快。实时追踪。30天内免费退货。',
+  },
+  'bespoke.trendy.tabShippingReturnsBody': {
+    fr: 'Livraison express 24-48h gratuite dès 60€. Retour gratuit sous 30 jours. Échanges illimités. Emballage fashion recyclable.',
+    en: 'Free 24-48h express shipping from €60. Free returns within 30 days. Unlimited exchanges. Recyclable fashion packaging.',
+    es: 'Envío exprés 24-48h gratis desde 60€. Devolución gratis en 30 días. Cambios ilimitados. Embalaje fashion reciclable.',
+    de: 'Kostenloser 24-48h Expressversand ab 60€. Kostenlose Rückgabe innerhalb von 30 Tagen. Unbegrenzte Umtausche. Recycelbare Fashion-Verpackung.',
+    it: 'Spedizione express 24-48h gratuita da 60€. Reso gratuito entro 30 giorni. Cambi illimitati. Confezione fashion riciclabile.',
+    pt: 'Envio expresso 24-48h grátis a partir de 60€. Devolução grátis em 30 dias. Trocas ilimitadas. Embalagem fashion reciclável.',
+    nl: 'Gratis 24-48u expresverzending vanaf €60. Gratis retour binnen 30 dagen. Onbeperkt omruilen. Recyclebare fashionverpakking.',
+    ar: 'شحن سريع مجاني خلال 24-48 ساعة من 60€. إرجاع مجاني خلال 30 يومًا. استبدال غير محدود. تغليف أزياء قابل لإعادة التدوير.',
+    zh: '满60欧元享24-48小时免费特快配送。30天内免费退货。无限次换货。可回收时尚包装。',
+  },
+  'bespoke.pulse.finalTrustSentence': {
+    fr: 'Rejoignez des milliers de clients satisfaits. Livraison gratuite, retours 30 jours, garantie 2 ans — sans condition.',
+    en: 'Join thousands of satisfied customers. Free shipping, 30-day returns, 2-year warranty — no conditions attached.',
+    es: 'Únete a miles de clientes satisfechos. Envío gratis, devoluciones en 30 días, garantía de 2 años — sin condiciones.',
+    de: 'Schließe dich Tausenden zufriedener Kunden an. Kostenloser Versand, 30 Tage Rückgabe, 2 Jahre Garantie — ohne Bedingungen.',
+    it: 'Unisciti a migliaia di clienti soddisfatti. Spedizione gratuita, resi entro 30 giorni, garanzia di 2 anni — senza condizioni.',
+    pt: 'Junte-se a milhares de clientes satisfeitos. Envio grátis, devoluções em 30 dias, garantia de 2 anos — sem condições.',
+    nl: 'Sluit je aan bij duizenden tevreden klanten. Gratis verzending, 30 dagen retour, 2 jaar garantie — zonder voorwaarden.',
+    ar: 'انضم إلى آلاف العملاء الراضين. شحن مجاني، إرجاع خلال 30 يومًا، ضمان لمدة سنتين — بدون شروط.',
+    zh: '加入数千名满意客户的行列。免费配送、30天退货、2年保修 — 无附加条件。',
+  },
+  'trust.warrantyReturn': {
+    fr: 'Garantie retour', en: 'Warranty return', es: 'Garantía de devolución', de: 'Rückgabegarantie',
+    it: 'Garanzia di reso', pt: 'Garantia de devolução', nl: 'Retourgarantie', ar: 'ضمان الإرجاع', zh: '退货保障',
+  },
+  'bespoke.artisan.tabShippingBody': {
+    fr: "Livraison offerte à partir d'un certain montant. Emballage recyclable. Expédition sous 48h. Livraison en France et Belgique.",
+    en: 'Free shipping above a certain order amount. Recyclable packaging. Shipped within 48h. Delivery in France and Belgium.',
+    es: 'Envío gratis a partir de cierto importe. Embalaje reciclable. Envío en 48h. Entrega en Francia y Bélgica.',
+    de: 'Kostenloser Versand ab einem bestimmten Bestellwert. Recycelbare Verpackung. Versand innerhalb von 48h. Lieferung nach Frankreich und Belgien.',
+    it: 'Spedizione gratuita a partire da un certo importo. Confezione riciclabile. Spedito entro 48h. Consegna in Francia e Belgio.',
+    pt: 'Envio grátis a partir de um determinado valor. Embalagem reciclável. Enviado em 48h. Entrega em França e na Bélgica.',
+    nl: 'Gratis verzending vanaf een bepaald bedrag. Recyclebare verpakking. Verzonden binnen 48u. Levering in Frankrijk en België.',
+    ar: 'شحن مجاني ابتداءً من مبلغ معين. تغليف قابل لإعادة التدوير. يُشحن خلال 48 ساعة. التوصيل إلى فرنسا وبلجيكا.',
+    zh: '满一定金额免运费。可回收包装。48小时内发货。配送至法国和比利时。',
+  },
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────

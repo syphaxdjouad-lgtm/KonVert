@@ -365,7 +365,7 @@ ${renderRichSections(data, LUXE_THEME)}
       </div>
       <div>
         <p style="font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};font-family:'Inter',sans-serif;margin-bottom:18px;opacity:.6;">${trans(lang, 'bespoke.nav.services')}</p>
-        ${['Contact','Livraison','Retours','FAQ','Mentions légales'].map(l => `<p style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;color:${C.muted};font-family:'Inter',sans-serif;font-weight:300;transition:color .2s;" onmouseover="this.style.color='${C.accent}'" onmouseout="this.style.color='${C.muted}'">${l}</a></p>`).join('')}
+        ${[trans(lang, 'bespoke.nav.contact'), trans(lang, 'trust.shippingLabel'), trans(lang, 'trust.returnLabelPlural'), trans(lang, 'bespoke.faqShort'), trans(lang, 'footer.legalNotice')].map(l => `<p style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;color:${C.muted};font-family:'Inter',sans-serif;font-weight:300;transition:color .2s;" onmouseover="this.style.color='${C.accent}'" onmouseout="this.style.color='${C.muted}'">${l}</a></p>`).join('')}
       </div>
     </div>
     <div style="border-top:1px solid ${C.border};padding-top:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">

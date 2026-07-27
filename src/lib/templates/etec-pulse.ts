@@ -146,7 +146,7 @@ export function templateEtecPulse(data: LandingPageData): string {
   const productName   = data.product_name   || 'Gadget Pro X'
   const headline      = data.headline       || 'La technologie du futur. Disponible maintenant.'
   const subtitle      = data.subtitle       || 'La technologie qui change tout'
-  const ctaText       = data.cta            || 'Commander maintenant'
+  const ctaText       = data.cta || trans(lang, 'cta.orderNow')
   const urgency       = data.urgency        || 'Offre de lancement — Stock limité à 300 unités'
   const price         = data.price          || '89'
   const originalPrice = data.original_price || '149'
@@ -178,7 +178,7 @@ export function templateEtecPulse(data: LandingPageData): string {
     <div class="fpls-spec-card">
       <div class="fpls-spec-icon">${s.icon}</div>
       <div class="fpls-spec-value">${s.value}</div>
-      <div class="fpls-spec-label">${s.label}</div>
+      <div class="fpls-spec-label">${s.label === 'Garantie' ? trans(lang, 'style.footer_guarantee') : s.label}</div>
       <div class="fpls-spec-desc">${s.desc}</div>
     </div>`).join('')
 
@@ -204,7 +204,7 @@ export function templateEtecPulse(data: LandingPageData): string {
     const comp2Val  = typeof r.comp2 === 'boolean' ? (r.comp2 ? `<span class="fpls-check-dim">${ICON_CHECK}</span>` : `<span class="fpls-cross">${ICON_X}</span>`) : `<span class="fpls-compare-dim">${r.comp2}</span>`
     return `
     <tr class="fpls-compare-row">
-      <td class="fpls-compare-feature">${r.feature}</td>
+      <td class="fpls-compare-feature">${r.feature === 'Garantie' ? trans(lang, 'style.footer_guarantee') : r.feature}</td>
       <td class="fpls-compare-ours">${oursVal}</td>
       <td class="fpls-compare-other">${comp1Val}</td>
       <td class="fpls-compare-other">${comp2Val}</td>
@@ -1256,8 +1256,8 @@ button{font-family:inherit}
       ${urgency}
     </div>
     <div class="fpls-trust-row">
-      <div class="fpls-trust-item">${ICON_TRUCK} Livraison gratuite</div>
-      <div class="fpls-trust-item">${ICON_SHIELD} Paiement sécurisé</div>
+      <div class="fpls-trust-item">${ICON_TRUCK} trans(lang, 'trust.freeShippingOffered')</div>
+      <div class="fpls-trust-item">${ICON_SHIELD} trans(lang, 'hero.securePayment')</div>
       <div class="fpls-trust-item">${ICON_ROTATE} Retours 30 jours</div>
     </div>
   </div>
@@ -1390,15 +1390,15 @@ ${renderRichSections(data, PULSE_THEME)}
   <div class="fpls-final-glow"></div>
   <div class="fpls-final-cta-inner fpls-fade">
     <h2>Prêt à passer au niveau supérieur ?</h2>
-    <p>Rejoignez des milliers de clients satisfaits. Livraison gratuite, retours 30 jours, garantie 2 ans — sans condition.</p>
+    <p>trans(lang, 'bespoke.pulse.finalTrustSentence')</p>
     <a href="javascript:void(0)" onclick="event.preventDefault()" class="fpls-cta-btn" style="margin:0 auto">
       ${ICON_BOLT} ${ctaText}
     </a>
     <div class="fpls-final-trust">
-      <div class="fpls-final-trust-item">${ICON_TRUCK} Livraison offerte</div>
+      <div class="fpls-final-trust-item">${ICON_TRUCK} trans(lang, 'trust.freeShippingOffered')</div>
       <div class="fpls-final-trust-item">${ICON_SHIELD} Paiement 100% sécurisé</div>
-      <div class="fpls-final-trust-item">${ICON_ROTATE} Retour gratuit 30j</div>
-      <div class="fpls-final-trust-item">${ICON_CHECK} Garantie 2 ans</div>
+      <div class="fpls-final-trust-item">${ICON_ROTATE} trans(lang, 'trust.freeReturn') trans(lang, 'trust.returnDaysShort', { n: 30 })</div>
+      <div class="fpls-final-trust-item">${ICON_CHECK} ${trans(lang, 'trust.warrantyYears', { n: 2 })}</div>
     </div>
   </div>
 </section>
@@ -1412,7 +1412,7 @@ ${renderRichSections(data, PULSE_THEME)}
         <p class="fpls-footer-tagline">Technologie de pointe conçue pour la vie réelle. Aucun compromis.</p>
       </div>
       <div>
-        <div class="fpls-footer-col-title">Produit</div>
+        <div class="fpls-footer-col-title">${trans(lang, 'bespoke.nav.product')}</div>
         <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'legacy.features.eyebrow')}</a>
         <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'bespoke.nav.specs')}</a>
         <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'legacy.competitorComparison.eyebrow')}</a>
@@ -1421,14 +1421,14 @@ ${renderRichSections(data, PULSE_THEME)}
       <div>
         <div class="fpls-footer-col-title">${trans(lang, 'bespoke.nav.support')}</div>
         <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'bespoke.faqShort')}</a>
-        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">Livraison</a>
-        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">Retours</a>
-        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">Garantie</a>
+        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'trust.shippingLabel')}</a>
+        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'trust.returnLabelPlural')}</a>
+        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'style.footer_guarantee')}</a>
       </div>
     </div>
     <div class="fpls-footer-bottom">
-      <span class="fpls-footer-copy">© ${new Date().getFullYear()} ${productName}. Tous droits réservés.</span>
-      <span class="fpls-footer-copy">${data.hero_badges?.join(' · ') || 'Certifié · Testé · Garanti'}</span>
+      <span class="fpls-footer-copy">© ${new Date().getFullYear()} ${productName}. ${trans(lang, 'style.footer_copyright')}</span>
+      <span class="fpls-footer-copy">${data.hero_badges?.join(' · ') || [trans(lang, 'trust.certifiedShort'), trans(lang, 'trust.testedShort'), trans(lang, 'trust.guaranteedShort')].join(' · ')}</span>
     </div>
   </div>
 </footer>

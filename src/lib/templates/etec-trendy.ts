@@ -49,7 +49,7 @@ export function templateEtecTrendy(data: LandingPageData): string {
   const tabContents = [
     { id: 'tab-tr-details', label: 'Détails', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">Conçu avec des matériaux premium pour un confort et un style incomparables. Coupe moderne pensée pour le quotidien. Finitions soignées, coutures renforcées.</p>` },
     { id: 'tab-tr-tailles', label: 'Guide tailles', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">XS : 34-36 · S : 36-38 · M : 38-40 · L : 40-42 · XL : 42-44. Coupe regular fit. En cas de doute, prenez une taille au-dessus pour un fit oversize tendance.</p>` },
-    { id: 'tab-tr-livraison', label: 'Livraison & Retours', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">Livraison express 24-48h gratuite dès 60€. Retour gratuit sous 30 jours. Échanges illimités. Emballage fashion recyclable.</p>` },
+    { id: 'tab-tr-livraison', label: 'Livraison & Retours', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">${trans(lang, 'bespoke.trendy.tabShippingReturnsBody')}</p>` },
   ]
 
   const stylePoints = [
@@ -145,7 +145,7 @@ body{font-family:'Rubik',sans-serif;background:#fff;color:#222;}
       <!-- CTAs -->
       <div style="display:flex;gap:12px;margin-bottom:12px;">
         <button class="tr-btn" style="flex:1;text-align:center;">
-          ${data.cta || 'Ajouter au panier'}
+          ${data.cta || trans(lang, 'cta.addToCart')}
         </button>
         <button class="tr-btn-alt" style="flex:1;text-align:center;">
           Acheter now
@@ -154,9 +154,9 @@ body{font-family:'Rubik',sans-serif;background:#fff;color:#222;}
 
       <!-- TRUST -->
       <div style="display:flex;gap:20px;margin-top:20px;padding-top:16px;border-top:1px solid #EBEBEB;" class="tr-trust-row">
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Express 24h</span>
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Paiement sécurisé</span>
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.return(14)} Retour gratuit</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.expressHours', { n: 24 })}</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.lock(14)} ${trans(lang, 'hero.securePayment')}</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.return(14)} ${trans(lang, 'trust.freeReturn')}</span>
       </div>
     </div>
   </div>
@@ -258,7 +258,7 @@ ${renderRichSections(data, TRENDY_THEME)}
     <p style="font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:32px;line-height:1.6;">${data.subtitle}</p>
     ${data.price ? `<p style="font-family:'Oswald',sans-serif;font-size:52px;font-weight:700;color:#fff;margin-bottom:32px;">${data.price}€</p>` : ''}
     <button style="background:#f50381;color:#fff;border:none;border-radius:4px;padding:18px 52px;font-family:'Rubik',sans-serif;font-size:15px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:background .3s;">${data.cta || 'Shopper maintenant'}</button>
-    <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:20px;">Express 24h · Retour gratuit · Paiement sécurisé</p>
+    <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:20px;">${[trans(lang, 'trust.expressHours', { n: 24 }), trans(lang, 'trust.freeReturn'), trans(lang, 'hero.securePayment')].join(' · ')}</p>
   </div>
 </section>
 

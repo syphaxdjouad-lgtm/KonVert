@@ -82,7 +82,7 @@ body{font-family:'DM Sans',sans-serif;background:#FAF7F2;color:#2C2420;}
 
 <!-- TOP BAR -->
 <div style="background:#2C2420;color:#D4C5A9;text-align:center;padding:11px 20px;font-size:12px;font-weight:500;letter-spacing:0.06em;">
-  ${data.urgency || 'Livraison offerte — Pièces artisanales en édition limitée'}
+  ${data.urgency || trans(lang, 'bespoke.homestyle.urgencyFallback')}
 </div>
 
 <!-- BREADCRUMB -->
@@ -130,14 +130,14 @@ body{font-family:'DM Sans',sans-serif;background:#FAF7F2;color:#2C2420;}
       </ul>
 
       <div style="display:flex;gap:12px;">
-        <button class="hs-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button>
+        <button class="hs-btn" style="flex:1;text-align:center;">${data.cta || trans(lang, 'cta.addToCart')}</button>
         <button class="hs-btn-outline" style="flex:1;text-align:center;">Voir en 3D</button>
       </div>
 
       <div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #E8E0D8;">
-        <span style="font-size:11px;color:#A09688;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Livraison soignée</span>
-        <span style="font-size:11px;color:#A09688;display:flex;align-items:center;gap:5px;">${ico.shield(14)} Garantie 5 ans</span>
-        <span style="font-size:11px;color:#A09688;display:flex;align-items:center;gap:5px;">${ico.return(14)} Retour 30j</span>
+        <span style="font-size:11px;color:#A09688;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.carefulShipping')}</span>
+        <span style="font-size:11px;color:#A09688;display:flex;align-items:center;gap:5px;">${ico.shield(14)} ${trans(lang, 'trust.warrantyYears', { n: 5 })}</span>
+        <span style="font-size:11px;color:#A09688;display:flex;align-items:center;gap:5px;">${ico.return(14)} ${trans(lang, 'trust.returnDays', { n: 30 })}</span>
       </div>
     </div>
   </div>
@@ -166,14 +166,14 @@ body{font-family:'DM Sans',sans-serif;background:#FAF7F2;color:#2C2420;}
       ${[
         { label: 'Matériaux', content: `<p style="font-size:14px;color:#7A7067;line-height:1.8;">Bois massif certifié FSC, finitions huilées naturelles. Assemblages traditionnels à tenon et mortaise. Chaque pièce est unique grâce aux veines naturelles du bois.</p>` },
         { label: 'Dimensions', content: `<p style="font-size:14px;color:#7A7067;line-height:1.8;">Dimensions standards adaptées aux intérieurs modernes. Sur demande : dimensions personnalisées disponibles. Poids optimisé pour faciliter la livraison et l'installation.</p>` },
-        { label: 'Livraison', content: `<p style="font-size:14px;color:#7A7067;line-height:1.8;">Livraison offerte en France métropolitaine. Emballage renforcé sur mesure. Installation possible (supplément). Délai : 5-10 jours ouvrés.</p>` },
+        { label: trans(lang, 'trust.shippingLabel'), content: `<p style="font-size:14px;color:#7A7067;line-height:1.8;">${trans(lang, 'bespoke.homestyle.tabShippingBody')}</p>` },
       ].map((t, i) => `
       <button onclick="(function(){document.querySelectorAll('.tp-hs').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tbtn-hs').forEach(function(b,j){b.style.borderBottom=j===${i}?'2px solid #8B6914':'2px solid transparent';b.style.color=j===${i}?'#2C2420':'#A09688';b.style.marginBottom='-1px';});})()" class="tbtn-hs" style="padding:14px 28px;background:none;border:none;border-bottom:${i===0?'2px solid #8B6914':'2px solid transparent'};color:${i===0?'#2C2420':'#A09688'};font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:-1px;transition:all .2s;">${t.label}</button>`).join('')}
     </div>
     ${[
       `<p style="font-size:14px;color:#7A7067;line-height:1.8;">Bois massif certifié FSC, finitions huilées naturelles. Assemblages traditionnels à tenon et mortaise. Chaque pièce est unique grâce aux veines naturelles du bois.</p>`,
       `<p style="font-size:14px;color:#7A7067;line-height:1.8;">Dimensions standards adaptées aux intérieurs modernes. Sur demande : dimensions personnalisées disponibles. Poids optimisé pour faciliter la livraison et l'installation.</p>`,
-      `<p style="font-size:14px;color:#7A7067;line-height:1.8;">Livraison offerte en France métropolitaine. Emballage renforcé sur mesure. Installation possible (supplément). Délai : 5-10 jours ouvrés.</p>`,
+      `<p style="font-size:14px;color:#7A7067;line-height:1.8;">${trans(lang, 'bespoke.homestyle.tabShippingBody')}</p>`,
     ].map((c, i) => `<div class="tp-hs" style="display:${i===0?'block':'none'};">${c}</div>`).join('')}
   </div>
 </section>
@@ -240,8 +240,8 @@ ${renderRichSections(data, HOMESTYLE_THEME)}
     <h2 style="font-family:'Lora',serif;font-size:38px;font-weight:600;color:#FAF7F2;letter-spacing:-0.02em;margin-bottom:16px;">${data.headline}</h2>
     <p style="font-size:15px;color:rgba(250,247,242,0.5);margin-bottom:36px;line-height:1.7;">${data.subtitle}</p>
     ${data.price ? `<p style="font-family:'Lora',serif;font-size:48px;font-weight:600;color:#D4C5A9;margin-bottom:36px;">${data.price}€</p>` : ''}
-    <button style="background:#8B6914;color:#fff;border:none;border-radius:6px;padding:18px 52px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;">${data.cta || 'Commander maintenant'}</button>
-    <p style="font-size:12px;color:rgba(250,247,242,0.3);margin-top:20px;">Livraison offerte · Garantie 5 ans · Retour 30 jours</p>
+    <button style="background:#8B6914;color:#fff;border:none;border-radius:6px;padding:18px 52px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;">${data.cta || trans(lang, 'cta.orderNow')}</button>
+    <p style="font-size:12px;color:rgba(250,247,242,0.3);margin-top:20px;">${[trans(lang, 'trust.freeShippingOffered'), trans(lang, 'trust.warrantyYears', { n: 5 }), trans(lang, 'trust.returnDays', { n: 30 })].join(' · ')}</p>
   </div>
 </section>
 

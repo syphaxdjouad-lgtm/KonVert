@@ -51,7 +51,7 @@ export function templateEtecOutfit(data: LandingPageData): string {
 .of-btn{background:#1A1A1A;color:#fff;border:none;border-radius:8px;padding:17px 40px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;}.of-btn:hover{background:#B5854B;transform:translateY(-1px);}
 .of-btn-alt{background:#F5EFE6;color:#1A1A1A;border:none;border-radius:8px;padding:15px 40px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;}.of-btn-alt:hover{background:#E8DFD2;}
 @media(max-width:768px){.of-hero{flex-direction:column!important;}.of-hero-img{width:100%!important;height:460px!important;}.of-hero-info{width:100%!important;padding:32px 20px!important;}.of-grid3{grid-template-columns:1fr!important;}.of-compare{flex-direction:column!important;}.of-reviews{grid-template-columns:1fr!important;}}</style></head><body>
-<div style="background:#1A1A1A;color:#E5D5BE;text-align:center;padding:11px 20px;font-size:12px;font-weight:400;letter-spacing:0.06em;">${data.urgency || 'Nouvelle collection — Livraison offerte dès 80€'}</div>
+<div style="background:#1A1A1A;color:#E5D5BE;text-align:center;padding:11px 20px;font-size:12px;font-weight:400;letter-spacing:0.06em;">${data.urgency || trans(lang, 'bespoke.outfit.urgencyFallback')}</div>
 <nav style="background:#FFFDF8;border-bottom:1px solid #E5E0D8;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">Vêtements</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#1A1A1A;font-weight:500;">${data.product_name}</span></div></nav>
 <section style="background:#FFFDF8;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="of-hero">
 <div style="width:56%;position:relative;background:#F5EFE6;overflow:hidden;border-radius:0 16px 16px 0;" class="of-hero-img">
@@ -65,8 +65,8 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#B5
 <p style="font-size:15px;color:#888;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-size:36px;font-weight:700;color:#1A1A1A;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#BBB;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="color:#B5854B;font-size:14px;">✓</span><span style="font-size:14px;color:#555;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="of-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="of-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.nav.sizeGuide')}</button></div>
-<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #E5E0D8;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Offerte</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Sécurisé</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(14)} Échanges gratuits</span></div>
+<div style="display:flex;gap:12px;"><button class="of-btn" style="flex:1;text-align:center;">${data.cta || trans(lang, 'cta.addToCart')}</button><button class="of-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.nav.sizeGuide')}</button></div>
+<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #E5E0D8;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.offeredShort')}</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.lock(14)} ${trans(lang, 'trust.securedShort')}</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(14)} ${trans(lang, 'trust.freeExchanges')}</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#F5EFE6;"><div style="max-width:1100px;margin:0 auto;">
 <p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#B5854B;text-align:center;text-transform:uppercase;margin-bottom:8px;">Qualité</p>
@@ -91,8 +91,8 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#B5
 <h2 style="font-size:38px;font-weight:700;color:#FFFDF8;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(255,253,248,0.5);margin-bottom:36px;">${data.subtitle}</p>
 ${data.price ? `<p style="font-size:48px;font-weight:700;color:#B5854B;margin-bottom:36px;">${data.price}€</p>` : ''}
-<button class="of-btn" style="background:#B5854B;font-size:15px;padding:18px 52px;">${data.cta || 'Commander maintenant'}</button>
-<p style="font-size:12px;color:rgba(255,253,248,0.3);margin-top:20px;">Coton bio · Livraison offerte · Échanges gratuits</p>
+<button class="of-btn" style="background:#B5854B;font-size:15px;padding:18px 52px;">${data.cta || trans(lang, 'cta.orderNow')}</button>
+<p style="font-size:12px;color:rgba(255,253,248,0.3);margin-top:20px;">Coton bio · ${trans(lang, 'trust.freeShippingOffered')} · ${trans(lang, 'trust.freeExchanges')}</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, OUTFIT_THEME)}

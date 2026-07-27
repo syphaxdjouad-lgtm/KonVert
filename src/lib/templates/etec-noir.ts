@@ -49,9 +49,9 @@ export function templateEtecNoir(data: LandingPageData): string {
     </div>`).join('')
 
   const tabContents = [
-    { id: 'tab2-garantie', label: 'Garantie', content: `<p style="font-size:15px;color:#8A8A8A;line-height:1.8;margin:0;">Satisfait ou remboursé pendant 30 jours. Garantie constructeur 12 mois couvrant tous les défauts de fabrication. Support technique prioritaire inclus.</p>` },
-    { id: 'tab2-livraison', label: 'Livraison', content: `<p style="font-size:15px;color:#8A8A8A;line-height:1.8;margin:0;">Expédition sous 24h. Livraison express disponible. Emballage sécurisé anti-choc. Suivi en temps réel. Livraison internationale disponible.</p>` },
-    { id: 'tab2-support', label: 'Support', content: `<p style="font-size:15px;color:#8A8A8A;line-height:1.8;margin:0;">Support 7j/7 via chat et email. Temps de réponse garanti sous 1h. Hotline dédiée pour les membres premium. Discord communautaire actif.</p>` },
+    { id: 'tab2-garantie', label: trans(lang, 'style.footer_guarantee'), content: `<p style="font-size:15px;color:#8A8A8A;line-height:1.8;margin:0;">${trans(lang, 'bespoke.noir.tabGuaranteeBody')}</p>` },
+    { id: 'tab2-livraison', label: trans(lang, 'trust.shippingLabel'), content: `<p style="font-size:15px;color:#8A8A8A;line-height:1.8;margin:0;">Expédition sous 24h. Livraison express disponible. Emballage sécurisé anti-choc. Suivi en temps réel. Livraison internationale disponible.</p>` },
+    { id: 'tab2-support', label: trans(lang, 'bespoke.nav.support'), content: `<p style="font-size:15px;color:#8A8A8A;line-height:1.8;margin:0;">Support 7j/7 via chat et email. Temps de réponse garanti sous 1h. Hotline dédiée pour les membres premium. Discord communautaire actif.</p>` },
   ]
 
   const specRows = [
@@ -59,14 +59,14 @@ export function templateEtecNoir(data: LandingPageData): string {
     ['Performance', benefits[1] || 'Grade professionnel'],
     ['Compatibilité', benefits[2] || 'Universel'],
     ['Finition', benefits[3] || 'Premium'],
-    ['Garantie', '12 mois constructeur'],
+    [trans(lang, 'style.footer_guarantee'), '12 mois constructeur'],
   ]
 
   const stats = [
     { value: '4.9/5', label: 'Note moyenne' },
     { value: '2 847', label: 'Clients satisfaits' },
-    { value: '30j', label: 'Garantie retour' },
-    { value: '24h', label: 'Livraison express' },
+    { value: '30j', label: trans(lang, 'trust.warrantyReturn') },
+    { value: '24h', label: trans(lang, 'trust.expressShipping') },
   ]
 
   return `<!DOCTYPE html>
@@ -201,22 +201,22 @@ body{font-family:'Space Grotesk',sans-serif;background:#000000;color:#ffffff;}
       </div>
       <!-- CTAs -->
       <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
-        <button class="noir-cta-main" style="width:100%;font-size:15px;padding:17px 36px;">${data.cta || 'Ajouter au panier'}</button>
-        <button class="noir-cta-ghost" style="width:100%;">Acheter maintenant</button>
+        <button class="noir-cta-main" style="width:100%;font-size:15px;padding:17px 36px;">${data.cta || trans(lang, 'cta.addToCart')}</button>
+        <button class="noir-cta-ghost" style="width:100%;">${trans(lang, 'cta.buyNow')}</button>
       </div>
       <!-- Trust signals -->
       <div style="display:flex;flex-direction:column;gap:0;">
         <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
           <span style="color:#C8FF00;opacity:0.9;">${ico.truck(15)}</span>
-          <span style="font-size:12px;color:#3A3A3A;">Livraison express disponible</span>
+          <span style="font-size:12px;color:#3A3A3A;">${trans(lang, 'trust.expressShippingAvailable')}</span>
         </div>
         <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
           <span style="color:#C8FF00;opacity:0.9;">${ico.lock(15)}</span>
-          <span style="font-size:12px;color:#3A3A3A;">Paiement 100% sécurisé</span>
+          <span style="font-size:12px;color:#3A3A3A;">${trans(lang, 'trustBadges.securePayment100')}</span>
         </div>
         <div style="display:flex;align-items:center;gap:12px;padding:11px 0;">
           <span style="color:#C8FF00;opacity:0.9;">${ico.return(15)}</span>
-          <span style="font-size:12px;color:#3A3A3A;">Retour gratuit 30 jours</span>
+          <span style="font-size:12px;color:#3A3A3A;">${trans(lang, 'trust.freeReturn')} ${trans(lang, 'trust.returnDaysBare', { n: 30 })}</span>
         </div>
       </div>
     </div>
@@ -258,7 +258,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#000000;color:#ffffff;}
   </div>
 </section>
 
-<!-- TABS — Garantie / Livraison / Support -->
+<!-- TABS — Warranty / Shipping / Support -->
 <section style="padding:72px 24px;background:#000000;">
   <div style="max-width:800px;margin:0 auto;">
     <div style="display:flex;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:40px;">
@@ -310,8 +310,8 @@ ${renderRichSections(data, NOIR_THEME)}
     <h2 style="font-size:52px;font-weight:700;color:#000000;letter-spacing:-0.03em;margin-bottom:16px;line-height:1.05;">${data.headline}</h2>
     <p style="font-size:16px;color:rgba(0,0,0,0.5);margin-bottom:36px;line-height:1.7;">${data.subtitle}</p>
     ${data.price ? `<p style="font-size:60px;font-weight:700;color:#000000;margin-bottom:36px;letter-spacing:-0.03em;line-height:1;">${data.price}€</p>` : ''}
-    <button style="background:#000000;color:#ffffff;border:none;border-radius:3px;padding:20px 60px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.04em;transition:opacity .2s ease,transform .2s ease;" onmouseover="this.style.opacity='0.85';this.style.transform='translateY(-1px)'" onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'">${data.cta || 'Commander maintenant'}</button>
-    <p style="font-size:11px;color:rgba(0,0,0,0.4);margin-top:20px;letter-spacing:0.04em;text-transform:uppercase;">Livraison express · Paiement sécurisé · 30j satisfait ou remboursé</p>
+    <button style="background:#000000;color:#ffffff;border:none;border-radius:3px;padding:20px 60px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:0.04em;transition:opacity .2s ease,transform .2s ease;" onmouseover="this.style.opacity='0.85';this.style.transform='translateY(-1px)'" onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'">${data.cta || trans(lang, 'cta.orderNow')}</button>
+    <p style="font-size:11px;color:rgba(0,0,0,0.4);margin-top:20px;letter-spacing:0.04em;text-transform:uppercase;">${[trans(lang, 'trust.expressShipping'), trans(lang, 'hero.securePayment'), trans(lang, 'trust.returnDaysShort', { n: 30 }) + ' ' + trans(lang, 'trust.satisfiedOrRefunded')].join(' · ')}</p>
   </div>
 </section>
 

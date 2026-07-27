@@ -275,10 +275,10 @@ export function templateEtecGold(data: LandingPageData): string {
       <!-- Séparateur -->
       <div style="width:100%;height:1px;background:${C.divider};margin-bottom:20px;"></div>
 
-      <!-- Tabs Garantie / Livraison / Support -->
+      <!-- Tabs Warranty / Shipping / Support -->
       <div style="border:1px solid ${C.divider};">
         <div style="display:flex;border-bottom:1px solid ${C.divider};">
-          ${['Garantie', 'Livraison', 'Service'].map((tab, i) => `
+          ${[trans(lang, 'style.footer_guarantee'), trans(lang, 'trust.shippingLabel'), trans(lang, 'bespoke.nav.services')].map((tab, i) => `
             <button
               onclick="document.querySelectorAll('.tp5').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tb5').forEach(function(b,j){b.style.background=j===${i}?'${C.accentLight}':'transparent';b.style.color=j===${i}?'${C.accent}':'${C.muted}';b.style.fontWeight=j===${i}?'600':'400';});"
               class="tb5"

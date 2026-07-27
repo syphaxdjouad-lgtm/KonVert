@@ -33,6 +33,31 @@ const RESIDUAL_FR_CHROME = [
   'Achat vérifié',
 ]
 
+// Résidu J-2 (fondateur) : titre/CTA/footer restaient en FR sur les templates
+// legacy etec-*.ts (cf audit — fallbacks `data.cta || '...'` codés en dur +
+// mini trust-row sous le CTA hero + footer légal de etec-beauty/luxe/pulse +
+// etec-blusho/etec-shopz dont le dico local ne couvrait que fr/en/es/ar).
+// Ces libellés ne sont jamais présents dans mockLandingDataFull (vérifié),
+// donc un simple .not.toContain suffit — pas besoin du wrapper >...< strict
+// (ces textes suivent souvent une icône inline dans le même tag).
+const RESIDUAL_FR_TRUST_AND_FOOTER = [
+  'Sécurisé',
+  'Offerte',
+  'Garanti',
+  'Retour 30j',
+  'Retour 14j',
+  'Livraison offerte',
+  'Paiement sécurisé',
+  'Tous droits réservés',
+  'Politique de confidentialité',
+  'Mentions légales',
+  'Acheter maintenant',
+  'Retour gratuit',
+  'Échanges gratuits',
+  'Livraison soignée',
+  'Écrin offert',
+]
+
 describe('renderTemplate — smoke i18n sur les 43 templates etec-*', () => {
   for (const tpl of TEMPLATES) {
     describe(tpl.id, () => {
@@ -49,6 +74,9 @@ describe('renderTemplate — smoke i18n sur les 43 templates etec-*', () => {
         expect(html).toContain('<html lang="en"')
         for (const residual of RESIDUAL_FR_CHROME) {
           expect(html, `${tpl.id}: résidu FR "${residual}" trouvé en language=en`).not.toContain(`>${residual}<`)
+        }
+        for (const residual of RESIDUAL_FR_TRUST_AND_FOOTER) {
+          expect(html, `${tpl.id}: résidu FR "${residual}" trouvé en language=en (trust badge/footer)`).not.toContain(residual)
         }
       })
 

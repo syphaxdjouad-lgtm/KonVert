@@ -64,8 +64,8 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#5B
 <p style="font-size:15px;color:#888;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-size:36px;font-weight:700;color:#2D2D2D;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#BBB;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="color:#5B7553;font-size:14px;">✓</span><span style="font-size:14px;color:#555;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="in-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="in-btn-alt" style="flex:1;text-align:center;">Voir les dimensions</button></div>
-<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #DDD8D0;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Livraison soignée</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Sécurisé</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(14)} Retour 14j</span></div>
+<div style="display:flex;gap:12px;"><button class="in-btn" style="flex:1;text-align:center;">${data.cta || trans(lang, 'cta.addToCart')}</button><button class="in-btn-alt" style="flex:1;text-align:center;">Voir les dimensions</button></div>
+<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #DDD8D0;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.carefulShipping')}</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.lock(14)} ${trans(lang, 'trust.securedShort')}</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(14)} ${trans(lang, 'trust.returnDays', { n: 14 })}</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#EEF0E8;"><div style="max-width:1100px;margin:0 auto;">
 <p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#5B7553;text-align:center;text-transform:uppercase;margin-bottom:8px;">Qualité</p>
@@ -90,8 +90,8 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#5B
 <h2 style="font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:#FAF9F6;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(250,249,246,0.5);margin-bottom:36px;">${data.subtitle}</p>
 ${data.price ? `<p style="font-size:48px;font-weight:700;color:#E8EDE4;margin-bottom:36px;">${data.price}€</p>` : ''}
-<button style="background:#FAF9F6;color:#5B7553;border:none;border-radius:8px;padding:18px 52px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Commander maintenant'}</button>
-<p style="font-size:12px;color:rgba(250,249,246,0.3);margin-top:20px;">Bois massif · Livraison soignée · Retour gratuit</p>
+<button style="background:#FAF9F6;color:#5B7553;border:none;border-radius:8px;padding:18px 52px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || trans(lang, 'cta.orderNow')}</button>
+<p style="font-size:12px;color:rgba(250,249,246,0.3);margin-top:20px;">Bois massif · ${trans(lang, 'trust.carefulShipping')} · ${trans(lang, 'trust.freeReturn')}</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, INTERIOR_THEME)}

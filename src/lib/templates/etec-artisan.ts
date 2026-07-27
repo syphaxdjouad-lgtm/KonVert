@@ -82,7 +82,7 @@ body{font-family:'Jost',sans-serif;background:#FBF3ED;color:#111;}
 
 <!-- TOP BAR — WARM -->
 <div style="background:#FF871D;color:#fff;text-align:center;padding:11px 20px;font-size:12px;font-weight:500;">
-  ${data.urgency || 'Fait main avec amour — Livraison offerte dès 35€'}
+  ${data.urgency || trans(lang, 'bespoke.artisan.urgencyFallback')}
 </div>
 
 <!-- BREADCRUMB -->
@@ -130,15 +130,15 @@ body{font-family:'Jost',sans-serif;background:#FBF3ED;color:#111;}
       </ul>
 
       <div style="display:flex;gap:12px;">
-        <button class="ar-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button>
+        <button class="ar-btn" style="flex:1;text-align:center;">${data.cta || trans(lang, 'cta.addToCart')}</button>
         <button class="ar-btn-outline" style="flex:1;text-align:center;">Offrir</button>
       </div>
 
       <div style="display:flex;gap:20px;margin-top:24px;padding-top:18px;border-top:1px solid #EDE6DC;">
-        <span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.leaf(13)} Naturel</span>
+        <span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.leaf(13)} ${trans(lang, 'trust.naturalShort')}</span>
         <span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.recycle(13)} Éco</span>
-        <span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(13)} Offerte</span>
-        <span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(13)} 30j</span>
+        <span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(13)} ${trans(lang, 'trust.offeredShort')}</span>
+        <span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(13)} ${trans(lang, 'trust.returnDaysShort', { n: 30 })}</span>
       </div>
     </div>
   </div>
@@ -167,14 +167,14 @@ body{font-family:'Jost',sans-serif;background:#FBF3ED;color:#111;}
       ${[
         { label: 'Composition', content: `<p style="font-size:14px;color:#888;line-height:1.8;">${data.features?.[0]?.description || data.benefits.slice(0,3).join('. ') || `${data.product_name} — composition naturelle, sans additifs indésirables.`}</p>` },
         { label: 'Utilisation', content: `<p style="font-size:14px;color:#888;line-height:1.8;">${data.features?.[1]?.description || data.how_it_works?.[0] || `Suivez les instructions d'utilisation de ${data.product_name} pour des résultats optimaux.`}</p>` },
-        { label: 'Livraison', content: `<p style="font-size:14px;color:#888;line-height:1.8;">Livraison offerte à partir d'un certain montant. Emballage recyclable. Expédition sous 48h. Livraison en France et Belgique.</p>` },
+        { label: trans(lang, 'trust.shippingLabel'), content: `<p style="font-size:14px;color:#888;line-height:1.8;">${trans(lang, 'bespoke.artisan.tabShippingBody')}</p>` },
       ].map((t, i) => `
       <button onclick="(function(){document.querySelectorAll('.tp-ar').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tbtn-ar').forEach(function(b,j){b.style.borderBottom=j===${i}?'2px solid #FF871D':'2px solid transparent';b.style.color=j===${i}?'#111':'#AAA';b.style.marginBottom='-1px';});})()" class="tbtn-ar" style="padding:14px 24px;background:none;border:none;border-bottom:${i===0?'2px solid #FF871D':'2px solid transparent'};color:${i===0?'#111':'#AAA'};font-family:'Jost',sans-serif;font-size:13px;font-weight:500;cursor:pointer;margin-bottom:-1px;transition:all .2s;">${t.label}</button>`).join('')}
     </div>
     ${[
       `<p style="font-size:14px;color:#888;line-height:1.8;">${data.features?.[0]?.description || data.benefits.slice(0,3).join('. ') || `${data.product_name} — composition naturelle, sans additifs indésirables.`}</p>`,
       `<p style="font-size:14px;color:#888;line-height:1.8;">${data.features?.[1]?.description || data.how_it_works?.[0] || `Suivez les instructions d'utilisation de ${data.product_name} pour des résultats optimaux.`}</p>`,
-      `<p style="font-size:14px;color:#888;line-height:1.8;">Livraison offerte à partir d'un certain montant. Emballage recyclable. Expédition sous 48h. Livraison en France et Belgique.</p>`,
+      `<p style="font-size:14px;color:#888;line-height:1.8;">${trans(lang, 'bespoke.artisan.tabShippingBody')}</p>`,
     ].map((c, i) => `<div class="tp-ar" style="display:${i===0?'block':'none'};">${c}</div>`).join('')}
   </div>
 </section>
@@ -241,7 +241,7 @@ ${renderRichSections(data, ARTISAN_THEME)}
     <p style="font-size:15px;color:rgba(251,243,237,0.5);margin-bottom:36px;line-height:1.7;">${data.subtitle}</p>
     ${data.price ? `<p style="font-family:'Crimson Text',serif;font-size:48px;font-weight:700;color:#FF871D;margin-bottom:36px;">${data.price}€</p>` : ''}
     <button class="ar-btn" style="font-size:15px;padding:18px 52px;">${data.cta || 'Adopter maintenant'}</button>
-    <p style="font-size:12px;color:rgba(251,243,237,0.3);margin-top:20px;">100% naturel · Fait main · Livraison offerte</p>
+    <p style="font-size:12px;color:rgba(251,243,237,0.3);margin-top:20px;">100% naturel · Fait main · ${trans(lang, 'trust.freeShippingOffered')}</p>
   </div>
 </section>
 

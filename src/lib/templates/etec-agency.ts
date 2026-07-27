@@ -65,7 +65,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#33
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-size:36px;font-weight:700;color:#1E293B;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#CBD5E1;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="color:#334FB4;font-size:14px;font-weight:700;">✓</span><span style="font-size:14px;color:#64748B;">${b}</span></li>`).join('')}</ul>
 <div style="display:flex;gap:12px;"><button class="ag-btn" style="flex:1;text-align:center;">${data.cta || 'Commander'}</button><button class="ag-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.cta.learnMore')}</button></div>
-<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #E2E8F0;"><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Offerte</span><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Sécurisé</span><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.shield(14)} Garanti</span></div>
+<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #E2E8F0;"><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.offeredShort')}</span><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.lock(14)} ${trans(lang, 'trust.securedShort')}</span><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.shield(14)} ${trans(lang, 'trust.guaranteedShort')}</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#F1F5F9;"><div style="max-width:1100px;margin:0 auto;">
 <p style="font-size:11px;font-weight:600;letter-spacing:0.16em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">Expertise</p>
@@ -91,7 +91,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#33
 <p style="font-size:15px;color:rgba(255,255,255,0.5);margin-bottom:36px;">${data.subtitle}</p>
 ${data.price ? `<p style="font-size:48px;font-weight:700;color:#334FB4;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button style="background:#334FB4;color:#fff;border:none;padding:18px 52px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Démarrer maintenant'}</button>
-<p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:20px;">Satisfaction garantie · Support dédié · Paiement sécurisé</p>
+<p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:20px;">${[trans(lang, 'trust.satisfactionGuaranteed'), trans(lang, 'trust.dedicatedSupport'), trans(lang, 'hero.securePayment')].join(' · ')}</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, AGENCY_THEME)}

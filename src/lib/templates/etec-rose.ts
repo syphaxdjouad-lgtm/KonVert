@@ -235,7 +235,7 @@ export function templateEtecRose(data: LandingPageData): string {
 
       <!-- CTA principal -->
       <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:${C.accent};color:#fff;padding:17px 32px;border-radius:100px;font-size:15px;font-weight:700;text-decoration:none;margin-bottom:12px;letter-spacing:.01em;font-family:'Inter',sans-serif;box-shadow:0 4px 20px rgba(214,51,112,0.35);transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
-        ${data.cta || 'Ajouter au panier'} →
+        ${data.cta || trans(lang, 'cta.addToCart')} →
       </a>
 
       <!-- CTA secondaire -->
@@ -254,8 +254,8 @@ export function templateEtecRose(data: LandingPageData): string {
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:${C.border};border:1px solid ${C.border};border-radius:16px;overflow:hidden;margin-bottom:24px;">
         ${[
           [ico.star(22), 'Formule certifiée', 'Dermatologiquement testé'],
-          [ico.truck(22), 'Livraison offerte', 'Dès 50€ d\'achat'],
-          [ico.return(22), 'Retour 30 jours', 'Satisfaite ou remboursée'],
+          [ico.truck(22), trans(lang, 'trust.freeShippingOffered'), trans(lang, 'trust.fromAmount', { n: 50 })],
+          [ico.return(22), trans(lang, 'trust.returnDays', { n: 30 }), trans(lang, 'trust.satisfiedOrRefundedFem')],
         ].map(([icon, title, sub]) => `
           <div style="background:${C.accentLight};padding:14px 10px;text-align:center;">
             <div style="color:${C.accent};display:flex;justify-content:center;margin-bottom:6px;">${icon}</div>
@@ -264,10 +264,10 @@ export function templateEtecRose(data: LandingPageData): string {
           </div>`).join('')}
       </div>
 
-      <!-- Tabs Garantie / Livraison / Support -->
+      <!-- Tabs Warranty / Shipping / Support -->
       <div style="border:1px solid ${C.border};border-radius:16px;overflow:hidden;">
         <div style="display:flex;border-bottom:1px solid ${C.border};">
-          ${['Garantie', 'Livraison', 'Support'].map((tab, i) => `
+          ${[trans(lang, 'style.footer_guarantee'), trans(lang, 'trust.shippingLabel'), trans(lang, 'bespoke.nav.support')].map((tab, i) => `
             <button
               onclick="document.querySelectorAll('.tp3').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tb3').forEach(function(b,j){b.style.background=j===${i}?'${C.accentLight}':'transparent';b.style.color=j===${i}?'${C.accent}':'${C.muted}';b.style.fontWeight=j===${i}?'700':'500';});"
               class="tb3"
@@ -278,7 +278,7 @@ export function templateEtecRose(data: LandingPageData): string {
           Tous nos produits sont couverts par une <strong style="color:${C.text};">garantie satisfaite ou remboursée 30 jours</strong>. Si vous n'êtes pas entièrement convaincue des résultats, nous remboursons sans question ni frais.
         </div>
         <div class="tp3" style="padding:18px;font-size:13px;color:${C.muted};line-height:1.85;display:none;background:${C.card};font-family:'Inter',sans-serif;">
-          Livraison <strong style="color:${C.text};">2–4 jours ouvrés</strong> partout en France. Expédition le jour même si commande avant 13h. Suivi par SMS. <strong style="color:${C.text};">Livraison offerte dès 50€.</strong>
+          ${trans(lang, 'trust.shippingLabel')} <strong style="color:${C.text};">2–4 jours ouvrés</strong> partout en France. Expédition le jour même si commande avant 13h. Suivi par SMS. <strong style="color:${C.text};">${trans(lang, 'trust.freeShippingOffered')} ${trans(lang, 'trust.fromAmount', { n: 50 })}.</strong>
         </div>
         <div class="tp3" style="padding:18px;font-size:13px;color:${C.muted};line-height:1.85;display:none;background:${C.card};font-family:'Inter',sans-serif;">
           Notre équipe beauté est disponible <strong style="color:${C.text};">7j/7 par chat et email</strong>. Des conseillères expertes répondent en moins de 2h. Votre satisfaction est notre priorité absolue.
@@ -374,9 +374,9 @@ ${renderRichSections(data, ROSE_THEME)}
   <p style="color:rgba(255,255,255,.8);font-size:16px;margin-bottom:14px;max-width:480px;margin-left:auto;margin-right:auto;font-family:'Inter',sans-serif;line-height:1.75;">${data.subtitle || ''}</p>
   ${data.urgency ? `<p style="color:rgba(255,255,255,.95);font-size:14px;font-weight:600;margin-bottom:36px;font-family:'Inter',sans-serif;">${data.urgency}</p>` : '<div style="margin-bottom:36px;"></div>'}
   <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-block;background:#fff;color:${C.accent};padding:18px 52px;border-radius:100px;font-size:16px;font-weight:700;text-decoration:none;font-family:'Inter',sans-serif;letter-spacing:.01em;box-shadow:0 8px 32px rgba(0,0,0,0.2);transition:transform .2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-    ${data.cta || 'Commander maintenant'} →
+    ${data.cta || trans(lang, 'cta.orderNow')} →
   </a>
-  <p style="margin-top:22px;font-size:13px;color:rgba(255,255,255,.5);font-family:'Inter',sans-serif;">Paiement sécurisé · Livraison offerte · Retour 30 jours · Satisfaite ou remboursée</p>
+  <p style="margin-top:22px;font-size:13px;color:rgba(255,255,255,.5);font-family:'Inter',sans-serif;">${[trans(lang, 'hero.securePayment'), trans(lang, 'trust.freeShippingOffered'), trans(lang, 'trust.returnDays', { n: 30 }), trans(lang, 'trust.satisfiedOrRefundedFem')].join(' · ')}</p>
 </div>
 
 </body>

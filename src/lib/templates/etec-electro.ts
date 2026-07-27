@@ -64,8 +64,8 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:lin
 <p style="font-size:15px;color:#64748B;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-family:'Rajdhani',sans-serif;font-size:40px;font-weight:700;color:#0F172A;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#CBD5E1;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="width:20px;height:20px;border-radius:6px;background:#E0F7FA;color:#00B4D8;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${ico.flash(12)}</span><span style="font-size:14px;color:#475569;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="ec-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="ec-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.nav.composition')}</button></div>
-<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #B2EBF2;"><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Express</span><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Sécurisé</span><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.shield(14)} Certifié</span></div>
+<div style="display:flex;gap:12px;"><button class="ec-btn" style="flex:1;text-align:center;">${data.cta || trans(lang, 'cta.addToCart')}</button><button class="ec-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.nav.composition')}</button></div>
+<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #B2EBF2;"><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.expressShort')}</span><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.lock(14)} ${trans(lang, 'trust.securedShort')}</span><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.shield(14)} ${trans(lang, 'trust.certifiedShort')}</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#E0F7FA;"><div style="max-width:1100px;margin:0 auto;">
 <p style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#00B4D8;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.nav.science')}</p>
@@ -91,7 +91,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:lin
 <p style="font-size:15px;color:rgba(240,253,250,0.5);margin-bottom:36px;">${data.subtitle}</p>
 ${data.price ? `<p style="font-family:'Rajdhani',sans-serif;font-size:52px;font-weight:700;color:#00B4D8;margin-bottom:36px;">${data.price}€</p>` : ''}
 <button class="ec-btn" style="font-size:15px;padding:18px 52px;">${data.cta || 'Booster ma perf'}</button>
-<p style="font-size:12px;color:rgba(240,253,250,0.3);margin-top:20px;">Formule clean · Livraison express · Satisfait ou remboursé</p>
+<p style="font-size:12px;color:rgba(240,253,250,0.3);margin-top:20px;">Formule clean · ${trans(lang, 'trust.expressShipping')} · ${trans(lang, 'trust.satisfiedOrRefunded')}</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, ELECTRO_THEME)}

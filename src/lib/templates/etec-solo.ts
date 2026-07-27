@@ -130,14 +130,14 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
 
         <!-- CTA -->
         <button class="so-btn" style="width:100%;justify-content:center;font-size:16px;padding:20px 40px;">
-          ${data.cta || 'Commander maintenant'} →
+          ${data.cta || trans(lang, 'cta.orderNow')} →
         </button>
 
         <!-- TRUST -->
         <div style="display:flex;gap:24px;margin-top:24px;justify-content:center;">
-          <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Livraison offerte</span>
-          <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Paiement sécurisé</span>
-          <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.return(14)} Retour 30j</span>
+          <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.freeShippingOffered')}</span>
+          <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.lock(14)} ${trans(lang, 'hero.securePayment')}</span>
+          <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.return(14)} ${trans(lang, 'trust.returnDays', { n: 30 })}</span>
         </div>
       </div>
     </div>
@@ -250,7 +250,7 @@ ${renderRichSections(data, SOLO_THEME)}
     <button class="so-btn" style="background:#334FB4;font-size:16px;padding:20px 56px;">
       ${data.cta || 'Obtenir le mien'} →
     </button>
-    <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;">Livraison offerte · Satisfait ou remboursé · Paiement sécurisé</p>
+    <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;">${[trans(lang, 'trust.freeShippingOffered'), trans(lang, 'trust.satisfiedOrRefunded'), trans(lang, 'hero.securePayment')].join(' · ')}</p>
   </div>
 </section>
 

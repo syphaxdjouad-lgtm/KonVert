@@ -64,8 +64,8 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#A0
 <p style="font-size:15px;color:#999;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-size:36px;font-weight:700;color:#3D2E1F;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#CCC;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="color:#A0522D;font-size:14px;">✓</span><span style="font-size:14px;color:#666;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="po-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="po-btn-alt" style="flex:1;text-align:center;">L'histoire</button></div>
-<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #DDD5CA;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Soigné</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.leaf(14)} Naturel</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(14)} Retour 30j</span></div>
+<div style="display:flex;gap:12px;"><button class="po-btn" style="flex:1;text-align:center;">${data.cta || trans(lang, 'cta.addToCart')}</button><button class="po-btn-alt" style="flex:1;text-align:center;">L'histoire</button></div>
+<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #DDD5CA;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.carefulShort')}</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.leaf(14)} ${trans(lang, 'trust.naturalShort')}</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(14)} ${trans(lang, 'trust.returnDays', { n: 30 })}</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#F0EBE1;"><div style="max-width:1100px;margin:0 auto;">
 <p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#A0522D;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.nav.craftsmanship')}</p>
@@ -90,8 +90,8 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#A0
 <h2 style="font-family:'Libre Baskerville',serif;font-size:38px;font-weight:400;color:#FBF8F4;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(251,248,244,0.5);margin-bottom:36px;">${data.subtitle}</p>
 ${data.price ? `<p style="font-size:48px;font-weight:700;color:#F5EEE6;margin-bottom:36px;">${data.price}€</p>` : ''}
-<button style="background:#FBF8F4;color:#A0522D;border:none;border-radius:20px;padding:18px 52px;font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Commander maintenant'}</button>
-<p style="font-size:12px;color:rgba(251,248,244,0.4);margin-top:20px;">Fait main · Emballage soigné · Retour gratuit</p>
+<button style="background:#FBF8F4;color:#A0522D;border:none;border-radius:20px;padding:18px 52px;font-family:'Source Sans 3',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || trans(lang, 'cta.orderNow')}</button>
+<p style="font-size:12px;color:rgba(251,248,244,0.4);margin-top:20px;">Fait main · ${trans(lang, 'trust.carefulPackaging')} · ${trans(lang, 'trust.freeReturn')}</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, POTERIE_THEME)}

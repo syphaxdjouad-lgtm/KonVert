@@ -111,7 +111,7 @@ export function templateEtecSage(data: LandingPageData): string {
       date:  'Il y a 5 jours',
     },
     {
-      text:  'Enfin un produit bio qui goûte vraiment bon ! Pas d\'amertume, pas d\'additifs suspects. Je l\'incorpore à mes smoothies chaque matin. Livraison soignée dans un emballage recyclable — tout est cohérent avec les valeurs de la marque.',
+      text:  `Enfin un produit bio qui goûte vraiment bon ! Pas d'amertume, pas d'additifs suspects. Je l'incorpore à mes smoothies chaque matin. ${trans(lang, 'trust.carefulShipping')} dans un emballage recyclable — tout est cohérent avec les valeurs de la marque.`,
       name:  'Julia B.',
       date:  'Il y a 10 jours',
     },
@@ -227,7 +227,7 @@ export function templateEtecSage(data: LandingPageData): string {
 
       <!-- Badges certifications BIO — élément unique Sage -->
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:22px;">
-        <span style="display:inline-flex;align-items:center;gap:5px;background:#E8F5E9;color:${C.accent};font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;border:1px solid ${C.border};font-family:'DM Sans',sans-serif;">${ico.leaf(12)} Bio</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;background:#E8F5E9;color:${C.accent};font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;border:1px solid ${C.border};font-family:'DM Sans',sans-serif;">${ico.leaf(12)} ${trans(lang, 'trust.organicShort')}</span>
         <span style="display:inline-flex;align-items:center;gap:5px;background:#E8F5E9;color:${C.accent};font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;border:1px solid ${C.border};font-family:'DM Sans',sans-serif;">${ico.flask(12)} Sans additifs</span>
         <span style="display:inline-flex;align-items:center;gap:5px;background:#E8F5E9;color:${C.accent};font-size:12px;font-weight:700;padding:5px 12px;border-radius:100px;border:1px solid ${C.border};font-family:'DM Sans',sans-serif;">${ico.recycle(12)} Éco-responsable</span>
       </div>
@@ -242,12 +242,12 @@ export function templateEtecSage(data: LandingPageData): string {
 
       <!-- CTA principal -->
       <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:${C.accent};color:#fff;padding:17px 32px;border-radius:100px;font-size:15px;font-weight:700;text-decoration:none;margin-bottom:12px;letter-spacing:.01em;font-family:'DM Sans',sans-serif;box-shadow:0 4px 20px rgba(45,106,79,0.30);transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
-        ${data.cta || 'Commander maintenant'} →
+        ${data.cta || trans(lang, 'cta.orderNow')} →
       </a>
 
       <!-- CTA secondaire -->
       <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:transparent;color:${C.accent};padding:15px 32px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;border:2px solid ${C.accent};margin-bottom:22px;font-family:'DM Sans',sans-serif;transition:all .2s;" onmouseover="this.style.background='${C.accentLight}'" onmouseout="this.style.background='transparent'">
-        Ajouter au panier
+        ${trans(lang, 'cta.addToCart')}
       </a>
 
       <!-- Urgence -->
@@ -261,8 +261,8 @@ export function templateEtecSage(data: LandingPageData): string {
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:${C.border};border:1px solid ${C.border};border-radius:14px;overflow:hidden;margin-bottom:24px;">
         ${[
           [ico.leaf(22), 'Certifié bio', 'Agriculture raisonnée'],
-          [ico.truck(22), 'Livraison offerte', 'Dès 40€ d\'achat'],
-          [ico.return(22), 'Retour 30 jours', 'Sans frais'],
+          [ico.truck(22), trans(lang, 'trust.freeShippingOffered'), trans(lang, 'trust.fromAmount', { n: 40 })],
+          [ico.return(22), trans(lang, 'trust.returnDays', { n: 30 }), trans(lang, 'trust.noFees')],
         ].map(([icon, title, sub]) => `
           <div style="background:${C.accentLight};padding:14px 10px;text-align:center;">
             <div style="color:${C.accent};display:flex;justify-content:center;margin-bottom:6px;">${icon}</div>
@@ -271,10 +271,10 @@ export function templateEtecSage(data: LandingPageData): string {
           </div>`).join('')}
       </div>
 
-      <!-- Tabs Garantie / Livraison / Support -->
+      <!-- Tabs Warranty / Shipping / Support -->
       <div style="border:1px solid ${C.border};border-radius:14px;overflow:hidden;">
         <div style="display:flex;border-bottom:1px solid ${C.border};">
-          ${['Garantie', 'Livraison', 'Support'].map((tab, i) => `
+          ${[trans(lang, 'style.footer_guarantee'), trans(lang, 'trust.shippingLabel'), trans(lang, 'bespoke.nav.support')].map((tab, i) => `
             <button
               onclick="document.querySelectorAll('.tp4').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tb4').forEach(function(b,j){b.style.background=j===${i}?'${C.accentLight}':'transparent';b.style.color=j===${i}?'${C.accent}':'${C.muted}';b.style.fontWeight=j===${i}?'700':'500';});"
               class="tb4"
@@ -381,9 +381,9 @@ ${renderRichSections(data, SAGE_THEME)}
   <p style="color:rgba(255,255,255,.8);font-size:16px;margin-bottom:14px;max-width:480px;margin-left:auto;margin-right:auto;font-family:'DM Sans',sans-serif;line-height:1.75;">${data.subtitle || ''}</p>
   ${data.urgency ? `<p style="color:rgba(255,255,255,.95);font-size:14px;font-weight:700;margin-bottom:36px;font-family:'DM Sans',sans-serif;">${data.urgency}</p>` : '<div style="margin-bottom:36px;"></div>'}
   <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:inline-block;background:#fff;color:${C.accent};padding:18px 52px;border-radius:100px;font-size:16px;font-weight:800;text-decoration:none;font-family:'DM Sans',sans-serif;letter-spacing:.01em;box-shadow:0 8px 32px rgba(0,0,0,0.2);transition:transform .2s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-    ${data.cta || 'Commander maintenant'} →
+    ${data.cta || trans(lang, 'cta.orderNow')} →
   </a>
-  <p style="margin-top:22px;font-size:13px;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;">Paiement sécurisé · Livraison offerte · Retour 30 jours · Satisfait ou remboursé</p>
+  <p style="margin-top:22px;font-size:13px;color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;">${[trans(lang, 'hero.securePayment'), trans(lang, 'trust.freeShippingOffered'), trans(lang, 'trust.returnDays', { n: 30 }), trans(lang, 'trust.satisfiedOrRefunded')].join(' · ')}</p>
 </div>
 
 </body>

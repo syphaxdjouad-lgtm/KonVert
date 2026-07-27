@@ -135,9 +135,9 @@ body{font-family:'Poppins',sans-serif;background:#000;color:#e3e3e3;}
       </div>
 
       <div style="display:flex;gap:24px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(163,114,73,0.15);">
-        <span style="font-size:10px;color:#666;display:flex;align-items:center;gap:6px;letter-spacing:0.06em;text-transform:uppercase;">${ico.shield(13)} Certifié</span>
-        <span style="font-size:10px;color:#666;display:flex;align-items:center;gap:6px;letter-spacing:0.06em;text-transform:uppercase;">${ico.truck(13)} Écrin offert</span>
-        <span style="font-size:10px;color:#666;display:flex;align-items:center;gap:6px;letter-spacing:0.06em;text-transform:uppercase;">${ico.return(13)} 30 jours</span>
+        <span style="font-size:10px;color:#666;display:flex;align-items:center;gap:6px;letter-spacing:0.06em;text-transform:uppercase;">${ico.shield(13)} ${trans(lang, 'trust.certifiedShort')}</span>
+        <span style="font-size:10px;color:#666;display:flex;align-items:center;gap:6px;letter-spacing:0.06em;text-transform:uppercase;">${ico.truck(13)} ${trans(lang, 'trust.giftBoxOffered')}</span>
+        <span style="font-size:10px;color:#666;display:flex;align-items:center;gap:6px;letter-spacing:0.06em;text-transform:uppercase;">${ico.return(13)} ${trans(lang, 'trust.returnDaysBare', { n: 30 })}</span>
       </div>
     </div>
   </div>
@@ -166,7 +166,7 @@ body{font-family:'Poppins',sans-serif;background:#000;color:#e3e3e3;}
       ${[
         { label: 'Détails', content: `<p style="font-size:14px;color:#868686;line-height:1.8;">Façonné à la main dans notre atelier parisien. Or 18 carats, pierres précieuses certifiées. Poinçon de maître. Finition polie miroir. Livré dans un écrin de luxe avec certificat d'authenticité.</p>` },
         { label: 'Entretien', content: `<p style="font-size:14px;color:#868686;line-height:1.8;">Nettoyez avec un chiffon doux. Évitez le contact avec les produits chimiques. Rangez dans l'écrin fourni. Révision gratuite chaque année dans notre atelier.</p>` },
-        { label: 'Livraison', content: `<p style="font-size:14px;color:#868686;line-height:1.8;">Livraison sécurisée et assurée sous 48h. Emballage cadeau premium inclus. Suivi en temps réel. Livraison en Europe et international disponible.</p>` },
+        { label: trans(lang, 'trust.shippingLabel'), content: `<p style="font-size:14px;color:#868686;line-height:1.8;">Livraison sécurisée et assurée sous 48h. Emballage cadeau premium inclus. Suivi en temps réel. Livraison en Europe et international disponible.</p>` },
       ].map((t, i) => `
       <button onclick="(function(){document.querySelectorAll('.tp-jw').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tbtn-jw').forEach(function(b,j){b.style.borderBottom=j===${i}?'1px solid #a37249':'1px solid transparent';b.style.color=j===${i}?'#ddab6a':'#666';b.style.marginBottom='-1px';});})()" class="tbtn-jw" style="padding:14px 28px;background:none;border:none;border-bottom:${i===0?'1px solid #a37249':'1px solid transparent'};color:${i===0?'#ddab6a':'#666'};font-family:'Poppins',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;margin-bottom:-1px;transition:all .3s;">${t.label}</button>`).join('')}
     </div>
@@ -245,7 +245,7 @@ ${renderRichSections(data, JEWEL_THEME)}
     <p style="font-size:14px;color:#666;margin-bottom:36px;line-height:1.7;">${data.subtitle}</p>
     ${data.price ? `<p style="font-family:'Bodoni Moda',serif;font-size:52px;font-weight:400;color:#ddab6a;margin-bottom:36px;">${data.price}€</p>` : ''}
     <button class="jw-btn" style="font-size:13px;padding:20px 56px;">${data.cta || 'Acquérir cette pièce'}</button>
-    <p style="font-size:10px;color:#444;margin-top:24px;letter-spacing:0.1em;text-transform:uppercase;">Certificat d'authenticité · Écrin offert · Livraison sécurisée</p>
+    <p style="font-size:10px;color:#444;margin-top:24px;letter-spacing:0.1em;text-transform:uppercase;">${[trans(lang, 'trust.certificateOfAuthenticity'), trans(lang, 'trust.giftBoxOffered'), trans(lang, 'trust.secureShipping')].join(' · ')}</p>
   </div>
 </section>
 

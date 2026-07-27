@@ -51,7 +51,7 @@ export function templateEtecStarter(data: LandingPageData): string {
 .st-btn{background:#4F46E5;color:#fff;border:none;border-radius:12px;padding:17px 40px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;}.st-btn:hover{background:#4338CA;transform:translateY(-1px);box-shadow:0 6px 20px rgba(79,70,229,0.25);}
 .st-btn-alt{background:#F5F5FF;color:#4F46E5;border:none;border-radius:12px;padding:15px 40px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;}.st-btn-alt:hover{background:#EEF2FF;}
 @media(max-width:768px){.st-hero{flex-direction:column!important;}.st-hero-img{width:100%!important;height:460px!important;}.st-hero-info{width:100%!important;padding:32px 20px!important;}.st-grid3{grid-template-columns:1fr!important;}.st-compare{flex-direction:column!important;}.st-reviews{grid-template-columns:1fr!important;}}</style></head><body>
-<div style="background:#4F46E5;color:#fff;text-align:center;padding:11px 20px;font-size:12px;font-weight:500;">${data.urgency || `Offre spéciale — Livraison offerte aujourd'hui`}</div>
+<div style="background:#4F46E5;color:#fff;text-align:center;padding:11px 20px;font-size:12px;font-weight:500;">${data.urgency || trans(lang, 'bespoke.starter.urgencyFallback')}</div>
 <nav style="background:#fff;border-bottom:1px solid #E5E7EB;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.shop')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#111;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#fff;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="st-hero">
 <div style="width:55%;position:relative;background:#F5F5FF;overflow:hidden;border-radius:0 12px 12px 0;" class="st-hero-img"><img id="mi-st" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
@@ -64,8 +64,8 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#4F
 <p style="font-size:15px;color:#888;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-size:36px;font-weight:700;color:#111;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#CCC;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="width:20px;height:20px;border-radius:6px;background:#F5F5FF;color:#4F46E5;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✓</span><span style="font-size:14px;color:#555;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="st-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="st-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.cta.learnMore')}</button></div>
-<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #E5E7EB;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Offerte</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Sécurisé</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(14)} Retour 30j</span></div>
+<div style="display:flex;gap:12px;"><button class="st-btn" style="flex:1;text-align:center;">${data.cta || trans(lang, 'cta.addToCart')}</button><button class="st-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.cta.learnMore')}</button></div>
+<div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #E5E7EB;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.offeredShort')}</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.lock(14)} ${trans(lang, 'trust.securedShort')}</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(14)} ${trans(lang, 'trust.returnDays', { n: 30 })}</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#F5F5FF;"><div style="max-width:1100px;margin:0 auto;">
 <p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#4F46E5;text-align:center;text-transform:uppercase;margin-bottom:8px;">Avantages</p>
@@ -73,7 +73,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#4F
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="st-grid3">${[
   { t: benefits[0]||'Qualité premium', d: 'Des matériaux soigneusement sélectionnés pour une durabilité maximale' },
   { t: benefits[1]||'Design moderne', d: `Un design épuré et contemporain qui s'adapte à tous les styles` },
-  { t: benefits[2]||'Satisfaction garantie', d: `Retour gratuit sous 30 jours si vous n'êtes pas satisfait` },
+  { t: benefits[2]||trans(lang, 'trust.satisfactionGuaranteed'), d: `${trans(lang, 'trust.freeReturn')} sous 30 jours si vous n'êtes pas satisfait` },
 ].map(s => `<div style="background:#fff;border-radius:12px;padding:36px 28px;text-align:center;border:1px solid #E5E7EB;"><h3 style="font-size:18px;font-weight:600;color:#111;margin-bottom:10px;">${s.t}</h3><p style="font-size:14px;color:#888;line-height:1.7;">${s.d}</p></div>`).join('')}</div></div></section>
 <section style="padding:80px 24px;background:#fff;"><div style="max-width:1000px;margin:0 auto;">
 <h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#111;text-align:center;margin-bottom:48px;">${trans(lang, 'bespoke.section.inSituation')}</h2>
@@ -90,8 +90,8 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#4F
 <h2 style="font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:700;color:#fff;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:36px;">${data.subtitle}</p>
 ${data.price ? `<p style="font-size:48px;font-weight:700;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
-<button style="background:#fff;color:#4F46E5;border:none;border-radius:12px;padding:18px 52px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || 'Commander maintenant'}</button>
-<p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;">Livraison offerte · Retour gratuit · Paiement sécurisé</p>
+<button style="background:#fff;color:#4F46E5;border:none;border-radius:12px;padding:18px 52px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">${data.cta || trans(lang, 'cta.orderNow')}</button>
+<p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;">${[trans(lang, 'trust.freeShippingOffered'), trans(lang, 'trust.freeReturn'), trans(lang, 'hero.securePayment')].join(' · ')}</p>
 </div></section>
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, STARTER_THEME)}

@@ -47,9 +47,9 @@ export function templateEtecCosmetix(data: LandingPageData): string {
     </div>`).join('')
 
   const tabContents = [
-    { id: 'tab-cx-garantie', label: 'Garantie', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">${data.guarantee?.description || 'Satisfait ou remboursé pendant ' + (data.guarantee?.duration || '30 jours') + '. Retournez le produit dans son emballage d\'origine pour un remboursement intégral.'}</p>` },
+    { id: 'tab-cx-garantie', label: trans(lang, 'style.footer_guarantee'), content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">${data.guarantee?.description || trans(lang, 'bespoke.cosmetix.tabGuaranteeBody')}</p>` },
     { id: 'tab-cx-details', label: 'Détails', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">${data.benefits?.join(' · ') || 'Produit de qualité premium, conçu pour vous apporter satisfaction et résultats durables.'}</p>` },
-    { id: 'tab-cx-livraison', label: 'Livraison', content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">Livraison offerte dès 40€. Expédition sous 24h en jours ouvrés. Emballage recyclable et éco-responsable. Suivi en temps réel par email.</p>` },
+    { id: 'tab-cx-livraison', label: trans(lang, 'trust.shippingLabel'), content: `<p style="font-size:14px;color:#666;line-height:1.7;margin:0;">${trans(lang, 'bespoke.cosmetix.tabShippingBody')}</p>` },
   ]
 
   const ingredients = [
@@ -89,7 +89,7 @@ body{font-family:'DM Sans',sans-serif;background:#FEFCFA;color:#121212;}
 
 <!-- TOP BAR -->
 <div style="background:#121212;color:#fff;text-align:center;padding:10px 20px;font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;">
-  ${data.urgency || 'Offre exclusive — Livraison offerte aujourd\'hui'}
+  ${data.urgency || trans(lang, 'bespoke.cosmetix.urgencyFallback')}
 </div>
 
 <!-- BREADCRUMB -->
@@ -144,19 +144,19 @@ body{font-family:'DM Sans',sans-serif;background:#FEFCFA;color:#121212;}
       <!-- CTAs -->
       <div style="display:flex;flex-direction:column;gap:12px;">
         <button class="cx-btn" style="width:100%;text-align:center;">
-          ${data.cta || 'Ajouter au panier'}
+          ${data.cta || trans(lang, 'cta.addToCart')}
         </button>
         <button class="cx-btn-outline" style="width:100%;text-align:center;">
-          Acheter maintenant
+          ${trans(lang, 'cta.buyNow')}
         </button>
       </div>
 
       <!-- TRUST -->
       <div style="display:flex;gap:24px;margin-top:24px;padding-top:20px;border-top:1px solid #E8E4DF;" class="cx-trust-row">
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.03em;">${ico.leaf(14)} Naturel</span>
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.03em;">${ico.shield(14)} Certifié</span>
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.03em;">${ico.truck(14)} Offerte</span>
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.03em;">${ico.return(14)} 30 jours</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.03em;">${ico.leaf(14)} ${trans(lang, 'trust.naturalShort')}</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.03em;">${ico.shield(14)} ${trans(lang, 'trust.certifiedShort')}</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.03em;">${ico.truck(14)} ${trans(lang, 'trust.offeredShort')}</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:6px;letter-spacing:0.03em;">${ico.return(14)} ${trans(lang, 'trust.returnDaysBare', { n: 30 })}</span>
       </div>
     </div>
   </div>
@@ -254,8 +254,8 @@ ${renderRichSections(data, COSMETIX_THEME)}
     <h2 style="font-family:'Playfair Display',serif;font-size:38px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-bottom:16px;">${data.headline}</h2>
     <p style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:32px;line-height:1.6;">${data.subtitle}</p>
     ${data.price ? `<p style="font-size:48px;font-weight:700;color:#fff;margin-bottom:32px;">${data.price}€</p>` : ''}
-    <button style="background:#334FB4;color:#fff;border:none;padding:18px 52px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background .3s;">${data.cta || 'Commander maintenant'}</button>
-    <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;letter-spacing:0.03em;">Formule naturelle · Livraison offerte · Satisfait ou remboursé</p>
+    <button style="background:#334FB4;color:#fff;border:none;padding:18px 52px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:background .3s;">${data.cta || trans(lang, 'cta.orderNow')}</button>
+    <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;letter-spacing:0.03em;">Formule naturelle · ${trans(lang, 'trust.freeShippingOffered')} · ${trans(lang, 'trust.satisfiedOrRefunded')}</p>
   </div>
 </section>
 

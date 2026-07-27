@@ -86,7 +86,7 @@ body{font-family:'Jost',sans-serif;background:#fff;color:#000;}
 
 <!-- TOP BAR -->
 <div style="background:#000;color:#fff;text-align:center;padding:11px 20px;font-size:13px;font-weight:400;">
-  ${data.urgency || 'Livraison gratuite — Commandez avant 14h, expédié aujourd\'hui'}
+  ${data.urgency || trans(lang, 'bespoke.techcase.urgencyFallback')}
 </div>
 
 <!-- BREADCRUMB -->
@@ -135,15 +135,15 @@ body{font-family:'Jost',sans-serif;background:#fff;color:#000;}
 
       <!-- CTAs -->
       <div style="display:flex;gap:10px;margin-bottom:16px;">
-        <button class="tc-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button>
+        <button class="tc-btn" style="flex:1;text-align:center;">${data.cta || trans(lang, 'cta.addToCart')}</button>
         <button class="tc-btn-gray" style="flex:1;text-align:center;">Acheter</button>
       </div>
 
       <!-- TRUST -->
       <div style="display:flex;gap:20px;margin-top:16px;padding-top:16px;border-top:1px solid #EBEBEB;">
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Express 24h</span>
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Paiement sécurisé</span>
-        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.return(14)} Retour gratuit</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.truck(14)} ${trans(lang, 'trust.expressHours', { n: 24 })}</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.lock(14)} ${trans(lang, 'hero.securePayment')}</span>
+        <span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.return(14)} ${trans(lang, 'trust.freeReturn')}</span>
       </div>
     </div>
   </div>
@@ -174,14 +174,14 @@ body{font-family:'Jost',sans-serif;background:#fff;color:#000;}
       ${[
         { label: 'Description', content: `<p style="font-size:14px;color:#777;line-height:1.8;">Protection anti-choc certifiée MIL-STD-810G. Compatible charge sans fil et MagSafe. Boutons tactiles réactifs. Découpes précises pour tous les ports. Grip anti-dérapant.</p>` },
         { label: 'Compatibilité', content: `<p style="font-size:14px;color:#777;line-height:1.8;">Compatible avec les derniers modèles iPhone et Samsung Galaxy. Vérifiez la compatibilité exacte dans le sélecteur de modèle. Support MagSafe et Qi certifié.</p>` },
-        { label: 'Livraison', content: `<p style="font-size:14px;color:#777;line-height:1.8;">Expédié sous 24h jours ouvrés. Livraison gratuite en France métropolitaine. Express 24h disponible. Suivi en temps réel. Retour gratuit sous 30 jours.</p>` },
+        { label: trans(lang, 'trust.shippingLabel'), content: `<p style="font-size:14px;color:#777;line-height:1.8;">${trans(lang, 'bespoke.techcase.tabShippingBody')}</p>` },
       ].map((t, i) => `
       <button onclick="(function(){document.querySelectorAll('.tp-tc').forEach(function(p,j){p.style.display=j===${i}?'block':'none';});document.querySelectorAll('.tbtn-tc').forEach(function(b,j){b.style.borderBottom=j===${i}?'2px solid #000':'2px solid transparent';b.style.color=j===${i}?'#000':'#999';b.style.marginBottom='-2px';});})()" class="tbtn-tc" style="padding:14px 24px;background:none;border:none;border-bottom:${i===0?'2px solid #000':'2px solid transparent'};color:${i===0?'#000':'#999'};font-family:'Jost',sans-serif;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:-2px;transition:all .2s;">${t.label}</button>`).join('')}
     </div>
     ${[
       `<p style="font-size:14px;color:#777;line-height:1.8;">Protection anti-choc certifiée MIL-STD-810G. Compatible charge sans fil et MagSafe. Boutons tactiles réactifs. Découpes précises pour tous les ports. Grip anti-dérapant.</p>`,
       `<p style="font-size:14px;color:#777;line-height:1.8;">Compatible avec les derniers modèles iPhone et Samsung Galaxy. Vérifiez la compatibilité exacte dans le sélecteur de modèle. Support MagSafe et Qi certifié.</p>`,
-      `<p style="font-size:14px;color:#777;line-height:1.8;">Expédié sous 24h jours ouvrés. Livraison gratuite en France métropolitaine. Express 24h disponible. Suivi en temps réel. Retour gratuit sous 30 jours.</p>`,
+      `<p style="font-size:14px;color:#777;line-height:1.8;">${trans(lang, 'bespoke.techcase.tabShippingBody')}</p>`,
     ].map((c, i) => `<div class="tp-tc" style="display:${i===0?'block':'none'};">${c}</div>`).join('')}
   </div>
 </section>
@@ -246,8 +246,8 @@ ${renderRichSections(data, TECHCASE_THEME)}
     <h2 style="font-size:40px;font-weight:600;color:#fff;letter-spacing:-0.02em;margin-bottom:16px;">${data.headline}</h2>
     <p style="font-size:15px;color:rgba(255,255,255,0.5);margin-bottom:36px;line-height:1.6;">${data.subtitle}</p>
     ${data.price ? `<p style="font-size:52px;font-weight:600;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
-    <button style="background:#fff;color:#000;border:none;border-radius:8px;padding:18px 52px;font-family:'Jost',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;">${data.cta || 'Commander maintenant'}</button>
-    <p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:20px;">Express 24h · Retour gratuit · Paiement sécurisé</p>
+    <button style="background:#fff;color:#000;border:none;border-radius:8px;padding:18px 52px;font-family:'Jost',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;">${data.cta || trans(lang, 'cta.orderNow')}</button>
+    <p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:20px;">${[trans(lang, 'trust.expressHours', { n: 24 }), trans(lang, 'trust.freeReturn'), trans(lang, 'hero.securePayment')].join(' · ')}</p>
   </div>
 </section>
 

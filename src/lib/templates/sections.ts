@@ -10,8 +10,11 @@ import type { LandingPageData } from '@/types'
 import type { SectionInstance } from '@/types/editor'
 import { renderTrustBadgesPayment, type PaymentMethod } from '@/lib/sections-v3/shared/TrustBadgesPayment'
 import { renderStickyAddToCartMobile } from '@/lib/sections-v3/shared/StickyAddToCartMobile'
+// Alias `trans` : le paramètre `t: SectionTheme` est utilisé dans les 21 renderers
+// de ce fichier — un import nommé `t` entrerait en collision.
+import { t as trans } from '@/lib/i18n/ui-labels'
 
-// ─── Section keys & ordre canonique ──────────────────────────────────────────
+// ─── Section keys & ordre canonique ────────────────────────────────────
 // Liste exhaustive des sections rendues par renderRichSections, dans l'ordre
 // psychologique e-com DTC validé en brainstorming (spec § 3.2).
 // `hero_badges` n'est PAS dans cette liste — il reste dans le hero du template.
@@ -87,11 +90,11 @@ export const DEFAULT_THEME: SectionTheme = {
   radius: '16px',
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════════════════════
 // V2 PREMIUM SECTIONS (OBITO design 2026-05-23) + 13 nouvelles sections
-// ═══════════════════════════════════════════════════════════════════════════
+// ═════════════════════════════════════════════════════════════════════════════════
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Helpers ─────────────────────────────────────────────────────
 
 /** Génère le bloc <style> responsive injecté une seule fois par section. */
 function mq(sectionId: string, rules: string): string {
@@ -107,18 +110,19 @@ function starsSvg(rating: number, color: string): string {
   }).join('')
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 1. SOCIAL PROOF BAR V2 — bandeau horizontal 3 chiffres clés
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderSocialProofBarV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.social_proof) return ''
   const sp = d.social_proof
   if (!sp.customers && !sp.rating && !sp.sold) return ''
 
+  const lang = d.language
   const items: { label: string; value: string; icon: string }[] = []
-  if (sp.customers) items.push({ label: 'Clients satisfaits', value: sp.customers, icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>` })
-  if (sp.rating)    items.push({ label: 'Note moyenne', value: sp.rating, icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>` })
-  if (sp.sold)      items.push({ label: 'Vendus ce mois', value: sp.sold, icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>` })
+  if (sp.customers) items.push({ label: trans(lang, 'legacy.socialProof.customers'), value: sp.customers, icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>` })
+  if (sp.rating)    items.push({ label: trans(lang, 'legacy.socialProof.rating'), value: sp.rating, icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>` })
+  if (sp.sold)      items.push({ label: trans(lang, 'legacy.socialProof.sold'), value: sp.sold, icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>` })
 
   const cols = items.map((it, i) => `
     <div style="flex:1;min-width:160px;display:flex;flex-direction:column;align-items:center;gap:10px;padding:28px 20px;${i < items.length - 1 ? `border-right:1px solid ${t.border};` : ''}">
@@ -138,19 +142,20 @@ ${mq('spb', `.spb-inner{flex-direction:column!important;} .spb-item{border-right
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 2. STORY V2 — timeline verticale PAS (SVG — zéro emoji icône principale)
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderStoryV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.story) return ''
   const s = d.story
   if (!s.problem && !s.agitation && !s.solution && !s.transformation) return ''
+  const lang = d.language
 
   // SVG inline 24×24 pour chaque étape — stroke uniquement, zéro emoji
   const steps = [
     {
       key: s.problem,
-      label: 'Le problème',
+      label: trans(lang, 'legacy.story.problem'),
       labelColor: '#B91C1C',
       bg: '#FEF2F2',
       stroke: '#B91C1C',
@@ -158,7 +163,7 @@ export function renderStoryV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEM
     },
     {
       key: s.agitation,
-      label: 'Ce que ça coûte',
+      label: trans(lang, 'legacy.story.cost'),
       labelColor: '#B45309',
       bg: '#FFFBEB',
       stroke: '#B45309',
@@ -166,7 +171,7 @@ export function renderStoryV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEM
     },
     {
       key: s.solution,
-      label: 'Notre solution',
+      label: trans(lang, 'legacy.story.solution'),
       labelColor: t.primary,
       bg: t.accent,
       stroke: t.primary,
@@ -174,7 +179,7 @@ export function renderStoryV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEM
     },
     {
       key: s.transformation,
-      label: 'Le résultat',
+      label: trans(lang, 'legacy.story.result'),
       labelColor: '#065F46',
       bg: '#ECFDF5',
       stroke: '#065F46',
@@ -182,7 +187,9 @@ export function renderStoryV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEM
     },
   ].filter(st => Boolean(st.key))
 
-  const title = d.product_name ? `Pourquoi nous avons créé ${d.product_name}` : "L'histoire derrière le produit"
+  const title = d.product_name
+    ? trans(lang, 'legacy.story.titleWithProduct', { name: d.product_name })
+    : trans(lang, 'legacy.story.titleDefault')
 
   const timeline = steps.map((st, i) => {
     const isLast = i === steps.length - 1
@@ -214,11 +221,12 @@ ${mq('stv2', `.stv2-wrap{padding:60px 20px!important;}`)}
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 3. TESTIMONIALS V2 — grid 3 cards reviews avec étoiles SVG
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderTestimonialsV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.testimonials || d.testimonials.length === 0) return ''
+  const lang = d.language
 
   const cards = d.testimonials.slice(0, 6).map(tm => {
     const initial = (tm.name?.[0] ?? 'A').toUpperCase()
@@ -232,13 +240,13 @@ export function renderTestimonialsV2(d: LandingPageData, t: SectionTheme = DEFAU
         <div style="display:flex;align-items:center;gap:12px;">
           <div style="width:40px;height:40px;border-radius:50%;background:${t.accent};color:${t.primary};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0;">${initial}</div>
           <div>
-            <p style="font-size:14px;font-weight:700;color:${t.text};margin:0;">${tm.name ?? 'Client vérifié'}</p>
+            <p style="font-size:14px;font-weight:700;color:${t.text};margin:0;">${tm.name ?? trans(lang, 'legacy.testimonials.defaultName')}</p>
             <p style="font-size:12px;color:${t.textMuted};margin:0;">${tm.variant ?? (tm.location ?? '')}</p>
           </div>
         </div>
         <div style="display:inline-flex;align-items:center;gap:5px;background:${t.accent};padding:4px 10px;border-radius:100px;flex-shrink:0;">
           ${checkIcon}
-          <span style="font-size:11px;color:${t.primary};font-weight:700;white-space:nowrap;">Achat vérifié</span>
+          <span style="font-size:11px;color:${t.primary};font-weight:700;white-space:nowrap;">${trans(lang, 'reviews.verifiedPurchase')}</span>
         </div>
       </div>
     </div>`
@@ -248,8 +256,8 @@ export function renderTestimonialsV2(d: LandingPageData, t: SectionTheme = DEFAU
 ${mq('tmv2', `.tmv2-grid{grid-template-columns:1fr!important;} .tmv2-wrap{padding:60px 20px!important;}`)}
 <section class="tmv2-wrap" style="padding:80px 24px;background:${t.bg};font-family:${t.fontFamily};">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">Avis clients</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">Ils ont fait le choix.</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'reviews.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">${trans(lang, 'legacy.testimonials.title')}</h2>
     <div class="tmv2-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;">
       ${cards}
     </div>
@@ -257,13 +265,14 @@ ${mq('tmv2', `.tmv2-grid{grid-template-columns:1fr!important;} .tmv2-wrap{paddin
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 4. COMPARISON V2 — 2 colonnes sans/avec (rouge/vert hardcodés — autorisé)
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderComparisonV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.comparison) return ''
   const c = d.comparison
   if (!c.without?.length && !c.with?.length) return ''
+  const lang = d.language
 
   const crossIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
   const checkIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
@@ -280,15 +289,15 @@ export function renderComparisonV2(d: LandingPageData, t: SectionTheme = DEFAULT
 ${mq('cpv2', `.cpv2-grid{grid-template-columns:1fr!important;} .cpv2-wrap{padding:60px 20px!important;}`)}
 <section class="cpv2-wrap" style="padding:80px 24px;background:${t.bgAlt};font-family:${t.fontFamily};">
   <div style="max-width:1000px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">La différence</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">${d.product_name ? `${d.product_name} change la donne` : 'Avec ou sans ?'}</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.comparison.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">${d.product_name ? trans(lang, 'legacy.comparison.titleWithProduct', { name: d.product_name }) : trans(lang, 'legacy.comparison.titleDefault')}</h2>
     <div class="cpv2-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
       <div style="background:#FEF2F2;border:2px solid #FECACA;border-radius:${t.radius};padding:28px 24px;">
-        <p style="font-size:12px;font-weight:800;color:#DC2626;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 20px 0;">${c.without_title ?? 'Sans'}</p>
+        <p style="font-size:12px;font-weight:800;color:#DC2626;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 20px 0;">${c.without_title ?? trans(lang, 'legacy.comparison.without')}</p>
         <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;">${withoutItems}</ul>
       </div>
       <div style="background:#F0FDF4;border:2px solid #BBF7D0;border-radius:${t.radius};padding:28px 24px;">
-        <p style="font-size:12px;font-weight:800;color:#059669;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 20px 0;">${c.with_title ?? 'Avec'}</p>
+        <p style="font-size:12px;font-weight:800;color:#059669;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 20px 0;">${c.with_title ?? trans(lang, 'legacy.comparison.with')}</p>
         <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;">${withItems}</ul>
       </div>
     </div>
@@ -296,11 +305,12 @@ ${mq('cpv2', `.cpv2-grid{grid-template-columns:1fr!important;} .cpv2-wrap{paddin
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 5. BONUSES V2 — cards empilées avec ribbon "OFFERT" + numéro SVG
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderBonusesV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.bonuses || d.bonuses.length === 0) return ''
+  const lang = d.language
 
   const giftIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>`
 
@@ -308,14 +318,14 @@ export function renderBonusesV2(d: LandingPageData, t: SectionTheme = DEFAULT_TH
     <div style="background:${t.bg};border:1px solid ${t.border};border-radius:${t.radius};padding:24px 28px;display:flex;gap:20px;align-items:center;position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);">
       <div style="flex-shrink:0;width:52px;height:52px;border-radius:14px;background:${t.accent};color:${t.primary};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;letter-spacing:-0.02em;">${String(i + 1).padStart(2, '0')}</div>
       <div style="flex:1;min-width:0;">
-        <p style="font-size:17px;font-weight:800;color:${t.text};margin:0 0 4px 0;">${b.title ?? 'Bonus'}</p>
+        <p style="font-size:17px;font-weight:800;color:${t.text};margin:0 0 4px 0;">${b.title ?? trans(lang, 'legacy.bonuses.defaultTitle')}</p>
         <p style="font-size:14px;color:${t.textMuted};line-height:1.55;margin:0;">${b.description ?? ''}</p>
       </div>
       <div style="flex-shrink:0;text-align:right;">
         ${b.value ? `<p style="font-size:14px;font-weight:600;color:${t.textMuted};margin:0 0 2px 0;text-decoration:line-through;">${b.value}</p>` : ''}
         <div style="display:inline-flex;align-items:center;gap:5px;background:#ECFDF5;border:1px solid #6EE7B7;border-radius:6px;padding:4px 10px;">
           ${giftIcon}
-          <span style="font-size:11px;font-weight:800;color:#059669;letter-spacing:0.06em;">OFFERT</span>
+          <span style="font-size:11px;font-weight:800;color:#059669;letter-spacing:0.06em;">${trans(lang, 'legacy.bonuses.offered')}</span>
         </div>
       </div>
     </div>`).join('')
@@ -324,20 +334,21 @@ export function renderBonusesV2(d: LandingPageData, t: SectionTheme = DEFAULT_TH
 ${mq('bnv2', `.bnv2-wrap{padding:60px 20px!important;}`)}
 <section class="bnv2-wrap" style="padding:80px 24px;background:${t.bgAlt};font-family:${t.fontFamily};">
   <div style="max-width:880px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">Bonus exclusifs</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:12px;">Inclus dans votre commande</h2>
-    <p style="font-size:15px;color:${t.textMuted};text-align:center;margin-bottom:44px;">Valeur additionnelle offerte — disponible uniquement aujourd'hui.</p>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.bonuses.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:12px;">${trans(lang, 'legacy.bonuses.title')}</h2>
+    <p style="font-size:15px;color:${t.textMuted};text-align:center;margin-bottom:44px;">${trans(lang, 'legacy.bonuses.subtitle')}</p>
     <div style="display:flex;flex-direction:column;gap:14px;">${cards}</div>
   </div>
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 6. GUARANTEE V2 — section centrale, shield SVG premium
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderGuaranteeV2(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.guarantee) return ''
   const g = d.guarantee
+  const lang = d.language
 
   const shieldIcon = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="${t.primary}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`
 
@@ -348,19 +359,20 @@ ${mq('grv2', `.grv2-wrap{padding:60px 20px!important;}`)}
     <div style="width:96px;height:96px;border-radius:50%;background:${t.accent};display:flex;align-items:center;justify-content:center;margin:0 auto 28px;border:2px solid ${t.border};">
       ${shieldIcon}
     </div>
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-transform:uppercase;margin-bottom:8px;">Sans risque</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};letter-spacing:-0.03em;margin-bottom:16px;line-height:1.2;">${g.title ?? 'Satisfait ou remboursé'}</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.guarantee.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};letter-spacing:-0.03em;margin-bottom:16px;line-height:1.2;">${g.title ?? trans(lang, 'legacy.guarantee.defaultTitle')}</h2>
     ${g.duration ? `<div style="display:inline-block;background:${t.primary};color:#fff;padding:6px 20px;border-radius:100px;font-size:13px;font-weight:800;letter-spacing:0.06em;margin-bottom:24px;">${g.duration.toUpperCase()}</div>` : ''}
     <p style="font-size:17px;color:${t.text};line-height:1.7;">${g.description ?? ''}</p>
   </div>
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 7. TARGET AUDIENCE — grid 3 cards profils ICP
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderTargetAudience(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.target_audience || d.target_audience.length === 0) return ''
+  const lang = d.language
 
   const personIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${t.primary}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`
 
@@ -375,7 +387,7 @@ export function renderTargetAudience(d: LandingPageData, t: SectionTheme = DEFAU
       </div>
       <div style="display:inline-flex;align-items:center;gap:6px;background:${t.accent};padding:5px 12px;border-radius:100px;width:fit-content;">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="${t.primary}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        <span style="font-size:11px;font-weight:700;color:${t.primary};letter-spacing:0.04em;">Ce produit est fait pour toi</span>
+        <span style="font-size:11px;font-weight:700;color:${t.primary};letter-spacing:0.04em;">${trans(lang, 'legacy.targetAudience.badge')}</span>
       </div>
     </div>`).join('')
 
@@ -383,8 +395,8 @@ export function renderTargetAudience(d: LandingPageData, t: SectionTheme = DEFAU
 ${mq('tau', `.tau-grid{grid-template-columns:1fr!important;} .tau-wrap{padding:60px 20px!important;}`)}
 <section class="tau-wrap" style="padding:80px 24px;background:${t.bgAlt};font-family:${t.fontFamily};">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">Pour qui ?</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">Ce produit a été pensé pour vous</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.targetAudience.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">${trans(lang, 'legacy.targetAudience.title')}</h2>
     <div class="tau-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
       ${cards}
     </div>
@@ -392,11 +404,12 @@ ${mq('tau', `.tau-grid{grid-template-columns:1fr!important;} .tau-wrap{padding:6
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 8. FEATURES — grid 3×2 features avec icônes (emoji → badge, SVG générique si nom d'icône)
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderFeatures(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.features || d.features.length === 0) return ''
+  const lang = d.language
 
   // Si feature.icon ressemble à un emoji, on le place dans un badge secondaire.
   // Sinon on affiche un SVG générique "star/check". Pattern compatible LLM qui envoie des emojis.
@@ -424,8 +437,8 @@ export function renderFeatures(d: LandingPageData, t: SectionTheme = DEFAULT_THE
 ${mq('fts', `.fts-grid{grid-template-columns:1fr!important;} .fts-wrap{padding:60px 20px!important;}`)}
 <section class="fts-wrap" style="padding:80px 24px;background:${t.bg};font-family:${t.fontFamily};">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">Caractéristiques</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">Conçu dans les moindres détails</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.features.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">${trans(lang, 'legacy.features.title')}</h2>
     <div class="fts-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
       ${cards}
     </div>
@@ -433,13 +446,14 @@ ${mq('fts', `.fts-grid{grid-template-columns:1fr!important;} .fts-wrap{padding:6
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 9. UNIQUE MECHANISM — split asymétrique texte + panneau preuve visuelle
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderUniqueMechanism(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.unique_mechanism) return ''
   const um = d.unique_mechanism
   if (!um.name && !um.description) return ''
+  const lang = d.language
 
   // Chantier B : si on a une 5ème image (apres les 4 du hero) ET feature flag actif,
   // on l'affiche dans le panneau droit. Sinon : panneau preuve texte (comportement chantier A).
@@ -459,7 +473,7 @@ export function renderUniqueMechanism(d: LandingPageData, t: SectionTheme = DEFA
         <div style="padding:24px;display:flex;flex-direction:column;gap:12px;border-left:4px solid ${t.primary};">
           <div style="display:flex;align-items:center;gap:12px;">
             ${dnaIcon}
-            <p style="font-size:12px;font-weight:700;color:${t.textMuted};text-transform:uppercase;letter-spacing:0.1em;margin:0;">Preuve</p>
+            <p style="font-size:12px;font-weight:700;color:${t.textMuted};text-transform:uppercase;letter-spacing:0.1em;margin:0;">${trans(lang, 'legacy.uniqueMechanism.proof')}</p>
           </div>
           <p style="font-size:14px;color:${t.text};line-height:1.65;margin:0;">${um.proof}</p>
         </div>` : ''}
@@ -467,7 +481,7 @@ export function renderUniqueMechanism(d: LandingPageData, t: SectionTheme = DEFA
       <div class="umch-proof" style="flex:0 0 380px;background:${t.bgAlt};border:1px solid ${t.border};border-radius:${t.radius};padding:32px;display:flex;flex-direction:column;gap:16px;border-left:4px solid ${t.primary};">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
           ${dnaIcon}
-          <p style="font-size:12px;font-weight:700;color:${t.textMuted};text-transform:uppercase;letter-spacing:0.1em;margin:0;">Preuve</p>
+          <p style="font-size:12px;font-weight:700;color:${t.textMuted};text-transform:uppercase;letter-spacing:0.1em;margin:0;">${trans(lang, 'legacy.uniqueMechanism.proof')}</p>
         </div>
         <p style="font-size:15px;color:${t.text};line-height:1.65;margin:0;">${um.proof}</p>
       </div>` : '')
@@ -476,8 +490,8 @@ export function renderUniqueMechanism(d: LandingPageData, t: SectionTheme = DEFA
 ${mq('umch', `.umch-grid{flex-direction:column!important;} .umch-proof{margin-top:24px!important;} .umch-wrap{padding:60px 20px!important;}`)}
 <section class="umch-wrap" style="padding:80px 24px;background:${t.bg};font-family:${t.fontFamily};">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">Technologie exclusive</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:52px;line-height:1.2;">Ce qui nous rend différents</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.uniqueMechanism.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:52px;line-height:1.2;">${trans(lang, 'legacy.uniqueMechanism.title')}</h2>
     <div class="umch-grid" style="display:flex;gap:48px;align-items:center;">
       <div style="flex:1;min-width:0;">
         <div style="display:inline-flex;align-items:center;gap:10px;background:${t.accent};padding:10px 18px;border-radius:100px;margin-bottom:24px;">
@@ -492,11 +506,12 @@ ${mq('umch', `.umch-grid{flex-direction:column!important;} .umch-proof{margin-to
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 10. HOW IT WORKS — timeline horizontale numérotée 4 étapes
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderHowItWorks(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.how_it_works || d.how_it_works.length === 0) return ''
+  const lang = d.language
 
   const steps = d.how_it_works.slice(0, 6)
 
@@ -517,8 +532,8 @@ export function renderHowItWorks(d: LandingPageData, t: SectionTheme = DEFAULT_T
 ${mq('hiw', `.hiw-grid{flex-direction:column!important;gap:32px!important;} .hiw-arrow{display:none!important;} .hiw-wrap{padding:60px 20px!important;}`)}
 <section class="hiw-wrap" style="padding:80px 24px;background:${t.bgAlt};font-family:${t.fontFamily};">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">En pratique</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:52px;line-height:1.2;">Comment ça marche</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.howItWorks.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:52px;line-height:1.2;">${trans(lang, 'legacy.howItWorks.title')}</h2>
     <div class="hiw-grid" style="display:flex;gap:16px;align-items:flex-start;justify-content:center;">
       ${stepCards}
     </div>
@@ -526,23 +541,24 @@ ${mq('hiw', `.hiw-grid{flex-direction:column!important;gap:32px!important;} .hiw
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 11. BEFORE AFTER — 2 colonnes côte à côte, texte uniquement
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderBeforeAfter(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.before_after || d.before_after.length === 0) return ''
+  const lang = d.language
 
   const arrowIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${t.primary}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`
 
   const rows = d.before_after.map(ba => `
     <div style="display:flex;gap:16px;align-items:center;">
       <div style="flex:1;background:#FEF2F2;border:1px solid #FECACA;border-radius:${t.radius};padding:18px 20px;">
-        <p style="font-size:11px;font-weight:700;color:#B91C1C;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px 0;">Avant</p>
+        <p style="font-size:11px;font-weight:700;color:#B91C1C;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px 0;">${trans(lang, 'legacy.beforeAfter.before')}</p>
         <p style="font-size:14px;color:#7F1D1D;line-height:1.6;margin:0;">${ba.before}</p>
       </div>
       <div style="flex-shrink:0;">${arrowIcon}</div>
       <div style="flex:1;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:${t.radius};padding:18px 20px;">
-        <p style="font-size:11px;font-weight:700;color:#065F46;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px 0;">Après</p>
+        <p style="font-size:11px;font-weight:700;color:#065F46;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 6px 0;">${trans(lang, 'legacy.beforeAfter.after')}</p>
         <p style="font-size:14px;color:#064E3B;line-height:1.6;margin:0;">${ba.after}</p>
       </div>
     </div>`).join('')
@@ -551,20 +567,21 @@ export function renderBeforeAfter(d: LandingPageData, t: SectionTheme = DEFAULT_
 ${mq('bafr', `.bafr-row{flex-direction:column!important;} .bafr-row>div:nth-child(2){transform:rotate(90deg);} .bafr-wrap{padding:60px 20px!important;}`)}
 <section class="bafr-wrap" style="padding:80px 24px;background:${t.bg};font-family:${t.fontFamily};">
   <div style="max-width:900px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">Transformation</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">Avant. Après.</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">${trans(lang, 'legacy.beforeAfter.title')}</h2>
     <div style="display:flex;flex-direction:column;gap:14px;">${rows}</div>
   </div>
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 12. COMPETITOR COMPARISON — table scrollable (vert/rouge hardcodés — autorisé)
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderCompetitorComparison(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.competitor_comparison) return ''
   const cc = d.competitor_comparison
   if (!cc.criteria?.length || !cc.us) return ''
+  const lang = d.language
 
   const checkIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
   const crossIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
@@ -599,13 +616,13 @@ export function renderCompetitorComparison(d: LandingPageData, t: SectionTheme =
 ${mq('cmpv', `.cmpv-wrap{padding:60px 20px!important;} .cmpv-scroll{overflow-x:auto!important;}`)}
 <section class="cmpv-wrap" style="padding:80px 24px;background:${t.bgAlt};font-family:${t.fontFamily};">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">Comparatif</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">Pourquoi nous ?</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.competitorComparison.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">${trans(lang, 'legacy.competitorComparison.title')}</h2>
     <div class="cmpv-scroll" style="overflow-x:auto;border-radius:${t.radius};border:1px solid ${t.border};box-shadow:0 1px 4px rgba(0,0,0,.06);">
       <table style="width:100%;border-collapse:collapse;min-width:500px;">
         <thead>
           <tr>
-            <th style="padding:14px 18px;font-size:11px;font-weight:700;color:${t.textMuted};text-transform:uppercase;letter-spacing:0.08em;background:${t.bg};text-align:left;">Critère</th>
+            <th style="padding:14px 18px;font-size:11px;font-weight:700;color:${t.textMuted};text-transform:uppercase;letter-spacing:0.08em;background:${t.bg};text-align:left;">${trans(lang, 'legacy.competitorComparison.criterion')}</th>
             ${headerCols}
           </tr>
         </thead>
@@ -616,11 +633,12 @@ ${mq('cmpv', `.cmpv-wrap{padding:60px 20px!important;} .cmpv-scroll{overflow-x:a
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 13. PRESS MENTIONS — bandeau monochrome logos textuels
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderPressMentions(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.press_mentions || d.press_mentions.length === 0) return ''
+  const lang = d.language
 
   const logos = d.press_mentions.slice(0, 8).map(name => `
     <div style="flex:0 0 auto;padding:12px 24px;border:1px solid ${t.border};border-radius:8px;background:${t.bg};">
@@ -631,7 +649,7 @@ export function renderPressMentions(d: LandingPageData, t: SectionTheme = DEFAUL
 ${mq('prss', `.prss-wrap{padding:40px 20px!important;} .prss-scroll{gap:10px!important;}`)}
 <section class="prss-wrap" style="padding:52px 24px;background:${t.bgAlt};font-family:${t.fontFamily};border-top:1px solid ${t.border};border-bottom:1px solid ${t.border};">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:28px;">Vu dans la presse</p>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:28px;">${trans(lang, 'legacy.pressMentions.eyebrow')}</p>
     <div class="prss-scroll" style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:center;">
       ${logos}
     </div>
@@ -639,15 +657,16 @@ ${mq('prss', `.prss-wrap{padding:40px 20px!important;} .prss-scroll{gap:10px!imp
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 14. FOUNDER NOTE — split asymétrique avatar circulaire + citation
 // Décision design : split 40/60 (avatar à gauche, message à droite) — plus
 // intime que centré, signature humaine dans un univers marchand.
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderFounderNote(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.founder_note) return ''
   const fn = d.founder_note
   if (!fn.message) return ''
+  const lang = d.language
 
   const initial = (fn.name?.[0] ?? 'F').toUpperCase()
   const quoteIcon = `<svg width="36" height="36" viewBox="0 0 24 24" fill="${t.accent}" stroke="${t.primary}" stroke-width="1" style="opacity:0.6;"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg>`
@@ -656,7 +675,7 @@ export function renderFounderNote(d: LandingPageData, t: SectionTheme = DEFAULT_
 ${mq('fnd', `.fnd-grid{flex-direction:column!important;align-items:center!important;text-align:center!important;} .fnd-wrap{padding:60px 20px!important;}`)}
 <section class="fnd-wrap" style="padding:80px 24px;background:${t.bg};font-family:${t.fontFamily};">
   <div style="max-width:960px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">Le mot du fondateur</p>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.founderNote.eyebrow')}</p>
     <div class="fnd-grid" style="display:flex;gap:48px;align-items:center;margin-top:40px;">
       <div style="flex:0 0 180px;display:flex;flex-direction:column;align-items:center;gap:14px;">
         <div style="width:120px;height:120px;border-radius:50%;background:${t.accent};color:${t.primary};display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:800;border:3px solid ${t.border};">${initial}</div>
@@ -674,13 +693,14 @@ ${mq('fnd', `.fnd-grid{flex-direction:column!important;align-items:center!import
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 15. VALUE STACK — table valeur barrée + prix final mis en évidence
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderValueStack(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.value_stack) return ''
   const vs = d.value_stack
   if (!vs.items?.length) return ''
+  const lang = d.language
 
   const rows = vs.items.map(it => `
     <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid ${t.border};">
@@ -692,33 +712,34 @@ export function renderValueStack(d: LandingPageData, t: SectionTheme = DEFAULT_T
 ${mq('vls', `.vls-wrap{padding:60px 20px!important;} .vls-inner{padding:32px 24px!important;}`)}
 <section class="vls-wrap" style="padding:80px 24px;background:${t.bgAlt};font-family:${t.fontFamily};">
   <div style="max-width:680px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">Ce que vous obtenez</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:40px;line-height:1.2;">Tout ce qui est inclus</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.valueStack.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:40px;line-height:1.2;">${trans(lang, 'legacy.valueStack.title')}</h2>
     <div class="vls-inner" style="background:${t.bg};border-radius:${t.radius};padding:36px 40px;border:1px solid ${t.border};box-shadow:0 2px 8px rgba(0,0,0,.07);">
       <div style="margin-bottom:8px;">${rows}</div>
       ${vs.total ? `
       <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:2px solid ${t.border};">
-        <p style="font-size:14px;font-weight:600;color:${t.textMuted};margin:0;">Valeur totale</p>
+        <p style="font-size:14px;font-weight:600;color:${t.textMuted};margin:0;">${trans(lang, 'legacy.valueStack.totalValue')}</p>
         <p style="font-size:18px;font-weight:700;color:${t.textMuted};margin:0;text-decoration:line-through;">${vs.total}</p>
       </div>` : ''}
       <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 0 0 0;">
-        <p style="font-size:16px;font-weight:800;color:${t.text};margin:0;">Vous payez aujourd'hui</p>
+        <p style="font-size:16px;font-weight:800;color:${t.text};margin:0;">${trans(lang, 'legacy.valueStack.youPayToday')}</p>
         <p style="font-size:28px;font-weight:800;color:${t.primary};margin:0;letter-spacing:-0.02em;">${vs.you_pay ?? ''}</p>
       </div>
       ${vs.savings ? `
       <div style="margin-top:14px;background:${t.accent};border-radius:8px;padding:10px 16px;text-align:center;">
-        <p style="font-size:13px;font-weight:800;color:${t.primary};margin:0;letter-spacing:0.02em;">Vous économisez ${vs.savings}</p>
+        <p style="font-size:13px;font-weight:800;color:${t.primary};margin:0;letter-spacing:0.02em;">${trans(lang, 'legacy.valueStack.youSave', { amount: vs.savings })}</p>
       </div>` : ''}
     </div>
   </div>
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 16. RISK REVERSAL — grid 3 cards livraison / retour / support
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderRiskReversal(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.risk_reversal || d.risk_reversal.length === 0) return ''
+  const lang = d.language
 
   // SVG fallback générique si icon est emoji ou texte non-SVG
   const rrIconSvgs: Record<string, string> = {
@@ -756,8 +777,8 @@ export function renderRiskReversal(d: LandingPageData, t: SectionTheme = DEFAULT
 ${mq('rrv', `.rrv-grid{grid-template-columns:1fr!important;} .rrv-wrap{padding:60px 20px!important;}`)}
 <section class="rrv-wrap" style="padding:80px 24px;background:${t.bgAlt};font-family:${t.fontFamily};">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">Réassurance</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">Achetez sans risque</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.riskReversal.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">${trans(lang, 'legacy.riskReversal.title')}</h2>
     <div class="rrv-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;">
       ${cards}
     </div>
@@ -765,11 +786,12 @@ ${mq('rrv', `.rrv-grid{grid-template-columns:1fr!important;} .rrv-wrap{padding:6
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 17. OBJECTIONS — accordéon inline JS (pattern FAQ etec-blue.ts)
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderObjections(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.objections || d.objections.length === 0) return ''
+  const lang = d.language
 
   const items = d.objections.map((obj, i) => `
     <div style="border-bottom:1px solid ${t.border};overflow:hidden;">
@@ -786,8 +808,8 @@ export function renderObjections(d: LandingPageData, t: SectionTheme = DEFAULT_T
 ${mq('obj', `.obj-wrap{padding:60px 20px!important;}`)}
 <section class="obj-wrap" style="padding:80px 24px;background:${t.bg};font-family:${t.fontFamily};">
   <div style="max-width:760px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">Vos questions</p>
-    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">Les vraies questions.</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.objections.eyebrow')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:${t.text};text-align:center;letter-spacing:-0.03em;margin-bottom:48px;line-height:1.2;">${trans(lang, 'legacy.objections.title')}</h2>
     <div style="border-top:1px solid ${t.border};">
       ${items}
     </div>
@@ -795,13 +817,14 @@ ${mq('obj', `.obj-wrap{padding:60px 20px!important;}`)}
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 18. COMMUNITY CALLOUT — banner CTA réseaux sociaux
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderCommunityCallout(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.community_callout) return ''
   const cc = d.community_callout
   if (!cc.title && !cc.description) return ''
+  const lang = d.language
 
   // Icônes Instagram + TikTok SVG inline
   const igIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`
@@ -813,7 +836,7 @@ ${mq('comu', `.comu-inner{flex-direction:column!important;text-align:center!impo
   <div style="max-width:900px;margin:0 auto;background:${t.accent};border-radius:${t.radius};padding:52px 48px;border:1px solid ${t.border};">
     <div class="comu-inner" style="display:flex;align-items:center;justify-content:space-between;gap:40px;">
       <div style="flex:1;min-width:0;">
-        <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.primary};text-transform:uppercase;margin-bottom:10px;">Communauté</p>
+        <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.primary};text-transform:uppercase;margin-bottom:10px;">${trans(lang, 'legacy.communityCallout.eyebrow')}</p>
         <h2 style="font-size:28px;font-weight:800;color:${t.text};letter-spacing:-0.03em;margin:0 0 12px 0;line-height:1.2;">${cc.title}</h2>
         <p style="font-size:15px;color:${t.textMuted};line-height:1.65;margin:0 0 20px 0;">${cc.description}</p>
         <div class="comu-icons" style="display:flex;gap:16px;align-items:center;">
@@ -822,18 +845,19 @@ ${mq('comu', `.comu-inner{flex-direction:column!important;text-align:center!impo
         </div>
       </div>
       <div style="flex-shrink:0;">
-        <div style="background:${t.primary};color:#fff;padding:16px 32px;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap;">${cc.cta ?? 'Rejoindre la communauté'}</div>
+        <div style="background:${t.primary};color:#fff;padding:16px 32px;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap;">${cc.cta ?? trans(lang, 'legacy.communityCallout.defaultCta')}</div>
       </div>
     </div>
   </div>
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 19. FINAL PITCH — paragraphe central + CTA bouton
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderFinalPitch(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   if (!d.final_pitch) return ''
+  const lang = d.language
 
   const arrowIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`
 
@@ -841,22 +865,22 @@ export function renderFinalPitch(d: LandingPageData, t: SectionTheme = DEFAULT_T
 ${mq('fp', `.fp-wrap{padding:60px 20px!important;}`)}
 <section class="fp-wrap" style="padding:80px 24px;background:${t.bgAlt};font-family:${t.fontFamily};">
   <div style="max-width:680px;margin:0 auto;text-align:center;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-transform:uppercase;margin-bottom:16px;">Dernière chance</p>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:${t.textMuted};text-transform:uppercase;margin-bottom:16px;">${trans(lang, 'legacy.finalPitch.eyebrow')}</p>
     <p style="font-size:20px;color:${t.text};line-height:1.75;margin:0 0 40px 0;font-weight:400;">${d.final_pitch}</p>
     <a href="#buy" style="display:inline-flex;align-items:center;gap:10px;background:${t.primary};color:#fff;padding:18px 40px;border-radius:100px;font-size:16px;font-weight:800;text-decoration:none;letter-spacing:0.01em;">
-      ${d.cta ?? 'Commander maintenant'}
+      ${d.cta ?? trans(lang, 'cta.orderNow')}
       ${arrowIcon}
     </a>
   </div>
 </section>`
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 // 20. TRUST BADGES PAYMENT — bande paiement sécurisé (Quick win RICE 960)
 // Injectée juste après 'guarantee' dans DEFAULT_ORDER.
 // Utilise payment_methods depuis data (champ MINATO sprint 2).
 // Fallback gracieux : affiche Visa/Mastercard/PayPal/Apple Pay si absent.
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
 export function renderTrustBadgesPaymentSection(d: LandingPageData, t: SectionTheme = DEFAULT_THEME): string {
   // Lecture du champ optionnel payment_methods injecté par MINATO
   const raw = (d as LandingPageData & { payment_methods?: string[] }).payment_methods
@@ -871,21 +895,14 @@ export function renderTrustBadgesPaymentSection(d: LandingPageData, t: SectionTh
     bg:         t.bgAlt,
     border:     t.border,
     fontFamily: t.fontFamily,
+    lang:       d.language,
   })
 }
 
-// ─── renderGallery (chantier B) ─────────────────────────────────────────────
+// ─── renderGallery (chantier B) ───────────────────────────────────────
 // Section dédiée appelée par renderRichSections à la position 5 (après features).
 // Affichée uniquement si images.length >= 8 (grid 2x2 = 4 cases, après 4 du hero).
 // Feature flag KONVERT_GALLERY=false → return ''.
-
-const GALLERY_LABEL: Record<string, string> = {
-  fr: 'Voir le produit en détail',
-  en: 'See it in detail',
-  es: 'Ver el producto en detalle',
-  de: 'Im Detail ansehen',
-  it: 'Vedere in dettaglio',
-}
 
 export function renderGallery(
   d: LandingPageData,
@@ -896,7 +913,7 @@ export function renderGallery(
   if (images.length < 8) return ''
 
   const galleryImages = images.slice(4, 8)
-  const label = GALLERY_LABEL[d.language ?? 'fr'] ?? GALLERY_LABEL.fr
+  const label = trans(d.language, 'legacy.gallery.title')
   const productName = d.product_name ?? 'Product'
 
   return `
@@ -921,7 +938,7 @@ export function renderGallery(
 `.trim()
 }
 
-// ─── renderHeroThumbs (chantier B) ──────────────────────────────────────────
+// ─── renderHeroThumbs (chantier B) ──────────────────────────────────────
 // Helper hero appelé directement par les 42 templates etec-*.ts dans leur
 // HTML hero, juste après leur <img> principal. Rend 2-4 thumbnails cliquables
 // + un <script> global qui swap le src de l'image principale via mainImgId.
@@ -976,7 +993,7 @@ export function renderHeroThumbs(
 `.trim()
 }
 
-// ─── Section renderers map ──────────────────────────────────────────────────
+// ─── Section renderers map ────────────────────────────────────────────
 // Map qui associe chaque SectionKey à son renderer V2. Utilisée par
 // renderRichSections pour itérer dans l'ordre voulu.
 
@@ -1006,7 +1023,7 @@ const SECTION_RENDERERS: Record<SectionKey, SectionRenderer> = {
   final_pitch:            renderFinalPitch,
 }
 
-// ─── click-to-edit injection helpers ────────────────────────────────────────
+// ─── click-to-edit injection helpers ─────────────────────────────
 
 /**
  * Script injected once in edit mode — listens for clicks on sections,
@@ -1081,7 +1098,7 @@ function wrapWithKvtId(html: string, id: string): string {
   return `<section data-kvt-section-id="${id}">${html}</section>`
 }
 
-// ─── renderRichSections — l'API publique ────────────────────────────────────
+// ─── renderRichSections — l'API publique ────────────────────────────────
 // Rend les sections riches dans l'ordre voulu, en skippant celles dont la
 // data est absente. Si KONVERT_RICH_SECTIONS=false (rollback prod), retourne
 // '' (aucune section).
@@ -1104,12 +1121,13 @@ function buildStickyCta(data: LandingPageData, theme: SectionTheme): string {
       currency:  'EUR',
       compareAt: data.original_price ? parseFloat(data.original_price.replace(/[^0-9.]/g, '')) : undefined,
     },
-    ctaLabel:    data.cta || 'Ajouter au panier',
+    ctaLabel:    data.cta || trans(data.language, 'cta.addToCart'),
     ctaColor:    theme.primary,
     fontFamily:  theme.fontFamily,
     bgColor:     theme.bg,
     borderColor: theme.border,
     showQty:     false,
+    lang:        data.language,
   })
 }
 
@@ -1235,7 +1253,7 @@ export function renderRichSections(
   return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + rendered.join('\n')
 }
 
-// ─── Backward compat ────────────────────────────────────────────────────────
+// ─── Backward compat ───────────────────────────────────────────────
 // Les noms V1 sont conservés comme aliases vers les versions V2 refondues.
 // Permet à du code externe (ou aux 41 templates pas encore migrés pendant le
 // rollout) de continuer à fonctionner.

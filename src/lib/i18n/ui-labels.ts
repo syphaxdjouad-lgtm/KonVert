@@ -414,6 +414,11 @@ export const UI_LABELS: Record<string, LabelDict> = {
   },
 
   // ── Legacy sections.ts (renderRichSections — partagé par les 43 templates) ─
+  'bespoke.badge.moneyBackGuarantee': {
+    fr: 'Garantie remboursement', en: 'Money-back guarantee', es: 'Garantía de devolución',
+    de: 'Geld-zurück-Garantie', it: 'Garanzia di rimborso', pt: 'Garantia de reembolso',
+    nl: 'Geld-terug-garantie', ar: 'ضمان استرداد الأموال', zh: '退款保证',
+  },
   'legacy.socialProof.customers': {
     fr: 'Clients satisfaits', en: 'Happy customers', es: 'Clientes satisfechos',
     de: 'Zufriedene Kunden', it: 'Clienti soddisfatti', pt: 'Clientes satisfeitos',
@@ -677,6 +682,634 @@ export const UI_LABELS: Record<string, LabelDict> = {
     fr: 'Voir le produit en détail', en: 'See it in detail', es: 'Ver el producto en detalle',
     de: 'Im Detail ansehen', it: 'Vedere in dettaglio', pt: 'Ver o produto em detalhe',
     nl: 'Bekijk het product in detail', ar: 'عرض المنتج بالتفصيل', zh: '查看产品细节',
+  },
+
+  // ── Bespoke (contenu individuel des 43 fichiers etec-*.ts — nav/footer/
+  // badges/CTA hardcodés propres à chaque template, hors sections.ts) ────
+  'bespoke.faqShort': {
+    fr: 'FAQ', en: 'FAQ', es: 'FAQ', de: 'FAQ', it: 'FAQ', pt: 'FAQ',
+    nl: 'FAQ', ar: 'الأسئلة الشائعة', zh: '常见问题',
+  },
+  'bespoke.nav.home': {
+    fr: 'Accueil', en: 'Home', es: 'Inicio', de: 'Startseite', it: 'Home',
+    pt: 'Início', nl: 'Home', ar: 'الرئيسية', zh: '首页',
+  },
+  'bespoke.nav.reviewsShort': {
+    fr: 'Avis', en: 'Reviews', es: 'Reseñas', de: 'Bewertungen', it: 'Recensioni',
+    pt: 'Avaliações', nl: 'Reviews', ar: 'التقييمات', zh: '评价',
+  },
+  'bespoke.nav.collection': {
+    fr: 'Collection', en: 'Collection', es: 'Colección', de: 'Kollektion',
+    it: 'Collezione', pt: 'Coleção', nl: 'Collectie', ar: 'المجموعة', zh: '系列',
+  },
+  'bespoke.nav.shop': {
+    fr: 'Boutique', en: 'Shop', es: 'Tienda', de: 'Shop', it: 'Negozio',
+    pt: 'Loja', nl: 'Winkel', ar: 'المتجر', zh: '商店',
+  },
+  'bespoke.nav.support': {
+    fr: 'Support', en: 'Support', es: 'Soporte', de: 'Support', it: 'Supporto',
+    pt: 'Suporte', nl: 'Support', ar: 'الدعم', zh: '支持',
+  },
+  'bespoke.nav.ourStory': {
+    fr: 'Notre histoire', en: 'Our Story', es: 'Nuestra historia', de: 'Unsere Geschichte',
+    it: 'La nostra storia', pt: 'A nossa história', nl: 'Ons verhaal', ar: 'قصتنا', zh: '我们的故事',
+  },
+  'bespoke.nav.lookbook': {
+    fr: 'Lookbook', en: 'Lookbook', es: 'Lookbook', de: 'Lookbook', it: 'Lookbook',
+    pt: 'Lookbook', nl: 'Lookbook', ar: 'لوك بوك', zh: '造型手册',
+  },
+  'bespoke.nav.specs': {
+    fr: 'Spécifications', en: 'Specs', es: 'Especificaciones', de: 'Spezifikationen',
+    it: 'Specifiche', pt: 'Especificações', nl: 'Specificaties', ar: 'المواصفات', zh: '规格',
+  },
+  'bespoke.nav.craftsmanship': {
+    fr: 'Savoir-faire', en: 'Craftsmanship', es: 'Saber hacer', de: 'Handwerkskunst',
+    it: 'Artigianato', pt: 'Saber-fazer', nl: 'Vakmanschap', ar: 'الحرفية', zh: '工艺',
+  },
+  'bespoke.nav.ingredients': {
+    fr: 'Ingrédients', en: 'Ingredients', es: 'Ingredientes', de: 'Zutaten',
+    it: 'Ingredienti', pt: 'Ingredientes', nl: 'Ingrediënten', ar: 'المكونات', zh: '成分',
+  },
+  'bespoke.nav.company': {
+    fr: 'Entreprise', en: 'Company', es: 'Empresa', de: 'Unternehmen', it: 'Azienda',
+    pt: 'Empresa', nl: 'Bedrijf', ar: 'الشركة', zh: '公司',
+  },
+  'bespoke.nav.bundles': {
+    fr: 'Packs', en: 'Bundles', es: 'Packs', de: 'Pakete', it: 'Pacchetti',
+    pt: 'Pacotes', nl: 'Bundels', ar: 'الحزم', zh: '套装',
+  },
+  'bespoke.nav.about': {
+    fr: 'À propos', en: 'About', es: 'Acerca de', de: 'Über uns', it: 'Chi siamo',
+    pt: 'Sobre', nl: 'Over ons', ar: 'من نحن', zh: '关于我们',
+  },
+  'bespoke.footer.subscribe': {
+    fr: "S'abonner", en: 'Subscribe', es: 'Suscribirse', de: 'Abonnieren',
+    it: 'Iscriviti', pt: 'Subscrever', nl: 'Abonneren', ar: 'اشترك', zh: '订阅',
+  },
+  'bespoke.nav.services': {
+    fr: 'Services', en: 'Services', es: 'Servicios', de: 'Dienstleistungen',
+    it: 'Servizi', pt: 'Serviços', nl: 'Diensten', ar: 'الخدمات', zh: '服务',
+  },
+  'bespoke.nav.science': {
+    fr: 'Science', en: 'Science', es: 'Ciencia', de: 'Wissenschaft', it: 'Scienza',
+    pt: 'Ciência', nl: 'Wetenschap', ar: 'العلم', zh: '科学',
+  },
+  'bespoke.badge.returns30': {
+    fr: 'Retours 30 jours', en: '30-day returns', es: 'Devoluciones 30 días',
+    de: '30 Tage Rückgabe', it: 'Reso 30 giorni', pt: 'Devolução 30 dias',
+    nl: '30 dagen retour', ar: 'إرجاع خلال 30 يومًا', zh: '30天退货',
+  },
+  'bespoke.section.provenResults': {
+    fr: 'Résultats prouvés', en: 'Proven results', es: 'Resultados probados',
+    de: 'Bewährte Ergebnisse', it: 'Risultati comprovati', pt: 'Resultados comprovados',
+    nl: 'Bewezen resultaten', ar: 'نتائج مثبتة', zh: '效果验证',
+  },
+  'bespoke.nav.questions': {
+    fr: 'Questions', en: 'Questions', es: 'Preguntas', de: 'Fragen', it: 'Domande',
+    pt: 'Perguntas', nl: 'Vragen', ar: 'الأسئلة', zh: '问题',
+  },
+  'bespoke.nav.product': {
+    fr: 'Produit', en: 'Product', es: 'Producto', de: 'Produkt', it: 'Prodotto',
+    pt: 'Produto', nl: 'Product', ar: 'المنتج', zh: '产品',
+  },
+  'bespoke.nav.press': {
+    fr: 'Presse', en: 'Press', es: 'Prensa', de: 'Presse', it: 'Stampa',
+    pt: 'Imprensa', nl: 'Pers', ar: 'الصحافة', zh: '媒体',
+  },
+  'bespoke.badge.limitedOffer': {
+    fr: 'Offre limitée', en: 'Limited offer', es: 'Oferta limitada',
+    de: 'Begrenztes Angebot', it: 'Offerta limitata', pt: 'Oferta limitada',
+    nl: 'Beperkt aanbod', ar: 'عرض محدود', zh: '限时优惠',
+  },
+  'bespoke.nav.nutrition': {
+    fr: 'Nutrition', en: 'Nutrition', es: 'Nutrición', de: 'Ernährung', it: 'Nutrizione',
+    pt: 'Nutrição', nl: 'Voeding', ar: 'التغذية', zh: '营养',
+  },
+  'bespoke.section.ourCommitments': {
+    fr: 'Nos engagements', en: 'Our commitments', es: 'Nuestros compromisos',
+    de: 'Unsere Verpflichtungen', it: 'I nostri impegni', pt: 'Os nossos compromissos',
+    nl: 'Onze beloftes', ar: 'التزاماتنا', zh: '我们的承诺',
+  },
+  'bespoke.nav.furniture': {
+    fr: 'Mobilier', en: 'Furniture', es: 'Mobiliario', de: 'Möbel', it: 'Mobili',
+    pt: 'Mobiliário', nl: 'Meubels', ar: 'الأثاث', zh: '家具',
+  },
+  'bespoke.nav.materials': {
+    fr: 'Matériaux', en: 'Materials', es: 'Materiales', de: 'Materialien',
+    it: 'Materiali', pt: 'Materiais', nl: 'Materialen', ar: 'الخامات', zh: '材质',
+  },
+  'bespoke.badge.freeShipping': {
+    fr: 'Livraison gratuite', en: 'Free shipping', es: 'Envío gratis',
+    de: 'Kostenloser Versand', it: 'Spedizione gratuita', pt: 'Envio grátis',
+    nl: 'Gratis verzending', ar: 'شحن مجاني', zh: '免费配送',
+  },
+  'bespoke.badge.limitedEdition': {
+    fr: 'Édition limitée', en: 'Limited Edition', es: 'Edición limitada',
+    de: 'Limitierte Auflage', it: 'Edizione limitata', pt: 'Edição limitada',
+    nl: 'Beperkte oplage', ar: 'إصدار محدود', zh: '限量版',
+  },
+  'bespoke.nav.inspirations': {
+    fr: 'Inspirations', en: 'Inspiration', es: 'Inspiración', de: 'Inspiration',
+    it: 'Ispirazione', pt: 'Inspiração', nl: 'Inspiratie', ar: 'إلهام', zh: '灵感',
+  },
+  'bespoke.nav.sizeGuide': {
+    fr: 'Guide des tailles', en: 'Size guide', es: 'Guía de tallas',
+    de: 'Größentabelle', it: 'Guida alle taglie', pt: 'Guia de tamanhos',
+    nl: 'Maattabel', ar: 'دليل المقاسات', zh: '尺码指南',
+  },
+  'bespoke.badge.warranty2y': {
+    fr: 'Garantie 2 ans', en: '2-year warranty', es: 'Garantía de 2 años',
+    de: '2 Jahre Garantie', it: 'Garanzia di 2 anni', pt: 'Garantia de 2 anos',
+    nl: '2 jaar garantie', ar: 'ضمان لمدة عامين', zh: '2年保修',
+  },
+  'bespoke.section.inSituation': {
+    fr: 'En situation', en: 'In use', es: 'En uso', de: 'Im Einsatz', it: 'In uso',
+    pt: 'Em uso', nl: 'In gebruik', ar: 'أثناء الاستخدام', zh: '使用场景',
+  },
+  'bespoke.cta.learnMore': {
+    fr: 'En savoir plus', en: 'Learn more', es: 'Saber más', de: 'Mehr erfahren',
+    it: 'Scopri di più', pt: 'Saber mais', nl: 'Meer weten', ar: 'اعرف المزيد', zh: '了解更多',
+  },
+  'bespoke.section.inAction': {
+    fr: 'En action', en: 'In action', es: 'En acción', de: 'In Aktion', it: 'In azione',
+    pt: 'Em ação', nl: 'In actie', ar: 'أثناء العمل', zh: '使用中',
+  },
+  'bespoke.nav.details': {
+    fr: 'Détails', en: 'Details', es: 'Detalles', de: 'Details', it: 'Dettagli',
+    pt: 'Detalhes', nl: 'Details', ar: 'التفاصيل', zh: '详情',
+  },
+  'bespoke.nav.contact': {
+    fr: 'Contact', en: 'Contact', es: 'Contacto', de: 'Kontakt', it: 'Contatto',
+    pt: 'Contacto', nl: 'Contact', ar: 'تواصل معنا', zh: '联系我们',
+  },
+  'bespoke.nav.composition': {
+    fr: 'Composition', en: 'Composition', es: 'Composición', de: 'Zusammensetzung',
+    it: 'Composizione', pt: 'Composição', nl: 'Samenstelling', ar: 'التركيب', zh: '成分构成',
+  },
+  'bespoke.faq.commonQuestions': {
+    fr: 'Questions courantes.', en: 'Common questions.', es: 'Preguntas frecuentes.',
+    de: 'Häufige Fragen.', it: 'Domande comuni.', pt: 'Perguntas comuns.',
+    nl: 'Veelgestelde vragen.', ar: 'أسئلة شائعة.', zh: '常见问题。',
+  },
+  'bespoke.nav.catalogue': {
+    fr: 'Catalogue', en: 'Catalog', es: 'Catálogo', de: 'Katalog', it: 'Catalogo',
+    pt: 'Catálogo', nl: 'Catalogus', ar: 'الكتالوج', zh: '产品目录',
+  },
+  'bespoke.nav.blog': {
+    fr: 'Blog', en: 'Blog', es: 'Blog', de: 'Blog', it: 'Blog', pt: 'Blog',
+    nl: 'Blog', ar: 'المدونة', zh: '博客',
+  },
+  'bespoke.nav.affiliates': {
+    fr: 'Programme affilié', en: 'Affiliates', es: 'Afiliados', de: 'Partnerprogramm',
+    it: 'Affiliati', pt: 'Afiliados', nl: 'Affiliates', ar: 'برنامج الشركاء', zh: '联盟计划',
+  },
+  'bespoke.nav.accessories': {
+    fr: 'Accessoires', en: 'Accessories', es: 'Accesorios', de: 'Zubehör',
+    it: 'Accessori', pt: 'Acessórios', nl: 'Accessoires', ar: 'الإكسسوارات', zh: '配件',
+  },
+
+  // ── etec-style.ts — consolidation de son ancien dico local (4 langues) ────
+  'style.nav_menu': {
+    fr: 'Menu', en: 'Menu', es: 'Menú', de: 'Menü', it: 'Menu', pt: 'Menu',
+    nl: 'Menu', ar: 'القائمة', zh: '菜单',
+  },
+  'style.nav_gallery': {
+    fr: 'Galerie', en: 'Gallery', es: 'Galería', de: 'Galerie', it: 'Galleria',
+    pt: 'Galeria', nl: 'Galerij', ar: 'المعرض', zh: '图库',
+  },
+  'style.nav_features': {
+    fr: 'Fonctions', en: 'Features', es: 'Funciones', de: 'Funktionen',
+    it: 'Funzioni', pt: 'Funcionalidades', nl: 'Functies', ar: 'المميزات', zh: '功能',
+  },
+  'style.nav_cta': {
+    fr: 'Nous contacter', en: 'Get in touch', es: 'Contacto', de: 'Kontaktieren Sie uns',
+    it: 'Contattaci', pt: 'Contacte-nos', nl: 'Neem contact op', ar: 'تواصل معنا', zh: '联系我们',
+  },
+  'style.hero_eyebrow': {
+    fr: 'Découvrez', en: 'Discover', es: 'Descubre', de: 'Entdecken', it: 'Scopri',
+    pt: 'Descubra', nl: 'Ontdek', ar: 'اكتشف', zh: '探索',
+  },
+  'style.hero_with': {
+    fr: 'avec', en: 'with', es: 'con', de: 'mit', it: 'con', pt: 'com',
+    nl: 'met', ar: 'مع', zh: '与',
+  },
+  'style.hero_experts': {
+    fr: 'Nos experts', en: 'Our experts', es: 'Nuestros expertos', de: 'Unsere Experten',
+    it: 'I nostri esperti', pt: 'Os nossos especialistas', nl: 'Onze experts', ar: 'خبراؤنا', zh: '我们的专家',
+  },
+  'style.hero_corner': {
+    fr: "Commandez dès aujourd'hui et profitez de votre produit.",
+    en: 'Order today and enjoy your product.',
+    es: 'Pide hoy y disfruta tu producto.',
+    de: 'Bestellen Sie noch heute und genießen Sie Ihr Produkt.',
+    it: 'Ordina oggi e goditi il tuo prodotto.',
+    pt: 'Encomende hoje e desfrute do seu produto.',
+    nl: 'Bestel vandaag en geniet van je product.',
+    ar: 'اطلب اليوم واستمتع بمنتجك.',
+    zh: '今天下单，尽享您的产品。',
+  },
+  'style.hero_members': {
+    fr: 'clients', en: 'customers', es: 'clientes', de: 'Kunden', it: 'clienti',
+    pt: 'clientes', nl: 'klanten', ar: 'عميل', zh: '位客户',
+  },
+  'style.services_tagline': {
+    fr: 'Tout ce dont vous avez besoin, réuni en un seul produit.',
+    en: 'Everything you need, in one product.',
+    es: 'Todo lo que necesitas, en un producto.',
+    de: 'Alles, was du brauchst, in einem Produkt.',
+    it: 'Tutto ciò di cui hai bisogno, in un unico prodotto.',
+    pt: 'Tudo o que precisa, num único produto.',
+    nl: 'Alles wat je nodig hebt, in één product.',
+    ar: 'كل ما تحتاجه في منتج واحد.',
+    zh: '一件产品，满足所有需求。',
+  },
+  'style.benefit_0': {
+    fr: 'Support continu', en: 'Ongoing support', es: 'Soporte continuo',
+    de: 'Kontinuierlicher Support', it: 'Supporto continuo', pt: 'Suporte contínuo',
+    nl: 'Continue ondersteuning', ar: 'دعم مستمر', zh: '持续支持',
+  },
+  'style.benefit_1': {
+    fr: 'Conseil expert', en: 'Expert advice', es: 'Consejo experto',
+    de: 'Expertenberatung', it: 'Consulenza esperta', pt: 'Aconselhamento especializado',
+    nl: 'Deskundig advies', ar: 'نصيحة خبير', zh: '专家建议',
+  },
+  'style.benefit_2': {
+    fr: 'Assistance achat', en: 'Shopping assistance', es: 'Asistencia de compra',
+    de: 'Einkaufsunterstützung', it: 'Assistenza agli acquisti', pt: 'Assistência de compra',
+    nl: 'Winkelhulp', ar: 'مساعدة في الشراء', zh: '购物协助',
+  },
+  'style.benefit_3': {
+    fr: 'Consultation personnalisée', en: 'Personalised consultation', es: 'Consulta personalizada',
+    de: 'Persönliche Beratung', it: 'Consulenza personalizzata', pt: 'Consulta personalizada',
+    nl: 'Persoonlijk advies', ar: 'استشارة شخصية', zh: '个性化咨询',
+  },
+  'style.benefit_4': {
+    fr: 'Qualité premium', en: 'Premium quality', es: 'Calidad premium',
+    de: 'Premium-Qualität', it: 'Qualità premium', pt: 'Qualidade premium',
+    nl: 'Premiumkwaliteit', ar: 'جودة ممتازة', zh: '优质品质',
+  },
+  'style.benefit_5': {
+    fr: 'Résultats garantis', en: 'Guaranteed results', es: 'Resultados garantizados',
+    de: 'Garantierte Ergebnisse', it: 'Risultati garantiti', pt: 'Resultados garantidos',
+    nl: 'Gegarandeerde resultaten', ar: 'نتائج مضمونة', zh: '效果保证',
+  },
+  'style.price_from': {
+    fr: 'à partir de', en: 'from', es: 'desde', de: 'ab', it: 'a partire da',
+    pt: 'a partir de', nl: 'vanaf', ar: 'من', zh: '起',
+  },
+  'style.price_unit': {
+    fr: '/ unité', en: '/ unit', es: '/ unidad', de: '/ Stück', it: '/ unità',
+    pt: '/ unidade', nl: '/ stuk', ar: '/ وحدة', zh: '/ 件',
+  },
+  'style.styles_eyebrow': {
+    fr: 'Explorer', en: 'Explore', es: 'Explorar', de: 'Entdecken', it: 'Esplora',
+    pt: 'Explorar', nl: 'Ontdekken', ar: 'استكشف', zh: '探索',
+  },
+  'style.styles_title': {
+    fr: 'Nos produits', en: 'Our products', es: 'Nuestros productos', de: 'Unsere Produkte',
+    it: 'I nostri prodotti', pt: 'Os nossos produtos', nl: 'Onze producten', ar: 'منتجاتنا', zh: '我们的产品',
+  },
+  'style.styles_subtitle': {
+    fr: 'Une sélection pensée pour vous — qualité, praticité, style.',
+    en: 'A selection designed for you — quality, practicality, style.',
+    es: 'Una selección diseñada para ti — calidad, practicidad, estilo.',
+    de: 'Eine für dich zusammengestellte Auswahl — Qualität, Praktikabilität, Stil.',
+    it: 'Una selezione pensata per te — qualità, praticità, stile.',
+    pt: 'Uma seleção pensada para si — qualidade, praticidade, estilo.',
+    nl: 'Een selectie speciaal voor jou — kwaliteit, gemak, stijl.',
+    ar: 'تشكيلة مصممة لك — جودة وعملية وأناقة.',
+    zh: '为你精心挑选——品质、实用、风格。',
+  },
+  'style.collage_badge': {
+    fr: 'Populaire', en: 'Popular', es: 'Popular', de: 'Beliebt', it: 'Popolare',
+    pt: 'Popular', nl: 'Populair', ar: 'الأكثر طلبًا', zh: '热门',
+  },
+  'style.collage_card_title': {
+    fr: 'Tendances produit', en: 'Product trends', es: 'Tendencias del producto',
+    de: 'Produkttrends', it: 'Tendenze del prodotto', pt: 'Tendências do produto',
+    nl: 'Producttrends', ar: 'اتجاهات المنتج', zh: '产品趋势',
+  },
+  'style.collage_overlay': {
+    fr: 'Voir les détails', en: 'View details', es: 'Ver detalles', de: 'Details ansehen',
+    it: 'Vedi dettagli', pt: 'Ver detalhes', nl: 'Bekijk details', ar: 'عرض التفاصيل', zh: '查看详情',
+  },
+  'style.cat_0': {
+    fr: 'Qualité', en: 'Quality', es: 'Calidad', de: 'Qualität', it: 'Qualità',
+    pt: 'Qualidade', nl: 'Kwaliteit', ar: 'جودة', zh: '品质',
+  },
+  'style.cat_1': {
+    fr: 'Design', en: 'Design', es: 'Diseño', de: 'Design', it: 'Design',
+    pt: 'Design', nl: 'Design', ar: 'تصميم', zh: '设计',
+  },
+  'style.cat_2': {
+    fr: 'Confort', en: 'Comfort', es: 'Confort', de: 'Komfort', it: 'Comfort',
+    pt: 'Conforto', nl: 'Comfort', ar: 'راحة', zh: '舌适',
+  },
+  'style.cat_3': {
+    fr: 'Durabilité', en: 'Durability', es: 'Durabilidad', de: 'Langlebigkeit',
+    it: 'Durabilità', pt: 'Durabilidade', nl: 'Duurzaamheid', ar: 'متانة', zh: '耐用性',
+  },
+  'style.cat_4': {
+    fr: 'Praticité', en: 'Practical', es: 'Practicidad', de: 'Praktisch',
+    it: 'Praticità', pt: 'Praticidade', nl: 'Praktisch', ar: 'عملية', zh: '实用性',
+  },
+  'style.cat_5': {
+    fr: 'Tendance', en: 'Trending', es: 'Tendencia', de: 'Trend', it: 'Di tendenza',
+    pt: 'Tendência', nl: 'Trending', ar: 'رائج', zh: '流行',
+  },
+  'style.cat_6': {
+    fr: 'Premium', en: 'Premium', es: 'Premium', de: 'Premium', it: 'Premium',
+    pt: 'Premium', nl: 'Premium', ar: 'فاخر', zh: '高端',
+  },
+  'style.cat_7': {
+    fr: 'Populaire', en: 'Popular', es: 'Popular', de: 'Beliebt', it: 'Popolare',
+    pt: 'Popular', nl: 'Populair', ar: 'شائع', zh: '热门',
+  },
+  'style.cat_8': {
+    fr: 'Exclusif', en: 'Exclusive', es: 'Exclusivo', de: 'Exklusiv', it: 'Esclusivo',
+    pt: 'Exclusivo', nl: 'Exclusief', ar: 'حصري', zh: '独家',
+  },
+  'style.cat_9': {
+    fr: 'Bestseller', en: 'Bestseller', es: 'Más vendido', de: 'Bestseller',
+    it: 'Bestseller', pt: 'Mais vendido', nl: 'Bestseller', ar: 'الأكثر مبيعاً', zh: '畅销',
+  },
+  'style.quote_eyebrow': {
+    fr: "Ce qu'ils disent", en: 'What they say', es: 'Lo que dicen', de: 'Was sie sagen',
+    it: 'Cosa dicono', pt: 'O que dizem', nl: 'Wat ze zeggen', ar: 'ما يقولونه', zh: '他们怎么说',
+  },
+  'style.quote_fallback': {
+    fr: "Ce produit a transformé mon quotidien. Je ne peux plus m'en passer.",
+    en: "This product transformed my daily routine. I can't live without it.",
+    es: 'Este producto transformó mi rutina diaria. No puedo vivir sin él.',
+    de: 'Dieses Produkt hat meinen Alltag verändert. Ich kann nicht mehr darauf verzichten.',
+    it: 'Questo prodotto ha trasformato la mia routine quotidiana. Non posso più farne a meno.',
+    pt: 'Este produto transformou a minha rotina diária. Não consigo viver sem ele.',
+    nl: 'Dit product heeft mijn dagelijkse routine veranderd. Ik kan er niet meer zonder.',
+    ar: 'غيّر هذا المنتج حياتي اليومية. لا أستطيع العيش بدونه.',
+    zh: '这款产品改变了我的日常生活，我离不开它了。',
+  },
+  'style.footer_desc_fallback': {
+    fr: 'Qualité et satisfaction, livrées chez vous.',
+    en: 'Quality and satisfaction, delivered to you.',
+    es: 'Calidad y satisfacción, entregadas a ti.',
+    de: 'Qualität und Zufriedenheit, direkt zu dir geliefert.',
+    it: 'Qualità e soddisfazione, consegnate a te.',
+    pt: 'Qualidade e satisfação, entregues a si.',
+    nl: 'Kwaliteit en tevredenheid, bij jou bezorgd.',
+    ar: 'الجودة والرضا، تُوصَل إليك.',
+    zh: '品质与满意，直达你手中。',
+  },
+  'style.footer_products': {
+    fr: 'Produits', en: 'Products', es: 'Productos', de: 'Produkte', it: 'Prodotti',
+    pt: 'Produtos', nl: 'Producten', ar: 'المنتجات', zh: '产品',
+  },
+  'style.footer_support': {
+    fr: 'Support client', en: 'Customer support', es: 'Soporte al cliente',
+    de: 'Kundensupport', it: 'Assistenza clienti', pt: 'Apoio ao cliente',
+    nl: 'Klantenservice', ar: 'دعم العملاء', zh: '客户支持',
+  },
+  'style.footer_guarantee': {
+    fr: 'Garantie', en: 'Guarantee', es: 'Garantía', de: 'Garantie', it: 'Garanzia',
+    pt: 'Garantia', nl: 'Garantie', ar: 'الضمان', zh: '保修',
+  },
+  'style.footer_order': {
+    fr: 'Commander', en: 'Order now', es: 'Pedir ahora', de: 'Jetzt bestellen',
+    it: 'Ordina ora', pt: 'Encomendar', nl: 'Bestellen', ar: 'اطلب الآن', zh: '立即订购',
+  },
+  'style.footer_instagram': {
+    fr: 'Instagram', en: 'Instagram', es: 'Instagram', de: 'Instagram', it: 'Instagram',
+    pt: 'Instagram', nl: 'Instagram', ar: 'إنستغرام', zh: 'Instagram',
+  },
+  'style.footer_copyright': {
+    fr: 'Tous droits réservés.', en: 'All rights reserved.', es: 'Todos los derechos reservados.',
+    de: 'Alle Rechte vorbehalten.', it: 'Tutti i diritti riservati.', pt: 'Todos os direitos reservados.',
+    nl: 'Alle rechten voorbehouden.', ar: 'جميع الحقوق محفوظة.', zh: '保留所有权利。',
+  },
+  'style.footer_privacy': {
+    fr: 'Politique de confidentialité', en: 'Privacy Policy', es: 'Política de privacidad',
+    de: 'Datenschutzrichtlinie', it: 'Informativa sulla privacy', pt: 'Política de privacidade',
+    nl: 'Privacybeleid', ar: 'سياسة الخصوصية', zh: '隐私政策',
+  },
+  'style.footer_terms': {
+    fr: "Conditions d'utilisation", en: 'Terms of Use', es: 'Términos de uso',
+    de: 'Nutzungsbedingungen', it: 'Termini di utilizzo', pt: 'Termos de utilização',
+    nl: 'Gebruiksvoorwaarden', ar: 'شروط الاستخدام', zh: '使用条款',
+  },
+  'style.footer_cookies': {
+    fr: 'Cookies', en: 'Cookie Settings', es: 'Ajustes de cookies', de: 'Cookie-Einstellungen',
+    it: 'Impostazioni cookie', pt: 'Definições de cookies', nl: 'Cookie-instellingen',
+    ar: 'إعدادات الكوكيز', zh: 'Cookie 设置',
+  },
+  'style.aria_hero': {
+    fr: 'Section principale', en: 'Main section', es: 'Sección principal', de: 'Hauptbereich',
+    it: 'Sezione principale', pt: 'Secção principal', nl: 'Hoofdsectie', ar: 'القسم الرئيسي', zh: '主要区域',
+  },
+  'style.aria_experts': {
+    fr: 'Notre équipe', en: 'Our team', es: 'Nuestro equipo', de: 'Unser Team',
+    it: 'Il nostro team', pt: 'A nossa equipa', nl: 'Ons team', ar: 'فريقنا', zh: '我们的团队',
+  },
+  'style.aria_styles': {
+    fr: 'Nos catégories', en: 'Our categories', es: 'Nuestras categorías', de: 'Unsere Kategorien',
+    it: 'Le nostre categorie', pt: 'As nossas categorias', nl: 'Onze categorieën', ar: 'فئاتنا', zh: '我们的分类',
+  },
+  'style.aria_quote_nav': {
+    fr: 'Navigation avis', en: 'Reviews navigation', es: 'Navegación de reseñas',
+    de: 'Bewertungsnavigation', it: 'Navigazione recensioni', pt: 'Navegação de avaliações',
+    nl: 'Beoordelingsnavigatie', ar: 'التنقل بين الآراء', zh: '评价导航',
+  },
+  'style.aria_prev': {
+    fr: 'Avis précédent', en: 'Previous review', es: 'Reseña anterior', de: 'Vorherige Bewertung',
+    it: 'Recensione precedente', pt: 'Avaliação anterior', nl: 'Vorige beoordeling', ar: 'الرأي السابق', zh: '上一条评价',
+  },
+  'style.aria_next': {
+    fr: 'Avis suivant', en: 'Next review', es: 'Siguiente reseña', de: 'Nächste Bewertung',
+    it: 'Recensione successiva', pt: 'Avaliação seguinte', nl: 'Volgende beoordeling', ar: 'الرأي التالي', zh: '下一条评价',
+  },
+  'style.aria_footer': {
+    fr: 'Pied de page', en: 'Footer', es: 'Pie de página', de: 'Fußzeile', it: 'Piè di pagina',
+    pt: 'Rodapé', nl: 'Voettekst', ar: 'تذييل الصفحة', zh: '页脚',
+  },
+
+  // ── etec-natural.ts — consolidation de son ancien dico local (4 langues) ──
+  'natural.nav_cta': {
+    fr: 'Découvrir', en: 'Shop now', es: 'Comprar', de: 'Jetzt entdecken',
+    it: 'Scopri ora', pt: 'Comprar agora', nl: 'Nu ontdekken', ar: 'تسوق الآن', zh: '立即选购',
+  },
+  'natural.hero_eyebrow': {
+    fr: 'Nouveau', en: 'New', es: 'Nuevo', de: 'Neu', it: 'Novità', pt: 'Novo',
+    nl: 'Nieuw', ar: 'جديد', zh: '新品',
+  },
+  'natural.hero_nature': {
+    fr: 'Fait pour durer', en: 'Made to last', es: 'Hecho para durar', de: 'Gemacht, um zu bleiben',
+    it: 'Fatto per durare', pt: 'Feito para durar', nl: 'Gemaakt om te blijven', ar: 'صُنع ليدوم', zh: '经久耐用',
+  },
+  'natural.hero_scroll': {
+    fr: 'Défiler', en: 'Scroll', es: 'Desplazar', de: 'Scrollen', it: 'Scorri',
+    pt: 'Deslizar', nl: 'Scrollen', ar: 'تمرير', zh: '向下滑动',
+  },
+  'natural.hero_stat_suffix': {
+    fr: 'commandes', en: 'orders', es: 'pedidos', de: 'Bestellungen', it: 'ordini',
+    pt: 'encomendas', nl: 'bestellingen', ar: 'طلب', zh: '笔订单',
+  },
+  'natural.press_eyebrow': {
+    fr: 'Vu dans', en: 'Featured in', es: 'Visto en', de: 'Erwähnt in', it: 'Menzionato su',
+    pt: 'Visto em', nl: 'Gezien in', ar: 'كما ذُكر في', zh: '媒体报道',
+  },
+  'natural.story_fallback_h': {
+    fr: 'Pourquoi ce produit existe', en: 'Why this product exists', es: 'Por qué existe este producto',
+    de: 'Warum es dieses Produkt gibt', it: 'Perché esiste questo prodotto', pt: 'Porque é que este produto existe',
+    nl: 'Waarom dit product bestaat', ar: 'لماذا يوجد هذا المنتج', zh: '这款产品诞生的原因',
+  },
+  'natural.story_fallback_p': {
+    fr: 'Nous avons créé ce produit pour résoudre un problème réel — pas pour suivre une tendance.',
+    en: 'We built this product to solve a real problem — not to follow a trend.',
+    es: 'Creamos este producto para resolver un problema real — no para seguir una tendencia.',
+    de: 'Wir haben dieses Produkt entwickelt, um ein echtes Problem zu lösen — nicht um einem Trend zu folgen.',
+    it: 'Abbiamo creato questo prodotto per risolvere un problema reale — non per seguire una tendenza.',
+    pt: 'Criámos este produto para resolver um problema real — não para seguir uma tendência.',
+    nl: 'We hebben dit product gemaakt om een echt probleem op te lossen — niet om een trend te volgen.',
+    ar: 'صنعنا هذا المنتج لحل مشكلة حقيقية — ليس لمتابعة الاتجاهات.',
+    zh: '我们打造这款产品是为了解决真实问题——而非追随潮流。',
+  },
+  'natural.feat_fallback_0': {
+    fr: 'Matière naturelle', en: 'Natural material', es: 'Material natural', de: 'Natürliches Material',
+    it: 'Materiale naturale', pt: 'Material natural', nl: 'Natuurlijk materiaal', ar: 'مادة طبيعية', zh: '天然材质',
+  },
+  'natural.feat_fallback_1': {
+    fr: 'Fabrication responsable', en: 'Responsible manufacturing', es: 'Fabricación responsable',
+    de: 'Verantwortungsvolle Herstellung', it: 'Produzione responsabile', pt: 'Fabrico responsável',
+    nl: 'Verantwoorde productie', ar: 'تصنيع مسؤول', zh: '负责任的生产',
+  },
+  'natural.feat_fallback_2': {
+    fr: 'Durabilité certifiée', en: 'Certified durability', es: 'Durabilidad certificada',
+    de: 'Zertifizierte Langlebigkeit', it: 'Durabilità certificata', pt: 'Durabilidade certificada',
+    nl: 'Gecertificeerde duurzaamheid', ar: 'متانة معتمدة', zh: '认证耐用性',
+  },
+  'natural.feat_desc_0': {
+    fr: 'Sélectionné à la source pour sa qualité supérieure.',
+    en: 'Sourced for superior quality.',
+    es: 'Seleccionado en origen por su calidad superior.',
+    de: 'An der Quelle ausgewählt für höchste Qualität.',
+    it: "Selezionato all'origine per la sua qualità superiore.",
+    pt: 'Selecionado na origem pela sua qualidade superior.',
+    nl: 'Aan de bron geselecteerd voor superieure kwaliteit.',
+    ar: 'مختار من المصدر لجودته العالية.',
+    zh: '从源头精选，品质卓越。',
+  },
+  'natural.feat_desc_1': {
+    fr: 'Chaque pièce assemblée avec une attention extrême.',
+    en: 'Every piece assembled with extreme care.',
+    es: 'Cada pieza ensamblada con extremo cuidado.',
+    de: 'Jedes Teil wird mit größter Sorgfalt montiert.',
+    it: 'Ogni pezzo assemblato con estrema cura.',
+    pt: 'Cada peça montada com extremo cuidado.',
+    nl: 'Elk onderdeel met uiterste zorg gemonteerd.',
+    ar: 'كل قطعة مجمعة باهتمام شديد.',
+    zh: '每一件都经过精心组装。',
+  },
+  'natural.feat_desc_2': {
+    fr: 'Conçu pour accompagner chaque jour, longtemps.',
+    en: 'Designed to accompany every day, for a long time.',
+    es: 'Diseñado para acompañar cada día, durante mucho tiempo.',
+    de: 'Entwickelt, um dich lange Zeit jeden Tag zu begleiten.',
+    it: 'Progettato per accompagnarti ogni giorno, a lungo.',
+    pt: 'Concebido para acompanhar cada dia, durante muito tempo.',
+    nl: 'Ontworpen om je elke dag, lange tijd, te vergezellen.',
+    ar: 'مصمم ليرافق كل يوم، لفترة طويلة.',
+    zh: '专为长久院伴每一天而设计。',
+  },
+  'natural.testimonial_fallback': {
+    fr: 'Ce produit a changé ma façon de consommer. Je ne reviendrai pas en arrière.',
+    en: "This product changed the way I consume. I won't go back.",
+    es: 'Este producto cambió mi forma de consumir. No volvería atrás.',
+    de: 'Dieses Produkt hat meine Art zu konsumieren verändert. Ich möchte nicht mehr zurück.',
+    it: 'Questo prodotto ha cambiato il mio modo di consumare. Non tornerei indietro.',
+    pt: 'Este produto mudou a minha forma de consumir. Não voltaria atrás.',
+    nl: 'Dit product heeft mijn manier van consumeren veranderd. Ik ga niet meer terug.',
+    ar: 'غيّر هذا المنتج طريقة استهلاكي. لن أعود أبدًا.',
+    zh: '这款产品改变了我的消费方式，我再也回不去了。',
+  },
+  'natural.testimonial_name': {
+    fr: 'Camille L.', en: 'Camille L.', es: 'Camille L.', de: 'Camille L.', it: 'Camille L.',
+    pt: 'Camille L.', nl: 'Camille L.', ar: 'كاميل ل.', zh: 'Camille L.',
+  },
+  'natural.testimonial_role': {
+    fr: 'Cliente depuis 2 ans', en: 'Customer for 2 years', es: 'Cliente desde hace 2 años',
+    de: 'Kundin seit 2 Jahren', it: 'Cliente da 2 anni', pt: 'Cliente há 2 anos',
+    nl: 'Klant sinds 2 jaar', ar: 'عميلة منذ سنتين', zh: '两年老客户',
+  },
+  'natural.behind_eyebrow': {
+    fr: 'Coulisses', en: 'Behind the scenes', es: 'Detrás del diseño', de: 'Hinter den Kulissen',
+    it: 'Dietro le quinte', pt: 'Bastidores', nl: 'Achter de schermen', ar: 'خلف الكواليس', zh: '幕后故事',
+  },
+  'natural.behind_title': {
+    fr: 'Derrière le design', en: 'Behind the design', es: 'Detrás del diseño', de: 'Hinter dem Design',
+    it: 'Dietro il design', pt: 'Por trás do design', nl: 'Achter het ontwerp', ar: 'خلف التصميم', zh: '设计背后',
+  },
+  'natural.behind_fallback': {
+    fr: "Chaque détail a été pensé dans un seul objectif : vous offrir quelque chose qui dure vraiment, qui s'améliore avec le temps, et qui ne compromet jamais la planète.",
+    en: 'Every detail was thought out with a single goal: to offer you something that truly lasts, improves over time, and never compromises the planet.',
+    es: 'Cada detalle fue pensado con un solo objetivo: ofrecerte algo que realmente dure, que mejore con el tiempo y que nunca comprometa el planeta.',
+    de: 'Jedes Detail wurde mit einem einzigen Ziel durchdacht: dir etwas zu bieten, das wirklich hält, sich mit der Zeit verbessert und den Planeten niemals gefährdet.',
+    it: 'Ogni dettaglio è stato pensato con un unico obiettivo: offrirti qualcosa che duri davvero, che migliori nel tempo e che non comprometta mai il pianeta.',
+    pt: 'Cada detalhe foi pensado com um único objetivo: oferecer-lhe algo que dure verdadeiramente, que melhore com o tempo e que nunca comprometa o planeta.',
+    nl: 'Elk detail is doordacht met één doel: je iets bieden dat écht lang meegaat, in de loop van de tijd beter wordt en de planeet nooit schaadt.',
+    ar: 'تم التفكير في كل تفصيل بهدف واحد: تقديم شيء يدوم حقًا، ويتحسن مع الوقت، ولا يضر بالكوكب أبدًا.',
+    zh: '每一个细节都以一个目标为出发点：为你提供真正经久耐用、随时间愈发出色、且绝不危害地球的产品。',
+  },
+  'natural.faq_title': {
+    fr: 'Ce que vous voulez savoir', en: 'What you want to know', es: 'Lo que quieres saber',
+    de: 'Was du wissen möchtest', it: 'Quello che vuoi sapere', pt: 'O que quer saber',
+    nl: 'Wat je wilt weten', ar: 'ما تريد معرفته', zh: '你想了解的',
+  },
+  'natural.rr_shipping': {
+    fr: 'Livraison offerte', en: 'Free shipping', es: 'Envío gratis', de: 'Kostenloser Versand',
+    it: 'Spedizione gratuita', pt: 'Envio grátis', nl: 'Gratis verzending', ar: 'شحن مجاني', zh: '免费配送',
+  },
+  'natural.rr_returns': {
+    fr: 'Retour 30 jours', en: '30-day returns', es: 'Devolución 30 días', de: '30 Tage Rückgabe',
+    it: 'Reso 30 giorni', pt: 'Devolução 30 dias', nl: '30 dagen retour', ar: 'إرجاع 30 يومًا', zh: '30天退货',
+  },
+  'natural.rr_carbon': {
+    fr: 'Neutre en carbone', en: 'Carbon neutral', es: 'Neutro en carbono', de: 'Klimaneutral',
+    it: 'Neutrale dal punto di vista climatico', pt: 'Neutro em carbono', nl: 'Klimaatneutraal', ar: 'محايد كربونيًا', zh: '碳中和',
+  },
+  'natural.final_eyebrow': {
+    fr: 'Prêt à commencer ?', en: 'Ready to start?', es: '¿Listo para empezar?', de: 'Bereit anzufangen?',
+    it: 'Pronto per iniziare?', pt: 'Pronto para começar?', nl: 'Klaar om te beginnen?', ar: 'مستعد للبدء؟', zh: '准备好了吗？',
+  },
+  'natural.final_cta': {
+    fr: 'Découvrir maintenant', en: 'Shop now', es: 'Comprar ahora', de: 'Jetzt entdecken',
+    it: 'Scopri ora', pt: 'Comprar agora', nl: 'Nu ontdekken', ar: 'تسوق الآن', zh: '立即选购',
+  },
+  'natural.final_sub': {
+    fr: 'Livraison gratuite · Retour 30 jours · Neutre en carbone',
+    en: 'Free shipping · 30-day returns · Carbon neutral',
+    es: 'Envío gratis · Devolución 30 días · Neutro en carbono',
+    de: 'Kostenloser Versand · 30 Tage Rückgabe · Klimaneutral',
+    it: 'Spedizione gratuita · Reso 30 giorni · Neutrale dal punto di vista climatico',
+    pt: 'Envio grátis · Devolução 30 dias · Neutro em carbono',
+    nl: 'Gratis verzending · 30 dagen retour · Klimaatneutraal',
+    ar: 'شحن مجاني · إرجاع 30 يومًا · محايد كربونيًا',
+    zh: '免费配送 · 30天退货 · 碳中和',
+  },
+  'natural.footer_privacy': {
+    fr: 'Confidentialité', en: 'Privacy', es: 'Privacidad', de: 'Datenschutz', it: 'Privacy',
+    pt: 'Privacidade', nl: 'Privacy', ar: 'الخصوصية', zh: '隐私',
+  },
+  'natural.footer_terms': {
+    fr: 'Conditions', en: 'Terms', es: 'Términos', de: 'Bedingungen', it: 'Termini',
+    pt: 'Termos', nl: 'Voorwaarden', ar: 'الشروط', zh: '条款',
+  },
+  'natural.footer_desc_fallback': {
+    fr: 'Conçu pour durer. Fabriqué avec soin.', en: 'Designed to last. Made with care.',
+    es: 'Diseñado para durar. Fabricado con cuidado.', de: 'Für die Ewigkeit gemacht. Mit Sorgfalt hergestellt.',
+    it: 'Progettato per durare. Realizzato con cura.', pt: 'Concebido para durar. Feito com cuidado.',
+    nl: 'Gemaakt om te blijven. Met zorg vervaardigd.', ar: 'مصمم ليدوم. مصنوع بعناية.', zh: '经久耐用，用心制作。',
+  },
+  'natural.aria_gallery': {
+    fr: 'Galerie produit', en: 'Product gallery', es: 'Galería del producto', de: 'Produktgalerie',
+    it: 'Galleria del prodotto', pt: 'Galeria do produto', nl: 'Productgalerij', ar: 'معرض المنتج', zh: '产品图库',
   },
 }
 

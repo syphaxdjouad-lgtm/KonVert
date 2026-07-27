@@ -26,6 +26,8 @@
  */
 
 import { renderQuantitySelector } from './QuantitySelector'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 export interface StickyPrice {
   amount:    number
@@ -64,6 +66,9 @@ export interface StickyAddToCartOptions {
   // Sprint 1 T6
   stockSignal?:  StickyStockSignal
   flashSale?:    StickyFlashSale
+  // Langue de rendu — pilote les libellés par défaut (CTA, bandeaux stock/flash).
+  // Fallback 'fr' si absent.
+  lang?:         string
 }
 
 function formatPrice(amount: number, currency: string): string {
@@ -74,14 +79,14 @@ function formatPrice(amount: number, currency: string): string {
   }
 }
 
-// ─── Helpers bandeaux ─────────────────────────────────────────────────────────
+// ─── Helpers bandeaux ─────────────────────────────────────────
 
 const COLOR_WARNING = '#D97706'
 const COLOR_WARNING_BG = '#FFFBEB'
 const COLOR_DANGER  = '#DC2626'
 const COLOR_DANGER_BG  = '#FEF2F2'
 
-function renderStockSignalBanner(signal: StickyStockSignal, fontFamily: string): string {
+function renderStockSignalBanner(signal: StickyStockSignal, fontFamily: string, lang: string): string {
   const bg   = signal.type === 'critical' ? COLOR_DANGER_BG  : COLOR_WARNING_BG
   const color = signal.type === 'critical' ? COLOR_DANGER     : COLOR_WARNING
 
@@ -90,10 +95,10 @@ function renderStockSignalBanner(signal: StickyStockSignal, fontFamily: string):
     text = signal.label
   } else if (signal.count !== undefined) {
     text = signal.type === 'critical'
-      ? `🔴 Seulement ${signal.count} unité${signal.count > 1 ? 's' : ''} restante${signal.count > 1 ? 's' : ''}`
-      : `Plus que ${signal.count} unité${signal.count > 1 ? 's' : ''} en stock`
+      ? t(lang, 'sticky.stockCriticalCount', { n: signal.count })
+      : t(lang, 'sticky.stockLowCount', { n: signal.count })
   } else {
-    text = signal.type === 'critical' ? 'Stock presque épuisé' : 'Stock limité'
+    text = signal.type === 'critical' ? t(lang, 'sticky.stockCritical') : t(lang, 'sticky.stockLow')
   }
 
   return `<div id="kvt-stock-signal" style="
@@ -109,8 +114,8 @@ function renderStockSignalBanner(signal: StickyStockSignal, fontFamily: string):
   ">${text}</div>`
 }
 
-function renderFlashSaleBanner(flashSale: StickyFlashSale, fontFamily: string): string {
-  const label = flashSale.label ?? 'Offre flash expire dans'
+function renderFlashSaleBanner(flashSale: StickyFlashSale, fontFamily: string, lang: string): string {
+  const label = flashSale.label ?? t(lang, 'sticky.flashSaleDefault')
   // Échapper l'ISO pour injection JSON dans l'attribut data-*
   const endsAtEscaped = flashSale.endsAt.replace(/"/g, '&quot;')
 
@@ -163,11 +168,12 @@ function renderFlashSaleBanner(flashSale: StickyFlashSale, fontFamily: string): 
 }
 
 export function renderStickyAddToCartMobile(options: StickyAddToCartOptions): string {
+  const lang = resolveLanguage(options.lang)
   const {
     productName,
     productImage,
     price,
-    ctaLabel    = 'Ajouter au panier',
+    ctaLabel    = t(lang, 'cta.addToCart'),
     ctaColor    = '#1A1A1A',
     ctaTextColor = '#FFFFFF',
     showQty     = false,
@@ -183,9 +189,9 @@ export function renderStickyAddToCartMobile(options: StickyAddToCartOptions): st
   // Les bandeaux s'affichent AU-DESSUS de la barre sticky (pas dedans)
   // Flash sale a la priorité sur stockSignal si les deux sont fournis
   const signalBanner = flashSale
-    ? renderFlashSaleBanner(flashSale, fontFamily)
+    ? renderFlashSaleBanner(flashSale, fontFamily, lang)
     : stockSignal
-      ? renderStockSignalBanner(stockSignal, fontFamily)
+      ? renderStockSignalBanner(stockSignal, fontFamily, lang)
       : ''
 
   const priceFormatted    = formatPrice(price.amount, price.currency)
@@ -303,7 +309,7 @@ export function renderStickyAddToCartMobile(options: StickyAddToCartOptions): st
 
 ${signalBanner}
 
-<div id="kvt-sticky-wrapper" role="region" aria-label="Ajouter au panier — barre rapide">
+<div id="kvt-sticky-wrapper" role="region" aria-label="${t(lang, 'sticky.ariaLabel')}">
   <div id="kvt-sticky-cta">
     <!-- Thumbnail + infos produit -->
     <div style="display:flex;align-items:center;gap:10px;flex:0 0 auto;max-width:180px;min-width:0;">

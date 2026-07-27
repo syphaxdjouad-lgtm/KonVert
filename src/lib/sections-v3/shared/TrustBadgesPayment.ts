@@ -11,6 +11,9 @@
  *   Ajouté comme section 'trust_badges_payment' juste après 'guarantee'.
  */
 
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
+
 export type PaymentMethod =
   | 'visa'
   | 'mastercard'
@@ -30,11 +33,14 @@ export interface TrustBadgesOptions {
   bg?: string
   border?: string
   fontFamily?: string
+  // Langue de rendu — pilote les libellés ("Paiement sécurisé", aria-labels).
+  // Fallback 'fr' si absent.
+  lang?: string
 }
 
 const DEFAULT_METHODS: PaymentMethod[] = ['visa', 'mastercard', 'paypal', 'apple_pay']
 
-// ─── SVG inline pour chaque méthode ───────────────────────────────────────────
+// ─── SVG inline pour chaque méthode ───────────────────────────────────
 // Formes vectorielles simplifiées fidèles aux logotypes officiels.
 // Viewbox 38×24 = ratio carte bancaire standard.
 
@@ -105,9 +111,10 @@ const LABELS: Record<PaymentMethod, string> = {
   alma:        'Alma',
 }
 
-// ─── Rendu principal ──────────────────────────────────────────────────────────
+// ─── Rendu principal ─────────────────────────────────────────────────────────
 
 export function renderTrustBadgesPayment(options: TrustBadgesOptions = {}): string {
+  const lang = resolveLanguage(options.lang)
   const {
     methods       = DEFAULT_METHODS,
     variant       = 'footer',
@@ -129,7 +136,7 @@ export function renderTrustBadgesPayment(options: TrustBadgesOptions = {}): stri
       </div>`).join('')
 
     return `
-<div role="group" aria-label="Moyens de paiement acceptés"
+<div role="group" aria-label="${t(lang, 'trustBadges.ariaLabel')}"
   style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:12px 0;font-family:${fontFamily};">
   ${badges}
 </div>`
@@ -149,9 +156,9 @@ export function renderTrustBadgesPayment(options: TrustBadgesOptions = {}): stri
 <section style="background:${bg};padding:20px 24px;font-family:${fontFamily};">
   <div style="max-width:680px;margin:0 auto;">
     <p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:${accentColor};margin-bottom:14px;text-align:center;">
-      Paiement 100% sécurisé
+      ${t(lang, 'trustBadges.securePayment100')}
     </p>
-    <div role="group" aria-label="Moyens de paiement acceptés"
+    <div role="group" aria-label="${t(lang, 'trustBadges.ariaLabel')}"
       style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;gap:12px;">
       ${badges}
     </div>
@@ -172,9 +179,9 @@ export function renderTrustBadgesPayment(options: TrustBadgesOptions = {}): stri
   <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 20px;">
     <div style="display:flex;align-items:center;gap:6px;color:${accentColor};font-size:12px;font-weight:500;">
       ${lockIcon}
-      <span>Paiement sécurisé</span>
+      <span>${t(lang, 'hero.securePayment')}</span>
     </div>
-    <div role="group" aria-label="Moyens de paiement acceptés"
+    <div role="group" aria-label="${t(lang, 'trustBadges.ariaLabel')}"
       style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
       ${badges}
     </div>

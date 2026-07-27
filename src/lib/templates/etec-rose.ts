@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -38,6 +39,7 @@ const ROSE_THEME: SectionTheme = {
 }
 
 export function templateEtecRose(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? [];
   const imgs = _real.length >= 1
     ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length])
@@ -124,7 +126,7 @@ export function templateEtecRose(data: LandingPageData): string {
     <div style="background:${C.card};border:1px solid ${C.border};border-radius:20px;padding:28px;box-shadow:0 2px 16px rgba(214,51,112,0.06);">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
         <span style="color:${C.accent};font-size:15px;letter-spacing:3px;">★★★★★</span>
-        <span style="font-size:11px;color:#b45e7a;font-weight:600;background:${C.accentLight};padding:3px 10px;border-radius:20px;">✓ Achat vérifié</span>
+        <span style="font-size:11px;color:#b45e7a;font-weight:600;background:${C.accentLight};padding:3px 10px;border-radius:20px;">${trans(lang, 'reviews.verifiedPurchase')}</span>
       </div>
       <p style="font-size:14px;color:${C.muted};line-height:1.85;margin-bottom:20px;font-family:'Inter',sans-serif;font-style:italic;">"${r.text}"</p>
       <div style="display:flex;align-items:center;gap:10px;">
@@ -173,18 +175,18 @@ export function templateEtecRose(data: LandingPageData): string {
 </head>
 <body>
 
-<!-- ═══ BREADCRUMB ═══════════════════════════════════════════════════════════ -->
+<!-- ═══ BREADCRUMB ════════════════════════════════════════════════════════ -->
 <div style="background:${C.card};border-bottom:1px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:13px 24px;font-size:13px;color:${C.muted};font-family:'Inter',sans-serif;">
-    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">Accueil</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">${trans(lang, 'bespoke.nav.home')}</a>
     <span style="margin:0 8px;opacity:.4;">›</span>
-    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">Boutique</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">${trans(lang, 'bespoke.nav.shop')}</a>
     <span style="margin:0 8px;opacity:.4;">›</span>
     <span style="color:${C.muted};">${data.product_name}</span>
   </div>
 </div>
 
-<!-- ═══ HERO ══════════════════════════════════════════════════════════════════ -->
+<!-- ═══ HERO ═══════════════════════════════════════════════════════════ -->
 <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
   <div class="pg3" style="display:grid;grid-template-columns:1fr 1fr;gap:60px;padding:48px 0 88px;align-items:start;">
 
@@ -238,7 +240,7 @@ export function templateEtecRose(data: LandingPageData): string {
 
       <!-- CTA secondaire -->
       <a href="javascript:void(0)" onclick="event.preventDefault()" style="display:block;text-align:center;background:transparent;color:${C.accent};padding:15px 32px;border-radius:100px;font-size:14px;font-weight:600;text-decoration:none;border:2px solid ${C.accent};margin-bottom:22px;font-family:'Inter',sans-serif;transition:all .2s;" onmouseover="this.style.background='${C.accentLight}'" onmouseout="this.style.background='transparent'">
-        En savoir plus
+        ${trans(lang, 'bespoke.cta.learnMore')}
       </a>
 
       <!-- Urgence -->
@@ -286,11 +288,11 @@ export function templateEtecRose(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ FEATURES ALTERNÉES ════════════════════════════════════════════════════ -->
+<!-- ═══ FEATURES ALTERNÉES ═════════════════════════════════════════════════ -->
 <div style="background:${C.card};padding:88px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:64px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'Inter',sans-serif;margin-bottom:14px;">Caractéristiques</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'Inter',sans-serif;margin-bottom:14px;">${trans(lang, 'legacy.features.eyebrow')}</p>
       <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;line-height:1.2;">${data.headline || data.product_name}</h2>
       <p style="color:${C.muted};font-size:15px;max-width:520px;margin:0 auto;font-family:'Inter',sans-serif;line-height:1.75;">${data.subtitle || `Découvrez ce qui fait la différence avec ${data.product_name}.`}</p>
     </div>
@@ -298,11 +300,11 @@ export function templateEtecRose(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ AVANT / APRÈS ════════════════════════════════════════════════════════ -->
+<!-- ═══ AVANT / APRÈS ═════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:52px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'Inter',sans-serif;margin-bottom:14px;">Transformation</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'Inter',sans-serif;margin-bottom:14px;">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
       <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Avant · Après</h2>
       <p style="color:${C.muted};font-size:15px;max-width:480px;margin:0 auto;font-family:'Inter',sans-serif;">Des milliers de clients ont transformé leur quotidien avec ${data.product_name}. Voici leur vérité.</p>
     </div>
@@ -311,7 +313,7 @@ export function templateEtecRose(data: LandingPageData): string {
       <div style="background:${C.card};border-radius:20px;overflow:hidden;border:1px solid ${C.border};box-shadow:0 2px 16px rgba(214,51,112,0.06);">
         <div style="aspect-ratio:4/3;overflow:hidden;position:relative;">
           <img src="${BEFORE_IMG}" alt="Avant" style="width:100%;height:100%;object-fit:cover;display:block;" />
-          <div style="position:absolute;top:14px;left:14px;background:rgba(28,10,14,0.65);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.06em;font-family:'Inter',sans-serif;">AVANT</div>
+          <div style="position:absolute;top:14px;left:14px;background:rgba(28,10,14,0.65);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.06em;font-family:'Inter',sans-serif;">${trans(lang, 'legacy.beforeAfter.before').toUpperCase()}</div>
         </div>
         <div style="padding:22px;">
           <p style="font-size:15px;font-weight:600;color:${C.text};margin-bottom:8px;font-family:'Inter',sans-serif;">Avant notre produit</p>
@@ -322,7 +324,7 @@ export function templateEtecRose(data: LandingPageData): string {
       <div style="background:${C.card};border-radius:20px;overflow:hidden;border:1px solid ${C.border};box-shadow:0 2px 16px rgba(214,51,112,0.06);">
         <div style="aspect-ratio:4/3;overflow:hidden;position:relative;">
           <img src="${AFTER_IMG}" alt="Après" style="width:100%;height:100%;object-fit:cover;display:block;" />
-          <div style="position:absolute;top:14px;left:14px;background:rgba(214,51,112,0.85);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.06em;font-family:'Inter',sans-serif;">APRÈS</div>
+          <div style="position:absolute;top:14px;left:14px;background:rgba(214,51,112,0.85);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.06em;font-family:'Inter',sans-serif;">${trans(lang, 'legacy.beforeAfter.after').toUpperCase()}</div>
         </div>
         <div style="padding:22px;">
           <p style="font-size:15px;font-weight:600;color:${C.text};margin-bottom:8px;font-family:'Inter',sans-serif;">Après ${data.product_name}</p>
@@ -333,11 +335,11 @@ export function templateEtecRose(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ AVIS CLIENTS ═════════════════════════════════════════════════════════ -->
+<!-- ═══ AVIS CLIENTS ═════════════════════════════════════════════════ -->
 <div id="reviews3" style="background:${C.card};padding:88px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:52px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'Inter',sans-serif;margin-bottom:14px;">Témoignages</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'Inter',sans-serif;margin-bottom:14px;">${trans(lang, 'reviews.eyebrow')}</p>
       <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;letter-spacing:-.01em;color:${C.text};margin-bottom:16px;">Elles en parlent mieux que nous</h2>
       <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;">
         <span style="color:${C.accent};font-size:16px;letter-spacing:3px;">★★★★★</span>
@@ -354,18 +356,18 @@ export function templateEtecRose(data: LandingPageData): string {
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, ROSE_THEME)}
 
-<!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
+<!-- ═══ FAQ ═══════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:1px solid ${C.border};">
   <div style="max-width:720px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:56px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'Inter',sans-serif;margin-bottom:14px;">FAQ</p>
-      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;letter-spacing:-.01em;color:${C.text};">Questions fréquentes</h2>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'Inter',sans-serif;margin-bottom:14px;">${trans(lang, 'bespoke.faqShort')}</p>
+      <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:36px;font-weight:600;letter-spacing:-.01em;color:${C.text};">${trans(lang, 'faqV3.title')}</h2>
     </div>
     ${faqHTML}
   </div>
 </div>
 
-<!-- ═══ CTA FINAL ════════════════════════════════════════════════════════════ -->
+<!-- ═══ CTA FINAL ═════════════════════════════════════════════════════ -->
 <div style="background:linear-gradient(135deg,${C.accent},#EC4899);padding:88px 24px;text-align:center;">
   <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.65);font-family:'Inter',sans-serif;margin-bottom:16px;">Offre exclusive</p>
   <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:42px;font-weight:600;color:#fff;letter-spacing:-.01em;margin-bottom:16px;line-height:1.15;">${data.headline || 'Sublimez votre beauté dès aujourd\'hui'}</h2>

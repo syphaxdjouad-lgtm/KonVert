@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -38,6 +39,7 @@ const SAGE_THEME: SectionTheme = {
 }
 
 export function templateEtecSage(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? [];
   const imgs = _real.length >= 1
     ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length])
@@ -124,7 +126,7 @@ export function templateEtecSage(data: LandingPageData): string {
     <div style="background:${C.card};border:1px solid ${C.border};border-radius:18px;padding:28px;box-shadow:0 2px 16px rgba(45,106,79,0.06);">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
         <span style="color:#4CAF50;font-size:15px;letter-spacing:3px;">★★★★★</span>
-        <span style="font-size:11px;color:${C.accent};font-weight:600;background:${C.accentLight};padding:3px 10px;border-radius:20px;font-family:'DM Sans',sans-serif;">✓ Achat vérifié</span>
+        <span style="font-size:11px;color:${C.accent};font-weight:600;background:${C.accentLight};padding:3px 10px;border-radius:20px;font-family:'DM Sans',sans-serif;">${trans(lang, 'reviews.verifiedPurchase')}</span>
       </div>
       <p style="font-size:14px;color:${C.muted};line-height:1.85;margin-bottom:20px;font-family:'DM Sans',sans-serif;">"${r.text}"</p>
       <div style="display:flex;align-items:center;gap:10px;">
@@ -173,18 +175,18 @@ export function templateEtecSage(data: LandingPageData): string {
 </head>
 <body>
 
-<!-- ═══ BREADCRUMB ═══════════════════════════════════════════════════════════ -->
+<!-- ═══ BREADCRUMB ═════════════════════════════════════════════════════ -->
 <div style="background:${C.card};border-bottom:1px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:13px 24px;font-size:13px;color:${C.muted};font-family:'DM Sans',sans-serif;">
-    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">Accueil</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">${trans(lang, 'bespoke.nav.home')}</a>
     <span style="margin:0 8px;opacity:.4;">›</span>
-    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">Boutique</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">${trans(lang, 'bespoke.nav.shop')}</a>
     <span style="margin:0 8px;opacity:.4;">›</span>
     <span style="color:${C.muted};">${data.product_name}</span>
   </div>
 </div>
 
-<!-- ═══ HERO ══════════════════════════════════════════════════════════════════ -->
+<!-- ═══ HERO ═══════════════════════════════════════════════════════════ -->
 <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
   <div class="pg4" style="display:grid;grid-template-columns:1fr 1fr;gap:60px;padding:48px 0 88px;align-items:start;">
 
@@ -293,11 +295,11 @@ export function templateEtecSage(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ FEATURES ALTERNÉES ════════════════════════════════════════════════════ -->
+<!-- ═══ FEATURES ALTERNÉES ═════════════════════════════════════════════════ -->
 <div style="background:${C.card};padding:88px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:64px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Caractéristiques</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">${trans(lang, 'legacy.features.eyebrow')}</p>
       <h2 style="font-family:'DM Sans',sans-serif;font-size:32px;font-weight:800;letter-spacing:-.02em;color:${C.text};margin-bottom:14px;">${data.headline || data.product_name}</h2>
       <p style="color:${C.muted};font-size:15px;max-width:520px;margin:0 auto;font-family:'DM Sans',sans-serif;line-height:1.75;">${data.subtitle || `Découvrez ce qui fait la différence avec ${data.product_name}.`}</p>
     </div>
@@ -305,11 +307,11 @@ export function templateEtecSage(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ AVANT / APRÈS ════════════════════════════════════════════════════════ -->
+<!-- ═══ AVANT / APRÈS ═════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:52px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Transformation</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
       <h2 style="font-family:'DM Sans',sans-serif;font-size:32px;font-weight:800;letter-spacing:-.02em;color:${C.text};margin-bottom:14px;">Avant · Après</h2>
       <p style="color:${C.muted};font-size:15px;max-width:480px;margin:0 auto;font-family:'DM Sans',sans-serif;">Découvrez comment ${data.product_name} transforme le quotidien de nos clients.</p>
     </div>
@@ -318,7 +320,7 @@ export function templateEtecSage(data: LandingPageData): string {
       <div style="background:${C.card};border-radius:20px;overflow:hidden;border:1px solid ${C.border};box-shadow:0 2px 16px rgba(45,106,79,0.06);">
         <div style="aspect-ratio:4/3;overflow:hidden;position:relative;">
           <img src="${BEFORE_IMG}" alt="Avant" style="width:100%;height:100%;object-fit:cover;display:block;" />
-          <div style="position:absolute;top:14px;left:14px;background:rgba(27,58,45,0.7);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.06em;font-family:'DM Sans',sans-serif;">AVANT</div>
+          <div style="position:absolute;top:14px;left:14px;background:rgba(27,58,45,0.7);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.06em;font-family:'DM Sans',sans-serif;">${trans(lang, 'legacy.beforeAfter.before').toUpperCase()}</div>
         </div>
         <div style="padding:22px;">
           <p style="font-size:15px;font-weight:700;color:${C.text};margin-bottom:8px;font-family:'DM Sans',sans-serif;">Avant notre produit</p>
@@ -329,7 +331,7 @@ export function templateEtecSage(data: LandingPageData): string {
       <div style="background:${C.card};border-radius:20px;overflow:hidden;border:1px solid ${C.border};box-shadow:0 2px 16px rgba(45,106,79,0.06);">
         <div style="aspect-ratio:4/3;overflow:hidden;position:relative;">
           <img src="${AFTER_IMG}" alt="Après" style="width:100%;height:100%;object-fit:cover;display:block;" />
-          <div style="position:absolute;top:14px;left:14px;background:rgba(45,106,79,0.9);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.06em;font-family:'DM Sans',sans-serif;">APRÈS</div>
+          <div style="position:absolute;top:14px;left:14px;background:rgba(45,106,79,0.9);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.06em;font-family:'DM Sans',sans-serif;">${trans(lang, 'legacy.beforeAfter.after').toUpperCase()}</div>
         </div>
         <div style="padding:22px;">
           <p style="font-size:15px;font-weight:700;color:${C.text};margin-bottom:8px;font-family:'DM Sans',sans-serif;">Après ${data.product_name}</p>
@@ -340,11 +342,11 @@ export function templateEtecSage(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ AVIS CLIENTS ═════════════════════════════════════════════════════════ -->
+<!-- ═══ AVIS CLIENTS ═════════════════════════════════════════════════ -->
 <div id="reviews4" style="background:${C.card};padding:88px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:52px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Témoignages</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">${trans(lang, 'reviews.eyebrow')}</p>
       <h2 style="font-family:'DM Sans',sans-serif;font-size:32px;font-weight:800;letter-spacing:-.02em;color:${C.text};margin-bottom:16px;">Ce que nos clients en disent</h2>
       <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;">
         <span style="color:#4CAF50;font-size:16px;letter-spacing:3px;">★★★★★</span>
@@ -361,18 +363,18 @@ export function templateEtecSage(data: LandingPageData): string {
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, SAGE_THEME)}
 
-<!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
+<!-- ═══ FAQ ═══════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:1px solid ${C.border};">
   <div style="max-width:720px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:56px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">FAQ</p>
-      <h2 style="font-family:'DM Sans',sans-serif;font-size:32px;font-weight:800;letter-spacing:-.02em;color:${C.text};">Questions fréquentes</h2>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">${trans(lang, 'bespoke.faqShort')}</p>
+      <h2 style="font-family:'DM Sans',sans-serif;font-size:32px;font-weight:800;letter-spacing:-.02em;color:${C.text};">${trans(lang, 'faqV3.title')}</h2>
     </div>
     ${faqHTML}
   </div>
 </div>
 
-<!-- ═══ CTA FINAL ════════════════════════════════════════════════════════════ -->
+<!-- ═══ CTA FINAL ═════════════════════════════════════════════════════ -->
 <div style="background:${C.accent};padding:88px 24px;text-align:center;">
   <p style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);font-family:'DM Sans',sans-serif;margin-bottom:16px;">Offre naturelle</p>
   <h2 style="font-family:'DM Sans',sans-serif;font-size:38px;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:16px;line-height:1.15;">${data.headline || 'Prenez soin de vous naturellement'}</h2>

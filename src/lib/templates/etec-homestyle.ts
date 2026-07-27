@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -7,13 +8,13 @@ import {
   renderHeroThumbs,
 } from './sections'
 const IMGS = [
-  'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/1648776/pexels-photo-1648776.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/2079249/pexels-photo-2079249.jpeg?auto=compress&cs=tinysrgb&w=800',
-  'https://images.pexels.com/photos/2062431/pexels-photo-2062431.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/1762851/pexels-photo-1762851.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/2693212/pexels-photo-2693212.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/1191710/pexels-photo-1191710.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/2747449/pexels-photo-2747449.jpeg?auto=compress&cs=tinysrgb&w=800',
 ]
-const BEFORE_IMG = 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600'
-const AFTER_IMG  = 'https://images.pexels.com/photos/2079249/pexels-photo-2079249.jpeg?auto=compress&cs=tinysrgb&w=600'
+const BEFORE_IMG = 'https://images.pexels.com/photos/1762851/pexels-photo-1762851.jpeg?auto=compress&cs=tinysrgb&w=600'
+const AFTER_IMG  = 'https://images.pexels.com/photos/2693212/pexels-photo-2693212.jpeg?auto=compress&cs=tinysrgb&w=600'
 
 const HOMESTYLE_THEME: SectionTheme = {
   primary:    '#8b6914',
@@ -28,6 +29,7 @@ const HOMESTYLE_THEME: SectionTheme = {
 }
 
 export function templateEtecHomestyle(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -88,7 +90,7 @@ body{font-family:'DM Sans',sans-serif;background:#FAF7F2;color:#2C2420;}
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;">
     <span style="font-size:12px;color:#A09688;">Maison</span>
     <span style="font-size:12px;color:#D4C5A9;">›</span>
-    <span style="font-size:12px;color:#A09688;">Mobilier</span>
+    <span style="font-size:12px;color:#A09688;">${trans(lang, 'bespoke.nav.furniture')}</span>
     <span style="font-size:12px;color:#D4C5A9;">›</span>
     <span style="font-size:12px;color:#2C2420;font-weight:500;">${data.product_name}</span>
   </div>
@@ -144,7 +146,7 @@ body{font-family:'DM Sans',sans-serif;background:#FAF7F2;color:#2C2420;}
 <!-- QUALITIES — 3 COL -->
 <section style="padding:80px 24px;background:#F0EBE3;">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#8B6914;text-align:center;text-transform:uppercase;margin-bottom:8px;">Savoir-faire</p>
+    <p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#8B6914;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.nav.craftsmanship')}</p>
     <h2 style="font-family:'Lora',serif;font-size:32px;font-weight:600;color:#2C2420;text-align:center;letter-spacing:-0.02em;margin-bottom:56px;">Ce qui fait la différence</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="hs-qual-grid">
       ${qualities.map(q => `
@@ -179,16 +181,16 @@ body{font-family:'DM Sans',sans-serif;background:#FAF7F2;color:#2C2420;}
 <!-- AVANT / APRES -->
 <section style="padding:80px 24px;background:#F0EBE3;">
   <div style="max-width:1000px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#8B6914;text-align:center;text-transform:uppercase;margin-bottom:8px;">Transformation</p>
+    <p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#8B6914;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
     <h2 style="font-family:'Lora',serif;font-size:32px;font-weight:600;color:#2C2420;text-align:center;margin-bottom:48px;">Avant / Après installation</h2>
     <div style="display:flex;gap:20px;" class="hs-compare">
       <div style="flex:1;position:relative;border-radius:12px;overflow:hidden;">
         <img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:340px;object-fit:cover;display:block;filter:saturate(0.4) brightness(0.85);" alt="Avant">
-        <div style="position:absolute;top:16px;left:16px;background:rgba(44,36,32,0.7);color:#FAF7F2;font-size:11px;font-weight:600;padding:6px 16px;border-radius:6px;">AVANT</div>
+        <div style="position:absolute;top:16px;left:16px;background:rgba(44,36,32,0.7);color:#FAF7F2;font-size:11px;font-weight:600;padding:6px 16px;border-radius:6px;">${trans(lang, 'legacy.beforeAfter.before').toUpperCase()}</div>
       </div>
       <div style="flex:1;position:relative;border-radius:12px;overflow:hidden;">
         <img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:340px;object-fit:cover;display:block;" alt="Après">
-        <div style="position:absolute;top:16px;left:16px;background:#8B6914;color:#fff;font-size:11px;font-weight:600;padding:6px 16px;border-radius:6px;">APRÈS</div>
+        <div style="position:absolute;top:16px;left:16px;background:#8B6914;color:#fff;font-size:11px;font-weight:600;padding:6px 16px;border-radius:6px;">${trans(lang, 'legacy.beforeAfter.after').toUpperCase()}</div>
       </div>
     </div>
   </div>
@@ -197,7 +199,7 @@ body{font-family:'DM Sans',sans-serif;background:#FAF7F2;color:#2C2420;}
 <!-- REVIEWS -->
 <section style="padding:80px 24px;background:#FAF7F2;">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#8B6914;text-align:center;text-transform:uppercase;margin-bottom:8px;">Avis clients</p>
+    <p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#8B6914;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'reviews.eyebrow')}</p>
     <h2 style="font-family:'Lora',serif;font-size:32px;font-weight:600;color:#2C2420;text-align:center;margin-bottom:48px;">Ils ont transformé leur intérieur</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="hs-reviews">
       ${[
@@ -227,7 +229,7 @@ ${renderRichSections(data, HOMESTYLE_THEME)}
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#F0EBE3;">
   <div style="max-width:700px;margin:0 auto;">
-    <h2 style="font-family:'Lora',serif;font-size:32px;font-weight:600;color:#2C2420;text-align:center;margin-bottom:48px;">Questions fréquentes</h2>
+    <h2 style="font-family:'Lora',serif;font-size:32px;font-weight:600;color:#2C2420;text-align:center;margin-bottom:48px;">${trans(lang, 'faqV3.title')}</h2>
     <div style="background:#FAF7F2;border-radius:12px;padding:8px 32px;">${faqHtml}</div>
   </div>
 </section>

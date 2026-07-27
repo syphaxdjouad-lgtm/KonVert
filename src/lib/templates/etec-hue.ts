@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const HUE_THEME: SectionTheme = {
 }
 
 export function templateEtecHue(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
@@ -50,7 +52,7 @@ export function templateEtecHue(data: LandingPageData): string {
 .hu-btn-alt{background:#FFF4EC;color:#FF6B35;border:none;border-radius:16px;padding:15px 40px;font-family:'Sora',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;}.hu-btn-alt:hover{background:#FFE8D9;}
 @media(max-width:768px){.hu-hero{flex-direction:column!important;}.hu-hero-img{width:100%!important;height:460px!important;}.hu-hero-info{width:100%!important;padding:32px 20px!important;}.hu-grid3{grid-template-columns:1fr!important;}.hu-compare{flex-direction:column!important;}.hu-reviews{grid-template-columns:1fr!important;}}</style></head><body>
 <div style="background:linear-gradient(90deg,#FF6B35,#FF8F5E,#FFB347);color:#fff;text-align:center;padding:11px 20px;font-size:12px;font-weight:600;">${data.urgency || 'Édition créative — Stock limité !'}</div>
-<nav style="background:#FFFEF9;border-bottom:1px solid #FFE0CC;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">Collection</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#1A1A1A;font-weight:600;">${data.product_name}</span></div></nav>
+<nav style="background:#FFFEF9;border-bottom:1px solid #FFE0CC;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.collection')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#1A1A1A;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#FFFEF9;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="hu-hero">
 <div style="width:55%;position:relative;background:#FFF4EC;overflow:hidden;border-radius:0 16px 16px 0;" class="hu-hero-img"><img id="mi-hu" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
       ${renderHeroThumbs(_real ?? imgs ?? [], HUE_THEME, 'mi-hu')}
@@ -77,13 +79,13 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#FF
 <h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#1A1A1A;text-align:center;margin-bottom:48px;">Galerie</h2>
 <div style="display:flex;gap:20px;" class="hu-compare"><div style="flex:1;position:relative;border-radius:16px;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Style 1"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">Style Audacieux</p></div></div><div style="flex:1;position:relative;border-radius:16px;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Style 2"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">Style Raffiné</p></div></div></div></div></section>
 <section style="padding:80px 24px;background:#FFF4EC;"><div style="max-width:1100px;margin:0 auto;">
-<h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#1A1A1A;text-align:center;margin-bottom:48px;">Avis clients</h2>
+<h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#1A1A1A;text-align:center;margin-bottom:48px;">${trans(lang, 'reviews.eyebrow')}</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="hu-reviews">${[
   { name:'Lucas V.', text:`Le ${data.product_name} est une pépite ! Les couleurs sont magnifiques et la qualité est au top.`, date:'3 jours' },
   { name:'Emma B.', text:'Original et bien fait. Ça change des produits classiques. Je suis fan du concept.', date:'1 semaine' },
   { name:'Maxime C.', text:'Commandé pour offrir, tout le monde a adoré. Packaging soigné et produit fidèle aux photos.', date:'2 semaines' },
 ].map(r => `<div style="background:#FFFEF9;border-radius:16px;padding:28px 24px;"><div style="color:#FF6B35;font-size:13px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div><p style="font-size:14px;color:#555;line-height:1.75;margin-bottom:20px;">"${r.text}"</p><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#FF6B35,#FFB347);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">${r.name[0]}</div><div><p style="font-size:13px;font-weight:600;color:#1A1A1A;">${r.name}</p><p style="font-size:11px;color:#AAA;">Il y a ${r.date}</p></div></div></div>`).join('')}</div></div></section>
-<section style="padding:80px 24px;background:#FFFEF9;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#1A1A1A;text-align:center;margin-bottom:48px;">FAQ</h2><div style="background:#FFF4EC;border-radius:16px;padding:8px 32px;">${faqHtml}</div></div></section>
+<section style="padding:80px 24px;background:#FFFEF9;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#1A1A1A;text-align:center;margin-bottom:48px;">${trans(lang, 'bespoke.faqShort')}</h2><div style="background:#FFF4EC;border-radius:16px;padding:8px 32px;">${faqHtml}</div></div></section>
 <section style="padding:100px 24px;background:linear-gradient(135deg,#FF6B35,#FF8F5E,#FFB347);"><div style="max-width:700px;margin:0 auto;text-align:center;">
 <h2 style="font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:700;color:#fff;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:36px;">${data.subtitle}</p>

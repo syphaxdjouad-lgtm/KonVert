@@ -464,6 +464,15 @@ function NewPageInner() {
     track.newPageWizardStarted()
   }, [])
 
+  // ── Auto-dismiss du bandeau d'avertissement (mismatch template / scrape partiel) ──
+  // Le bouton de fermeture manuel reste disponible, mais on ne veut pas que le
+  // message reste affiché indéfiniment et pollue l'écran une fois lu.
+  useEffect(() => {
+    if (!partialWarning) return
+    const timer = setTimeout(() => setPartialWarning(null), 8000)
+    return () => clearTimeout(timer)
+  }, [partialWarning])
+
   // ── Tracking avancement steps wizard ──
   // Noms des steps alignés avec l'UI pour lisibilité dans PostHog.
   const STEP_NAMES: Record<number, string> = {
@@ -929,7 +938,7 @@ function NewPageInner() {
           ? data.category
           : PRODUCT_TYPE_LABELS[detected as ProductType]
         setPartialWarning(
-          `Template incompatible : "${tplMeta.name}" est conçu pour ${tplLabel}, ton produit ressemble plutôt à ${detectedLabel}. Le rendu peut afficher du contenu hors-sujet — change de template (Blue, Solo, Starter, Hue, Ella sont universels).`
+          `Astuce : le template "${tplMeta.name}" est pensé pour ${tplLabel}. Ton produit ressemble plutôt à ${detectedLabel} — pour un rendu optimal, essaie un template universel (Blue, Solo, Starter, Hue, Ella). Tu peux aussi continuer avec "${tplMeta.name}", ça fonctionne.`
         )
       } else if (json.partial) {
         setPartialWarning(

@@ -1247,7 +1247,7 @@ function NewPageInner() {
             <Sparkles className="w-8 h-8 text-white animate-pulse" />
           </div>
           <h2 className="text-xl font-black mb-2" style={{ color: '#1a1a2e' }}>Génération en cours...</h2>
-          <p className="text-[13px] mb-8" style={{ color: '#8b8b9e' }}>L'IA crée ta page produit premium</p>
+          <p className="text-[13px] mb-8" style={{ color: '#8b8b9e' }}>L&apos;IA crée ta page produit premium</p>
           <div className="w-64 mx-auto space-y-3">
             {['Analyse du produit', 'Rédaction du copy', 'Application du design', 'Optimisation conversion'].map((item) => (
               <div key={item} className="flex items-center gap-3 text-[13px]" style={{ color: '#5c5c7a' }}>
@@ -1315,7 +1315,7 @@ function NewPageInner() {
         {step === 1 && (
           <div>
             <h1 className="text-2xl font-black mb-1" style={{ color: '#1a1a2e' }}>Source du produit</h1>
-            <p className="text-[14px] mb-6" style={{ color: '#8b8b9e' }}>D'où vient le produit que tu veux mettre en avant ?</p>
+            <p className="text-[14px] mb-6" style={{ color: '#8b8b9e' }}>D&apos;où vient le produit que tu veux mettre en avant ?</p>
 
             {/* Toggle */}
             <div className="flex gap-3 mb-6">
@@ -1448,7 +1448,7 @@ function NewPageInner() {
                     <Upload className="w-[18px] h-[18px]" style={{ color: '#7c3aed' }} />
                   </div>
                   <div className="text-left">
-                    <p className="text-[13px] font-bold mb-0.5" style={{ color: '#1a1a2e' }}>Ajouter d'autres photos</p>
+                    <p className="text-[13px] font-bold mb-0.5" style={{ color: '#1a1a2e' }}>Ajouter d&apos;autres photos</p>
                     <p className="text-[11.5px]" style={{ color: '#8b8b9e' }}>JPG, PNG, WEBP · max 5 photos</p>
                   </div>
                   <span className="ml-auto text-[11px] font-semibold flex-shrink-0" style={{ color: '#a78bfa' }}>
@@ -1505,7 +1505,7 @@ function NewPageInner() {
             {/* Tip vert success — toujours visible (fallback IA info fonctionnelle) */}
             <div className="flex items-start gap-2 p-3 rounded-xl mt-4" style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
               <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#16a34a' }} />
-              <p className="text-[12px]" style={{ color: '#15803d' }}>Sans photo, l'IA utilisera automatiquement les images scrappées depuis l'URL produit.</p>
+              <p className="text-[12px]" style={{ color: '#15803d' }}>Sans photo, l&apos;IA utilisera automatiquement les images scrappées depuis l&apos;URL produit.</p>
             </div>
 
             <button
@@ -1949,7 +1949,7 @@ function NewPageInner() {
             {/* ── Tip Transformation ── */}
             <div className="mt-4 p-3 rounded-xl flex items-start gap-2.5" style={{ background: '#faf9ff', border: '1px solid #ddd6fe' }}>
               <Lightbulb className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#7c3aed' }} />
-              <p className="text-[12px]" style={{ color: '#5b21b6' }}>Ces photos seront automatiquement intégrées dans une section "Transformation" sur ta page produit.</p>
+              <p className="text-[12px]" style={{ color: '#5b21b6' }}>Ces photos seront automatiquement intégrées dans une section &quot;Transformation&quot; sur ta page produit.</p>
             </div>
 
             <button
@@ -2529,7 +2529,7 @@ function NewPageInner() {
               <div className="flex items-start gap-3">
                 <Zap className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#7c3aed' }} />
                 <p className="text-[12px]" style={{ color: '#5b21b6' }}>
-                  Après génération, tu pourras publier en 1 clic directement depuis l'éditeur. Assure-toi d'avoir connecté ton store dans <strong>Mes stores</strong>.
+                  Après génération, tu pourras publier en 1 clic directement depuis l&apos;éditeur. Assure-toi d&apos;avoir connecté ton store dans <strong>Mes stores</strong>.
                 </p>
               </div>
             </div>
@@ -2540,7 +2540,7 @@ function NewPageInner() {
         {step === 7 && (
           <div>
             <h1 className="text-2xl font-black mb-1" style={{ color: '#1a1a2e' }}>Langue de la page</h1>
-            <p className="text-[14px] mb-6" style={{ color: '#8b8b9e' }}>Dans quelle langue veux-tu que l'IA génère le contenu de ta page ?</p>
+            <p className="text-[14px] mb-6" style={{ color: '#8b8b9e' }}>Dans quelle langue veux-tu que l&apos;IA génère le contenu de ta page ?</p>
 
             <div className="grid grid-cols-2 gap-3">
               {LANGUAGES.map(({ code, flag, label, desc }) => (
@@ -2605,9 +2605,9 @@ function NewPageInner() {
               }}
             >
               <Sparkles className="w-4 h-4" />
-              Générer ma page avec l'IA
+              Générer ma page avec l&apos;IA
             </button>
-            <p className="text-center text-[12px] mt-2" style={{ color: '#8b8b9e' }}>L'IA travaille — patiente 30 à 60 secondes</p>
+            <p className="text-center text-[12px] mt-2" style={{ color: '#8b8b9e' }}>L&apos;IA travaille — patiente 30 à 60 secondes</p>
           </div>
         )}
 

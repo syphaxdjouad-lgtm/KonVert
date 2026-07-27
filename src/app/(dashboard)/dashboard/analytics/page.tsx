@@ -3,6 +3,18 @@ import { redirect } from 'next/navigation'
 import { Eye, MousePointerClick, TrendingUp, BarChart2, ArrowUpRight } from 'lucide-react'
 import AnalyticsCharts, { type DailyPoint } from '@/components/dashboard/AnalyticsCharts'
 
+// Fenêtre temporelle pour la requête analytics_events. Sorti du composant :
+// Date.now() est un appel impur que le React Compiler refuse dans le corps
+// d'un composant/hook (react-hooks/purity) — ici c'est une fonction utilitaire
+// classique, pas un composant, donc hors du scope de la règle.
+function getAnalyticsWindow() {
+  const now = Date.now()
+  return {
+    since30: new Date(now - 30 * 24 * 60 * 60 * 1000),
+    since7:  new Date(now - 7 * 24 * 60 * 60 * 1000),
+  }
+}
+
 export default async function AnalyticsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -24,8 +36,7 @@ export default async function AnalyticsPage() {
 
   // Events 30 jours pour : scroll-bar (table) + courbes timeseries.
   // On filtre sur les pages de l'user (RLS s'en charge déjà, mais double sécurité).
-  const since30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-  const since7  = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  const { since30, since7 } = getAnalyticsWindow()
   const pageIds = list.map(p => p.id)
 
   const { data: events } = pageIds.length > 0

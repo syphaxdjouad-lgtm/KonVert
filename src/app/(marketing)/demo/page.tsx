@@ -141,7 +141,7 @@ export default function DemoPage() {
             <span style={{ color: '#5B47F5' }}>Obtenez une page en 30s.</span>
           </h1>
           <p className="text-base leading-relaxed mb-2 text-slate-600">
-            Pas de compte requis. Testez avec n'importe quelle URL AliExpress, Amazon ou Alibaba.
+            Pas de compte requis. Testez avec n&apos;importe quelle URL AliExpress, Amazon ou Alibaba.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 mt-5">
@@ -299,7 +299,7 @@ export default function DemoPage() {
               </div>
               <div className="flex items-center gap-3">
                 <button onClick={handleCopyUrl} className="flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs font-semibold text-gray-600 hover:border-[#5B47F5] hover:text-[#5B47F5] transition-all">
-                  {copiedUrl ? <><Check className="w-3.5 h-3.5 text-emerald-500" />Copié !</> : <><Copy className="w-3.5 h-3.5" />Copier l'URL</>}
+                  {copiedUrl ? <><Check className="w-3.5 h-3.5 text-emerald-500" />Copié !</> : <><Copy className="w-3.5 h-3.5" />Copier l&apos;URL</>}
                 </button>
                 <button onClick={handleReset} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-white transition-all"
                         style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)' }}>
@@ -336,7 +336,7 @@ export default function DemoPage() {
                   <div className="max-w-2xl">
                     <span className="inline-block text-xs font-bold px-3 py-1 rounded-full mb-4"
                           style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}>
-                      OFFRE LIMITÉE — -40% aujourd'hui
+                      OFFRE LIMITÉE — -40% aujourd&apos;hui
                     </span>
                     <h1 className={`text-2xl sm:text-3xl font-black mb-4 leading-tight ${selectedTemplate.text}`}>
                       {result.title}
@@ -349,7 +349,7 @@ export default function DemoPage() {
                     </div>
                     <button className="px-8 py-4 rounded-full font-black text-sm shadow-lg transition-all hover:scale-[1.02]"
                             style={{ background: '#fff', color: '#5B47F5' }}>
-                      🛒 J'en profite maintenant →
+                      🛒 J&apos;en profite maintenant →
                     </button>
                   </div>
                 </div>
@@ -358,7 +358,7 @@ export default function DemoPage() {
                 <div className="p-8 border-b border-gray-100">
                   <h2 className="text-lg font-black text-gray-900 mb-3">Description</h2>
                   <p className="text-gray-600 text-sm leading-relaxed mb-6">{result.desc}</p>
-                  <h2 className="text-lg font-black text-gray-900 mb-3">Pourquoi vous allez l'adorer</h2>
+                  <h2 className="text-lg font-black text-gray-900 mb-3">Pourquoi vous allez l&apos;adorer</h2>
                   <ul className="space-y-2.5">
                     {result.benefits.map((b) => (
                       <li key={b} className="flex items-center gap-2.5 text-sm text-gray-700">
@@ -371,7 +371,7 @@ export default function DemoPage() {
 
                 {/* Avis clients */}
                 <div className="p-8 border-b border-gray-100" style={{ background: '#fafafa' }}>
-                  <h2 className="text-lg font-black text-gray-900 mb-5">Ce qu'ils en pensent</h2>
+                  <h2 className="text-lg font-black text-gray-900 mb-5">Ce qu&apos;ils en pensent</h2>
                   <div className="grid sm:grid-cols-2 gap-4">
                     {[
                       { name: 'Sophie M.', note: '⭐⭐⭐⭐⭐', text: 'Produit parfait, livraison rapide. Je recommande les yeux fermés !' },

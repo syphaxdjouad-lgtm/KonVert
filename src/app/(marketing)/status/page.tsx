@@ -25,8 +25,8 @@ export default function StatusPage() {
             <span className="font-bold text-emerald-700">Tous les systèmes opérationnels</span>
           </div>
           <h1 className="text-4xl font-black text-gray-900 mb-4">Status Konvert</h1>
-          <p className="text-gray-500">Surveillance en temps réel de l'infrastructure Konvert.</p>
-          <p className="text-sm text-gray-400 mt-2">Dernière vérification : à l'instant · Hébergé à Paris 🇫🇷</p>
+          <p className="text-gray-500">Surveillance en temps réel de l&apos;infrastructure Konvert.</p>
+          <p className="text-sm text-gray-400 mt-2">Dernière vérification : à l&apos;instant · Hébergé à Paris 🇫🇷</p>
         </div>
       </section>
 

@@ -1,12 +1,23 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Plus, Users, FileText, Store, ExternalLink, Palette, Mail, Zap, ChevronDown, ChevronUp, Lock } from 'lucide-react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
+type Workspace = {
+  id: string
+  name: string
+  client_name?: string | null
+  brand_name?: string | null
+  brand_color?: string | null
+  pages?: { count: number }[]
+  stores?: { count: number }[]
+  members?: { count: number }[]
+}
+
 export default function AgencyPage() {
-  const [workspaces, setWorkspaces] = useState<any[]>([])
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([])
   const [loading, setLoading]       = useState(true)
   const [plan, setPlan]             = useState<string>('starter')
   const [showForm, setShowForm]     = useState(false)
@@ -15,6 +26,18 @@ export default function AgencyPage() {
   const [form, setForm] = useState({
     name: '', client_name: '', client_email: '', brand_name: '', brand_color: '#7c3aed',
   })
+
+  // useCallback + déclaration avant le useEffect : le React Compiler ne peut
+  // pas garantir la stabilité d'une function declaration référencée avant sa
+  // définition textuelle (accessed-before-declared), même si elle est hoisted
+  // par le moteur JS. loadWorkspaces() est aussi rappelée après création.
+  const loadWorkspaces = useCallback(async () => {
+    const res  = await fetch('/api/workspaces')
+    const json = await res.json()
+    if (json.error === 'Non authentifié') { window.location.href = '/login'; return }
+    setWorkspaces(json.data || [])
+    setLoading(false)
+  }, [])
 
   useEffect(() => {
     loadWorkspaces()
@@ -25,15 +48,7 @@ export default function AgencyPage() {
         if (data?.plan) setPlan(data.plan)
       })
     })
-  }, [])
-
-  async function loadWorkspaces() {
-    const res  = await fetch('/api/workspaces')
-    const json = await res.json()
-    if (json.error === 'Non authentifié') { window.location.href = '/login'; return }
-    setWorkspaces(json.data || [])
-    setLoading(false)
-  }
+  }, [loadWorkspaces])
 
   async function createWorkspace(e: React.FormEvent) {
     e.preventDefault()
@@ -178,7 +193,7 @@ export default function AgencyPage() {
   )
 }
 
-function WorkspaceCard({ workspace: ws }: { workspace: any }) {
+function WorkspaceCard({ workspace: ws }: { workspace: Workspace }) {
   const [showInvite, setShowInvite] = useState(false)
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviteRole, setInviteRole]   = useState('viewer')

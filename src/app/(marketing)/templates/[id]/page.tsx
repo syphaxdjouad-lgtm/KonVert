@@ -496,7 +496,7 @@ export default function TemplateDetailPage() {
                 </button>
 
                 <p className="text-[11px] text-center mt-3" style={{ color: '#94a3b8' }}>
-                  Personnalisé en 30 secondes avec l'IA
+                  Personnalisé en 30 secondes avec l&apos;IA
                 </p>
               </div>
             </div>

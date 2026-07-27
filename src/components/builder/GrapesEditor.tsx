@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import type { Editor as GrapesEditorInstance } from 'grapesjs'
 import 'grapesjs/dist/css/grapes.min.css'
 import Leadmeter from '@/components/dashboard/Leadmeter'
 
@@ -13,7 +14,7 @@ type Device = 'desktop' | 'tablet' | 'mobile'
 
 export default function GrapesEditor({ html, onSave }: Props) {
   const editorRef    = useRef<HTMLDivElement>(null)
-  const gjsRef       = useRef<any>(null)
+  const gjsRef       = useRef<GrapesEditorInstance | null>(null)
   const debounceRef  = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const [device,      setDevice]      = useState<Device>('desktop')
@@ -25,7 +26,7 @@ export default function GrapesEditor({ html, onSave }: Props) {
   useEffect(() => {
     if (!editorRef.current || gjsRef.current) return
 
-    let editor: any
+    let editor: GrapesEditorInstance
 
     const init = async () => {
       const gjs = await import('grapesjs')
@@ -42,7 +43,7 @@ export default function GrapesEditor({ html, onSave }: Props) {
         height: '100%',
         width: 'auto',
         storageManager: false,
-        undoManager: {} as any,
+        undoManager: {},
         // Pas de plugins : on veut un canvas pur, sans panels parasites.
         // Notre toolbar custom (device switcher + Export + Save) gère tout.
         plugins: [],
@@ -56,11 +57,11 @@ export default function GrapesEditor({ html, onSave }: Props) {
         },
         // On désactive tous les panels par défaut de GrapesJS (gauche/droite/top)
         panels: { defaults: [] },
-        blockManager: { appendTo: '#__gjs_unused', blocks: [] } as any,
-        layerManager: { appendTo: '#__gjs_unused' } as any,
-        selectorManager: { appendTo: '#__gjs_unused' } as any,
-        traitManager: { appendTo: '#__gjs_unused' } as any,
-        styleManager: { appendTo: '#__gjs_unused', sectors: [] } as any,
+        blockManager: { appendTo: '#__gjs_unused', blocks: [] },
+        layerManager: { appendTo: '#__gjs_unused' },
+        selectorManager: { appendTo: '#__gjs_unused' },
+        traitManager: { appendTo: '#__gjs_unused' },
+        styleManager: { appendTo: '#__gjs_unused', sectors: [] },
       })
 
       gjsRef.current = editor

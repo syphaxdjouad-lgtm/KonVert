@@ -2,6 +2,39 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { jsPDF } from 'jspdf'
 
+// Champs effectivement consommés par le rapport (HTML + PDF) — le workspace
+// vient d'un `select('*')` donc son type réel est plus large, mais on ne
+// type ici que ce qui est lu pour éviter un `any` sur toute la chaîne.
+type ReportWorkspace = {
+  name: string
+  brand_color?: string | null
+  brand_name?: string | null
+  client_name?: string | null
+}
+
+type ReportPage = {
+  title: string | null
+  status: string
+  views: number | null
+  cta_clicks: number | null
+  created_at: string
+  published_url: string | null
+}
+
+type ReportStats = {
+  total: number
+  published: number
+  totalViews: number
+  totalClicks: number
+}
+
+type ReportData = {
+  workspace: ReportWorkspace
+  pages: ReportPage[]
+  stats: ReportStats
+  generatedAt: string
+}
+
 // GET /api/workspaces/[id]/report — génère les données du rapport PDF
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id: workspaceId } = await params
@@ -79,11 +112,11 @@ function safeCssColor(value: unknown, fallback: string): string {
   return fallback
 }
 
-function buildReportHtml({ workspace, pages, stats, generatedAt }: any): string {
+function buildReportHtml({ workspace, pages, stats, generatedAt }: ReportData): string {
   const brandColor = safeCssColor(workspace.brand_color, '#7c3aed')
   const brandName  = esc(workspace.brand_name) || 'KONVERT'
 
-  const pagesRows = pages.map((p: any) => `
+  const pagesRows = pages.map((p) => `
     <tr>
       <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;color:#111;max-width:250px">
         <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.title) || 'Sans titre'}</div>
@@ -186,7 +219,7 @@ function hexToRgb(hex: string): [number, number, number] {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
 }
 
-function buildReportPdf({ workspace, pages, stats, generatedAt }: any): ArrayBuffer {
+function buildReportPdf({ workspace, pages, stats, generatedAt }: ReportData): ArrayBuffer {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
   const brandHex = safeCssColor(workspace.brand_color, '#7c3aed')
   const brand = hexToRgb(brandHex)
@@ -265,7 +298,7 @@ function buildReportPdf({ workspace, pages, stats, generatedAt }: any): ArrayBuf
   // Data rows
   doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
-  pages.forEach((p: any) => {
+  pages.forEach((p) => {
     if (y > 270) {
       doc.addPage()
       y = 20

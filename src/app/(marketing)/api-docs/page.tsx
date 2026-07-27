@@ -75,7 +75,7 @@ export default function ApiDocsPage() {
             </Link>
             <Link href="/contact?subject=API"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold border border-gray-200 text-gray-700 hover:border-[#5B47F5]/40 transition-colors">
-              Contacter l'équipe
+              Contacter l&apos;équipe
             </Link>
           </div>
         </div>

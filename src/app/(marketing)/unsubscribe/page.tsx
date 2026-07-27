@@ -54,14 +54,14 @@ function UnsubscribeContent() {
               </div>
               <h2 className="text-xl font-black mb-2" style={{ color: '#111' }}>Désinscription confirmée</h2>
               <p className="text-sm mb-6" style={{ color: '#6b7280' }}>
-                Tu ne recevras plus d'emails de KonVert à cette adresse.
+                Tu ne recevras plus d&apos;emails de KonVert à cette adresse.
               </p>
               <Link
                 href="/"
                 className="inline-flex items-center gap-2 text-sm font-bold py-2.5 px-5 rounded-xl text-white transition-all hover:opacity-90"
                 style={{ background: 'linear-gradient(135deg, #7c3aed, #6d28d9)' }}
               >
-                Retour à l'accueil
+                Retour à l&apos;accueil
               </Link>
             </div>
           ) : (

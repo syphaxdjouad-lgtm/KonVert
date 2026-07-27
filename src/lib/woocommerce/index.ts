@@ -1,8 +1,20 @@
-import crypto from 'crypto'
 import { encryptToken, decryptToken } from '@/lib/shopify'
 
 // ─── WooCommerce REST API client ──────────────────────────────────────────────
 // Authentification via Consumer Key + Consumer Secret (Basic Auth)
+
+type WooSystemStatus = {
+  settings?: { title?: string }
+  environment?: { version?: string }
+}
+
+function isAbortError(err: unknown): boolean {
+  return err instanceof Error && err.name === 'AbortError'
+}
+
+function errorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : String(err)
+}
 
 export class WooCommerceClient {
   private baseUrl: string
@@ -40,10 +52,11 @@ export class WooCommerceClient {
       }
 
       return res.json() as Promise<T>
-    } catch (err: any) {
-      if (err.name === 'AbortError') throw new Error('Timeout WooCommerce — store trop lent ou URL incorrecte')
+    } catch (err: unknown) {
+      if (isAbortError(err)) throw new Error('Timeout WooCommerce — store trop lent ou URL incorrecte')
       // Erreurs SSL auto-signées fréquentes sur les sites de dev
-      if (err.message?.includes('CERT') || err.message?.includes('SSL')) {
+      const message = errorMessage(err)
+      if (message.includes('CERT') || message.includes('SSL')) {
         throw new Error('Erreur SSL — si c\'est un site de dev, configure un certificat valide')
       }
       throw err
@@ -54,7 +67,7 @@ export class WooCommerceClient {
 
   // Vérifier la connexion
   async ping(): Promise<{ name: string; url: string; version: string }> {
-    const data = await this.request<any>('/system_status')
+    const data = await this.request<WooSystemStatus>('/system_status')
     return {
       name:    data.settings?.title || this.baseUrl,
       url:     this.baseUrl,
@@ -89,10 +102,10 @@ export class WooCommerceClient {
         throw new Error(`WP Pages API ${res.status}: ${body.slice(0, 200)}`)
       }
 
-      const page = await res.json()
+      const page = await res.json() as { id: number; link: string }
       return { id: page.id, url: page.link }
-    } catch (err: any) {
-      if (err.name === 'AbortError') throw new Error('Timeout création page WordPress')
+    } catch (err: unknown) {
+      if (isAbortError(err)) throw new Error('Timeout création page WordPress')
       throw err
     } finally {
       clearTimeout(timeout)

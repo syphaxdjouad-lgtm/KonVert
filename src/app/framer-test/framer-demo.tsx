@@ -831,7 +831,7 @@ export default function KonvertFramerDemo() {
         }}
       >
         <span style={{ fontSize: 16 }}>↺</span>
-        Rejouer l'animation
+        Rejouer l&apos;animation
       </motion.button>
     </div>
   );

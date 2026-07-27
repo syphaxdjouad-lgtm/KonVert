@@ -63,7 +63,7 @@ export function stripDiscouragedSections(data: LandingPageData, policy: SectionP
   }
 }
 
-// ─── Sanitization ─────────────────────────────────────────────────────────
+// ─── Sanitization ───────────────────────────────────────────────────────────
 
 // Escape les caractères HTML dangereux. Les templates injectent les champs
 // via `${...}` sans escape ; sans cette sanitization, un produit scrapé
@@ -186,7 +186,7 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     }))
   }
 
-  // ─── Sections enrichies DTC 2026 (chantier A) ──────────────────────────
+  // ─── Sections enrichies DTC 2026 (chantier A) ──────────────────────────────
 
   if (Array.isArray(d.hero_badges)) {
     out.hero_badges = d.hero_badges.map(escapeHtml).filter(Boolean)
@@ -302,7 +302,7 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     out.final_pitch = escapeHtml(d.final_pitch)
   }
 
-  // ─── Champs CRO enrichis v2 ─────────────────────────────────
+  // ─── Champs CRO enrichis v2 ─────────────────────────────────────────────
 
   // photo_descriptions
   if (Array.isArray(d.photo_descriptions)) {
@@ -406,7 +406,7 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
   return out
 }
 
-// ─── Whitelist press_logos / press_mentions ───────────────────────────────
+// ─── Whitelist press_logos / press_mentions ──────────────────────────────────
 //
 // Liste canonique de publications presse autorisées. Toute publication hors de
 // cette liste est strippée par le sanitizer, indépendamment de ce que le LLM
@@ -513,10 +513,10 @@ IMPORTANT : Tu génères TOUT le contenu textuel en ${langName}. Chaque mot du J
 
 Tu réponds UNIQUEMENT avec un JSON valide, sans markdown, sans explication, sans texte avant ou après.
 
-═══════════════════════════════════════
+═══════════════════════════════════════════════
 FEW-SHOT EXAMPLES — calibration ton DTC-grade
 (extraits, pas à copier — juste le registre visé)
-═══════════════════════════════════════
+═══════════════════════════════════════════════
 
 NICHE BEAUTÉ (sérum visage) — HEADLINES À ÉVITER vs PRIVILÉGIER :
 ÉVITER : "Découvrez notre sérum révolutionnaire aux actifs naturels"
@@ -540,7 +540,7 @@ INCORRECT : ["Vogue", "Marie Claire"] — ne couvrent pas les accessoires smartp
 NICHE INCONNUE (boutique Shopify < 5000 avis OU AliExpress) :
 press_logos = [] OBLIGATOIRE. Aucune publication ne couvre les marques no-name.
 press_mentions = [] OBLIGATOIRE pour la même raison.
-═══════════════════════════════════════
+═══════════════════════════════════════════════
 
 Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
 {
@@ -749,7 +749,7 @@ CRITIQUE : Remplis TOUS les champs du schema JSON, même si tu dois inventer du 
 Renvoie UNIQUEMENT le JSON, rien d'autre.`
 }
 
-// ─── Appel API ────────────────────────────────────────────────────
+// ─── Appel API ──────────────────────────────────────────────────────────────
 
 interface DeepSeekResponse {
   choices: { message: { content: string } }[]
@@ -762,7 +762,7 @@ interface DeepSeekResponse {
   }
 }
 
-// ─── Versioning prompt ─────────────────────────────────────────────────
+// ─── Versioning prompt ──────────────────────────────────────────────────────
 // KONVERT_PROMPT_VERSION=v1 → ancien schema sans champs CRO enrichis.
 // Non défini ou =v2 → schema v2 (défaut).
 export const PROMPT_VERSION = 'v2.2-brand-based-reviews-gate-2026-06-14'
@@ -885,12 +885,12 @@ export async function generateLandingPage(
     data.images = product.images
   }
 
-  // ─── Gate v2.2 : reviews_count < 5000 → press_logos/mentions = [] ─────────
+  // ─── Gate v2.2 : reviews_count < 5000 → press_logos/mentions = [] ───────
   // Défense en profondeur côté code : même si DeepSeek ignore la règle 28
   // brand-based ("DTC > 5000 avis"), on stripe systématiquement les
   // publications presse pour les boutiques no-name / dropshipping AliExpress.
   // Whitelist seule (sanitizeLandingPageData) laisse passer Vogue/Marie Claire
-  // sans connaître la notorieté de la marque — ce gate la connaît.
+  // sans connaître la notoriété de la marque — ce gate la connaît.
   // Threshold 5000 aligné sur la règle prompt v2.1 (cf. PROMPT_VERSION).
   const SMALL_BRAND_THRESHOLD = 5000
   if (

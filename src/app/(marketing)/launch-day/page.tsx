@@ -19,8 +19,11 @@ function useCountdown(target: Date) {
   // La page est full client ('use client') donc pas de mismatch React #418.
   const [now, setNow] = useState<number | null>(null)
   useEffect(() => {
-    setNow(Date.now())
-    const id = setInterval(() => setNow(Date.now()), 1000)
+    function tick() {
+      setNow(Date.now())
+    }
+    tick()
+    const id = setInterval(tick, 1000)
     return () => clearInterval(id)
   }, [target])
   const diff = now === null ? 1 : Math.max(0, target.getTime() - now)

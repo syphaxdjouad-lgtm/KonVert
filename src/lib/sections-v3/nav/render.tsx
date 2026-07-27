@@ -18,6 +18,8 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { escapeHtml } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 const NAV_MAX_CHARS_DESKTOP = 30
 const NAV_MAX_CHARS_MOBILE  = 20
@@ -47,6 +49,7 @@ function resolveBrandLabelMobile(data: V3PageData): string {
 }
 
 export function renderNav(data: V3PageData, tokens: StyleTokens): string {
+  const lang = resolveLanguage(data.language)
   const brandDesktop = escapeHtml(resolveBrandLabel(data))
   const brandMobile  = escapeHtml(resolveBrandLabelMobile(data))
 
@@ -68,11 +71,11 @@ export function renderNav(data: V3PageData, tokens: StyleTokens): string {
   white-space:nowrap;
   border:0;
 " onfocus="this.style.cssText='position:fixed;top:8px;left:8px;width:auto;height:auto;overflow:visible;clip:auto;white-space:nowrap;background:${escapeHtml(tokens.colors.accent)};color:${escapeHtml(surfaceColor)};padding:8px 16px;border-radius:6px;font-family:${escapeHtml(tokens.fonts.body)};font-size:14px;font-weight:600;z-index:200;text-decoration:none;'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;'">
-  Aller au contenu
+  ${escapeHtml(t(lang, 'nav.skipToContent'))}
 </a>
 
 <style>
-/* ── NAV HEADER STICKY ─────────────────────────────────────────────────── */
+/* ── NAV HEADER STICKY ─────────────────────────────────────────────── */
 #kvt-nav {
   position: sticky;
   top: 0;
@@ -154,7 +157,7 @@ export function renderNav(data: V3PageData, tokens: StyleTokens): string {
   outline-offset: 3px;
 }
 
-/* ── Mobile ≤ 767px ─────────────────────────────────────────── */
+/* ── Mobile ≤ 767px ──────────────────────────────────── */
 @media (max-width: 767px) {
   .kvt-nav-inner {
     height: 52px;
@@ -181,7 +184,7 @@ export function renderNav(data: V3PageData, tokens: StyleTokens): string {
 }
 </style>
 
-<nav id="kvt-nav" role="navigation" aria-label="Navigation principale">
+<nav id="kvt-nav" role="navigation" aria-label="${escapeHtml(t(lang, 'nav.ariaLabel'))}">
   <div class="kvt-nav-inner">
     <!-- Marque / produit -->
     <span class="kvt-nav-brand" aria-label="${brandDesktop}">
@@ -193,14 +196,14 @@ export function renderNav(data: V3PageData, tokens: StyleTokens): string {
     <button
       class="kvt-nav-cta"
       type="button"
-      aria-label="Voir l&#39;offre — aller au bouton principal"
+      aria-label="${escapeHtml(t(lang, 'nav.viewOfferAria'))}"
       onclick="(function(){
         var el=document.getElementById('main-cta');
         if(el){el.scrollIntoView({behavior:'smooth',block:'center'});}
       }())"
     >
-      <span class="kvt-nav-cta-label-desktop">Voir l&#39;offre</span>
-      <span class="kvt-nav-cta-label-mobile" aria-hidden="true">Voir &#x2192;</span>
+      <span class="kvt-nav-cta-label-desktop">${escapeHtml(t(lang, 'cta.viewOffer'))}</span>
+      <span class="kvt-nav-cta-label-mobile" aria-hidden="true">${escapeHtml(t(lang, 'nav.viewShort'))} &#x2192;</span>
     </button>
   </div>
 </nav>

@@ -27,7 +27,7 @@ describe('renderNav', () => {
     const html = renderNav(baseData, softTokens)
     expect(html).toContain('Maison Léonie')
     // Le bouton CTA doit être présent
-    expect(html).toContain('Voir l&#39;offre')
+    expect(html).toContain("Voir l'offre")
   })
 
   /**

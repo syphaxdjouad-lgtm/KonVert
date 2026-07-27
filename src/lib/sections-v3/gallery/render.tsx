@@ -1,12 +1,15 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { escapeHtml, escapeAttr } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 export function renderGallery(data: V3PageData, tokens: StyleTokens): string {
   if (data.images.length === 0) {
     return `<section class="v3-gallery" style="background:${tokens.colors.bg};padding:${tokens.spacing.section} 0;"></section>`
   }
 
+  const lang = resolveLanguage(data.language)
   const totalCount = data.images.length
   const short = tokens.motion.durationShort ?? '120ms'
 
@@ -23,7 +26,7 @@ export function renderGallery(data: V3PageData, tokens: StyleTokens): string {
     ">
       <img
         src="${escapeAttr(src)}"
-        alt="${escapeHtml(data.product.title)} - vue ${i + 1}"
+        alt="${escapeHtml(data.product.title)} - ${escapeHtml(t(lang, 'image.viewAlt', { n: i + 1 }))}"
         style="width:100%;height:auto;display:block"
         loading="lazy"
       >
@@ -97,7 +100,7 @@ export function renderGallery(data: V3PageData, tokens: StyleTokens): string {
       font-size:clamp(28px,3vw,40px);
       font-weight:400;
       margin:0;
-    ">Tous les angles</h2>
+    ">${escapeHtml(t(lang, 'galleryV3.title'))}</h2>
   </div>
   <div class="v3-gallery__track" style="
     display:flex;

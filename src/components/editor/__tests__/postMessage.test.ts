@@ -35,6 +35,20 @@ describe('postMessage store integration', () => {
     expect(state.panelOpen).toBe(true)
   })
 
+  it('KVT_SECTION_SELECTED (clic canvas) : ouvre aussi PanelRight via openSubPanelEdit', () => {
+    // Chantier éditeur point 2a — le handler onMessage de PreviewIframe appelle
+    // désormais openSubPanelEdit (pas seulement setSelectedSection) pour que
+    // l'éditeur de section (PanelRight) s'ouvre au clic dans le canvas, comme
+    // au clic dans la liste.
+    const { openSubPanelEdit } = useEditorStore.getState()
+    openSubPanelEdit('section-abc')
+
+    const state = useEditorStore.getState()
+    expect(state.selectedSectionId).toBe('section-abc')
+    expect(state.subPanelEditOpen).toBe(true)
+    expect(state.editingSectionId).toBe('section-abc')
+  })
+
   it('KVT_SECTION_DESELECTED : setSelectedSection(null)', () => {
     useEditorStore.setState({ selectedSectionId: 'section-abc', panelOpen: true })
     useEditorStore.getState().setSelectedSection(null)

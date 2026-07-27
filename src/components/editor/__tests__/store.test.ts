@@ -165,6 +165,11 @@ describe('useEditorStore', () => {
       expect(useEditorStore.getState().subPanelEditOpen).toBe(true)
       expect(useEditorStore.getState().editingSectionId).toBe('id2')
     })
+    it('openSubPanelEdit met aussi a jour selectedSectionId (Shopify-like : editer = selectionner)', () => {
+      useEditorStore.setState({ selectedSectionId: null })
+      useEditorStore.getState().openSubPanelEdit('id3')
+      expect(useEditorStore.getState().selectedSectionId).toBe('id3')
+    })
     it('setEditForm met a jour les champs du formulaire', () => {
       useEditorStore.getState().setEditForm({ title: 'Mon titre' })
       expect(useEditorStore.getState().editForm.title).toBe('Mon titre')

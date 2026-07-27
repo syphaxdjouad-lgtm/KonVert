@@ -115,7 +115,11 @@ function SectionRow({ section, isOverlay = false }: SectionRowProps) {
   function handleRowClick(e: React.MouseEvent) {
     // Ignore clicks on action buttons
     if ((e.target as HTMLElement).closest('button')) return
-    setSelectedSection(section.id)
+    // openSubPanelEdit sélectionne ET ouvre l'éditeur — le clic sur la ligne
+    // (pas seulement sur le libellé) doit aussi scroller/surligner la section
+    // dans l'iframe (déclenché par le changement de selectedSectionId, cf
+    // PreviewIframe) et ouvrir PanelRight, façon Shopify.
+    openSubPanelEdit(section.id)
     setPanelOpen(true)
   }
 

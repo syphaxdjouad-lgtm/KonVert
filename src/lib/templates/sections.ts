@@ -1073,6 +1073,7 @@ const KVT_CLICK_TO_EDIT_SCRIPT = `<script>
         target.style.outline = '2px solid #A8B5A0';
         target.style.outlineOffset = '-2px';
         target.style.backgroundColor = 'rgba(168,181,160,0.06)';
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
   });

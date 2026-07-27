@@ -66,6 +66,33 @@ describe('SectionsList', () => {
     expect(useEditorStore.getState().panelOpen).toBe(true)
   })
 
+  // Chantier éditeur point 2b — clic sur la ligne (pas seulement le libellé)
+  // sélectionne + ouvre PanelRight. Le scroll/highlight réel dans l'iframe
+  // n'est pas testable en headless (cf PR) : on vérifie ici que le store
+  // reçoit bien le déclencheur (selectedSectionId + subPanelEditOpen) que
+  // PreviewIframe écoute pour poster KVT_HIGHLIGHT_SECTION.
+  it('clic sur la ligne (hors bouton) selectionne et ouvre PanelRight', () => {
+    render(React.createElement(SectionsList))
+    // handleRowClick est attache sur le div ".section-row-inner", pas sur le
+    // wrapper data-testid="section-row-*" (celui-ci sert au drag & drop) —
+    // on cible via le libelle de la section id2 ("Histoire") pour trouver sa ligne.
+    const label = screen.getByRole('button', { name: /Selectionner Histoire/i })
+    const rowInner = label.closest('.section-row-inner') as HTMLElement
+    expect(rowInner).toBeTruthy()
+    fireEvent.click(rowInner)
+    const state = useEditorStore.getState()
+    expect(state.selectedSectionId).toBe('id2')
+    expect(state.subPanelEditOpen).toBe(true)
+    expect(state.editingSectionId).toBe('id2')
+  })
+
+  it('clic sur le bouton eye ne declenche pas la selection de section', () => {
+    render(React.createElement(SectionsList))
+    const toggles = screen.getAllByRole('button', { name: /masquer|afficher/i })
+    fireEvent.click(toggles[1])
+    expect(useEditorStore.getState().selectedSectionId).toBeNull()
+  })
+
   it('bouton kebab est present pour chaque section', () => {
     render(React.createElement(SectionsList))
     const kebabs = screen.getAllByRole('button', { name: /plus d.actions/i })

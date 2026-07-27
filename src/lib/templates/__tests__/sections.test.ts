@@ -190,6 +190,16 @@ describe('renderRichSections — editMode (click-to-edit)', () => {
     const html = renderRichSections(data)
     expect(html).toContain('data-kvt-section-id')
   })
+
+  // Chantier éditeur point 2b — clic dans la liste (SectionsList) doit
+  // scroller jusqu'à la section dans l'iframe. Le scroll réel n'est
+  // vérifiable qu'en navigateur (cf PR) : on vérifie ici le contrat du
+  // script injecté (appelé dans le handler KVT_HIGHLIGHT_SECTION).
+  it('editMode=true : le handler KVT_HIGHLIGHT_SECTION appelle scrollIntoView', () => {
+    const html = renderRichSections(mockLandingDataFull, undefined, undefined, true)
+    expect(html).toContain('scrollIntoView')
+    expect(html).toContain("behavior: 'smooth'")
+  })
 })
 
 describe('Backward compatibility aliases (V1 names)', () => {

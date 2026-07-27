@@ -177,7 +177,11 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   })),
   setSubPanelEditOpen: (open) => set({ subPanelEditOpen: open }),
   setEditForm: (form) => set(state => ({ editForm: { ...state.editForm, ...form } })),
-  openSubPanelEdit: (sectionId) => set({ subPanelEditOpen: true, editingSectionId: sectionId }),
+  // selectedSectionId est mis à jour ici aussi (pas seulement via
+  // setSelectedSection) : ouvrir l'éditeur d'une section implique qu'elle est
+  // "sélectionnée" — évite d'avoir à appeler les 2 actions à chaque call site
+  // (canvas iframe click, liste, kebab "Modifier"...).
+  openSubPanelEdit: (sectionId) => set({ selectedSectionId: sectionId, subPanelEditOpen: true, editingSectionId: sectionId }),
 
   // ─── C2 ────────────────────────────────────────────────────────────────────
   updateSectionField: (sectionId, fieldPath, value) => set(state => ({

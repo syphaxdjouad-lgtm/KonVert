@@ -45,7 +45,7 @@ export default function DocsPage() {
             <BookOpen className="w-3.5 h-3.5" />
             Documentation
           </div>
-          <h1 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">Centre d'aide Konvert</h1>
+          <h1 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">Centre d&apos;aide Konvert</h1>
           <p className="text-lg text-gray-500 mb-8">Tout ce dont vous avez besoin pour maîtriser Konvert.</p>
           <Link href="/contact"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
@@ -83,7 +83,7 @@ export default function DocsPage() {
         <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">
           <div className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 mb-4">Bientôt disponible</div>
           <h2 className="text-2xl font-black text-gray-900 mb-3">Documentation technique complète</h2>
-          <p className="text-gray-500 mb-6">Références API, webhooks, guides d'intégration avancée — en cours de rédaction.</p>
+          <p className="text-gray-500 mb-6">Références API, webhooks, guides d&apos;intégration avancée — en cours de rédaction.</p>
           <Link href="/contact?subject=Documentation"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-[#5B47F5] text-[#5B47F5] hover:bg-[#5B47F5]/5 transition-colors">
             Être notifié à la sortie

@@ -515,8 +515,8 @@ export default function FeaturesPage() {
           </div>
 
           <h1 className="reveal delay-1 text-4xl sm:text-5xl font-black text-slate-900 mb-5 leading-tight">
-            Tout ce qu'il faut pour<br />
-            <span style={{ color: '#5B47F5' }}>vendre plus. Dès aujourd'hui.</span>
+            Tout ce qu&apos;il faut pour<br />
+            <span style={{ color: '#5B47F5' }}>vendre plus. Dès aujourd&apos;hui.</span>
           </h1>
           <p className="reveal delay-2 text-lg max-w-2xl mx-auto leading-relaxed mb-8 text-slate-600">
             KONVERT combine IA générative, templates optimisés, analytics temps réel et intégrations natives pour te donner un avantage concurrentiel immédiat.

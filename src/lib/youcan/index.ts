@@ -5,6 +5,29 @@ const YOUCAN_API = 'https://api.youcan.shop'
 // ─── YouCan REST API client ────────────────────────────────────────────────────
 // Auth : Bearer token généré dans YouCan Admin → Paramètres → API
 
+// L'API YouCan renvoie parfois la ressource à plat, parfois nichée sous une clé
+// (`store`, `page`) selon l'endpoint — types volontairement permissifs pour
+// couvrir les deux formes plutôt que de deviner un contrat strict non documenté.
+type YouCanStoreResponse = {
+  id?: string
+  name?: string
+  domain?: string
+  url?: string
+  store?: { id?: string; name?: string }
+}
+
+type YouCanPageResponse = {
+  id?: string
+  token?: string
+  url?: string
+  link?: string
+  page?: { id?: string; token?: string; url?: string; link?: string }
+}
+
+function isAbortError(err: unknown): boolean {
+  return err instanceof Error && err.name === 'AbortError'
+}
+
 export class YouCanClient {
   private token: string
 
@@ -37,8 +60,8 @@ export class YouCanClient {
       }
 
       return res.json() as Promise<T>
-    } catch (err: any) {
-      if (err.name === 'AbortError') throw new Error('Timeout YouCan — réessaie')
+    } catch (err: unknown) {
+      if (isAbortError(err)) throw new Error('Timeout YouCan — réessaie')
       throw err
     } finally {
       clearTimeout(timeout)
@@ -47,7 +70,7 @@ export class YouCanClient {
 
   // Vérifier le token et récupérer les infos du store
   async ping(): Promise<{ id: string; name: string; url: string }> {
-    const data = await this.request<any>('/store/me')
+    const data = await this.request<YouCanStoreResponse>('/store/me')
     return {
       id:   data.id   || data.store?.id   || '',
       name: data.name || data.store?.name || 'Ma boutique YouCan',
@@ -57,7 +80,7 @@ export class YouCanClient {
 
   // Créer une page produit sur YouCan
   async createPage(title: string, htmlContent: string): Promise<{ id: string; url: string }> {
-    const data = await this.request<any>('/store/pages', {
+    const data = await this.request<YouCanPageResponse>('/store/pages', {
       method: 'POST',
       body: JSON.stringify({
         title,
@@ -75,7 +98,7 @@ export class YouCanClient {
 
   // Mettre à jour une page existante
   async updatePage(pageId: string, title: string, htmlContent: string): Promise<void> {
-    await this.request<any>(`/store/pages/${pageId}`, {
+    await this.request<YouCanPageResponse>(`/store/pages/${pageId}`, {
       method: 'PUT',
       body: JSON.stringify({
         title,

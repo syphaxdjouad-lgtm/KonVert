@@ -17,7 +17,6 @@ interface PageData {
 export default function ABTestPage() {
   const { id: pageId } = useParams<{ id: string }>()
   const router = useRouter()
-  const supabase = createClient()
 
   const [page,      setPage]      = useState<PageData | null>(null)
   const [abTest,    setAbTest]    = useState<ABTest | null>(null)
@@ -27,11 +26,22 @@ export default function ABTestPage() {
   const [declaring, setDeclaring] = useState(false)
   const [creating,  setCreating]  = useState(false)
 
-  /* ─── Chargement initial ────────────────────────────────────── */
+  /* ─── Chargement initial ────────────────────────────────────────
+   * `router` est maintenant dans les deps (le React Compiler avait détecté
+   * l'usage réel de `router.push` non déclaré → "Could not preserve manual
+   * memoization"). `supabase` est instancié en local (pas de state, pas de
+   * souscription) plutôt que capturé depuis le render : createClient() en
+   * dep aurait recréé fetchData à chaque render (nouvelle instance à chaque
+   * fois) et fait tourner l'effect en boucle.
+   * `setLoading(true)`/`setError(null)` étaient appelés de façon synchrone
+   * en tête de fonction (react-hooks/set-state-in-effect) : redondant pour
+   * le chargement initial (déjà `true`/`null` par défaut), et provoquait un
+   * flash plein écran du spinner à chaque refetch après une action
+   * (create/déclare gagnant/changement de statut) — supprimé, l'erreur est
+   * maintenant réinitialisée après le fetch réussi plutôt qu'avant.
+   */
   const fetchData = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-
+    const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push('/login'); return }
 
@@ -63,8 +73,8 @@ export default function ABTestPage() {
       return
     }
     setPage(pageData)
-
     setAbTest(testData ?? null)
+    setError(null)
 
     if (testData) {
       const { data: variantData } = await supabase
@@ -77,9 +87,20 @@ export default function ABTestPage() {
     }
 
     setLoading(false)
-  }, [pageId])
+  }, [pageId, router])
 
-  useEffect(() => { fetchData() }, [fetchData])
+  useEffect(() => {
+    // fetchData() reste une fonction "top-level" (réutilisée par les handlers
+    // de mutation ci-dessous) — l'appeler directement dans l'effect est ce
+    // que react-hooks/set-state-in-effect signale (setState non-local à
+    // l'effect). L'enrober dans une fonction déclarée ET appelée à
+    // l'intérieur de l'effect suit le pattern documenté par React pour le
+    // fetch au mount.
+    async function run() {
+      await fetchData()
+    }
+    run()
+  }, [fetchData])
 
   /* ─── Créer un test A/B ─────────────────────────────────────── */
   async function handleCreate() {

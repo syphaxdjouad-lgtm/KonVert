@@ -102,11 +102,11 @@ export default function AboutPage() {
           </div>
 
           <h1 className="reveal delay-1 text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-tight mb-6">
-            On a construit l'outil<br />
-            <span style={{ color: '#5B47F5' }}>qu'on voulait utiliser.</span>
+            On a construit l&apos;outil<br />
+            <span style={{ color: '#5B47F5' }}>qu&apos;on voulait utiliser.</span>
           </h1>
           <p className="reveal delay-2 text-lg max-w-2xl mx-auto leading-relaxed text-slate-600">
-            KONVERT est né d'une frustration : créer une bonne page produit prenait des heures, nécessitait un designer,
+            KONVERT est né d&apos;une frustration : créer une bonne page produit prenait des heures, nécessitait un designer,
             un copywriter et un développeur. On a automatisé tout ça en 30 secondes.
           </p>
         </div>
@@ -129,18 +129,18 @@ export default function AboutPage() {
             <div className="reveal">
               <p className="text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-4">Notre histoire</p>
               <h2 className="text-3xl font-black text-gray-900 mb-5">
-                De dropshippers frustrés à une équipe d'une centaine d'utilisateurs.
+                De dropshippers frustrés à une équipe d&apos;une centaine d&apos;utilisateurs.
               </h2>
               <p className="text-gray-600 leading-relaxed mb-4">
-                En 2024, après avoir géré plusieurs boutiques dropshipping, on s'est retrouvés face au même problème en boucle :
+                En 2024, après avoir géré plusieurs boutiques dropshipping, on s&apos;est retrouvés face au même problème en boucle :
                 créer des pages produit qui convertissent prenait trop de temps et coûtait trop cher.
               </p>
               <p className="text-gray-600 leading-relaxed mb-4">
-                On passait 3 à 4 heures par page. On externalisait à des freelances qui ne comprenaient pas l'e-commerce.
-                On utilisait des outils génériques qui ne savaient pas ce qu'était un bon taux de conversion.
+                On passait 3 à 4 heures par page. On externalisait à des freelances qui ne comprenaient pas l&apos;e-commerce.
+                On utilisait des outils génériques qui ne savaient pas ce qu&apos;était un bon taux de conversion.
               </p>
               <p className="text-gray-600 leading-relaxed mb-6">
-                Alors on a construit KONVERT. D'abord pour nous. Puis on l'a partagé. Aujourd'hui, 2 800+ boutiques l'utilisent chaque semaine.
+                Alors on a construit KONVERT. D&apos;abord pour nous. Puis on l&apos;a partagé. Aujourd&apos;hui, 2 800+ boutiques l&apos;utilisent chaque semaine.
               </p>
               <Link
                 href="/demo"
@@ -205,7 +205,7 @@ export default function AboutPage() {
           <div className="text-center mb-12">
             <p className="reveal text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">Vision</p>
             <h2 className="reveal delay-1 text-3xl font-black text-gray-900">Notre vision 2027</h2>
-            <p className="reveal delay-2 text-sm text-gray-500 mt-3 max-w-xl mx-auto">On ne construit pas juste un outil. On construit l'infrastructure copywriting de l'e-commerce mondial.</p>
+            <p className="reveal delay-2 text-sm text-gray-500 mt-3 max-w-xl mx-auto">On ne construit pas juste un outil. On construit l&apos;infrastructure copywriting de l&apos;e-commerce mondial.</p>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-6">
@@ -231,7 +231,7 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
 
           <div className="text-center mb-12">
-            <p className="reveal text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">L'équipe</p>
+            <p className="reveal text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">L&apos;équipe</p>
             <h2 className="reveal delay-1 text-3xl font-black text-gray-900">Une équipe, une obsession : vos conversions.</h2>
           </div>
 

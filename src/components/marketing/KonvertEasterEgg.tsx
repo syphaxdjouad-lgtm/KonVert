@@ -3,10 +3,29 @@
 import { useEffect, useState } from 'react'
 
 const TARGET = 'KONVERT'
+const CONFETTI_COLORS = ['#5B47F5', '#f59e0b', '#10b981', '#ef4444', '#8b77ff', '#fbbf24']
+
+type ConfettiPiece = { left: number; top: number; color: string; delay: number; duration: number }
+
+// Génère les positions/couleurs du confetti une seule fois par activation
+// (dans le handler keydown, pas pendant le render). Avant ce fix, Math.random()
+// était appelé directement dans le JSX : le confetti se re-randomisait à
+// chaque frappe pendant que le toast était affiché (violation react-hooks/purity
+// ET bug visuel — confetti qui saute au lieu de rester stable).
+function generateConfetti(): ConfettiPiece[] {
+  return Array.from({ length: 20 }, (_, i) => ({
+    left: 10 + Math.random() * 80,
+    top: 10 + Math.random() * 30,
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    delay: Math.random() * 0.6,
+    duration: 0.8 + Math.random() * 0.8,
+  }))
+}
 
 export default function KonvertEasterEgg() {
   const [buffer, setBuffer] = useState('')
   const [show, setShow] = useState(false)
+  const [confetti, setConfetti] = useState<ConfettiPiece[]>([])
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -15,6 +34,7 @@ export default function KonvertEasterEgg() {
       setBuffer(next)
       if (next === TARGET) {
         setShow(true)
+        setConfetti(generateConfetti())
         setBuffer('')
         setTimeout(() => setShow(false), 6000)
       }
@@ -50,16 +70,16 @@ export default function KonvertEasterEgg() {
       `}</style>
 
       {/* Confetti */}
-      {Array.from({ length: 20 }).map((_, i) => (
+      {confetti.map((c, i) => (
         <span
           key={i}
           className="confetti-piece"
           style={{
-            left: `${10 + Math.random() * 80}%`,
-            top: `${10 + Math.random() * 30}%`,
-            background: ['#5B47F5', '#f59e0b', '#10b981', '#ef4444', '#8b77ff', '#fbbf24'][i % 6],
-            animationDelay: `${Math.random() * 0.6}s`,
-            animationDuration: `${0.8 + Math.random() * 0.8}s`,
+            left: `${c.left}%`,
+            top: `${c.top}%`,
+            background: c.color,
+            animationDelay: `${c.delay}s`,
+            animationDuration: `${c.duration}s`,
           }}
         />
       ))}

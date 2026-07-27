@@ -11,19 +11,6 @@ import { readUtmCookie } from '@/lib/analytics/utm'
 import { pixels } from '@/lib/tracking/pixels'
 
 function SignupContent() {
-  const [email, setEmail]           = useState('')
-  const [password, setPassword]     = useState('')
-  const [name, setName]             = useState('')
-  const [loading, setLoading]       = useState(false)
-  const [validating, setValidating] = useState(false)
-  const [error, setError]           = useState<string | null>(null)
-  const [tokenValid, setTokenValid] = useState<boolean | null>(null)
-  const [tokenEmail, setTokenEmail] = useState<string | null>(null)
-  // Quand Supabase a "Confirm email" activé, signUp() renvoie data.session = null
-  // → on doit afficher un écran d'attente au lieu de pousser sur /dashboard avec
-  // une session inexistante (le user atterrissait sur dashboard, voyait l'écran
-  // une milliseconde, puis était kické vers /login → UX cassée + perte conversion).
-  const [pendingConfirm, setPendingConfirm] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
@@ -32,11 +19,28 @@ function SignupContent() {
   const intervalParam = searchParams.get('interval')
   const couponParam = searchParams.get('coupon')
 
+  const [email, setEmail]           = useState('')
+  const [password, setPassword]     = useState('')
+  const [name, setName]             = useState('')
+  const [loading, setLoading]       = useState(false)
+  // Sans token, ni la validation ni son loading state n'ont lieu d'être —
+  // connu dès le premier render, ce qui évite un setState synchrone dans
+  // l'effect (react-hooks/set-state-in-effect) et le re-render en cascade
+  // qui l'accompagnait.
+  const [validating, setValidating] = useState(() => !!token)
+  const [error, setError]           = useState<string | null>(null)
+  const [tokenValid, setTokenValid] = useState<boolean | null>(() => (token ? null : true))
+  const [tokenEmail, setTokenEmail] = useState<string | null>(null)
+  // Quand Supabase a "Confirm email" activé, signUp() renvoie data.session = null
+  // → on doit afficher un écran d'attente au lieu de pousser sur /dashboard avec
+  // une session inexistante (le user atterrissait sur dashboard, voyait l'écran
+  // une milliseconde, puis était kické vers /login → UX cassée + perte conversion).
+  const [pendingConfirm, setPendingConfirm] = useState(false)
+
   // Valide le token au chargement (optionnel : signup ouvert à tous depuis launch)
   useEffect(() => {
     track.signupStarted()
-    if (!token) { setTokenValid(true); return }
-    setValidating(true)
+    if (!token) return
     fetch(`/api/invitations/validate?token=${token}`)
       .then(r => r.json())
       .then(data => {

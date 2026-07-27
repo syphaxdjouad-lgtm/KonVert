@@ -20,7 +20,7 @@ export function DataValidationStep({ data, onContinue, onBack }: Props) {
     <div className="max-w-2xl mx-auto p-8">
       <h1 className="text-3xl font-semibold mb-2">Vérifie les infos extraites</h1>
       <p className="text-neutral-600 mb-6">
-        L'AI a extrait ces données automatiquement. Confirme ou complète avant publication.
+        L&apos;AI a extrait ces données automatiquement. Confirme ou complète avant publication.
       </p>
 
       <div className="space-y-4">

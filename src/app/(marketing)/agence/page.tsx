@@ -227,7 +227,7 @@ export default function AgencePage() {
                 <span className="text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full inline-block mb-5">
                   {metric}
                 </span>
-                <p className="text-sm leading-relaxed mb-6 italic" style={{ color: '#c0c0d8' }}>"{quote}"</p>
+                <p className="text-sm leading-relaxed mb-6 italic" style={{ color: '#c0c0d8' }}>&quot;{quote}&quot;</p>
                 <div className="flex items-center gap-3">
                   <div className={`w-9 h-9 rounded-full ${bg} flex items-center justify-center text-white text-xs font-bold`}>
                     {avatar}

@@ -106,6 +106,20 @@ export function decryptToken(encrypted: string): string {
 
 // ─── Shopify API client ───────────────────────────────────────────────────────
 
+type ShopifyShop = {
+  myshopify_domain: string
+  name: string
+  email: string
+}
+
+type ShopifyPage = {
+  id: number
+  title: string
+  handle: string
+  body_html: string
+  published: boolean
+}
+
 export class ShopifyClient {
   private shop:  string
   private token: string
@@ -139,7 +153,7 @@ export class ShopifyClient {
 
   // Vérifier que la connexion fonctionne
   async ping(): Promise<{ shop: string; name: string; email: string }> {
-    const data = await this.request<{ shop: any }>('/shop.json')
+    const data = await this.request<{ shop: ShopifyShop }>('/shop.json')
     return {
       shop:  data.shop.myshopify_domain,
       name:  data.shop.name,
@@ -149,7 +163,7 @@ export class ShopifyClient {
 
   // Créer une page dans le store Shopify
   async createPage(title: string, htmlBody: string): Promise<{ id: number; url: string }> {
-    const data = await this.request<{ page: any }>('/pages.json', {
+    const data = await this.request<{ page: ShopifyPage }>('/pages.json', {
       method: 'POST',
       body: JSON.stringify({
         page: {
@@ -178,7 +192,7 @@ export class ShopifyClient {
 
   // Lister les pages du store
   async listPages(): Promise<{ id: number; title: string; handle: string }[]> {
-    const data = await this.request<{ pages: any[] }>('/pages.json?limit=50')
+    const data = await this.request<{ pages: ShopifyPage[] }>('/pages.json?limit=50')
     return data.pages.map((p) => ({ id: p.id, title: p.title, handle: p.handle }))
   }
 }

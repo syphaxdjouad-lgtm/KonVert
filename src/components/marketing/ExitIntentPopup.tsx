@@ -153,7 +153,7 @@ export default function ExitIntentPopup() {
                 </p>
                 <ul className="text-sm space-y-1" style={{ color: '#4a3fa0' }}>
                   <li>✓ 42 templates haute conversion</li>
-                  <li>✓ 1 page produit générée par l'IA — résultat immédiat</li>
+                  <li>✓ 1 page produit générée par l&apos;IA — résultat immédiat</li>
                   <li>✓ Aucune carte bancaire requise</li>
                 </ul>
               </div>

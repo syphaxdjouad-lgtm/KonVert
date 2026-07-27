@@ -25,9 +25,9 @@ import {
   TrendUp as TrendUpBadge,
 } from '@phosphor-icons/react'
 
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════════
    HOOK — useSlider
-═══════════════════════════════════════════════════════════════════════════ */
+═════════════════════════════════════════════════════ */
 function useSlider(count: number, autoPlayMs: number) {
   const [slide, setSlide] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -102,7 +102,7 @@ function Slide1() {
             </Link>
           </div>
 
-          {/* ── Trust signals (réels uniquement) ───────────────────── */}
+          {/* ── Trust signals (réels uniquement) ────────────────── */}
           <div
             className="mt-6 flex flex-col items-center lg:items-start gap-2.5"
             style={{ animation: 'slideUp .7s .35s cubic-bezier(.16,1,.3,1) both' }}
@@ -603,7 +603,7 @@ function Slide3() {
                 <span className="text-[11px] font-semibold" style={{ color: 'rgba(255,255,255,0.4)' }}>Conversions — 7 derniers jours</span>
               </div>
               <div className="flex items-end gap-2" style={{ height: '80px' }}>
-                {[40, 65, 50, 80, 60, 90, 75].map((h, i) => (
+                {bars.map((h, i) => (
                   <div key={i} className="flex-1 flex flex-col items-center gap-1">
                     <div
                       className="w-full rounded-md"
@@ -767,9 +767,9 @@ function Slide5() {
     </div>
   )
 }
-/* ═══════════════════════════════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════════
    HERO SLIDER PRINCIPAL
-═══════════════════════════════════════════════════════════════════════════ */
+═════════════════════════════════════════════════════ */
 const SLIDES = [Slide1, Slide2, Slide3, Slide4, Slide5]
 
 export default function HeroSlider() {
@@ -812,7 +812,7 @@ export default function HeroSlider() {
           opacity: 0.07,
         }}
       />
-      {/* Grain overlay très subtil */}
+      {/* Grain overlay très subtile */}
       <div
         className="absolute inset-0 pointer-events-none opacity-30"
         style={{

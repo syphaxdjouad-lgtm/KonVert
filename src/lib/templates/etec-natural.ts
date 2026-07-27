@@ -1,103 +1,12 @@
 import type { LandingPageData } from '@/types'
+import { t as trans } from '@/lib/i18n/ui-labels'
 import {
   renderRichSections,
-  type SectionTheme,
   renderHeroThumbs,
+  type SectionTheme,
 } from './sections'
 
-// ─── I18N ─────────────────────────────────────────────────────────────────────
-
-const T: Record<string, Record<string, string>> = {
-  // Nav
-  nav_story:         { fr: 'Notre histoire',  en: 'Our story',     ar: 'قصتنا',         es: 'Nuestra historia' },
-  nav_materials:     { fr: 'Matériaux',       en: 'Materials',     ar: 'المواد',         es: 'Materiales'       },
-  nav_reviews:       { fr: 'Avis',            en: 'Reviews',       ar: 'التقييمات',      es: 'Reseñas'          },
-  nav_cta:           { fr: 'Découvrir',       en: 'Shop now',      ar: 'تسوق الآن',      es: 'Comprar'          },
-
-  // Hero
-  hero_eyebrow:      { fr: 'Nouveau',         en: 'New',           ar: 'جديد',           es: 'Nuevo'            },
-  hero_nature:       { fr: 'Fait pour durer', en: 'Made to last',  ar: 'صُنع ليدوم',     es: 'Hecho para durar' },
-  hero_cta:          { fr: 'Découvrir',       en: 'Shop now',      ar: 'تسوق الآن',      es: 'Comprar'          },
-  hero_scroll:       { fr: 'Défiler',         en: 'Scroll',        ar: 'تمرير',          es: 'Desplazar'        },
-  hero_stat_suffix:  { fr: 'commandes',       en: 'orders',        ar: 'طلب',            es: 'pedidos'          },
-
-  // Press
-  press_eyebrow:     { fr: 'Vu dans',         en: 'Featured in',   ar: 'كما ذُكر في',    es: 'Visto en'         },
-
-  // Story editorial
-  story_eyebrow:     { fr: 'Notre histoire',  en: 'Our story',     ar: 'قصتنا',          es: 'Nuestra historia' },
-  story_fallback_h:  { fr: 'Pourquoi ce produit existe',     en: 'Why this product exists',      ar: 'لماذا يوجد هذا المنتج',         es: 'Por qué existe este producto'    },
-  story_fallback_p:  { fr: 'Nous avons créé ce produit pour résoudre un problème réel — pas pour suivre une tendance.', en: 'We built this product to solve a real problem — not to follow a trend.', ar: 'صنعنا هذا المنتج لحل مشكلة حقيقية — ليس لمتابعة الاتجاهات.', es: 'Creamos este producto para resolver un problema real — no para seguir una tendencia.' },
-
-  // Materials / Features
-  materials_eyebrow: { fr: 'Les matériaux',   en: 'Materials',     ar: 'المواد',          es: 'Los materiales'   },
-  materials_title:   { fr: 'Conçu avec soin', en: 'Crafted with care', ar: 'مصنوع بعناية', es: 'Fabricado con cuidado' },
-  feat_fallback_0:   { fr: 'Matière naturelle',       en: 'Natural material',          ar: 'مادة طبيعية',         es: 'Material natural'         },
-  feat_fallback_1:   { fr: 'Fabrication responsable', en: 'Responsible manufacturing', ar: 'تصنيع مسؤول',         es: 'Fabricación responsable'  },
-  feat_fallback_2:   { fr: 'Durabilité certifiée',    en: 'Certified durability',      ar: 'متانة معتمدة',        es: 'Durabilidad certificada'   },
-  feat_desc_0:       { fr: 'Sélectionné à la source pour sa qualité supérieure.', en: 'Sourced for superior quality.', ar: 'مختار من المصدر لجودته العالية.', es: 'Seleccionado en origen por su calidad superior.' },
-  feat_desc_1:       { fr: 'Chaque pièce assemblée avec une attention extrême.', en: 'Every piece assembled with extreme care.', ar: 'كل قطعة مجمعة باهتمام شديد.', es: 'Cada pieza ensamblada con extremo cuidado.' },
-  feat_desc_2:       { fr: 'Conçu pour accompagner chaque jour, longtemps.', en: 'Designed to accompany every day, for a long time.', ar: 'مصمم ليرافق كل يوم، لفترة طويلة.', es: 'Diseñado para acompañar cada día, durante mucho tiempo.' },
-
-  // Before / After
-  before_label:      { fr: 'Avant',           en: 'Before',        ar: 'قبل',            es: 'Antes'            },
-  after_label:       { fr: 'Après',           en: 'After',         ar: 'بعد',            es: 'Después'          },
-  ba_eyebrow:        { fr: 'Transformation',  en: 'Transformation', ar: 'التحول',        es: 'Transformación'   },
-  ba_title:          { fr: 'La différence',   en: 'The difference', ar: 'الفرق',         es: 'La diferencia'    },
-
-  // Testimonial
-  testimonial_eyebrow: { fr: 'Ce qu\'ils disent', en: 'What they say', ar: 'ما يقولونه', es: 'Lo que dicen'    },
-  testimonial_fallback: { fr: 'Ce produit a changé ma façon de consommer. Je ne reviendrai pas en arrière.', en: 'This product changed the way I consume. I won\'t go back.', ar: 'غيّر هذا المنتج طريقة استهلاكي. لن أعود أبدًا.', es: 'Este producto cambió mi forma de consumir. No volvería atrás.' },
-  testimonial_name:  { fr: 'Camille L.',      en: 'Camille L.',    ar: 'كاميل ل.',        es: 'Camille L.'       },
-  testimonial_role:  { fr: 'Cliente depuis 2 ans', en: 'Customer for 2 years', ar: 'عميلة منذ سنتين', es: 'Cliente desde hace 2 años' },
-
-  // Behind design
-  behind_eyebrow:    { fr: 'Coulisses',       en: 'Behind the scenes', ar: 'خلف الكواليس', es: 'Detrás del diseño' },
-  behind_title:      { fr: 'Derrière le design', en: 'Behind the design', ar: 'خلف التصميم', es: 'Detrás del diseño' },
-  behind_fallback:   { fr: 'Chaque détail a été pensé dans un seul objectif : vous offrir quelque chose qui dure vraiment, qui s\'améliore avec le temps, et qui ne compromet jamais la planète.', en: 'Every detail was thought out with a single goal: to offer you something that truly lasts, improves over time, and never compromises the planet.', ar: 'تم التفكير في كل تفصيل بهدف واحد: تقديم شيء يدوم حقًا، ويتحسن مع الوقت، ولا يضر بالكوكب أبدًا.', es: 'Cada detalle fue pensado con un solo objetivo: ofrecerte algo que realmente dure, que mejore con el tiempo y que nunca comprometa el planeta.' },
-
-  // Gallery
-  gallery_eyebrow:   { fr: 'Galerie',         en: 'Gallery',       ar: 'المعرض',         es: 'Galería'          },
-
-  // FAQ
-  faq_eyebrow:       { fr: 'Questions',       en: 'Questions',     ar: 'الأسئلة',        es: 'Preguntas'        },
-  faq_title:         { fr: 'Ce que vous voulez savoir', en: 'What you want to know', ar: 'ما تريد معرفته', es: 'Lo que quieres saber' },
-
-  // Risk reversal
-  rr_shipping:       { fr: 'Livraison offerte', en: 'Free shipping',  ar: 'شحن مجاني',    es: 'Envío gratis'     },
-  rr_returns:        { fr: 'Retour 30 jours',   en: '30-day returns', ar: 'إرجاع 30 يومًا', es: 'Devolución 30 días' },
-  rr_carbon:         { fr: 'Neutre en carbone', en: 'Carbon neutral', ar: 'محايد كربونيًا', es: 'Neutro en carbono' },
-
-  // Final CTA
-  final_eyebrow:     { fr: 'Prêt à commencer ?', en: 'Ready to start?', ar: 'مستعد للبدء؟', es: '¿Listo para empezar?' },
-  final_cta:         { fr: 'Découvrir maintenant', en: 'Shop now', ar: 'تسوق الآن', es: 'Comprar ahora' },
-  final_sub:         { fr: 'Livraison gratuite · Retour 30 jours · Neutre en carbone', en: 'Free shipping · 30-day returns · Carbon neutral', ar: 'شحن مجاني · إرجاع 30 يومًا · محايد كربونيًا', es: 'Envío gratis · Devolución 30 días · Neutro en carbono' },
-
-  // Footer
-  footer_explore:    { fr: 'Explorer',        en: 'Explore',       ar: 'استكشف',         es: 'Explorar'         },
-  footer_products:   { fr: 'Produits',        en: 'Products',      ar: 'المنتجات',       es: 'Productos'        },
-  footer_reviews:    { fr: 'Avis clients',    en: 'Reviews',       ar: 'آراء العملاء',   es: 'Reseñas'          },
-  footer_faq:        { fr: 'FAQ',             en: 'FAQ',           ar: 'الأسئلة الشائعة', es: 'FAQ'             },
-  footer_services:   { fr: 'Services',        en: 'Services',      ar: 'الخدمات',        es: 'Servicios'        },
-  footer_delivery:   { fr: 'Livraison',       en: 'Delivery',      ar: 'التوصيل',        es: 'Entrega'          },
-  footer_returns:    { fr: 'Retours',         en: 'Returns',       ar: 'الإرجاع',        es: 'Devoluciones'     },
-  footer_support:    { fr: 'Support',         en: 'Support',       ar: 'الدعم',          es: 'Soporte'          },
-  footer_contact:    { fr: 'Contact',         en: 'Contact',       ar: 'تواصل',          es: 'Contacto'         },
-  footer_copyright:  { fr: 'Tous droits réservés.', en: 'All rights reserved.', ar: 'جميع الحقوق محفوظة.', es: 'Todos los derechos reservados.' },
-  footer_privacy:    { fr: 'Confidentialité', en: 'Privacy',       ar: 'الخصوصية',       es: 'Privacidad'       },
-  footer_terms:      { fr: 'Conditions',      en: 'Terms',         ar: 'الشروط',         es: 'Términos'         },
-  footer_desc_fallback: { fr: 'Conçu pour durer. Fabriqué avec soin.', en: 'Designed to last. Made with care.', ar: 'مصمم ليدوم. مصنوع بعناية.', es: 'Diseñado para durar. Fabricado con cuidado.' },
-
-  // Aria
-  aria_nav:          { fr: 'Navigation principale', en: 'Main navigation', ar: 'التنقل الرئيسي', es: 'Navegación principal' },
-  aria_hero:         { fr: 'Section principale',    en: 'Main section',    ar: 'القسم الرئيسي',  es: 'Sección principal'   },
-  aria_gallery:      { fr: 'Galerie produit',        en: 'Product gallery', ar: 'معرض المنتج',    es: 'Galería del producto' },
-  aria_footer:       { fr: 'Pied de page',           en: 'Footer',          ar: 'تذييل الصفحة',  es: 'Pie de página'       },
-  aria_prev:         { fr: 'Avis précédent',         en: 'Previous review', ar: 'الرأي السابق',   es: 'Reseña anterior'     },
-  aria_next:         { fr: 'Avis suivant',           en: 'Next review',     ar: 'الرأي التالي',   es: 'Siguiente reseña'    },
-}
-
-// ─── COULEURS NATURE ──────────────────────────────────────────────────────────
+// ─── COULEURS NATURE ──────────────────────────────────────────────
 // Jamais de noir pur en fond. Le charcoal sert uniquement pour le texte.
 
 const N = {
@@ -112,7 +21,7 @@ const N = {
   sageLight: '#EEF2EC', // sage très clair — bg badges/chips
 }
 
-// ─── THEME SECTIONS ───────────────────────────────────────────────────────────
+// ─── THEME SECTIONS ──────────────────────────────────────────────────
 
 const NATURAL_THEME: SectionTheme = {
   primary:    N.sage,
@@ -137,7 +46,7 @@ const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=85', // paysage montagne lumière naturelle
 ]
 
-// ─── SVG ICONS outline 1.5px — aucun emoji ────────────────────────────────────
+// ─── SVG ICONS outline 1.5px — aucun emoji ───────────────────────────────
 
 const ICO = {
   leaf:    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>`,
@@ -152,11 +61,10 @@ const ICO = {
   sun:     `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`,
 }
 
-// ─── TEMPLATE ─────────────────────────────────────────────────────────────────
+// ─── TEMPLATE ────────────────────────────────────────────────────────────
 
 export function templateEtecNatural(data: LandingPageData): string {
   const lang = data.language ?? 'fr'
-  const t = (key: string): string => T[key]?.[lang] ?? T[key]?.['fr'] ?? key
 
   // Résolution images
   const _real = data.images?.filter(Boolean) ?? []
@@ -165,7 +73,7 @@ export function templateEtecNatural(data: LandingPageData): string {
 
   // Données produit
   const brandName  = data.product_name || 'Natural'
-  const ctaText    = data.cta || t('hero_cta')
+  const ctaText    = data.cta || trans(lang, 'natural.nav_cta')
   const price      = data.price ?? null
   const origPrice  = data.original_price ?? null
   const savePct    = price && origPrice
@@ -179,8 +87,8 @@ export function templateEtecNatural(data: LandingPageData): string {
   const featureCards = [0, 1, 2].map(i => {
     const feat = features[i]
     return {
-      title: feat?.title ?? t(`feat_fallback_${i}`),
-      desc:  feat?.description ?? t(`feat_desc_${i}`),
+      title: feat?.title ?? trans(lang, `natural.feat_fallback_${i}`),
+      desc:  feat?.description ?? trans(lang, `natural.feat_desc_${i}`),
       icon:  i === 0 ? ICO.feather : i === 1 ? ICO.recycle : ICO.sun,
     }
   })
@@ -189,24 +97,24 @@ export function templateEtecNatural(data: LandingPageData): string {
   const pressMentions = data.press_mentions?.slice(0, 5) ?? []
 
   // Testimonials — 1 central
-  const testimonialText = data.testimonials?.[0]?.text ?? t('testimonial_fallback')
-  const testimonialName = data.testimonials?.[0]?.name ?? t('testimonial_name')
-  const testimonialRole = data.testimonials?.[0]?.location ?? t('testimonial_role')
+  const testimonialText = data.testimonials?.[0]?.text ?? trans(lang, 'natural.testimonial_fallback')
+  const testimonialName = data.testimonials?.[0]?.name ?? trans(lang, 'natural.testimonial_name')
+  const testimonialRole = data.testimonials?.[0]?.location ?? trans(lang, 'natural.testimonial_role')
 
   // Story éditoriale
-  const storyTitle = data.story?.solution ?? data.unique_mechanism?.name ?? t('story_fallback_h')
+  const storyTitle = data.story?.solution ?? data.unique_mechanism?.name ?? trans(lang, 'natural.story_fallback_h')
   const storyBody  =
     data.story?.transformation ??
     data.unique_mechanism?.description ??
     data.subtitle ??
-    t('story_fallback_p')
+    trans(lang, 'natural.story_fallback_p')
   const storyProblem = data.story?.problem ?? ''
 
   // Behind design — fond text éditorial
   const behindText =
     data.founder_note?.message ??
     data.unique_mechanism?.proof ??
-    t('behind_fallback')
+    trans(lang, 'natural.behind_fallback')
   const behindAuthor = data.founder_note
     ? `${data.founder_note.name} · ${data.founder_note.role}`
     : null
@@ -236,7 +144,7 @@ export function templateEtecNatural(data: LandingPageData): string {
   const hasBa = (data.before_after?.length ?? 0) > 0
 
   // Footer desc
-  const footerDesc = data.subtitle || t('footer_desc_fallback')
+  const footerDesc = data.subtitle || trans(lang, 'natural.footer_desc_fallback')
 
   return `<!DOCTYPE html>
 <html lang="${lang}" dir="${lang === 'ar' ? 'rtl' : 'ltr'}">
@@ -1069,18 +977,18 @@ export function templateEtecNatural(data: LandingPageData): string {
 <body>
 
   <!-- ── NAVIGATION ── -->
-  <nav class="nat-nav" role="navigation" aria-label="${t('aria_nav')}">
+  <nav class="nat-nav" role="navigation" aria-label="${trans(lang, 'nav.ariaLabel')}">
     <span class="nat-nav-brand">${brandName}</span>
     <ul class="nat-nav-links" role="list">
-      <li><a href="#story">${t('nav_story')}</a></li>
-      <li><a href="#materials">${t('nav_materials')}</a></li>
-      <li><a href="#reviews">${t('nav_reviews')}</a></li>
+      <li><a href="#story">${trans(lang, 'bespoke.nav.ourStory')}</a></li>
+      <li><a href="#materials">${trans(lang, 'bespoke.nav.materials')}</a></li>
+      <li><a href="#reviews">${trans(lang, 'bespoke.nav.reviewsShort')}</a></li>
     </ul>
-    <a href="#final-cta" class="nat-nav-cta">${t('nav_cta')} ${ICO.arrow_r}</a>
+    <a href="#final-cta" class="nat-nav-cta">${trans(lang, 'natural.nav_cta')} ${ICO.arrow_r}</a>
   </nav>
 
   <!-- ── HERO SPLIT ── -->
-  <section class="nat-hero" aria-label="${t('aria_hero')}">
+  <section class="nat-hero" aria-label="${trans(lang, 'style.aria_hero')}">
 
     <!-- Image column -->
     <div class="nat-hero-img-col">
@@ -1108,7 +1016,7 @@ export function templateEtecNatural(data: LandingPageData): string {
 
     <!-- Info column -->
     <div class="nat-hero-info-col">
-      <p class="nat-eyebrow">${t('hero_eyebrow')} — ${data.category || t('hero_nature')}</p>
+      <p class="nat-eyebrow">${trans(lang, 'natural.hero_eyebrow')} — ${data.category || trans(lang, 'natural.hero_nature')}</p>
       <h1 class="nat-hero-h1">${data.headline}</h1>
       <p class="nat-hero-sub">${data.subtitle}</p>
 
@@ -1134,13 +1042,13 @@ export function templateEtecNatural(data: LandingPageData): string {
         ${ctaText} ${ICO.arrow_r}
       </a>
       <a href="#story" class="nat-cta-secondary">
-        ${t('nav_story')} ${ICO.arrow_r}
+        ${trans(lang, 'bespoke.nav.ourStory')} ${ICO.arrow_r}
       </a>
 
       ${statCustomers ? `
       <div class="nat-hero-stat">
         <span class="nat-hero-stat-num">${statCustomers}</span>
-        <span class="nat-hero-stat-label">${t('hero_stat_suffix')}</span>
+        <span class="nat-hero-stat-label">${trans(lang, 'natural.hero_stat_suffix')}</span>
       </div>` : data.social_proof?.rating ? `
       <div class="nat-hero-stat">
         <span class="nat-hero-stat-num">${data.social_proof.rating}</span>
@@ -1152,8 +1060,8 @@ export function templateEtecNatural(data: LandingPageData): string {
 
   <!-- ── PRESS MENTIONS ÉDITORIAL ── -->
   ${pressMentions.length > 0 ? `
-  <div class="nat-press nat-fade" aria-label="${t('press_eyebrow')}">
-    <span class="nat-press-label">${t('press_eyebrow')}</span>
+  <div class="nat-press nat-fade" aria-label="${trans(lang, 'natural.press_eyebrow')}">
+    <span class="nat-press-label">${trans(lang, 'natural.press_eyebrow')}</span>
     <div class="nat-press-divider" aria-hidden="true"></div>
     <div class="nat-press-items">
       ${pressMentions.map(m => `<span class="nat-press-item">${m}</span>`).join('')}
@@ -1165,7 +1073,7 @@ export function templateEtecNatural(data: LandingPageData): string {
     <div class="nat-container">
       <div class="nat-story-grid">
         <div class="nat-story-text">
-          <p class="nat-section-eyebrow">${t('story_eyebrow')}</p>
+          <p class="nat-section-eyebrow">${trans(lang, 'bespoke.nav.ourStory')}</p>
           <h2 class="nat-section-h2" id="nat-story-h2">${storyTitle}</h2>
           ${storyProblem ? `<p class="nat-story-problem">${storyProblem}</p>` : ''}
           <p class="nat-story-body">${storyBody}</p>
@@ -1180,8 +1088,8 @@ export function templateEtecNatural(data: LandingPageData): string {
   <!-- ── MATERIALS / FEATURES ── -->
   <section class="nat-section nat-fade" id="materials" aria-labelledby="nat-mat-h2">
     <div class="nat-container">
-      <p class="nat-section-eyebrow">${t('materials_eyebrow')}</p>
-      <h2 class="nat-section-h2" id="nat-mat-h2">${t('materials_title')}</h2>
+      <p class="nat-section-eyebrow">${trans(lang, 'materials.title')}</p>
+      <h2 class="nat-section-h2" id="nat-mat-h2">${trans(lang, 'thoughtfullyDesigned.title')}</h2>
       <p class="nat-section-lead">${data.subtitle}</p>
 
       <div class="nat-feat-grid" role="list">
@@ -1200,16 +1108,16 @@ export function templateEtecNatural(data: LandingPageData): string {
   ${hasBa ? `
   <section class="nat-section-alt nat-fade" aria-labelledby="nat-ba-h2">
     <div class="nat-container">
-      <p class="nat-section-eyebrow">${t('ba_eyebrow')}</p>
-      <h2 class="nat-section-h2" id="nat-ba-h2">${t('ba_title')}</h2>
+      <p class="nat-section-eyebrow">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
+      <h2 class="nat-section-h2" id="nat-ba-h2">${trans(lang, 'legacy.comparison.eyebrow')}</h2>
       <div class="nat-ba-grid">
         <div class="nat-ba-item before">
-          <img src="${imgs(2)}" alt="${t('before_label')}" loading="lazy">
-          <span class="nat-ba-label">${t('before_label')}</span>
+          <img src="${imgs(2)}" alt="${trans(lang, 'legacy.beforeAfter.before')}" loading="lazy">
+          <span class="nat-ba-label">${trans(lang, 'legacy.beforeAfter.before')}</span>
         </div>
         <div class="nat-ba-item">
-          <img src="${imgs(0)}" alt="${t('after_label')}" loading="lazy">
-          <span class="nat-ba-label" style="background:rgba(168,181,160,0.85);">${t('after_label')}</span>
+          <img src="${imgs(0)}" alt="${trans(lang, 'legacy.beforeAfter.after')}" loading="lazy">
+          <span class="nat-ba-label" style="background:rgba(168,181,160,0.85);">${trans(lang, 'legacy.beforeAfter.after')}</span>
         </div>
       </div>
     </div>
@@ -1219,7 +1127,7 @@ export function templateEtecNatural(data: LandingPageData): string {
   <section class="nat-section nat-fade" id="reviews" aria-labelledby="nat-reviews-eyebrow">
     <div class="nat-container-narrow">
       <div class="nat-testimonial">
-        <p class="nat-section-eyebrow" id="nat-reviews-eyebrow">${t('testimonial_eyebrow')}</p>
+        <p class="nat-section-eyebrow" id="nat-reviews-eyebrow">${trans(lang, 'style.quote_eyebrow')}</p>
         <div class="nat-quote-line" aria-hidden="true"></div>
         <span class="nat-quote-mark" aria-hidden="true">&ldquo;</span>
         <blockquote class="nat-quote-text" id="nat-quote-text">
@@ -1232,14 +1140,14 @@ export function templateEtecNatural(data: LandingPageData): string {
 
         ${(data.testimonials?.length ?? 0) > 1 ? `
         <div class="nat-quote-nav" role="group" aria-label="Navigation avis">
-          <button class="nat-quote-nav-btn" onclick="natPrevQuote()" aria-label="${t('aria_prev')}">
+          <button class="nat-quote-nav-btn" onclick="natPrevQuote()" aria-label="${trans(lang, 'style.aria_prev')}">
             ${ICO.arrow_l}
           </button>
           <div class="nat-quote-dots" aria-hidden="true">
             ${(data.testimonials ?? []).slice(0, 5).map((_, i) => `
             <div class="nat-quote-dot${i === 0 ? ' active' : ''}" data-index="${i}"></div>`).join('')}
           </div>
-          <button class="nat-quote-nav-btn" onclick="natNextQuote()" aria-label="${t('aria_next')}">
+          <button class="nat-quote-nav-btn" onclick="natNextQuote()" aria-label="${trans(lang, 'style.aria_next')}">
             ${ICO.arrow_r}
           </button>
         </div>` : ''}
@@ -1255,8 +1163,8 @@ export function templateEtecNatural(data: LandingPageData): string {
           <img src="${imgs(3)}" alt="" loading="lazy">
         </div>
         <div class="nat-behind-content">
-          <p class="nat-section-eyebrow">${t('behind_eyebrow')}</p>
-          <h2 class="nat-section-h2" id="nat-behind-h2">${t('behind_title')}</h2>
+          <p class="nat-section-eyebrow">${trans(lang, 'natural.behind_eyebrow')}</p>
+          <h2 class="nat-section-h2" id="nat-behind-h2">${trans(lang, 'natural.behind_title')}</h2>
           <p class="nat-behind-body">${behindText}</p>
           ${behindAuthor ? `<p class="nat-behind-author">${behindAuthor}</p>` : ''}
         </div>
@@ -1265,10 +1173,10 @@ export function templateEtecNatural(data: LandingPageData): string {
   </section>
 
   <!-- ── GALERIE 2×2 ── -->
-  <section class="nat-section nat-fade" aria-label="${t('aria_gallery')}">
+  <section class="nat-section nat-fade" aria-label="${trans(lang, 'natural.aria_gallery')}">
     <div class="nat-container">
-      <p class="nat-section-eyebrow">${t('gallery_eyebrow')}</p>
-      <div class="nat-gallery-grid" aria-label="${t('aria_gallery')}">
+      <p class="nat-section-eyebrow">${trans(lang, 'style.nav_gallery')}</p>
+      <div class="nat-gallery-grid" aria-label="${trans(lang, 'natural.aria_gallery')}">
         ${[0, 1, 2, 3].map(i => `
         <div class="nat-gallery-item">
           <img src="${imgs(i)}" alt="${brandName}" loading="lazy">
@@ -1281,8 +1189,8 @@ export function templateEtecNatural(data: LandingPageData): string {
   ${data.faq.length > 0 ? `
   <section class="nat-section-alt nat-fade" aria-labelledby="nat-faq-h2">
     <div class="nat-container-narrow">
-      <p class="nat-section-eyebrow">${t('faq_eyebrow')}</p>
-      <h2 class="nat-section-h2" id="nat-faq-h2">${t('faq_title')}</h2>
+      <p class="nat-section-eyebrow">${trans(lang, 'bespoke.nav.questions')}</p>
+      <h2 class="nat-section-h2" id="nat-faq-h2">${trans(lang, 'natural.faq_title')}</h2>
       <div class="nat-faq-list">
         ${faqHtml}
       </div>
@@ -1296,73 +1204,73 @@ export function templateEtecNatural(data: LandingPageData): string {
   <div class="nat-rr-strip" aria-hidden="true">
     <span class="nat-rr-item">
       <span class="nat-rr-icon">${ICO.truck}</span>
-      ${t('rr_shipping')}
+      ${trans(lang, 'natural.rr_shipping')}
     </span>
     <span class="nat-rr-item">
       <span class="nat-rr-icon">${ICO.return_}</span>
-      ${t('rr_returns')}
+      ${trans(lang, 'natural.rr_returns')}
     </span>
     <span class="nat-rr-item">
       <span class="nat-rr-icon">${ICO.leaf}</span>
-      ${t('rr_carbon')}
+      ${trans(lang, 'natural.rr_carbon')}
     </span>
   </div>
 
   <!-- ── FINAL CTA ── -->
   <section class="nat-final-cta nat-fade" id="final-cta" aria-labelledby="nat-final-h2">
-    <p class="nat-section-eyebrow">${t('final_eyebrow')}</p>
+    <p class="nat-section-eyebrow">${trans(lang, 'natural.final_eyebrow')}</p>
     <h2 class="nat-final-h2" id="nat-final-h2">${data.headline}</h2>
     <p class="nat-final-sub">${data.subtitle}</p>
     ${price ? `<p class="nat-final-price">${price}€</p>` : ''}
     <a href="javascript:void(0)" onclick="event.preventDefault()" class="nat-btn-outlined">
-      ${t('final_cta')} ${ICO.arrow_r}
+      ${trans(lang, 'natural.final_cta')} ${ICO.arrow_r}
     </a>
-    <p class="nat-final-note">${t('final_sub')}</p>
+    <p class="nat-final-note">${trans(lang, 'natural.final_sub')}</p>
   </section>
 
   <!-- ── FOOTER ── -->
-  <footer class="nat-footer" id="footer" aria-label="${t('aria_footer')}">
+  <footer class="nat-footer" id="footer" aria-label="${trans(lang, 'style.aria_footer')}">
     <div class="nat-footer-top">
       <div>
         <p class="nat-footer-brand-name">${brandName}</p>
         <p class="nat-footer-brand-desc">${footerDesc}</p>
       </div>
       <div>
-        <p class="nat-footer-col-title">${t('footer_explore')}</p>
+        <p class="nat-footer-col-title">${trans(lang, 'style.styles_eyebrow')}</p>
         <ul class="nat-footer-links" role="list">
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_products')}</a></li>
-          <li><a href="#reviews">${t('footer_reviews')}</a></li>
-          <li><a href="#materials">${t('nav_materials')}</a></li>
-          <li><a href="#story">${t('footer_faq')}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'style.footer_products')}</a></li>
+          <li><a href="#reviews">${trans(lang, 'reviews.eyebrow')}</a></li>
+          <li><a href="#materials">${trans(lang, 'bespoke.nav.materials')}</a></li>
+          <li><a href="#story">${trans(lang, 'bespoke.faqShort')}</a></li>
         </ul>
       </div>
       <div>
-        <p class="nat-footer-col-title">${t('footer_services')}</p>
+        <p class="nat-footer-col-title">${trans(lang, 'bespoke.nav.services')}</p>
         <ul class="nat-footer-links" role="list">
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_delivery')}</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_returns')}</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_support')}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'care.shippingTitle')}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'care.returnsTitle')}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'bespoke.nav.support')}</a></li>
         </ul>
       </div>
       <div>
-        <p class="nat-footer-col-title">${t('footer_contact')}</p>
+        <p class="nat-footer-col-title">${trans(lang, 'bespoke.nav.contact')}</p>
         <ul class="nat-footer-links" role="list">
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_support')}</a></li>
-          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('nav_cta')}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'bespoke.nav.support')}</a></li>
+          <li><a href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'natural.nav_cta')}</a></li>
         </ul>
       </div>
     </div>
     <div class="nat-footer-bottom">
-      <p class="nat-footer-copy">&copy; ${new Date().getFullYear()} ${brandName}. ${t('footer_copyright')}</p>
+      <p class="nat-footer-copy">&copy; ${new Date().getFullYear()} ${brandName}. ${trans(lang, 'style.footer_copyright')}</p>
       <ul class="nat-footer-legal" role="list">
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_privacy')}</a></li>
-        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${t('footer_terms')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'natural.footer_privacy')}</a></li>
+        <li><a href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'natural.footer_terms')}</a></li>
       </ul>
     </div>
   </footer>
 
   <script>
-    // ── SCROLL FADE-IN ─────────────────────────────────────────────────────────
+    // ── SCROLL FADE-IN ──────────────────────────────────────────────────
     var natFadeEls = document.querySelectorAll('.nat-fade')
     var natIO = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
@@ -1374,7 +1282,7 @@ export function templateEtecNatural(data: LandingPageData): string {
     }, { threshold: 0.08, rootMargin: '-32px' })
     natFadeEls.forEach(function(el) { natIO.observe(el) })
 
-    // ── QUOTE ROTATOR ─────────────────────────────────────────────────────────
+    // ── QUOTE ROTATOR ─────────────────────────────────────────────────
     var NAT_QUOTES = ${JSON.stringify(
       data.testimonials && data.testimonials.length > 0
         ? data.testimonials.slice(0, 5).map(t_ => t_.text)

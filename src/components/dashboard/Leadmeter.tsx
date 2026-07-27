@@ -4,9 +4,9 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { TrendingUp, Zap, Eye, Shield, Sparkles, Check, X, Minus, BarChart3 } from 'lucide-react'
 
-/* ───────────────────────────────────
+/* ─────────────────────────────────────────────
    TYPES
-─────────────────────────────────── */
+───────────────────────────────────────────── */
 interface Criterion {
   id: string
   label: string
@@ -24,10 +24,10 @@ interface Metrics {
   h1Length: number
 }
 
-/* ───────────────────────────────────
+/* ─────────────────────────────────────────────
    ANALYSE HTML → CRITÈRES + MÉTRIQUES
    (inchangée — logique métier)
-─────────────────────────────────── */
+───────────────────────────────────────────── */
 function analyzeHtml(html: string): { criteria: Criterion[]; metrics: Metrics } {
   const parser = new DOMParser()
   const doc = parser.parseFromString(html, 'text/html')
@@ -105,9 +105,9 @@ function analyzeHtml(html: string): { criteria: Criterion[]; metrics: Metrics } 
   }
 }
 
-/* ───────────────────────────────────
+/* ─────────────────────────────────────────────
    SCORE PUBLIC (drop-in compatible)
-─────────────────────────────────── */
+───────────────────────────────────────────── */
 export function computeLeadmeterScore(html: string) {
   if (typeof window === 'undefined') return { score: 0, criteria: [] as Criterion[] }
   const { criteria } = analyzeHtml(html)
@@ -115,9 +115,9 @@ export function computeLeadmeterScore(html: string) {
   return { score, criteria }
 }
 
-/* ───────────────────────────────────
+/* ─────────────────────────────────────────────
    PALETTE — tokens sémantiques
-─────────────────────────────────── */
+───────────────────────────────────────────── */
 function getScorePalette(score: number) {
   if (score >= 71) return {
     accentHex:  '#059669',
@@ -148,9 +148,9 @@ function getScorePalette(score: number) {
   }
 }
 
-/* ───────────────────────────────────
+/* ─────────────────────────────────────────────
    COUNT-UP
-─────────────────────────────────── */
+───────────────────────────────────────────── */
 function CountUp({ value, decimals = 0, suffix = '' }: { value: number; decimals?: number; suffix?: string }) {
   const mv = useMotionValue(0)
   const springV = useSpring(mv, { stiffness: 80, damping: 18 })
@@ -161,9 +161,9 @@ function CountUp({ value, decimals = 0, suffix = '' }: { value: number; decimals
   return <>{text}</>
 }
 
-/* ───────────────────────────────────
+/* ─────────────────────────────────────────────
    SCORE RING (drawer)
-─────────────────────────────────── */
+───────────────────────────────────────────── */
 function ScoreRing({ score, ringColor, ringTrack }: { score: number; ringColor: string; ringTrack: string }) {
   const size = 132
   const stroke = 9
@@ -213,9 +213,9 @@ function ScoreRing({ score, ringColor, ringTrack }: { score: number; ringColor: 
   )
 }
 
-/* ───────────────────────────────────
+/* ─────────────────────────────────────────────
    KPI TILE
-─────────────────────────────────── */
+───────────────────────────────────────────── */
 function KpiTile({
   icon: Icon,
   label,
@@ -247,9 +247,9 @@ function KpiTile({
   )
 }
 
-/* ───────────────────────────────────
+/* ─────────────────────────────────────────────
    ÉTATS DE VUE + PERSISTANCE
-─────────────────────────────────── */
+───────────────────────────────────────────── */
 type ViewState = 'drawer' | 'pill' | 'icon'
 const STORAGE_KEY = 'konvert:leadmeter:view'
 const VIOLET = '#7C3AED'
@@ -261,9 +261,9 @@ function loadView(): ViewState {
   return v === 'drawer' || v === 'pill' || v === 'icon' ? v : 'pill'
 }
 
-/* ───────────────────────────────────
+/* ─────────────────────────────────────────────
    ICON BUTTON (header drawer + pill close)
-─────────────────────────────────── */
+───────────────────────────────────────────── */
 function IconBtn({
   onClick,
   children,
@@ -285,9 +285,9 @@ function IconBtn({
   )
 }
 
-/* ───────────────────────────────────
+/* ─────────────────────────────────────────────
    COMPOSANT PRINCIPAL
-─────────────────────────────────── */
+───────────────────────────────────────────── */
 interface Props {
   html: string
 }
@@ -344,9 +344,9 @@ export default function Leadmeter({ html }: Props) {
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      {/* ════════════════════════════════
+      {/* ════════════════════════════════════════
           VUE 1 — ICON (ultra-discret)
-      ════════════════════════════════ */}
+      ════════════════════════════════════════ */}
       {view === 'icon' && (
         <motion.button
           key="icon"
@@ -368,9 +368,9 @@ export default function Leadmeter({ html }: Props) {
         </motion.button>
       )}
 
-      {/* ════════════════════════════════
+      {/* ════════════════════════════════════════
           VUE 2 — PILL (compacte)
-      ════════════════════════════════ */}
+      ════════════════════════════════════════ */}
       {view === 'pill' && (
         <motion.div
           key="pill"
@@ -414,9 +414,9 @@ export default function Leadmeter({ html }: Props) {
         </motion.div>
       )}
 
-      {/* ════════════════════════════════
+      {/* ════════════════════════════════════════
           VUE 3 — DRAWER (panneau complet)
-      ════════════════════════════════ */}
+      ════════════════════════════════════════ */}
       {view === 'drawer' && (
         <motion.div
           key="drawer"

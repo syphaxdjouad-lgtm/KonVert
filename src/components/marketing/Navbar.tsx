@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Sparkles, ChevronDown, ArrowRight, Zap, BarChart3, Globe, Search, Palette, FlaskConical } from 'lucide-react'
+import { Menu, X, ChevronDown, ArrowRight, Zap, BarChart3, Globe, Search } from 'lucide-react'
 
 const NAV = [
   { label: 'Fonctionnalités', href: '/features' },

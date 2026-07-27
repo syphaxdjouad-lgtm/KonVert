@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { IconEdit, IconCopy, IconTrash } from './Icons'
 
 // Labels i18n inline
@@ -14,7 +14,6 @@ const lang = 'fr'
 const t = T[lang]
 
 interface KebabMenuProps {
-  sectionId: string
   sectionLabel: string
   anchorRef: React.RefObject<HTMLButtonElement | null>
   isOpen: boolean
@@ -25,7 +24,6 @@ interface KebabMenuProps {
 }
 
 export default function KebabMenu({
-  sectionId: _sectionId,
   sectionLabel,
   anchorRef,
   isOpen,
@@ -67,17 +65,30 @@ export default function KebabMenu({
     return () => document.removeEventListener('mousedown', onClickOutside)
   }, [isOpen, onClose, anchorRef])
 
-  // Position menu relative to anchor button
-  const getMenuStyle = (): React.CSSProperties => {
-    if (!anchorRef.current) return { display: 'none' }
-    const rect = anchorRef.current.getBoundingClientRect()
-    return {
-      position: 'fixed',
-      top: rect.bottom + 4,
-      right: window.innerWidth - rect.right,
-      minWidth: 188,
+  // Position menu relative to anchor button. Lire anchorRef.current pendant
+  // le render (comme le faisait l'ancienne getMenuStyle() appelée inline
+  // dans le JSX) n'est pas fiable — le ref appartient à un autre composant
+  // et React ne garantit pas sa valeur à jour avant le commit. On la lit
+  // dans un useLayoutEffect (avant paint, pas de flash) et on stocke le
+  // résultat en state.
+  const [menuStyle, setMenuStyle] = useState<React.CSSProperties>({ display: 'none' })
+
+  useLayoutEffect(() => {
+    function computeMenuStyle() {
+      if (!isOpen || !anchorRef.current) {
+        setMenuStyle({ display: 'none' })
+        return
+      }
+      const rect = anchorRef.current.getBoundingClientRect()
+      setMenuStyle({
+        position: 'fixed',
+        top: rect.bottom + 4,
+        right: window.innerWidth - rect.right,
+        minWidth: 188,
+      })
     }
-  }
+    computeMenuStyle()
+  }, [isOpen, anchorRef])
 
   return (
     <>
@@ -94,7 +105,7 @@ export default function KebabMenu({
         role="menu"
         aria-label={`Menu ${sectionLabel}`}
         style={{
-          ...getMenuStyle(),
+          ...menuStyle,
           background: '#FFFFFF',
           border: '1px solid #EDE8DF',
           borderRadius: 8,

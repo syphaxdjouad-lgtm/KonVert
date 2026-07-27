@@ -80,18 +80,27 @@ export function renderPageV3(
   const order = sectionOrder ?? DEFAULT_SECTION_ORDER_V3
   const lang = resolveLanguage(data.language)
 
-  const sectionsRaw = order
+  // (key, html) conservés ensemble avant le .filter(Boolean) sur le html —
+  // un simple .map(renderer) suivi d'un .filter perdrait la correspondance
+  // entre position filtrée et clé de section (Task point 2 éditeur : chaque
+  // section doit porter un data-section-id stable = sa V3SectionKey, pour
+  // que l'éditeur (SectionsList/PreviewIframe) puisse sélectionner/scroller
+  // dessus). Attribut statique et inerte : présent aussi sur le HTML publié,
+  // sans script attaché ici → aucun effet visible/interactif en prod (le
+  // script d'édition est injecté séparément, côté client uniquement, dans
+  // PreviewIframe.tsx).
+  const sectionsWithKeys = order
     .filter(key => shouldRenderSection(key, data))
-    .map(key => {
-      const renderer = SECTION_RENDERERS[key]
-      return renderer(data, tokens)
-    })
-    .filter(Boolean)
+    .map(key => ({ key, html: SECTION_RENDERERS[key](data, tokens) }))
+    .filter(({ html }) => html.trim().length > 0)
 
-  // T3 Sprint 4 — injecter id="main-content" sur la première section
-  // afin que le skip link du nav ("Aller au contenu") y pointe correctement.
-  const sections = sectionsRaw
-    .map((html, idx) => idx === 0 ? html.replace('<section', '<section id="main-content"') : html)
+  // T3 Sprint 4 — injecter id="main-content" sur la première section afin
+  // que le skip link du nav ("Aller au contenu") y pointe correctement.
+  const sections = sectionsWithKeys
+    .map(({ key, html }, idx) => {
+      const idAttr = idx === 0 ? ' id="main-content"' : ''
+      return html.replace('<section', `<section${idAttr} data-section-id="${key}"`)
+    })
     .join('\n')
 
   // P1-1 : Sticky add-to-cart mobile — toujours injecté, même si le prix est absent.

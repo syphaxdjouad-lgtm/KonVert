@@ -2,9 +2,9 @@
 
 import { useState, useRef } from 'react'
 import Link from 'next/link'
-import { Zap, ArrowRight, Check, Shield, Globe, Palette, BarChart3, Copy, ExternalLink, Sparkles, Clock, AlertCircle, Link2, Bot, Rocket } from 'lucide-react'
+import { Zap, ArrowRight, Check, Shield, Globe, Palette, Copy, Sparkles, AlertCircle, Link2, Bot, Rocket } from 'lucide-react'
 
-/* ── TEMPLATES DISPONIBLES ─────────────────────────────────────────────────── */
+/* ── TEMPLATES DISPONIBLES ─────────────────────────────────────────── */
 const DEMO_TEMPLATES = [
   { id: 'etec-blue',    name: 'Blue',           gradient: 'from-[#0057FF] to-[#3b82f6]', text: 'text-white' },
   { id: 'etec-noir',    name: 'Noir',           gradient: 'from-gray-900 to-gray-700',   text: 'text-white' },
@@ -25,11 +25,8 @@ const DEMO_URLS = [
   { label: 'Lampe LED gaming',    url: 'https://fr.aliexpress.com/item/led-lamp-gaming-demo',    platform: 'AliExpress' },
 ]
 
-/* ── GÉNÉRER UN APERÇU FICTIF ───────────────────────────────────────────────── */
-function generateMockPage(url: string, templateId: string, lang: string) {
-  const isAliExpress = url.includes('aliexpress')
-  const isAmazon     = url.includes('amazon')
-
+/* ── GÉNÉRER UN APERÇU FICTIF ────────────────────────────────────── */
+function generateMockPage(url: string) {
   const products: Record<string, { title: string; price: string; desc: string; benefits: string[]; faq: { q: string; a: string }[] }> = {
     'aliexpress.com/item/bluetooth': {
       title:    'Écouteurs Bluetooth Pro 5.0 — Son Stéréo HD 40h Autonomie',
@@ -57,7 +54,7 @@ function generateMockPage(url: string, templateId: string, lang: string) {
   return products[productKey]
 }
 
-/* ── COMPOSANT PAGE DÉMO ────────────────────────────────────────────────────── */
+/* ── COMPOSANT PAGE DÉMO ──────────────────────────────────────────────── */
 export default function DemoPage() {
   const [url,          setUrl]         = useState('')
   const [selectedTpl,  setSelectedTpl] = useState('etec-blue')
@@ -98,7 +95,7 @@ export default function DemoPage() {
     }
 
     await new Promise((r) => setTimeout(r, 300))
-    const mockResult = generateMockPage(url, selectedTpl, selectedLang)
+    const mockResult = generateMockPage(url)
     setResult(mockResult)
     setStep('result')
     setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
@@ -118,355 +115,220 @@ export default function DemoPage() {
   }
 
   return (
-    <>
-      {/* ── BANDEAU SANS INSCRIPTION ─────────────────────────────────────── */}
-      <div className="fixed top-16 left-0 right-0 z-40 flex items-center justify-center gap-2 py-2 text-xs font-bold"
-           style={{ background: 'linear-gradient(90deg, #5B47F5, #7c6af7)', color: '#fff' }}>
-        <span className="w-2 h-2 rounded-full bg-white/60 animate-pulse" />
-        Aucune inscription requise — teste KONVERT maintenant
-      </div>
+    <div className="min-h-screen bg-white">
+      {/* ── HERO ───────────────────────────────────────────────────── */}
+      <section className="pt-32 pb-16 text-center px-5" style={{ background: 'linear-gradient(180deg, #faf9ff 0%, #ffffff 100%)' }}>
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-6 border"
+             style={{ background: 'rgba(91,71,245,0.08)', borderColor: 'rgba(91,71,245,0.2)', color: '#5B47F5' }}>
+          <Sparkles className="w-3.5 h-3.5" />
+          Démo interactive
+        </div>
+        <h1 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4 max-w-2xl mx-auto leading-tight">
+          Colle un lien produit. <span style={{ color: '#5B47F5' }}>Regarde la magie opérer.</span>
+        </h1>
+        <p className="text-lg text-gray-500 max-w-xl mx-auto">
+          Aucune inscription requise. Teste KONVERT avec un vrai produit en 30 secondes.
+        </p>
+      </section>
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="pt-36 pb-10 bg-slate-50">
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
+      {step === 'idle' && (
+        <section className="pb-24 px-5">
+          <div className="max-w-2xl mx-auto">
+            {/* Sources supportées */}
+            <div className="flex justify-center gap-3 mb-6">
+              {SUPPORTED.map((s) => (
+                <span key={s.name} className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100">
+                  {s.emoji} {s.name}
+                </span>
+              ))}
+            </div>
 
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold mb-6 border"
-               style={{ background: 'rgba(91,71,245,0.08)', borderColor: 'rgba(91,71,245,0.2)', color: '#5B47F5' }}>
-            <Sparkles className="w-3.5 h-3.5" />
-            Démo interactive — Essayez gratuitement
+            {/* Input URL */}
+            <div className="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
+              <label className="block text-xs font-semibold text-gray-700 mb-2">Lien du produit</label>
+              <div className="flex gap-2">
+                <div className="flex-1 relative">
+                  <Link2 className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="url"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    placeholder="https://fr.aliexpress.com/item/..."
+                    className="w-full pl-10 pr-4 py-3.5 rounded-xl border border-gray-200 text-sm outline-none focus:ring-2 focus:ring-[#5B47F5]/20 focus:border-[#5B47F5] transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* URLs de démo rapide */}
+              <div className="mt-4">
+                <p className="text-xs text-gray-400 mb-2">Ou essaie avec un produit démo :</p>
+                <div className="flex flex-wrap gap-2">
+                  {DEMO_URLS.map((d) => (
+                    <button
+                      key={d.label}
+                      onClick={() => setUrl(d.url)}
+                      className="text-xs font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-full transition-colors"
+                    >
+                      {d.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sélecteur template */}
+              <div className="mt-6">
+                <label className="block text-xs font-semibold text-gray-700 mb-2">Style de template</label>
+                <div className="flex gap-2">
+                  {DEMO_TEMPLATES.map((t) => (
+                    <button
+                      key={t.id}
+                      onClick={() => setSelectedTpl(t.id)}
+                      className={`flex-1 h-10 rounded-xl bg-gradient-to-r ${t.gradient} transition-all ${
+                        selectedTpl === t.id ? 'ring-2 ring-offset-2 ring-[#5B47F5] scale-105' : 'opacity-60 hover:opacity-100'
+                      }`}
+                      title={t.name}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Sélecteur langue */}
+              <div className="mt-6">
+                <label className="block text-xs font-semibold text-gray-700 mb-2">Langue</label>
+                <div className="flex gap-2 flex-wrap">
+                  {LANGS.map((l) => (
+                    <button
+                      key={l.code}
+                      onClick={() => setLang(l.code)}
+                      className={`text-xs font-semibold px-3 py-2 rounded-lg transition-all ${
+                        selectedLang === l.code ? 'bg-[#5B47F5] text-white' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                      }`}
+                    >
+                      {l.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={handleGenerate}
+                disabled={!url.trim()}
+                className="w-full mt-6 py-4 rounded-xl text-sm font-bold text-white transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 4px 14px rgba(91,71,245,0.3)' }}
+              >
+                <Bot className="w-4 h-4" />
+                Générer ma page
+              </button>
+            </div>
           </div>
+        </section>
+      )}
 
-          <h1 className="text-4xl sm:text-5xl font-black text-slate-900 mb-4">
-            Collez une URL.<br />
-            <span style={{ color: '#5B47F5' }}>Obtenez une page en 30s.</span>
-          </h1>
-          <p className="text-base leading-relaxed mb-2 text-slate-600">
-            Pas de compte requis. Testez avec n&apos;importe quelle URL AliExpress, Amazon ou Alibaba.
-          </p>
+      {step === 'loading' && (
+        <section className="pb-24 px-5">
+          <div className="max-w-md mx-auto text-center">
+            <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ background: 'rgba(91,71,245,0.08)' }}>
+              <Rocket className="w-9 h-9 animate-pulse" style={{ color: '#5B47F5' }} />
+            </div>
+            <h2 className="text-xl font-black text-gray-900 mb-2">Génération en cours...</h2>
+            <p className="text-sm text-gray-500 mb-6">{progress}%</p>
+            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-500"
+                style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #5B47F5, #7c6af7)' }}
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-5">
-            {SUPPORTED.map(({ name, emoji }) => (
-              <span key={name} className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full font-medium"
-                    style={{ background: 'rgba(91,71,245,0.08)', color: '#64748b' }}>
-                {emoji} {name}
-              </span>
+      {step === 'result' && result && (
+        <section ref={resultRef} className="pb-24 px-5">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2 text-emerald-600 text-sm font-bold">
+                <Check className="w-4 h-4" /> Page générée avec succès
+              </div>
+              <button onClick={handleReset} className="text-xs font-semibold text-gray-500 hover:text-gray-800">
+                ← Nouvelle démo
+              </button>
+            </div>
+
+            {/* Preview mockup */}
+            <div className={`rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br ${selectedTemplate.gradient} p-8 sm:p-12`}>
+              <h2 className={`text-2xl sm:text-3xl font-black mb-3 ${selectedTemplate.text}`}>{result.title}</h2>
+              <p className={`text-sm sm:text-base mb-6 opacity-90 ${selectedTemplate.text}`}>{result.desc}</p>
+              <div className={`text-3xl font-black mb-6 ${selectedTemplate.text}`}>{result.price}</div>
+              <ul className="space-y-2 mb-6">
+                {result.benefits.map((b) => (
+                  <li key={b} className={`flex items-center gap-2 text-sm ${selectedTemplate.text}`}>
+                    <Check className="w-4 h-4 flex-shrink-0" /> {b}
+                  </li>
+                ))}
+              </ul>
+              <button className="bg-white text-gray-900 font-bold px-8 py-3.5 rounded-xl text-sm">
+                Ajouter au panier
+              </button>
+            </div>
+
+            {/* FAQ preview */}
+            <div className="mt-6 bg-white rounded-2xl border border-gray-100 p-6">
+              <h3 className="font-bold text-gray-900 mb-4 text-sm">Questions fréquentes générées</h3>
+              <div className="space-y-3">
+                {result.faq.map((f) => (
+                  <div key={f.q}>
+                    <p className="text-sm font-semibold text-gray-800">{f.q}</p>
+                    <p className="text-xs text-gray-500 mt-1">{f.a}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA final */}
+            <div className="mt-8 text-center bg-gray-50 rounded-2xl p-8">
+              <h3 className="font-black text-gray-900 mb-2">Impressionné ? C'est ta boutique qui pourrait avoir ça.</h3>
+              <p className="text-sm text-gray-500 mb-5">Génère ta vraie première page gratuitement, sans CB.</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link
+                  href="/essai"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold text-sm"
+                  style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 4px 14px rgba(91,71,245,0.3)' }}
+                >
+                  Créer ma vraie page <ArrowRight className="w-4 h-4" />
+                </Link>
+                <button
+                  onClick={handleCopyUrl}
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-sm border border-gray-200 text-gray-700"
+                >
+                  <Copy className="w-4 h-4" /> {copiedUrl ? 'Copié !' : "Copier l'URL"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── FEATURES BAR ───────────────────────────────────────────────── */}
+      <section className="py-16 bg-gray-50 border-t border-gray-100">
+        <div className="max-w-5xl mx-auto px-5 sm:px-8">
+          <div className="grid sm:grid-cols-4 gap-6 text-center">
+            {[
+              { icon: Zap, label: '30 secondes', desc: 'De la génération' },
+              { icon: Shield, label: 'Sécurisé', desc: 'OAuth + chiffrement' },
+              { icon: Globe, label: '8 langues', desc: 'Copy natif' },
+              { icon: Palette, label: '42+ templates', desc: 'Toutes niches' },
+            ].map(({ icon: Icon, label, desc }) => (
+              <div key={label} className="flex flex-col items-center gap-2">
+                <div className="w-10 h-10 rounded-xl bg-[#5B47F5]/10 flex items-center justify-center">
+                  <Icon className="w-5 h-5 text-[#5B47F5]" />
+                </div>
+                <p className="font-bold text-gray-900 text-sm">{label}</p>
+                <p className="text-xs text-gray-500">{desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* ── FORMULAIRE GÉNÉRATION ────────────────────────────────────────── */}
-      <section className="py-10 bg-white border-b border-gray-100">
-        <div className="max-w-3xl mx-auto px-5 sm:px-8">
-
-          {/* URLs démo prêtes */}
-          <div className="mb-5">
-            <p className="text-xs font-semibold text-gray-500 mb-2">Essayer avec :</p>
-            <div className="flex flex-wrap gap-2">
-              {DEMO_URLS.map(({ label, url: demoUrl, platform }) => (
-                <button
-                  key={label}
-                  onClick={() => setUrl(demoUrl)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all hover:border-[#5B47F5] hover:text-[#5B47F5]"
-                  style={{ borderColor: url === demoUrl ? '#5B47F5' : '#e5e7eb', color: url === demoUrl ? '#5B47F5' : '#6b7280', background: url === demoUrl ? '#f3f0ff' : '#fff' }}
-                >
-                  {label} <span className="opacity-60">({platform})</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Label URL */}
-          <p className="text-sm font-bold text-gray-800 mb-2">
-            Colle l&apos;URL de ton produit &rarr;
-          </p>
-
-          {/* Input URL */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <input
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
-              placeholder="https://mon-exemple.myshopify.com/products/mon-produit"
-              disabled={step === 'loading'}
-              className="flex-1 min-w-0 px-5 py-4 rounded-full border text-sm outline-none transition-all"
-              style={{ borderColor: '#e5e7eb', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}
-            />
-            <button
-              onClick={handleGenerate}
-              disabled={!url.trim() || step === 'loading'}
-              className="flex items-center justify-center gap-2 px-7 py-4 rounded-full text-white font-bold text-sm whitespace-nowrap transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 4px 16px rgba(91,71,245,0.35)' }}
-            >
-              {step === 'loading' ? (
-                <><div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />Génération...</>
-              ) : (
-                <><Zap className="w-4 h-4" />Générer ma page</>
-              )}
-            </button>
-          </div>
-
-          {/* Options */}
-          <div className="grid sm:grid-cols-2 gap-6">
-            {/* Choix template */}
-            <div>
-              <p className="text-xs font-semibold text-gray-600 mb-2 flex items-center gap-1.5">
-                <Palette className="w-3.5 h-3.5" />Template
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                {DEMO_TEMPLATES.map((tpl) => (
-                  <button
-                    key={tpl.id}
-                    onClick={() => setSelectedTpl(tpl.id)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all`}
-                    style={
-                      selectedTpl === tpl.id
-                        ? { borderColor: '#5B47F5', background: '#f3f0ff', color: '#5B47F5' }
-                        : { borderColor: '#e5e7eb', color: '#6b7280' }
-                    }
-                  >
-                    <div className={`w-3 h-3 rounded-sm bg-gradient-to-br ${tpl.gradient}`} />
-                    {tpl.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Choix langue */}
-            <div>
-              <p className="text-xs font-semibold text-gray-600 mb-2 flex items-center gap-1.5">
-                <Globe className="w-3.5 h-3.5" />Langue
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                {LANGS.map(({ code, label }) => (
-                  <button
-                    key={code}
-                    onClick={() => setLang(code)}
-                    className="px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all"
-                    style={
-                      selectedLang === code
-                        ? { borderColor: '#5B47F5', background: '#f3f0ff', color: '#5B47F5' }
-                        : { borderColor: '#e5e7eb', color: '#6b7280' }
-                    }
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── LOADING STATE ────────────────────────────────────────────────── */}
-      {step === 'loading' && (
-        <section className="py-16 bg-white">
-          <div className="max-w-md mx-auto px-5 text-center">
-            <div className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center"
-                 style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 32px rgba(91,71,245,0.35)' }}>
-              <Sparkles className="w-9 h-9 text-white animate-pulse" />
-            </div>
-            <h2 className="text-xl font-black text-gray-900 mb-2">Claude AI génère votre page...</h2>
-            <p className="text-sm text-gray-500 mb-6">Scraping des données, analyse produit, rédaction du copy.</p>
-            {/* Barre de progression */}
-            <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-300"
-                style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #5B47F5, #8b77ff)' }}
-              />
-            </div>
-            <p className="text-xs text-gray-400 mt-3">{progress}% — Génération en cours</p>
-          </div>
-        </section>
-      )}
-
-      {/* ── RÉSULTAT ─────────────────────────────────────────────────────── */}
-      {step === 'result' && result && (
-        <section ref={resultRef} className="py-10" style={{ background: '#fafafa' }}>
-          <div className="max-w-4xl mx-auto px-5 sm:px-8">
-
-            {/* Header résultat */}
-            <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                  <Check className="w-4 h-4 text-emerald-600" strokeWidth={2.5} />
-                </div>
-                <div>
-                  <p className="font-bold text-gray-900 text-sm">Page générée en 28 secondes</p>
-                  <p className="text-xs text-gray-400">Template : {selectedTemplate.name} · Langue : {LANGS.find(l => l.code === selectedLang)?.label}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <button onClick={handleCopyUrl} className="flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs font-semibold text-gray-600 hover:border-[#5B47F5] hover:text-[#5B47F5] transition-all">
-                  {copiedUrl ? <><Check className="w-3.5 h-3.5 text-emerald-500" />Copié !</> : <><Copy className="w-3.5 h-3.5" />Copier l&apos;URL</>}
-                </button>
-                <button onClick={handleReset} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold text-white transition-all"
-                        style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)' }}>
-                  <Zap className="w-3.5 h-3.5" />Nouvelle page
-                </button>
-              </div>
-            </div>
-
-            {/* Preview page générée */}
-            <div className="bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden">
-
-              {/* Barre navigateur */}
-              <div className="bg-[#f5f5f7] border-b border-gray-100 px-5 py-3 flex items-center gap-3">
-                <div className="flex gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-red-400" />
-                  <span className="w-3 h-3 rounded-full bg-yellow-400" />
-                  <span className="w-3 h-3 rounded-full bg-green-400" />
-                </div>
-                <div className="flex-1 bg-white rounded-lg border border-gray-200 px-3 py-1.5 flex items-center gap-2">
-                  <Shield className="w-3 h-3 text-emerald-500" />
-                  {/* URL fictive — pas de Date.now() pour éviter hydration mismatch SSR/CSR */}
-                  <span className="text-xs text-gray-400 font-mono truncate">konvertpilot.com/preview/demo</span>
-                </div>
-                <span className="text-xs font-black px-2.5 py-1 rounded-md" style={{ background: '#fef3c7', color: '#92400e' }}>
-                  Aperçu d&apos;exemple
-                </span>
-              </div>
-
-              {/* Contenu de la page générée */}
-              <div className="overflow-auto max-h-[600px]">
-
-                {/* Hero produit */}
-                <div className={`bg-gradient-to-br ${selectedTemplate.gradient} p-8 sm:p-12`}>
-                  <div className="max-w-2xl">
-                    <span className="inline-block text-xs font-bold px-3 py-1 rounded-full mb-4"
-                          style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}>
-                      OFFRE LIMITÉE — -40% aujourd&apos;hui
-                    </span>
-                    <h1 className={`text-2xl sm:text-3xl font-black mb-4 leading-tight ${selectedTemplate.text}`}>
-                      {result.title}
-                    </h1>
-                    <div className="flex items-center gap-4 mb-6">
-                      <span className={`text-3xl font-black ${selectedTemplate.text}`}>{result.price}</span>
-                      <span className="line-through text-lg opacity-50" style={{ color: selectedTemplate.id === 'clean-white' ? '#9ca3af' : 'rgba(255,255,255,0.5)' }}>
-                        {parseFloat(result.price) > 0 ? (parseFloat(result.price) * 1.6).toFixed(2).replace('.', ',') + '€' : ''}
-                      </span>
-                    </div>
-                    <button className="px-8 py-4 rounded-full font-black text-sm shadow-lg transition-all hover:scale-[1.02]"
-                            style={{ background: '#fff', color: '#5B47F5' }}>
-                      🛒 J&apos;en profite maintenant →
-                    </button>
-                  </div>
-                </div>
-
-                {/* Description & Bénéfices */}
-                <div className="p-8 border-b border-gray-100">
-                  <h2 className="text-lg font-black text-gray-900 mb-3">Description</h2>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-6">{result.desc}</p>
-                  <h2 className="text-lg font-black text-gray-900 mb-3">Pourquoi vous allez l&apos;adorer</h2>
-                  <ul className="space-y-2.5">
-                    {result.benefits.map((b) => (
-                      <li key={b} className="flex items-center gap-2.5 text-sm text-gray-700">
-                        <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" strokeWidth={2.5} />
-                        {b}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Avis clients */}
-                <div className="p-8 border-b border-gray-100" style={{ background: '#fafafa' }}>
-                  <h2 className="text-lg font-black text-gray-900 mb-5">Ce qu&apos;ils en pensent</h2>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {[
-                      { name: 'Sophie M.', note: '⭐⭐⭐⭐⭐', text: 'Produit parfait, livraison rapide. Je recommande les yeux fermés !' },
-                      { name: 'Pierre D.', note: '⭐⭐⭐⭐⭐', text: 'Qualité supérieure au prix. Exactement comme décrit.' },
-                    ].map(({ name, note, text }) => (
-                      <div key={name} className="bg-white p-4 rounded-xl border border-gray-100">
-                        <p className="text-sm mb-1">{note}</p>
-                        <p className="text-xs font-bold text-gray-900 mb-1">{name}</p>
-                        <p className="text-xs text-gray-500">{text}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* FAQ */}
-                <div className="p-8">
-                  <h2 className="text-lg font-black text-gray-900 mb-5">Questions fréquentes</h2>
-                  <div className="space-y-4">
-                    {result.faq.map(({ q, a }) => (
-                      <div key={q} className="border border-gray-100 rounded-xl p-5">
-                        <p className="font-bold text-gray-900 text-sm mb-2">{q}</p>
-                        <p className="text-gray-600 text-xs leading-relaxed">{a}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Notice démo */}
-            <div className="mt-5 p-4 rounded-xl flex items-start gap-3" style={{ background: 'rgba(91,71,245,0.06)', border: '1px solid rgba(91,71,245,0.15)' }}>
-              <AlertCircle className="w-4 h-4 text-[#5B47F5] flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-xs font-bold text-[#5B47F5] mb-1">Démo simulée</p>
-                <p className="text-xs text-gray-600">
-                  Cette démo illustre le type de page générée par KONVERT. En version complète, la vraie URL produit est scrapée et le copy est entièrement personnalisé.
-                  {' '}<Link href="/essai" className="text-[#5B47F5] font-bold hover:underline">Essaie avec ton produit →</Link>
-                </p>
-              </div>
-            </div>
-
-            {/* CTA upgrade */}
-            <div className="mt-6 p-8 rounded-3xl text-center" style={{ background: 'linear-gradient(135deg, #F0EDFF 0%, #F8F7FF 100%)', border: '1px solid rgba(91,71,245,0.12)' }}>
-              <p className="text-slate-900 font-black text-xl mb-2">Publiez cette page sur votre boutique.</p>
-              <p className="text-sm mb-6 text-slate-600">Connexion Shopify ou WooCommerce en 1 clic. 1 page gratuite pour tester.</p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link
-                  href="/essai"
-                  className="focus-konvert inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full text-white font-bold text-sm"
-                  style={{ background: 'linear-gradient(135deg, #5B47F5, #7c6af7)', boxShadow: '0 8px 24px rgba(91,71,245,0.35)' }}
-                >
-                  Publier sur Shopify
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  href="/templates"
-                  className="focus-konvert inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-sm border transition-colors"
-                  style={{ borderColor: 'rgba(91,71,245,0.3)', color: '#5B47F5' }}
-                >
-                  <Palette className="w-4 h-4" />
-                  Voir les 42 templates
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ── FEATURES DÉMO (si idle) ───────────────────────────────────────── */}
-      {step === 'idle' && (
-        <section className="py-16 bg-white">
-          <div className="max-w-5xl mx-auto px-5 sm:px-8">
-            <div className="text-center mb-10">
-              <p className="text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">Comment ça marche</p>
-              <h2 className="text-3xl font-black text-gray-900">3 étapes, 30 secondes.</h2>
-            </div>
-            <div className="grid sm:grid-cols-3 gap-8">
-              {[
-                { step: '01', Icon: Link2, color: '#5B47F5', bg: 'rgba(91,71,245,0.1)', title: 'Collez une URL', desc: 'AliExpress, Amazon ou Alibaba. KONVERT scrape automatiquement les données produit.' },
-                { step: '02', Icon: Bot, color: '#10b981', bg: 'rgba(16,185,129,0.1)', title: 'IA génère le copy', desc: 'Claude AI rédige accroche, bénéfices, FAQ et CTA optimisés pour la conversion.' },
-                { step: '03', Icon: Rocket, color: '#f97316', bg: 'rgba(249,115,22,0.1)', title: 'Publiez en 1 clic', desc: 'Connectez votre Shopify ou WooCommerce et publiez directement depuis KONVERT.' },
-              ].map(({ step: s, Icon, color, bg, title, desc }) => (
-                <div key={s} className="text-center p-8 rounded-2xl border border-gray-100">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: bg }}>
-                    <Icon className="w-7 h-7" style={{ color }} />
-                  </div>
-                  <span className="text-xs font-black text-[#5B47F5]/40 block mb-2">{s}</span>
-                  <h3 className="font-black text-gray-900 mb-2">{title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-    </>
+    </div>
   )
 }

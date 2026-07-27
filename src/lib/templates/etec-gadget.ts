@@ -1,9 +1,10 @@
 import type { LandingPageData } from '@/types'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
-  renderHeroThumbs,
   type SectionTheme,
+  renderHeroThumbs,
 } from './sections'
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
@@ -87,6 +88,7 @@ const GADGET_THEME: SectionTheme = {
 }
 
 export function templateEtecGadget(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const img = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
 
   const productName   = data.product_name   || 'ProTech Ultra'
@@ -352,10 +354,10 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 <nav class="nav">
   <div class="nav-logo">${productName.split(' ')[0]}</div>
   <div class="nav-links">
-    <a class="nav-link" href="javascript:void(0)">Features</a>
-    <a class="nav-link" href="javascript:void(0)">Specs</a>
-    <a class="nav-link" href="javascript:void(0)">Reviews</a>
-    <a class="nav-link" href="javascript:void(0)">Compare</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'legacy.features.eyebrow')}</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.specs')}</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.reviewsShort')}</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'legacy.competitorComparison.eyebrow')}</a>
   </div>
   <a class="nav-cta" href="javascript:void(0)">Order Now</a>
 </nav>
@@ -459,7 +461,7 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 
 <section class="reviews-section">
   <div style="max-width:900px;margin:0 auto">
-    <div class="section-label" style="text-align:center">Reviews</div>
+    <div class="section-label" style="text-align:center">${trans(lang, 'bespoke.nav.reviewsShort')}</div>
     <h2 class="section-title" style="text-align:center">8,400+ happy customers.</h2>
     <div class="reviews-grid">${reviewsHTML}</div>
   </div>
@@ -467,8 +469,8 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
 
 <section class="faq-section">
   <div class="faq-inner">
-    <div class="section-label" style="text-align:center">FAQ</div>
-    <h2 class="section-title" style="text-align:center;margin-bottom:40px">Common questions.</h2>
+    <div class="section-label" style="text-align:center">${trans(lang, 'bespoke.faqShort')}</div>
+    <h2 class="section-title" style="text-align:center;margin-bottom:40px">${trans(lang, 'bespoke.faq.commonQuestions')}</h2>
     ${faqHTML}
   </div>
 </section>
@@ -487,24 +489,24 @@ body{font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;back
         <p class="footer-tagline">Technology engineered for real life. No compromises.</p>
       </div>
       <div>
-        <div class="footer-col-title">Product</div>
-        <a class="footer-link" href="javascript:void(0)">Features</a>
-        <a class="footer-link" href="javascript:void(0)">Specs</a>
-        <a class="footer-link" href="javascript:void(0)">Compare</a>
-        <a class="footer-link" href="javascript:void(0)">Accessories</a>
+        <div class="footer-col-title">${trans(lang, 'bespoke.nav.product')}</div>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'legacy.features.eyebrow')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.specs')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'legacy.competitorComparison.eyebrow')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.accessories')}</a>
       </div>
       <div>
-        <div class="footer-col-title">Company</div>
-        <a class="footer-link" href="javascript:void(0)">About</a>
-        <a class="footer-link" href="javascript:void(0)">Blog</a>
-        <a class="footer-link" href="javascript:void(0)">Press</a>
+        <div class="footer-col-title">${trans(lang, 'bespoke.nav.company')}</div>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.about')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.blog')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.press')}</a>
         <a class="footer-link" href="javascript:void(0)">Careers</a>
       </div>
       <div>
-        <div class="footer-col-title">Support</div>
-        <a class="footer-link" href="javascript:void(0)">FAQ</a>
-        <a class="footer-link" href="javascript:void(0)">Shipping</a>
-        <a class="footer-link" href="javascript:void(0)">Returns</a>
+        <div class="footer-col-title">${trans(lang, 'bespoke.nav.support')}</div>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.faqShort')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'care.shippingTitle')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'care.returnsTitle')}</a>
         <a class="footer-link" href="javascript:void(0)">Warranty</a>
       </div>
     </div>

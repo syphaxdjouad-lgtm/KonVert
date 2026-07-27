@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const BOOST_THEME: SectionTheme = {
 }
 
 export function templateEtecBoost(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
@@ -50,7 +52,7 @@ export function templateEtecBoost(data: LandingPageData): string {
 .bo-btn-alt{background:#FFF0F5;color:#FF2277;border:none;border-radius:14px;padding:15px 40px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;}.bo-btn-alt:hover{background:#FFE0EB;}
 @media(max-width:768px){.bo-hero{flex-direction:column!important;}.bo-hero-img{width:100%!important;height:460px!important;}.bo-hero-info{width:100%!important;padding:32px 20px!important;}.bo-grid3{grid-template-columns:1fr!important;}.bo-compare{flex-direction:column!important;}.bo-reviews{grid-template-columns:1fr!important;}}</style></head><body>
 <div style="background:linear-gradient(90deg,#FF2277,#724CE9);color:#fff;text-align:center;padding:12px 20px;font-size:12px;font-weight:600;">${data.urgency || 'Offre flash — Plus que quelques unités en stock !'}</div>
-<nav style="background:#fff;border-bottom:1px solid #F0E0F0;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#BBB;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#BBB;">Wellness</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#1A1A2E;font-weight:600;">${data.product_name}</span></div></nav>
+<nav style="background:#fff;border-bottom:1px solid #F0E0F0;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#BBB;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#BBB;">Wellness</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#1A1A2E;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#fff;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="bo-hero">
 <div style="width:55%;position:relative;background:#FFF0F5;overflow:hidden;border-radius:0 14px 14px 0;" class="bo-hero-img"><img id="mi-bo" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
       ${renderHeroThumbs(_real ?? imgs ?? [], BOOST_THEME, 'mi-bo')}
@@ -63,11 +65,11 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:lin
 <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;"><div style="display:flex;">${'★★★★★'.split('').map(() => `<span style="color:#FF2277;font-size:16px;">★</span>`).join('')}</div><span style="font-size:13px;color:#999;">4.9/5 · 2 847 avis</span></div>
 <div style="background:#FFF0F5;border-radius:14px;padding:16px 24px;display:inline-flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-size:36px;font-weight:800;color:#FF2277;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#CCC;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#FF2277,#724CE9);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✓</span><span style="font-size:14px;color:#555;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="bo-btn" style="flex:1;text-align:center;">${data.cta || 'Commander maintenant'}</button><button class="bo-btn-alt" style="flex:1;text-align:center;">Composition</button></div>
+<div style="display:flex;gap:12px;"><button class="bo-btn" style="flex:1;text-align:center;">${data.cta || 'Commander maintenant'}</button><button class="bo-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.nav.composition')}</button></div>
 <div style="display:flex;gap:16px;margin-top:20px;justify-content:center;"><span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.truck(13)} Offerte</span><span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.lock(13)} Sécurisé</span><span style="font-size:11px;color:#BBB;display:flex;align-items:center;gap:5px;">${ico.shield(13)} Garanti</span><span style="font-size:11px;color:#039903;font-weight:600;display:flex;align-items:center;gap:5px;">${ico.flash(13)} En stock</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#FFF0F5;"><div style="max-width:1100px;margin:0 auto;">
-<p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#FF2277;text-align:center;text-transform:uppercase;margin-bottom:8px;">Résultats prouvés</p>
+<p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#FF2277;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.section.provenResults')}</p>
 <h2 style="font-size:32px;font-weight:800;color:#1A1A2E;text-align:center;margin-bottom:56px;">Pourquoi ils adorent</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="bo-grid3">${[
   { t: benefits[0]||'Formule naturelle', d: 'Ingrédients purs et efficaces, sans additifs inutiles' },
@@ -76,7 +78,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:lin
 ].map(s => `<div style="background:#fff;border-radius:14px;padding:36px 28px;text-align:center;"><h3 style="font-size:18px;font-weight:700;color:#1A1A2E;margin-bottom:10px;">${s.t}</h3><p style="font-size:14px;color:#999;line-height:1.7;">${s.d}</p></div>`).join('')}</div></div></section>
 <section style="padding:80px 24px;background:#fff;"><div style="max-width:1000px;margin:0 auto;">
 <h2 style="font-size:32px;font-weight:800;color:#1A1A2E;text-align:center;margin-bottom:48px;">Avant / Après</h2>
-<div style="display:flex;gap:20px;" class="bo-compare"><div style="flex:1;position:relative;border-radius:14px;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Avant"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">Avant</p></div></div><div style="flex:1;position:relative;border-radius:14px;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Après"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">Après</p></div></div></div></div></section>
+<div style="display:flex;gap:20px;" class="bo-compare"><div style="flex:1;position:relative;border-radius:14px;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Avant"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">${trans(lang, 'legacy.beforeAfter.before')}</p></div></div><div style="flex:1;position:relative;border-radius:14px;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Après"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">${trans(lang, 'legacy.beforeAfter.after')}</p></div></div></div></div></section>
 <section style="padding:80px 24px;background:#FFF0F5;"><div style="max-width:1100px;margin:0 auto;">
 <h2 style="font-size:32px;font-weight:800;color:#1A1A2E;text-align:center;margin-bottom:48px;">+2 800 avis 5 étoiles</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="bo-reviews">${[
@@ -84,7 +86,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:lin
   { name:'Karim A.', text:`J'étais sceptique mais les résultats parlent d'eux-mêmes. Formule top, goût agréable. 5 étoiles.`, date:'5 jours' },
   { name:'Chloé D.', text:'Commandé 3 fois déjà. Livraison rapide, produit efficace. Mon entourage me demande mon secret !', date:'1 semaine' },
 ].map(r => `<div style="background:#fff;border-radius:14px;padding:28px 24px;"><div style="color:#FF2277;font-size:13px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div><p style="font-size:14px;color:#555;line-height:1.75;margin-bottom:20px;">"${r.text}"</p><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#FF2277,#724CE9);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">${r.name[0]}</div><div><p style="font-size:13px;font-weight:600;color:#1A1A2E;">${r.name}</p><p style="font-size:11px;color:#BBB;">Il y a ${r.date}</p></div></div></div>`).join('')}</div></div></section>
-<section style="padding:80px 24px;background:#fff;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-size:32px;font-weight:800;color:#1A1A2E;text-align:center;margin-bottom:48px;">FAQ</h2><div style="background:#FFF0F5;border-radius:14px;padding:8px 32px;">${faqHtml}</div></div></section>
+<section style="padding:80px 24px;background:#fff;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-size:32px;font-weight:800;color:#1A1A2E;text-align:center;margin-bottom:48px;">${trans(lang, 'bespoke.faqShort')}</h2><div style="background:#FFF0F5;border-radius:14px;padding:8px 32px;">${faqHtml}</div></div></section>
 <section style="padding:100px 24px;background:linear-gradient(135deg,#724CE9,#FF2277);"><div style="max-width:700px;margin:0 auto;text-align:center;">
 <h2 style="font-size:40px;font-weight:800;color:#fff;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:36px;">${data.subtitle}</p>

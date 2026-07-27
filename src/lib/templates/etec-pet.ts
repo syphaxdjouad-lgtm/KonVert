@@ -1,4 +1,5 @@
 import type { LandingPageData } from '@/types'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -79,6 +80,7 @@ const PET_THEME: SectionTheme = {
 }
 
 export function templateEtecPet(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const img = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
 
   const productName   = data.product_name   || 'BarkBuddy Pro Chew Toy'
@@ -348,9 +350,9 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
   <div class="nav-logo">🐾 PetCo</div>
   <div class="nav-links">
     <a class="nav-link" href="javascript:void(0)">Why We're Different</a>
-    <a class="nav-link" href="javascript:void(0)">Reviews</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.reviewsShort')}</a>
     <a class="nav-link" href="javascript:void(0)">Sizes</a>
-    <a class="nav-link" href="javascript:void(0)">FAQ</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.faqShort')}</a>
   </div>
   <a class="nav-cta" href="javascript:void(0)">Shop Now 🐾</a>
 </nav>
@@ -385,7 +387,7 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
 
 <div class="media-bar">
   <div class="media-inner">
-    <span class="media-label">As seen in</span>
+    <span class="media-label">${trans(lang, 'legacy.pressMentions.eyebrow')}</span>
     <span class="media-logo">Cosmopolitan Pets</span>
     <span class="media-logo">BuzzFeed</span>
     <span class="media-logo">Good Morning America</span>
@@ -424,7 +426,7 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
       </div>
       <p class="price-note">Free shipping · 30-day guarantee</p>
       <div class="qty-row">
-        <span class="qty-label">Qty</span>
+        <span class="qty-label">${trans(lang, 'qty.srLabel')}</span>
         <div class="qty-ctrl">
           <button class="qty-btn" onclick="changeQty(-1)">${ICON_MINUS}</button>
           <span class="qty-val" id="qty">1</span>
@@ -446,7 +448,7 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
   <div class="how-inner" style="max-width:1000px;margin:0 auto">
     <img src="${img(1)}" alt="Happy pet" class="how-img">
     <div>
-      <div class="section-eyebrow" style="color:${C.orange}">How It Works</div>
+      <div class="section-eyebrow" style="color:${C.orange}">${trans(lang, 'legacy.howItWorks.title')}</div>
       <h2 style="font-size:clamp(28px,3vw,40px);font-weight:800;color:#fff;letter-spacing:-0.03em;margin-bottom:12px">Happy pet in 3 steps.</h2>
       <p style="font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:40px;line-height:1.6">No assembly. No complicated instructions. Just pure joy for your furry friend.</p>
       <div class="how-steps">${stepsHTML}</div>
@@ -456,7 +458,7 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
 
 <section class="reviews-section">
   <div class="reviews-inner">
-    <div class="section-eyebrow">Reviews</div>
+    <div class="section-eyebrow">${trans(lang, 'bespoke.nav.reviewsShort')}</div>
     <h2 class="section-h">12,000+ happy pets can't be wrong.</h2>
     <div class="reviews-grid">${reviewsHTML}</div>
   </div>
@@ -477,8 +479,8 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
 
 <section class="faq-section">
   <div class="faq-inner">
-    <div class="section-eyebrow">FAQ</div>
-    <h2 style="font-size:clamp(24px,2.5vw,36px);font-weight:800;letter-spacing:-0.03em;margin-bottom:36px">Common questions.</h2>
+    <div class="section-eyebrow">${trans(lang, 'bespoke.faqShort')}</div>
+    <h2 style="font-size:clamp(24px,2.5vw,36px);font-weight:800;letter-spacing:-0.03em;margin-bottom:36px">${trans(lang, 'bespoke.faq.commonQuestions')}</h2>
     ${faqHTML}
   </div>
 </section>
@@ -499,23 +501,23 @@ body{font-family:-apple-system,'Inter','Helvetica Neue',sans-serif;background:${
       <div>
         <div class="footer-col-title">Products</div>
         <a class="footer-link" href="javascript:void(0)">Toys</a>
-        <a class="footer-link" href="javascript:void(0)">Accessories</a>
-        <a class="footer-link" href="javascript:void(0)">Nutrition</a>
-        <a class="footer-link" href="javascript:void(0)">Bundles</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.accessories')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.nutrition')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.bundles')}</a>
       </div>
       <div>
-        <div class="footer-col-title">Company</div>
-        <a class="footer-link" href="javascript:void(0)">About Us</a>
-        <a class="footer-link" href="javascript:void(0)">Our Story</a>
-        <a class="footer-link" href="javascript:void(0)">Reviews</a>
-        <a class="footer-link" href="javascript:void(0)">Affiliates</a>
+        <div class="footer-col-title">${trans(lang, 'bespoke.nav.company')}</div>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.about')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.ourStory')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.reviewsShort')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.affiliates')}</a>
       </div>
       <div>
-        <div class="footer-col-title">Support</div>
-        <a class="footer-link" href="javascript:void(0)">FAQ</a>
-        <a class="footer-link" href="javascript:void(0)">Shipping</a>
-        <a class="footer-link" href="javascript:void(0)">Returns</a>
-        <a class="footer-link" href="javascript:void(0)">Contact</a>
+        <div class="footer-col-title">${trans(lang, 'bespoke.nav.support')}</div>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.faqShort')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'care.shippingTitle')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'care.returnsTitle')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.contact')}</a>
       </div>
     </div>
     <div class="footer-bottom">

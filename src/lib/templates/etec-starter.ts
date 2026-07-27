@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const STARTER_THEME: SectionTheme = {
 }
 
 export function templateEtecStarter(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
@@ -50,7 +52,7 @@ export function templateEtecStarter(data: LandingPageData): string {
 .st-btn-alt{background:#F5F5FF;color:#4F46E5;border:none;border-radius:12px;padding:15px 40px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;}.st-btn-alt:hover{background:#EEF2FF;}
 @media(max-width:768px){.st-hero{flex-direction:column!important;}.st-hero-img{width:100%!important;height:460px!important;}.st-hero-info{width:100%!important;padding:32px 20px!important;}.st-grid3{grid-template-columns:1fr!important;}.st-compare{flex-direction:column!important;}.st-reviews{grid-template-columns:1fr!important;}}</style></head><body>
 <div style="background:#4F46E5;color:#fff;text-align:center;padding:11px 20px;font-size:12px;font-weight:500;">${data.urgency || `Offre spéciale — Livraison offerte aujourd'hui`}</div>
-<nav style="background:#fff;border-bottom:1px solid #E5E7EB;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">Boutique</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#111;font-weight:600;">${data.product_name}</span></div></nav>
+<nav style="background:#fff;border-bottom:1px solid #E5E7EB;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.shop')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#111;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#fff;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="st-hero">
 <div style="width:55%;position:relative;background:#F5F5FF;overflow:hidden;border-radius:0 12px 12px 0;" class="st-hero-img"><img id="mi-st" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
       ${renderHeroThumbs(_real ?? imgs ?? [], STARTER_THEME, 'mi-st')}
@@ -62,7 +64,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#4F
 <p style="font-size:15px;color:#888;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-size:36px;font-weight:700;color:#111;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#CCC;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="width:20px;height:20px;border-radius:6px;background:#F5F5FF;color:#4F46E5;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✓</span><span style="font-size:14px;color:#555;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="st-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="st-btn-alt" style="flex:1;text-align:center;">En savoir plus</button></div>
+<div style="display:flex;gap:12px;"><button class="st-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="st-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.cta.learnMore')}</button></div>
 <div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #E5E7EB;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Offerte</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Sécurisé</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(14)} Retour 30j</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#F5F5FF;"><div style="max-width:1100px;margin:0 auto;">
@@ -74,16 +76,16 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#4F
   { t: benefits[2]||'Satisfaction garantie', d: `Retour gratuit sous 30 jours si vous n'êtes pas satisfait` },
 ].map(s => `<div style="background:#fff;border-radius:12px;padding:36px 28px;text-align:center;border:1px solid #E5E7EB;"><h3 style="font-size:18px;font-weight:600;color:#111;margin-bottom:10px;">${s.t}</h3><p style="font-size:14px;color:#888;line-height:1.7;">${s.d}</p></div>`).join('')}</div></div></section>
 <section style="padding:80px 24px;background:#fff;"><div style="max-width:1000px;margin:0 auto;">
-<h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#111;text-align:center;margin-bottom:48px;">En situation</h2>
+<h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#111;text-align:center;margin-bottom:48px;">${trans(lang, 'bespoke.section.inSituation')}</h2>
 <div style="display:flex;gap:20px;" class="st-compare"><div style="flex:1;position:relative;border-radius:12px;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Vue 1"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.6));"><p style="color:#fff;font-size:14px;font-weight:600;">Au quotidien</p></div></div><div style="flex:1;position:relative;border-radius:12px;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Vue 2"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.6));"><p style="color:#fff;font-size:14px;font-weight:600;">En déplacement</p></div></div></div></div></section>
 <section style="padding:80px 24px;background:#F5F5FF;"><div style="max-width:1100px;margin:0 auto;">
-<h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#111;text-align:center;margin-bottom:48px;">Avis clients</h2>
+<h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#111;text-align:center;margin-bottom:48px;">${trans(lang, 'reviews.eyebrow')}</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="st-reviews">${[
   { name:'Thomas D.', text:`Le ${data.product_name} a dépassé mes attentes. Qualité irréprochable et livraison ultra rapide.`, date:'3 jours' },
   { name:'Marine L.', text:'Exactement ce que je cherchais. Simple, efficace, bien pensé. Je recommande à 100%.', date:'1 semaine' },
   { name:'Antoine P.', text:`Rapport qualité-prix imbattable. J'en ai commandé un deuxième pour offrir.`, date:'2 semaines' },
 ].map(r => `<div style="background:#fff;border-radius:12px;padding:28px 24px;border:1px solid #E5E7EB;"><div style="color:#4F46E5;font-size:13px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div><p style="font-size:14px;color:#555;line-height:1.75;margin-bottom:20px;">"${r.text}"</p><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:#4F46E5;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;">${r.name[0]}</div><div><p style="font-size:13px;font-weight:600;color:#111;">${r.name}</p><p style="font-size:11px;color:#AAA;">Il y a ${r.date}</p></div></div></div>`).join('')}</div></div></section>
-<section style="padding:80px 24px;background:#fff;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#111;text-align:center;margin-bottom:48px;">FAQ</h2><div style="background:#F5F5FF;border-radius:12px;padding:8px 32px;">${faqHtml}</div></div></section>
+<section style="padding:80px 24px;background:#fff;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;color:#111;text-align:center;margin-bottom:48px;">${trans(lang, 'bespoke.faqShort')}</h2><div style="background:#F5F5FF;border-radius:12px;padding:8px 32px;">${faqHtml}</div></div></section>
 <section style="padding:100px 24px;background:#4F46E5;"><div style="max-width:700px;margin:0 auto;text-align:center;">
 <h2 style="font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:700;color:#fff;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:36px;">${data.subtitle}</p>

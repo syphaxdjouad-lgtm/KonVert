@@ -1,12 +1,13 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 import {
   renderRichSections,
   type SectionTheme,
   renderHeroThumbs,
 } from './sections'
 
-// ─── FALLBACK IMAGES — skincare botanique Unsplash ───────────────────────────
+// ─── FALLBACK IMAGES — skincare botanique Unsplash ─────────────────────
 
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=800&q=80',
@@ -15,7 +16,7 @@ const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1585842378054-ee2e52f94ba2?w=800&q=80',
 ]
 
-// ─── COLOR TOKENS ────────────────────────────────────────────────────────────
+// ─── COLOR TOKENS ───────────────────────────────────────────────
 
 const C = {
   bg:          '#F4F0E8',
@@ -43,7 +44,7 @@ const VELVETY_THEME: SectionTheme = {
   radius:     '20px',
 }
 
-// ─── INLINE SVG DECORATIONS ──────────────────────────────────────────────────
+// ─── INLINE SVG DECORATIONS ─────────────────────────────────────────
 
 const LEAF_BG = `<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 480 480" fill="none" style="position:absolute;right:-80px;top:-80px;opacity:.07;pointer-events:none;">
   <path d="M240 40 C320 80 420 160 400 280 C380 400 280 440 200 420 C120 400 60 320 80 220 C100 120 160 0 240 40Z" fill="#D6E8D9"/>
@@ -65,9 +66,10 @@ const FLORAL_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="340" height="
   <circle cx="170" cy="170" r="8" fill="#4A7C59"/>
 </svg>`
 
-// ─── MAIN EXPORT ─────────────────────────────────────────────────────────────
+// ─── MAIN EXPORT ───────────────────────────────────────────────────
 
 export function templateEtecVelvety(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? [];
   const imgs = _real.length >= 1
     ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length])
@@ -87,7 +89,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
     data.benefits?.[4] || 'Biodegradable packaging — our commitment to your skin and to the planet.',
   ]
 
-  // ── PRODUCT CARDS (3 variantes) ──────────────────────────────────────────
+  // ── PRODUCT CARDS (3 variantes) ───────────────────────────────
   const productNames = [
     data.product_name,
     data.product_name,
@@ -120,7 +122,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
       </div>
     </div>`).join('')
 
-  // ── ALL PRODUCTS GRID (4 items) ───────────────────────────────────────────
+  // ── ALL PRODUCTS GRID (4 items) ─────────────────────────────────
   const allProductsHTML = [0, 1, 2, 3].map(i => {
     const pname = data.product_name
     const pprice = `€${(parseFloat(price) + (i * 4 - 3)).toFixed(2)}`
@@ -141,7 +143,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
     </div>`
   }).join('')
 
-  // ── FILTER TAGS ──────────────────────────────────────────────────────────
+  // ── FILTER TAGS ──────────────────────────────────────────
   const filterTags = ['All assets', 'Protein', 'Supplement', 'Purifying', 'Natural Retinol', 'Collagen', 'Antioxidant', 'Vitamin', 'Hyaluron', 'Peptides']
   const filterTagsHTML = filterTags.map((tag, i) => `
     <button
@@ -150,7 +152,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
       style="padding:8px 18px;border-radius:100px;border:1px solid ${i === 0 ? C.accentDark : C.border};background:${i === 0 ? C.accentDark : C.card};color:${i === 0 ? '#fff' : C.muted};font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all .2s;"
     >${tag}</button>`).join('')
 
-  // ── FAQ ACCORDION ─────────────────────────────────────────────────────────
+  // ── FAQ ACCORDION ───────────────────────────────────────────
   const faqItems = data.faq && data.faq.length > 0 ? data.faq : [
     { question: 'Are all your ingredients truly organic?', answer: 'Yes — every active ingredient in our formulas is certified organic by ECOCERT or COSMOS. We source directly from partner farms committed to sustainable agriculture.' },
     { question: 'Is this suitable for sensitive skin?', answer: `${data.product_name} has been dermatologist-tested and is free from parabens, sulfates, artificial fragrances, and known irritants. It is suitable for sensitive, reactive, and combination skin.` },
@@ -173,9 +175,9 @@ export function templateEtecVelvety(data: LandingPageData): string {
       >${item.answer}</div>
     </div>`).join('')
 
-  // ─────────────────────────────────────────────────────────────────────────
+  // ───────────────────────────────────────────────────────────────────
   // HTML TEMPLATE
-  // ─────────────────────────────────────────────────────────────────────────
+  // ───────────────────────────────────────────────────────────────────
 
   return `<!DOCTYPE html>
 <html lang="${data.language || 'fr'}" dir="${data.language === 'ar' ? 'rtl' : 'ltr'}">
@@ -190,7 +192,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
   img{display:block;}
   a{text-decoration:none;}
 
-  /* ── Responsive ─────────────────────────────────────────────────────────── */
+  /* ── Responsive ───────────────────────────────────────────────────── */
   @media(max-width:900px){
     .hgv{grid-template-columns:1fr!important;gap:32px!important;}
     .hgv>div:first-child{order:2!important;}
@@ -214,9 +216,9 @@ export function templateEtecVelvety(data: LandingPageData): string {
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ════════════════════════════════════════════════════════════════════════════════════════
      1. NAVBAR
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <nav style="position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid ${C.border};box-shadow:0 1px 12px rgba(30,61,47,.06);">
   <div style="max-width:1280px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:68px;">
 
@@ -247,9 +249,9 @@ export function templateEtecVelvety(data: LandingPageData): string {
 </nav>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════ -->
      2. HERO — fond vert forêt avec motif feuilles SVG
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.hero};position:relative;overflow:hidden;">
   ${LEAF_BG}
 
@@ -318,9 +320,9 @@ export function templateEtecVelvety(data: LandingPageData): string {
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      3. INSPIRED BY NATURE — fond crème
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:96px 0;">
   <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
     <div class="abv" style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;">
@@ -362,9 +364,9 @@ export function templateEtecVelvety(data: LandingPageData): string {
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      4. FEATURED PRODUCTS — fond blanc
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.card};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
 
@@ -388,16 +390,16 @@ export function templateEtecVelvety(data: LandingPageData): string {
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      5. ABOUT SECTION — fond crème
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section id="about-v" style="background:${C.bg};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
     <div class="abv" style="display:grid;grid-template-columns:1fr 1fr;gap:72px;">
 
       <!-- Colonne gauche -->
       <div>
-        <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:16px;">Our Story</p>
+        <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:16px;">${trans(lang, 'bespoke.nav.ourStory')}</p>
         <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:600;line-height:1.2;color:${C.text};margin-bottom:24px;letter-spacing:-.01em;">${data.product_name.split(' ')[0]} — ${data.subtitle?.split(' ').slice(0,5).join(' ') || 'Our Story'}</h2>
         <p style="font-size:15px;color:${C.muted};line-height:1.85;margin-bottom:24px;font-family:'DM Sans',sans-serif;">
           ${data.subtitle || `We were born from a simple belief: the most effective skincare is the kind that works in harmony with your skin, not against it. Every product we craft starts with a botanical story — a plant, a root, a flower — and ends with a formula your skin will love.`}
@@ -422,7 +424,7 @@ export function templateEtecVelvety(data: LandingPageData): string {
 
     <!-- Logos presse -->
     <div style="margin-top:64px;padding-top:40px;border-top:1px solid ${C.border};">
-      <p style="text-align:center;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};margin-bottom:28px;font-family:'DM Sans',sans-serif;">As seen in</p>
+      <p style="text-align:center;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};margin-bottom:28px;font-family:'DM Sans',sans-serif;">${trans(lang, 'legacy.pressMentions.eyebrow')}</p>
       <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:36px 48px;">
         ${['VOGUE', 'Forbes', 'THOUGHT CATALOG', "Women's Health", 'WWD'].map(press => `
           <span style="font-family:'Playfair Display',Georgia,serif;font-size:15px;font-weight:600;color:rgba(92,122,101,.45);letter-spacing:.04em;">${press}</span>
@@ -434,9 +436,9 @@ export function templateEtecVelvety(data: LandingPageData): string {
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      6. ALL PRODUCTS + FILTERS — fond vert pâle
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section id="all-products-v" style="background:${C.bgAlt};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
 
@@ -460,9 +462,9 @@ export function templateEtecVelvety(data: LandingPageData): string {
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      7. SKIN DIAGNOSIS CTA — fond blanc
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.card};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
     <div class="abv" style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;">
@@ -491,9 +493,9 @@ export function templateEtecVelvety(data: LandingPageData): string {
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      8. TESTIMONIALS — fond crème
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:860px;margin:0 auto;padding:0 32px;text-align:center;" id="testimonials-v">
 
@@ -510,21 +512,21 @@ export function templateEtecVelvety(data: LandingPageData): string {
           <blockquote style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:400;font-style:italic;line-height:1.65;color:${C.text};margin-bottom:32px;max-width:720px;margin-left:auto;margin-right:auto;">
             "${data.testimonials?.[0]?.text || `I picked up ${data.product_name} and I am absolutely amazed. The results exceeded all my expectations — I couldn't be happier!`}"
           </blockquote>
-          <p style="font-size:14px;font-weight:600;color:${C.muted};font-family:'DM Sans',sans-serif;">— Sarah M. <span style="font-weight:400;color:${C.border}">&nbsp;·&nbsp;</span> <span style="font-weight:400;">Verified buyer</span></p>
+          <p style="font-size:14px;font-weight:600;color:${C.muted};font-family:'DM Sans',sans-serif;">— Sarah M. <span style="font-weight:400;color:${C.border}">&nbsp;·&nbsp;</span> <span style="font-weight:400;">${trans(lang, 'reviews.verifiedPurchase')}</span></p>
         </div>
         <!-- Slide 1 -->
         <div class="tsl-itemv" style="display:none;">
           <blockquote style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:400;font-style:italic;line-height:1.65;color:${C.text};margin-bottom:32px;max-width:720px;margin-left:auto;margin-right:auto;">
             "The texture is divine — light as a feather but incredibly nourishing. I've been using it for three weeks and my skin has never looked this radiant. I'm never going back."
           </blockquote>
-          <p style="font-size:14px;font-weight:600;color:${C.muted};font-family:'DM Sans',sans-serif;">— Emma L. <span style="font-weight:400;color:${C.border}">&nbsp;·&nbsp;</span> <span style="font-weight:400;">Verified buyer</span></p>
+          <p style="font-size:14px;font-weight:600;color:${C.muted};font-family:'DM Sans',sans-serif;">— Emma L. <span style="font-weight:400;color:${C.border}">&nbsp;·&nbsp;</span> <span style="font-weight:400;">${trans(lang, 'reviews.verifiedPurchase')}</span></p>
         </div>
         <!-- Slide 2 -->
         <div class="tsl-itemv" style="display:none;">
           <blockquote style="font-family:'Playfair Display',Georgia,serif;font-size:24px;font-weight:400;font-style:italic;line-height:1.65;color:${C.text};margin-bottom:32px;max-width:720px;margin-left:auto;margin-right:auto;">
             "Finally a brand that lives up to its claims. All organic, all effective — and the packaging is absolutely beautiful. Makes your morning routine feel like a ritual."
           </blockquote>
-          <p style="font-size:14px;font-weight:600;color:${C.muted};font-family:'DM Sans',sans-serif;">— Clara R. <span style="font-weight:400;color:${C.border}">&nbsp;·&nbsp;</span> <span style="font-weight:400;">Verified buyer</span></p>
+          <p style="font-size:14px;font-weight:600;color:${C.muted};font-family:'DM Sans',sans-serif;">— Clara R. <span style="font-weight:400;color:${C.border}">&nbsp;·&nbsp;</span> <span style="font-weight:400;">${trans(lang, 'reviews.verifiedPurchase')}</span></p>
         </div>
       </div>
     </div>
@@ -547,15 +549,15 @@ export function templateEtecVelvety(data: LandingPageData): string {
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      SECTIONS DYNAMIQUES — story / comparison / testimonials / bonuses / guarantee
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 ${renderRichSections(data, VELVETY_THEME)}
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      9. THREE PILLARS — fond vert forêt
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.hero};padding:80px 0;">
   <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
     <div class="thpv" style="display:grid;grid-template-columns:repeat(3,1fr);">
@@ -577,9 +579,9 @@ ${renderRichSections(data, VELVETY_THEME)}
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      10. NEWSLETTER — fond vert forêt
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.accentDark};border-top:1px solid rgba(74,124,89,.3);padding:72px 32px;text-align:center;">
   <div style="max-width:560px;margin:0 auto;">
     <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(214,232,217,.6);font-family:'DM Sans',sans-serif;margin-bottom:12px;">Stay in touch</p>
@@ -597,7 +599,7 @@ ${renderRichSections(data, VELVETY_THEME)}
       <button
         type="submit"
         style="padding:14px 28px;background:#fff;color:${C.accentDark};border:none;border-radius:0 100px 100px 0;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'"
-      >Subscribe</button>
+      >${trans(lang, 'bespoke.footer.subscribe')}</button>
     </form>
 
     <p style="font-size:12px;color:rgba(255,255,255,.3);margin-top:16px;font-family:'DM Sans',sans-serif;">By subscribing you agree to our Privacy Policy. Unsubscribe at any time.</p>
@@ -605,13 +607,13 @@ ${renderRichSections(data, VELVETY_THEME)}
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      FAQ — interlude fond crème
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:88px 0;border-top:1px solid ${C.border};">
   <div style="max-width:720px;margin:0 auto;padding:0 32px;">
     <div style="text-align:center;margin-bottom:52px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">FAQ</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">${trans(lang, 'bespoke.faqShort')}</p>
       <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:36px;font-weight:600;color:${C.text};">Frequently asked questions</h2>
     </div>
     ${faqHTML}
@@ -619,9 +621,9 @@ ${renderRichSections(data, VELVETY_THEME)}
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      CTA FINAL BANNER — fond crème avec CTA vert
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:88px 32px;text-align:center;border-top:1px solid ${C.border};">
   <p style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:14px;">Limited offer</p>
   <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:44px;font-weight:600;color:${C.text};letter-spacing:-.02em;line-height:1.15;margin-bottom:16px;max-width:600px;margin-left:auto;margin-right:auto;">${data.headline || data.product_name}</h2>
@@ -634,9 +636,9 @@ ${renderRichSections(data, VELVETY_THEME)}
 </section>
 
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
+<!-- ═════════════════════════════════════════════════════════════════════════════════════════
      11. FOOTER — fond très sombre
-════════════════════════════════════════════════════════════════════════════ -->
+═════════════════════════════════════════════════════════════════════════════════════════ -->
 <footer style="background:#0F2318;padding:64px 0 0;">
   <div style="max-width:1280px;margin:0 auto;padding:0 32px;">
     <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.08);" class="fgv">
@@ -659,7 +661,7 @@ ${renderRichSections(data, VELVETY_THEME)}
 
       <!-- Col 2 — Shop -->
       <div>
-        <h5 style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);font-family:'DM Sans',sans-serif;margin-bottom:18px;">Shop</h5>
+        <h5 style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);font-family:'DM Sans',sans-serif;margin-bottom:18px;">${trans(lang, 'bespoke.nav.shop')}</h5>
         <ul style="list-style:none;">
           ${['All Products', 'Facial Care', 'Body Care', 'Serums', 'Gift Sets', 'New Arrivals'].map(link => `
             <li style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.55)'">${link}</a></li>

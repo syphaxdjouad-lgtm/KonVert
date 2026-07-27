@@ -1,6 +1,8 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { escapeHtml } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 // ─── Fallback pour les tokens sémantiques (cas où le style ne les définit pas) ──
 const CRO_DEFAULTS = {
@@ -11,7 +13,7 @@ const CRO_DEFAULTS = {
   danger:  '#DC2626',
 } as const
 
-// ─── Mapping icône SVG par mots-clés dans le label ───────────────────────────
+// ─── Mapping icône SVG par mots-clés dans le label ─────────────────────
 // Chaque icône est un SVG inline 24×24, outline style, aria-hidden.
 
 const ICON_RUNNING = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="m10 9-1 5 4 2 2 4"/><path d="m14 9 1 3-3 1"/><path d="M8 14s-1 2-1 4"/><path d="M14 14s2 1 3 3"/></svg>`
@@ -45,9 +47,10 @@ function pickIcon(label: string): string {
   return ICON_DEFAULT
 }
 
-// ─── Rendu principal ──────────────────────────────────────────────────────────
+// ─── Rendu principal ─────────────────────────────────────────────────────────
 
 export function renderBestFor(data: V3PageData, tokens: StyleTokens): string {
+  const lang = resolveLanguage(data.language)
   const items = data.copy.best_for ?? []
 
   const accentBg      = tokens.colors.bgAlt   ?? CRO_DEFAULTS.bgAlt
@@ -107,14 +110,14 @@ export function renderBestFor(data: V3PageData, tokens: StyleTokens): string {
       font-family:${tokens.fonts.body};
       font-size:12px;letter-spacing:0.15em;text-transform:uppercase;
       color:${tokens.colors.textMuted};display:block;margin:0 0 24px;text-align:center
-    ">Idéal pour</p>
+    ">${escapeHtml(t(lang, 'bestFor.eyebrow'))}</p>
     <div class="kvt-bf-grid" style="
       display:grid;
       grid-template-columns:repeat(2, 1fr);
       gap:${tokens.spacing.gap};
     ">${items.length > 0 ? cards : `
       <p style="color:${tokens.colors.textMuted};font-size:14px;grid-column:1/-1;text-align:center;margin:0">
-        Informations non disponibles pour ce produit.
+        ${escapeHtml(t(lang, 'bestFor.empty'))}
       </p>`}
     </div>
   </div>

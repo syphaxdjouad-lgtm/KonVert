@@ -20,6 +20,9 @@
  * templates etec-*, et StickyAddToCartMobile.
  */
 
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
+
 export type QuantitySize = 'compact' | 'default' | 'large'
 
 export interface QuantitySelectorOptions {
@@ -37,6 +40,8 @@ export interface QuantitySelectorOptions {
   id?:          string
   /** Label visible au-dessus (ex: "Quantité"). Vide = pas de label. */
   label?:       string
+  /** Langue de rendu — pilote les aria-labels. Fallback 'fr' si absent. */
+  lang?:        string
 }
 
 const HEIGHT_MAP: Record<QuantitySize, string> = {
@@ -64,6 +69,7 @@ const INPUT_WIDTH_MAP: Record<QuantitySize, string> = {
 }
 
 export function renderQuantitySelector(options: QuantitySelectorOptions = {}): string {
+  const lang = resolveLanguage(options.lang)
   const {
     value       = 1,
     min         = 1,
@@ -89,7 +95,7 @@ export function renderQuantitySelector(options: QuantitySelectorOptions = {}): s
 
   const labelHtml = label
     ? `<label for="${id}-input" style="display:block;font-size:12px;font-weight:600;color:${textColor};font-family:${fontFamily};margin-bottom:6px;text-transform:uppercase;letter-spacing:0.07em;">${label}</label>`
-    : `<label for="${id}-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;">Quantité</label>`
+    : `<label for="${id}-input" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;">${t(lang, 'qty.srLabel')}</label>`
 
   // Focus visible ring injecté via <style>
   const styleTag = `<style>
@@ -145,13 +151,13 @@ export function renderQuantitySelector(options: QuantitySelectorOptions = {}): s
   return `${styleTag}
 <div style="position:relative;${disabledStyle}font-family:${fontFamily};">
   ${labelHtml}
-  <div role="group" aria-label="Sélecteur de quantité"
+  <div role="group" aria-label="${t(lang, 'qty.groupAriaLabel')}"
     style="display:inline-flex;align-items:center;height:${h};border:1px solid ${borderColor};border-radius:8px;overflow:hidden;background:${bgColor};">
 
     <button
       id="${id}-dec"
       type="button"
-      aria-label="Diminuer la quantité"
+      aria-label="${t(lang, 'qty.decrease')}"
       ${value <= min ? 'disabled' : ''}
       ${disabledAttr}
       style="width:${bw};height:100%;background:none;border:none;border-right:1px solid ${borderColor};cursor:pointer;display:flex;align-items:center;justify-content:center;color:${textColor};font-size:${fs};font-weight:500;transition:background .15s;flex-shrink:0;"
@@ -171,7 +177,7 @@ export function renderQuantitySelector(options: QuantitySelectorOptions = {}): s
       aria-valuenow="${value}"
       aria-valuemin="${min}"
       aria-valuemax="${max}"
-      aria-label="Quantité"
+      aria-label="${t(lang, 'qty.srLabel')}"
       value="${value}"
       min="${min}"
       max="${max}"
@@ -182,7 +188,7 @@ export function renderQuantitySelector(options: QuantitySelectorOptions = {}): s
     <button
       id="${id}-inc"
       type="button"
-      aria-label="Augmenter la quantité"
+      aria-label="${t(lang, 'qty.increase')}"
       ${value >= max ? 'disabled' : ''}
       ${disabledAttr}
       style="width:${bw};height:100%;background:none;border:none;border-left:1px solid ${borderColor};cursor:pointer;display:flex;align-items:center;justify-content:center;color:${textColor};font-size:${fs};font-weight:500;transition:background .15s;flex-shrink:0;"

@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const JEWEL_THEME: SectionTheme = {
 }
 
 export function templateEtecJewel(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -86,7 +88,7 @@ body{font-family:'Poppins',sans-serif;background:#000;color:#e3e3e3;}
 <!-- BREADCRUMB -->
 <nav style="background:#000;border-bottom:1px solid rgba(163,114,73,0.15);padding:14px 24px;">
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:10px;">
-    <span style="font-size:11px;color:#868686;letter-spacing:0.06em;">Accueil</span>
+    <span style="font-size:11px;color:#868686;letter-spacing:0.06em;">${trans(lang, 'bespoke.nav.home')}</span>
     <span style="font-size:11px;color:#444;">·</span>
     <span style="font-size:11px;color:#868686;letter-spacing:0.06em;">Joaillerie</span>
     <span style="font-size:11px;color:#444;">·</span>
@@ -200,7 +202,7 @@ body{font-family:'Poppins',sans-serif;background:#000;color:#e3e3e3;}
 <!-- REVIEWS -->
 <section style="padding:80px 24px;background:#000;">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-family:'Bodoni Moda',serif;font-size:13px;letter-spacing:0.2em;color:#a37249;text-align:center;text-transform:uppercase;margin-bottom:8px;">Témoignages</p>
+    <p style="font-family:'Bodoni Moda',serif;font-size:13px;letter-spacing:0.2em;color:#a37249;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'reviews.eyebrow')}</p>
     <h2 style="font-family:'Bodoni Moda',serif;font-size:34px;font-weight:400;color:#e3e3e3;text-align:center;margin-bottom:48px;">Elles l'ont choisi</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="jw-reviews">
       ${[
@@ -230,7 +232,7 @@ ${renderRichSections(data, JEWEL_THEME)}
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#0A0A0A;">
   <div style="max-width:700px;margin:0 auto;">
-    <h2 style="font-family:'Bodoni Moda',serif;font-size:34px;font-weight:400;color:#e3e3e3;text-align:center;margin-bottom:48px;">Questions fréquentes</h2>
+    <h2 style="font-family:'Bodoni Moda',serif;font-size:34px;font-weight:400;color:#e3e3e3;text-align:center;margin-bottom:48px;">${trans(lang, 'faqV3.title')}</h2>
     <div style="padding:8px 36px;">${faqHtml}</div>
   </div>
 </section>

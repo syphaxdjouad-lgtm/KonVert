@@ -1,10 +1,12 @@
 import type { LandingPageData } from '@/types'
+import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
   type SectionTheme,
 } from './sections'
-// ─── FALLBACK IMAGES ──────────────────────────────────────────────────────────
+// ─── FALLBACK IMAGES ──────────────────────────────────────────────
 
 const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=800&q=80',
@@ -14,7 +16,7 @@ const FALLBACK_IMGS = [
   'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=800&q=80',
 ]
 
-// ─── DESIGN TOKENS ────────────────────────────────────────────────────────────
+// ─── DESIGN TOKENS ───────────────────────────────────────────────
 
 const C = {
   bg:        '#080B12',
@@ -32,7 +34,7 @@ const C = {
   borderSub: 'rgba(255,255,255,0.07)',
 }
 
-// ─── SVG ICONS ────────────────────────────────────────────────────────────────
+// ─── SVG ICONS ──────────────────────────────────────────────────────────
 
 const ICON_CHECK  = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
 const ICON_X      = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
@@ -46,7 +48,7 @@ const ICON_PLUS   = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
 const ICON_ZAP    = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
 const ICON_ROTATE = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg>`
 
-// ─── STATIC DATA ──────────────────────────────────────────────────────────────
+// ─── STATIC DATA ─────────────────────────────────────────────────────────
 
 const SPECS = [
   { icon: ICON_CHIP,   label: 'Processeur', value: 'IA',       desc: 'Puce intelligente intégrée' },
@@ -104,7 +106,7 @@ const REVIEWS = [
   { name: 'Sophie V.',  rating: 5, text: 'Design ultra soigné. Le verre haute résistance — aucune rayure après des semaines. Qualité premium.' },
 ]
 
-// ─── HELPER ───────────────────────────────────────────────────────────────────
+// ─── HELPER ────────────────────────────────────────────────────────────
 
 function stars(n: number): string {
   return Array.from({ length: 5 }, (_, i) =>
@@ -119,7 +121,7 @@ function calcDiscount(price: string, orig: string): number {
   return Math.round((1 - p / o) * 100)
 }
 
-// ─── TEMPLATE ─────────────────────────────────────────────────────────────────
+// ─── TEMPLATE ────────────────────────────────────────────────────────────
 
 const PULSE_THEME: SectionTheme = {
   primary:    '#00d4ff',
@@ -134,6 +136,7 @@ const PULSE_THEME: SectionTheme = {
 }
 
 export function templateEtecPulse(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const benefits = data.benefits ?? []
   const faq      = data.faq      ?? []
   const images   = data.images   ?? []
@@ -165,7 +168,7 @@ export function templateEtecPulse(data: LandingPageData): string {
     { question: 'La charge sans fil est-elle incluse ?',     answer: 'Oui, compatible Qi 15W. Le chargeur USB-C rapide (30min) est inclus dans la boîte.' },
   ]
 
-  // ─── HTML FRAGMENTS ─────────────────────────────────────────────────────────
+  // ─── HTML FRAGMENTS ─────────────────────────────────────────────
 
   const benefitsHTML = benefitsList.map(b =>
     `<li class="fpls-benefit"><span class="fpls-benefit-ico">${ICON_CHECK}</span><span>${b}</span></li>`
@@ -230,7 +233,7 @@ export function templateEtecPulse(data: LandingPageData): string {
       <div class="fpls-faq-a" id="faq-a-${i}" style="display:none"><p>${f.answer}</p></div>
     </div>`).join('')
 
-  // ─── FINAL TEMPLATE ─────────────────────────────────────────────────────────
+  // ─── FINAL TEMPLATE ──────────────────────────────────────────────────────
 
   return `<!DOCTYPE html>
 <html lang="${data.language || 'fr'}" dir="${data.language === 'ar' ? 'rtl' : 'ltr'}">
@@ -242,7 +245,7 @@ export function templateEtecPulse(data: LandingPageData): string {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ─── RESET & BASE ──────────────────────────────────────────── */
+/* ─── RESET & BASE ────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
@@ -256,7 +259,7 @@ body{
 img{max-width:100%;display:block}
 button{font-family:inherit}
 
-/* ─── KEYFRAMES ─────────────────────────────────────────────── */
+/* ─── KEYFRAMES ────────────────────────────────── */
 @keyframes blink{
   0%,100%{opacity:1}
   50%{opacity:0.25}
@@ -282,7 +285,7 @@ button{font-family:inherit}
   50%{opacity:0.7}
 }
 
-/* ─── TOP BAR MARQUEE ───────────────────────────────────────── */
+/* ─── TOP BAR MARQUEE ────────────────────────────────── */
 .fpls-topbar{
   background:${C.cyan};
   color:#080B12;
@@ -311,7 +314,7 @@ button{font-family:inherit}
   opacity:0.5;
 }
 
-/* ─── NAV ───────────────────────────────────────────────────── */
+/* ─── NAV ─────────────────────────────────────────── */
 .fpls-nav{
   position:sticky;
   top:0;
@@ -362,7 +365,7 @@ button{font-family:inherit}
 }
 .fpls-nav-cta:hover{opacity:0.85;transform:translateY(-1px)}
 
-/* ─── HERO ──────────────────────────────────────────────────── */
+/* ─── HERO ─────────────────────────────────────────── */
 .fpls-hero{
   position:relative;
   min-height:calc(100vh - 96px);
@@ -556,7 +559,7 @@ button{font-family:inherit}
 }
 .fpls-trust-item svg{color:${C.cyan}}
 
-/* ─── HERO RIGHT ────────────────────────────────────────────── */
+/* ─── HERO RIGHT ─────────────────────────────────────── */
 .fpls-hero-right{
   position:relative;
   z-index:1;
@@ -590,7 +593,7 @@ button{font-family:inherit}
   pointer-events:none;
 }
 
-/* ─── SPECS GRID ────────────────────────────────────────────── */
+/* ─── SPECS GRID ─────────────────────────────────────── */
 .fpls-specs-section{
   background:${C.surface};
   padding:80px 40px;
@@ -664,7 +667,7 @@ button{font-family:inherit}
   font-weight:400;
 }
 
-/* ─── FEATURES TABS ─────────────────────────────────────────── */
+/* ─── FEATURES TABS ────────────────────────────────── */
 .fpls-features-section{
   background:${C.bg};
   padding:80px 40px;
@@ -740,7 +743,7 @@ button{font-family:inherit}
   font-weight:400;
 }
 
-/* ─── COMPARE TABLE ─────────────────────────────────────────── */
+/* ─── COMPARE TABLE ────────────────────────────────── */
 .fpls-compare-section{
   background:${C.surface};
   padding:80px 40px;
@@ -798,7 +801,7 @@ button{font-family:inherit}
 .fpls-check-dim{color:rgba(255,255,255,0.35);display:inline-flex;align-items:center}
 .fpls-cross{color:rgba(255,80,80,0.7);display:inline-flex;align-items:center}
 
-/* ─── COUNTDOWN ─────────────────────────────────────────────── */
+/* ─── COUNTDOWN ────────────────────────────────── */
 .fpls-countdown-section{
   background:linear-gradient(135deg,rgba(0,212,255,0.08) 0%,rgba(123,47,190,0.15) 50%,rgba(8,11,18,0.95) 100%);
   border-top:1px solid ${C.border};
@@ -862,7 +865,7 @@ button{font-family:inherit}
   margin-bottom:20px;
 }
 
-/* ─── BENEFITS ──────────────────────────────────────────────── */
+/* ─── BENEFITS ────────────────────────────────── */
 .fpls-benefits-section{
   background:${C.bg};
   padding:80px 40px;
@@ -904,7 +907,7 @@ button{font-family:inherit}
   font-weight:400;
 }
 
-/* ─── TESTIMONIALS ──────────────────────────────────────────── */
+/* ─── TESTIMONIALS ────────────────────────────────── */
 .fpls-reviews-section{
   background:${C.surface};
   padding:80px 40px;
@@ -974,7 +977,7 @@ button{font-family:inherit}
   font-weight:400;
 }
 
-/* ─── FAQ ───────────────────────────────────────────────────── */
+/* ─── FAQ ──────────────────────────────────────── */
 .fpls-faq-section{
   background:${C.surface};
   padding:80px 40px;
@@ -1018,7 +1021,7 @@ button{font-family:inherit}
   font-weight:400;
 }
 
-/* ─── CTA FINAL ─────────────────────────────────────────────── */
+/* ─── CTA FINAL ────────────────────────────────── */
 .fpls-final-cta{
   position:relative;
   background:radial-gradient(ellipse at 50% 0%,rgba(123,47,190,0.3) 0%,rgba(0,212,255,0.08) 40%,${C.bg} 70%);
@@ -1076,7 +1079,7 @@ button{font-family:inherit}
 }
 .fpls-final-trust-item svg{color:${C.cyan}}
 
-/* ─── FOOTER ────────────────────────────────────────────────── */
+/* ─── FOOTER ────────────────────────────────────────── */
 .fpls-footer{
   background:${C.surface};
   padding:48px 40px 24px;
@@ -1139,7 +1142,7 @@ button{font-family:inherit}
   font-weight:400;
 }
 
-/* ─── FADE IN OBSERVER ──────────────────────────────────────── */
+/* ─── FADE IN OBSERVER ─────────────────────────────── */
 .fpls-fade{
   opacity:0;
   transform:translateY(24px);
@@ -1150,7 +1153,7 @@ button{font-family:inherit}
   transform:translateY(0);
 }
 
-/* ─── RESPONSIVE ────────────────────────────────────────────── */
+/* ─── RESPONSIVE ────────────────────────────────── */
 @media(max-width:960px){
   .fpls-hero{grid-template-columns:1fr}
   .fpls-hero-right{
@@ -1186,21 +1189,21 @@ button{font-family:inherit}
 <!-- TOP BAR MARQUEE -->
 <div class="fpls-topbar" aria-hidden="true">
   <div class="fpls-marquee-track">
-    <span class="fpls-marquee-item">LIVRAISON GRATUITE</span>
+    <span class="fpls-marquee-item">${trans(lang, 'bespoke.badge.freeShipping').toUpperCase()}</span>
     <span class="fpls-marquee-sep">·</span>
-    <span class="fpls-marquee-item">PAIEMENT SÉCURISÉ</span>
+    <span class="fpls-marquee-item">${trans(lang, 'hero.securePayment').toUpperCase()}</span>
     <span class="fpls-marquee-sep">·</span>
-    <span class="fpls-marquee-item">RETOURS 30 JOURS</span>
+    <span class="fpls-marquee-item">${trans(lang, 'bespoke.badge.returns30').toUpperCase()}</span>
     <span class="fpls-marquee-sep">·</span>
-    <span class="fpls-marquee-item">GARANTIE 2 ANS</span>
+    <span class="fpls-marquee-item">${trans(lang, 'bespoke.badge.warranty2y').toUpperCase()}</span>
     <span class="fpls-marquee-sep">·</span>
-    <span class="fpls-marquee-item">LIVRAISON GRATUITE</span>
+    <span class="fpls-marquee-item">${trans(lang, 'bespoke.badge.freeShipping').toUpperCase()}</span>
     <span class="fpls-marquee-sep">·</span>
-    <span class="fpls-marquee-item">PAIEMENT SÉCURISÉ</span>
+    <span class="fpls-marquee-item">${trans(lang, 'hero.securePayment').toUpperCase()}</span>
     <span class="fpls-marquee-sep">·</span>
-    <span class="fpls-marquee-item">RETOURS 30 JOURS</span>
+    <span class="fpls-marquee-item">${trans(lang, 'bespoke.badge.returns30').toUpperCase()}</span>
     <span class="fpls-marquee-sep">·</span>
-    <span class="fpls-marquee-item">GARANTIE 2 ANS</span>
+    <span class="fpls-marquee-item">${trans(lang, 'bespoke.badge.warranty2y').toUpperCase()}</span>
     <span class="fpls-marquee-sep">·</span>
   </div>
 </div>
@@ -1209,10 +1212,10 @@ button{font-family:inherit}
 <nav class="fpls-nav">
   <div class="fpls-nav-logo">${productName.split(' ')[0]}</div>
   <div class="fpls-nav-links">
-    <a class="fpls-nav-link" href="javascript:void(0)" onclick="event.preventDefault()">Specs</a>
-    <a class="fpls-nav-link" href="javascript:void(0)" onclick="event.preventDefault()">Features</a>
-    <a class="fpls-nav-link" href="javascript:void(0)" onclick="event.preventDefault()">Comparatif</a>
-    <a class="fpls-nav-link" href="javascript:void(0)" onclick="event.preventDefault()">Avis</a>
+    <a class="fpls-nav-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'bespoke.nav.specs')}</a>
+    <a class="fpls-nav-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'legacy.features.eyebrow')}</a>
+    <a class="fpls-nav-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'legacy.competitorComparison.eyebrow')}</a>
+    <a class="fpls-nav-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'bespoke.nav.reviewsShort')}</a>
   </div>
   <a class="fpls-nav-cta" href="javascript:void(0)" onclick="event.preventDefault()">Commander</a>
 </nav>
@@ -1278,7 +1281,7 @@ button{font-family:inherit}
 <!-- SPECS GRID -->
 <section class="fpls-specs-section" aria-label="Spécifications techniques">
   <div class="fpls-section-inner">
-    <div class="fpls-section-label fpls-fade">Spécifications</div>
+    <div class="fpls-section-label fpls-fade">${trans(lang, 'bespoke.nav.specs')}</div>
     <h2 class="fpls-section-title fpls-fade">Les chiffres parlent d'eux-mêmes.</h2>
     <div class="fpls-specs-grid">
       ${specsHTML}
@@ -1289,7 +1292,7 @@ button{font-family:inherit}
 <!-- FEATURES TABS -->
 <section class="fpls-features-section" aria-label="Fonctionnalités">
   <div class="fpls-section-inner">
-    <div class="fpls-section-label fpls-fade">Fonctionnalités</div>
+    <div class="fpls-section-label fpls-fade">${trans(lang, 'legacy.features.eyebrow')}</div>
     <h2 class="fpls-section-title fpls-fade">Conçu pour dépasser vos attentes.</h2>
     <div class="fpls-tabs-nav fpls-fade" role="tablist">
       ${tabsNavHTML}
@@ -1303,7 +1306,7 @@ button{font-family:inherit}
 <!-- COMPARISON TABLE -->
 <section class="fpls-compare-section" aria-label="Comparatif">
   <div class="fpls-section-inner" style="max-width:820px">
-    <div class="fpls-section-label fpls-fade">Comparatif</div>
+    <div class="fpls-section-label fpls-fade">${trans(lang, 'legacy.competitorComparison.eyebrow')}</div>
     <h2 class="fpls-section-title fpls-fade">Pourquoi nous gagnons.</h2>
     <table class="fpls-compare-table fpls-fade" role="table">
       <thead>
@@ -1323,7 +1326,7 @@ button{font-family:inherit}
 
 <!-- COUNTDOWN -->
 <section class="fpls-countdown-section" aria-label="Offre limitée">
-  <div class="fpls-countdown-label fpls-fade">Offre limitée</div>
+  <div class="fpls-countdown-label fpls-fade">${trans(lang, 'bespoke.badge.limitedOffer')}</div>
   <h2 class="fpls-countdown-title fpls-fade">Cette offre expire dans</h2>
   <div class="fpls-countdown-digits fpls-fade" id="fpls-countdown" aria-live="polite">
     <div class="fpls-digit-block">
@@ -1361,7 +1364,7 @@ button{font-family:inherit}
 <!-- TESTIMONIALS -->
 <section class="fpls-reviews-section" aria-label="Avis clients">
   <div class="fpls-section-inner" style="max-width:940px">
-    <div class="fpls-section-label fpls-fade">Avis clients</div>
+    <div class="fpls-section-label fpls-fade">${trans(lang, 'reviews.eyebrow')}</div>
     <h2 class="fpls-section-title fpls-fade">Ils ont sauté le pas.</h2>
     <div class="fpls-reviews-grid">
       ${reviewsHTML}
@@ -1376,7 +1379,7 @@ ${renderRichSections(data, PULSE_THEME)}
 <!-- FAQ ACCORDION -->
 <section class="fpls-faq-section" aria-label="Questions fréquentes">
   <div class="fpls-faq-inner">
-    <div class="fpls-section-label fpls-fade" style="text-align:center">FAQ</div>
+    <div class="fpls-section-label fpls-fade" style="text-align:center">${trans(lang, 'bespoke.faqShort')}</div>
     <h2 class="fpls-section-title fpls-fade" style="margin-bottom:40px">Questions fréquentes.</h2>
     ${faqHTML}
   </div>
@@ -1410,14 +1413,14 @@ ${renderRichSections(data, PULSE_THEME)}
       </div>
       <div>
         <div class="fpls-footer-col-title">Produit</div>
-        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">Fonctionnalités</a>
-        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">Spécifications</a>
-        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">Comparatif</a>
-        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">Accessoires</a>
+        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'legacy.features.eyebrow')}</a>
+        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'bespoke.nav.specs')}</a>
+        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'legacy.competitorComparison.eyebrow')}</a>
+        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'bespoke.nav.accessories')}</a>
       </div>
       <div>
-        <div class="fpls-footer-col-title">Support</div>
-        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">FAQ</a>
+        <div class="fpls-footer-col-title">${trans(lang, 'bespoke.nav.support')}</div>
+        <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">${trans(lang, 'bespoke.faqShort')}</a>
         <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">Livraison</a>
         <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">Retours</a>
         <a class="fpls-footer-link" href="javascript:void(0)" onclick="event.preventDefault()">Garantie</a>
@@ -1431,7 +1434,7 @@ ${renderRichSections(data, PULSE_THEME)}
 </footer>
 
 <script>
-// ─── TABS ──────────────────────────────────────────────────────
+// ─── TABS ─────────────────────────────────────────────────────
 function switchTab(id) {
   document.querySelectorAll('.fpls-tab').forEach(function(t) {
     t.classList.toggle('fpls-tab-active', t.dataset.tab === id);
@@ -1441,7 +1444,7 @@ function switchTab(id) {
   });
 }
 
-// ─── FAQ ACCORDION ─────────────────────────────────────────────
+// ─── FAQ ACCORDION ──────────────────────────────────────────────
 function toggleFaq(i) {
   var a   = document.getElementById('faq-a-' + i);
   var ico = document.getElementById('faq-ico-' + i);
@@ -1453,7 +1456,7 @@ function toggleFaq(i) {
   btn.setAttribute('aria-expanded', String(!open));
 }
 
-// ─── COUNTDOWN ─────────────────────────────────────────────────
+// ─── COUNTDOWN ───────────────────────────────────────────────────
 (function() {
   function getNextMidnight() {
     var now = new Date();
@@ -1481,7 +1484,7 @@ function toggleFaq(i) {
   setInterval(tick, 1000);
 })();
 
-// ─── INTERSECTION OBSERVER FADE IN ─────────────────────────────
+// ─── INTERSECTION OBSERVER FADE IN ──────────────────────────────
 (function() {
   if (!('IntersectionObserver' in window)) {
     document.querySelectorAll('.fpls-fade').forEach(function(el) {
@@ -1502,7 +1505,7 @@ function toggleFaq(i) {
   });
 })();
 
-// ─── NAV SCROLL SHADOW ─────────────────────────────────────────
+// ─── NAV SCROLL SHADOW ───────────────────────────────────────
 window.addEventListener('scroll', function() {
   var nav = document.querySelector('.fpls-nav');
   if (nav) {

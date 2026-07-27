@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const POTERIE_THEME: SectionTheme = {
 }
 
 export function templateEtecPoterie(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
@@ -50,7 +52,7 @@ export function templateEtecPoterie(data: LandingPageData): string {
 .po-btn-alt{background:#F0EBE1;color:#A0522D;border:none;border-radius:20px;padding:15px 40px;font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;}.po-btn-alt:hover{background:#E5DDD0;}
 @media(max-width:768px){.po-hero{flex-direction:column!important;}.po-hero-img{width:100%!important;height:460px!important;}.po-hero-info{width:100%!important;padding:32px 20px!important;}.po-grid3{grid-template-columns:1fr!important;}.po-compare{flex-direction:column!important;}.po-reviews{grid-template-columns:1fr!important;}}</style></head><body>
 <div style="background:#A0522D;color:#F5EEE6;text-align:center;padding:11px 20px;font-size:12px;font-weight:400;">${data.urgency || 'Pièces uniques façonnées à la main — Série limitée'}</div>
-<nav style="background:#FBF8F4;border-bottom:1px solid #DDD5CA;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">Artisanat</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#3D2E1F;font-weight:500;">${data.product_name}</span></div></nav>
+<nav style="background:#FBF8F4;border-bottom:1px solid #DDD5CA;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">Artisanat</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#3D2E1F;font-weight:500;">${data.product_name}</span></div></nav>
 <section style="background:#FBF8F4;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="po-hero">
 <div style="width:55%;position:relative;background:#F0EBE1;overflow:hidden;border-radius:0 20px 20px 0;" class="po-hero-img"><img id="mi-po" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
       ${renderHeroThumbs(_real ?? imgs ?? [], POTERIE_THEME, 'mi-po')}
@@ -66,7 +68,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#A0
 <div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #DDD5CA;"><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Soigné</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.leaf(14)} Naturel</span><span style="font-size:11px;color:#AAA;display:flex;align-items:center;gap:5px;">${ico.return(14)} Retour 30j</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#F0EBE1;"><div style="max-width:1100px;margin:0 auto;">
-<p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#A0522D;text-align:center;text-transform:uppercase;margin-bottom:8px;">Savoir-faire</p>
+<p style="font-size:11px;font-weight:600;letter-spacing:0.14em;color:#A0522D;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.nav.craftsmanship')}</p>
 <h2 style="font-family:'Libre Baskerville',serif;font-size:32px;font-weight:400;color:#3D2E1F;text-align:center;margin-bottom:56px;">L'art de la terre</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="po-grid3">${[
   { t: benefits[0]||'Terre naturelle', d: 'Argile locale sélectionnée avec soin, sans additifs chimiques' },
@@ -77,13 +79,13 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#A0
 <h2 style="font-family:'Libre Baskerville',serif;font-size:32px;font-weight:400;color:#3D2E1F;text-align:center;margin-bottom:48px;">Dans votre intérieur</h2>
 <div style="display:flex;gap:20px;" class="po-compare"><div style="flex:1;position:relative;border-radius:20px;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Ambiance 1"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">Table dressée</p></div></div><div style="flex:1;position:relative;border-radius:20px;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Ambiance 2"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">Décoration</p></div></div></div></div></section>
 <section style="padding:80px 24px;background:#F0EBE1;"><div style="max-width:1100px;margin:0 auto;">
-<h2 style="font-family:'Libre Baskerville',serif;font-size:32px;font-weight:400;color:#3D2E1F;text-align:center;margin-bottom:48px;">Avis clients</h2>
+<h2 style="font-family:'Libre Baskerville',serif;font-size:32px;font-weight:400;color:#3D2E1F;text-align:center;margin-bottom:48px;">${trans(lang, 'reviews.eyebrow')}</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="po-reviews">${[
   { name:'Hélène C.', text:`Le ${data.product_name} est magnifique. On sent le travail artisanal. Chaque pièce est vraiment unique.`, date:'3 jours' },
   { name:'François P.', text:'Superbe qualité, les finitions sont impeccables. Ça donne un cachet incroyable à notre cuisine.', date:'1 semaine' },
   { name:'Claire M.', text:'Emballage très soigné, la pièce est arrivée intacte. Les couleurs sont encore plus belles en vrai.', date:'2 semaines' },
 ].map(r => `<div style="background:#FBF8F4;border-radius:20px;padding:28px 24px;"><div style="color:#A0522D;font-size:13px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div><p style="font-size:14px;color:#666;line-height:1.75;margin-bottom:20px;">"${r.text}"</p><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:#A0522D;color:#F5EEE6;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;">${r.name[0]}</div><div><p style="font-size:13px;font-weight:600;color:#3D2E1F;">${r.name}</p><p style="font-size:11px;color:#AAA;">Il y a ${r.date}</p></div></div></div>`).join('')}</div></div></section>
-<section style="padding:80px 24px;background:#FBF8F4;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Libre Baskerville',serif;font-size:32px;font-weight:400;color:#3D2E1F;text-align:center;margin-bottom:48px;">FAQ</h2><div style="background:#F0EBE1;border-radius:20px;padding:8px 32px;">${faqHtml}</div></div></section>
+<section style="padding:80px 24px;background:#FBF8F4;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Libre Baskerville',serif;font-size:32px;font-weight:400;color:#3D2E1F;text-align:center;margin-bottom:48px;">${trans(lang, 'bespoke.faqShort')}</h2><div style="background:#F0EBE1;border-radius:20px;padding:8px 32px;">${faqHtml}</div></div></section>
 <section style="padding:100px 24px;background:#A0522D;"><div style="max-width:700px;margin:0 auto;text-align:center;">
 <h2 style="font-family:'Libre Baskerville',serif;font-size:38px;font-weight:400;color:#FBF8F4;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(251,248,244,0.5);margin-bottom:36px;">${data.subtitle}</p>

@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const INTERIOR_THEME: SectionTheme = {
 }
 
 export function templateEtecInterior(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
@@ -50,7 +52,7 @@ export function templateEtecInterior(data: LandingPageData): string {
 .in-btn-alt{background:#EEF0E8;color:#5B7553;border:none;border-radius:8px;padding:15px 40px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;}.in-btn-alt:hover{background:#E0E4D8;}
 @media(max-width:768px){.in-hero{flex-direction:column!important;}.in-hero-img{width:100%!important;height:460px!important;}.in-hero-info{width:100%!important;padding:32px 20px!important;}.in-grid3{grid-template-columns:1fr!important;}.in-compare{flex-direction:column!important;}.in-reviews{grid-template-columns:1fr!important;}}</style></head><body>
 <div style="background:#5B7553;color:#E8EDE4;text-align:center;padding:11px 20px;font-size:12px;font-weight:400;letter-spacing:0.04em;">${data.urgency || `Soldes Maison — Jusqu'à -30% sur la sélection`}</div>
-<nav style="background:#FAF9F6;border-bottom:1px solid #DDD8D0;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">Mobilier</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#2D2D2D;font-weight:500;">${data.product_name}</span></div></nav>
+<nav style="background:#FAF9F6;border-bottom:1px solid #DDD8D0;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.furniture')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#2D2D2D;font-weight:500;">${data.product_name}</span></div></nav>
 <section style="background:#FAF9F6;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="in-hero">
 <div style="width:56%;position:relative;background:#EEF0E8;overflow:hidden;border-radius:0 8px 8px 0;" class="in-hero-img"><img id="mi-in" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
       ${renderHeroThumbs(_real ?? imgs ?? [], INTERIOR_THEME, 'mi-in')}
@@ -74,16 +76,16 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#5B
   { t: benefits[2]||'Fabrication française', d: 'Confectionné dans nos ateliers partenaires en France' },
 ].map(s => `<div style="background:#FAF9F6;border-radius:8px;padding:36px 28px;text-align:center;"><h3 style="font-size:18px;font-weight:600;color:#2D2D2D;margin-bottom:10px;">${s.t}</h3><p style="font-size:14px;color:#888;line-height:1.7;">${s.d}</p></div>`).join('')}</div></div></section>
 <section style="padding:80px 24px;background:#FAF9F6;"><div style="max-width:1000px;margin:0 auto;">
-<h2 style="font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">Inspirations</h2>
+<h2 style="font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">${trans(lang, 'bespoke.nav.inspirations')}</h2>
 <div style="display:flex;gap:20px;" class="in-compare"><div style="flex:1;position:relative;border-radius:8px;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Ambiance 1"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.6));"><p style="color:#fff;font-size:14px;font-weight:600;">Salon Contemporain</p></div></div><div style="flex:1;position:relative;border-radius:8px;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Ambiance 2"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.6));"><p style="color:#fff;font-size:14px;font-weight:600;">Chambre Cocooning</p></div></div></div></div></section>
 <section style="padding:80px 24px;background:#EEF0E8;"><div style="max-width:1100px;margin:0 auto;">
-<h2 style="font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">Avis clients</h2>
+<h2 style="font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">${trans(lang, 'reviews.eyebrow')}</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="in-reviews">${[
   { name:'Isabelle F.', text:`Le ${data.product_name} est magnifique. La qualité du bois est remarquable, le montage simple et rapide.`, date:'5 jours' },
   { name:'Pierre D.', text:'On sent la qualité artisanale. Ce meuble donne une vraie âme à notre salon. Très satisfait.', date:'1 semaine' },
   { name:'Nathalie G.', text:`Livraison impeccable, bien emballé. Le rendu est encore plus beau qu'en photo.`, date:'3 semaines' },
 ].map(r => `<div style="background:#FAF9F6;border-radius:8px;padding:28px 24px;"><div style="color:#5B7553;font-size:13px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div><p style="font-size:14px;color:#555;line-height:1.75;margin-bottom:20px;">"${r.text}"</p><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:#5B7553;color:#E8EDE4;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;">${r.name[0]}</div><div><p style="font-size:13px;font-weight:600;color:#2D2D2D;">${r.name}</p><p style="font-size:11px;color:#AAA;">Il y a ${r.date}</p></div></div></div>`).join('')}</div></div></section>
-<section style="padding:80px 24px;background:#FAF9F6;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">FAQ</h2><div style="background:#EEF0E8;border-radius:8px;padding:8px 32px;">${faqHtml}</div></div></section>
+<section style="padding:80px 24px;background:#FAF9F6;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'DM Serif Display',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">${trans(lang, 'bespoke.faqShort')}</h2><div style="background:#EEF0E8;border-radius:8px;padding:8px 32px;">${faqHtml}</div></div></section>
 <section style="padding:100px 24px;background:#5B7553;"><div style="max-width:700px;margin:0 auto;text-align:center;">
 <h2 style="font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:#FAF9F6;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(250,249,246,0.5);margin-bottom:36px;">${data.subtitle}</p>

@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 import {
   renderRichSections,
   type SectionTheme,
@@ -28,6 +29,7 @@ const BEFORE_IMG = 'https://images.pexels.com/photos/1571939/pexels-photo-157193
 const AFTER_IMG  = 'https://images.pexels.com/photos/2803158/pexels-photo-2803158.jpeg?auto=compress&cs=tinysrgb&w=600'
 
 export function templateEtecBlue(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -53,7 +55,7 @@ export function templateEtecBlue(data: LandingPageData): string {
   const specItems = [
     { num: benefits[0] ? '01' : '—', title: benefits[0] || 'Performance', desc: data.subtitle || 'Conçu pour dépasser vos attentes' },
     { num: benefits[1] ? '02' : '—', title: benefits[1] || 'Qualité', desc: 'Matériaux premium sélectionnés avec soin' },
-    { num: benefits[2] ? '03' : '—', title: benefits[2] || 'Design', desc: 'Esthétique épurée, finitions premium' },
+    { num: benefits[2] ? '03' : '—', title: benefits[2] || 'Design', desc: 'Ésthétique épurée, finitions premium' },
   ]
 
   return `<!DOCTYPE html>
@@ -90,9 +92,9 @@ body{font-family:'Inter',sans-serif;background:#FAFAFA;color:#1D1D1F;}
 <!-- BREADCRUMB -->
 <nav style="background:#fff;border-bottom:1px solid #E8E8ED;padding:12px 24px;">
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;">
-    <span style="font-size:12px;color:#6E6E73;cursor:pointer;">Accueil</span>
+    <span style="font-size:12px;color:#6E6E73;cursor:pointer;">${trans(lang, 'bespoke.nav.home')}</span>
     <span style="font-size:12px;color:#C7C7CC;">›</span>
-    <span style="font-size:12px;color:#6E6E73;cursor:pointer;">Catalogue</span>
+    <span style="font-size:12px;color:#6E6E73;cursor:pointer;">${trans(lang, 'bespoke.nav.catalogue')}</span>
     <span style="font-size:12px;color:#C7C7CC;">›</span>
     <span style="font-size:12px;color:#1D1D1F;font-weight:500;">${data.product_name}</span>
   </div>
@@ -167,7 +169,7 @@ body{font-family:'Inter',sans-serif;background:#FAFAFA;color:#1D1D1F;}
 <!-- SPECS SECTION — APPLE STYLE 3 COLONNES -->
 <section style="padding:80px 24px;background:#F5F5F7;">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#6E6E73;text-align:center;text-transform:uppercase;margin-bottom:8px;">Caractéristiques</p>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#6E6E73;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.features.eyebrow')}</p>
     <h2 style="font-size:32px;font-weight:800;color:#1D1D1F;text-align:center;letter-spacing:-0.03em;margin-bottom:56px;">${data.product_name} en chiffres</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#E8E8ED;border-radius:20px;overflow:hidden;" class="blue-specs-grid">
       ${specItems.map(s => `
@@ -200,11 +202,11 @@ body{font-family:'Inter',sans-serif;background:#FAFAFA;color:#1D1D1F;}
     <div style="display:flex;gap:24px;" class="blue-before-after">
       <div style="flex:1;position:relative;border-radius:20px;overflow:hidden;">
         <img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:320px;object-fit:cover;display:block;filter:saturate(0.6);" alt="Avant">
-        <div style="position:absolute;top:16px;left:16px;background:rgba(0,0,0,0.6);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:100px;letter-spacing:0.05em;">AVANT</div>
+        <div style="position:absolute;top:16px;left:16px;background:rgba(0,0,0,0.6);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:100px;letter-spacing:0.05em;">${trans(lang, 'legacy.beforeAfter.before').toUpperCase()}</div>
       </div>
       <div style="flex:1;position:relative;border-radius:20px;overflow:hidden;">
         <img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:320px;object-fit:cover;display:block;" alt="Après">
-        <div style="position:absolute;top:16px;left:16px;background:#0055D4;color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:100px;letter-spacing:0.05em;">APRÈS</div>
+        <div style="position:absolute;top:16px;left:16px;background:#0055D4;color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:100px;letter-spacing:0.05em;">${trans(lang, 'legacy.beforeAfter.after').toUpperCase()}</div>
       </div>
     </div>
   </div>
@@ -215,8 +217,8 @@ ${renderRichSections(data, BLUE_THEME)}
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#F5F5F7;">
   <div style="max-width:700px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#6E6E73;text-align:center;text-transform:uppercase;margin-bottom:8px;">FAQ</p>
-    <h2 style="font-size:32px;font-weight:800;color:#1D1D1F;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">Questions fréquentes</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;color:#6E6E73;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.faqShort')}</p>
+    <h2 style="font-size:32px;font-weight:800;color:#1D1D1F;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">${trans(lang, 'faqV3.title')}</h2>
     <div style="background:#fff;border-radius:20px;padding:8px 28px;">${faqHtml}</div>
   </div>
 </section>

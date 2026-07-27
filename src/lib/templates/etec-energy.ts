@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -38,6 +39,7 @@ const ENERGY_THEME: SectionTheme = {
 }
 
 export function templateEtecEnergy(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? [];
   const imgs = _real.length >= 1
     ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length])
@@ -120,14 +122,14 @@ export function templateEtecEnergy(data: LandingPageData): string {
     },
   ]
   const reviewsData = data.testimonials && data.testimonials.length > 0
-    ? data.testimonials.slice(0, 3).map(t => ({ text: t.text, name: t.name, date: t.location || 'Achat vérifié' }))
+    ? data.testimonials.slice(0, 3).map(t => ({ text: t.text, name: t.name, date: t.location || trans(lang, 'reviews.verifiedPurchase') }))
     : reviewsDataFallback
 
   const reviewsHTML = reviewsData.map(r => `
     <div style="background:${C.card};border:1px solid ${C.border};border-radius:8px;padding:26px;border-left:4px solid ${C.accent};">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
         <span style="color:${C.accent};font-size:14px;letter-spacing:3px;">★★★★★</span>
-        <span style="font-size:11px;color:#16a34a;font-weight:700;background:#dcfce7;padding:3px 10px;border-radius:4px;font-family:'Barlow',sans-serif;">✓ Achat vérifié</span>
+        <span style="font-size:11px;color:#16a34a;font-weight:700;background:#dcfce7;padding:3px 10px;border-radius:4px;font-family:'Barlow',sans-serif;">${trans(lang, 'reviews.verifiedPurchase')}</span>
       </div>
       <p style="font-size:14px;color:${C.muted};line-height:1.8;margin-bottom:20px;font-family:'Barlow',sans-serif;">"${r.text}"</p>
       <div style="display:flex;align-items:center;gap:10px;">
@@ -180,9 +182,9 @@ export function templateEtecEnergy(data: LandingPageData): string {
 <!-- ═══ BREADCRUMB ═══════════════════════════════════════════════════════════ -->
 <div style="background:${C.card};border-bottom:2px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:13px 24px;font-size:12px;color:${C.muted};font-family:'Barlow',sans-serif;letter-spacing:.03em;text-transform:uppercase;">
-    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;font-weight:600;">Accueil</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;font-weight:600;">${trans(lang, 'bespoke.nav.home')}</a>
     <span style="margin:0 8px;opacity:.4;">›</span>
-    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;font-weight:600;">Boutique</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;font-weight:600;">${trans(lang, 'bespoke.nav.shop')}</a>
     <span style="margin:0 8px;opacity:.4;">›</span>
     <span style="color:${C.muted};">${data.product_name}</span>
   </div>
@@ -192,7 +194,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
 <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
   <div class="pg6" style="display:grid;grid-template-columns:60% 40%;gap:48px;padding:44px 0 80px;align-items:start;">
 
-    <!-- Galerie gauche — très dominante ──────────────────────── -->
+    <!-- Galerie gauche — très dominante ───────────────── -->
     <div>
       <div style="background:${C.card};border-radius:8px;overflow:hidden;aspect-ratio:4/3;border:1px solid ${C.border};margin-bottom:10px;position:relative;">
         <img id="mi6" src="${imgs[0]}" alt="${data.product_name}" style="width:100%;height:100%;object-fit:cover;" />
@@ -205,7 +207,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
       </div>
     </div>
 
-    <!-- Info droite (40%) ──────────────────────────────────────── -->
+    <!-- Info droite (40%) ───────────────────────── -->
     <div>
       <!-- Label niche -->
       <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.accent};margin-bottom:12px;font-family:'Barlow Condensed',sans-serif;">${data.hero_badges?.slice(0,3).join(' · ') || data.product_name}</p>
@@ -310,11 +312,11 @@ export function templateEtecEnergy(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ FEATURES ALTERNÉES ════════════════════════════════════════════════════ -->
+<!-- ═══ FEATURES ALTERNÉES ═════════════════════════════════════════════════ -->
 <div style="background:${C.card};padding:88px 0;border-top:2px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:64px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.accent};font-family:'Barlow Condensed',sans-serif;margin-bottom:14px;">Caractéristiques</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.accent};font-family:'Barlow Condensed',sans-serif;margin-bottom:14px;">${trans(lang, 'legacy.features.eyebrow')}</p>
       <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:${C.text};margin-bottom:14px;">${data.headline || data.product_name}</h2>
       <p style="color:${C.muted};font-size:15px;max-width:520px;margin:0 auto;font-family:'Barlow',sans-serif;line-height:1.75;">${data.subtitle || 'Tout a été pensé pour maximiser tes performances, sans compromis.'}</p>
     </div>
@@ -322,11 +324,11 @@ export function templateEtecEnergy(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ AVANT / APRÈS ════════════════════════════════════════════════════════ -->
+<!-- ═══ AVANT / APRÈS ═════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:2px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:52px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.accent};font-family:'Barlow Condensed',sans-serif;margin-bottom:14px;">Transformation</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.accent};font-family:'Barlow Condensed',sans-serif;margin-bottom:14px;">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
       <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:${C.text};margin-bottom:14px;">Avant · Après</h2>
       <p style="color:${C.muted};font-size:15px;max-width:480px;margin:0 auto;font-family:'Barlow',sans-serif;">Des milliers d'athlètes ont changé leur niveau avec ${data.product_name}. Voici la preuve.</p>
     </div>
@@ -335,7 +337,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
       <div style="background:${C.card};border:1px solid ${C.border};overflow:hidden;border-radius:8px;">
         <div style="aspect-ratio:4/3;overflow:hidden;position:relative;">
           <img src="${BEFORE_IMG}" alt="Avant" style="width:100%;height:100%;object-fit:cover;display:block;" />
-          <div style="position:absolute;top:14px;left:14px;background:rgba(0,0,0,0.75);color:#fff;font-size:12px;font-weight:900;padding:5px 14px;letter-spacing:.1em;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;">AVANT</div>
+          <div style="position:absolute;top:14px;left:14px;background:rgba(0,0,0,0.75);color:#fff;font-size:12px;font-weight:900;padding:5px 14px;letter-spacing:.1em;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;">${trans(lang, 'legacy.beforeAfter.before').toUpperCase()}</div>
         </div>
         <div style="padding:22px;border-top:2px solid ${C.border};">
           <p style="font-size:15px;font-weight:700;color:${C.text};margin-bottom:8px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.03em;">Avant notre produit</p>
@@ -346,7 +348,7 @@ export function templateEtecEnergy(data: LandingPageData): string {
       <div style="background:${C.card};border:1px solid ${C.border};overflow:hidden;border-radius:8px;border-top:4px solid ${C.accent};">
         <div style="aspect-ratio:4/3;overflow:hidden;position:relative;">
           <img src="${AFTER_IMG}" alt="Après" style="width:100%;height:100%;object-fit:cover;display:block;" />
-          <div style="position:absolute;top:14px;left:14px;background:${C.accent};color:#fff;font-size:12px;font-weight:900;padding:5px 14px;letter-spacing:.1em;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;">APRÈS</div>
+          <div style="position:absolute;top:14px;left:14px;background:${C.accent};color:#fff;font-size:12px;font-weight:900;padding:5px 14px;letter-spacing:.1em;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;">${trans(lang, 'legacy.beforeAfter.after').toUpperCase()}</div>
         </div>
         <div style="padding:22px;border-top:2px solid ${C.border};">
           <p style="font-size:15px;font-weight:700;color:${C.text};margin-bottom:8px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.03em;">Après ${data.product_name}</p>
@@ -357,11 +359,11 @@ export function templateEtecEnergy(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ AVIS CLIENTS ═════════════════════════════════════════════════════════ -->
+<!-- ═══ AVIS CLIENTS ═════════════════════════════════════════════════ -->
 <div id="reviews6" style="background:${C.card};padding:88px 0;border-top:2px solid ${C.border};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:52px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.accent};font-family:'Barlow Condensed',sans-serif;margin-bottom:14px;">Témoignages</p>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.accent};font-family:'Barlow Condensed',sans-serif;margin-bottom:14px;">${trans(lang, 'reviews.eyebrow')}</p>
       <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:${C.text};margin-bottom:16px;">Ils en parlent</h2>
       <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;">
         <span style="color:${C.accent};font-size:16px;letter-spacing:3px;">★★★★★</span>
@@ -378,20 +380,20 @@ export function templateEtecEnergy(data: LandingPageData): string {
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, ENERGY_THEME)}
 
-<!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
+<!-- ═══ FAQ ═══════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:88px 0;border-top:2px solid ${C.border};">
   <div style="max-width:720px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:56px;">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.accent};font-family:'Barlow Condensed',sans-serif;margin-bottom:14px;">FAQ</p>
-      <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:${C.text};">Questions fréquentes</h2>
+      <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:${C.accent};font-family:'Barlow Condensed',sans-serif;margin-bottom:14px;">${trans(lang, 'bespoke.faqShort')}</p>
+      <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:40px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;color:${C.text};">${trans(lang, 'faqV3.title')}</h2>
     </div>
     ${faqHTML}
   </div>
 </div>
 
-<!-- ═══ CTA FINAL ════════════════════════════════════════════════════════════ -->
+<!-- ═══ CTA FINAL ═══════════════════════════════════════════════════════ -->
 <div style="background:${C.accent};padding:88px 24px;text-align:center;">
-  <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.65);font-family:'Barlow Condensed',sans-serif;margin-bottom:16px;">Offre limitée</p>
+  <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.65);font-family:'Barlow Condensed',sans-serif;margin-bottom:16px;">${trans(lang, 'bespoke.badge.limitedOffer')}</p>
   <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:52px;font-weight:900;color:#fff;letter-spacing:-.01em;text-transform:uppercase;margin-bottom:16px;line-height:1.05;">${data.headline || 'PRÊT À PASSER AU NIVEAU SUPÉRIEUR ?'}</h2>
   <p style="color:rgba(255,255,255,.85);font-size:16px;margin-bottom:14px;max-width:480px;margin-left:auto;margin-right:auto;font-family:'Barlow',sans-serif;line-height:1.75;">${data.subtitle || ''}</p>
   ${data.urgency ? `<p style="color:rgba(255,255,255,.95);font-size:14px;font-weight:700;margin-bottom:36px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.06em;">${data.urgency}</p>` : '<div style="margin-bottom:36px;"></div>'}
@@ -401,7 +403,7 @@ ${renderRichSections(data, ENERGY_THEME)}
   <p style="margin-top:24px;font-size:13px;color:rgba(255,255,255,.5);font-family:'Barlow',sans-serif;">Paiement sécurisé · Livraison express · Retour 30 jours · Certifié anti-dopage</p>
 </div>
 
-<!-- ═══ COUNTDOWN JS ══════════════════════════════════════════════════════════ -->
+<!-- ═══ COUNTDOWN JS ══════════════════════════════════════════════════ -->
 <script>
   (function() {
     var totalSeconds = 2 * 3600 + 47 * 60 + 33;

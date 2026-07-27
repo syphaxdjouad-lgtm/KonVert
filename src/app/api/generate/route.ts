@@ -21,7 +21,7 @@ import { resolveLanguage, languageName } from '@/lib/i18n/languages'
 // Vercel Pro + Fluid Compute = 90s — Bright Data AliExpress 50-65s + DeepSeek 18-22s
 export const maxDuration = 90
 
-// ─── V3 helpers ──────────────────────────────────────────────────────────────
+// ─── V3 helpers ─────────────────────────────────────────────
 
 /**
  * Builds the system prompt for V3 copy generation.
@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
     // Rate limit burst (5 générations / minute / user). Le quota DB bloque
     // déjà l'abus mensuel (75/300/9999 selon plan) mais sans throttle un user
     // Pro peut burst 300 appels DeepSeek en quelques secondes (cost
-    // amplification ~ $1-2 cramés). Ce limiter est indépendant du quota et
+    // amplification ~ $1-2 crames). Ce limiter est indépendant du quota et
     // protège la facture DeepSeek en cas de script abusif.
     const rl = await rateLimitAsync(`generate:${user.id}`, 5, 60_000)
     if (!rl.allowed) {
@@ -274,7 +274,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // ─── V3 path ───────────────────────────────────────────────────────────────
+    // ─── V3 path ────────────────────────────────────────────────
     // Activated when `engine === 'v3'` is explicitly passed in the request body.
     // Everything below is additive — legacy callers (no engine field) are unaffected.
     if (body.engine === 'v3') {
@@ -357,6 +357,9 @@ export async function POST(req: NextRequest) {
       const v3Data: V3PageData = {
         styleId,
         tone: resolvedTone,
+        // Pilote à la fois <html lang>/dir="rtl" et les libellés d'habillage
+        // (CTA, nav, FAQ par défaut...) dans renderPageV3 — cf ui-labels.ts.
+        language: resolveLanguage(body.language),
         product: {
           title: product.title,
           description: product.description,
@@ -420,7 +423,7 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // ─── Legacy path (engine !== 'v3') — untouched ─────────────────────────────
+    // ─── Legacy path (engine !== 'v3') — untouched ────────────────────────────
     let landingPage
     try {
       landingPage = await generateLandingPage(product, {

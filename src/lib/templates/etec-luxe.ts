@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -37,6 +38,7 @@ const LUXE_THEME: SectionTheme = {
 }
 
 export function templateEtecLuxe(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? [];
   const imgs = _real.length >= 1
     ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length])
@@ -104,7 +106,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
         <img src="${imgs[i] || imgs[0]}" alt="${names[i]}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'"/>
       </div>
       <div style="padding:20px;">
-        <p style="font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};margin-bottom:6px;font-family:'Inter',sans-serif;">Limited Edition</p>
+        <p style="font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};margin-bottom:6px;font-family:'Inter',sans-serif;">${trans(lang, 'bespoke.badge.limitedEdition')}</p>
         <h4 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-weight:600;color:${C.text};margin-bottom:10px;">${names[i]}</h4>
         <p style="font-size:16px;color:${C.accent};font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;">${prices[i]}€</p>
       </div>
@@ -151,7 +153,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
 </head>
 <body>
 
-<!-- ═══ BARRE TOP MARQUEE ════════════════════════════════════════════════ -->
+<!-- ═══ BARRE TOP MARQUEE ══════════════════════════════════════════════════════ -->
 <div style="background:${C.accent};overflow:hidden;padding:10px 0;">
   <div style="display:flex;white-space:nowrap;">
     <div style="display:flex;animation:marqueelx 24s linear infinite;white-space:nowrap;">
@@ -163,7 +165,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ NAVBAR ══════════════════════════════════════════════════════════ -->
+<!-- ═══ NAVBAR ══════════════════════════════════════════════════════ -->
 <nav style="background:${C.bg};border-bottom:1px solid ${C.border};position:sticky;top:0;z-index:100;">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:70px;">
     <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;color:${C.text};letter-spacing:.18em;text-transform:uppercase;">LUXE</a>
@@ -184,7 +186,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
   </div>
 </nav>
 
-<!-- ═══ HERO CINÉMATIQUE ════════════════════════════════════════════════ -->
+<!-- ═══ HERO CINÉMATIQUE ═════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:80px 0 72px;position:relative;overflow:hidden;">
   <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.07) 0%,transparent 70%);pointer-events:none;"></div>
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
@@ -194,7 +196,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
       <p style="font-size:16px;font-weight:300;color:${C.muted};max-width:520px;margin:0 auto 36px;font-family:'Inter',sans-serif;line-height:1.75;letter-spacing:.02em;">${data.subtitle || 'Where centuries of savoir-faire meet the pursuit of absolute perfection. Each creation, a singular testament to excellence.'}</p>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
         <a href="javascript:void(0)" onclick="event.preventDefault()" style="background:${C.accent};color:${C.bg};padding:16px 40px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;letter-spacing:.12em;text-transform:uppercase;display:inline-block;transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">${data.cta || 'Discover the Collection'}</a>
-        <a href="javascript:void(0)" onclick="event.preventDefault()" style="background:transparent;color:${C.accent};padding:16px 40px;font-size:12px;font-weight:400;font-family:'Inter',sans-serif;letter-spacing:.12em;text-transform:uppercase;border:1px solid ${C.accent};display:inline-block;transition:all .2s;" onmouseover="this.style.background='${C.accent}';this.style.color='${C.bg}'" onmouseout="this.style.background='transparent';this.style.color='${C.accent}'">Our Story</a>
+        <a href="javascript:void(0)" onclick="event.preventDefault()" style="background:transparent;color:${C.accent};padding:16px 40px;font-size:12px;font-weight:400;font-family:'Inter',sans-serif;letter-spacing:.12em;text-transform:uppercase;border:1px solid ${C.accent};display:inline-block;transition:all .2s;" onmouseover="this.style.background='${C.accent}';this.style.color='${C.bg}'" onmouseout="this.style.background='transparent';this.style.color='${C.accent}'">${trans(lang, 'bespoke.nav.ourStory')}</a>
       </div>
     </div>
     <div style="max-width:560px;margin:0 auto;position:relative;">
@@ -207,7 +209,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ LOGO BAR ════════════════════════════════════════════════════════ -->
+<!-- ═══ LOGO BAR ══════════════════════════════════════════════════════ -->
 <section style="background:${C.bgAlt};border-top:1px solid ${C.border};border-bottom:1px solid ${C.border};padding:28px 0;">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <p style="text-align:center;font-size:10px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:${C.muted};font-family:'Inter',sans-serif;margin-bottom:22px;">As Seen In</p>
@@ -217,7 +219,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ PRODUIT ══════════════════════════════════════════════════════════ -->
+<!-- ═══ PRODUIT ═════════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:96px 0;">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div class="grid2-lx" style="display:grid;grid-template-columns:55% 45%;gap:64px;align-items:start;">
@@ -229,7 +231,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
       </div>
       <div>
         <div style="width:40px;height:1px;background:${C.accent};margin-bottom:20px;"></div>
-        <span style="display:inline-block;border:1px solid ${C.accent};color:${C.accent};font-size:10px;font-weight:500;padding:4px 14px;font-family:'Inter',sans-serif;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;">Limited Edition</span>
+        <span style="display:inline-block;border:1px solid ${C.accent};color:${C.accent};font-size:10px;font-weight:500;padding:4px 14px;font-family:'Inter',sans-serif;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;">${trans(lang, 'bespoke.badge.limitedEdition')}</span>
         <h1 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:500;line-height:1.15;letter-spacing:-.01em;color:${C.text};margin-bottom:12px;">${data.product_name}</h1>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:22px;">
           <span style="color:${C.accent};font-size:13px;letter-spacing:4px;">★★★★★</span>
@@ -257,7 +259,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ SAVOIR-FAIRE ════════════════════════════════════════════════════ -->
+<!-- ═══ SAVOIR-FAIRE ═════════════════════════════════════════════════ -->
 <section style="background:${C.bgAlt};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:72px;">
@@ -269,7 +271,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ COLLECTION ══════════════════════════════════════════════════════ -->
+<!-- ═══ COLLECTION ═════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:64px;">
@@ -281,7 +283,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ TESTIMONIALS ════════════════════════════════════════════════════ -->
+<!-- ═══ TESTIMONIALS ═════════════════════════════════════════════════ -->
 <section style="background:${C.bgAlt};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:64px;">
@@ -293,7 +295,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ GARANTIES ════════════════════════════════════════════════════════ -->
+<!-- ═══ GARANTIES ════════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:72px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div class="grid4-lx" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:${C.border};border:1px solid ${C.border};">
@@ -311,7 +313,7 @@ export function templateEtecLuxe(data: LandingPageData): string {
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, LUXE_THEME)}
 
-<!-- ═══ FAQ ══════════════════════════════════════════════════════════════ -->
+<!-- ═══ FAQ ═══════════════════════════════════════════════════════════ -->
 <section style="background:${C.bgAlt};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:720px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:60px;">
@@ -322,7 +324,7 @@ ${renderRichSections(data, LUXE_THEME)}
   </div>
 </section>
 
-<!-- ═══ NEWSLETTER ════════════════════════════════════════════════════ -->
+<!-- ═══ NEWSLETTER ═════════════════════════════════════════════════════ -->
 <section style="background:${C.accent};padding:72px 24px;text-align:center;">
   <p style="font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:${C.bg};opacity:.6;font-family:'Inter',sans-serif;margin-bottom:14px;">Cercle Privé</p>
   <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:42px;font-weight:400;color:${C.bg};letter-spacing:.02em;margin-bottom:12px;">Join Our Inner Circle</h2>
@@ -333,7 +335,7 @@ ${renderRichSections(data, LUXE_THEME)}
   </div>
 </section>
 
-<!-- ═══ CTA FINAL ════════════════════════════════════════════════════ -->
+<!-- ═══ CTA FINAL ═════════════════════════════════════════════════════ -->
 <section style="background:linear-gradient(135deg,#050505,#1A1208,#050505);padding:96px 24px;text-align:center;border-top:1px solid rgba(201,168,76,.2);">
   <div style="width:40px;height:1px;background:rgba(201,168,76,.3);margin:0 auto 26px;"></div>
   <h2 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:52px;font-weight:400;color:${C.text};letter-spacing:-.01em;margin-bottom:18px;line-height:1.1;">${data.product_name}</h2>
@@ -342,7 +344,7 @@ ${renderRichSections(data, LUXE_THEME)}
   <p style="margin-top:24px;font-size:12px;color:${C.muted};font-family:'Inter',sans-serif;letter-spacing:.04em;">Private delivery · Authenticity guaranteed · Returns 60 days</p>
 </section>
 
-<!-- ═══ FOOTER ════════════════════════════════════════════════════════ -->
+<!-- ═══ FOOTER ══════════════════════════════════════════════════════════ -->
 <footer style="background:#050505;padding:64px 0 32px;border-top:1px solid ${C.accent};">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div class="footer-lx" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;">
@@ -354,7 +356,7 @@ ${renderRichSections(data, LUXE_THEME)}
         </div>
       </div>
       <div>
-        <p style="font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};font-family:'Inter',sans-serif;margin-bottom:18px;opacity:.6;">Collection</p>
+        <p style="font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};font-family:'Inter',sans-serif;margin-bottom:18px;opacity:.6;">${trans(lang, 'bespoke.nav.collection')}</p>
         ${['Joaillerie','Parfums','Maroquinerie','Accessoires'].map(l => `<p style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;color:${C.muted};font-family:'Inter',sans-serif;font-weight:300;transition:color .2s;" onmouseover="this.style.color='${C.accent}'" onmouseout="this.style.color='${C.muted}'">${l}</a></p>`).join('')}
       </div>
       <div>
@@ -362,7 +364,7 @@ ${renderRichSections(data, LUXE_THEME)}
         ${['Notre Histoire','Atelier','Héritage','Presse'].map(l => `<p style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;color:${C.muted};font-family:'Inter',sans-serif;font-weight:300;transition:color .2s;" onmouseover="this.style.color='${C.accent}'" onmouseout="this.style.color='${C.muted}'">${l}</a></p>`).join('')}
       </div>
       <div>
-        <p style="font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};font-family:'Inter',sans-serif;margin-bottom:18px;opacity:.6;">Services</p>
+        <p style="font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};font-family:'Inter',sans-serif;margin-bottom:18px;opacity:.6;">${trans(lang, 'bespoke.nav.services')}</p>
         ${['Contact','Livraison','Retours','FAQ','Mentions légales'].map(l => `<p style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:13px;color:${C.muted};font-family:'Inter',sans-serif;font-weight:300;transition:color .2s;" onmouseover="this.style.color='${C.accent}'" onmouseout="this.style.color='${C.muted}'">${l}</a></p>`).join('')}
       </div>
     </div>

@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const ELECTRO_THEME: SectionTheme = {
 }
 
 export function templateEtecElectro(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
@@ -50,7 +52,7 @@ export function templateEtecElectro(data: LandingPageData): string {
 .ec-btn-alt{background:#E0F7FA;color:#00B4D8;border:none;border-radius:10px;padding:15px 40px;font-family:'Nunito Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .3s;}.ec-btn-alt:hover{background:#B2EBF2;}
 @media(max-width:768px){.ec-hero{flex-direction:column!important;}.ec-hero-img{width:100%!important;height:460px!important;}.ec-hero-info{width:100%!important;padding:32px 20px!important;}.ec-grid3{grid-template-columns:1fr!important;}.ec-compare{flex-direction:column!important;}.ec-reviews{grid-template-columns:1fr!important;}}</style></head><body>
 <div style="background:linear-gradient(90deg,#00B4D8,#0077B6);color:#fff;text-align:center;padding:11px 20px;font-size:12px;font-weight:700;">${data.urgency || 'Offre lancement — -20% avec le code POWER20'}</div>
-<nav style="background:#F0FDFA;border-bottom:1px solid #B2EBF2;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#94A3B8;">Accueil</span><span style="font-size:12px;color:#CBD5E1;">›</span><span style="font-size:12px;color:#94A3B8;">Nutrition</span><span style="font-size:12px;color:#CBD5E1;">›</span><span style="font-size:12px;color:#0F172A;font-weight:600;">${data.product_name}</span></div></nav>
+<nav style="background:#F0FDFA;border-bottom:1px solid #B2EBF2;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#94A3B8;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#CBD5E1;">›</span><span style="font-size:12px;color:#94A3B8;">${trans(lang, 'bespoke.nav.nutrition')}</span><span style="font-size:12px;color:#CBD5E1;">›</span><span style="font-size:12px;color:#0F172A;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#F0FDFA;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="ec-hero">
 <div style="width:55%;position:relative;background:#E0F7FA;overflow:hidden;border-radius:0 10px 10px 0;" class="ec-hero-img"><img id="mi-ec" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
       ${renderHeroThumbs(_real ?? imgs ?? [], ELECTRO_THEME, 'mi-ec')}
@@ -62,11 +64,11 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:lin
 <p style="font-size:15px;color:#64748B;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;">${data.price ? `<span style="font-family:'Rajdhani',sans-serif;font-size:40px;font-weight:700;color:#0F172A;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#CBD5E1;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="width:20px;height:20px;border-radius:6px;background:#E0F7FA;color:#00B4D8;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${ico.flash(12)}</span><span style="font-size:14px;color:#475569;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="ec-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="ec-btn-alt" style="flex:1;text-align:center;">Composition</button></div>
+<div style="display:flex;gap:12px;"><button class="ec-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="ec-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.nav.composition')}</button></div>
 <div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1px solid #B2EBF2;"><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Express</span><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Sécurisé</span><span style="font-size:11px;color:#94A3B8;display:flex;align-items:center;gap:5px;">${ico.shield(14)} Certifié</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#E0F7FA;"><div style="max-width:1100px;margin:0 auto;">
-<p style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#00B4D8;text-align:center;text-transform:uppercase;margin-bottom:8px;">Science</p>
+<p style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#00B4D8;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.nav.science')}</p>
 <h2 style="font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:#0F172A;text-align:center;margin-bottom:56px;">La formule qui fait la différence</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="ec-grid3">${[
   { t: benefits[0]||'Électrolytes essentiels', d: 'Sodium, potassium et magnésium en doses optimales pour la performance' },
@@ -74,7 +76,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:lin
   { t: benefits[2]||'Absorption rapide', d: `Technologie d'hydratation avancée pour une récupération express` },
 ].map(s => `<div style="background:#F0FDFA;border-radius:10px;padding:36px 28px;text-align:center;"><h3 style="font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:#0F172A;margin-bottom:10px;">${s.t}</h3><p style="font-size:14px;color:#64748B;line-height:1.7;">${s.d}</p></div>`).join('')}</div></div></section>
 <section style="padding:80px 24px;background:#F0FDFA;"><div style="max-width:1000px;margin:0 auto;">
-<h2 style="font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:#0F172A;text-align:center;margin-bottom:48px;">En action</h2>
+<h2 style="font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:#0F172A;text-align:center;margin-bottom:48px;">${trans(lang, 'bespoke.section.inAction')}</h2>
 <div style="display:flex;gap:20px;" class="ec-compare"><div style="flex:1;position:relative;border-radius:10px;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Training"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.6));"><p style="color:#fff;font-size:14px;font-weight:600;">Entraînement</p></div></div><div style="flex:1;position:relative;border-radius:10px;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Recovery"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.6));"><p style="color:#fff;font-size:14px;font-weight:600;">Récupération</p></div></div></div></div></section>
 <section style="padding:80px 24px;background:#E0F7FA;"><div style="max-width:1100px;margin:0 auto;">
 <h2 style="font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:#0F172A;text-align:center;margin-bottom:48px;">Avis athlètes</h2>
@@ -83,7 +85,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:lin
   { name:'Sarah L.', text:'Enfin un produit clean qui marche vraiment. Le goût est top et je sens la différence dès la première utilisation.', date:'1 semaine' },
   { name:'Matthieu D.', text:`Je l'utilise avant et après chaque séance. Fini les crampes et la fatigue. Game changer total.`, date:'2 semaines' },
 ].map(r => `<div style="background:#F0FDFA;border-radius:10px;padding:28px 24px;"><div style="color:#00B4D8;font-size:13px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div><p style="font-size:14px;color:#475569;line-height:1.75;margin-bottom:20px;">"${r.text}"</p><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00B4D8,#0077B6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">${r.name[0]}</div><div><p style="font-size:13px;font-weight:600;color:#0F172A;">${r.name}</p><p style="font-size:11px;color:#94A3B8;">Il y a ${r.date}</p></div></div></div>`).join('')}</div></div></section>
-<section style="padding:80px 24px;background:#0F172A;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:#F0FDFA;text-align:center;margin-bottom:48px;">FAQ</h2><div style="background:#1E293B;border-radius:10px;padding:8px 32px;">${faqHtml}</div></div></section>
+<section style="padding:80px 24px;background:#0F172A;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:#F0FDFA;text-align:center;margin-bottom:48px;">${trans(lang, 'bespoke.faqShort')}</h2><div style="background:#1E293B;border-radius:10px;padding:8px 32px;">${faqHtml}</div></div></section>
 <section style="padding:100px 24px;background:#0F172A;"><div style="max-width:700px;margin:0 auto;text-align:center;">
 <h2 style="font-family:'Rajdhani',sans-serif;font-size:42px;font-weight:700;color:#F0FDFA;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(240,253,250,0.5);margin-bottom:36px;">${data.subtitle}</p>

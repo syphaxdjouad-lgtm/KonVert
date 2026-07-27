@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const GLOWUP_THEME: SectionTheme = {
 }
 
 export function templateEtecGlowup(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
@@ -50,7 +52,7 @@ export function templateEtecGlowup(data: LandingPageData): string {
 .gu-btn-alt{background:#FFF0F5;color:#D4508B;border:none;border-radius:20px;padding:15px 40px;font-family:'Work Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;}.gu-btn-alt:hover{background:#FFE0EB;}
 @media(max-width:768px){.gu-hero{flex-direction:column!important;}.gu-hero-img{width:100%!important;height:460px!important;}.gu-hero-info{width:100%!important;padding:32px 20px!important;}.gu-grid3{grid-template-columns:1fr!important;}.gu-compare{flex-direction:column!important;}.gu-reviews{grid-template-columns:1fr!important;}}</style></head><body>
 <div style="background:linear-gradient(90deg,#D4508B,#E8729E);color:#fff;text-align:center;padding:11px 20px;font-size:12px;font-weight:500;">${data.urgency || 'Collection limitée — Offre beauté exclusive'}</div>
-<nav style="background:#FFF9FB;border-bottom:1px solid #FFE0EB;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#BBB;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#BBB;">Beauté</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#2D2D2D;font-weight:600;">${data.product_name}</span></div></nav>
+<nav style="background:#FFF9FB;border-bottom:1px solid #FFE0EB;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#BBB;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#BBB;">Beauté</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#2D2D2D;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#FFF9FB;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="gu-hero">
 <div style="width:55%;position:relative;background:#FFF0F5;overflow:hidden;border-radius:0 20px 20px 0;" class="gu-hero-img"><img id="mi-gu" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
       ${renderHeroThumbs(_real ?? imgs ?? [], GLOWUP_THEME, 'mi-gu')}
@@ -75,7 +77,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#D4
 ].map(s => `<div style="background:#FFF9FB;border-radius:20px;padding:36px 28px;text-align:center;"><h3 style="font-size:18px;font-weight:600;color:#2D2D2D;margin-bottom:10px;">${s.t}</h3><p style="font-size:14px;color:#999;line-height:1.7;">${s.d}</p></div>`).join('')}</div></div></section>
 <section style="padding:80px 24px;background:#FFF9FB;"><div style="max-width:1000px;margin:0 auto;">
 <h2 style="font-family:'Marcellus',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">Avant / Après</h2>
-<div style="display:flex;gap:20px;" class="gu-compare"><div style="flex:1;position:relative;border-radius:20px;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Avant"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">Avant</p></div></div><div style="flex:1;position:relative;border-radius:20px;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Après"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">Après</p></div></div></div></div></section>
+<div style="display:flex;gap:20px;" class="gu-compare"><div style="flex:1;position:relative;border-radius:20px;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Avant"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">${trans(lang, 'legacy.beforeAfter.before')}</p></div></div><div style="flex:1;position:relative;border-radius:20px;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Après"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.5));"><p style="color:#fff;font-size:14px;font-weight:600;">${trans(lang, 'legacy.beforeAfter.after')}</p></div></div></div></div></section>
 <section style="padding:80px 24px;background:#FFF0F5;"><div style="max-width:1100px;margin:0 auto;">
 <h2 style="font-family:'Marcellus',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">Elles en parlent</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="gu-reviews">${[
@@ -83,7 +85,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#D4
   { name: data.testimonials?.[1]?.name || 'Camille R.', text: data.testimonials?.[1]?.text || `Je suis conquise ! La qualité est au rendez-vous et ça fonctionne vraiment. Mon must-have.`, date:'5 jours' },
   { name: data.testimonials?.[2]?.name || 'Sofia T.', text: data.testimonials?.[2]?.text || `Enfin un produit qui tient ses promesses. Je recommande à 100%.`, date:'1 semaine' },
 ].map(r => `<div style="background:#FFF9FB;border-radius:20px;padding:28px 24px;"><div style="color:#D4508B;font-size:13px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div><p style="font-size:14px;color:#555;line-height:1.75;margin-bottom:20px;">"${r.text}"</p><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#D4508B,#E8729E);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">${r.name[0]}</div><div><p style="font-size:13px;font-weight:600;color:#2D2D2D;">${r.name}</p><p style="font-size:11px;color:#BBB;">Il y a ${r.date}</p></div></div></div>`).join('')}</div></div></section>
-<section style="padding:80px 24px;background:#FFF9FB;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Marcellus',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">FAQ</h2><div style="background:#FFF0F5;border-radius:20px;padding:8px 32px;">${faqHtml}</div></div></section>
+<section style="padding:80px 24px;background:#FFF9FB;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Marcellus',serif;font-size:32px;font-weight:400;color:#2D2D2D;text-align:center;margin-bottom:48px;">${trans(lang, 'bespoke.faqShort')}</h2><div style="background:#FFF0F5;border-radius:20px;padding:8px 32px;">${faqHtml}</div></div></section>
 <section style="padding:100px 24px;background:linear-gradient(135deg,#D4508B,#E8729E);"><div style="max-width:700px;margin:0 auto;text-align:center;">
 <h2 style="font-family:'Marcellus',serif;font-size:40px;font-weight:400;color:#fff;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(255,255,255,0.7);margin-bottom:36px;">${data.subtitle}</p>

@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const QUARTER_THEME: SectionTheme = {
 }
 
 export function templateEtecQuarter(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
@@ -50,7 +52,7 @@ export function templateEtecQuarter(data: LandingPageData): string {
 .qt-btn-alt{background:#fff;color:#121212;border:1.5px solid #121212;border-radius:0;padding:15px 40px;font-family:'Manrope',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .3s;}.qt-btn-alt:hover{background:#F5F5F5;}
 @media(max-width:768px){.qt-hero{flex-direction:column!important;}.qt-hero-img{width:100%!important;height:460px!important;}.qt-hero-info{width:100%!important;padding:32px 20px!important;}.qt-grid3{grid-template-columns:1fr!important;}.qt-compare{flex-direction:column!important;}.qt-reviews{grid-template-columns:1fr!important;}}</style></head><body>
 <div style="background:#121212;color:rgba(255,255,255,0.7);text-align:center;padding:11px 20px;font-size:12px;font-weight:500;letter-spacing:0.04em;">${data.urgency || 'Nouvelle collection disponible — Livraison offerte'}</div>
-<nav style="background:#fff;border-bottom:1.5px solid #121212;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#999;">Accueil</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#999;">Boutique</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#121212;font-weight:600;">${data.product_name}</span></div></nav>
+<nav style="background:#fff;border-bottom:1.5px solid #121212;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#999;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#999;">${trans(lang, 'bespoke.nav.shop')}</span><span style="font-size:12px;color:#DDD;">›</span><span style="font-size:12px;color:#121212;font-weight:600;">${data.product_name}</span></div></nav>
 <section style="background:#fff;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="qt-hero">
 <div style="width:55%;position:relative;background:#F5F5F5;overflow:hidden;" class="qt-hero-img"><img id="mi-qt" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
       ${renderHeroThumbs(_real ?? imgs ?? [], QUARTER_THEME, 'mi-qt')}
@@ -62,7 +64,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#12
 <p style="font-size:15px;color:#999;line-height:1.7;margin-bottom:28px;">${data.subtitle}</p>
 <div style="display:flex;align-items:baseline;gap:14px;margin-bottom:28px;padding-bottom:20px;border-bottom:1.5px solid #E5E5E5;">${data.price ? `<span style="font-size:36px;font-weight:800;color:#121212;">${data.price}€</span>` : ''}${data.original_price ? `<span style="font-size:18px;color:#CCC;text-decoration:line-through;">${data.original_price}€</span>` : ''}</div>
 <ul style="list-style:none;margin-bottom:32px;display:flex;flex-direction:column;gap:10px;">${benefits.map(b => `<li style="display:flex;align-items:center;gap:10px;"><span style="width:6px;height:6px;border-radius:50%;background:#121212;flex-shrink:0;"></span><span style="font-size:14px;color:#666;">${b}</span></li>`).join('')}</ul>
-<div style="display:flex;gap:12px;"><button class="qt-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="qt-btn-alt" style="flex:1;text-align:center;">Détails</button></div>
+<div style="display:flex;gap:12px;"><button class="qt-btn" style="flex:1;text-align:center;">${data.cta || 'Ajouter au panier'}</button><button class="qt-btn-alt" style="flex:1;text-align:center;">${trans(lang, 'bespoke.nav.details')}</button></div>
 <div style="display:flex;gap:24px;margin-top:24px;padding-top:18px;border-top:1.5px solid #E5E5E5;"><span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.truck(14)} Offerte</span><span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.lock(14)} Sécurisé</span><span style="font-size:11px;color:#999;display:flex;align-items:center;gap:5px;">${ico.return(14)} Retour 30j</span></div>
 </div></div></section>
 <section style="padding:80px 24px;background:#F5F5F5;"><div style="max-width:1100px;margin:0 auto;">
@@ -76,13 +78,13 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#12
 <h2 style="font-size:32px;font-weight:800;color:#121212;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">En contexte</h2>
 <div style="display:flex;gap:20px;" class="qt-compare"><div style="flex:1;position:relative;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Vue 1"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.6));"><p style="color:#fff;font-size:14px;font-weight:600;">Minimaliste</p></div></div><div style="flex:1;position:relative;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Vue 2"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.6));"><p style="color:#fff;font-size:14px;font-weight:600;">Contemporain</p></div></div></div></div></section>
 <section style="padding:80px 24px;background:#F5F5F5;"><div style="max-width:1100px;margin:0 auto;">
-<h2 style="font-size:32px;font-weight:800;color:#121212;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">Avis</h2>
+<h2 style="font-size:32px;font-weight:800;color:#121212;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">${trans(lang, 'bespoke.nav.reviewsShort')}</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="qt-reviews">${[
   { name:'Vincent R.', text:`Le ${data.product_name} est exactement ce que je cherchais. Minimaliste, efficace, bien fait.`, date:'4 jours' },
   { name:'Pauline G.', text:`Design impeccable et finitions soignées. On voit que chaque détail a été pensé.`, date:'1 semaine' },
   { name:'David C.', text:'Simple mais pas simpliste. La qualité est remarquable pour le prix. Très satisfait.', date:'2 semaines' },
 ].map(r => `<div style="background:#fff;padding:28px 24px;border-bottom:3px solid #121212;"><div style="color:#121212;font-size:13px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div><p style="font-size:14px;color:#666;line-height:1.75;margin-bottom:20px;">"${r.text}"</p><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:#121212;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">${r.name[0]}</div><div><p style="font-size:13px;font-weight:700;color:#121212;">${r.name}</p><p style="font-size:11px;color:#999;">Il y a ${r.date}</p></div></div></div>`).join('')}</div></div></section>
-<section style="padding:80px 24px;background:#fff;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-size:32px;font-weight:800;color:#121212;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">FAQ</h2><div style="background:#F5F5F5;padding:8px 32px;">${faqHtml}</div></div></section>
+<section style="padding:80px 24px;background:#fff;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-size:32px;font-weight:800;color:#121212;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">${trans(lang, 'bespoke.faqShort')}</h2><div style="background:#F5F5F5;padding:8px 32px;">${faqHtml}</div></div></section>
 <section style="padding:100px 24px;background:#121212;"><div style="max-width:700px;margin:0 auto;text-align:center;">
 <h2 style="font-size:40px;font-weight:800;color:#fff;letter-spacing:-0.02em;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(255,255,255,0.4);margin-bottom:36px;">${data.subtitle}</p>

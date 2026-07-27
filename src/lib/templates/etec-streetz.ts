@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const STREETZ_THEME: SectionTheme = {
 }
 
 export function templateEtecStreetz(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
   const benefits = data.benefits.slice(0, 5)
@@ -50,7 +52,7 @@ export function templateEtecStreetz(data: LandingPageData): string {
 .sz-btn-alt{background:#111;color:#F8F8F8;border:none;border-radius:0;padding:15px 40px;font-family:'Barlow',sans-serif;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;transition:all .3s;}.sz-btn-alt:hover{background:#222;}
 @media(max-width:768px){.sz-hero{flex-direction:column!important;}.sz-hero-img{width:100%!important;height:460px!important;}.sz-hero-info{width:100%!important;padding:32px 20px!important;}.sz-grid3{grid-template-columns:1fr!important;}.sz-compare{flex-direction:column!important;}.sz-reviews{grid-template-columns:1fr!important;}}</style></head><body>
 <div style="background:#E11D48;color:#fff;text-align:center;padding:11px 20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;">${data.urgency || `Drop limité — Dispo jusqu'à épuisement`}</div>
-<nav style="background:#F8F8F8;border-bottom:2px solid #111;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#999;">Home</span><span style="font-size:12px;color:#CCC;">›</span><span style="font-size:12px;color:#999;">Street</span><span style="font-size:12px;color:#CCC;">›</span><span style="font-size:12px;color:#111;font-weight:600;text-transform:uppercase;">${data.product_name}</span></div></nav>
+<nav style="background:#F8F8F8;border-bottom:2px solid #111;padding:14px 24px;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#999;">${trans(lang, 'bespoke.nav.home')}</span><span style="font-size:12px;color:#CCC;">›</span><span style="font-size:12px;color:#999;">Street</span><span style="font-size:12px;color:#CCC;">›</span><span style="font-size:12px;color:#111;font-weight:600;text-transform:uppercase;">${data.product_name}</span></div></nav>
 <section style="background:#F8F8F8;padding:0;"><div style="max-width:1200px;margin:0 auto;display:flex;align-items:stretch;min-height:620px;" class="sz-hero">
 <div style="width:55%;position:relative;background:#E5E5E5;overflow:hidden;" class="sz-hero-img"><img id="mi-sz" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;min-height:520px;" alt="${data.product_name}">
       ${renderHeroThumbs(_real ?? imgs ?? [], STREETZ_THEME, 'mi-sz')}
@@ -74,7 +76,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#E1
   { t: benefits[2]||'Édition limitée', d: 'Production en série limitée, chaque drop est unique' },
 ].map(s => `<div style="background:#1A1A1A;padding:36px 28px;text-align:center;border:1px solid #333;"><h3 style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#F8F8F8;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px;">${s.t}</h3><p style="font-size:14px;color:#888;line-height:1.7;">${s.d}</p></div>`).join('')}</div></div></section>
 <section style="padding:80px 24px;background:#F8F8F8;"><div style="max-width:1000px;margin:0 auto;">
-<h2 style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#111;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:48px;">Lookbook</h2>
+<h2 style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#111;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:48px;">${trans(lang, 'bespoke.nav.lookbook')}</h2>
 <div style="display:flex;gap:20px;" class="sz-compare"><div style="flex:1;position:relative;overflow:hidden;"><img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Look 1"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));"><p style="color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;text-transform:uppercase;letter-spacing:0.06em;">Street Casual</p></div></div><div style="flex:1;position:relative;overflow:hidden;"><img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:360px;object-fit:cover;display:block;" alt="Look 2"><div style="position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));"><p style="color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;text-transform:uppercase;letter-spacing:0.06em;">Full Drip</p></div></div></div></div></section>
 <section style="padding:80px 24px;background:#111;"><div style="max-width:1100px;margin:0 auto;">
 <h2 style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#F8F8F8;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:48px;">La communauté parle</h2>
@@ -83,7 +85,7 @@ ${savePct > 0 ? `<div style="position:absolute;top:20px;left:20px;background:#E1
   { name:'Théo M.', text:`Qualité incroyable pour le prix. J'ai pris 2 coloris. Le packaging est stylé aussi.`, date:'5 jours' },
   { name:'Amine B.', text:'Drop cop réussi ! La qualité est vraiment au dessus. Hâte du prochain drop.', date:'1 semaine' },
 ].map(r => `<div style="background:#1A1A1A;padding:28px 24px;border:1px solid #333;"><div style="color:#E11D48;font-size:13px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div><p style="font-size:14px;color:#AAA;line-height:1.75;margin-bottom:20px;">"${r.text}"</p><div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:#E11D48;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">${r.name[0]}</div><div><p style="font-size:13px;font-weight:600;color:#F8F8F8;">${r.name}</p><p style="font-size:11px;color:#666;">Il y a ${r.date}</p></div></div></div>`).join('')}</div></div></section>
-<section style="padding:80px 24px;background:#1A1A1A;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#F8F8F8;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:48px;">FAQ</h2><div style="background:#111;padding:8px 32px;">${faqHtml}</div></div></section>
+<section style="padding:80px 24px;background:#1A1A1A;"><div style="max-width:700px;margin:0 auto;"><h2 style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#F8F8F8;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:48px;">${trans(lang, 'bespoke.faqShort')}</h2><div style="background:#111;padding:8px 32px;">${faqHtml}</div></div></section>
 <section style="padding:100px 24px;background:#E11D48;"><div style="max-width:700px;margin:0 auto;text-align:center;">
 <h2 style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:16px;">${data.headline}</h2>
 <p style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:36px;">${data.subtitle}</p>

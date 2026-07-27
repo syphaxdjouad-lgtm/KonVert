@@ -49,6 +49,10 @@ export interface V3PageData {
   styleId: StyleId
   tone: CopyTone
   sectionOrder?: V3SectionKey[]
+  // Langue choisie par l'utilisateur (wizard step 7) — pilote à la fois le
+  // contenu généré par DeepSeek ET les libellés d'habillage (CTA, nav, FAQ
+  // par défaut...). Fallback 'fr' si absent (cf resolveLanguage()).
+  language?: string
   product: {
     title: string
     description: string

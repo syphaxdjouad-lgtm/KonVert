@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const TECHCASE_THEME: SectionTheme = {
 }
 
 export function templateEtecTechcase(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -90,9 +92,9 @@ body{font-family:'Jost',sans-serif;background:#fff;color:#000;}
 <!-- BREADCRUMB -->
 <nav style="background:#fff;border-bottom:1px solid #EBEBEB;padding:14px 24px;">
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;">
-    <span style="font-size:12px;color:#999;">Home</span>
+    <span style="font-size:12px;color:#999;">${trans(lang, 'bespoke.nav.home')}</span>
     <span style="font-size:12px;color:#DDD;">/</span>
-    <span style="font-size:12px;color:#999;">Accessoires</span>
+    <span style="font-size:12px;color:#999;">${trans(lang, 'bespoke.nav.accessories')}</span>
     <span style="font-size:12px;color:#DDD;">/</span>
     <span style="font-size:12px;color:#000;font-weight:500;">${data.product_name}</span>
   </div>
@@ -150,7 +152,7 @@ body{font-family:'Jost',sans-serif;background:#fff;color:#000;}
 <!-- SPECS — 2x2 GRID -->
 <section style="padding:80px 24px;background:#F5F5F5;">
   <div style="max-width:900px;margin:0 auto;">
-    <p style="font-size:12px;font-weight:500;letter-spacing:0.1em;color:#999;text-align:center;text-transform:uppercase;margin-bottom:8px;">Caractéristiques</p>
+    <p style="font-size:12px;font-weight:500;letter-spacing:0.1em;color:#999;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.features.eyebrow')}</p>
     <h2 style="font-size:34px;font-weight:600;color:#000;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">Conçu pour protéger</h2>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" class="tc-specs">
       ${specs.map(s => `
@@ -233,7 +235,7 @@ ${renderRichSections(data, TECHCASE_THEME)}
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#F5F5F5;">
   <div style="max-width:700px;margin:0 auto;">
-    <h2 style="font-size:34px;font-weight:600;color:#000;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">FAQ</h2>
+    <h2 style="font-size:34px;font-weight:600;color:#000;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">${trans(lang, 'bespoke.faqShort')}</h2>
     <div style="background:#fff;border-radius:12px;padding:8px 28px;">${faqHtml}</div>
   </div>
 </section>

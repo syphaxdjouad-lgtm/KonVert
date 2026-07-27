@@ -1,8 +1,11 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { escapeHtml, escapeAttr } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 export function renderCompareVariants(data: V3PageData, tokens: StyleTokens): string {
+  const lang = resolveLanguage(data.language)
   const variants = data.product.variants ?? []
 
   // Sprint 3 T5 — highlight variante recommandée + sticky 1re col mobile
@@ -37,7 +40,7 @@ export function renderCompareVariants(data: V3PageData, tokens: StyleTokens): st
         font-family:${tokens.fonts.body};font-size:11px;font-weight:600;
         text-transform:uppercase;letter-spacing:0.08em;
         padding:3px 10px;border-radius:999px;margin-bottom:12px
-      ">Recommandé</span>` : ''}
+      ">${escapeHtml(t(lang, 'compareVariants.recommended'))}</span>` : ''}
       ${v.image ? `<div style="
         aspect-ratio:1;background:${tokens.colors.surface};
         border-radius:${tokens.radius.image};overflow:hidden;margin-bottom:12px
@@ -57,7 +60,7 @@ export function renderCompareVariants(data: V3PageData, tokens: StyleTokens): st
     <h2 style="
       font-family:${tokens.fonts.heading};font-size:clamp(24px,2.5vw,32px);
       color:${tokens.colors.text};margin:0 0 32px;text-align:center;font-weight:400
-    ">Toutes les variantes</h2>
+    ">${escapeHtml(t(lang, 'compareVariants.title'))}</h2>
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
       <div style="
         display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));

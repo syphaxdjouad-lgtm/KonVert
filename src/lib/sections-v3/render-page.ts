@@ -2,6 +2,8 @@ import type { V3PageData, V3SectionKey } from '@/types/v3'
 import type { StyleId, StyleTokens } from '@/lib/styles/types'
 import { escapeHtml } from '@/lib/utils/html'
 import { STYLE_IDS } from '@/lib/styles'
+import { t, isRtl } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 import { DEFAULT_SECTION_ORDER_V3 } from './index'
 import { shouldRenderSection } from './display-rules'
 import { softTokens } from '@/lib/styles/soft/tokens'
@@ -76,6 +78,7 @@ export function renderPageV3(
   }
   const tokens = STYLE_TOKENS[styleId]
   const order = sectionOrder ?? DEFAULT_SECTION_ORDER_V3
+  const lang = resolveLanguage(data.language)
 
   const sectionsRaw = order
     .filter(key => shouldRenderSection(key, data))
@@ -118,7 +121,7 @@ export function renderPageV3(
       currency: 'EUR',
     },
     // Si pas de prix valide : libellé "Voir l'offre" + prix masqué (évite "0,00 €")
-    ctaLabel:    hasPriceData ? 'Ajouter au panier' : 'Voir l\'offre',
+    ctaLabel:    hasPriceData ? t(lang, 'cta.addToCart') : t(lang, 'cta.viewOffer'),
     showPrice:   hasPriceData,
     ctaColor:    tokens.colors.accent,
     fontFamily:  tokens.fonts.body,
@@ -126,6 +129,7 @@ export function renderPageV3(
     borderColor: tokens.colors.border,
     showQty:     false,
     stockSignal: stockSignalForSticky,
+    lang,
   })
 
   // Trust badges footer — auto-injecté juste avant </body> pour les pages V3
@@ -135,6 +139,7 @@ export function renderPageV3(
     bg:          tokens.colors.surface,
     border:      tokens.colors.border,
     fontFamily:  tokens.fonts.body,
+    lang,
   })
 
   // P0-3 (iframe) : script postMessage hauteur dynamique.
@@ -189,7 +194,7 @@ export function renderPageV3(
   const navHtml = renderNav(data, tokens)
 
   return `<!DOCTYPE html>
-<html lang="fr">
+<html lang="${lang}"${isRtl(lang) ? ' dir="rtl"' : ''}>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">

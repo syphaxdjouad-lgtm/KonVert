@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const COSMETIX_THEME: SectionTheme = {
 }
 
 export function templateEtecCosmetix(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -93,7 +95,7 @@ body{font-family:'DM Sans',sans-serif;background:#FEFCFA;color:#121212;}
 <!-- BREADCRUMB -->
 <nav style="background:#FEFCFA;border-bottom:1px solid #E8E4DF;padding:14px 24px;">
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;">
-    <span style="font-size:12px;color:#999;">Accueil</span>
+    <span style="font-size:12px;color:#999;">${trans(lang, 'bespoke.nav.home')}</span>
     <span style="font-size:12px;color:#CCC;">—</span>
     <span style="font-size:12px;color:#999;">${data.hero_badges?.[0] || 'Produits'}</span>
     <span style="font-size:12px;color:#CCC;">—</span>
@@ -196,11 +198,11 @@ body{font-family:'DM Sans',sans-serif;background:#FEFCFA;color:#121212;}
     <div style="display:flex;gap:24px;" class="cx-before-after">
       <div style="flex:1;position:relative;overflow:hidden;">
         <img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:340px;object-fit:cover;display:block;filter:saturate(0.5);" alt="Avant">
-        <div style="position:absolute;top:16px;left:16px;background:#121212;color:#fff;font-size:11px;font-weight:600;padding:6px 16px;letter-spacing:0.1em;text-transform:uppercase;">Avant</div>
+        <div style="position:absolute;top:16px;left:16px;background:#121212;color:#fff;font-size:11px;font-weight:600;padding:6px 16px;letter-spacing:0.1em;text-transform:uppercase;">${trans(lang, 'legacy.beforeAfter.before')}</div>
       </div>
       <div style="flex:1;position:relative;overflow:hidden;">
         <img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:340px;object-fit:cover;display:block;" alt="Après">
-        <div style="position:absolute;top:16px;left:16px;background:#334FB4;color:#fff;font-size:11px;font-weight:600;padding:6px 16px;letter-spacing:0.1em;text-transform:uppercase;">Après</div>
+        <div style="position:absolute;top:16px;left:16px;background:#334FB4;color:#fff;font-size:11px;font-weight:600;padding:6px 16px;letter-spacing:0.1em;text-transform:uppercase;">${trans(lang, 'legacy.beforeAfter.after')}</div>
       </div>
     </div>
   </div>
@@ -209,7 +211,7 @@ body{font-family:'DM Sans',sans-serif;background:#FEFCFA;color:#121212;}
 <!-- AVIS CLIENTS -->
 <section style="padding:80px 24px;background:#FEFCFA;">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:600;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">Témoignages</p>
+    <p style="font-size:11px;font-weight:600;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'reviews.eyebrow')}</p>
     <h2 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:600;color:#121212;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">Elles adorent ${data.product_name}</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="cx-reviews-grid">
       ${[
@@ -224,7 +226,7 @@ body{font-family:'DM Sans',sans-serif;background:#FEFCFA;color:#121212;}
           <div style="width:36px;height:36px;background:#334FB4;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;border-radius:50%;">${r.name[0]}</div>
           <div>
             <p style="font-size:13px;font-weight:600;color:#121212;">${r.name}</p>
-            <p style="font-size:11px;color:#999;">${r.date} · Achat vérifié</p>
+            <p style="font-size:11px;color:#999;">${r.date} · ${trans(lang, 'reviews.verifiedPurchase')}</p>
           </div>
         </div>
       </div>`).join('')}
@@ -239,7 +241,7 @@ ${renderRichSections(data, COSMETIX_THEME)}
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#F6F3EF;">
   <div style="max-width:700px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:600;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">Questions</p>
+    <p style="font-size:11px;font-weight:600;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.nav.questions')}</p>
     <h2 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:600;color:#121212;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">Foire aux questions</h2>
     <div style="background:#FEFCFA;border:1px solid #E8E4DF;padding:8px 32px;">${faqHtml}</div>
   </div>

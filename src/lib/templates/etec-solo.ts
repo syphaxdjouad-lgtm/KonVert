@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const SOLO_THEME: SectionTheme = {
 }
 
 export function templateEtecSolo(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -183,16 +185,16 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
 <!-- AVANT / APRES -->
 <section style="padding:80px 24px;background:#fff;">
   <div style="max-width:1000px;margin:0 auto;">
-    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">Transformation</p>
+    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
     <h2 style="font-size:36px;font-weight:900;color:#121212;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">Avant / Après</h2>
     <div style="display:flex;gap:20px;" class="so-compare">
       <div style="flex:1;position:relative;border-radius:2rem;overflow:hidden;">
         <img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:340px;object-fit:cover;display:block;filter:saturate(0.5) brightness(0.9);" alt="Avant">
-        <div style="position:absolute;top:20px;left:20px;background:rgba(18,18,18,0.8);color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:2rem;letter-spacing:0.08em;">AVANT</div>
+        <div style="position:absolute;top:20px;left:20px;background:rgba(18,18,18,0.8);color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:2rem;letter-spacing:0.08em;">${trans(lang, 'legacy.beforeAfter.before').toUpperCase()}</div>
       </div>
       <div style="flex:1;position:relative;border-radius:2rem;overflow:hidden;">
         <img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:340px;object-fit:cover;display:block;" alt="Après">
-        <div style="position:absolute;top:20px;left:20px;background:#334FB4;color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:2rem;letter-spacing:0.08em;">APRÈS</div>
+        <div style="position:absolute;top:20px;left:20px;background:#334FB4;color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:2rem;letter-spacing:0.08em;">${trans(lang, 'legacy.beforeAfter.after').toUpperCase()}</div>
       </div>
     </div>
   </div>
@@ -201,7 +203,7 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
 <!-- REVIEWS -->
 <section style="padding:80px 24px;background:#FAFAFA;">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">Avis clients</p>
+    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'reviews.eyebrow')}</p>
     <h2 style="font-size:36px;font-weight:900;color:#121212;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">Ils l'ont adopté</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="so-reviews-grid">
       ${[
@@ -216,7 +218,7 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
           <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#121212,#334FB4);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;">${r.name[0]}</div>
           <div>
             <p style="font-size:13px;font-weight:700;color:#121212;">${r.name}</p>
-            <p style="font-size:11px;color:#999;">${r.date} · ✓ Achat vérifié</p>
+            <p style="font-size:11px;color:#999;">${r.date} · ${trans(lang, 'reviews.verifiedPurchase')}</p>
           </div>
         </div>
       </div>`).join('')}
@@ -231,8 +233,8 @@ ${renderRichSections(data, SOLO_THEME)}
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#fff;">
   <div style="max-width:700px;margin:0 auto;">
-    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">FAQ</p>
-    <h2 style="font-size:36px;font-weight:900;color:#121212;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">Questions fréquentes</h2>
+    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.faqShort')}</p>
+    <h2 style="font-size:36px;font-weight:900;color:#121212;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">${trans(lang, 'faqV3.title')}</h2>
     <div style="background:#FAFAFA;border-radius:2rem;padding:8px 32px;">${faqHtml}</div>
   </div>
 </section>

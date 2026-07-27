@@ -3,6 +3,8 @@ import type { StyleTokens } from '@/lib/styles/types'
 import { buildImagePool, getImage } from '@/lib/images/pool'
 import type { ImageSlot } from '@/lib/images/pool'
 import { escapeHtml } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 const CONFIDENCE_THRESHOLD = 0.6
 
@@ -13,6 +15,7 @@ function imageHintToSlot(hint: string | undefined): ImageSlot {
 }
 
 export function renderMaterialsBreakdown(data: V3PageData, tokens: StyleTokens): string {
+  const lang = resolveLanguage(data.language)
   const materials = (data.copy.materials ?? []).filter(
     (m) => m.confidence >= CONFIDENCE_THRESHOLD,
   )
@@ -33,7 +36,7 @@ export function renderMaterialsBreakdown(data: V3PageData, tokens: StyleTokens):
         ${imgTag}
       </div>
       <div>
-        <span style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:${tokens.colors.textMuted}">Matériau</span>
+        <span style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:${tokens.colors.textMuted}">${escapeHtml(t(lang, 'materials.eyebrow'))}</span>
         <h3 style="font-family:${tokens.fonts.heading};font-size:20px;font-weight:400;color:${tokens.colors.text};margin:8px 0 6px">${escapeHtml(m.name)}</h3>
         <p style="color:${tokens.colors.textMuted};font-size:14px;line-height:1.6;margin:0">${escapeHtml(m.benefit)}</p>
       </div>
@@ -44,7 +47,7 @@ export function renderMaterialsBreakdown(data: V3PageData, tokens: StyleTokens):
   return `
 <section style="background:${tokens.colors.bg};padding:${tokens.spacing.section} 24px">
   <div style="max-width:1240px;margin:0 auto">
-    <h2 style="font-family:${tokens.fonts.heading};font-size:clamp(28px,3vw,40px);color:${tokens.colors.text};margin:0 0 48px;text-align:center;font-weight:400">Les matériaux</h2>
+    <h2 style="font-family:${tokens.fonts.heading};font-size:clamp(28px,3vw,40px);color:${tokens.colors.text};margin:0 0 48px;text-align:center;font-weight:400">${escapeHtml(t(lang, 'materials.title'))}</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:${tokens.spacing.gap}">${cards}</div>
   </div>
 </section>`.trim()

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Sparkles, Zap, Shield, Globe } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 
 export const metadata = { title: 'Changelog — Konvert' }
 

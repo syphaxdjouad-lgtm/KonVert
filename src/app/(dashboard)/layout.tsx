@@ -39,10 +39,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userInitial, setUserInitial] = useState('K')
 
-  // Fermer le menu mobile quand on change de page
-  useEffect(() => {
+  // Fermer le menu mobile quand on change de page. Pattern "ajuster le state
+  // pendant le render" (recommandé par React plutôt qu'un effect pour ce cas :
+  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes) —
+  // évite le setState synchrone dans un effect (react-hooks/set-state-in-effect)
+  // et le re-render en cascade qu'il provoquait à chaque navigation.
+  const [prevPathname, setPrevPathname] = useState(pathname)
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname)
     setMobileMenuOpen(false)
-  }, [pathname])
+  }
 
   // Récupérer l'initiale, identifier l'utilisateur dans PostHog, et tracker la vue dashboard
   useEffect(() => {

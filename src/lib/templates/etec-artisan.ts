@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const ARTISAN_THEME: SectionTheme = {
 }
 
 export function templateEtecArtisan(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -86,9 +88,9 @@ body{font-family:'Jost',sans-serif;background:#FBF3ED;color:#111;}
 <!-- BREADCRUMB -->
 <nav style="background:#FBF3ED;border-bottom:1px solid #EDE6DC;padding:14px 24px;">
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;">
-    <span style="font-size:12px;color:#AAA;">Boutique</span>
+    <span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.shop')}</span>
     <span style="font-size:12px;color:#DDD;">›</span>
-    <span style="font-size:12px;color:#AAA;">Collection</span>
+    <span style="font-size:12px;color:#AAA;">${trans(lang, 'bespoke.nav.collection')}</span>
     <span style="font-size:12px;color:#DDD;">›</span>
     <span style="font-size:12px;color:#111;font-weight:500;">${data.product_name}</span>
   </div>
@@ -145,7 +147,7 @@ body{font-family:'Jost',sans-serif;background:#FBF3ED;color:#111;}
 <!-- VALUES — 3 COL -->
 <section style="padding:80px 24px;background:#F5EDE4;">
   <div style="max-width:1000px;margin:0 auto;">
-    <p style="font-size:12px;font-weight:500;letter-spacing:0.1em;color:#FF871D;text-align:center;text-transform:uppercase;margin-bottom:8px;">Nos engagements</p>
+    <p style="font-size:12px;font-weight:500;letter-spacing:0.1em;color:#FF871D;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.section.ourCommitments')}</p>
     <h2 style="font-family:'Crimson Text',serif;font-size:34px;font-weight:700;color:#111;text-align:center;margin-bottom:56px;">Fait avec soin, pour vous</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;" class="ar-values">
       ${values.map(v => `
@@ -184,11 +186,11 @@ body{font-family:'Jost',sans-serif;background:#FBF3ED;color:#111;}
     <div style="display:flex;gap:20px;" class="ar-compare">
       <div style="flex:1;position:relative;border-radius:16px;overflow:hidden;">
         <img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:340px;object-fit:cover;display:block;filter:saturate(0.5);" alt="Avant">
-        <div style="position:absolute;top:16px;left:16px;background:rgba(0,0,0,0.5);color:#fff;font-size:11px;font-weight:600;padding:6px 16px;border-radius:10px;">AVANT</div>
+        <div style="position:absolute;top:16px;left:16px;background:rgba(0,0,0,0.5);color:#fff;font-size:11px;font-weight:600;padding:6px 16px;border-radius:10px;">${trans(lang, 'legacy.beforeAfter.before').toUpperCase()}</div>
       </div>
       <div style="flex:1;position:relative;border-radius:16px;overflow:hidden;">
         <img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:340px;object-fit:cover;display:block;" alt="Après">
-        <div style="position:absolute;top:16px;left:16px;background:#FF871D;color:#fff;font-size:11px;font-weight:600;padding:6px 16px;border-radius:10px;">APRÈS</div>
+        <div style="position:absolute;top:16px;left:16px;background:#FF871D;color:#fff;font-size:11px;font-weight:600;padding:6px 16px;border-radius:10px;">${trans(lang, 'legacy.beforeAfter.after').toUpperCase()}</div>
       </div>
     </div>
   </div>
@@ -211,7 +213,7 @@ body{font-family:'Jost',sans-serif;background:#FBF3ED;color:#111;}
           <div style="width:36px;height:36px;border-radius:50%;background:#FF871D;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;">${r.name[0]}</div>
           <div>
             <p style="font-size:13px;font-weight:600;color:#111;">${r.name}</p>
-            <p style="font-size:11px;color:#AAA;">Il y a ${r.date} · Achat vérifié</p>
+            <p style="font-size:11px;color:#AAA;">Il y a ${r.date} · ${trans(lang, 'reviews.verifiedPurchase')}</p>
           </div>
         </div>
       </div>`).join('')}
@@ -226,7 +228,7 @@ ${renderRichSections(data, ARTISAN_THEME)}
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#F5EDE4;">
   <div style="max-width:700px;margin:0 auto;">
-    <h2 style="font-family:'Crimson Text',serif;font-size:34px;font-weight:700;color:#111;text-align:center;margin-bottom:48px;">Questions fréquentes</h2>
+    <h2 style="font-family:'Crimson Text',serif;font-size:34px;font-weight:700;color:#111;text-align:center;margin-bottom:48px;">${trans(lang, 'faqV3.title')}</h2>
     <div style="background:#FBF3ED;border-radius:16px;padding:8px 32px;">${faqHtml}</div>
   </div>
 </section>

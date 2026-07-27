@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -40,6 +41,7 @@ const AURA_THEME: SectionTheme = {
 }
 
 export function templateEtecAura(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? [];
   const imgs = _real.length >= 1
     ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length])
@@ -150,7 +152,7 @@ export function templateEtecAura(data: LandingPageData): string {
 </head>
 <body>
 
-<!-- ═══ NAVBAR ══════════════════════════════════════════════════════════════ -->
+<!-- ═══ NAVBAR ══════════════════════════════════════════════════════ -->
 <nav style="background:${C.card};border-bottom:1px solid ${C.border};position:sticky;top:0;z-index:100;box-shadow:0 1px 14px rgba(44,27,105,.07);">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:68px;">
     <a href="javascript:void(0)" onclick="event.preventDefault()" style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;font-style:italic;color:${C.accentDark};">${data.product_name || 'Aura'}</a>
@@ -161,7 +163,7 @@ export function templateEtecAura(data: LandingPageData): string {
   </div>
 </nav>
 
-<!-- ═══ HERO ════════════════════════════════════════════════════════════════ -->
+<!-- ═══ HERO ═══════════════════════════════════════════════════════════ -->
 <section style="background:${C.hero};padding:80px 0 72px;position:relative;overflow:hidden;min-height:560px;display:flex;align-items:center;">
   <svg xmlns="http://www.w3.org/2000/svg" width="580" height="580" style="position:absolute;right:-60px;top:-60px;opacity:.07;pointer-events:none;" viewBox="0 0 580 580">
     <circle cx="290" cy="290" r="260" stroke="#E8DEFF" stroke-width="1" fill="none"/>
@@ -202,7 +204,7 @@ export function templateEtecAura(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ TRUST PILLS ════════════════════════════════════════════════════════ -->
+<!-- ═══ TRUST PILLS ═══════════════════════════════════════════════════════ -->
 <section style="background:${C.card};border-bottom:1px solid ${C.border};padding:16px 0;">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
     ${([['✓', data.hero_badges?.[0] || 'Certifié'],['🌿', data.hero_badges?.[1] || 'Qualité Premium'],['💜', data.hero_badges?.[2] || 'Testé & Approuvé'],['♻️', data.hero_badges?.[3] || 'Éco Responsable']] as [string,string][]).map(([icon, label]) => `
@@ -212,7 +214,7 @@ export function templateEtecAura(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ RITUAL EN 3 ÉTAPES ══════════════════════════════════════════════════ -->
+<!-- ═══ RITUAL EN 3 ÉTAPES ══════════════════════════════════════════════ -->
 <section style="padding:96px 0;background:${C.bg};">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:64px;">
@@ -224,7 +226,7 @@ export function templateEtecAura(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ PRODUIT DETAIL ══════════════════════════════════════════════════════ -->
+<!-- ═══ PRODUIT DETAIL ═════════════════════════════════════════════════════ -->
 <section style="background:${C.card};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div class="grid2-au" style="display:grid;grid-template-columns:55% 45%;gap:64px;align-items:start;">
@@ -265,7 +267,7 @@ export function templateEtecAura(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ INGRÉDIENTS ══════════════════════════════════════════════════════════ -->
+<!-- ═══ INGRÉDIENTS ═════════════════════════════════════════════════════════ -->
 <section style="background:${C.bgAlt};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:64px;">
@@ -277,11 +279,11 @@ export function templateEtecAura(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ BEFORE / AFTER ════════════════════════════════════════════════════ -->
+<!-- ═══ BEFORE / AFTER ═══════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:56px;">
-      <p style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:12px;">Transformation</p>
+      <p style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:12px;">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
       <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:600;color:${C.text};letter-spacing:-.02em;margin-bottom:14px;">Real Results</h2>
       <p style="font-size:15px;color:${C.muted};max-width:460px;margin:0 auto;font-family:'DM Sans',sans-serif;line-height:1.75;">See what a consistent 30-day ritual can do for your wellbeing and radiance.</p>
     </div>
@@ -298,7 +300,7 @@ export function templateEtecAura(data: LandingPageData): string {
   </div>
 </section>
 
-<!-- ═══ TESTIMONIALS ══════════════════════════════════════════════════════ -->
+<!-- ═══ TESTIMONIALS ════════════════════════════════════════════════════ -->
 <section style="background:${C.card};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:64px;">
@@ -317,18 +319,18 @@ export function templateEtecAura(data: LandingPageData): string {
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, AURA_THEME)}
 
-<!-- ═══ FAQ ══════════════════════════════════════════════════════════════ -->
+<!-- ═══ FAQ ════════════════════════════════════════════════════════ -->
 <section style="background:${C.bg};padding:96px 0;border-top:1px solid ${C.border};">
   <div style="max-width:720px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:60px;">
-      <p style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:12px;">FAQ</p>
+      <p style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:${C.accent};font-family:'DM Sans',sans-serif;margin-bottom:12px;">${trans(lang, 'bespoke.faqShort')}</p>
       <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:38px;font-weight:600;color:${C.text};letter-spacing:-.02em;">Common Questions</h2>
     </div>
     ${faqHTML}
   </div>
 </section>
 
-<!-- ═══ CTA FINAL ════════════════════════════════════════════════════════ -->
+<!-- ═══ CTA FINAL ═══════════════════════════════════════════════════════ -->
 <section style="background:${C.hero};padding:96px 24px;text-align:center;position:relative;overflow:hidden;">
   <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(124,92,191,.2) 0%,transparent 70%);pointer-events:none;"></div>
   <div style="position:relative;z-index:1;">
@@ -340,7 +342,7 @@ ${renderRichSections(data, AURA_THEME)}
   </div>
 </section>
 
-<!-- ═══ FOOTER ════════════════════════════════════════════════════════════ -->
+<!-- ═══ FOOTER ══════════════════════════════════════════════════════════ -->
 <footer style="background:${C.accentDark};padding:64px 0 32px;">
   <div style="max-width:1240px;margin:0 auto;padding:0 24px;">
     <div class="footer-au" style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:48px;">
@@ -356,7 +358,7 @@ ${renderRichSections(data, AURA_THEME)}
         ${['Wellness','Rituals','Ingredients','Science','Blog'].map(l => `<p style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:14px;color:rgba(232,222,255,.5);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='${C.accentLight}'" onmouseout="this.style.color='rgba(232,222,255,.5)'">${l}</a></p>`).join('')}
       </div>
       <div>
-        <p style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:${C.accentLight};opacity:.5;font-family:'DM Sans',sans-serif;margin-bottom:18px;">Support</p>
+        <p style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:${C.accentLight};opacity:.5;font-family:'DM Sans',sans-serif;margin-bottom:18px;">${trans(lang, 'bespoke.nav.support')}</p>
         ${['Contact','FAQ','Shipping','Returns','Privacy'].map(l => `<p style="margin-bottom:10px;"><a href="javascript:void(0)" onclick="event.preventDefault()" style="font-size:14px;color:rgba(232,222,255,.5);font-family:'DM Sans',sans-serif;transition:color .2s;" onmouseover="this.style.color='${C.accentLight}'" onmouseout="this.style.color='rgba(232,222,255,.5)'">${l}</a></p>`).join('')}
       </div>
     </div>

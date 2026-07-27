@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { BarChart2 } from 'lucide-react'
 
-/* ─── Données mockup dashboard ────────────────────────────── */
+/* ─── Données mockup dashboard ─────────────────────────────────────────── */
 const LEADS = [
   { email: 'alex@conversions.com',  source: 'Meta Ads',    page: '/sneakers-pro',   date: '07 avr.',  enriched: true },
   { email: 'sarah.b@gmail.com',     source: 'Google SEO',  page: '/jordan-retro',   date: '07 avr.',  enriched: false },
@@ -14,7 +14,7 @@ const LEADS = [
   { email: 'nina.r@yahoo.fr',       source: 'Meta Ads',    page: '/collection-ete', date: '05 avr.',  enriched: false },
 ]
 
-/* ─── Composant principal ───────────────────────────────── */
+/* ─── Composant principal ───────────────────────────────────────────────── */
 export default function LeadEnrichmentDemo() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [triggered, setTriggered] = useState(false)
@@ -41,7 +41,7 @@ export default function LeadEnrichmentDemo() {
       style={{ background: '#0c0a1a' }}
       className="relative overflow-hidden py-24 px-5 sm:px-8"
     >
-      {/* ── Fond radial blur ────────────────────────────────── */}
+      {/* ── Fond radial blur ─────────────────────────────────────────── */}
       <div
         aria-hidden
         style={{
@@ -68,7 +68,7 @@ export default function LeadEnrichmentDemo() {
       />
 
       <div className="relative max-w-7xl mx-auto">
-        {/* ── Header ───────────────────────────────── */}
+        {/* ── Header ───────────────────────────────────────────────── */}
         <div className="text-center mb-16">
           <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold mb-4"
@@ -100,7 +100,7 @@ export default function LeadEnrichmentDemo() {
           </p>
         </div>
 
-        {/* ── Zone démo : dashboard + carte ──────────────────────── */}
+        {/* ── Zone démo : dashboard + carte ──────────────────────────── */}
         <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 lg:gap-0">
 
           {/* Wrapper dashboard — zoom au scroll */}
@@ -266,7 +266,7 @@ export default function LeadEnrichmentDemo() {
             </div>
           </div>
 
-          {/* ── Carte détail lead ──────────────────────── */}
+          {/* ── Carte détail lead ─────────────────────────────────── */}
           <div
             style={{
               position: 'relative',

@@ -17,8 +17,53 @@
 
 import type { ScrapedProduct, LandingPageData } from '@/types'
 import { cleanProductName, sanitizeTitleFallback } from './product-name'
+import type { ProductType } from '@/lib/templates'
+import type { SectionKey } from '@/lib/templates/sections'
+import { detectProductType } from '@/lib/templates/detect-product-type'
+import { getSectionPolicy, policyToLegacyKeys, type SectionPolicy } from './section-policy'
 
-// ─── Sanitization ───────────────────────────────────────────────────────────
+// Champ LandingPageData vidé par chaque SectionKey legacy quand la section est
+// "discouraged" par la policy — renderRichSections/SECTION_RENDERERS skippent
+// déjà une section dont le champ correspondant est absent/vide (cf sections.ts),
+// donc vider le champ suffit à empêcher le rendu, sans toucher au renderer.
+// `gallery` est piloté par le nombre d'images scrapées (>= 8), pas un champ
+// texte généré par l'IA — rien à stripper ici sans casser le hero.
+const LEGACY_KEY_TO_DATA_FIELD: Partial<Record<SectionKey, keyof LandingPageData>> = {
+  social_proof_bar:      'social_proof',
+  story:                 'story',
+  target_audience:       'target_audience',
+  features:              'features',
+  unique_mechanism:      'unique_mechanism',
+  how_it_works:          'how_it_works',
+  before_after:          'before_after',
+  comparison:            'comparison',
+  competitor_comparison: 'competitor_comparison',
+  testimonials:          'testimonials',
+  press_mentions:        'press_mentions',
+  founder_note:          'founder_note',
+  value_stack:           'value_stack',
+  bonuses:               'bonuses',
+  guarantee:             'guarantee',
+  trust_badges_payment:  'payment_methods',
+  risk_reversal:         'risk_reversal',
+  objections:            'objections',
+  community_callout:     'community_callout',
+  final_pitch:           'final_pitch',
+}
+
+// Défense en profondeur (Task 4) : même si DeepSeek ignore la consigne de
+// ciblage produit du prompt, on supprime déterministiquement les sections
+// discouraged réellement présentes dans la sortie parsée avant de retourner.
+// Exportée pour les tests unitaires / vérification — ne pas appeler directement depuis le front.
+export function stripDiscouragedSections(data: LandingPageData, policy: SectionPolicy): void {
+  const discouragedLegacyKeys = policyToLegacyKeys(policy.discouraged)
+  for (const key of discouragedLegacyKeys) {
+    const field = LEGACY_KEY_TO_DATA_FIELD[key]
+    if (field) delete (data as unknown as Record<string, unknown>)[field]
+  }
+}
+
+// ─── Sanitization ─────────────────────────────────────────────────────────
 
 // Escape les caractères HTML dangereux. Les templates injectent les champs
 // via `${...}` sans escape ; sans cette sanitization, un produit scrapé
@@ -141,7 +186,7 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     }))
   }
 
-  // ─── Sections enrichies DTC 2026 (chantier A) ──────────────────────────────
+  // ─── Sections enrichies DTC 2026 (chantier A) ──────────────────────────
 
   if (Array.isArray(d.hero_badges)) {
     out.hero_badges = d.hero_badges.map(escapeHtml).filter(Boolean)
@@ -257,7 +302,7 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
     out.final_pitch = escapeHtml(d.final_pitch)
   }
 
-  // ─── Champs CRO enrichis v2 ─────────────────────────────────────────────
+  // ─── Champs CRO enrichis v2 ─────────────────────────────────
 
   // photo_descriptions
   if (Array.isArray(d.photo_descriptions)) {
@@ -361,7 +406,7 @@ export function sanitizeLandingPageData(d: LandingPageData): LandingPageData {
   return out
 }
 
-// ─── Whitelist press_logos / press_mentions ──────────────────────────────────
+// ─── Whitelist press_logos / press_mentions ───────────────────────────────
 //
 // Liste canonique de publications presse autorisées. Toute publication hors de
 // cette liste est strippée par le sanitizer, indépendamment de ce que le LLM
@@ -468,10 +513,10 @@ IMPORTANT : Tu génères TOUT le contenu textuel en ${langName}. Chaque mot du J
 
 Tu réponds UNIQUEMENT avec un JSON valide, sans markdown, sans explication, sans texte avant ou après.
 
-═══════════════════════════════════════════════
+═══════════════════════════════════════
 FEW-SHOT EXAMPLES — calibration ton DTC-grade
 (extraits, pas à copier — juste le registre visé)
-═══════════════════════════════════════════════
+═══════════════════════════════════════
 
 NICHE BEAUTÉ (sérum visage) — HEADLINES À ÉVITER vs PRIVILÉGIER :
 ÉVITER : "Découvrez notre sérum révolutionnaire aux actifs naturels"
@@ -495,7 +540,7 @@ INCORRECT : ["Vogue", "Marie Claire"] — ne couvrent pas les accessoires smartp
 NICHE INCONNUE (boutique Shopify < 5000 avis OU AliExpress) :
 press_logos = [] OBLIGATOIRE. Aucune publication ne couvre les marques no-name.
 press_mentions = [] OBLIGATOIRE pour la même raison.
-═══════════════════════════════════════════════
+═══════════════════════════════════════
 
 Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
 {
@@ -626,9 +671,30 @@ ${V2_SCHEMA_BLOCK}
 }`
 }
 
-const buildUserPrompt = (product: ScrapedProduct, tone: string, priceLine: string, language = 'fr'): string => {
+// Policy injectée dans buildUserPrompt — jamais dans buildSystemPrompt (qui doit
+// rester 100% statique par langue pour le prompt caching DeepSeek, cf en-tête
+// du fichier). `productType` sert uniquement à l'affichage de la consigne.
+export type PromptSectionPolicy = SectionPolicy & { productType: ProductType | null }
+
+export const buildUserPrompt = (
+  product: ScrapedProduct,
+  tone: string,
+  priceLine: string,
+  language = 'fr',
+  policy?: PromptSectionPolicy,
+): string => {
   const toneInstruction = TONE_INSTRUCTIONS[tone] || TONE_INSTRUCTIONS['persuasif']
   const langName = LANGUAGE_NAMES[language] || 'français'
+  // Ciblage produit (adaptive sections) : guide DeepSeek vers le socle de
+  // sections pertinent pour ce type de produit. Non-bloquant — un strip
+  // côté serveur (generateLandingPage) rattrape les sections discouraged
+  // que l'IA générerait quand même (cf section-policy.ts).
+  const policyBlock = policy ? `
+
+CIBLAGE PRODUIT (type: ${policy.productType ?? 'non détecté — socle universel'}) :
+- Sections à REMPLIR en priorité : ${policyToLegacyKeys(policy.recommended).join(', ') || 'aucune contrainte'}
+- Sections à NE PAS générer (hors-sujet pour ce produit) : ${policyToLegacyKeys(policy.discouraged).join(', ') || 'aucune'}
+- Vise entre ${policy.min} et ${policy.max} sections au total. Tu peux retirer une section du socle si non pertinente, ou en ajouter une hors socle si le produit le justifie clairement.` : ''
   return `Génère une landing page de vente complète et haute conversion pour ce produit e-commerce.
 
 TON DE RÉDACTION : ${toneInstruction}
@@ -676,13 +742,14 @@ ${USE_V2_PROMPT ? `26. photo_descriptions : 3 à 6 descriptions UGC (genre appar
 28. press_logos : cf. règle 28 du system prompt — ZÉRO TOLÉRANCE, retourne [] par défaut. N'ajoute QUE si DTC > 5 000 avis + dans la whitelist, OU si le nom exact de la publication est dans la description. Max 3 entrées. En cas de doute → [].
 29. stock_signal : évalue l'urgence appropriée (limited_stock / high_demand / back_in_stock / limited_time). Si aucun signal plausible → retourne null avec type: null.
 30. bundle_offer : beauty/wellness/pet/mode/déco → propose 1 bundle sensé (2-3 produits complémentaires). Standalone ou sans complémentaire évident → retourne null.` : ''}
+${policyBlock}
 
-CRITIQUE : Remplis TOUS les champs du schema JSON, même si tu dois inventer du contenu plausible. Les champs vides cassent le rendu de la landing.
+CRITIQUE : Remplis TOUS les champs du schema JSON, même si tu dois inventer du contenu plausible — sauf exclusion explicite par la consigne de ciblage produit ci-dessus, si présente, auquel cas tu omets ou laisses vide la section exclue. Les champs vides cassent le rendu de la landing sur les sections attendues.
 
 Renvoie UNIQUEMENT le JSON, rien d'autre.`
 }
 
-// ─── Appel API ──────────────────────────────────────────────────────────────
+// ─── Appel API ────────────────────────────────────────────────────
 
 interface DeepSeekResponse {
   choices: { message: { content: string } }[]
@@ -695,7 +762,7 @@ interface DeepSeekResponse {
   }
 }
 
-// ─── Versioning prompt ──────────────────────────────────────────────────────
+// ─── Versioning prompt ─────────────────────────────────────────────────
 // KONVERT_PROMPT_VERSION=v1 → ancien schema sans champs CRO enrichis.
 // Non défini ou =v2 → schema v2 (défaut).
 export const PROMPT_VERSION = 'v2.2-brand-based-reviews-gate-2026-06-14'
@@ -718,6 +785,20 @@ export async function generateLandingPage(
     ? 'utilise le prix barré comme ancrage et mentionne l\'économie réalisée'
     : 'évoque un stock limité ou une fin de promotion proche, sans mentir'
 
+  // Adaptive sections — socle de sections par type de produit détecté (cf
+  // section-policy.ts). Aucune nouvelle détection : on réutilise detectProductType,
+  // déjà utilisé pour le style/tone auto-pick. Injecté dans buildUserPrompt
+  // uniquement (jamais buildSystemPrompt, qui doit rester statique pour le cache).
+  const detectedProductType = detectProductType({ title: product.title, description: product.description })
+  const priceNum = product.price ? parseFloat(product.price) : undefined
+  const sectionPolicy: PromptSectionPolicy = {
+    productType: detectedProductType,
+    ...getSectionPolicy({
+      productType: detectedProductType,
+      price: Number.isFinite(priceNum) ? priceNum : undefined,
+    }),
+  }
+
   // Retry 1x sur 429 / 5xx — DeepSeek peut être flaky en pic
   // Timeout 50s (au-dessous de Vercel maxDuration 60s) pour laisser une marge
   const callDeepSeek = async (): Promise<Response> => {
@@ -736,7 +817,7 @@ export async function generateLandingPage(
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: buildSystemPrompt(language) },
-          { role: 'user', content: buildUserPrompt(product, tone, priceLine, language) },
+          { role: 'user', content: buildUserPrompt(product, tone, priceLine, language, sectionPolicy) },
         ],
       }),
       signal: AbortSignal.timeout(50000),
@@ -804,12 +885,12 @@ export async function generateLandingPage(
     data.images = product.images
   }
 
-  // ─── Gate v2.2 : reviews_count < 5000 → press_logos/mentions = [] ───────
+  // ─── Gate v2.2 : reviews_count < 5000 → press_logos/mentions = [] ─────────
   // Défense en profondeur côté code : même si DeepSeek ignore la règle 28
   // brand-based ("DTC > 5000 avis"), on stripe systématiquement les
   // publications presse pour les boutiques no-name / dropshipping AliExpress.
   // Whitelist seule (sanitizeLandingPageData) laisse passer Vogue/Marie Claire
-  // sans connaître la notoriété de la marque — ce gate la connaît.
+  // sans connaître la notorieté de la marque — ce gate la connaît.
   // Threshold 5000 aligné sur la règle prompt v2.1 (cf. PROMPT_VERSION).
   const SMALL_BRAND_THRESHOLD = 5000
   if (
@@ -821,6 +902,10 @@ export async function generateLandingPage(
   }
 
   data.language = language
+
+  // Adaptive sections — garde-fou serveur : strip les sections discouraged
+  // réellement présentes, indépendamment de ce que DeepSeek a produit.
+  stripDiscouragedSections(data, sectionPolicy)
 
   return sanitizeLandingPageData(data)
 }

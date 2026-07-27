@@ -12,7 +12,7 @@ import type { ProductType } from '@/lib/templates'
 import type { SectionKey } from '@/lib/templates/sections'
 import type { V3SectionKey } from '@/types/v3'
 
-// ─── Vocabulaire neutre de sections (indépendant des deux moteurs) ───────────
+// ─── Vocabulaire neutre de sections (indépendant des deux moteurs) ─────────
 // Le mapping vers les clés legacy (SectionKey) et V3 (V3SectionKey) est
 // ajouté séparément (cf policyToLegacyKeys / policyToV3Keys plus bas dans ce module).
 
@@ -28,7 +28,7 @@ export interface SectionPolicy {
   max: number
 }
 
-// ─── Table de policies par catégorie ──────────────────────────────────────
+// ─── Table de policies par catégorie ───────────────────────────────────────
 // Source : docs/superpowers/research/2026-07-27-dtc-sections-benchmark.md
 // `max` ici = plafond "produit premium" de la catégorie (cf règle prix plus bas).
 //

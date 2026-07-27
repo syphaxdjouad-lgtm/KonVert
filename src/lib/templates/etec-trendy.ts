@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const TRENDY_THEME: SectionTheme = {
 }
 
 export function templateEtecTrendy(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -93,9 +95,9 @@ body{font-family:'Rubik',sans-serif;background:#fff;color:#222;}
 <!-- BREADCRUMB -->
 <nav style="background:#fff;border-bottom:1px solid #EBEBEB;padding:14px 24px;">
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;">
-    <span style="font-size:12px;color:#999;">Home</span>
+    <span style="font-size:12px;color:#999;">${trans(lang, 'bespoke.nav.home')}</span>
     <span style="font-size:12px;color:#ddd;">/</span>
-    <span style="font-size:12px;color:#999;">Collection</span>
+    <span style="font-size:12px;color:#999;">${trans(lang, 'bespoke.nav.collection')}</span>
     <span style="font-size:12px;color:#ddd;">/</span>
     <span style="font-size:12px;color:#222;font-weight:500;">${data.product_name}</span>
   </div>
@@ -191,7 +193,7 @@ body{font-family:'Rubik',sans-serif;background:#fff;color:#222;}
 <!-- LOOKBOOK — AVANT / APRES -->
 <section style="padding:80px 24px;background:#f9f9f9;">
   <div style="max-width:1000px;margin:0 auto;">
-    <p style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;color:#319da0;text-align:center;text-transform:uppercase;margin-bottom:8px;">Lookbook</p>
+    <p style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;color:#319da0;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.nav.lookbook')}</p>
     <h2 style="font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;color:#222;text-align:center;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:48px;">Portez-le partout</h2>
     <div style="display:flex;gap:20px;" class="tr-look-grid">
       <div style="flex:1;position:relative;border-radius:4px;overflow:hidden;">
@@ -213,7 +215,7 @@ body{font-family:'Rubik',sans-serif;background:#fff;color:#222;}
 <!-- AVIS CLIENTS -->
 <section style="padding:80px 24px;background:#fff;">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;color:#319da0;text-align:center;text-transform:uppercase;margin-bottom:8px;">Avis clients</p>
+    <p style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;color:#319da0;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'reviews.eyebrow')}</p>
     <h2 style="font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;color:#222;text-align:center;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:48px;">Ils portent ${data.product_name}</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="tr-reviews-grid">
       ${[
@@ -243,8 +245,8 @@ ${renderRichSections(data, TRENDY_THEME)}
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#f3f3f3;">
   <div style="max-width:700px;margin:0 auto;">
-    <p style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;color:#319da0;text-align:center;text-transform:uppercase;margin-bottom:8px;">FAQ</p>
-    <h2 style="font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;color:#222;text-align:center;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:48px;">Questions fréquentes</h2>
+    <p style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.18em;color:#319da0;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.faqShort')}</p>
+    <h2 style="font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;color:#222;text-align:center;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:48px;">${trans(lang, 'faqV3.title')}</h2>
     <div style="background:#fff;border-radius:4px;padding:8px 28px;">${faqHtml}</div>
   </div>
 </section>

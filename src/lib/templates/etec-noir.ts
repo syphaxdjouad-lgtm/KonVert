@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 import {
   renderRichSections,
   type SectionTheme,
@@ -30,6 +31,7 @@ const BEFORE_IMG = 'https://images.pexels.com/photos/1037999/pexels-photo-103799
 const AFTER_IMG  = 'https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=600'
 
 export function templateEtecNoir(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -148,9 +150,9 @@ body{font-family:'Space Grotesk',sans-serif;background:#000000;color:#ffffff;}
 <!-- BREADCRUMB NAV -->
 <nav style="background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:14px 24px;position:sticky;top:0;z-index:50;">
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:10px;">
-    <span style="font-size:12px;color:#3A3A3A;cursor:pointer;transition:color .15s;" onmouseover="this.style.color='#8A8A8A'" onmouseout="this.style.color='#3A3A3A'">Accueil</span>
+    <span style="font-size:12px;color:#3A3A3A;cursor:pointer;transition:color .15s;" onmouseover="this.style.color='#8A8A8A'" onmouseout="this.style.color='#3A3A3A'">${trans(lang, 'bespoke.nav.home')}</span>
     <span style="font-size:12px;color:#3A3A3A;">›</span>
-    <span style="font-size:12px;color:#3A3A3A;cursor:pointer;transition:color .15s;" onmouseover="this.style.color='#8A8A8A'" onmouseout="this.style.color='#3A3A3A'">Catalogue</span>
+    <span style="font-size:12px;color:#3A3A3A;cursor:pointer;transition:color .15s;" onmouseover="this.style.color='#8A8A8A'" onmouseout="this.style.color='#3A3A3A'">${trans(lang, 'bespoke.nav.catalogue')}</span>
     <span style="font-size:12px;color:#3A3A3A;">›</span>
     <span style="font-size:12px;color:#ffffff;font-weight:500;">${data.product_name}</span>
   </div>
@@ -240,7 +242,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#000000;color:#ffffff;}
 <!-- SPECS TABLE — sobre, lignes subtiles -->
 <section style="padding:80px 24px;background:#000000;">
   <div style="max-width:860px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C8FF00;text-transform:uppercase;margin-bottom:10px;">Spécifications</p>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C8FF00;text-transform:uppercase;margin-bottom:10px;">${trans(lang, 'bespoke.nav.specs')}</p>
     <h2 style="font-size:48px;font-weight:700;color:#ffffff;margin-bottom:48px;letter-spacing:-0.025em;">Specs Techniques</h2>
     <div style="border-radius:6px;overflow:hidden;background:rgba(255,255,255,0.03);">
       ${specRows.map((row, i) => `
@@ -271,20 +273,20 @@ body{font-family:'Space Grotesk',sans-serif;background:#000000;color:#ffffff;}
 <!-- AVANT / APRÈS — images côte à côte, zéro border de card -->
 <section style="padding:80px 24px;background:#000000;">
   <div style="max-width:960px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C8FF00;text-transform:uppercase;margin-bottom:10px;">Transformation</p>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C8FF00;text-transform:uppercase;margin-bottom:10px;">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
     <h2 style="font-size:48px;font-weight:700;color:#ffffff;margin-bottom:48px;letter-spacing:-0.025em;">Avant / Après</h2>
     <div style="display:flex;gap:16px;" class="noir-ba-grid">
       <!-- Avant -->
       <div style="flex:1;position:relative;border-radius:6px;overflow:hidden;">
         <img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:340px;object-fit:cover;display:block;filter:grayscale(100%) brightness(0.5);" alt="Avant">
         <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.45), transparent 60%);pointer-events:none;"></div>
-        <div style="position:absolute;top:16px;left:16px;background:rgba(255,255,255,0.08);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#8A8A8A;font-size:10px;font-weight:700;padding:6px 14px;border-radius:2px;letter-spacing:0.1em;text-transform:uppercase;">Avant</div>
+        <div style="position:absolute;top:16px;left:16px;background:rgba(255,255,255,0.08);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#8A8A8A;font-size:10px;font-weight:700;padding:6px 14px;border-radius:2px;letter-spacing:0.1em;text-transform:uppercase;">${trans(lang, 'legacy.beforeAfter.before')}</div>
       </div>
       <!-- Après -->
       <div style="flex:1;position:relative;border-radius:6px;overflow:hidden;">
         <img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:340px;object-fit:cover;display:block;" alt="Après">
         <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,0.3), transparent 60%);pointer-events:none;"></div>
-        <div style="position:absolute;top:16px;left:16px;background:#C8FF00;color:#000000;font-size:10px;font-weight:700;padding:6px 14px;border-radius:2px;letter-spacing:0.1em;text-transform:uppercase;">Après</div>
+        <div style="position:absolute;top:16px;left:16px;background:#C8FF00;color:#000000;font-size:10px;font-weight:700;padding:6px 14px;border-radius:2px;letter-spacing:0.1em;text-transform:uppercase;">${trans(lang, 'legacy.beforeAfter.after')}</div>
       </div>
     </div>
   </div>
@@ -296,8 +298,8 @@ ${renderRichSections(data, NOIR_THEME)}
 <!-- FAQ ACCORDION -->
 <section style="padding:80px 24px;background:#000000;">
   <div style="max-width:680px;margin:0 auto;">
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C8FF00;text-transform:uppercase;margin-bottom:10px;">FAQ</p>
-    <h2 style="font-size:48px;font-weight:700;color:#ffffff;margin-bottom:48px;letter-spacing:-0.025em;">Questions fréquentes</h2>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.15em;color:#C8FF00;text-transform:uppercase;margin-bottom:10px;">${trans(lang, 'bespoke.faqShort')}</p>
+    <h2 style="font-size:48px;font-weight:700;color:#ffffff;margin-bottom:48px;letter-spacing:-0.025em;">${trans(lang, 'faqV3.title')}</h2>
     <div>${faqHtml}</div>
   </div>
 </section>

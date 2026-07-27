@@ -56,7 +56,7 @@ const T: Record<Locale, {
     firstNamePh: 'Ex : Ahmed',
     emailLabel: 'Où on envoie ta page ?',
     emailPh: 'ton@email.com',
-    emailHelp: 'On t’envoie aussi le lien pour la modifier.',
+    emailHelp: 'On t\u2019envoie aussi le lien pour la modifier.',
     generateBtn: 'Générer ma page',
     productTitle: 'Ton produit',
     productSubtitle: 'Colle un lien ou entre les infos manuellement.',
@@ -81,7 +81,7 @@ const T: Record<Locale, {
     loadingDuration: 'Ça prend environ 60 secondes — accroche-toi !',
     trust: ['Aucune CB', 'Résultat immédiat', '100% gratuit'],
     errEmail: 'Entre un email valide.',
-    errUrl: 'Colle l’URL du produit.',
+    errUrl: 'Colle l\u2019URL du produit.',
     errProductName: 'Entre le nom du produit.',
     errCaptcha: 'Patiente quelques secondes — vérification anti-bot en cours.',
     errNetwork: 'Erreur réseau. Vérifie ta connexion et réessaie.',
@@ -95,7 +95,7 @@ const T: Record<Locale, {
     firstNamePh: 'E.g. Ahmed',
     emailLabel: 'Where do we send your page?',
     emailPh: 'you@email.com',
-    emailHelp: 'We’ll also send the link to edit it.',
+    emailHelp: 'We\u2019ll also send the link to edit it.',
     generateBtn: 'Generate my page',
     productTitle: 'Your product',
     productSubtitle: 'Paste a link or enter the info manually.',
@@ -108,9 +108,9 @@ const T: Record<Locale, {
     productNamePh: 'E.g. Smart sports watch',
     productDescLabel: 'Short description',
     productDescOptional: '(optional)',
-    productDescPh: 'What the product does, who it’s for, benefits...',
+    productDescPh: 'What the product does, who it\u2019s for, benefits...',
     generateBtnFinal: 'Generate my page in under a minute',
-    back: '← Back',
+    back: '\u2190 Back',
     loadingTexts: [
       'Analyzing the product...',
       'Writing sales copy...',
@@ -209,7 +209,7 @@ function EssaiContent() {
   const [captchaToken, setCaptchaToken] = useState<string | null>(null)
   const captchaRequired = !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
-  // ── Étape 1 : email ────────────────────────────────────────────
+  // ── Étape 1 : email ──────────────────────────────────────────────────────
   function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email || !email.includes('@')) {
@@ -220,7 +220,7 @@ function EssaiContent() {
     setStep('product')
   }
 
-  // ── Étape 2 : produit + génération ────────────────────────────────
+  // ── Étape 2 : produit + génération ───────────────────────────────────────
   async function handleGenerate(e: React.FormEvent) {
     e.preventDefault()
     // Race condition guard : double-click sur "Générer" ouvrait 2 requêtes
@@ -327,7 +327,7 @@ function EssaiContent() {
     }
   }
 
-  // ── Loader ─────────────────────────────────────────────────────────
+  // ── Loader ───────────────────────────────────────────────────────────────
   if (step === 'generating') {
     return (
       <div
@@ -369,7 +369,7 @@ function EssaiContent() {
     )
   }
 
-  // ── Layout commun ────────────────────────────────────────────────────────────
+  // ── Layout commun ────────────────────────────────────────────────────────
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-4 py-16"

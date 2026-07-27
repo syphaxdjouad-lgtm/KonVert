@@ -2,11 +2,18 @@ import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { buildImagePool, getImage } from '@/lib/images/pool'
 import { escapeHtml, escapeAttr } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 export function renderBrandManifesto(data: V3PageData, tokens: StyleTokens): string {
+  const lang = resolveLanguage(data.language)
   const m = data.copy.manifesto ?? {
-    headline: 'Conçu pour durer',
-    pillars: ['Qualité', 'Éthique', 'Transparence'],
+    headline: t(lang, 'manifesto.defaultHeadline'),
+    pillars: [
+      t(lang, 'manifesto.defaultPillar1'),
+      t(lang, 'manifesto.defaultPillar2'),
+      t(lang, 'manifesto.defaultPillar3'),
+    ],
   }
 
   const pool = buildImagePool(data.images)
@@ -42,7 +49,7 @@ export function renderBrandManifesto(data: V3PageData, tokens: StyleTokens): str
         margin-top:40px;background:${tokens.colors.text};color:${tokens.colors.surface};
         padding:16px 32px;border:0;border-radius:${tokens.radius.button};
         font-family:${tokens.fonts.body};font-size:15px;cursor:pointer
-      ">Découvrir l'histoire</button>
+      ">${escapeHtml(t(lang, 'manifesto.cta'))}</button>
     </div>
   </div>
 </section>`.trim()

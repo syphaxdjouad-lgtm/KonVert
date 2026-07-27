@@ -1,6 +1,8 @@
 import type { V3PageData, V3Review } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { escapeHtml, escapeAttr } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 // Tokens sémantiques Sprint 1 — fallbacks identiques aux valeurs design system
 const CRO_DEFAULTS = {
@@ -60,7 +62,7 @@ function avgRating(reviews: V3Review[]): string {
   return (sum / reviews.length).toFixed(1)
 }
 
-function renderReviewCard(review: V3Review, index: number, tokens: StyleTokens): string {
+function renderReviewCard(review: V3Review, index: number, tokens: StyleTokens, lang: string): string {
   const starColor = tokens.colors.star    ?? CRO_DEFAULTS.star
   const successColor = tokens.colors.success ?? CRO_DEFAULTS.success
   const gradient = avatarGradient(index)
@@ -71,7 +73,7 @@ function renderReviewCard(review: V3Review, index: number, tokens: StyleTokens):
 
   const verifiedBadge = review.verified
     ? `<span style="display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:${successColor}">
-        ${checkIcon} Achat vérifié
+        ${checkIcon} ${escapeHtml(t(lang, 'reviews.verifiedPurchase'))}
        </span>`
     : ''
 
@@ -135,6 +137,7 @@ export function renderReviews(data: V3PageData, tokens: StyleTokens): string {
   // 5 reviews = 2 rangées complètes mobile → crédibilité visuelle suffisante.
   if (!reviews || reviews.length < 5) return ''
 
+  const lang         = resolveLanguage(data.language)
   const starColor    = tokens.colors.star    ?? CRO_DEFAULTS.star
   const bgAlt        = tokens.colors.bgAlt   ?? CRO_DEFAULTS.bgAlt
   const avg          = avgRating(reviews)
@@ -158,7 +161,12 @@ export function renderReviews(data: V3PageData, tokens: StyleTokens): string {
     </div>`).join('')
 
   // Filtres chips — visuels uniquement (MVP, pas de JS filter)
-  const filterChips = ['Tous', 'Avec photos', '5 étoiles', 'Vérifiés']
+  const filterChips = [
+    t(lang, 'reviews.filterAll'),
+    t(lang, 'reviews.filterWithPhotos'),
+    t(lang, 'reviews.filter5Star'),
+    t(lang, 'reviews.filterVerified'),
+  ]
     .map((label, i) => `
       <span style="
         display:inline-flex;align-items:center;
@@ -174,7 +182,7 @@ export function renderReviews(data: V3PageData, tokens: StyleTokens): string {
 
   // Grid des cards
   const cardsHtml = reviews
-    .map((r, i) => renderReviewCard(r, i, tokens))
+    .map((r, i) => renderReviewCard(r, i, tokens, lang))
     .join('\n')
 
   return `
@@ -186,14 +194,14 @@ export function renderReviews(data: V3PageData, tokens: StyleTokens): string {
   <div style="max-width:1240px;margin:0 auto">
 
     <!-- Section header -->
-    <p style="font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:${tokens.colors.textMuted};margin:0 0 12px">Avis clients</p>
+    <p style="font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:${tokens.colors.textMuted};margin:0 0 12px">${escapeHtml(t(lang, 'reviews.eyebrow'))}</p>
     <h2 style="
       font-family:${tokens.fonts.heading};
       font-size:clamp(28px,3.5vw,40px);
       font-weight:400;letter-spacing:-0.02em;
       color:${tokens.colors.text};
       margin:0 0 40px;line-height:1.1
-    ">Ce qu'ils en disent.</h2>
+    ">${escapeHtml(t(lang, 'reviewsV3.title'))}</h2>
 
     <!-- Summary bar -->
     <div style="
@@ -212,7 +220,7 @@ export function renderReviews(data: V3PageData, tokens: StyleTokens): string {
           color:${tokens.colors.text};line-height:1
         ">${avg.replace('.', ',')}</div>
         <div style="font-size:20px;letter-spacing:2px;margin:6px 0 4px">${fullStars}</div>
-        <div style="font-size:13px;color:${tokens.colors.textMuted}">${count} avis vérifiés</div>
+        <div style="font-size:13px;color:${tokens.colors.textMuted}">${escapeHtml(t(lang, 'reviews.verifiedCount', { n: count }))}</div>
       </div>
 
       <!-- Distribution barres -->

@@ -2,29 +2,33 @@ import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { buildImagePool, getImage } from '@/lib/images/pool'
 import { escapeHtml, escapeAttr } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 // Sprint 3 T3 — stats génériques pour la trust bar de fallback
-const TRUST_STATS: Array<{ icon: string; label: string }> = [
-  {
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
-    label: '+10 000 clients satisfaits',
-  },
-  {
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
-    label: 'Note moyenne 4,8&#9733;',
-  },
-  {
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
-    label: 'Livraison rapide 48h',
-  },
-  {
-    icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
-    label: 'Garantie 30 jours',
-  },
-]
+function buildTrustStats(lang: string): Array<{ icon: string; label: string }> {
+  return [
+    {
+      icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+      label: t(lang, 'trust.satisfiedCustomers'),
+    },
+    {
+      icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+      label: t(lang, 'trust.averageRating'),
+    },
+    {
+      icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
+      label: t(lang, 'trust.fastShipping48h'),
+    },
+    {
+      icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+      label: t(lang, 'hero.guarantee30'),
+    },
+  ]
+}
 
-function renderTrustStatsBar(tokens: StyleTokens): string {
-  const stats = TRUST_STATS.map(
+function renderTrustStatsBar(tokens: StyleTokens, lang: string): string {
+  const stats = buildTrustStats(lang).map(
     (s) => `
     <div style="
       display:flex;align-items:center;gap:10px;
@@ -50,10 +54,11 @@ function renderTrustStatsBar(tokens: StyleTokens): string {
 
 export function renderPressQuote(data: V3PageData, tokens: StyleTokens): string {
   const pq = data.copy.press_quote
+  const lang = resolveLanguage(data.language)
 
   // Sprint 3 T3 — si pas de quote, on renvoie la trust stats bar
   // plutôt que '' pour éviter le gap visuel de 80px
-  if (!pq) return renderTrustStatsBar(tokens)
+  if (!pq) return renderTrustStatsBar(tokens, lang)
 
   const pool = buildImagePool(data.images)
   const lifestyleImg = getImage(pool, 'lifestyle', 0)

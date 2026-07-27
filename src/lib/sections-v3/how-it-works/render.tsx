@@ -1,8 +1,11 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { escapeHtml } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 export function renderHowItWorks(data: V3PageData, tokens: StyleTokens): string {
+  const lang = resolveLanguage(data.language)
   const steps = data.copy.how_it_works ?? []
 
   const items = steps
@@ -41,7 +44,7 @@ export function renderHowItWorks(data: V3PageData, tokens: StyleTokens): string 
     <h2 style="
       font-family:${tokens.fonts.heading};font-size:clamp(28px,3vw,40px);
       text-align:center;color:${tokens.colors.text};margin:0 0 48px;font-weight:400
-    ">Comment l'utiliser</h2>
+    ">${escapeHtml(t(lang, 'howItWorksV3.title'))}</h2>
     <div style="display:flex;gap:${tokens.spacing.gap};flex-wrap:wrap;justify-content:center">${items}</div>
   </div>
 </section>`.trim()

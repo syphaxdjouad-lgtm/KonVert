@@ -1,9 +1,12 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { escapeHtml } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
 export function renderCareInstructions(data: V3PageData, tokens: StyleTokens): string {
-  const care = data.copy.care ?? 'Pour conserver toute sa qualité, suis simplement les indications fournies avec le produit.'
+  const lang = resolveLanguage(data.language)
+  const care = data.copy.care ?? t(lang, 'care.defaultText')
 
   return `
 <section style="background:${tokens.colors.bg};padding:${tokens.spacing.section} 24px">
@@ -16,7 +19,7 @@ export function renderCareInstructions(data: V3PageData, tokens: StyleTokens): s
         <h3 style="
           font-family:${tokens.fonts.heading};font-size:24px;
           color:${tokens.colors.text};margin:0 0 12px;font-weight:400
-        ">Entretien</h3>
+        ">${escapeHtml(t(lang, 'care.title'))}</h3>
         <p style="color:${tokens.colors.textMuted};line-height:1.6;margin:0">
           ${escapeHtml(care)}
         </p>
@@ -25,18 +28,18 @@ export function renderCareInstructions(data: V3PageData, tokens: StyleTokens): s
         <h3 style="
           font-family:${tokens.fonts.heading};font-size:24px;
           color:${tokens.colors.text};margin:0 0 12px;font-weight:400
-        ">Livraison</h3>
+        ">${escapeHtml(t(lang, 'care.shippingTitle'))}</h3>
         <p style="color:${tokens.colors.textMuted};line-height:1.6;margin:0">
-          Livraison gratuite à partir de 75€. Expédition sous 24-48h.
+          ${escapeHtml(t(lang, 'care.shippingText'))}
         </p>
       </div>
       <div>
         <h3 style="
           font-family:${tokens.fonts.heading};font-size:24px;
           color:${tokens.colors.text};margin:0 0 12px;font-weight:400
-        ">Retours</h3>
+        ">${escapeHtml(t(lang, 'care.returnsTitle'))}</h3>
         <p style="color:${tokens.colors.textMuted};line-height:1.6;margin:0">
-          30 jours pour changer d'avis. Retour gratuit, remboursement sous 5 jours.
+          ${escapeHtml(t(lang, 'care.returnsText'))}
         </p>
       </div>
     </div>

@@ -1,14 +1,19 @@
 import type { V3PageData } from '@/types/v3'
 import type { StyleTokens } from '@/lib/styles/types'
 import { escapeHtml } from '@/lib/utils/html'
+import { t } from '@/lib/i18n/ui-labels'
+import { resolveLanguage } from '@/lib/i18n/languages'
 
-const DEFAULT_FAQ: Array<{ q: string; a: string }> = [
-  { q: 'Combien de temps pour la livraison ?', a: '24 à 48h ouvrées en France.' },
-  { q: 'Puis-je retourner le produit ?', a: 'Oui, sous 30 jours, retour gratuit.' },
-]
+function buildDefaultFaq(lang: string): Array<{ q: string; a: string }> {
+  return [
+    { q: t(lang, 'faq.defaultQ1'), a: t(lang, 'faq.defaultA1') },
+    { q: t(lang, 'faq.defaultQ2'), a: t(lang, 'faq.defaultA2') },
+  ]
+}
 
 export function renderFaq(data: V3PageData, tokens: StyleTokens): string {
-  const items = data.copy.faq ?? DEFAULT_FAQ
+  const lang = resolveLanguage(data.language)
+  const items = data.copy.faq ?? buildDefaultFaq(lang)
 
   // Sprint 3 T4 — animation max-height CSS pure sur <details>
   // L'astuce : on anime .kvt-faq-answer avec max-height 0 → max-height 2000px
@@ -81,7 +86,7 @@ export function renderFaq(data: V3PageData, tokens: StyleTokens): string {
 <section style="background:${tokens.colors.surface};padding:${tokens.spacing.section} 24px">
   ${faqStyles}
   <div style="max-width:720px;margin:0 auto">
-    <h2 style="font-family:${tokens.fonts.heading};font-size:clamp(28px,3vw,40px);color:${tokens.colors.text};margin:0 0 24px;font-weight:400">Questions fréquentes</h2>
+    <h2 style="font-family:${tokens.fonts.heading};font-size:clamp(28px,3vw,40px);color:${tokens.colors.text};margin:0 0 24px;font-weight:400">${escapeHtml(t(lang, 'faqV3.title'))}</h2>
     ${list}
   </div>
 </section>`.trim()

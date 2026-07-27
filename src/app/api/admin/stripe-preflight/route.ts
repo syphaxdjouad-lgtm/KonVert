@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       status: 'error',
       mode,
-      detail: 'STRIPE_SECRET_KEY absent ou mal formate en prod',
+      detail: 'STRIPE_SECRET_KEY absent ou mal formaté en prod',
     })
   }
 

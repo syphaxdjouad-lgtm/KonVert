@@ -1180,6 +1180,7 @@ export function renderRichSections(
   order?: SectionKey[] | SectionInstance[],
   editMode = false,
   visualSettings?: VisualSettingsRecord,
+  maxSections?: number,
 ): string {
   // Feature flag rollback (spec § 3.6)
   if (process.env.KONVERT_RICH_SECTIONS === 'false') return ''
@@ -1200,20 +1201,33 @@ export function renderRichSections(
   const dataVisualSettings = (data as LandingPageData & { _visualSettings?: VisualSettingsRecord })._visualSettings
   const effectiveVisualSettings = visualSettings ?? dataVisualSettings
 
+  // Adaptive sections (Task 6) — garde-fou de rendu indépendant de l'IA : si
+  // le nombre de sections effectivement rendues (non vides) dépasse le plafond,
+  // on tronque en conservant l'ordre déjà établi (DEFAULT_ORDER, ou l'order
+  // explicite déjà priorisé par la policy en amont — cf section-policy.ts).
+  // Peut aussi venir de data._maxSections (même convention que _sectionOrder),
+  // pour un futur branchement sans modifier les 42+ templates.
+  const dataMaxSections = (data as LandingPageData & { _maxSections?: number })._maxSections
+  const effectiveMaxSections = maxSections ?? dataMaxSections
+  const applyCap = (htmlBlocks: string[]): string[] =>
+    typeof effectiveMaxSections === 'number' && htmlBlocks.length > effectiveMaxSections
+      ? htmlBlocks.slice(0, effectiveMaxSections)
+      : htmlBlocks
+
   // Cas 1 : pas d'order → DEFAULT_ORDER (comportement legacy chantier A)
   if (!order) {
-    const sections = DEFAULT_ORDER
+    const sections = applyCap(DEFAULT_ORDER
       .map(key => SECTION_RENDERERS[key]?.(data, theme) ?? '')
-      .filter(html => html.trim().length > 0)
+      .filter(html => html.trim().length > 0))
     if (!effectiveEditMode) return sections.join('\n') + '\n' + stickyCta
     // In edit mode without instance ids: use key as pseudo-id
-    return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + DEFAULT_ORDER
+    return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + applyCap(DEFAULT_ORDER
       .map(key => {
         const html = SECTION_RENDERERS[key]?.(data, theme) ?? ''
         if (!html.trim()) return ''
         return wrapWithKvtId(html, key)
       })
-      .filter(html => html.trim().length > 0)
+      .filter(html => html.trim().length > 0))
       .join('\n')
   }
 
@@ -1225,7 +1239,7 @@ export function renderRichSections(
     typeof order[0] === 'object' && order[0] !== null && 'id' in (order[0] as object)
 
   if (isInstanceArray) {
-    const rendered = (order as SectionInstance[])
+    const rendered = applyCap((order as SectionInstance[])
       .filter(s => s.visible)
       .map(s => {
         const raw = SECTION_RENDERERS[s.key]?.(data, theme) ?? ''
@@ -1234,13 +1248,13 @@ export function renderRichSections(
         const withVisual = wrapWithVisualSettings(raw, s.id, effectiveVisualSettings)
         return effectiveEditMode ? wrapWithKvtId(withVisual, s.id) : withVisual
       })
-      .filter(html => html.trim().length > 0)
+      .filter(html => html.trim().length > 0))
     if (!effectiveEditMode) return rendered.join('\n') + '\n' + stickyCta
     return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + rendered.join('\n')
   }
 
   // Legacy : SectionKey[]
-  const rendered = (order as SectionKey[])
+  const rendered = applyCap((order as SectionKey[])
     .map(key => {
       const renderer = SECTION_RENDERERS[key]
       if (!renderer) return '' // clé inconnue → skip silencieux
@@ -1248,7 +1262,7 @@ export function renderRichSections(
       if (!html.trim()) return ''
       return effectiveEditMode ? wrapWithKvtId(html, key) : html
     })
-    .filter(html => html.trim().length > 0)
+    .filter(html => html.trim().length > 0))
   if (!effectiveEditMode) return rendered.join('\n') + '\n' + stickyCta
   return KVT_CLICK_TO_EDIT_SCRIPT + '\n' + rendered.join('\n')
 }

@@ -7,119 +7,41 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 import { validateScrapeUrl } from '@/lib/security/url-allow'
 import { rateLimitAsync } from '@/lib/security/ratelimit'
 import { renderPageV3 } from '@/lib/sections-v3/render-page'
+import { DEFAULT_SECTION_ORDER_V3, type V3SectionKey } from '@/lib/sections-v3'
 import { suggestStyle } from '@/lib/styles/auto-pick'
 import { autoPickTone } from '@/lib/ai/auto-pick-tone'
-import { TONE_PROMPTS } from '@/lib/ai/tone-prompts'
 import { generateV3Copy } from '@/lib/ai/deepseek-v3'
 import { sanitizeDeep } from '@/lib/security/sanitize'
 import type { DeepSeekV3Output } from '@/lib/ai/v3-schema'
 import type { ScrapedProduct } from '@/types'
 import type { V3PageData, CopyTone } from '@/types/v3'
 import type { StyleId } from '@/lib/styles/types'
-import { resolveLanguage, languageName } from '@/lib/i18n/languages'
+import { resolveLanguage } from '@/lib/i18n/languages'
+import { buildV3SystemPrompt } from './prompt-v3'
+import { detectProductType } from '@/lib/templates/detect-product-type'
+import { getSectionPolicy, policyToV3Keys } from '@/lib/generation/section-policy'
 
 // Vercel Pro + Fluid Compute = 90s — Bright Data AliExpress 50-65s + DeepSeek 18-22s
 export const maxDuration = 90
 
-// ─── V3 helpers ─────────────────────────────────────────────
+// ─── Adaptive sections (V3) ────────────────────────────────────────
+// Garde-fou de rendu indépendant de l'IA : retire les sections discouraged de
+// l'ordre par défaut puis tronque à `max`, en priorisant les sections
+// recommandées par la policy. Appliqué même si DeepSeek ignore la consigne du
+// system prompt (le schema V3 impose de toujours produire les 13 champs JSON).
+function buildV3SectionOrder(
+  recommended: V3SectionKey[],
+  discouraged: V3SectionKey[],
+  max: number,
+): V3SectionKey[] {
+  const discouragedSet = new Set(discouraged)
+  const remaining = DEFAULT_SECTION_ORDER_V3.filter(key => !discouragedSet.has(key))
+  if (remaining.length <= max) return remaining
 
-/**
- * Builds the system prompt for V3 copy generation.
- * Injects the resolved tone instruction so DeepSeek output matches the brand voice.
- * The tone 'auto' must be resolved to a concrete tone BEFORE calling this function.
- */
-function buildV3SystemPrompt(args: {
-  tone: Exclude<CopyTone, 'auto'>
-  brand?: string
-  product: { title: string; description: string; category?: string }
-  language: string
-}): string {
-  const toneInstruction = TONE_PROMPTS[args.tone] || TONE_PROMPTS.friendly
-  const brandLine = args.brand
-    ? `- Nom de marque : ${args.brand} (à utiliser tel quel dans hero + manifesto)`
-    : `- Nom de marque : NON FOURNI — invente un nom court, élégant, cohérent avec le produit (ex: "Atelier Forêt" pour cuir artisanal, "Velura" pour skincare, "Halo" pour bijoux)`
-  const langName = languageName(args.language)
-
-  return `Tu es un copywriter DTC premium niveau Allbirds/Mejuri/Glossier.
-
-LANGUE DE SORTIE : ${langName}. TOUT le contenu textuel des champs JSON (brand, hero, why_we_love, features, best_for, materials, care, faq, manifesto, press_quote, reviews_summary, how_it_works) doit être rédigé EXCLUSIVEMENT en ${langName}. Les noms propres de marques inventées peuvent rester latins. Les clés JSON restent en anglais (ne pas traduire).
-
-${toneInstruction}
-
-Produit à valoriser :
-- Titre : ${args.product.title}
-- Description source : ${args.product.description}
-${args.product.category ? `- Catégorie : ${args.product.category}` : ''}
-${brandLine}
-
-OBLIGATOIRE : génère TOUTES les 13 sections ci-dessous, AUCUNE ne doit être omise. Une page sans press_quote / reviews_summary / how_it_works / reviews paraît vide et amateur.
-
-JSON STRICT à produire :
-
-{
-  "brand": "Nom de marque court (2-40 chars), tel que fourni ou inventé",
-  "hero": { "tagline": "≤8 mots, accroche émotionnelle", "subtagline": "≤12 mots, complément" },
-  "why_we_love": "3-4 lignes d'émotion authentique, JAMAIS de superlatifs creux",
-  "features": [
-    { "name": "Nom propriétaire si possible (ex: TENCEL™, SoftFit™)", "description": "≤15 mots, bénéfice concret", "isPropriety": false }
-  ],
-  "best_for": ["3-4 items, chacun est une PROMESSE CLIENT ≤6 mots, formulée avec un verbe ou un adjectif actionnable. EXEMPLES écouteurs : 'Appels clairs en open space', 'Running sans fil qui glisse', 'Concerts sans fatiguer les oreilles'. EXEMPLES mode : 'Confort toute la journée', 'Séchage rapide après le sport', 'Style casual sans effort'. EXEMPLES beauté : 'Peau hydratée dès la 1re nuit', 'Routine simplifiée en 3 gestes'. JAMAIS : mot générique seul sans bénéfice ('Musique', 'Sport', 'Travel', 'Confort', 'Mode'). OBLIGATOIRE : chaque item en ${langName}, jamais en anglais — même pour les mots courts (pas 'Sport', pas 'Travel', pas 'Music')."],
-  "materials": [
-    { "name": "Matériau", "benefit": "≤12 mots", "confidence": 0.0 }
-  ],
-  "care": "1 phrase d'entretien, chaleureuse",
-  "faq": [
-    { "q": "Question simple ?", "a": "Réponse directe ≤25 mots" }
-  ],
-  "manifesto": {
-    "headline": "≤6 mots, statement brand",
-    "pillars": ["Pilier 1 court", "Pilier 2 court", "Pilier 3 court"]
-  },
-  "press_quote": { "quote": "Citation presse crédible ≤20 mots", "source": "Nom du média (ex: Vogue, GQ, Monocle, ELLE, Forbes)" },
-  "reviews_summary": "Résumé reviews 2-3 phrases (note moyenne + bénéfice clé + nombre d'avis)",
-  "how_it_works": [
-    { "step": 1, "title": "≤4 mots", "description": "≤15 mots" },
-    { "step": 2, "title": "≤4 mots", "description": "≤15 mots" },
-    { "step": 3, "title": "≤4 mots", "description": "≤15 mots" }
-  ],
-  "reviews": [
-    {
-      "author": "Prénom N. (ex: Marie L., Thomas D., Sarah M., Adrien P.) — noms génériques français/internationaux, JAMAIS de célébrité ni de marque tierce",
-      "initials": "2 lettres majuscules (ex: ML, TD)",
-      "rating": 5,
-      "title": "Courte accroche entre guillemets ≤8 mots",
-      "text": "Avis authentique 2-3 phrases, bénéfice concret, ton naturel",
-      "date": "Texte français naturel : 'il y a 3 jours', 'la semaine dernière', 'il y a 2 semaines', 'il y a 1 mois'",
-      "photo_url": "URL image optionnelle — UNIQUEMENT https://images.unsplash.com/... ou https://cdn.shopify.com/... Pour 1 ou 2 reviews max, choisis une photo générique et pertinente (personne en train d'utiliser ce type de produit). Pour les autres reviews, mets null.",
-      "variant": "Variante si produit multi-variantes (ex: 'Noir mat'), sinon null",
-      "verified": true
-    }
-  ],
-  "stock_signal": {
-    "label": "Phrase courte SANS chiffre (ex: 'Stock limité', 'Dernières pièces disponibles', 'Ne tardez pas')",
-    "tone": "low"
-  },
-  "variants_meta": [
-    { "name": "Nom de la variante (identique à la liste des variantes)", "recommended": false },
-    { "name": "Meilleure variante", "recommended": true }
-  ]
-}
-
-Règles :
-- AUCUN emoji
-- AUCUN superlatif creux ("incroyable", "unique", "exceptionnel" sans preuve)
-- features : 3-5 features, mots propriétaires bienvenus dans name (style "SoftFit™", "PureBlend")
-- best_for : 3-4 promesses client ≤6 mots avec verbe/adjectif actionnable, JAMAIS un mot générique seul ("Musique", "Sport", "Travel", "Mode", "Confort"). Exemples valides : "Appels clairs en open space", "Peau hydratée dès la 1re nuit". Exemples invalides : "Musique", "Sport", "Confort".
-- materials : 2-4 matériaux, confidence honest (0.9 = explicite dans desc, 0.4 = inféré)
-- faq : 4-5 questions
-- press_quote : invente une citation presse crédible (média réel, ton sobre)
-- reviews_summary : invente un résumé reviews crédible (4.7/5 sur 2400 avis style)
-- how_it_works : 3 étapes du parcours produit (de la commande à l'usage)
-- reviews : EXACTEMENT 5 avis clients, jamais moins. rating 4 ou 5 pour 80% des avis (crédible mais positif). verified: true pour la majorité. photo_url : propose une URL https://images.unsplash.com/... générique et pertinente sur 1 ou 2 reviews maximum (montre une personne utilisant ce type de produit) — JAMAIS une vraie marque, JAMAIS une célébrité, JAMAIS une URL inventée en dehors de unsplash.com ou cdn.shopify.com. Mets null sur les autres. Noms d'auteurs : prénoms français/internationaux courants + initiale nom (ex: Marie L., Thomas D., Sarah M., Adrien P., Camille V., Lucas M.) — JAMAIS de célébrité, JAMAIS de nom de marque tierce. Texte de l'avis en ${langName}, bénéfice concret, ton naturel de vrai client.
-- stock_signal : génère ce champ UNIQUEMENT si le titre ou la description produit évoque explicitement un article populaire, en édition limitée, ou saisonnier. label DOIT être une phrase courte SANS aucun chiffre (ex: "Stock limité", "Dernières pièces disponibles", "Commandez avant rupture"). tone = "critical" pour les articles très saisonniers, "low" pour le reste. Si aucun indice de scarcité dans les données produit → omets complètement le champ stock_signal (null / absent).
-- variants_meta : si le produit a des variantes, liste-les TOUTES dans le même ordre avec recommended:true sur UNE SEULE (celle qui offre le meilleur rapport qualité/prix ou la plus populaire). Si une seule variante ou aucune variante → omets ce champ.
-- LANGUE STRICTE : TOUTE valeur string doit être en ${langName}, y compris les champs de ≤2 mots (best_for, manifesto.pillars, features.name). DeepSeek tend à sortir des mots en anglais sur les champs courts — c'est INTERDIT.
-- Retourne UNIQUEMENT le JSON, aucun texte avant/après`.trim()
+  const recommendedSet = new Set(recommended)
+  const prioritized = remaining.filter(key => recommendedSet.has(key))
+  const rest = remaining.filter(key => !recommendedSet.has(key))
+  return [...prioritized, ...rest].slice(0, max)
 }
 
 export async function POST(req: NextRequest) {
@@ -274,7 +196,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // ─── V3 path ────────────────────────────────────────────────
+    // ─── V3 path ────────────────────────────────
     // Activated when `engine === 'v3'` is explicitly passed in the request body.
     // Everything below is additive — legacy callers (no engine field) are unaffected.
     if (body.engine === 'v3') {
@@ -309,6 +231,18 @@ export async function POST(req: NextRequest) {
       const brand = typeof body.brand === 'string' && body.brand.trim().length >= 2
         ? body.brand.trim().slice(0, 40)
         : undefined
+
+      // Adaptive sections — même détection/policy que le path legacy (Task 4),
+      // mappée vers les V3SectionKey. Guide le system prompt ET pilote le
+      // sectionOrder passé à renderPageV3 plus bas (garde-fou indépendant de l'IA).
+      const detectedProductType = detectProductType({ title: product.title, description: product.description })
+      const sectionPolicy = getSectionPolicy({
+        productType: detectedProductType,
+        price: Number.isFinite(priceNum) ? priceNum : undefined,
+      })
+      const v3Recommended = policyToV3Keys(sectionPolicy.recommended)
+      const v3Discouraged = policyToV3Keys(sectionPolicy.discouraged)
+
       const systemPrompt = buildV3SystemPrompt({
         tone: resolvedTone,
         brand,
@@ -317,6 +251,13 @@ export async function POST(req: NextRequest) {
           description: product.description,
         },
         language: resolveLanguage(body.language),
+        policy: {
+          productType: detectedProductType,
+          recommended: v3Recommended,
+          discouraged: v3Discouraged,
+          min: sectionPolicy.min,
+          max: sectionPolicy.max,
+        },
       })
 
       let aiOutput: DeepSeekV3Output
@@ -406,7 +347,11 @@ export async function POST(req: NextRequest) {
       }
 
       // 5. Render HTML and return.
-      const html = renderPageV3(styleId, v3Data)
+      // Adaptive sections — garde-fou de rendu : sectionOrder filtré (discouraged
+      // retirés) et tronqué à sectionPolicy.max, indépendamment de ce que
+      // DeepSeek a produit (cf buildV3SectionOrder plus haut).
+      const sectionOrder = buildV3SectionOrder(v3Recommended, v3Discouraged, sectionPolicy.max)
+      const html = renderPageV3(styleId, v3Data, sectionOrder)
 
       return NextResponse.json({
         html,
@@ -423,7 +368,7 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // ─── Legacy path (engine !== 'v3') — untouched ────────────────────────────
+    // ─── Legacy path (engine !== 'v3') — untouched ──────────────────────────
     let landingPage
     try {
       landingPage = await generateLandingPage(product, {
@@ -431,7 +376,7 @@ export async function POST(req: NextRequest) {
         tone: body.tone,
       })
     } catch (genErr) {
-      // Rollback : DeepSeek timeout ou JSON invalide → ne pas brûler le quota.
+      // Rollback : DeepSeek timeout ou JSON invalide — ne pas brûler le quota.
       await rollbackQuota()
       throw genErr
     }

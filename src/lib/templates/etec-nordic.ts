@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -44,6 +45,7 @@ const NORDIC_THEME: SectionTheme = {
 }
 
 export function templateEtecNordic(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const imgAt = (i: number) =>
     (data.images && data.images[i] && data.images[i].length > 0)
       ? data.images[i]
@@ -285,7 +287,7 @@ ${renderRichSections(data, NORDIC_THEME)}
 <!-- FAQ -->
 <section class="section-pad-nd" style="padding:96px 64px;background:${C.bgAlt};">
   <div style="max-width:680px;margin:0 auto;">
-    <h2 style="font-family:'Fraunces',serif;font-size:40px;font-weight:400;color:${C.text};margin-bottom:48px;text-align:center;">Questions fréquentes</h2>
+    <h2 style="font-family:'Fraunces',serif;font-size:40px;font-weight:400;color:${C.text};margin-bottom:48px;text-align:center;">${trans(lang, 'faqV3.title')}</h2>
     ${faqHTML}
   </div>
 </section>
@@ -296,7 +298,7 @@ ${renderRichSections(data, NORDIC_THEME)}
   <p style="font-family:'Manrope',sans-serif;font-size:14px;color:rgba(255,255,255,.6);margin-bottom:32px;">Nouvelles collections, histoires d'artisans, parutions éditoriales.</p>
   <form style="display:flex;max-width:460px;margin:0 auto;" onsubmit="event.preventDefault()">
     <input type="email" placeholder="votre@email.com" style="flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-right:none;color:#fff;font-family:'Manrope',sans-serif;font-size:13px;padding:14px 20px;outline:none;" autocomplete="email"/>
-    <button type="submit" style="background:${C.sand};color:${C.text};font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:14px 22px;border:1px solid ${C.sand};cursor:pointer;white-space:nowrap;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Subscribe</button>
+    <button type="submit" style="background:${C.sand};color:${C.text};font-family:'Manrope',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:14px 22px;border:1px solid ${C.sand};cursor:pointer;white-space:nowrap;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">${trans(lang, 'bespoke.footer.subscribe')}</button>
   </form>
 </section>
 

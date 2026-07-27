@@ -5,18 +5,19 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, FileText, Store, Plus, Zap, LogOut,
-  BarChart2, Users, Settings, X, Menu,
+  BarChart2, Users, Settings, X, Menu, Rocket,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import NotificationBell from '@/components/dashboard/NotificationBell'
 import { identifyUser, resetUser, track } from '@/lib/analytics'
 
 const NAV_ITEMS = [
-  { href: '/dashboard',           icon: LayoutDashboard, label: 'Vue d\'ensemble' },
-  { href: '/dashboard/pages',     icon: FileText,         label: 'Mes pages'       },
-  { href: '/dashboard/stores',    icon: Store,            label: 'Mes stores'      },
-  { href: '/dashboard/analytics', icon: BarChart2,        label: 'Analytics'       },
-  { href: '/dashboard/agency',    icon: Users,            label: 'Mode Agence'     },
+  { href: '/dashboard',              icon: LayoutDashboard, label: 'Vue d\'ensemble' },
+  { href: '/dashboard/pages',        icon: FileText,         label: 'Mes pages'       },
+  { href: '/dashboard/stores',       icon: Store,            label: 'Mes stores'      },
+  { href: '/dashboard/store-builder', icon: Rocket,          label: 'Store Builder'   },
+  { href: '/dashboard/analytics',    icon: BarChart2,        label: 'Analytics'       },
+  { href: '/dashboard/agency',       icon: Users,            label: 'Mode Agence'     },
 ]
 
 // Items affichés dans la bottom nav mobile (les plus utilisés)

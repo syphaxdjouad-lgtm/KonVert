@@ -21,24 +21,24 @@ export async function GET(req: NextRequest) {
   // 0. Valider le format du shop domain — jamais laisser passer un domaine
   // arbitraire (redirect_uri/token exchange partiraient vers un tiers).
   if (!shop || !isValidShopDomain(shop)) {
-    return NextResponse.redirect(new URL('/dashboard/stores?sb_error=invalid_shop', req.url))
+    return NextResponse.redirect(new URL('/dashboard/store-builder?sb_error=invalid_shop', req.url))
   }
 
   // 1. Vérifier le state CSRF (cookie dédié Store Builder)
   const cookieStore = await cookies()
   const savedState = cookieStore.get(STORE_BUILDER_STATE_COOKIE)?.value
   if (!savedState || savedState !== state) {
-    return NextResponse.redirect(new URL('/dashboard/stores?sb_error=oauth_state_invalid', req.url))
+    return NextResponse.redirect(new URL('/dashboard/store-builder?sb_error=oauth_state_invalid', req.url))
   }
   cookieStore.delete(STORE_BUILDER_STATE_COOKIE)
 
   // 2. Vérifier la signature HMAC de la requête Shopify (secret Store Builder)
   if (!verifyHmac(params, getStoreBuilderApiSecret())) {
-    return NextResponse.redirect(new URL('/dashboard/stores?sb_error=oauth_hmac_invalid', req.url))
+    return NextResponse.redirect(new URL('/dashboard/store-builder?sb_error=oauth_hmac_invalid', req.url))
   }
 
   if (!code) {
-    return NextResponse.redirect(new URL('/dashboard/stores?sb_error=oauth_missing_code', req.url))
+    return NextResponse.redirect(new URL('/dashboard/store-builder?sb_error=oauth_missing_code', req.url))
   }
 
   // 3. Échanger le code contre un access token — on récupère le `scope`
@@ -56,7 +56,7 @@ export async function GET(req: NextRequest) {
     scope = result.scope
   } catch (err) {
     console.error('[shopify/store-builder/callback] token exchange error:', err)
-    return NextResponse.redirect(new URL('/dashboard/stores?sb_error=oauth_token_failed', req.url))
+    return NextResponse.redirect(new URL('/dashboard/store-builder?sb_error=oauth_token_failed', req.url))
   }
 
   // 4. Chiffrer et stocker le token en DB (upsert par user+shop — gère la
@@ -86,9 +86,9 @@ export async function GET(req: NextRequest) {
     if (error) throw error
   } catch (err) {
     console.error('[shopify/store-builder/callback] db error:', err)
-    return NextResponse.redirect(new URL('/dashboard/stores?sb_error=store_save_failed', req.url))
+    return NextResponse.redirect(new URL('/dashboard/store-builder?sb_error=store_save_failed', req.url))
   }
 
   // 5. Rediriger vers le dashboard avec succès
-  return NextResponse.redirect(new URL('/dashboard/stores?store_builder_connected=1', req.url))
+  return NextResponse.redirect(new URL('/dashboard/store-builder?store_builder_connected=1', req.url))
 }

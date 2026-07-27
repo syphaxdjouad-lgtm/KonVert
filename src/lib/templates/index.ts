@@ -1,5 +1,7 @@
 import type { LandingPageData } from '@/types'
 import type { SectionInstance, VisualSettings, GlobalStyles } from '@/types/editor'
+import { DEFAULT_ORDER } from './sections'
+import { buildProductAwareSectionOrder, resolveProductType } from './section-policy'
 
 export { templateEtecBlue }   from './etec-blue'
 export { templateEtecNoir }   from './etec-noir'
@@ -211,9 +213,21 @@ export function renderTemplate(templateId: string, data: LandingPageData, overri
   // C2 : injection de visualSettings dans data via _visualSettings (idem stratégie).
   // Editor v2 : injection de _kvt_edit_mode pour activer click-to-edit dans iframe.
   // Stratégie : évite de modifier la signature des 42+ fonctions template.
+  //
+  // Moteur product-aware : si l'appelant ne fournit PAS déjà un sectionOrder
+  // explicite (ex: l'éditeur, qui gère sa propre timeline C1), on calcule un
+  // ordre filtré selon la doctrine section-policy.md (sections bannies +
+  // conditionnelles au type de produit). Un appelant qui passe sectionOrder
+  // explicitement (éditeur) garde la main — on ne l'écrase jamais.
+  const sectionOrder = overrides?.sectionOrder ?? buildProductAwareSectionOrder(
+    DEFAULT_ORDER,
+    resolveProductType(data),
+    data,
+  )
+
   const renderData: LandingPageData = {
     ...data,
-    ...(overrides?.sectionOrder ? { _sectionOrder: overrides.sectionOrder } : {}),
+    _sectionOrder: sectionOrder,
     ...(overrides?.visualSettings ? { _visualSettings: overrides.visualSettings } : {}),
     ...(overrides?.editMode ? { _kvt_edit_mode: true } : {}),
   } as LandingPageData

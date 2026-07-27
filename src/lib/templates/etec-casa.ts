@@ -1,4 +1,5 @@
 import type { LandingPageData } from '@/types'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -48,7 +49,7 @@ function stars(n: number) {
 
 const MATERIALS = [
   { icon: '🪵', name: 'Natural Wood',   desc: 'Solid oak and walnut sourced from sustainable FSC-certified forests. Each piece is unique.' },
-  { icon: '🪡', name: 'Linen & Cotton', desc: 'OEKO-TEX certified fabric — soft, breathable, and designed to age beautifully over time.' },
+  { icon: '🧵', name: 'Linen & Cotton', desc: 'OEKO-TEX certified fabric — soft, breathable, and designed to age beautifully over time.' },
   { icon: '🏺', name: 'Handmade Ceramic', desc: 'Hand-thrown by artisans. Slight variations in glaze make every piece one of a kind.' },
 ]
 
@@ -79,6 +80,7 @@ const CASA_THEME: SectionTheme = {
 }
 
 export function templateEtecCasa(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const img = (i: number) => data.images?.[i] || FALLBACK_IMGS[i % FALLBACK_IMGS.length]
 
   const productName   = data.product_name   || 'Artisan Oak Side Table'
@@ -333,10 +335,10 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
 <nav class="nav">
   <div class="nav-logo">Casa</div>
   <div class="nav-links">
-    <a class="nav-link" href="javascript:void(0)">Collection</a>
-    <a class="nav-link" href="javascript:void(0)">Materials</a>
-    <a class="nav-link" href="javascript:void(0)">Reviews</a>
-    <a class="nav-link" href="javascript:void(0)">About</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.collection')}</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.materials')}</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.reviewsShort')}</a>
+    <a class="nav-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.about')}</a>
   </div>
   <a class="nav-cta" href="javascript:void(0)">Shop Now</a>
 </nav>
@@ -434,7 +436,7 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
 
 <section class="reviews-section">
   <div style="max-width:900px;margin:0 auto">
-    <div class="section-eyebrow">Reviews</div>
+    <div class="section-eyebrow">${trans(lang, 'bespoke.nav.reviewsShort')}</div>
     <h2 class="section-h">2,400+ happy homes.</h2>
     <div class="reviews-grid">${reviewsHTML}</div>
   </div>
@@ -442,7 +444,7 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
 
 <section class="bundle-section">
   <div class="bundle-inner">
-    <div class="section-eyebrow">Bundles</div>
+    <div class="section-eyebrow">${trans(lang, 'bespoke.nav.bundles')}</div>
     <h2 class="section-h">Better together.</h2>
     <div class="bundle-grid">
       <div class="bundle-card">
@@ -470,7 +472,7 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
 
 <section class="faq-section">
   <div class="faq-inner">
-    <div class="section-eyebrow">FAQ</div>
+    <div class="section-eyebrow">${trans(lang, 'bespoke.faqShort')}</div>
     <h2 class="section-h" style="margin-bottom:36px">Frequently asked.</h2>
     ${faqHTML}
   </div>
@@ -484,25 +486,25 @@ h1,h2,h3,.serif{font-family:'Cormorant Garamond',Georgia,serif}
         <p class="footer-tagline">Handcrafted pieces for homes that tell a story.</p>
       </div>
       <div>
-        <div class="footer-col-title">Shop</div>
+        <div class="footer-col-title">${trans(lang, 'bespoke.nav.shop')}</div>
         <a class="footer-link" href="javascript:void(0)">Furniture</a>
         <a class="footer-link" href="javascript:void(0)">Textiles</a>
         <a class="footer-link" href="javascript:void(0)">Ceramics</a>
-        <a class="footer-link" href="javascript:void(0)">Bundles</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.bundles')}</a>
       </div>
       <div>
-        <div class="footer-col-title">About</div>
-        <a class="footer-link" href="javascript:void(0)">Our Story</a>
-        <a class="footer-link" href="javascript:void(0)">Materials</a>
+        <div class="footer-col-title">${trans(lang, 'bespoke.nav.about')}</div>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.ourStory')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.materials')}</a>
         <a class="footer-link" href="javascript:void(0)">Artisans</a>
-        <a class="footer-link" href="javascript:void(0)">Press</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.press')}</a>
       </div>
       <div>
         <div class="footer-col-title">Help</div>
-        <a class="footer-link" href="javascript:void(0)">FAQ</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.faqShort')}</a>
         <a class="footer-link" href="javascript:void(0)">Delivery</a>
-        <a class="footer-link" href="javascript:void(0)">Returns</a>
-        <a class="footer-link" href="javascript:void(0)">Contact</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'care.returnsTitle')}</a>
+        <a class="footer-link" href="javascript:void(0)">${trans(lang, 'bespoke.nav.contact')}</a>
       </div>
     </div>
     <div class="footer-bottom">

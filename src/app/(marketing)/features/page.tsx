@@ -181,7 +181,7 @@ const COMPARE_ROWS = [
 ]
 
 function FeatureVisualContent({ id }: { id: string }) {
-  // ── IA ─────────────────────────────────────────────────────────── */
+  // ── IA ──────────────────────────────────────────────────────────────────────
   if (id === 'ia') {
     return (
       <div style={{ fontFamily: 'inherit', padding: '20px', height: '100%', display: 'flex', flexDirection: 'column', gap: '0' }}>
@@ -228,7 +228,7 @@ function FeatureVisualContent({ id }: { id: string }) {
     )
   }
 
-  // ── TEMPLATES ─────────────────────────────────────────────────────────── */
+  // ── TEMPLATES ───────────────────────────────────────────────────────────────
   if (id === 'templates') {
     const cards = [
       { img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&q=80', niche: 'Sport', cvr: '+5.2%' },
@@ -263,7 +263,7 @@ function FeatureVisualContent({ id }: { id: string }) {
     )
   }
 
-  // ── ANALYTICS ─────────────────────────────────────────────────────────── */
+  // ── ANALYTICS ───────────────────────────────────────────────────────────────
   if (id === 'analytics') {
     const bars = [
       { day: 'L', h: 55, active: false },
@@ -324,7 +324,7 @@ function FeatureVisualContent({ id }: { id: string }) {
     )
   }
 
-  // ── INTEGRATIONS ───────────────────────────────────────────────────────────── */
+  // ── INTEGRATIONS ────────────────────────────────────────────────────────────
   if (id === 'integrations') {
     return (
       <div style={{ padding: '24px 20px', height: '100%', display: 'flex', flexDirection: 'column', gap: 20, justifyContent: 'center' }}>
@@ -392,7 +392,7 @@ function FeatureVisualContent({ id }: { id: string }) {
     )
   }
 
-  // ── A/B TESTING ─────────────────────────────────────────────────────────── */
+  // ── A/B TESTING ─────────────────────────────────────────────────────────────
   if (id === 'abtesting') {
     return (
       <div style={{ padding: '20px', height: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -439,7 +439,7 @@ function FeatureVisualContent({ id }: { id: string }) {
     )
   }
 
-  // ── LANGUES ─────────────────────────────────────────────────────────── */
+  // ── LANGUES ─────────────────────────────────────────────────────────────────
   if (id === 'langues') {
     const langs = [
       { flag: '🇫🇷', code: 'Français',   active: true },
@@ -534,7 +534,7 @@ export default function FeaturesPage() {
         </div>
       </section>
 
-      {/* ── FEATURES DÉTAILLÉES ─────────────────────────────────────────── */}
+      {/* ── FEATURES DÉTAILLÉES ──────────────────────────────────────────── */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 space-y-24">
           {FEATURES_MAIN.map((f) => {
@@ -580,7 +580,7 @@ export default function FeaturesPage() {
         </div>
       </section>
 
-      {/* ── COMPARATIF ──────────────────────────────────────────────────────── */}
+      {/* ── COMPARATIF ───────────────────────────────────────────────────── */}
       <section className="py-20" style={{ background: '#fafafa' }}>
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-12">
@@ -628,7 +628,7 @@ export default function FeaturesPage() {
         </div>
       </section>
 
-      {/* ── AUTRES FEATURES ─────────────────────────────────────────────────── */}
+      {/* ── AUTRES FEATURES ──────────────────────────────────────────────── */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-12">
@@ -651,7 +651,7 @@ export default function FeaturesPage() {
         </div>
       </section>
 
-      {/* ── DEEP DIVE ─────────────────────────────────────────────────────────── */}
+      {/* ── DEEP DIVE ────────────────────────────────────────────────────── */}
       <section className="py-20" style={{ background: '#faf8ff' }}>
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-12">

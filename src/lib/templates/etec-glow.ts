@@ -1,5 +1,6 @@
 import type { LandingPageData } from '@/types'
 import { ico } from './icons'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -28,6 +29,7 @@ const GLOW_THEME: SectionTheme = {
 }
 
 export function templateEtecGlow(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -87,7 +89,7 @@ body{font-family:'Nunito Sans',sans-serif;background:#FFF9F5;color:#111;}
 <!-- BREADCRUMB -->
 <nav style="background:#FFF9F5;border-bottom:1px solid #F0E8E0;padding:14px 24px;">
   <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;">
-    <span style="font-size:12px;color:#BBB;">Accueil</span>
+    <span style="font-size:12px;color:#BBB;">${trans(lang, 'bespoke.nav.home')}</span>
     <span style="font-size:12px;color:#DDD;">›</span>
     <span style="font-size:12px;color:#BBB;">${data.hero_badges?.[0] || 'Produits'}</span>
     <span style="font-size:12px;color:#DDD;">›</span>
@@ -178,12 +180,12 @@ body{font-family:'Nunito Sans',sans-serif;background:#FFF9F5;color:#111;}
 <!-- AVANT / APRES -->
 <section style="padding:80px 24px;background:#FFF9F5;">
   <div style="max-width:1000px;margin:0 auto;">
-    <p style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#EF4A65;text-align:center;text-transform:uppercase;margin-bottom:8px;">Résultats prouvés</p>
+    <p style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#EF4A65;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.section.provenResults')}</p>
     <h2 style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:#111;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">Avant / Après 28 jours</h2>
     <div style="display:flex;gap:20px;" class="gl-compare">
       <div style="flex:1;position:relative;border-radius:20px;overflow:hidden;">
         <img src="${BEFORE_IMG}" crossorigin="anonymous" style="width:100%;height:350px;object-fit:cover;display:block;filter:saturate(0.5);" alt="Avant">
-        <div style="position:absolute;top:16px;left:16px;background:rgba(0,0,0,0.5);color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:15px;">AVANT</div>
+        <div style="position:absolute;top:16px;left:16px;background:rgba(0,0,0,0.5);color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:15px;">${trans(lang, 'legacy.beforeAfter.before').toUpperCase()}</div>
       </div>
       <div style="flex:1;position:relative;border-radius:20px;overflow:hidden;">
         <img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:350px;object-fit:cover;display:block;" alt="Après">
@@ -203,11 +205,11 @@ body{font-family:'Nunito Sans',sans-serif;background:#FFF9F5;color:#111;}
         name: t.name,
         text: t.text,
         date: `${idx * 4 + 2} jours`,
-        badge: t.variant || data.hero_badges?.[idx % (data.hero_badges?.length || 1)] || 'Achat vérifié',
+        badge: t.variant || data.hero_badges?.[idx % (data.hero_badges?.length || 1)] || trans(lang, 'reviews.verifiedPurchase'),
       })) : [
-        { name: 'Amira L.', text: `${data.product_name} est devenu mon indispensable. Les résultats sont incroyables, je ne peux plus m'en passer !`, date: '2 jours', badge: data.hero_badges?.[0] || 'Achat vérifié' },
-        { name: 'Charlotte D.', text: `Résultat visible dès la première semaine ! Produit de qualité, livraison rapide. J'adore.`, date: '6 jours', badge: data.hero_badges?.[1] || 'Achat vérifié' },
-        { name: 'Sarah K.', text: `Commandé en duo avec ma sœur. On est fan toutes les deux ! Le packaging est magnifique. Top.`, date: '12 jours', badge: data.hero_badges?.[2] || 'Achat vérifié' },
+        { name: 'Amira L.', text: `${data.product_name} est devenu mon indispensable. Les résultats sont incroyables, je ne peux plus m'en passer !`, date: '2 jours', badge: data.hero_badges?.[0] || trans(lang, 'reviews.verifiedPurchase') },
+        { name: 'Charlotte D.', text: `Résultat visible dès la première semaine ! Produit de qualité, livraison rapide. J'adore.`, date: '6 jours', badge: data.hero_badges?.[1] || trans(lang, 'reviews.verifiedPurchase') },
+        { name: 'Sarah K.', text: `Commandé en duo avec ma sœur. On est fan toutes les deux ! Le packaging est magnifique. Top.`, date: '12 jours', badge: data.hero_badges?.[2] || trans(lang, 'reviews.verifiedPurchase') },
       ]).map(r => `
       <div style="background:#FFF9F5;border-radius:20px;padding:28px 24px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
@@ -219,7 +221,7 @@ body{font-family:'Nunito Sans',sans-serif;background:#FFF9F5;color:#111;}
           <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#EF4A65,#D63953);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;">${r.name[0]}</div>
           <div>
             <p style="font-size:13px;font-weight:700;color:#111;">${r.name}</p>
-            <p style="font-size:11px;color:#BBB;">Il y a ${r.date} · Achat vérifié</p>
+            <p style="font-size:11px;color:#BBB;">Il y a ${r.date} · ${trans(lang, 'reviews.verifiedPurchase')}</p>
           </div>
         </div>
       </div>`).join('')}
@@ -234,7 +236,7 @@ ${renderRichSections(data, GLOW_THEME)}
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#FFF9F5;">
   <div style="max-width:700px;margin:0 auto;">
-    <p style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#EF4A65;text-align:center;text-transform:uppercase;margin-bottom:8px;">FAQ</p>
+    <p style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#EF4A65;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.faqShort')}</p>
     <h2 style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:600;color:#111;text-align:center;letter-spacing:-0.02em;margin-bottom:48px;">Vos questions</h2>
     <div style="background:#fff;border-radius:20px;padding:8px 32px;">${faqHtml}</div>
   </div>

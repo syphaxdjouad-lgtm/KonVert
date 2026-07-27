@@ -1,4 +1,5 @@
 import type { LandingPageData } from '@/types'
+import { t as trans } from '@/lib/i18n/ui-labels'
 
 import {
   renderRichSections,
@@ -38,6 +39,7 @@ const GOLD_THEME: SectionTheme = {
 }
 
 export function templateEtecGold(data: LandingPageData): string {
+  const lang = data.language || 'fr'
   const _real = data.images?.filter(Boolean) ?? [];
   const imgs = _real.length >= 1
     ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length])
@@ -125,7 +127,7 @@ export function templateEtecGold(data: LandingPageData): string {
     <div style="background:${C.card};border:1px solid ${C.divider};border-radius:4px;padding:32px;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
         <span style="color:${C.accent};font-size:13px;letter-spacing:4px;">★★★★★</span>
-        <span style="font-size:11px;color:${C.accent};font-weight:600;background:${C.accentLight};padding:3px 10px;border-radius:2px;font-family:'Montserrat',sans-serif;letter-spacing:.06em;">✓ Achat vérifié</span>
+        <span style="font-size:11px;color:${C.accent};font-weight:600;background:${C.accentLight};padding:3px 10px;border-radius:2px;font-family:'Montserrat',sans-serif;letter-spacing:.06em;">${trans(lang, 'reviews.verifiedPurchase')}</span>
       </div>
       <div style="width:100%;height:1px;background:${C.divider};margin-bottom:20px;"></div>
       <p style="font-size:14px;color:${C.muted};line-height:1.9;margin-bottom:24px;font-family:'Montserrat',sans-serif;font-style:italic;">"${r.text}"</p>
@@ -180,15 +182,15 @@ export function templateEtecGold(data: LandingPageData): string {
 <!-- ═══ BREADCRUMB ═══════════════════════════════════════════════════════════ -->
 <div style="background:${C.card};border-bottom:1px solid ${C.divider};">
   <div style="max-width:1100px;margin:0 auto;padding:14px 24px;font-size:12px;color:${C.muted};font-family:'Montserrat',sans-serif;letter-spacing:.04em;">
-    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">Accueil</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">${trans(lang, 'bespoke.nav.home')}</a>
     <span style="margin:0 10px;opacity:.35;">›</span>
-    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">Collection</a>
+    <a href="javascript:void(0)" onclick="event.preventDefault()" style="color:${C.accent};text-decoration:none;">${trans(lang, 'bespoke.nav.collection')}</a>
     <span style="margin:0 10px;opacity:.35;">›</span>
     <span style="color:${C.muted};">${data.product_name}</span>
   </div>
 </div>
 
-<!-- ═══ HERO — galerie DROITE (55%), info GAUCHE (45%) ═══════════════════════ -->
+<!-- ═══ HERO — galerie DROITE (55%), info GAUCHE (45%) ═══════════════════════════ -->
 <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
   <div class="pg5" style="display:grid;grid-template-columns:45% 55%;gap:60px;padding:52px 0 96px;align-items:start;">
 
@@ -308,7 +310,7 @@ export function templateEtecGold(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ FEATURES ALTERNÉES ════════════════════════════════════════════════════ -->
+<!-- ═══ FEATURES ALTERNÉES ═════════════════════════════════════════════════ -->
 <div style="background:${C.card};padding:96px 0;border-top:1px solid ${C.divider};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:72px;">
@@ -321,11 +323,11 @@ export function templateEtecGold(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ AVANT / APRÈS ════════════════════════════════════════════════════════ -->
+<!-- ═══ AVANT / APRÈS ═════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:96px 0;border-top:1px solid ${C.divider};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:56px;">
-      <p style="font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:${C.accent};font-family:'Montserrat',sans-serif;margin-bottom:16px;">Transformation</p>
+      <p style="font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:${C.accent};font-family:'Montserrat',sans-serif;margin-bottom:16px;">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
       <div style="width:48px;height:1px;background:${C.divider};margin:0 auto 24px;"></div>
       <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:600;letter-spacing:-.01em;color:${C.text};margin-bottom:14px;">Avant · Après</h2>
       <p style="color:${C.muted};font-size:14px;max-width:480px;margin:0 auto;font-family:'Montserrat',sans-serif;">L'élégance transforme. Découvrez l'effet ${data.product_name} sur ceux qui l'ont adopté.</p>
@@ -335,7 +337,7 @@ export function templateEtecGold(data: LandingPageData): string {
       <div style="background:${C.card};border:1px solid ${C.divider};overflow:hidden;">
         <div style="aspect-ratio:4/3;overflow:hidden;position:relative;">
           <img src="${BEFORE_IMG}" alt="Avant" style="width:100%;height:100%;object-fit:cover;display:block;" />
-          <div style="position:absolute;top:14px;left:14px;background:rgba(10,8,6,0.75);color:${C.muted};font-size:11px;font-weight:600;padding:5px 14px;letter-spacing:.1em;font-family:'Montserrat',sans-serif;">AVANT</div>
+          <div style="position:absolute;top:14px;left:14px;background:rgba(10,8,6,0.75);color:${C.muted};font-size:11px;font-weight:600;padding:5px 14px;letter-spacing:.1em;font-family:'Montserrat',sans-serif;">${trans(lang, 'legacy.beforeAfter.before').toUpperCase()}</div>
         </div>
         <div style="padding:24px;border-top:1px solid ${C.divider};">
           <p style="font-size:14px;font-weight:600;color:${C.text};margin-bottom:8px;font-family:'Montserrat',sans-serif;">Avant ${data.product_name}</p>
@@ -346,7 +348,7 @@ export function templateEtecGold(data: LandingPageData): string {
       <div style="background:${C.card};border:1px solid ${C.divider};overflow:hidden;">
         <div style="aspect-ratio:4/3;overflow:hidden;position:relative;">
           <img src="${AFTER_IMG}" alt="Après" style="width:100%;height:100%;object-fit:cover;display:block;" />
-          <div style="position:absolute;top:14px;left:14px;background:rgba(212,168,83,0.85);color:${C.bg};font-size:11px;font-weight:700;padding:5px 14px;letter-spacing:.1em;font-family:'Montserrat',sans-serif;">APRÈS</div>
+          <div style="position:absolute;top:14px;left:14px;background:rgba(212,168,83,0.85);color:${C.bg};font-size:11px;font-weight:700;padding:5px 14px;letter-spacing:.1em;font-family:'Montserrat',sans-serif;">${trans(lang, 'legacy.beforeAfter.after').toUpperCase()}</div>
         </div>
         <div style="padding:24px;border-top:1px solid ${C.divider};">
           <p style="font-size:14px;font-weight:600;color:${C.text};margin-bottom:8px;font-family:'Montserrat',sans-serif;">Après ${data.product_name}</p>
@@ -357,11 +359,11 @@ export function templateEtecGold(data: LandingPageData): string {
   </div>
 </div>
 
-<!-- ═══ AVIS CLIENTS ═════════════════════════════════════════════════════════ -->
+<!-- ═══ AVIS CLIENTS ═════════════════════════════════════════════════ -->
 <div id="reviews5" style="background:${C.card};padding:96px 0;border-top:1px solid ${C.divider};">
   <div style="max-width:1100px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:56px;">
-      <p style="font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:${C.accent};font-family:'Montserrat',sans-serif;margin-bottom:16px;">Témoignages</p>
+      <p style="font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:${C.accent};font-family:'Montserrat',sans-serif;margin-bottom:16px;">${trans(lang, 'reviews.eyebrow')}</p>
       <div style="width:48px;height:1px;background:${C.divider};margin:0 auto 24px;"></div>
       <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:600;letter-spacing:-.01em;color:${C.text};margin-bottom:18px;">La parole de nos clients</h2>
       <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;">
@@ -379,19 +381,19 @@ export function templateEtecGold(data: LandingPageData): string {
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
 ${renderRichSections(data, GOLD_THEME)}
 
-<!-- ═══ FAQ ══════════════════════════════════════════════════════════════════ -->
+<!-- ═══ FAQ ═══════════════════════════════════════════════════════════ -->
 <div style="background:${C.bg};padding:96px 0;border-top:1px solid ${C.divider};">
   <div style="max-width:720px;margin:0 auto;padding:0 24px;">
     <div style="text-align:center;margin-bottom:60px;">
-      <p style="font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:${C.accent};font-family:'Montserrat',sans-serif;margin-bottom:16px;">Questions</p>
+      <p style="font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:${C.accent};font-family:'Montserrat',sans-serif;margin-bottom:16px;">${trans(lang, 'bespoke.nav.questions')}</p>
       <div style="width:48px;height:1px;background:${C.divider};margin:0 auto 24px;"></div>
-      <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:600;letter-spacing:-.01em;color:${C.text};">Questions fréquentes</h2>
+      <h2 style="font-family:'Playfair Display',Georgia,serif;font-size:32px;font-weight:600;letter-spacing:-.01em;color:${C.text};">${trans(lang, 'faqV3.title')}</h2>
     </div>
     ${faqHTML}
   </div>
 </div>
 
-<!-- ═══ CTA FINAL ════════════════════════════════════════════════════════════ -->
+<!-- ═══ CTA FINAL ═══════════════════════════════════════════════════════ -->
 <div style="background:linear-gradient(135deg,#1A1206,#2D1E08);padding:96px 24px;text-align:center;border-top:1px solid rgba(212,168,83,0.30);">
   <p style="font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:${C.accent};opacity:.7;font-family:'Montserrat',sans-serif;margin-bottom:20px;">Collection exclusive</p>
   <div style="width:48px;height:1px;background:${C.divider};margin:0 auto 28px;"></div>

@@ -28,8 +28,38 @@ const SOLO_THEME: SectionTheme = {
   radius:     '16px',
 }
 
+// Solo est le template "universel adaptatif" : son accent se colore selon le
+// produit détecté au lieu d'être fixe (demande founder). L'accent effectif
+// est calculé côté wizard (suggestTemplateForProduct) et transmis ici via
+// renderTemplate > overrides.globalStyles.accent > data._soloAccent — même
+// convention d'injection de champ privé que _visualSettings/_sectionOrder.
+// Sans override (génération directe, ancien flow) : bleu indigo par défaut.
+function isValidHex(v: string | undefined): v is string {
+  return typeof v === 'string' && /^#[0-9a-fA-F]{6}$/.test(v)
+}
+function hexToRgb(hex: string): string {
+  const h = hex.replace('#', '')
+  return `${parseInt(h.slice(0, 2), 16)},${parseInt(h.slice(2, 4), 16)},${parseInt(h.slice(4, 6), 16)}`
+}
+// Éclaircit une couleur en la mélangeant vers du blanc — sert à dériver le
+// "accent" (light tint, cf SectionTheme) à partir du "primary" (couleur pleine).
+function lightenHex(hex: string, amount: number): string {
+  const h = hex.replace('#', '')
+  const mix = (c: number) => Math.round(c + (255 - c) * amount)
+  const r = mix(parseInt(h.slice(0, 2), 16))
+  const g = mix(parseInt(h.slice(2, 4), 16))
+  const b = mix(parseInt(h.slice(4, 6), 16))
+  return `#${[r, g, b].map(v => v.toString(16).padStart(2, '0')).join('')}`
+}
+
 export function templateEtecSolo(data: LandingPageData): string {
   const lang = data.language || 'fr'
+  const accentOverride = (data as LandingPageData & { _soloAccent?: string })._soloAccent
+  const ACCENT = isValidHex(accentOverride) ? accentOverride : SOLO_THEME.primary
+  const ACCENT_RGB = hexToRgb(ACCENT)
+  const theme: SectionTheme = ACCENT === SOLO_THEME.primary
+    ? SOLO_THEME
+    : { ...SOLO_THEME, primary: ACCENT, accent: lightenHex(ACCENT, 0.92) }
   const _real = data.images?.filter(Boolean) ?? []; const imgs = _real.length >= 1 ? Array.from({ length: Math.max(4, _real.length) }, (_, i) => _real[i % _real.length]) : IMGS
   const savePct = data.price && data.original_price
     ? Math.round((1 - +data.price / +data.original_price) * 100) : 0
@@ -39,7 +69,7 @@ export function templateEtecSolo(data: LandingPageData): string {
     <div style="border-bottom:1px solid #F2F2F7;overflow:hidden;">
       <button onclick="(function(){var c=document.getElementById('faq-so-${i}');var open=c.style.maxHeight!=='0px'&&c.style.maxHeight!=='';c.style.maxHeight=open?'0px':'500px';c.style.paddingTop=open?'0':'12px';var arr=document.getElementById('arr-so-${i}');arr.textContent=open?'+':'−';})()" style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:20px 0;background:none;border:none;cursor:pointer;text-align:left;">
         <span style="font-family:'Inter',sans-serif;font-size:16px;font-weight:600;color:#121212;">${f.question}</span>
-        <span id="arr-so-${i}" style="font-size:22px;color:#334FB4;flex-shrink:0;margin-left:16px;font-weight:300;transition:transform .3s;">+</span>
+        <span id="arr-so-${i}" style="font-size:22px;color:${ACCENT};flex-shrink:0;margin-left:16px;font-weight:300;transition:transform .3s;">+</span>
       </button>
       <div id="faq-so-${i}" style="max-height:0;overflow:hidden;transition:max-height .4s ease,padding-top .4s ease;padding-top:0;">
         <p style="font-family:'Inter',sans-serif;font-size:14px;color:#6E6E73;line-height:1.8;padding-bottom:20px;margin:0;">${f.answer}</p>
@@ -66,7 +96,7 @@ export function templateEtecSolo(data: LandingPageData): string {
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
 .so-btn{background:#121212;color:#fff;border:none;border-radius:2rem;padding:18px 40px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:8px;}
-.so-btn:hover{background:#334FB4;transform:translateY(-2px);box-shadow:0 8px 24px rgba(51,79,180,0.25);}
+.so-btn:hover{background:${ACCENT};transform:translateY(-2px);box-shadow:0 8px 24px rgba(${ACCENT_RGB},0.25);}
 .so-fade{opacity:0;transform:translateY(20px);animation:soFadeUp .6s ease forwards;}
 @keyframes soFadeUp{to{opacity:1;transform:translateY(0);}}
 @media(max-width:768px){
@@ -98,12 +128,12 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
     <!-- MEDIA -->
     <div style="width:55%;position:relative;background:#F3F3F3;overflow:hidden;" class="so-hero-media">
       <img id="mi-so" src="${imgs[0]}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;" alt="${data.product_name}">
-      ${renderHeroThumbs(_real ?? imgs ?? [], SOLO_THEME, 'mi-so')}
-      ${savePct > 0 ? `<div style="position:absolute;top:24px;left:24px;background:#334FB4;color:#fff;font-size:12px;font-weight:700;padding:8px 18px;border-radius:2rem;letter-spacing:0.05em;">-${savePct}% OFFERT</div>` : ''}
+      ${renderHeroThumbs(_real ?? imgs ?? [], theme, 'mi-so')}
+      ${savePct > 0 ? `<div style="position:absolute;top:24px;left:24px;background:${ACCENT};color:#fff;font-size:12px;font-weight:700;padding:8px 18px;border-radius:2rem;letter-spacing:0.05em;">-${savePct}% OFFERT</div>` : ''}
       <!-- THUMBNAILS -->
       <div style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:10px;background:rgba(255,255,255,0.9);padding:8px 12px;border-radius:2rem;">
         ${imgs.slice(0,4).map((img, i) => `
-        <div onclick="document.getElementById('mi-so').src='${img}';document.querySelectorAll('.th-so').forEach(function(t,j){t.style.outline=j===${i}?'2px solid #334FB4':'2px solid transparent';t.style.opacity=j===${i}?'1':'.5';});" class="th-so" style="width:48px;height:48px;border-radius:50%;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?'#334FB4':'transparent'};opacity:${i===0?1:.5};transition:all .2s;">
+        <div onclick="document.getElementById('mi-so').src='${img}';document.querySelectorAll('.th-so').forEach(function(t,j){t.style.outline=j===${i}?'2px solid ${ACCENT}':'2px solid transparent';t.style.opacity=j===${i}?'1':'.5';});" class="th-so" style="width:48px;height:48px;border-radius:50%;overflow:hidden;cursor:pointer;outline:2px solid ${i===0?ACCENT:'transparent'};opacity:${i===0?1:.5};transition:all .2s;">
           <img src="${img}" crossorigin="anonymous" style="width:100%;height:100%;object-fit:cover;display:block;">
         </div>`).join('')}
       </div>
@@ -112,7 +142,7 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
     <!-- CONTENT -->
     <div style="width:45%;padding:56px 52px;display:flex;flex-direction:column;justify-content:center;" class="so-hero-content">
       <div class="so-fade">
-        <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:#334FB4;text-transform:uppercase;margin-bottom:16px;">Le produit unique</p>
+        <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:${ACCENT};text-transform:uppercase;margin-bottom:16px;">Le produit unique</p>
         <h1 style="font-size:46px;font-weight:900;color:#121212;line-height:1.08;letter-spacing:-0.04em;margin-bottom:16px;">${data.headline}</h1>
         <p style="font-size:16px;color:#6E6E73;line-height:1.65;margin-bottom:32px;">${data.subtitle}</p>
 
@@ -152,7 +182,7 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
       <p style="font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;">Clients satisfaits</p>
     </div>
     <div>
-      <p style="font-size:36px;font-weight:900;color:#334FB4;">4.9★</p>
+      <p style="font-size:36px;font-weight:900;color:${ACCENT};">4.9★</p>
       <p style="font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;">Note moyenne</p>
     </div>
     <div>
@@ -160,7 +190,7 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
       <p style="font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;">Recommandent</p>
     </div>
     <div>
-      <p style="font-size:36px;font-weight:900;color:#334FB4;">24h</p>
+      <p style="font-size:36px;font-weight:900;color:${ACCENT};">24h</p>
       <p style="font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;">Expédition</p>
     </div>
   </div>
@@ -169,12 +199,12 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
 <!-- FEATURES — 2x2 GRID -->
 <section style="padding:80px 24px;background:#FAFAFA;">
   <div style="max-width:1000px;margin:0 auto;">
-    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">Pourquoi ${data.product_name}</p>
+    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:${ACCENT};text-align:center;text-transform:uppercase;margin-bottom:8px;">Pourquoi ${data.product_name}</p>
     <h2 style="font-size:36px;font-weight:900;color:#121212;text-align:center;letter-spacing:-0.03em;margin-bottom:56px;">Conçu pour l'excellence</h2>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" class="so-feat-grid">
       ${features.map(f => `
       <div style="background:#fff;border-radius:2rem;padding:36px 32px;border:1px solid #F2F2F7;transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(0,0,0,0.06)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none';">
-        <div style="width:48px;height:48px;border-radius:12px;background:#F3F3F3;display:flex;align-items:center;justify-content:center;color:#334FB4;margin-bottom:20px;">${f.icon}</div>
+        <div style="width:48px;height:48px;border-radius:12px;background:#F3F3F3;display:flex;align-items:center;justify-content:center;color:${ACCENT};margin-bottom:20px;">${f.icon}</div>
         <h3 style="font-size:18px;font-weight:700;color:#121212;margin-bottom:8px;">${f.title}</h3>
         <p style="font-size:14px;color:#6E6E73;line-height:1.7;">${f.desc}</p>
       </div>`).join('')}
@@ -185,7 +215,7 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
 <!-- AVANT / APRES -->
 <section style="padding:80px 24px;background:#fff;">
   <div style="max-width:1000px;margin:0 auto;">
-    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
+    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:${ACCENT};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'legacy.beforeAfter.eyebrow')}</p>
     <h2 style="font-size:36px;font-weight:900;color:#121212;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">Avant / Après</h2>
     <div style="display:flex;gap:20px;" class="so-compare">
       <div style="flex:1;position:relative;border-radius:2rem;overflow:hidden;">
@@ -194,7 +224,7 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
       </div>
       <div style="flex:1;position:relative;border-radius:2rem;overflow:hidden;">
         <img src="${AFTER_IMG}" crossorigin="anonymous" style="width:100%;height:340px;object-fit:cover;display:block;" alt="Après">
-        <div style="position:absolute;top:20px;left:20px;background:#334FB4;color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:2rem;letter-spacing:0.08em;">${trans(lang, 'legacy.beforeAfter.after').toUpperCase()}</div>
+        <div style="position:absolute;top:20px;left:20px;background:${ACCENT};color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:2rem;letter-spacing:0.08em;">${trans(lang, 'legacy.beforeAfter.after').toUpperCase()}</div>
       </div>
     </div>
   </div>
@@ -203,7 +233,7 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
 <!-- REVIEWS -->
 <section style="padding:80px 24px;background:#FAFAFA;">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'reviews.eyebrow')}</p>
+    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:${ACCENT};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'reviews.eyebrow')}</p>
     <h2 style="font-size:36px;font-weight:900;color:#121212;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">Ils l'ont adopté</h2>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="so-reviews-grid">
       ${[
@@ -212,10 +242,10 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
         { name: 'Hugo P.', text: `Design magnifique et performance au top. J'ai déjà converti 3 amis. Service client au top aussi !`, date: 'Il y a 10 jours' },
       ].map(r => `
       <div style="background:#fff;border-radius:2rem;padding:28px 24px;border:1px solid #F2F2F7;">
-        <div style="color:#334FB4;font-size:14px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div>
+        <div style="color:${ACCENT};font-size:14px;letter-spacing:2px;margin-bottom:14px;">★★★★★</div>
         <p style="font-size:14px;color:#444;line-height:1.75;margin-bottom:20px;">"${r.text}"</p>
         <div style="display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #F2F2F7;">
-          <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#121212,#334FB4);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;">${r.name[0]}</div>
+          <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#121212,${ACCENT});color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;">${r.name[0]}</div>
           <div>
             <p style="font-size:13px;font-weight:700;color:#121212;">${r.name}</p>
             <p style="font-size:11px;color:#999;">${r.date} · ${trans(lang, 'reviews.verifiedPurchase')}</p>
@@ -228,12 +258,12 @@ body{font-family:'Inter',sans-serif;background:#fff;color:#121212;}
 
 
 <!-- ═══ SECTIONS DYNAMIQUES (story / social_proof / comparison / testimonials / bonuses / guarantee) ═══ -->
-${renderRichSections(data, SOLO_THEME)}
+${renderRichSections(data, theme)}
 
 <!-- FAQ -->
 <section style="padding:80px 24px;background:#fff;">
   <div style="max-width:700px;margin:0 auto;">
-    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:#334FB4;text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.faqShort')}</p>
+    <p style="font-size:12px;font-weight:700;letter-spacing:0.15em;color:${ACCENT};text-align:center;text-transform:uppercase;margin-bottom:8px;">${trans(lang, 'bespoke.faqShort')}</p>
     <h2 style="font-size:36px;font-weight:900;color:#121212;text-align:center;letter-spacing:-0.03em;margin-bottom:48px;">${trans(lang, 'faqV3.title')}</h2>
     <div style="background:#FAFAFA;border-radius:2rem;padding:8px 32px;">${faqHtml}</div>
   </div>
@@ -241,13 +271,13 @@ ${renderRichSections(data, SOLO_THEME)}
 
 <!-- CTA FINAL -->
 <section style="padding:100px 24px;background:#121212;position:relative;overflow:hidden;">
-  <div style="position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(51,79,180,0.15),transparent);border-radius:50%;"></div>
-  <div style="position:absolute;bottom:-80px;left:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(51,79,180,0.1),transparent);border-radius:50%;"></div>
+  <div style="position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(${ACCENT_RGB},0.15),transparent);border-radius:50%;"></div>
+  <div style="position:absolute;bottom:-80px;left:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(${ACCENT_RGB},0.1),transparent);border-radius:50%;"></div>
   <div style="max-width:700px;margin:0 auto;text-align:center;position:relative;z-index:1;">
     <h2 style="font-size:42px;font-weight:900;color:#fff;letter-spacing:-0.04em;margin-bottom:16px;">${data.headline}</h2>
     <p style="font-size:16px;color:rgba(255,255,255,0.6);margin-bottom:36px;line-height:1.6;">${data.subtitle}</p>
     ${data.price ? `<p style="font-size:52px;font-weight:900;color:#fff;margin-bottom:36px;">${data.price}€</p>` : ''}
-    <button class="so-btn" style="background:#334FB4;font-size:16px;padding:20px 56px;">
+    <button class="so-btn" style="background:${ACCENT};font-size:16px;padding:20px 56px;">
       ${data.cta || 'Obtenir le mien'} →
     </button>
     <p style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:20px;">${[trans(lang, 'trust.freeShippingOffered'), trans(lang, 'trust.satisfiedOrRefunded'), trans(lang, 'hero.securePayment')].join(' · ')}</p>

@@ -114,3 +114,42 @@ describe('renderTemplate — overrides.visualSettings (chantier C2)', () => {
     expect(html.toLowerCase()).toContain('#ffee00')
   })
 })
+
+describe('renderTemplate — etec-solo, accent adaptatif (globalStyles.accent)', () => {
+  it('sans override, garde l\'indigo par défaut', () => {
+    const html = renderTemplate('etec-solo', mockLandingDataFull)
+    expect(html.toLowerCase()).toContain('#334fb4')
+  })
+
+  it('avec overrides.globalStyles.accent, recolore le CTA/badges avec l\'accent fourni', () => {
+    const html = renderTemplate('etec-solo', mockLandingDataFull, {
+      globalStyles: { accent: '#00D4FF' },
+    })
+    expect(html).toContain('#00D4FF')
+    // L'indigo par défaut ne doit plus apparaître (entièrement remplacé par l'accent).
+    expect(html.toLowerCase()).not.toContain('#334fb4')
+    // Garde anti-régression : le template literal imbriqué (thumbnails outline)
+    // doit être correctement interpolé — pas de littéral "${ACCENT}" non résolu.
+    expect(html).not.toContain('${ACCENT}')
+    // Le swap d'image (thumbnail actif) doit bien porter le vrai hex, pas un
+    // littéral non interpolé, dans l'attribut outline inline.
+    expect(html).toMatch(/outline:2px solid #00D4FF/)
+  })
+
+  it('ignore un accent invalide (pas un hex #RRGGBB) et garde le défaut', () => {
+    const html = renderTemplate('etec-solo', mockLandingDataFull, {
+      globalStyles: { accent: 'not-a-color' },
+    })
+    expect(html.toLowerCase()).toContain('#334fb4')
+  })
+
+  it('globalStyles.accent est ignoré pour les autres templates (pas de fuite cross-template)', () => {
+    const html = renderTemplate('etec-blue', mockLandingDataFull, {
+      globalStyles: { accent: '#00D4FF' },
+    })
+    // etec-blue n'a aucune notion d'accent adaptatif — le override ne doit
+    // rien changer par rapport au rendu sans overrides.
+    const htmlWithout = renderTemplate('etec-blue', mockLandingDataFull)
+    expect(html).toBe(htmlWithout)
+  })
+})

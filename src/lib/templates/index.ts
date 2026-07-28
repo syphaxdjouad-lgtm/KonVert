@@ -89,7 +89,7 @@ import { templateEtecQuarter } from './etec-quarter'
 import { templateEtecBoost }    from './etec-boost'
 import { templateEtecNatural } from './etec-natural'
 
-// ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
+// ─── BACKWARD COMPAT ALIASES ─────────────────────────────────────────────────────
 
 export const templateHealingBird    = templateEtecBeauty
 export const templateMinimalDark    = templateEtecNoir
@@ -111,7 +111,7 @@ export const templateGamingZone     = templateEtecNoir
 export const templatePetLove        = templateEtecRose
 export const templatePremiumGlass   = templateEtecGold
 
-// ─── REGISTRY ─────────────────────────────────────────────────────────────────
+// ─── REGISTRY ─────────────────────────────────────────────────────
 
 // Type de produit ciblé par un template. Sert au matching wizard ↔ produit
 // scrapé pour éviter qu'un blender se retrouve sur un template skincare.
@@ -186,7 +186,7 @@ export const TEMPLATES = [
 // AUDIT_FABLE5.md : 38/42/50 selon la page avant ce fix).
 export const TEMPLATE_COUNT = TEMPLATES.length
 
-// ─── RENDER ───────────────────────────────────────────────────────────────────
+// ─── RENDER ─────────────────────────────────────────────────────────────
 
 /**
  * Overrides passes a renderTemplate pour customiser le rendu.
@@ -195,7 +195,10 @@ export const TEMPLATE_COUNT = TEMPLATES.length
  *   Lu par renderRichSections via injection _sectionOrder dans data.
  * @field visualSettings - Chantier C2 : réglages visuels (couleurs, densité...)
  *   du Settings Panel éditeur. Lu via injection _visualSettings dans data.
- * @field globalStyles - RESERVE Chantier C5. Ignore en C1, warning dev si fourni.
+ * @field globalStyles - RESERVE Chantier C5, avec une exception : `accent`
+ *   est consommé par etec-solo (couleur adaptative selon le produit détecté,
+ *   cf suggestTemplateForProduct) via injection _soloAccent. Le reste
+ *   (primary/fontFamily/radius) reste ignoré en C1, warning dev si fourni.
  * @field editMode - Editor v2 : active injection data-kvt-section-id +
  *   script click-to-edit postMessage dans l'iframe. Faux en prod.
  */
@@ -207,6 +210,11 @@ export interface TemplateOverrides {
 }
 
 export function renderTemplate(templateId: string, data: LandingPageData, overrides?: TemplateOverrides): string {
+  // etec-solo est le seul template a consommer globalStyles.accent aujourd'hui
+  // (couleur adaptative — cf etec-solo.ts). Les autres champs de globalStyles
+  // restent reserves Chantier C5.
+  const soloAccent = templateId === 'etec-solo' ? overrides?.globalStyles?.accent : undefined
+
   // C1 : injection de sectionOrder dans data via _sectionOrder (champ privé).
   // C2 : injection de visualSettings dans data via _visualSettings (idem stratégie).
   // Editor v2 : injection de _kvt_edit_mode pour activer click-to-edit dans iframe.
@@ -216,13 +224,17 @@ export function renderTemplate(templateId: string, data: LandingPageData, overri
     ...(overrides?.sectionOrder ? { _sectionOrder: overrides.sectionOrder } : {}),
     ...(overrides?.visualSettings ? { _visualSettings: overrides.visualSettings } : {}),
     ...(overrides?.editMode ? { _kvt_edit_mode: true } : {}),
+    ...(soloAccent ? { _soloAccent: soloAccent } : {}),
   } as LandingPageData
 
-  // C5 globalStyles toujours pas supporte — warning dev pour eviter les faux
-  // positifs silencieux ("ca marche pas mais pas d'erreur").
-  if (process.env.NODE_ENV !== 'production' && overrides) {
-    if (overrides.globalStyles && Object.keys(overrides.globalStyles).length > 0) {
-      console.warn('[renderTemplate] overrides.globalStyles est ignore en C1 (supporte en C5)')
+  // C5 globalStyles toujours pas supporte (sauf accent sur etec-solo, cf plus
+  // haut) — warning dev pour eviter les faux positifs silencieux ("ca marche
+  // pas mais pas d'erreur").
+  if (process.env.NODE_ENV !== 'production' && overrides?.globalStyles) {
+    const unconsumed = Object.entries(overrides.globalStyles)
+      .filter(([key, value]) => value !== undefined && !(key === 'accent' && soloAccent !== undefined))
+    if (unconsumed.length > 0) {
+      console.warn('[renderTemplate] overrides.globalStyles partiellement ignore en C1 (supporte en C5)', Object.fromEntries(unconsumed))
     }
   }
 

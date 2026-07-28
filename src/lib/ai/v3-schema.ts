@@ -55,9 +55,28 @@ export const stockSignalSchema = z.object({
 
 // Sprint 2 — Reviews avec photos (P3)
 // photo_url: null pour MVP — la validation strip toute URL non-null pour sécurité
-export const reviewSchema = z.object({
+//
+// Repro locale 2026-07-28 (harness jetable, langue arabe) : `initials` avec
+// `.max(3)` calibré latin ("ML", "TD") rejetait le format arabe naturel du
+// LLM (ex: "س.م." = 4 chars) → NoObjectGeneratedError intermittent en prod
+// (2/10 runs AR). Fix : on ne fait plus confiance à `initials` (dérivé
+// server-side depuis `author` dans route.ts, cf deriveInitials) — le champ
+// devient purement informatif et ne doit JAMAIS faire échouer la validation.
+// Même repro a révélé un 2e mode d'échec plus rare : le LLM utilise parfois
+// `description` au lieu de `text` (confusion avec le nom de champ utilisé
+// ailleurs dans le schema pour features/materials/how_it_works) — preprocess
+// ci-dessous relève `description` vers `text` si `text` est absent.
+export const reviewSchema = z.preprocess((val) => {
+  if (val && typeof val === 'object' && !Array.isArray(val)) {
+    const obj = val as Record<string, unknown>
+    if (obj.text === undefined && typeof obj.description === 'string') {
+      return { ...obj, text: obj.description }
+    }
+  }
+  return val
+}, z.object({
   author:    z.string().min(1),
-  initials:  z.string().min(1).max(3),
+  initials:  z.string().optional(),
   rating:    z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]),
   title:     z.string().min(1),
   text:      z.string().min(1),
@@ -68,7 +87,7 @@ export const reviewSchema = z.object({
   photo_url: z.string().nullable().optional(),
   variant:   z.string().optional().nullable(),
   verified:  z.boolean(),
-})
+}))
 
 export const deepseekV3OutputSchema = z.object({
   // Brand name — affiché en haut du hero + dans le manifesto. Si l'user n'a

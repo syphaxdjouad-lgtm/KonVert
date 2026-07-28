@@ -11,6 +11,7 @@ import { DEFAULT_SECTION_ORDER_V3, type V3SectionKey } from '@/lib/sections-v3'
 import { suggestStyle } from '@/lib/styles/auto-pick'
 import { autoPickTone } from '@/lib/ai/auto-pick-tone'
 import { generateV3Copy } from '@/lib/ai/deepseek-v3'
+import { deriveInitials } from '@/lib/reviews/derive-initials'
 import { sanitizeDeep } from '@/lib/security/sanitize'
 import type { DeepSeekV3Output } from '@/lib/ai/v3-schema'
 import type { ScrapedProduct } from '@/types'
@@ -336,8 +337,12 @@ export async function POST(req: NextRequest) {
           how_it_works: aiOutput.how_it_works,
           // Sprint 2+4 — reviews avec photo_url whitelist Unsplash/Shopify CDN.
           // Les URLs hors-whitelist sont supprimées (copyright/marques/URLs inventées).
+          // `initials` : jamais celle envoyée par le LLM (repro locale
+          // 2026-07-28 — format arabe hors-schema, intermittent en prod) —
+          // toujours dérivée server-side depuis `author`, Unicode-safe.
           reviews: aiOutput.reviews?.map(r => ({
             ...r,
+            initials: deriveInitials(r.author),
             photo_url: sanitizePhotoUrl(r.photo_url),
             variant: r.variant ?? undefined,
           })),

@@ -764,6 +764,15 @@ export const UI_LABELS: Record<string, LabelDict> = {
     de: 'Bewährte Ergebnisse', it: 'Risultati comprovati', pt: 'Resultados comprovados',
     nl: 'Bewezen resultaten', ar: 'نتائج مثبتة', zh: '效果验证',
   },
+  'bespoke.badge.bestseller': {
+    fr: 'Bestseller', en: 'Bestseller', es: 'Más vendido', de: 'Bestseller',
+    it: 'Più venduto', pt: 'Mais vendido', nl: 'Bestseller', ar: 'الأكثر مبيعًا', zh: '畅销产品',
+  },
+  'bespoke.section.whyTheyLoveIt': {
+    fr: 'Pourquoi ils adorent', en: 'Why they love it', es: 'Por qué lo adoran',
+    de: 'Warum sie es lieben', it: 'Perché lo adorano', pt: 'Porque adoram',
+    nl: 'Waarom ze het geweldig vinden', ar: 'لماذا يحبونه', zh: '为什么他们喜欢它',
+  },
   'bespoke.nav.questions': {
     fr: 'Questions', en: 'Questions', es: 'Preguntas', de: 'Fragen', it: 'Domande',
     pt: 'Perguntas', nl: 'Vragen', ar: 'الأسئلة', zh: '问题',

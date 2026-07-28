@@ -325,6 +325,12 @@ interface PageJsonContent extends LandingPageData {
     visualSettings?: VisualSettings
     globalStyles?: GlobalStyles
   }
+  // Accent adaptatif d'etec-solo (couleur selon le produit détecté à la
+  // génération, cf lib/templates/detect-product-type.ts suggestTemplateForProduct).
+  // Source durable (sibling de _template_slug) tant qu'aucun _editor_state
+  // n'existe encore — une fois un save passé par buildJsonForDb, l'accent vit
+  // aussi dans _editor_state.globalStyles.accent (qui prend priorité ci-dessous).
+  _solo_accent?: string
 }
 
 // Heuristique : la section est "remplie" si la data correspondante est presente.
@@ -360,6 +366,10 @@ export function hasDataForSection(data: LandingPageData, key: SectionKey): boole
 export function hydrateFromPage(jsonContent: PageJsonContent): EditorState {
   const templateId = jsonContent._template_slug || 'etec-blue'
   const editorState = jsonContent._editor_state
+  // _solo_accent (top-level, durable) sert de fallback tant que
+  // _editor_state.globalStyles.accent n'a pas encore été écrit par un save
+  // passé par buildJsonForDb — une fois présent, ce dernier prend priorité.
+  const soloAccentFallback = jsonContent._solo_accent ? { accent: jsonContent._solo_accent } : {}
 
   // Page recente : preserve l'etat complet
   if (editorState?.sectionOrder) {
@@ -368,7 +378,7 @@ export function hydrateFromPage(jsonContent: PageJsonContent): EditorState {
       landingData: jsonContent,
       sectionOrder: editorState.sectionOrder,
       visualSettings: editorState.visualSettings ?? {},
-      globalStyles: editorState.globalStyles ?? {},
+      globalStyles: { ...soloAccentFallback, ...(editorState.globalStyles ?? {}) },
     }
   }
 
@@ -382,6 +392,6 @@ export function hydrateFromPage(jsonContent: PageJsonContent): EditorState {
       visible: hasDataForSection(jsonContent, key),
     })),
     visualSettings: {},
-    globalStyles: {},
+    globalStyles: soloAccentFallback,
   }
 }

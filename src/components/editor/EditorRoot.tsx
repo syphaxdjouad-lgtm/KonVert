@@ -27,6 +27,10 @@ interface Props {
   jsonContent?: LandingPageData & {
     _template_slug?: string
     _editor_state?: unknown
+    // Accent adaptatif d'etec-solo (couleur selon le produit détecté), lu
+    // par hydrateFromPage tant qu'aucun _editor_state.globalStyles n'existe
+    // encore (page fraîchement générée). Cf store.ts + lib/templates/etec-solo.ts.
+    _solo_accent?: string
   }
   defaultTemplateId?: string
   // V3 — html déjà rendu serveur. Si présent, PreviewIframe l'utilise direct

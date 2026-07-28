@@ -89,7 +89,7 @@ import { templateEtecQuarter } from './etec-quarter'
 import { templateEtecBoost }    from './etec-boost'
 import { templateEtecNatural } from './etec-natural'
 
-// ─── BACKWARD COMPAT ALIASES ─────────────────────────────────────────────────────
+// ─── BACKWARD COMPAT ALIASES ──────────────────────────────────────────────────
 
 export const templateHealingBird    = templateEtecBeauty
 export const templateMinimalDark    = templateEtecNoir
@@ -111,7 +111,7 @@ export const templateGamingZone     = templateEtecNoir
 export const templatePetLove        = templateEtecRose
 export const templatePremiumGlass   = templateEtecGold
 
-// ─── REGISTRY ─────────────────────────────────────────────────────
+// ─── REGISTRY ─────────────────────────────────────────────────────────────────
 
 // Type de produit ciblé par un template. Sert au matching wizard ↔ produit
 // scrapé pour éviter qu'un blender se retrouve sur un template skincare.
@@ -186,7 +186,7 @@ export const TEMPLATES = [
 // AUDIT_FABLE5.md : 38/42/50 selon la page avant ce fix).
 export const TEMPLATE_COUNT = TEMPLATES.length
 
-// ─── RENDER ─────────────────────────────────────────────────────────────
+// ─── RENDER ───────────────────────────────────────────────────────────────────
 
 /**
  * Overrides passes a renderTemplate pour customiser le rendu.

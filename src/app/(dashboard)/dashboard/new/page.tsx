@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { TEMPLATES, PRODUCT_TYPE_LABELS, type ProductType } from '@/lib/templates'
-import { detectProductType } from '@/lib/templates/detect-product-type'
+import { detectProductType, suggestTemplateForProduct } from '@/lib/templates/detect-product-type'
 import {
   Link2, Pencil, Loader2, ArrowLeft, ArrowRight, Check,
   Upload, Palette, Sparkles, Camera, Lightbulb,
@@ -31,49 +31,23 @@ const EditorRoot    = dynamic(() => import('@/components/editor/EditorRoot'),   
 type Mode = 'wizard' | 'generating' | 'editor'
 type InputMode = 'url' | 'manual'
 
+// Liste resserrée à 11 templates phares (10 curés par le founder + Solo, le
+// passe-partout universel dont l'accent s'adapte au produit détecté). Les 32
+// autres templates restent dans le code (fichiers + registre TEMPLATES
+// intacts — les pages déjà générées avec continuent de rendre normalement),
+// ils sont juste retirés de cette liste UI.
 const STYLES = [
-  { id: 'etec-blue',      name: 'Blue',      desc: 'Moderne et universel — bleu électrique, fond blanc, boutons ronds',        emoji: '🔵' },
-  { id: 'etec-noir',      name: 'Noir',      desc: 'Dark premium élégant — fond noir profond, accents violets, gaming/luxe',   emoji: '🖤' },
-  { id: 'etec-rose',      name: 'Rose',      desc: 'Beauté & skincare — rose chaud, galerie UGC, top conversion beauté',       emoji: '🌸' },
-  { id: 'etec-sage',      name: 'Sage',      desc: 'Organic & bien-être — vert forêt, tons naturels, certifications bio',      emoji: '🌿' },
-  { id: 'etec-gold',      name: 'Gold',      desc: 'Luxe & exclusivité — fond noir, accents dorés, haute gamme',               emoji: '✨' },
-  { id: 'etec-energy',    name: 'Energy',    desc: 'Sport & fitness — orange vif, countdown, dynamisme total',                 emoji: '⚡' },
-  { id: 'etec-beauty',    name: 'Beauty',    desc: 'Hair care premium — crème & orange brûlé, routine capillaire, UGC',        emoji: '💆' },
-  { id: 'etec-style',     name: 'Style',     desc: 'Fashion & personal styling — beige caramel, minimaliste élégant',          emoji: '👗' },
-  { id: 'etec-shopz',     name: 'Shopz',     desc: 'E-commerce clothing — galerie interactive, swatches couleur/taille',       emoji: '🛍️' },
-  { id: 'etec-velvety',   name: 'Velvety',   desc: 'Skincare botanique — vert forêt, grille produits, newsletter',             emoji: '🍃' },
-  { id: 'etec-prime',     name: 'Prime',     desc: 'Supplements premium — dark + lime, ingrédients cliniques, subscribe',      emoji: '💊' },
-  { id: 'etec-blusho',    name: 'Blusho',    desc: 'Cosmetics & skincare — vert olive doux, galerie UGC, routine beauté',      emoji: '🧴' },
-  { id: 'etec-casa',      name: 'Casa',      desc: 'Maison & déco artisanale — serif élégant, terre cuite, galerie lifestyle', emoji: '🏠' },
-  { id: 'etec-pet',       name: 'Pet',       desc: 'Animaux & pet care — orange chaleureux, sélecteur taille, avis espèce',    emoji: '🐾' },
-  { id: 'etec-gadget',    name: 'Gadget',    desc: 'Tech & électronique — Apple-style, glassmorphism, color picker, specs',    emoji: '📱' },
-  { id: 'etec-aura',      name: 'Aura',      desc: 'Wellness & rituel — lavande, tons zen, méditation et bien-être',           emoji: '🔮' },
-  { id: 'etec-luxe',      name: 'Luxe',      desc: 'Joaillerie & ultra premium — noir & or, serif élégant, exclusivité',       emoji: '💎' },
+  { id: 'etec-solo',      name: 'Solo',      desc: 'Universel adaptatif — mono-produit épuré, la couleur s\'adapte à ton produit', emoji: '🎯' },
   { id: 'etec-pulse',     name: 'Pulse',     desc: 'Tech & cyberpunk — dark mode, néon bleu, gadgets futuristes',              emoji: '🌀' },
-  { id: 'etec-nordic',    name: 'Nordic',    desc: 'Lifestyle scandinave — minimaliste, tons froids, nature & design',         emoji: '🏔️' },
-  { id: 'etec-cosmetix',  name: 'Cosmetix',  desc: 'Clean beauty & cosmétiques — bleu profond, Playfair Display, lab vibes',   emoji: '🧪' },
-  { id: 'etec-trendy',    name: 'Trendy',    desc: 'Fashion & streetwear — gradient teal/bleu, Oswald bold, mode urbaine',     emoji: '🔥' },
-  { id: 'etec-solo',      name: 'Solo',      desc: 'Mono-produit DTC — focus unique, stats bar, conversion maximale',          emoji: '🎯' },
-  { id: 'etec-prestige',  name: 'Prestige',  desc: 'Premium artisanal — rouge profond, serif luxe, haut de gamme',             emoji: '🏆' },
-  { id: 'etec-glow',      name: 'Glow',      desc: 'Skincare ritual — corail doux, Cormorant Garamond, routine beauté',        emoji: '✨' },
-  { id: 'etec-homestyle',  name: 'HomeStyle', desc: 'Mobilier & déco — tons bois chaud, lifestyle maison, ambiance cosy',       emoji: '🏠' },
-  { id: 'etec-jewel',      name: 'Jewel',     desc: 'Bijoux dark luxe — fond sombre, accents dorés, joaillerie premium',        emoji: '💎' },
-  { id: 'etec-techcase',   name: 'TechCase',  desc: 'Accessoires tech — minimal noir, coques phone, gadgets Apple style',       emoji: '📱' },
-  { id: 'etec-artisan',    name: 'Artisan',   desc: 'Handmade & naturel — tons orangés, savon artisanal, fait main',           emoji: '🧼' },
-  { id: 'etec-outfit',     name: 'Outfit',    desc: 'Vêtements e-com — tons neutres chauds, galerie lookbook, warm neutral',   emoji: '👕' },
-  { id: 'etec-ella',       name: 'Ella',      desc: 'Mode féminine — mauve élégant, serif raffiné, lifestyle féminin',        emoji: '👠' },
-  { id: 'etec-starter',    name: 'Starter',   desc: 'Polyvalent & clean — indigo, design universel, idéal pour débuter',      emoji: '🚀' },
-  { id: 'etec-glowup',     name: 'GlowUp',   desc: 'Beauté & makeup — rose glamour, galerie UGC, routine maquillage',        emoji: '💄' },
-  { id: 'etec-hue',        name: 'Hue',       desc: 'Créatif & audacieux — orange vif, couleurs vibrantes, design bold',      emoji: '🎨' },
-  { id: 'etec-interior',   name: 'Interior',  desc: 'Mobilier & intérieur — vert nature, lifestyle maison, design organique', emoji: '🪴' },
-  { id: 'etec-platina',    name: 'Platina',   desc: 'Bijoux & joaillerie — doré raffiné, serif premium, pièces uniques',      emoji: '💍' },
-  { id: 'etec-streetz',    name: 'StreetZ',   desc: 'Streetwear & urban — rouge bold, design audacieux, mode urbaine',        emoji: '🧢' },
-  { id: 'etec-poterie',    name: 'Poterie',   desc: 'Céramique & artisanat — terre cuite, fait main, style organique',        emoji: '🏺' },
-  { id: 'etec-electro',    name: 'Electro',   desc: 'Supplements & sport — bleu cyan, hydratation, energy boost',             emoji: '💧' },
-  { id: 'etec-agency',     name: 'Agency',    desc: 'Corporate & services — bleu pro, structure claire, B2B',                 emoji: '🏢' },
-  { id: 'etec-supreme',    name: 'Supreme',   desc: 'Streetwear & drops — fond dark, monospace, urgence maximale',            emoji: '🔴' },
-  { id: 'etec-quarter',    name: 'Quarter',   desc: 'Minimal luxe — noir & blanc épuré, typographie élégante',                emoji: '◼️' },
-  { id: 'etec-boost',      name: 'Boost',     desc: 'Conversion max — badges confiance, preuves sociales, DTC wellness',     emoji: '🚀' },
+  { id: 'etec-style',     name: 'Style',     desc: 'Fashion & personal styling — beige caramel, minimaliste élégant',          emoji: '👗' },
+  { id: 'etec-natural',   name: 'Natural',   desc: 'Organic & bien-être — vert sauge & sable, lifestyle doux, zéro noir',      emoji: '🌿' },
+  { id: 'etec-blusho',    name: 'Blusho',    desc: 'Cosmetics & skincare — vert olive doux, galerie UGC, routine beauté',      emoji: '🧴' },
+  { id: 'etec-prime',     name: 'Prime',     desc: 'Supplements premium — dark + lime, ingrédients cliniques, subscribe',      emoji: '💊' },
+  { id: 'etec-velvety',   name: 'Velvety',   desc: 'Skincare botanique — vert forêt, grille produits, newsletter',             emoji: '🍃' },
+  { id: 'etec-pet',       name: 'Pet',       desc: 'Animaux & pet care — orange chaleureux, sélecteur taille, avis espèce',    emoji: '🐾' },
+  { id: 'etec-casa',      name: 'Casa',      desc: 'Maison & déco artisanale — serif élégant, terre cuite, galerie lifestyle', emoji: '🏠' },
+  { id: 'etec-energy',    name: 'Energy',    desc: 'Sport & fitness — orange vif, countdown, dynamisme total',                 emoji: '⚡' },
+  { id: 'etec-gold',      name: 'Gold',      desc: 'Luxe & exclusivité — fond noir, accents dorés, haute gamme',               emoji: '✨' },
 ]
 
 // ── Styles V3 (10 styles Allbirds-grade — engine V3 branché Phase 2) ──
@@ -429,11 +403,26 @@ function NewPageInner() {
   const [afterPhotos,  setAfterPhotos]  = useState<string[]>([])
 
   // Step 5 — Style & Ton
-  const [selectedStyle, setSelectedStyle] = useState('etec-blue')
+  // Solo est le défaut : template universel adaptatif dont l'accent se
+  // colore selon le produit détecté (cf suggestTemplateForProduct plus bas).
+  const [selectedStyle, setSelectedStyle] = useState('etec-solo')
   // Phase 1 — toggle UI entre la liste des templates legacy (etec-*) et la
   // liste des nouveaux styles V3. Engine de génération reste legacy pour
   // l'instant (Phase 2 branchera engine V3 quand l'UI sera validée).
   const [styleMode, setStyleMode] = useState<'legacy' | 'v3'>('legacy')
+  // Suggestion auto de template (11 curés) — vrai dès que l'user a cliqué un
+  // template à la main (liste legacy OU v3) ou qu'une page existante/un
+  // draft a été restauré avec un style déjà choisi. Empêche la suggestion
+  // d'écraser un choix explicite. Ref (pas de state) : lu de façon synchrone
+  // dans generate(), pas besoin de re-render sur ce flag.
+  const styleChosenExplicitly = useRef(false)
+  // Accent adaptatif d'etec-solo (Option B — couleur du type détecté, cf
+  // suggestTemplateForProduct). null si Solo n'est pas le template actif ou
+  // qu'aucun type n'a été détecté (fallback indigo par défaut du template).
+  // Répliqué en state (en plus de la variable locale effectiveAccent dans
+  // generate()) pour rester disponible aux renders suivants — JSX EditorRoot,
+  // savePage() — hors du scope de la fonction generate().
+  const [soloAccent, setSoloAccent] = useState<string | null>(null)
   const [selectedTone,  setSelectedTone]  = useState('persuasif')
   // Brand name affiché en haut du hero V3 + dans le manifesto. Optionnel —
   // si vide, DeepSeek invente un nom cohérent avec le produit.
@@ -522,7 +511,9 @@ function NewPageInner() {
       if (Array.isArray(d.ugcLinks)) setUgcLinks(d.ugcLinks)
       if (Array.isArray(d.beforePhotos)) setBeforePhotos(d.beforePhotos)
       if (Array.isArray(d.afterPhotos)) setAfterPhotos(d.afterPhotos)
-      if (d.selectedStyle) setSelectedStyle(d.selectedStyle)
+      // Un style restauré depuis un draft compte comme un choix explicite —
+      // la suggestion auto ne doit pas l'écraser au prochain edit de champ.
+      if (d.selectedStyle) { setSelectedStyle(d.selectedStyle); styleChosenExplicitly.current = true }
       if (d.selectedTone) setSelectedTone(d.selectedTone)
       if (d.platform) setPlatform(d.platform)
       if (d.resultLang) setResultLang(d.resultLang)
@@ -560,6 +551,30 @@ function NewPageInner() {
     }
   }, [mode, html])
 
+  // ── Suggestion auto de template (mode manuel) ─────────────────────────
+  // Parmi les 11 templates curés (STYLES), on pré-sélectionne celui adapté
+  // au produit dès que les champs sont renseignés — mais seulement si l'user
+  // n'a pas déjà choisi un template à la main (styleChosenExplicitly) et
+  // qu'on est bien sur la liste legacy (le toggle v3 a ses propres ids,
+  // aucune suggestion n'y est câblée — décision founder, onglet v3 intact).
+  // Mode URL : pas de données produit ici avant generate() → suggestion
+  // appliquée directement dans generate() une fois le scrape revenu (cf plus
+  // bas), avec la même garde styleChosenExplicitly.
+  useEffect(() => {
+    if (styleChosenExplicitly.current) return
+    if (styleMode !== 'legacy') return
+    if (inputMode !== 'manual') return
+    if (!manual.product_name.trim()) return
+    const suggestion = suggestTemplateForProduct({
+      title: manual.product_name,
+      description: `${manual.headline} ${manual.subtitle}`,
+    })
+    if (suggestion && suggestion.templateId !== selectedStyle) {
+      setSelectedStyle(suggestion.templateId)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputMode, styleMode, manual.product_name, manual.headline, manual.subtitle])
+
   // ── Chargement d'une page existante ──
   useEffect(() => {
     const id = searchParams.get('page_id')
@@ -593,7 +608,9 @@ function NewPageInner() {
           // Le slug du template est stocke dans json_content._template_slug
           // (template_id en DB est un UUID FK qui reste null pour l'instant)
           const slug = (json as { _template_slug?: string })._template_slug
-          if (slug) setSelectedStyle(slug)
+          // Style d'une page déjà générée = choix explicite (par l'user ou
+          // déjà résolu par la suggestion auto lors du generate() précédent).
+          if (slug) { setSelectedStyle(slug); styleChosenExplicitly.current = true }
         }
         if (data.title) setTitle(data.title)
         if (data.html_content) {
@@ -721,6 +738,14 @@ function NewPageInner() {
     track.newPageWizardCompleted()
     track.generateStarted('dashboard')
     const startedAt = Date.now()
+    // Style effectivement utilisé pour cette génération. Par défaut = ce que
+    // l'user a dans le wizard (styleChosenExplicitly=true, ou fallback si la
+    // suggestion ne trouve rien) — réassigné plus bas si une suggestion auto
+    // s'applique (mode URL : dès que le scrape revient ; mode manuel : déjà
+    // résolu par l'effet step5, mais on revalide ici avec les données finales).
+    // effectiveAccent ne concerne que etec-solo (couleur adaptative).
+    let effectiveStyle = selectedStyle
+    let effectiveAccent: string | null = null
     try {
       // Mode URL : on split le flow en 2 appels (scrape → generate) pour ne pas
       // dépasser le maxDuration Vercel sur AliExpress (Bright Data ~50-65s).
@@ -776,17 +801,51 @@ function NewPageInner() {
           return
         }
 
+        // ── Suggestion auto de template (mode URL) ──────────────────────
+        // Le produit n'est connu qu'ici (post-scrape) — c'est le seul moment
+        // possible pour appliquer la suggestion en mode URL. On ne l'applique
+        // que sur la liste legacy (styleMode==='v3' garde les ids V3 intacts)
+        // et seulement si l'user n'a pas déjà choisi un template à la main.
+        const urlSuggestion = styleMode === 'legacy'
+          ? suggestTemplateForProduct({ title: scraped.title, description: scraped.description })
+          : null
+        if (urlSuggestion && !styleChosenExplicitly.current) {
+          effectiveStyle = urlSuggestion.templateId
+          if (effectiveStyle !== selectedStyle) setSelectedStyle(effectiveStyle)
+        }
+        if (effectiveStyle === 'etec-solo') {
+          effectiveAccent = urlSuggestion?.accent ?? null
+        }
+
         // Phase 2 — generate avec le product déjà scrapé.
         // /api/generate accepte body.product (skip scrape côté serveur).
         body = {
           product: { ...scraped, tone: selectedTone },
-          style: selectedStyle,
+          style: effectiveStyle,
           ugcVideos: ugcVideos.length > 0 ? '[vidéos uploadées]' : ugcLinks.filter(l => l.trim()),
           beforeAfter: beforePhotos.length > 0 && afterPhotos.length > 0,
           language: resultLang,
           tone: selectedTone,
         }
       } else {
+        // ── Suggestion auto de template (mode manuel) ───────────────────
+        // Déjà résolue en amont par l'effet step 5 (UX : l'user voit la carte
+        // pré-sélectionnée) — on revalide ici avec les données au moment du
+        // clic "Générer" pour rester cohérent si l'user a édité juste avant.
+        const manualSuggestion = styleMode === 'legacy'
+          ? suggestTemplateForProduct({
+              title: manual.product_name,
+              description: `${manual.headline} ${manual.subtitle}`,
+            })
+          : null
+        if (manualSuggestion && !styleChosenExplicitly.current) {
+          effectiveStyle = manualSuggestion.templateId
+          if (effectiveStyle !== selectedStyle) setSelectedStyle(effectiveStyle)
+        }
+        if (effectiveStyle === 'etec-solo') {
+          effectiveAccent = manualSuggestion?.accent ?? null
+        }
+
         body = {
           product: {
             ...manual,
@@ -911,7 +970,7 @@ function NewPageInner() {
       // sémantique multilingue, bien meilleur que keywords).
       // Priorité 2 : fallback detectProductType keyword-based (compat anciennes
       // pages générées sans le mini-call, ou en cas d'échec du mini-call).
-      const tplMeta = TEMPLATES.find(t => t.id === selectedStyle)
+      const tplMeta = TEMPLATES.find(t => t.id === effectiveStyle)
       const llmType = (data.product_type && data.product_type !== 'universal')
         ? (data.product_type as ProductType)
         : null
@@ -942,7 +1001,7 @@ function NewPageInner() {
           ? data.category
           : PRODUCT_TYPE_LABELS[detected as ProductType]
         setPartialWarning(
-          `Astuce : le template "${tplMeta.name}" est pensé pour ${tplLabel}. Ton produit ressemble plutôt à ${detectedLabel} — pour un rendu optimal, essaie un template universel (Blue, Solo, Starter, Hue, Ella). Tu peux aussi continuer avec "${tplMeta.name}", ça fonctionne.`
+          `Astuce : le template "${tplMeta.name}" est pensé pour ${tplLabel}. Ton produit ressemble plutôt à ${detectedLabel} — pour un rendu optimal, choisis plutôt un template adapté à ton produit dans la liste (ou "Solo", l'universel adaptatif). Tu peux aussi continuer avec "${tplMeta.name}", ça fonctionne.`
         )
       } else if (json.partial) {
         setPartialWarning(
@@ -964,9 +1023,17 @@ function NewPageInner() {
       setTitle(pageTitle)
 
       const { renderTemplate } = await import('@/lib/templates')
-      const generatedHtml = renderTemplate(selectedStyle, data)
+      // etec-solo colorise son accent selon le produit détecté (cf
+      // suggestTemplateForProduct plus haut) — transmis via le mécanisme
+      // d'override existant (overrides.globalStyles.accent, consommé
+      // spécifiquement par etec-solo dans renderTemplate/index.ts).
+      const renderOverrides = effectiveStyle === 'etec-solo' && effectiveAccent
+        ? { globalStyles: { accent: effectiveAccent } }
+        : undefined
+      const generatedHtml = renderTemplate(effectiveStyle, data, renderOverrides)
       setHtml(generatedHtml)
       setMode('editor')
+      setSoloAccent(effectiveStyle === 'etec-solo' ? effectiveAccent : null)
 
       // Autosave silencieux : si pas encore de pageId (nouvelle page),
       // on crée la draft en DB tout de suite. Sans ça, le bouton Publier
@@ -977,8 +1044,15 @@ function NewPageInner() {
           const supabase = createClient()
           const { data: { user } } = await supabase.auth.getUser()
           if (user) {
-            // template_id (uuid FK) reste null ; on stocke le slug dans json
-            const jsonWithSlug = { ...data, _template_slug: selectedStyle }
+            // template_id (uuid FK) reste null ; on stocke le slug dans json.
+            // _solo_accent (sibling de _template_slug) : source durable de
+            // l'accent adaptatif de Solo, relue par hydrateFromPage (nouvel
+            // éditeur) à la réouverture — cf store.ts.
+            const jsonWithSlug = {
+              ...data,
+              _template_slug: effectiveStyle,
+              ...(effectiveStyle === 'etec-solo' && effectiveAccent ? { _solo_accent: effectiveAccent } : {}),
+            }
             const { data: inserted, error: insertErr } = await supabase
               .from('pages')
               .insert({
@@ -1028,9 +1102,11 @@ function NewPageInner() {
       // template_id est un UUID FK vers public.templates — on n'y met PAS
       // le slug 'etec-blue' (sinon Postgres rejette). Le slug est conservé
       // dans json_content._template_slug pour la réouverture (cf F5).
+      // _solo_accent : idem pour l'accent adaptatif de Solo (cf generate()).
+      const soloAccentField = selectedStyle === 'etec-solo' && soloAccent ? { _solo_accent: soloAccent } : {}
       const jsonWithSlug = landingData
-        ? { ...landingData, _template_slug: selectedStyle }
-        : { _template_slug: selectedStyle }
+        ? { ...landingData, _template_slug: selectedStyle, ...soloAccentField }
+        : { _template_slug: selectedStyle, ...soloAccentField }
 
       if (pageId) {
         // Mode édition — mise à jour de la page existante
@@ -1155,7 +1231,11 @@ function NewPageInner() {
             <EditorRoot
               jsonContent={
                 landingData
-                  ? { ...landingData, _template_slug: selectedStyle }
+                  ? {
+                      ...landingData,
+                      _template_slug: selectedStyle,
+                      ...(selectedStyle === 'etec-solo' && soloAccent ? { _solo_accent: soloAccent } : {}),
+                    }
                   : undefined
               }
               defaultTemplateId={selectedStyle}
@@ -2013,7 +2093,7 @@ function NewPageInner() {
                   return (
                     <button
                       key={s.id}
-                      onClick={() => setSelectedStyle(s.id)}
+                      onClick={() => { styleChosenExplicitly.current = true; setSelectedStyle(s.id) }}
                       className="w-full text-left rounded-2xl border-2 overflow-hidden transition-all hover:shadow-md"
                       style={{
                         height: 200,
@@ -2146,7 +2226,7 @@ function NewPageInner() {
                         {/* Header : nom mis en valeur + badges */}
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-[22px] font-black leading-none tracking-tight" style={{ color: '#0f0f1e' }}>{s.name}</span>
-                          {s.id === 'etec-blue' && (
+                          {s.id === 'etec-solo' && (
                             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md" style={{ background: '#fef3c7', color: '#d97706' }}>POPULAIRE</span>
                           )}
                           {productLabel && (
@@ -2218,7 +2298,7 @@ function NewPageInner() {
                   return (
                     <button
                       key={s.id}
-                      onClick={() => setSelectedStyle(s.id)}
+                      onClick={() => { styleChosenExplicitly.current = true; setSelectedStyle(s.id) }}
                       className="w-full text-left rounded-2xl border-2 overflow-hidden transition-all hover:shadow-md"
                       style={{
                         height: 200,

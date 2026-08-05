@@ -3,6 +3,13 @@
 import { useState, useRef, useCallback } from 'react'
 
 /* ── Avant / Après — slider réaliste mobile-first ─────────────────────────── */
+// TODO OBITO (cf. `06-ZARA-reecriture-hero-pricing.md` Section 2 Bloc 1) :
+// remplacer le produit démo "SoundPro X5" / visuel écouteurs générique par un
+// produit DTC crédible (accessoire tech premium ou skincare de marque), design
+// sobre, SANS badges "-40% / GRATUIT / 2847 avis" — ces mentions sur le mockup
+// AFTER (ci-dessous, AfterSide) donnent la même impression de fausse preuve
+// sociale que les témoignages retirés. Coordination visuelle nécessaire,
+// hors périmètre copy de cette branche.
 
 const Star = ({ filled = true }: { filled?: boolean }) => (
   <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" viewBox="0 0 20 20" fill={filled ? '#f59e0b' : '#d1d5db'}>
@@ -249,7 +256,7 @@ export default function BeforeAfter() {
             Avant vs Apres KONVERT
           </h2>
           <p className="text-sm sm:text-lg text-gray-500 max-w-xl mx-auto">
-            Glisse le curseur pour voir la difference entre une fiche AliExpress et une landing page KONVERT.
+            Glisse le curseur pour voir la difference entre une fiche produit brute et une landing page KONVERT.
           </p>
         </div>
 

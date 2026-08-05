@@ -2,7 +2,6 @@ import LeadEnrichmentDemo from '@/components/marketing/LeadEnrichmentDemo'
 import KonvertEasterEgg from '@/components/marketing/KonvertEasterEgg'
 import BeforeAfter from '@/components/marketing/BeforeAfter'
 import LogoMarquee from '@/components/marketing/LogoMarquee'
-import StatsCounter from '@/components/marketing/StatsCounter'
 import FAQ from '@/components/marketing/FAQ'
 import RevealController from '@/components/marketing/home/RevealController'
 import HeroSlider from '@/components/marketing/home/HeroSlider'
@@ -111,7 +110,6 @@ export default function HomePage() {
         <LogoMarquee />
         <TrustBar />
         <ProofSection />
-        <StatsCounter />
         <FeaturesSection />
         <LeadEnrichmentDemo />
         <HowItWorks />

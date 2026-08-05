@@ -410,7 +410,7 @@ const STEPS = [
     num: '01',
     Icon: LinkSimple,
     title: 'Colle ton lien produit',
-    desc: 'AliExpress, Amazon, Alibaba. Tu colles l\'URL — KONVERT scrape tout automatiquement.',
+    desc: 'Shopify, ton catalogue existant, ou l\'URL d\'un fournisseur. Tu colles, KONVERT génère.',
   },
   {
     num: '02',
@@ -438,7 +438,7 @@ export function HowItWorks() {
             Comment ça marche
           </div>
           <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-4">
-            Un lien AliExpress. Une page qui vend.
+            Une URL produit. Une page qui vend.
           </h2>
           <p className="reveal delay-2 text-lg text-white/60 max-w-xl mx-auto">
             Personne d&apos;autre ne fait ça. Tu colles un lien — l&apos;IA scrape, rédige, structure. Ta page est prête en 30 secondes.
@@ -936,7 +936,7 @@ export function BuilderSection() {
               Fini les pages qui font fuir tes clients.
             </h2>
             <p className="reveal delay-1 text-lg text-gray-500 leading-relaxed mb-10">
-              Zéro dev, zéro designer. Tu colles ton lien AliExpress, tu choisis un template, tu personnalises en 2 clics. Ta page convertit — aujourd&apos;hui.
+              Zéro dev, zéro designer. Tu colles l&apos;URL de ton produit, tu choisis un template, tu personnalises en 2 clics. Ta page convertit — aujourd&apos;hui.
             </p>
             <Link href="/demo" className="reveal delay-2 inline-flex items-center gap-4 group">
               <span className="font-bold text-gray-900 text-sm">Créer des pages optimisées</span>
@@ -1439,47 +1439,20 @@ export function PublishSection() {
   )
 }
 /* ═══════════════════════════════════════════════════════════════════════════
-   TESTIMONIALS
-═══════════════════════════════════════════════════════════════════════════ */
-const TESTIMONIALS = [
-  {
-    name: 'Thomas M.',
-    role: 'Dropshipper · Shopify',
-    avatar: 'T',
-    color: '#5B47F5',
-    quote: 'J\'ai généré ma première landing page en 45 secondes. Mon taux de conversion a grimpé de 5.2% dès le lendemain. KONVERT est l\'outil que j\'attendais.',
-    stars: 5,
-    stat: '+5.2% CVR',
-  },
-  {
-    name: 'Sarah K.',
-    role: 'Agence SMMA · 23 clients',
-    avatar: 'S',
-    color: '#10b981',
-    quote: 'On gère 23 boutiques clients depuis un seul dashboard. La fonctionnalité white-label nous a permis de vendre KONVERT comme un service premium à 500€/mois.',
-    stars: 5,
-    stat: '23 clients',
-  },
-  {
-    name: 'Julien R.',
-    role: 'E-commerce · Beauté',
-    avatar: 'J',
-    color: '#f97316',
-    quote: 'Mon ROAS est passé de x1.4 à x4.2 en 3 semaines. Les templates beauté sont absolument parfaits pour ma niche. Je ne reviendrai jamais en arrière.',
-    stars: 5,
-    stat: 'ROAS x4.2',
-  },
-  {
-    name: 'Camille L.',
-    role: 'Mode Femme · Shopify',
-    avatar: 'C',
-    color: '#ec4899',
-    quote: 'En mode, l\'image c\'est tout. KONVERT m\'a permis de créer des pages produit qui respirent le luxe sans passer des heures sur Figma. Mes bounces ont chuté de 62%.',
-    stars: 5,
-    stat: '-62% bounce',
-  },
-]
+   TESTIMONIALS → remplacé par une preuve honnête (démo live), cf.
+   `06-ZARA-reecriture-hero-pricing.md` Section 2 Bloc 3 : KONVERT n'a pas
+   encore de client payant réel, donc pas de témoignage inventé ni de chiffre
+   non vérifiable. La preuve la plus forte disponible aujourd'hui, c'est le
+   produit lui-même — le visiteur colle une URL et voit le résultat.
+   Nom du composant conservé (`Testimonials`) pour ne pas casser l'import
+   dans page.tsx — seul le contenu change.
 
+   TODO OBITO : ce bloc n'a qu'un titre + CTA texte, pas de visuel — contraste
+   faible avec les sections voisines (LeadEnrichmentDemo, AIBuilderDemoSection)
+   qui ont des mockups riches. Prévoir un visuel démo réel (screen recording
+   ou mockup interactif "URL → page générée") pour éviter le trou visuel une
+   fois le placeholder produit (Bloc 1 ZARA, cf. BeforeAfter.tsx TODO) réglé.
+═══════════════════════════════════════════════════════════════════════════ */
 export function Testimonials() {
   return (
     <section style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(91,71,245,0.22) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 5% 100%, rgba(167,139,250,0.12) 0%, transparent 55%), #0e0d1e' }}>
@@ -1490,65 +1463,22 @@ export function Testimonials() {
             style={{ background: 'rgba(91,71,245,0.18)', color: '#a78bfa', border: '1px solid rgba(91,71,245,0.3)' }}
           >
             <Star className="w-3.5 h-3.5" />
-            Témoignages
+            Preuve, pas promesse
           </div>
           <h2 className="reveal delay-1 text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-4">
-            Ils ont transformé leurs résultats.
+            Vois le résultat avant de croire la promesse.
           </h2>
           <p className="reveal delay-2 text-lg text-white/60 max-w-xl mx-auto">
-            Des e-commerçants et agences qui utilisent KONVERT au quotidien.
+            Colle l&apos;URL d&apos;un produit. KONVERT génère la page en 30 secondes, sous tes yeux. Aucune inscription requise.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {TESTIMONIALS.map((t, i) => (
-            <div
-              key={t.name}
-              className="reveal p-6 rounded-2xl flex flex-col gap-4"
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                backdropFilter: 'blur(12px)',
-                transitionDelay: `${i * 0.1}s`,
-              }}
-            >
-              <div className="flex gap-1">
-                {Array.from({ length: t.stars }).map((_, s) => (
-                  <Star key={s} className="w-4 h-4 fill-current" style={{ color: '#f59e0b' }} />
-                ))}
-              </div>
-              <p className="text-white/75 leading-relaxed text-sm flex-1">&ldquo;{t.quote}&rdquo;</p>
-              <div className="flex items-center justify-between pt-2" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-9 h-9 rounded-full flex items-center justify-center font-black text-white text-sm"
-                    style={{ background: t.color }}
-                  >
-                    {t.avatar}
-                  </div>
-                  <div>
-                    <div className="text-white font-semibold text-sm">{t.name}</div>
-                    <div className="text-white/40 text-xs">{t.role}</div>
-                  </div>
-                </div>
-                <span
-                  className="text-xs font-bold px-2.5 py-1 rounded-full"
-                  style={{ background: `${t.color}22`, color: t.color }}
-                >
-                  {t.stat}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="reveal text-center mt-10">
+        <div className="reveal text-center">
           <Link
-            href="/testimonials"
-            className="inline-flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-70"
-            style={{ color: '#a78bfa' }}
+            href="/essai"
+            className="btn-shimmer inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg"
           >
-            Voir tous les avis <ArrowRight className="w-4 h-4" />
+            Essaie maintenant (gratuit) <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>

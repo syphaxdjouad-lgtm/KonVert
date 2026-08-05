@@ -43,7 +43,7 @@ export default function FinalCTA() {
         <p
           className="reveal delay-2 text-lg text-white/60 mb-10 max-w-xl mx-auto"
         >
-          AliExpress, Amazon, Alibaba — peu importe. L&apos;IA génère ta page de vente complète. Gratuit, sans carte bancaire.
+          Shopify, Amazon, ton fournisseur — peu importe la source. L&apos;IA génère ta page de vente complète. Gratuit, sans carte bancaire.
         </p>
 
         <div
@@ -53,7 +53,7 @@ export default function FinalCTA() {
             type="url"
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}
-            placeholder="https://fr.aliexpress.com/item/ton-produit..."
+            placeholder="https://ta-boutique.com/produits/ton-produit..."
             className="flex-1 px-5 py-3.5 rounded-full text-sm font-medium outline-none transition-all"
             style={{
               background: 'rgba(255,255,255,0.08)',
@@ -76,7 +76,7 @@ export default function FinalCTA() {
           1 page gratuite · Aucune CB requise · Résiliation en 1 clic
         </p>
         <p className="mt-2 text-sm font-semibold" style={{ color: 'rgba(134,239,172,0.7)' }}>
-          <Check size={14} weight="bold" className="inline mr-1" /> Satisfait ou remboursé 30 jours — Sans question
+          <Check size={14} weight="bold" className="inline mr-1" /> Tu testes avant de payer. Pas l&apos;inverse.
         </p>
       </div>
     </section>

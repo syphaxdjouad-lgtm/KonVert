@@ -73,7 +73,7 @@ export default function VideoDemoTrigger() {
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold text-sm transition-transform hover:scale-105"
                 style={{ background: 'linear-gradient(135deg,#7c3aed,#6d28d9)' }}
               >
-                Génère ma première page — gratuit
+                Génère ta première page (30s, sans compte)
               </a>
             </div>
             <button

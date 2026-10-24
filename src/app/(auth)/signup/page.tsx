@@ -322,7 +322,6 @@ function SignupContent() {
                     {[1,2,3,4,5].map(i => (
                       <svg key={i} className="w-2 h-2" viewBox="0 0 20 20" fill="#f59e0b"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.34L10 13.27l-4.77 2.46.91-5.34L2.27 6.62l5.34-.78L10 1z"/></svg>
                     ))}
-                    <span className="text-[7px] text-gray-400">4.9</span>
                   </div>
                   <div className="flex gap-1.5">
                     {[1,2,3].map(i => (
@@ -379,7 +378,6 @@ function SignupContent() {
                     {[1,2,3,4,5].map(i => (
                       <svg key={i} className="w-2 h-2" viewBox="0 0 20 20" fill="#f59e0b"><path d="M10 1l2.39 4.84 5.34.78-3.87 3.77.91 5.34L10 13.27l-4.77 2.46.91-5.34L2.27 6.62l5.34-.78L10 1z"/></svg>
                     ))}
-                    <span className="text-[7px] text-gray-400 ml-0.5">2 847 avis</span>
                   </div>
                   <p className="text-[11px] font-black text-gray-900 leading-tight mb-1">
                     Montre Minimaliste Pro —<br />Design qui fait tourner les têtes

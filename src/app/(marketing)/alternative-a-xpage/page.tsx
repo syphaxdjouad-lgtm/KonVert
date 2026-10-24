@@ -64,13 +64,6 @@ const jsonLdSoftware = {
     priceCurrency: 'EUR',
     description: '1 page gratuite sans compte',
   },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.7',
-    bestRating: '5',
-    worstRating: '1',
-    ratingCount: '1',
-  },
   creator: {
     '@type': 'Organization',
     name: 'Luna Corporation LTD',

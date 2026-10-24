@@ -118,8 +118,8 @@ export default function Image() {
         {/* Stats pills */}
         <div style={{ display: 'flex', gap: '16px' }}>
           {[
-            { label: '50 000+', sub: 'pages générées' },
-            { label: '+40%', sub: 'conversion moyenne' },
+            { label: 'Shopify', sub: 'export direct' },
+            { label: 'WooCommerce', sub: 'export direct' },
             { label: '30s', sub: 'pour créer ta page' },
           ].map((stat) => (
             <div

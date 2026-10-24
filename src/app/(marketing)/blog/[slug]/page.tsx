@@ -290,8 +290,8 @@ export default async function BlogArticlePage({
             qui convertit.
           </h2>
           <p className="text-sm mb-8" style={{ color: '#8b8baa' }}>
-            1 conseil actionnable par semaine. Stratégies, analyses, outils. Rejoignez 4 200+
-            e-commerçants.
+            1 conseil actionnable par semaine. Stratégies, analyses, outils. Une newsletter pensée
+            pour les e-commerçants.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input

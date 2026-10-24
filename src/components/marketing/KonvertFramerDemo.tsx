@@ -25,7 +25,7 @@ const navItems = ["Accueil", "Pages", "Stores", "Analytics", "Agence"] as const;
 // ─── Stat Cards ───────────────────────────────────────────────────────────────
 const statCards = [
   { label: "Pages créées", value: "47", accent: tokens.primaryLight },
-  { label: "Taux de conversion", value: "+23%", accent: tokens.success },
+  { label: "Pages publiées", value: "12", accent: tokens.success },
   { label: "Stores connectés", value: "3", accent: tokens.primaryLight },
 ] as const;
 

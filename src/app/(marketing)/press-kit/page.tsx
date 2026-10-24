@@ -40,7 +40,7 @@ const ONE_PAGE = `L'e-commerce a un problème invisible : la majorité des bouti
 
 KONVERT résout ce problème en 30 secondes. L'e-commerçant colle un lien produit (AliExpress, Amazon, URL quelconque) ou saisit son produit manuellement. KONVERT analyse le produit, génère un copy optimisé conversion en utilisant les frameworks éprouvés — AIDA, PAS, principes de Cialdini — et produit une landing page prête à être importée sur Shopify, WooCommerce ou YouCan. Ce qui prenait 3 à 5 jours et coûtait 400 € chez un freelance se fait en une demi-minute pour 39 €/mois.
 
-Le marché cible est double et délibérément underserved par les outils US : les e-commerçants francophones d'Europe et les marchands arabophones du MENA. KONVERT supporte 8 langues dont l'arabe natif — un angle que personne n'adresse sérieusement. La plateforme cible aussi les agences SMMA qui gèrent plusieurs clients et ont besoin de livrables volumétriques sans sacrifier la qualité.
+Le marché cible est double et délibérément underserved par les outils US : les e-commerçants francophones d'Europe et les marchands arabophones du MENA. KONVERT supporte 9 langues dont l'arabe natif — un angle que personne n'adresse sérieusement. La plateforme cible aussi les agences SMMA qui gèrent plusieurs clients et ont besoin de livrables volumétriques sans sacrifier la qualité.
 
 KONVERT est un projet indie, bootstrappé, développé par Luna Corporation Ltd (London) avec une philosophie de produit minimaliste : faire une seule chose parfaitement, pour les gens qui ont besoin de résultats aujourd'hui, pas dans six mois. La vision long terme est de devenir l'infrastructure copywriting de l'e-commerce en Europe et au MENA — démocratiser l'accès à l'optimisation conversion pour n'importe quelle boutique, quelle que soit sa taille ou son budget.`
 
@@ -50,7 +50,7 @@ const BIO_LONG = `KONVERT est né d'une frustration concrète : créer une bonne
 
 Luna Corporation Ltd (London) a fondé KONVERT avec une conviction simple : l'optimisation conversion ne doit pas être un luxe réservé aux grandes enseignes. En combinant de l'IA générative et des frameworks de copywriting éprouvés (AIDA, PAS, Cialdini), KONVERT automatise en 30 secondes ce qu'un freelance facture 400 € et livre en 5 jours.
 
-Le produit supporte 8 langues dont l'arabe natif, cible un marché double FR + MENA gigantesque et ignoré par les SaaS américains, et s'intègre directement à Shopify, WooCommerce et YouCan. Bootstrappé, sans levée de fonds, KONVERT est construit sur la philosophie indie : être profondément utile à une cible précise plutôt que médiocrement généraliste pour tous. Lancé en mai 2026, pricing dès 39 €/mois, premier essai gratuit sans carte de crédit.`
+Le produit supporte 9 langues dont l'arabe natif, cible un marché double FR + MENA gigantesque et ignoré par les SaaS américains, et s'intègre directement à Shopify, WooCommerce et YouCan. Bootstrappé, sans levée de fonds, KONVERT est construit sur la philosophie indie : être profondément utile à une cible précise plutôt que médiocrement généraliste pour tous. Lancé en mai 2026, pricing dès 39 €/mois, premier essai gratuit sans carte de crédit.`
 
 const QUOTES = [
   {
@@ -89,9 +89,9 @@ const STATS = [
   },
   {
     icon: Globe,
-    value: '8 langues',
+    value: '9 langues',
     label: 'supportées',
-    sub: 'FR, EN, ES, DE, IT, PT, AR, NL',
+    sub: 'FR, EN, ES, DE, IT, PT, NL, AR, ZH',
     color: '#f97316',
     bg: 'rgba(249,115,22,0.08)',
   },

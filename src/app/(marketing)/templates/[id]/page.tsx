@@ -4,8 +4,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import {
-  ArrowLeft, TrendingUp, Monitor, Smartphone, Tablet,
-  Tag, ExternalLink, Sparkles, Star, Check,
+  ArrowLeft, Monitor, Smartphone, Tablet,
+  Tag, ExternalLink, Sparkles, Check,
   ChevronRight, ArrowRight,
 } from 'lucide-react'
 
@@ -17,7 +17,6 @@ interface TemplateDetail {
   category: string
   objective: string
   style: string
-  convRate: number
   badge: string | null
   description: string
   longDesc: string
@@ -33,106 +32,106 @@ interface TemplateDetail {
 const TEMPLATES_MAP: Record<string, TemplateDetail> = {
   'shein-pro': {
     id: 'shein-pro', name: 'Shein Pro', category: 'E-commerce', objective: 'Ventes', style: 'Mobile',
-    convRate: 18.2, badge: 'Populaire', colors: ['#7c3aed', '#16a34a', '#f8f8fc'],
+    badge: 'Populaire', colors: ['#7c3aed', '#16a34a', '#f8f8fc'],
     description: 'E-commerce mobile-first avec CTA sticky et galerie photos',
     longDesc: 'Template inspiré des meilleurs stores fashion et e-commerce asiatiques. Navigation sticky, galerie de produits swipeable, sélecteur de quantité, avis clients et FAQ intégrée. Optimisé pour les conversions mobiles depuis Facebook Ads et TikTok.',
     tags: ['#ecommerce', '#mobile', '#shopify', '#fashion', '#sticky-cta'],
     industries: ['Mode', 'Accessoires', 'Beauté', 'Lifestyle'],
     devices: ['Mobile', 'Tablette', 'Desktop'],
-    stats: [{ label: 'Conv. moyenne', value: '18.2%' }, { label: 'CTA sticky', value: 'Oui' }, { label: 'Galerie', value: '5 photos' }, { label: 'FAQ intégrée', value: 'Oui' }],
+    stats: [{ label: 'CTA sticky', value: 'Oui' }, { label: 'Galerie', value: '5 photos' }, { label: 'FAQ intégrée', value: 'Oui' }],
   },
   'minimal-dark': {
     id: 'minimal-dark', name: 'Minimal Dark', category: 'Lead Gen', objective: 'Leads', style: 'Dark',
-    convRate: 14.7, badge: 'Trending', colors: ['#0f0f0f', '#ef4444', '#1a1a1a'],
+    badge: 'Trending', colors: ['#0f0f0f', '#ef4444', '#1a1a1a'],
     description: 'Fond sombre, typographie bold, accents rouges lifestyle',
     longDesc: 'Design sombre et épuré, typographie bold, accents rouges pour les produits tech et lifestyle premium. Split layout avec image à droite, card bénéfices, FAQ. Idéal pour les produits qui veulent projeter force et autorité.',
     tags: ['#dark', '#lifestyle', '#tech', '#minimal', '#bold'],
     industries: ['Tech', 'Gaming', 'Sport', 'Lifestyle'],
     devices: ['Desktop', 'Tablette', 'Mobile'],
-    stats: [{ label: 'Conv. moyenne', value: '14.7%' }, { label: 'Layout', value: 'Split 2 col.' }, { label: 'Mode', value: 'Dark' }, { label: 'FAQ', value: 'Incluse' }],
+    stats: [{ label: 'Layout', value: 'Split 2 col.' }, { label: 'Mode', value: 'Dark' }, { label: 'FAQ', value: 'Incluse' }],
   },
   'clean-white': {
     id: 'clean-white', name: 'Clean White', category: 'SaaS', objective: 'Inscription', style: 'Light',
-    convRate: 11.3, badge: null, colors: ['#ffffff', '#7c3aed', '#f8fafc'],
+    badge: null, colors: ['#ffffff', '#7c3aed', '#f8fafc'],
     description: 'Fond blanc épuré, violet, standard SaaS et produits numériques',
     longDesc: 'Le standard du SaaS. Fond blanc, accent violet, hiérarchie typographique claire. Section bénéfices, FAQ, double CTA. Optimisé pour les produits numériques, formations et abonnements.',
     tags: ['#light', '#saas', '#violet', '#epure', '#conversion'],
     industries: ['SaaS', 'Formation', 'Digital', 'Abonnement'],
     devices: ['Desktop', 'Mobile', 'Tablette'],
-    stats: [{ label: 'Conv. moyenne', value: '11.3%' }, { label: 'Mode', value: 'Light' }, { label: 'CTA', value: 'Double' }, { label: 'Animation', value: 'Subtile' }],
+    stats: [{ label: 'Mode', value: 'Light' }, { label: 'CTA', value: 'Double' }, { label: 'Animation', value: 'Subtile' }],
   },
   'bold-sales': {
     id: 'bold-sales', name: 'Bold Sales', category: 'Promotions', objective: 'Ventes', style: 'Bold',
-    convRate: 22.1, badge: 'Populaire', colors: ['#ea580c', '#fbbf24', '#fff7ed'],
+    badge: 'Populaire', colors: ['#ea580c', '#fbbf24', '#fff7ed'],
     description: 'Orange brûlant, gradient agressif, urgence dropshipping maximale',
-    longDesc: 'Le template roi du dropshipping. Orange + jaune, gradient hero, prix barré visible, urgence textuelle. Hero plein écran, section bénéfices, double CTA. Taux de conversion record pour les offres limitées et promotions flash.',
+    longDesc: 'Le template roi du dropshipping. Orange + jaune, gradient hero, prix barré visible, urgence textuelle. Hero plein écran, section bénéfices, double CTA. Pensé pour les offres limitées et promotions flash.',
     tags: ['#bold', '#orange', '#dropshipping', '#urgence', '#promo'],
     industries: ['Dropshipping', 'E-commerce', 'Promotions', 'Flash sales'],
     devices: ['Mobile', 'Desktop', 'Tablette'],
-    stats: [{ label: 'Conv. moyenne', value: '22.1%' }, { label: 'Mode', value: 'Bold' }, { label: 'Urgence', value: 'Intégrée' }, { label: 'Gradient', value: 'Orange/Rouge' }],
+    stats: [{ label: 'Mode', value: 'Bold' }, { label: 'Urgence', value: 'Intégrée' }, { label: 'Gradient', value: 'Orange/Rouge' }],
     isHot: true,
   },
   'luxury': {
     id: 'luxury', name: 'Luxury Premium', category: 'Services', objective: 'Leads', style: 'Luxury',
-    convRate: 9.8, badge: null, colors: ['#faf9f7', '#c9993a', '#1a1714'],
+    badge: null, colors: ['#faf9f7', '#c9993a', '#1a1714'],
     description: 'Typographie serif, or, premium haute gamme',
     longDesc: 'Positionnement haut de gamme. Typographie Georgia/serif, accents or, espacement généreux. Layout centré élégant, liste bénéfices avec losanges dorés, FAQ stylisée. Pour les marques qui veulent justifier un prix premium.',
     tags: ['#luxury', '#gold', '#serif', '#premium', '#high-end'],
     industries: ['Luxe', 'Bijoux', 'Cosmétiques premium', 'Coaching'],
     devices: ['Desktop', 'Tablette', 'Mobile'],
-    stats: [{ label: 'Conv. moyenne', value: '9.8%' }, { label: 'Typographie', value: 'Serif' }, { label: 'Accent', value: 'Or #c9993a' }, { label: 'Layout', value: 'Centré' }],
+    stats: [{ label: 'Typographie', value: 'Serif' }, { label: 'Accent', value: 'Or #c9993a' }, { label: 'Layout', value: 'Centré' }],
   },
   'mobile-first': {
     id: 'mobile-first', name: 'Mobile First', category: 'E-commerce', objective: 'Ventes', style: 'Mobile',
-    convRate: 16.4, badge: null, colors: ['#2563eb', '#eff6ff', '#ffffff'],
+    badge: null, colors: ['#2563eb', '#eff6ff', '#ffffff'],
     description: 'Max 480px, bleu, trafic Facebook et TikTok mobile',
     longDesc: 'Conçu pour le trafic mobile pur. Max-width 480px, CTA pleine largeur, typographie compacte. Optimisé pour les campagnes Facebook et TikTok avec des landing pages ultra-légères et rapides.',
     tags: ['#mobile', '#facebook-ads', '#tiktok', '#bleu', '#compact'],
     industries: ['E-commerce', 'Dropshipping', 'B2C'],
     devices: ['Mobile', 'Tablette'],
-    stats: [{ label: 'Conv. moyenne', value: '16.4%' }, { label: 'Max-width', value: '480px' }, { label: 'CTA', value: 'Full width' }, { label: 'Poids', value: 'Ultra léger' }],
+    stats: [{ label: 'Max-width', value: '480px' }, { label: 'CTA', value: 'Full width' }, { label: 'Poids', value: 'Ultra léger' }],
   },
   'saas-hero': {
     id: 'saas-hero', name: 'SaaS Hero', category: 'SaaS', objective: 'Inscription', style: 'Dark',
-    convRate: 13.2, badge: 'Nouveau', colors: ['#0f172a', '#6366f1', '#1e293b'],
+    badge: 'Nouveau', colors: ['#0f172a', '#6366f1', '#1e293b'],
     description: 'Mesh background animé CSS, mockup dashboard, AI-Native UI',
     longDesc: 'Design AI-Native avec mesh background animé CSS, mockup dashboard simulé, features grid 3 colonnes, pricing card et témoignages. Slate-950 + indigo pour un look SaaS moderne. Idéal pour les produits tech et plateformes IA.',
     tags: ['#saas', '#dark', '#indigo', '#ai-native', '#mesh-bg'],
     industries: ['SaaS', 'IA', 'Productivité', 'B2B'],
     devices: ['Desktop', 'Tablette', 'Mobile'],
-    stats: [{ label: 'Conv. moyenne', value: '13.2%' }, { label: 'Mode', value: 'Dark SaaS' }, { label: 'Mockup', value: 'Dashboard CSS' }, { label: 'Sections', value: '5 incluses' }],
+    stats: [{ label: 'Mode', value: 'Dark SaaS' }, { label: 'Mockup', value: 'Dashboard CSS' }, { label: 'Sections', value: '5 incluses' }],
     isNew: true,
   },
   'flash-sale': {
     id: 'flash-sale', name: 'Flash Sale', category: 'Promotions', objective: 'Ventes', style: 'Bold',
-    convRate: 24.6, badge: 'Chaud', colors: ['#000000', '#ef4444', '#1a0000'],
-    description: 'Countdown 72h JS, barre de stock, urgence absolue, CVR record',
+    badge: 'Chaud', colors: ['#000000', '#ef4444', '#1a0000'],
+    description: 'Countdown 72h JS, barre de stock, urgence absolue',
     longDesc: 'L\'arme secrète des ventes flash. Countdown JavaScript 72h, barre de stock animée, urgency bar en haut, pulse rouge. Fond noir absolu pour maximiser le contraste et l\'impact émotionnel. Taux de conversion parmi les plus élevés du marché.',
     tags: ['#flash-sale', '#noir', '#countdown', '#urgence', '#stock-bar'],
     industries: ['E-commerce', 'Promotions', 'Black Friday', 'Flash sales'],
     devices: ['Mobile', 'Desktop', 'Tablette'],
-    stats: [{ label: 'Conv. moyenne', value: '24.6%' }, { label: 'Countdown', value: '72h JS' }, { label: 'Urgence', value: 'Maximale' }, { label: 'Mode', value: 'Noir' }],
+    stats: [{ label: 'Countdown', value: '72h JS' }, { label: 'Urgence', value: 'Maximale' }, { label: 'Mode', value: 'Noir' }],
     isHot: true,
   },
   'lead-magnet': {
     id: 'lead-magnet', name: 'Lead Magnet', category: 'Lead Gen', objective: 'Leads', style: 'Light',
-    convRate: 21.7, badge: 'Populaire', colors: ['#10b981', '#d1fae5', '#f8fafc'],
+    badge: 'Populaire', colors: ['#10b981', '#d1fae5', '#f8fafc'],
     description: 'Formulaire email central, mockup PDF CSS, preuve sociale inline',
     longDesc: 'Conçu pour la capture email. Formulaire 2 champs centré, mockup PDF simulé en CSS, avatars preuve sociale inline, compteur de téléchargements. Vert emerald, fond blanc cassé. Idéal pour les guides, e-books et newsletters.',
     tags: ['#lead-gen', '#email', '#pdf', '#vert', '#formulaire'],
     industries: ['Marketing', 'Formation', 'Newsletter', 'Lead gen'],
     devices: ['Desktop', 'Mobile', 'Tablette'],
-    stats: [{ label: 'Conv. moyenne', value: '21.7%' }, { label: 'Formulaire', value: '2 champs' }, { label: 'Social proof', value: 'Inline' }, { label: 'Objectif', value: 'Email' }],
+    stats: [{ label: 'Formulaire', value: '2 champs' }, { label: 'Social proof', value: 'Inline' }, { label: 'Objectif', value: 'Email' }],
   },
   'app-download': {
     id: 'app-download', name: 'App Download', category: 'SaaS', objective: 'Telechargement', style: 'Dark',
-    convRate: 25.1, badge: 'Top', colors: ['#1a1a2e', '#00d4ff', '#7b2ff7'],
+    badge: 'Top', colors: ['#1a1a2e', '#00d4ff', '#7b2ff7'],
     description: 'Mockup smartphone CSS, store badges, cyan + violet, screenshots',
     longDesc: 'Template de référence pour les apps mobiles. Gradient navy, mockup iPhone/Android en pur CSS, store badges App Store + Google Play stylisés, carousel screenshots simulé, features grid. Cyan + violet pour un look tech premium.',
     tags: ['#app', '#mobile', '#ios', '#android', '#store'],
     industries: ['App mobile', 'SaaS', 'Tech', 'Productivité'],
     devices: ['Desktop', 'Tablette', 'Mobile'],
-    stats: [{ label: 'Conv. moyenne', value: '25.1%' }, { label: 'Store badges', value: 'iOS + Android' }, { label: 'Mockup', value: 'Smartphone CSS' }, { label: 'Screenshots', value: 'Carousel' }],
+    stats: [{ label: 'Store badges', value: 'iOS + Android' }, { label: 'Mockup', value: 'Smartphone CSS' }, { label: 'Screenshots', value: 'Carousel' }],
     isHot: true,
   },
 }
@@ -276,10 +275,6 @@ function RelatedCard({ id }: { id: string }) {
       <div className="px-4 pb-4 pt-2">
         <div className="flex items-center justify-between mb-1">
           <div className="font-black text-[14px]" style={{ color: '#0f172a' }}>{tpl.name}</div>
-          <div className="flex items-center gap-1 text-[11px] font-bold" style={{ color: '#0f172a' }}>
-            <TrendingUp className="w-3 h-3 text-green-500" />
-            {tpl.convRate}%
-          </div>
         </div>
         <div className="text-[11px] font-medium" style={{ color: '#94a3b8' }}>
           {tpl.category} · {tpl.style}
@@ -450,18 +445,6 @@ export default function TemplateDetailPage() {
               />
 
               <div className="p-6">
-                {/* Conv badge */}
-                <div
-                  className="flex items-center gap-2 p-3 rounded-xl mb-5"
-                  style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}
-                >
-                  <TrendingUp className="w-5 h-5" style={{ color: '#16a34a' }} />
-                  <div>
-                    <div className="font-black text-[18px]" style={{ color: '#0f172a' }}>{tpl.convRate}%</div>
-                    <div className="text-[11px] font-medium" style={{ color: '#16a34a' }}>Taux de conversion moyen</div>
-                  </div>
-                </div>
-
                 {/* Stats */}
                 <div className="space-y-2 mb-6">
                   {tpl.stats.map(({ label, value }) => (
@@ -553,24 +536,6 @@ export default function TemplateDetailPage() {
                       </div>
                     ))}
                   </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Rating */}
-            <div
-              className="rounded-2xl p-5 flex items-center gap-4"
-              style={{ background: '#fffbeb', border: '1px solid #fde68a' }}
-            >
-              <div className="text-2xl font-black" style={{ color: '#0f172a' }}>4.8</div>
-              <div>
-                <div className="flex gap-0.5 mb-0.5">
-                  {[1,2,3,4,5].map(i => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <div className="text-[12px] font-medium" style={{ color: '#78716c' }}>
-                  Note moyenne · 120+ utilisateurs
                 </div>
               </div>
             </div>

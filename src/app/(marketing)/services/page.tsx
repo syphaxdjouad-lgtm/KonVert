@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Search, BarChart3, Zap, Check, TrendingUp, Clock, Star, ChevronDown } from 'lucide-react'
+import { ArrowRight, Search, BarChart3, Zap, Check, TrendingUp, Clock, ChevronDown } from 'lucide-react'
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -76,40 +76,9 @@ const PROCESS = [
   { num: '04', title: 'Résultats mesurés', desc: 'Chaque livrable s\'accompagne de métriques de référence. Dans 30 jours, vous mesurez l\'impact réel.' },
 ]
 
-const TESTIMONIALS = [
-  {
-    name: 'Marie L.',
-    role: 'Boutique mode Shopify',
-    quote: 'J\'avais 38 000 visites par mois et 1,4% de conversion. L\'audit a trouvé 11 problèmes critiques que j\'avais depuis l\'ouverture. Trois mois après les corrections : 2,9% de conversion et mon trafic organique a doublé sans toucher aux pubs.',
-    stars: 5,
-    metric: '+112% trafic · CVR x2',
-    avatar: 'ML',
-    accent: '#5B47F5',
-  },
-  {
-    name: 'Kevin B.',
-    role: 'Dropshipping niche sport',
-    quote: 'Mon ROAS était à 1.8 depuis 4 mois. J\'avais essayé de tout changer sauf ce qu\'il fallait changer. Après deux sessions, on a revu le positionnement produit et les angles d\'accroche. Six semaines plus tard : ROAS à 4.2 sur les mêmes budgets.',
-    stars: 5,
-    metric: 'ROAS 1.8 → 4.2',
-    avatar: 'KB',
-    accent: '#10b981',
-  },
-  {
-    name: 'Thomas R.',
-    role: 'Agence SMMA · 19 clients',
-    quote: 'On passait 20h par mois à faire les reportings manuellement. Maintenant le dashboard se met à jour automatiquement et le rapport commenté part aux clients le 5 de chaque mois. On a réinvesti ce temps en prospection — de 12 à 19 clients en 3 mois.',
-    stars: 5,
-    metric: '20h récupérées/mois',
-    avatar: 'TR',
-    accent: '#f97316',
-  },
-]
-
 const HERO_STATS = [
-  { value: '2 800+', label: 'Boutiques' },
-  { value: '4.9/5', label: 'Satisfaction' },
   { value: '<48h', label: 'Démarrage' },
+  { value: '1 à 1', label: 'Accès direct à votre expert' },
 ]
 
 // ─── SVG ILLUSTRATIONS ───────────────────────────────────────────────────────
@@ -195,6 +164,7 @@ function CoachingVisual() {
       {/* Before / After */}
       <text x="40" y="44" fill="rgba(249,115,22,0.7)" fontSize="9" fontWeight="700" letterSpacing="0.1em">AVANT</text>
       <text x="180" y="44" fill="rgba(74,222,128,0.7)" fontSize="9" fontWeight="700" letterSpacing="0.1em">APRÈS</text>
+      <text x="160" y="216" textAnchor="middle" fill="rgba(196,181,253,0.45)" fontSize="7">Illustration — valeurs fictives, non contractuelles</text>
       <line x1="160" y1="34" x2="160" y2="200" stroke="rgba(255,255,255,0.06)" strokeWidth="1" strokeDasharray="4 4" />
       {/* Before metrics */}
       {[
@@ -446,72 +416,6 @@ export default function ServicesPage() {
                 <div className="ml-10">
                   <h3 className="font-bold text-white mb-1 text-sm">{title}</h3>
                   <p className="text-xs leading-relaxed" style={{ color: '#8b8baa' }}>{desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TÉMOIGNAGES ──────────────────────────────────────────────────── */}
-      <section className="py-20" style={{ background: '#0d0d1a' }}>
-        <div className="max-w-5xl mx-auto px-5 sm:px-8">
-          <div className="text-center mb-14">
-            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: '#a78bfa' }}>
-              Résultats réels
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-black text-white" style={{ letterSpacing: '-0.02em' }}>
-              Ce que ça change concrètement.
-            </h2>
-            <p className="text-sm mt-3" style={{ color: '#8b8baa' }}>
-              Des e-commerçants qui avaient exactement vos problèmes, il y a quelques semaines.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-3 gap-6">
-            {TESTIMONIALS.map(({ name, role, quote, stars, metric, avatar, accent }) => (
-              <div
-                key={name}
-                className="p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1"
-                style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  backdropFilter: 'blur(16px)',
-                  border: '1px solid rgba(255,255,255,0.06)',
-                  borderTop: `2px solid ${accent}`,
-                }}
-              >
-                {/* Stars */}
-                <div className="flex items-center gap-0.5 mb-2">
-                  {Array.from({ length: stars }).map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-
-                {/* Metric */}
-                <span
-                  className="text-xs font-bold px-2.5 py-1 rounded-full inline-block mb-4"
-                  style={{ background: `${accent}15`, color: accent }}
-                >
-                  {metric}
-                </span>
-
-                {/* Quote */}
-                <p className="text-sm leading-relaxed mb-6" style={{ color: 'rgba(196,181,253,0.75)' }}>
-                  &ldquo;{quote}&rdquo;
-                </p>
-
-                {/* Author */}
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white"
-                    style={{ background: accent }}
-                  >
-                    {avatar}
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-white">{name}</p>
-                    <p className="text-xs" style={{ color: 'rgba(167,139,250,0.5)' }}>{role}</p>
-                  </div>
                 </div>
               </div>
             ))}

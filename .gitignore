@@ -60,6 +60,9 @@ supabase/.temp/
 # Ancré racine pour ne pas matcher src/components/marketing/
 /marketing/
 
+# data commerciale : cibles prospects, CRM, templates outreach (repo public)
+/docs/marketing/
+
 # screenshots temporaires dev
 /.tmp-screenshots/
 

@@ -33,7 +33,7 @@ function buildMockSupabase(countsByKey: Record<string, number>): SupabaseClient 
     // Le vrai code fait `await supabase.from(...).select(...).eq(...).eq(...).eq(...)`
     // — on rend le builder "thenable" pour que `await` résolve avec le count.
     Object.assign(builder, {
-      // @ts-expect-error mock thenable minimal pour simuler la promesse Supabase
+      // mock thenable minimal pour simuler la promesse Supabase
       then: (resolve: (v: { count: number; error: null }) => void) => {
         const key = `${state.eventType}:${state.variant}`
         resolve({ count: countsByKey[key] ?? 0, error: null })

@@ -4,11 +4,15 @@
 // trial expiré). Quota 1 page/mois pour rester cohérent avec le tunnel public.
 export type PlanType = 'free' | 'starter' | 'pro' | 'agency'
 
-export const PLAN_LIMITS: Record<PlanType, { pages: number; stores: number; whiteLabel: boolean }> = {
-  free:    { pages: 1,    stores: 0,  whiteLabel: false },
-  starter: { pages: 75,   stores: 2,  whiteLabel: false },
-  pro:     { pages: 300,  stores: 7,  whiteLabel: false },
-  agency:  { pages: 9999, stores: 99, whiteLabel: true  },
+// `storeBuilderStores` = nb de boutiques Shopify connectables au Store Builder
+// (table `shopify_store_connections`, distinct de `stores` page-builder).
+// 0 = module non inclus dans le plan (état upgrade). Décision packaging
+// founder : Starter non, Pro 1 store, Agency multi.
+export const PLAN_LIMITS: Record<PlanType, { pages: number; stores: number; whiteLabel: boolean; storeBuilderStores: number }> = {
+  free:    { pages: 1,    stores: 0,  whiteLabel: false, storeBuilderStores: 0  },
+  starter: { pages: 75,   stores: 2,  whiteLabel: false, storeBuilderStores: 0  },
+  pro:     { pages: 300,  stores: 7,  whiteLabel: false, storeBuilderStores: 1  },
+  agency:  { pages: 9999, stores: 99, whiteLabel: true,  storeBuilderStores: 99 },
 }
 
 // ─── USER ────────────────────────────────────────────────────────────────────

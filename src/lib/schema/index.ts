@@ -86,20 +86,14 @@ export function softwareApplicationSchema() {
     operatingSystem: 'Web',
     publisher: { '@id': `${APP_URL}/#organization` },
     offers,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      ratingCount: '247',
-      bestRating: '5',
-    },
     featureList: [
       'Génération IA de copy (titre, bénéfices, FAQ)',
       'Scraping anti-bot AliExpress, Amazon, Alibaba',
-      '42+ templates haute conversion',
+      'Templates de landing pages e-commerce',
       'Connexion native Shopify, WooCommerce, YouCan',
       'A/B testing intégré jusqu\'à 4 variantes',
       'Export HTML standalone',
-      'Multi-langue (8 langues)',
+      'Multi-langue (9 langues)',
       'Mode white-label pour agences',
     ],
   } as const

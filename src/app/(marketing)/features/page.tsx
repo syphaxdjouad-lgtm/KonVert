@@ -6,6 +6,7 @@ import {
 } from '@phosphor-icons/react/ssr'
 import Tooltip from '@/components/ui/Tooltip'
 import { TEMPLATE_COUNT } from '@/lib/templates'
+import { ALLOWED_LANGS } from '@/lib/i18n/languages'
 import RevealController from '@/components/marketing/shared/RevealController'
 import DeepDiveTabs from '@/components/marketing/features/DeepDiveTabs'
 
@@ -25,8 +26,8 @@ const FEATURES_MAIN = [
     ],
     stats: [
       { value: '30s', label: 'Génération' },
-      { value: '98%', label: 'Satisfaction' },
-      { value: '4.9★', label: 'Note moyenne' },
+      { value: String(ALLOWED_LANGS.size), label: 'Langues' },
+      { value: '30 j', label: 'Satisfait ou remboursé' },
     ],
     visual: 'ai',
     accent: '#5B47F5',
@@ -41,17 +42,16 @@ const FEATURES_MAIN = [
     badge: `${TEMPLATE_COUNT} Templates`,
     title: `${TEMPLATE_COUNT} Templates Premium`,
     subtitle: 'Un design pour chaque niche.',
-    desc: `${TEMPLATE_COUNT} templates conçus par des experts e-commerce et testés sur des milliers de boutiques. Mode, Tech, Beauté, Sport, Gaming, Alimentation, Animaux... Chaque template est optimisé pour maximiser les conversions dans sa niche.`,
+    desc: `${TEMPLATE_COUNT} templates conçus par des experts e-commerce. Mode, Tech, Beauté, Sport, Gaming, Alimentation, Animaux... Chaque template est optimisé pour maximiser les conversions dans sa niche.`,
     details: [
       `${TEMPLATE_COUNT} templates niches exclusifs`,
-      'Testé sur +50 000 pages générées',
+      'Export Shopify et WooCommerce',
       'Personnalisable dans le builder',
-      'Nouveaux templates chaque mois',
     ],
     stats: [
       { value: String(TEMPLATE_COUNT), label: 'Templates' },
       { value: '12', label: 'Niches' },
-      { value: '+4.8%', label: 'CVR moyen' },
+      { value: '1 clic', label: 'Aperçu plein écran' },
     ],
     visual: 'templates',
     accent: '#ec4899',
@@ -138,18 +138,18 @@ const FEATURES_MAIN = [
   {
     id: 'langues',
     icon: Globe,
-    badge: '8 Langues',
+    badge: `${ALLOWED_LANGS.size} Langues`,
     title: 'Génération Multi-langues',
     subtitle: 'Vendez partout dans le monde.',
-    desc: "Génère tes pages en français, anglais, espagnol, allemand, italien, portugais, arabe et chinois. Chaque copy est natif — pas une traduction mécanique. Atteins des marchés internationaux sans agence de traduction.",
+    desc: "Génère tes pages en français, anglais, espagnol, allemand, italien, portugais, néerlandais, arabe et chinois. Chaque copy est natif — pas une traduction mécanique. Atteins des marchés internationaux sans agence de traduction.",
     details: [
-      'FR, EN, ES, DE, IT, PT, AR, ZH',
+      'FR, EN, ES, DE, IT, PT, NL, AR, ZH',
       'Copy natif, pas une traduction Google',
       'Adapté aux habitudes culturelles de chaque marché',
       'Sélection de la langue en 1 clic',
     ],
     stats: [
-      { value: '8', label: 'Langues' },
+      { value: String(ALLOWED_LANGS.size), label: 'Langues' },
       { value: 'Natif', label: 'Qualité copy' },
       { value: '1 clic', label: 'Changement' },
     ],
@@ -231,12 +231,12 @@ function FeatureVisualContent({ id }: { id: string }) {
   // ── TEMPLATES ───────────────────────────────────────────────────────────────
   if (id === 'templates') {
     const cards = [
-      { img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&q=80', niche: 'Sport', cvr: '+5.2%' },
-      { img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&q=80', niche: 'Beauté', cvr: '+4.8%' },
-      { img: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=300&q=80', niche: 'Luxe', cvr: '+6.1%' },
-      { img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80', niche: 'Mode', cvr: '+4.3%' },
-      { img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&q=80', niche: 'Tech', cvr: '+5.7%' },
-      { img: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=300&q=80', niche: 'Maison', cvr: '+3.9%' },
+      { img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&q=80', niche: 'Sport' },
+      { img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&q=80', niche: 'Beauté' },
+      { img: 'https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=300&q=80', niche: 'Luxe' },
+      { img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80', niche: 'Mode' },
+      { img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&q=80', niche: 'Tech' },
+      { img: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=300&q=80', niche: 'Maison' },
     ]
     return (
       <div style={{ padding: '20px', height: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -254,7 +254,6 @@ function FeatureVisualContent({ id }: { id: string }) {
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%)' }} />
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '6px 8px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <span style={{ fontSize: 10, fontWeight: 700, color: '#fff' }}>{c.niche}</span>
-                <span style={{ fontSize: 9, fontWeight: 800, color: '#4ade80', background: 'rgba(0,0,0,0.5)', borderRadius: 4, padding: '1px 4px' }}>{c.cvr}</span>
               </div>
             </div>
           ))}

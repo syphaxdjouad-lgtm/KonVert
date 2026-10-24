@@ -21,6 +21,7 @@ import type { ProductType } from '@/lib/templates'
 import type { SectionKey } from '@/lib/templates/sections'
 import { detectProductType } from '@/lib/templates/detect-product-type'
 import { getSectionPolicy, policyToLegacyKeys, type SectionPolicy } from './section-policy'
+import { detectLangDrift } from './lang-drift'
 
 // Champ LandingPageData vidé par chaque SectionKey legacy quand la section est
 // "discouraged" par la policy — renderRichSections/SECTION_RENDERERS skippent
@@ -453,7 +454,29 @@ const TONE_INSTRUCTIONS: Record<string, string> = {
 //   doit jamais être injecté ici — tout ça va dans buildUserPrompt().
 // - Côté DeepSeek, le cache est activé automatiquement dès que le même
 //   system prompt est renvoyé dans les ~heures. Pas de header à ajouter.
-const buildSystemPrompt = (language: string): string => {
+//
+// Bug C (drift langue — investigation 2026-07-28/08-08) : sur langue non-FR
+// (ex arabe), les champs headline→social_proof revenaient SYSTÉMATIQUEMENT
+// en français malgré la consigne explicite, alors que les champs plus tardifs
+// du même JSON (guarantee→final_pitch) suivaient la consigne ~50% du temps.
+// Repro locale (harness jetable, 8 runs baseline) : 64/64 = 100% drift FR sur
+// les champs précoces. Isolation par A/B testé sur 4 conditions :
+//   - neutraliser le bloc few-shot FR (486-513 legacy)     → 0% d'effet
+//   - neutraliser SEULEMENT le schema JSON ci-dessous       → drift tombe à 0%
+//   - traduire SEULEMENT les règles 0-13 (buildUserPrompt)  → 0% d'effet
+//   - neutraliser schema + règles ensemble                  → 83% (pire que schema seul)
+// Cause isolée : le schema JSON qui suit contenait des exemples de COPY
+// littéraux en français ("ex: 'Les actives 30-45 ans'", "ex: 'Sans [produit]'",
+// "Prix, Ingrédients naturels...", "Notre produit", "Marque pharmacie"...) —
+// ces exemples ancrent le modèle en français pour les champs correspondants,
+// indépendamment de la consigne de langue. Fix : les exemples de COPY
+// littéraux ont été retirés/rendus structurels (langue-agnostiques) ;
+// les DESCRIPTIONS méta (instructions sur le format attendu) restent en
+// français — elles n'influencent pas la langue de sortie (prouvé par le test
+// "règles 0-13 traduites seules → 0% d'effet"). Les règles 0-13 de
+// buildUserPrompt n'ont volontairement PAS été touchées (inefficace seul,
+// contre-productif combiné).
+export const buildSystemPrompt = (language: string): string => {
   const langName = LANGUAGE_NAMES[language] || 'français'
 
   // Partie enrichie v2 : 5 nouveaux champs CRO.
@@ -547,7 +570,7 @@ Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
   "headline": "string — accroche principale, max 12 mots, image mentale forte",
   "subtitle": "string — développe la promesse, max 20 mots",
   "hero_badges": [
-    "string — badge court 1-3 mots (ex: 'Made in France', 'Cruelty-free', 'Livraison 48h', 'Cosmos Organic')",
+    "string — badge court 1-3 mots exprimant un argument de confiance (origine, certification, livraison)",
     "string", "string"
   ],
   "story": {
@@ -557,12 +580,12 @@ Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
     "transformation": "string — la nouvelle réalité du client après usage (1-2 phrases)"
   },
   "target_audience": [
-    { "profile": "ex: 'Les actives 30-45 ans'", "pain": "douleur principale en 1 phrase courte" },
+    { "profile": "description démographique courte du profil client", "pain": "douleur principale en 1 phrase courte" },
     { "profile": "string", "pain": "string" },
     { "profile": "string", "pain": "string" }
   ],
   "features": [
-    { "icon": "emoji 1 caractère (ex: '🌿')", "title": "2-3 mots", "description": "1 phrase max 12 mots" },
+    { "icon": "emoji 1 caractère pertinent", "title": "2-3 mots", "description": "1 phrase max 12 mots" },
     { "icon": "string", "title": "string", "description": "string" },
     { "icon": "string", "title": "string", "description": "string" },
     { "icon": "string", "title": "string", "description": "string" },
@@ -570,7 +593,7 @@ Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
     { "icon": "string", "title": "string", "description": "string" }
   ],
   "unique_mechanism": {
-    "name": "string — nom court du mécanisme/technologie (ex: 'Bio-Stim Complex', 'TripleAction Formula')",
+    "name": "string — nom court du mécanisme/technologie, invente un nom propriétaire court",
     "description": "2-3 phrases : ce qui rend ce produit unique, le POURQUOI ça marche, ingrédient/technique différenciante",
     "proof": "1 phrase de preuve concrète (étude, brevet, % d'efficacité, certification)"
   },
@@ -581,31 +604,31 @@ Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
     { "step": 4, "title": "string", "description": "string" }
   ],
   "before_after": [
-    { "before": "ex: 'Peau terne, fatiguée, ridules visibles dès 6h'", "after": "ex: 'Peau éclatante, lissée, hydratée toute la journée'" },
+    { "before": "état douloureux avant usage, 1 phrase concrète", "after": "état désirable après usage, 1 phrase concrète" },
     { "before": "string", "after": "string" },
     { "before": "string", "after": "string" }
   ],
   "comparison": {
-    "without_title": "ex: 'Sans [produit]'",
+    "without_title": "titre court négatif (2-4 mots)",
     "without": ["frustration 1", "frustration 2", "frustration 3", "frustration 4"],
-    "with_title": "ex: 'Avec [produit]'",
+    "with_title": "titre court positif (2-4 mots)",
     "with": ["bénéfice 1", "bénéfice 2", "bénéfice 3", "bénéfice 4"]
   },
   "competitor_comparison": {
-    "criteria": ["Prix", "Ingrédients naturels", "Résultats visibles", "Garantie", "Avis clients"],
-    "us": { "name": "Notre produit", "values": ["29€", "100%", "14 jours", "30 jours", "4.8/5"] },
+    "criteria": ["critère de comparaison 1", "critère 2", "critère 3", "critère 4", "critère 5"],
+    "us": { "name": "nom du produit/marque", "values": ["valeur 1", "valeur 2", "valeur 3", "valeur 4", "valeur 5"] },
     "them": [
-      { "name": "Concurrent A (nom générique : 'Marque pharmacie')", "values": ["49€", "60%", "6 semaines", "14 jours", "3.9/5"] },
-      { "name": "Concurrent B (nom générique : 'Marque luxe')", "values": ["89€", "80%", "1 mois", "Aucune", "4.2/5"] }
+      { "name": "nom de concurrent générique par type (SANS vraie marque)", "values": ["valeur 1", "valeur 2", "valeur 3", "valeur 4", "valeur 5"] },
+      { "name": "nom de concurrent générique par type (SANS vraie marque)", "values": ["valeur 1", "valeur 2", "valeur 3", "valeur 4", "valeur 5"] }
     ]
   },
   "social_proof": {
-    "customers": "string — ex: '12 847 clients satisfaits' (chiffre réaliste, pas rond)",
-    "rating": "string — ex: '4.8/5 sur 2 341 avis vérifiés'",
-    "sold": "string — ex: '3 200+ commandes ce mois-ci'"
+    "customers": "string — nombre de clients satisfaits, chiffre réaliste non arrondi",
+    "rating": "string — note moyenne sur 5 + nombre d'avis vérifiés",
+    "sold": "string — volume de commandes récentes"
   },
   "press_mentions": [
-    "string — nom de média réaliste (ex: 'Vogue', 'Marie Claire', 'Forbes', 'Le Figaro Madame')",
+    "string — nom de média réaliste et pertinent pour la catégorie produit",
     "string", "string", "string", "string"
   ],
   "testimonials": [
@@ -615,46 +638,46 @@ Tu réponds avec ce JSON exact (sans markdown, sans commentaire) :
   ],
   "founder_note": {
     "name": "string — prénom + nom du fondateur (cohérent culture cible)",
-    "role": "string — ex: 'Fondatrice & CEO'",
+    "role": "string — titre/fonction du fondateur",
     "message": "3-4 phrases — pourquoi j'ai créé ce produit, mon histoire personnelle, ma promesse au client"
   },
   "value_stack": {
     "items": [
-      { "label": "Produit principal", "value": "ex: '79€'" },
-      { "label": "Bonus 1", "value": "ex: '29€'" },
-      { "label": "Bonus 2", "value": "ex: '19€'" },
-      { "label": "Bonus 3", "value": "ex: '15€'" }
+      { "label": "produit principal", "value": "montant" },
+      { "label": "bonus 1", "value": "montant" },
+      { "label": "bonus 2", "value": "montant" },
+      { "label": "bonus 3", "value": "montant" }
     ],
-    "total": "ex: '142€'",
-    "you_pay": "ex: '49€'",
-    "savings": "ex: '93€ d\\'économie aujourd\\'hui'"
+    "total": "montant total",
+    "you_pay": "montant final",
+    "savings": "montant économisé"
   },
   "guarantee": {
-    "title": "ex: 'Satisfait ou remboursé'",
+    "title": "titre court de garantie",
     "description": "explication courte (1-2 phrases)",
-    "duration": "ex: '30 jours'"
+    "duration": "durée de la garantie"
   },
   "risk_reversal": [
-    { "icon": "🚚", "title": "Livraison rapide", "description": "ex: 'Expédié sous 24h, livré en 2-4 jours'" },
-    { "icon": "↩️", "title": "Retour facile", "description": "ex: 'Retour gratuit pendant 30 jours'" },
-    { "icon": "💬", "title": "Support 7/7", "description": "ex: 'Réponse en moins de 2h, par email ou chat'" }
+    { "icon": "🚚", "title": "titre court (livraison)", "description": "1 phrase concrète" },
+    { "icon": "↩️", "title": "titre court (retour)", "description": "1 phrase concrète" },
+    { "icon": "💬", "title": "titre court (support)", "description": "1 phrase concrète" }
   ],
   "bonuses": [
-    { "title": "bonus 1", "description": "courte description", "value": "ex: '29€'" },
+    { "title": "bonus 1", "description": "courte description", "value": "montant" },
     { "title": "string", "description": "string", "value": "string" },
     { "title": "string", "description": "string", "value": "string" }
   ],
   "objections": [
-    { "objection": "objection émotionnelle (ex: 'J\\'ai déjà essayé 10 produits sans résultat')", "response": "réponse rassurante 2-3 phrases qui désamorce" },
+    { "objection": "objection émotionnelle réaliste du client", "response": "réponse rassurante 2-3 phrases qui désamorce" },
     { "objection": "string", "response": "string" },
     { "objection": "string", "response": "string" },
     { "objection": "string", "response": "string" },
     { "objection": "string", "response": "string" }
   ],
   "community_callout": {
-    "title": "ex: 'Rejoignez 12 000+ membres sur Instagram'",
+    "title": "titre engageant d'invitation à la communauté",
     "description": "1 phrase qui invite à rejoindre la communauté",
-    "cta": "ex: '@marquename' ou 'Suivez-nous'"
+    "cta": "court appel à l'action"
   },
   "faq": [
     { "question": "string", "answer": "réponse rassurante, 2-3 phrases max" },
@@ -708,23 +731,23 @@ DONNÉES PRODUIT :
 - Variantes : ${product.variants.map(v => `${v.name}: ${v.values.join(', ')}`).join(' | ') || 'aucune'}
 
 RÈGLES DE GÉNÉRATION :
-0. ANCRAGE PRODUIT — RÈGLE ABSOLUE : Tu ne peux PAS inventer une catégorie de produit. Le "product_name" que tu retournes doit décrire EXACTEMENT le produit fourni dans "Nom" ci-dessus (tu peux reformuler/raccourcir, pas changer la nature). Si "Nom" parle d'un blender, ne pas écrire un sérum. Si "Nom" parle d'une montre, ne pas écrire un parfum. TOUS les contenus (story, benefits, testimonials, FAQ, features, mécanisme, comparatif concurrents, objections, fondateur, etc.) doivent rester cohérents avec ce produit réel — interdit d'inventer des ingrédients, des matériaux ou des cas d'usage qui ne correspondent pas au produit.
+0. PRODUCT ANCHOR — ABSOLUTE RULE: never invent a different product category. "product_name" must exactly describe the product given in "Nom" above (you may rephrase/shorten, never change its nature). ALL content (story, benefits, testimonials, FAQ, features, mechanism, competitor comparison, objections, founder note, etc.) must stay strictly consistent with this real product — never invent ingredients, materials, or use cases that don't match it.
 
-1. Le headline doit créer une IMAGE MENTALE FORTE et toucher un désir profond, pas décrire le produit
-2. hero_badges : 3 badges courts de confiance (origine, certification, livraison) cohérents avec le produit
-3. Le storytelling (story) suit PAS : problème vécu → agitation émotionnelle → solution avec mécanisme → transformation
-4. target_audience : 3 profils ICP distincts (âge/situation/besoin) avec leur douleur principale
-5. Les 5 bénéfices : verbe d'action, orientés résultat/transformation, 15 mots max
-6. features : 6 features concrètes avec icône emoji pertinente (matériau, technologie, ergonomie, garantie...)
-7. unique_mechanism : nomme la technologie/ingrédient/technique unique qui justifie POURQUOI ça marche, avec une preuve concrète
-8. how_it_works : 4 étapes claires (achat → utilisation → résultat) en mots du client
-9. before_after : 3 paires concrètes — état douloureux AVANT → état désirable APRÈS
-10. comparison : "Avec / Sans" 4 points symétriques, bénéfices concrets vs frustrations réelles
-11. competitor_comparison : 5 critères + nous + 2 concurrents GÉNÉRIQUES (pas de vraies marques, type "Marque pharmacie", "Marque luxe", "Marque drugstore") — toujours nous gagnant sur ≥3 critères sans tricher
-12. social_proof : chiffres précis et crédibles (jamais ronds : 12 847 plutôt que 12 000)
-13. press_mentions : MÊME RÈGLE QUE press_logos (cf. règle 28). Liste vide [] par défaut.
-    Ne mentionne que des publications mondialement reconnues qui ont réellement couvert la marque
-    (DTC > 5 000 avis OU nom dans la description). 0 à 3 entrées max. Mieux vaut [] qu'halluciner.
+1. headline: create a STRONG MENTAL IMAGE and touch a deep desire, never just describe the product
+2. hero_badges: 3 short trust badges (origin, certification, shipping) relevant to the product
+3. story: follow PAS — problem experienced → emotional agitation → solution with mechanism → transformation
+4. target_audience: 3 distinct ICP profiles (age/situation/need) with their main pain point
+5. benefits: action verb, transformation/result oriented, max 15 words each
+6. features: 6 concrete features with a relevant emoji icon (material, technology, ergonomics, warranty...)
+7. unique_mechanism: name the unique technology/ingredient/technique that explains WHY it works, with concrete proof
+8. how_it_works: 4 clear steps (purchase → use → result) in the customer's own words
+9. before_after: 3 concrete pairs — painful BEFORE state → desirable AFTER state
+10. comparison: "With / Without" — 4 symmetric points, concrete benefits vs real frustrations
+11. competitor_comparison: 5 criteria + us + 2 GENERIC competitors (no real brand names, just a type/category) — we win on ≥3 criteria without cheating
+12. social_proof: precise, credible, non-round numbers
+13. press_mentions: SAME RULE as press_logos (see rule 28). Empty [] by default.
+    Only mention globally recognized publications that genuinely covered the brand
+    (DTC brand with > 5,000 reviews, OR the publication's name is explicitly in the description). 0 to 3 entries max. Prefer [] over hallucinating.
 14. Témoignages : 3 prénoms cohérents avec la langue cible, détails concrets (pas générique), émotion vraie
 15. founder_note : prénom+nom de fondateur cohérent culture cible, message personnel et authentique (3-4 phrases)
 16. value_stack : produit + 3 bonus listés, total > prix final, économie chiffrée mise en avant
@@ -745,6 +768,8 @@ ${USE_V2_PROMPT ? `26. photo_descriptions : 3 à 6 descriptions UGC (genre appar
 ${policyBlock}
 
 CRITIQUE : Remplis TOUS les champs du schema JSON, même si tu dois inventer du contenu plausible — sauf exclusion explicite par la consigne de ciblage produit ci-dessus, si présente, auquel cas tu omets ou laisses vide la section exclue. Les champs vides cassent le rendu de la landing sur les sections attendues.
+
+RAPPEL CRITIQUE DE LANGUE : headline, subtitle, target_audience, features, unique_mechanism, how_it_works, comparison et social_proof DOIVENT être rédigés en ${langName}, sans AUCUNE exception, y compris les tout premiers mots générés. Ne bascule JAMAIS vers le français pour ces champs si ${langName} n'est pas le français.
 
 Renvoie UNIQUEMENT le JSON, rien d'autre.`
 }
@@ -837,33 +862,75 @@ export async function generateLandingPage(
       product_type: null as null,
     }))
 
-  let res = await callDeepSeek()
-  if (!res.ok && (res.status === 429 || res.status >= 500)) {
-    // Backoff 800ms puis retry une seule fois
-    await new Promise(r => setTimeout(r, 800))
-    res = await callDeepSeek()
+  // Un appel DeepSeek complet : fetch (avec son propre retry 429/5xx) + parse.
+  // Isolé pour pouvoir être rejoué tel quel par le filet anti-drift-langue
+  // ci-dessous (Bug C — cf commentaire buildSystemPrompt).
+  const generateOnce = async (): Promise<LandingPageData> => {
+    let res = await callDeepSeek()
+    if (!res.ok && (res.status === 429 || res.status >= 500)) {
+      // Backoff 800ms puis retry une seule fois
+      await new Promise(r => setTimeout(r, 800))
+      res = await callDeepSeek()
+    }
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => '')
+      throw new Error(`DeepSeek ${res.status} : ${errText.slice(0, 200)}`)
+    }
+
+    const json = await res.json() as DeepSeekResponse
+    const raw = json.choices[0]?.message?.content ?? ''
+
+    // Nettoyage défensif au cas où le LLM ajouterait quand même un ```json
+    const cleaned = raw
+      .replace(/^```json\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/```\s*$/i, '')
+      .trim()
+
+    try {
+      return JSON.parse(cleaned) as LandingPageData
+    } catch {
+      throw new Error('JSON invalide reçu de DeepSeek — réessaie')
+    }
   }
 
-  if (!res.ok) {
-    const errText = await res.text().catch(() => '')
-    throw new Error(`DeepSeek ${res.status} : ${errText.slice(0, 200)}`)
+  let data = await generateOnce()
+
+  // ─── Filet anti-drift-langue (Bug C) ───────────────────────────────────
+  // Neutraliser le prompt (schema JSON + règles 0-13 + rappel explicite,
+  // cf buildSystemPrompt/buildUserPrompt) réduit le drift FR de 100% → 25%
+  // mesuré sur ~30 runs réels (langue arabe, produit TV) mais ne l'élimine
+  // pas — DeepSeek "décide" parfois tôt dans la génération de rester en
+  // français malgré la consigne, de façon stochastique. On détecte le drift
+  // sur headline+subtitle (premiers champs générés, les plus touchés) et on
+  // relance UNE fois l'appel complet si besoin. Cap à 1 retry : la génération
+  // prend ~20s et le scrape ~50s sous maxDuration 90s — pas de marge pour plus.
+  // Si le retry échoue aussi → on accepte quand même la sortie (ne jamais
+  // bloquer l'utilisateur) mais on logue un warning + Sentry pour visibilité
+  // prod (tag phase: 'lang_drift').
+  const MAX_LANG_DRIFT_RETRIES = 1
+  let langDriftRetries = 0
+  while (
+    langDriftRetries < MAX_LANG_DRIFT_RETRIES &&
+    detectLangDrift(`${data.headline ?? ''} ${data.subtitle ?? ''}`, language)
+  ) {
+    langDriftRetries++
+    console.warn(`[generateLandingPage] drift langue détecté (${language}) — retry ${langDriftRetries}/${MAX_LANG_DRIFT_RETRIES}`)
+    data = await generateOnce()
   }
-
-  const json = await res.json() as DeepSeekResponse
-  const raw = json.choices[0]?.message?.content ?? ''
-
-  // Nettoyage défensif au cas où le LLM ajouterait quand même un ```json
-  const cleaned = raw
-    .replace(/^```json\s*/i, '')
-    .replace(/^```\s*/i, '')
-    .replace(/```\s*$/i, '')
-    .trim()
-
-  let data: LandingPageData
-  try {
-    data = JSON.parse(cleaned) as LandingPageData
-  } catch {
-    throw new Error('JSON invalide reçu de DeepSeek — réessaie')
+  if (detectLangDrift(`${data.headline ?? ''} ${data.subtitle ?? ''}`, language)) {
+    console.warn(`[generateLandingPage] drift langue toujours présent après ${langDriftRetries} retry(s) (${language}) — sortie acceptée quand même`)
+    // try/catch : le monitoring ne doit jamais faire échouer une génération
+    // réussie (hors runtime Next, captureMessage peut être absent).
+    try {
+      const Sentry = await import('@sentry/nextjs').catch(() => null)
+      Sentry?.captureMessage?.('Drift langue persistant après retries', {
+        level: 'warning',
+        tags: { phase: 'lang_drift' },
+        extra: { language, retriesUsed: langDriftRetries, productTitle: product.title },
+      })
+    } catch { /* monitoring best-effort */ }
   }
 
   // Forcer le nom produit depuis le mini-call dédié : version propre (sans

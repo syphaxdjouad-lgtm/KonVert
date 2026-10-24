@@ -18,7 +18,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${APP_URL}/agence`,           lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${APP_URL}/about`,            lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.6 },
     { url: `${APP_URL}/contact`,          lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.6 },
-    { url: `${APP_URL}/testimonials`,     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
     { url: `${APP_URL}/integrations`,     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
     { url: `${APP_URL}/changelog`,        lastModified: new Date(), changeFrequency: 'monthly', priority: 0.4 },
   ]

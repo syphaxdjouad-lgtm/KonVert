@@ -13,8 +13,12 @@ import { cookies } from 'next/headers'
 import { verifyHmac, encryptToken, exchangeCodeForTokenWithCredentials, isValidShopDomain } from '@/lib/shopify'
 import { getStoreBuilderApiKey, getStoreBuilderApiSecret, STORE_BUILDER_STATE_COOKIE } from '@/lib/shopify/store-builder/oauth'
 import { createClient } from '@/lib/supabase/server'
+import { canUserConnectShop, guardStoreBuilderUserRoute } from '@/lib/store-builder/access'
 
 export async function GET(req: NextRequest) {
+  const gate = await guardStoreBuilderUserRoute()
+  if (!gate.ok) return gate.response
+
   const params = Object.fromEntries(req.nextUrl.searchParams.entries())
   const { shop, code, state } = params
 
@@ -39,6 +43,13 @@ export async function GET(req: NextRequest) {
 
   if (!code) {
     return NextResponse.redirect(new URL('/dashboard/store-builder?sb_error=oauth_missing_code', req.url))
+  }
+
+  // 2b. Quota de boutiques du plan — re-vérifié ici (point d'écriture) :
+  // le connect peut avoir été lancé avant qu'un autre onglet ne consomme
+  // le slot. Avant l'échange de code : aucun token obtenu ni stocké.
+  if (!(await canUserConnectShop(gate.userId, gate.access.maxStores, shop))) {
+    return NextResponse.redirect(new URL('/dashboard/store-builder?sb_error=store_limit_reached', req.url))
   }
 
   // 3. Échanger le code contre un access token — on récupère le `scope`

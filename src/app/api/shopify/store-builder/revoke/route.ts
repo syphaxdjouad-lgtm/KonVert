@@ -22,12 +22,18 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { decryptToken } from '@/lib/shopify'
 import { rateLimitAsync } from '@/lib/security/ratelimit'
+import { guardStoreBuilderUserRoute } from '@/lib/store-builder/access'
 
 const revokeBodySchema = z.object({
   connection_id: z.string().uuid('connection_id doit être un UUID'),
 })
 
 export async function POST(req: NextRequest) {
+  // allowUpgrade : un Pro redescendu en Starter doit pouvoir déconnecter
+  // sa boutique (et révoquer le token) même sans plan éligible.
+  const gate = await guardStoreBuilderUserRoute({ allowUpgrade: true })
+  if (!gate.ok) return gate.response
+
   try {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()

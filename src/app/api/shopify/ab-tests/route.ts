@@ -29,6 +29,7 @@ import {
 } from '@/lib/shopify/store-builder'
 import { getAppUrl } from '@/lib/env'
 import { computeAbTestStats } from '@/lib/store-builder/ab-testing/compute-stats'
+import { guardStoreBuilderUserRoute } from '@/lib/store-builder/access'
 
 const createBodySchema = z.object({
   connection_id: z.string().uuid('connection_id doit être un UUID'),
@@ -55,6 +56,9 @@ async function requireOwnedConnection(userId: string, connectionId: string): Pro
 }
 
 export async function POST(req: NextRequest) {
+  const gate = await guardStoreBuilderUserRoute()
+  if (!gate.ok) return gate.response
+
   const supabase = await createClient()
   const {
     data: { user },
@@ -173,6 +177,9 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+  const gate = await guardStoreBuilderUserRoute()
+  if (!gate.ok) return gate.response
+
   const supabase = await createClient()
   const {
     data: { user },

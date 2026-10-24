@@ -19,8 +19,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { generateState, isValidShopDomain } from '@/lib/shopify'
 import { AB_TEST_OAUTH_SCOPE, buildStoreBuilderOAuthUrl, STORE_BUILDER_STATE_COOKIE } from '@/lib/shopify/store-builder/oauth'
+import { canUserConnectShop, guardStoreBuilderUserRoute } from '@/lib/store-builder/access'
 
 export async function GET(req: NextRequest) {
+  const gate = await guardStoreBuilderUserRoute()
+  if (!gate.ok) return gate.response
+
   const shopParam = req.nextUrl.searchParams.get('shop')
   const shop = shopParam?.toLowerCase()
 
@@ -29,6 +33,10 @@ export async function GET(req: NextRequest) {
       { error: 'Paramètre shop invalide (ex: mon-store.myshopify.com)' },
       { status: 400 }
     )
+  }
+
+  if (!(await canUserConnectShop(gate.userId, gate.access.maxStores, shop))) {
+    return NextResponse.redirect(new URL('/dashboard/store-builder?sb_error=store_limit_reached', req.url))
   }
 
   // `upgrade=ab_test` : reconnexion déclenchée depuis la création du 1er test

@@ -11,6 +11,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { guardStoreBuilderPublicRoute } from '@/lib/store-builder/access'
 
 const querySchema = z.object({
   shop: z.string().regex(/^[a-z0-9][a-z0-9-]*\.myshopify\.com$/, 'shop invalide'),
@@ -24,6 +25,9 @@ interface ActiveTestRow {
 }
 
 export async function GET(req: NextRequest) {
+  const disabled = guardStoreBuilderPublicRoute()
+  if (disabled) return disabled
+
   const parsed = querySchema.safeParse({
     shop: req.nextUrl.searchParams.get('shop'),
     product_id: req.nextUrl.searchParams.get('product_id'),

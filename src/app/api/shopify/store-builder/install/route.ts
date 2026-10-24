@@ -31,6 +31,7 @@ import {
   uploadTheme,
   type StoreBuilderContext,
 } from '@/lib/shopify/store-builder'
+import { guardStoreBuilderUserRoute } from '@/lib/store-builder/access'
 
 export const maxDuration = 60
 
@@ -76,6 +77,9 @@ const installBodySchema = z.object({
 type InstallStep = 'upload_theme' | 'create_product' | 'activate_theme'
 
 export async function POST(req: NextRequest) {
+  const gate = await guardStoreBuilderUserRoute()
+  if (!gate.ok) return gate.response
+
   try {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()

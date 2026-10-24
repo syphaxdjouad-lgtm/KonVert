@@ -21,6 +21,7 @@ import { safeCompare } from '@/lib/security/safe-compare'
 import { decryptToken } from '@/lib/shopify'
 import { DEFAULT_STORE_BUILDER_API_VERSION, shopifyAdminRequest, type StoreBuilderContext } from '@/lib/shopify/store-builder'
 import { evaluateAuditCriteria, computeAuditScore, selectTopRecommendations, fetchAuditInputs } from '@/lib/store-builder'
+import { isStoreBuilderEnabled } from '@/lib/store-builder/flag'
 
 export const maxDuration = 60
 export const runtime = 'nodejs'
@@ -50,6 +51,12 @@ interface DueConnection {
 export async function GET(req: NextRequest) {
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+  }
+
+  // Flag OFF : no-op 200 (pas d'erreur → pas d'alerte cron Vercel), sans
+  // toucher aux tables Store Builder potentiellement non migrées.
+  if (!isStoreBuilderEnabled()) {
+    return NextResponse.json({ skipped: true, reason: 'store_builder_disabled' })
   }
 
   const now = Date.now()

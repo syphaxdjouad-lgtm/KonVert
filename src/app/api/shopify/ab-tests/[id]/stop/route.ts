@@ -11,8 +11,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
+import { guardStoreBuilderUserRoute } from '@/lib/store-builder/access'
 
 export async function POST(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  // allowUpgrade : un user redescendu sous Pro doit pouvoir arrêter un test
+  // encore actif sur son storefront.
+  const gate = await guardStoreBuilderUserRoute({ allowUpgrade: true })
+  if (!gate.ok) return gate.response
+
   const { id } = await params
 
   const supabase = await createClient()

@@ -19,6 +19,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { verifyShopifyWebhookHmac, extractAbAttribution, getStoreBuilderApiSecret } from '@/lib/shopify/store-builder'
+import { guardStoreBuilderPublicRoute } from '@/lib/store-builder/access'
 
 export const maxDuration = 30
 export const runtime = 'nodejs'
@@ -30,6 +31,9 @@ interface ShopifyOrderPaidPayload {
 }
 
 export async function POST(req: NextRequest) {
+  const disabled = guardStoreBuilderPublicRoute()
+  if (disabled) return disabled
+
   const rawBody = await req.text()
   const hmacHeader = req.headers.get('x-shopify-hmac-sha256')
   const shopHeader = req.headers.get('x-shopify-shop-domain')

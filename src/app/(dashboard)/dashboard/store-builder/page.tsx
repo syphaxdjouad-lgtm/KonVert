@@ -21,6 +21,7 @@ const SB_ERROR_MESSAGES: Record<string, string> = {
   oauth_missing_code: 'Shopify n\'a pas renvoyé de code d\'autorisation — réessaie.',
   oauth_token_failed: "Échec de l'échange du jeton avec Shopify — réessaie dans quelques minutes.",
   store_save_failed: 'La connexion a réussi côté Shopify mais l\'enregistrement a échoué — réessaie.',
+  store_limit_reached: 'Ton plan inclut 1 boutique Store Builder. Passe au plan Agency pour en connecter plusieurs.',
 }
 
 function ConfirmModal({

@@ -17,6 +17,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { rateLimitAsync } from '@/lib/security/ratelimit'
+import { guardStoreBuilderPublicRoute } from '@/lib/store-builder/access'
 
 const eventBodySchema = z.object({
   shop_domain: z.string().regex(/^[a-z0-9][a-z0-9-]*\.myshopify\.com$/, 'shop_domain invalide'),
@@ -28,6 +29,9 @@ const eventBodySchema = z.object({
 })
 
 export async function POST(req: NextRequest) {
+  const disabled = guardStoreBuilderPublicRoute()
+  if (disabled) return disabled
+
   const rawBody = await req.json().catch(() => null)
   const parsed = eventBodySchema.safeParse(rawBody)
   if (!parsed.success) {

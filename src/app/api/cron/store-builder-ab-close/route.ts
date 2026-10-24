@@ -19,6 +19,7 @@ import * as Sentry from '@sentry/nextjs'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 import { safeCompare } from '@/lib/security/safe-compare'
 import { computeAbTestStats, AB_MAX_DURATION_DAYS } from '@/lib/store-builder'
+import { isStoreBuilderEnabled } from '@/lib/store-builder/flag'
 
 export const maxDuration = 60
 export const runtime = 'nodejs'
@@ -33,6 +34,12 @@ function isAuthorized(req: NextRequest): boolean {
 export async function GET(req: NextRequest) {
   if (!isAuthorized(req)) {
     return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+  }
+
+  // Flag OFF : no-op 200 (pas d'erreur → pas d'alerte cron Vercel), sans
+  // toucher aux tables Store Builder potentiellement non migrées.
+  if (!isStoreBuilderEnabled()) {
+    return NextResponse.json({ skipped: true, reason: 'store_builder_disabled' })
   }
 
   const cutoff = new Date(Date.now() - AB_MAX_DURATION_DAYS * 24 * 60 * 60 * 1000).toISOString()

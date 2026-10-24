@@ -18,6 +18,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 import { decryptToken } from '@/lib/shopify'
 import { DEFAULT_STORE_BUILDER_API_VERSION, updateProductField, type StoreBuilderContext } from '@/lib/shopify/store-builder'
 import { computeAbTestStats } from '@/lib/store-builder/ab-testing/compute-stats'
+import { guardStoreBuilderUserRoute } from '@/lib/store-builder/access'
 
 const bodySchema = z.object({
   force: z.boolean().optional().default(false),
@@ -25,6 +26,9 @@ const bodySchema = z.object({
 })
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const gate = await guardStoreBuilderUserRoute()
+  if (!gate.ok) return gate.response
+
   const { id } = await params
 
   const supabase = await createClient()

@@ -273,7 +273,7 @@ function SignupContent() {
               </span>
             </h2>
             <p className="text-sm" style={{ color: 'rgba(167,139,250,0.55)' }}>
-              Rejoins 2 800+ e-commerçants qui convertissent avec KONVERT.
+              Ta première page produit gratuite, prête en 30 secondes.
             </p>
           </div>
 
@@ -461,9 +461,9 @@ function SignupContent() {
         {/* Stats bas de page */}
         <div className="relative z-10 flex items-center gap-6">
           {[
-            { icon: '📈', value: '+300%', label: 'CTR moyen' },
-            { icon: '⚡', value: '28s', label: 'Generation' },
-            { icon: '⭐', value: '4.9/5', label: '247 avis' },
+            { icon: '🌍', value: '9', label: 'Langues' },
+            { icon: '⚡', value: '~30 s', label: 'Génération' },
+            { icon: '🛡️', value: '30 j', label: 'Satisfait ou remboursé' },
           ].map(s => (
             <div key={s.label} className="flex-1 text-center p-3 rounded-2xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(139,92,246,0.15)' }}>
               <p className="text-sm mb-0.5">{s.icon}</p>

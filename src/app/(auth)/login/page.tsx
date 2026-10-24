@@ -193,9 +193,9 @@ export default function LoginPage() {
           {/* Métriques */}
           <div className="grid grid-cols-3 gap-3">
             {[
-              { icon: <TrendingUp className="w-4 h-4" />, value: '+300%', label: 'CTR moyen', color: '#4ade80', bg: 'rgba(74,222,128,0.08)' },
-              { icon: <MousePointerClick className="w-4 h-4" />, value: '28s', label: 'Génération', color: '#a78bfa', bg: 'rgba(167,139,250,0.08)' },
-              { icon: <Star className="w-4 h-4" />, value: '4.9/5', label: '247 avis', color: '#fbbf24', bg: 'rgba(251,191,36,0.08)' },
+              { icon: <TrendingUp className="w-4 h-4" />, value: '9', label: 'Langues', color: '#4ade80', bg: 'rgba(74,222,128,0.08)' },
+              { icon: <MousePointerClick className="w-4 h-4" />, value: '~30 s', label: 'Génération', color: '#a78bfa', bg: 'rgba(167,139,250,0.08)' },
+              { icon: <Star className="w-4 h-4" />, value: '30 j', label: 'Satisfait ou remboursé', color: '#fbbf24', bg: 'rgba(251,191,36,0.08)' },
             ].map(m => (
               <div key={m.label} className="rounded-xl p-3 text-center" style={{ background: m.bg, border: `1px solid ${m.bg.replace('0.08', '0.2')}` }}>
                 <div className="flex justify-center mb-1" style={{ color: m.color }}>{m.icon}</div>
@@ -205,25 +205,6 @@ export default function LoginPage() {
             ))}
           </div>
 
-          {/* Témoignage */}
-          <div className="rounded-2xl p-5" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(139,92,246,0.15)' }}>
-            <div className="flex gap-0.5 mb-3">
-              {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />)}
-            </div>
-            <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(196,181,253,0.8)' }}>
-              &ldquo;Mon CTR est passé de 1.2% à 4.8% sur ma première page générée. En 30 secondes j&apos;avais un résultat meilleur que 4 heures de travail.&rdquo;
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0"
-                style={{ background: 'linear-gradient(135deg, #7c3aed, #5b21b6)', color: '#fff', border: '2px solid rgba(139,92,246,0.3)' }}>
-                K
-              </div>
-              <div>
-                <div className="text-xs font-bold text-white">Karim B.</div>
-                <div className="text-[11px]" style={{ color: 'rgba(167,139,250,0.5)' }}>Dropshippeur · 3 stores Shopify</div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

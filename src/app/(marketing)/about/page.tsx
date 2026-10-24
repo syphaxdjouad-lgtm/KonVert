@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { ArrowRight, Target, Heart, Zap, Globe, Users, TrendingUp, Store, Building2, Bot, Mail, type LucideIcon } from 'lucide-react'
 import RevealController from '@/components/marketing/shared/RevealController'
+import { TEMPLATE_COUNT } from '@/lib/templates'
+import { ALLOWED_LANGS } from '@/lib/i18n/languages'
 import StatsRow from '@/components/marketing/about/StatsRow'
 
 const VALUES = [
@@ -29,7 +30,7 @@ const VALUES = [
   {
     icon: Globe,
     title: 'Accessibilité globale',
-    desc: "L'e-commerce ne connaît pas de frontières. KONVERT supporte 8 langues et s'adapte à toutes les plateformes mondiales.",
+    desc: "L'e-commerce ne connaît pas de frontières. KONVERT supporte 9 langues et s'adapte à toutes les plateformes mondiales.",
     color: 'text-teal-500',
     bg: 'bg-teal-50',
   },
@@ -81,7 +82,7 @@ const VISION_CARDS: { Icon: LucideIcon; title: string; desc: string; color: stri
   {
     Icon: Store,
     title: '10 000 boutiques',
-    desc: "De 2 800 à 10 000 boutiques actives. Un réseau d'e-commerçants qui partagent les mêmes templates, les mêmes insights, le même avantage.",
+    desc: "Atteindre 10 000 boutiques actives. Un réseau d'e-commerçants qui partagent les mêmes templates, les mêmes insights, le même avantage.",
     color: '#f97316',
     bg: 'rgba(249,115,22,0.1)',
   },
@@ -116,7 +117,7 @@ export default function AboutPage() {
       <section className="py-14 bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
-            <StatsRow />
+            <StatsRow templateCount={TEMPLATE_COUNT} languageCount={ALLOWED_LANGS.size} />
           </div>
         </div>
       </section>
@@ -129,10 +130,10 @@ export default function AboutPage() {
             <div className="reveal">
               <p className="text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-4">Notre histoire</p>
               <h2 className="text-3xl font-black text-gray-900 mb-5">
-                De dropshippers frustrés à une équipe d&apos;une centaine d&apos;utilisateurs.
+                De dropshippers frustrés à un outil ouvert à tous les e-commerçants.
               </h2>
               <p className="text-gray-600 leading-relaxed mb-4">
-                En 2024, après avoir géré plusieurs boutiques dropshipping, on s&apos;est retrouvés face au même problème en boucle :
+                Après avoir géré plusieurs boutiques dropshipping, on s&apos;est retrouvés face au même problème en boucle :
                 créer des pages produit qui convertissent prenait trop de temps et coûtait trop cher.
               </p>
               <p className="text-gray-600 leading-relaxed mb-4">
@@ -140,7 +141,7 @@ export default function AboutPage() {
                 On utilisait des outils génériques qui ne savaient pas ce qu&apos;était un bon taux de conversion.
               </p>
               <p className="text-gray-600 leading-relaxed mb-6">
-                Alors on a construit KONVERT. D&apos;abord pour nous. Puis on l&apos;a partagé. Aujourd&apos;hui, 2 800+ boutiques l&apos;utilisent chaque semaine.
+                Alors on a construit KONVERT. D&apos;abord pour nous. Puis on a décidé de l&apos;ouvrir à tous les e-commerçants.
               </p>
               <Link
                 href="/demo"
@@ -155,11 +156,9 @@ export default function AboutPage() {
             {/* Timeline visuelle */}
             <div className="reveal delay-2 space-y-6">
               {[
-                { year: '2024 T1', event: "Création de KONVERT en interne pour nos propres boutiques.", col: '#5B47F5' },
-                { year: '2024 T2', event: 'Premiers bêta-testeurs. 100 pages générées en 2 semaines.', col: '#10b981' },
-                { year: '2024 T3', event: 'Lancement public. Intégration Shopify & WooCommerce native.', col: '#f97316' },
-                { year: '2024 T4', event: '2 800 boutiques connectées. 50 000 pages générées.', col: '#ec4899' },
-                { year: '2025', event: "Lancement des 42 templates, de l'A/B testing et du mode Agence.", col: '#8b77ff' },
+                { year: 'Avant', event: "Création de KONVERT en interne pour nos propres boutiques.", col: '#5B47F5' },
+                { year: '2026', event: 'Lancement public. Intégration Shopify & WooCommerce native.', col: '#10b981' },
+                { year: 'Ensuite', event: `${TEMPLATE_COUNT} templates, A/B testing et mode Agence.`, col: '#f97316' },
               ].map(({ year, event, col }) => (
                 <div key={year} className="flex gap-4 items-start">
                   <div className="w-16 flex-shrink-0 pt-0.5">
@@ -259,114 +258,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── CASE STUDIES ─────────────────────────────────────────────────── */}
-      <section className="py-20 bg-white" style={{ borderTop: '1px solid #f0ebff' }}>
-        <div className="max-w-5xl mx-auto px-5 sm:px-8">
-
-          <div className="text-center mb-12">
-            <p className="reveal text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-3">Cas clients</p>
-            <h2 className="reveal delay-1 text-3xl font-black text-gray-900">
-              Des résultats mesurables, pas des promesses.
-            </h2>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-8">
-
-            {/* Case study 1 — Décoration */}
-            <div className="reveal delay-1 rounded-3xl overflow-hidden border border-[#ede8ff]" style={{ boxShadow: '0 4px 20px rgba(91,71,245,0.07)' }}>
-              <div className="h-40 relative overflow-hidden">
-                <Image
-                  src="https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Boutique décoration maison"
-                  fill
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                  className="object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#78716c15', color: '#78716c' }}>Déco & Maison</span>
-                  <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#10b98115', color: '#10b981' }}>WooCommerce</span>
-                </div>
-                <h3 className="text-lg font-black text-gray-900 mb-4">Boutique Décoration : CVR x3 en 7 jours</h3>
-                <div className="space-y-3">
-                  <div className="flex gap-3">
-                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#ef4444' }}>!</div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Problème</p>
-                      <p className="text-sm text-gray-700">Pages produit génériques, 78% de taux de rebond, taux de conversion bloqué à 1.2% depuis 8 mois.</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#5B47F5' }}>K</div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Solution KONVERT</p>
-                      <p className="text-sm text-gray-700">Génération de landing pages émotionnelles avec storytelling ambiance, photos lifestyle optimisées et FAQ conversationnelle.</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#10b981' }}>✓</div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Résultat</p>
-                      <p className="text-sm font-semibold text-gray-900">Taux de conversion <span style={{ color: '#10b981' }}>1.2% → 3.8%</span> en 7 jours. CA mensuel +€4 200. Taux de rebond -41%.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Case study 2 — Agence SMMA */}
-            <div className="reveal delay-2 rounded-3xl overflow-hidden border border-[#ede8ff]" style={{ boxShadow: '0 4px 20px rgba(91,71,245,0.07)' }}>
-              <div className="h-40 relative overflow-hidden">
-                <Image
-                  src="https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Agence SMMA croissance"
-                  fill
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                  className="object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#10b98115', color: '#10b981' }}>Agence SMMA</span>
-                  <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#5B47F515', color: '#5B47F5' }}>White-label</span>
-                </div>
-                <h3 className="text-lg font-black text-gray-900 mb-4">Agence 23 clients : livrables x4, marge x2</h3>
-                <div className="space-y-3">
-                  <div className="flex gap-3">
-                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#ef4444' }}>!</div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Problème</p>
-                      <p className="text-sm text-gray-700">2 jours/page, 8 clients maximum, impossible de scaler sans embaucher. Marge brute à 42%.</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#5B47F5' }}>K</div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Solution KONVERT</p>
-                      <p className="text-sm text-gray-700">Dashboard multi-workspace white-label, génération en 30 sec/page, rapport mensuel automatisé pour chaque client.</p>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-black text-white mt-0.5" style={{ background: '#10b981' }}>✓</div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-0.5">Résultat</p>
-                      <p className="text-sm font-semibold text-gray-900">8 → <span style={{ color: '#10b981' }}>23 clients</span> en 3 mois. Marge 42% → 78%. Service KONVERT revendu <span style={{ color: '#10b981' }}>500€/mois/client</span>.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section className="py-20" style={{ background: 'linear-gradient(135deg, #F0EDFF 0%, #F8F7FF 100%)' }}>
         <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">
           <h2 className="reveal text-3xl font-black text-slate-900 mb-4">
-            Rejoignez les 2 800+ boutiques<br />qui convertissent avec KONVERT.
+            Créez votre première page<br />produit avec KONVERT.
           </h2>
           <p className="reveal delay-1 text-sm mb-8 text-slate-600">
             1 page gratuite. Aucune carte de crédit. Résultat immédiat.

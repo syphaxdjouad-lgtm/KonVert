@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowRight, Check, Star, Sparkles, Zap, Loader2, Gift } from 'lucide-react'
+import { ArrowRight, Check, Sparkles, Zap, Loader2, Gift } from 'lucide-react'
 import { toast } from 'sonner'
 import { track } from '@/lib/analytics'
 import { pixels } from '@/lib/tracking/pixels'
@@ -22,26 +22,8 @@ const FEATURES = [
   `${TEMPLATE_COUNT}+ templates haute conversion`,
   'A/B testing intégré',
   'Connexion Shopify, WooCommerce, YouCan',
-  'Copy IA optimisée 8 langues',
+  'Copy IA optimisée en 9 langues',
   'Mode white-label pour agences',
-]
-
-const PH_TESTIMONIALS = [
-  {
-    quote: 'Vu le post sur ProductHunt, testé en 5 min, ma 1ère page tourne sur Shopify ce soir. Sérieux.',
-    author: 'Mathilde R.',
-    role: 'Boutique cosmétiques · 2k€/mois',
-  },
-  {
-    quote: '30 secondes pour une page que j\'aurais payé 400€ à un freelance. KONVERT change la donne.',
-    author: 'Karim B.',
-    role: 'Dropshipping fashion · 8k€/mois',
-  },
-  {
-    quote: 'Le toggle annuel + 50% PH = j\'ai pris Pro pour 31€/mois la première année. No-brainer.',
-    author: 'Tom L.',
-    role: 'Agence SMMA · 5 clients',
-  },
 ]
 
 function PHContent() {
@@ -212,31 +194,6 @@ function PHContent() {
                   <Check className="w-4 h-4" style={{ color: '#da552f' }} />
                 </div>
                 <span className="text-sm font-semibold text-gray-700">{f}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="py-16 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-black text-center text-gray-900 mb-10" style={{ letterSpacing: '-0.02em' }}>
-            Ce qu&apos;ils en disent
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {PH_TESTIMONIALS.map(({ quote, author, role }) => (
-              <div key={author} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
-                <div className="flex gap-0.5 mb-3">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" style={{ color: '#da552f' }} />
-                  ))}
-                </div>
-                <p className="text-sm text-gray-700 mb-4 leading-relaxed">&ldquo;{quote}&rdquo;</p>
-                <div>
-                  <p className="text-sm font-bold text-gray-900">{author}</p>
-                  <p className="text-xs text-gray-500">{role}</p>
-                </div>
               </div>
             ))}
           </div>

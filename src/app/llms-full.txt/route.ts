@@ -81,7 +81,7 @@ KONVERT génère ta fiche produit et ta landing page e-commerce optimisées en 3
 
 - Europe francophone : France, Belgique, Suisse, Maghreb
 - MENA : Émirats Arabes Unis, Arabie Saoudite, Égypte, Koweït, Maroc
-- 8 langues supportées
+- 9 langues supportées
 
 ## Programme affilié
 

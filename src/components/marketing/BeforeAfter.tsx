@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
+import { ALLOWED_LANGS } from '@/lib/i18n/languages'
 
 /* ── Avant / Après — slider réaliste mobile-first ─────────────────────────── */
 // TODO OBITO (cf. `06-ZARA-reecriture-hero-pricing.md` Section 2 Bloc 1) :
@@ -164,7 +165,6 @@ function AfterSide() {
         {/* Stars */}
         <div className="flex items-center gap-1 mb-1.5">
           <div className="flex">{[1, 2, 3, 4, 5].map((i) => <Star key={i} />)}</div>
-          <span className="text-[9px] sm:text-[10px] text-gray-500 font-medium">4.9 (2 847 avis)</span>
         </div>
 
         {/* Title */}
@@ -324,9 +324,9 @@ export default function BeforeAfter() {
         {/* Stats */}
         <div className="grid grid-cols-3 gap-3 sm:gap-8 max-w-2xl mx-auto mt-6 sm:mt-12">
           {[
-            { value: '+340%', label: 'Taux de conversion' },
-            { value: '30 sec', label: 'Temps de creation' },
-            { value: '+89%', label: 'Temps sur la page' },
+            { value: '30 sec', label: 'Temps de création' },
+            { value: String(ALLOWED_LANGS.size), label: 'Langues supportées' },
+            { value: '1 clic', label: 'Publication Shopify / WooCommerce' },
           ].map((s) => (
             <div key={s.label} className="text-center">
               <p className="text-lg sm:text-3xl font-black" style={{ color: '#5B47F5' }}>{s.value}</p>

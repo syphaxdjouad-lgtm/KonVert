@@ -298,7 +298,7 @@ const TEMPLATE_CARDS = [
     cta: 'Acheter maintenant',
     Icon: Handbag,
     BadgeIcon: TrendUpBadge,
-    badge: { color: '#7c6af7', text: '+38% CVR', icon: '↑' },
+    badge: { color: '#7c6af7', text: 'Copy optimisée', icon: '↑' },
     delay: '0s',
     shapes: [
       { w: 48, h: 64, top: '10%', left: '10%', r: 8, bg: 'rgba(255,255,255,0.08)' },
@@ -317,7 +317,7 @@ const TEMPLATE_CARDS = [
     cta: 'Commander',
     Icon: Headphones,
     BadgeIcon: Lightning,
-    badge: { color: '#0ea5e9', text: 'ROAS ×4.2', icon: '⚡' },
+    badge: { color: '#0ea5e9', text: 'Prête pour tes pubs', icon: '⚡' },
     delay: '0.15s',
     shapes: [
       { w: 52, h: 40, top: '8%', left: '50%', r: 6, bg: 'rgba(14,165,233,0.15)' },
@@ -336,7 +336,7 @@ const TEMPLATE_CARDS = [
     cta: 'J\'en profite',
     Icon: Flower,
     BadgeIcon: ShoppingCart,
-    badge: { color: '#f97316', text: '+52% Add to cart', icon: '🛒' },
+    badge: { color: '#f97316', text: 'CTA optimisé', icon: '🛒' },
     delay: '0.3s',
     shapes: [
       { w: 36, h: 56, top: '5%', right: '10%', r: 999, bg: 'rgba(249,115,22,0.2)' },
@@ -355,7 +355,7 @@ const TEMPLATE_CARDS = [
     cta: 'Découvrir',
     Icon: Barbell,
     BadgeIcon: Trophy,
-    badge: { color: '#0d9488', text: '×3.8 ROAS', icon: '🏆' },
+    badge: { color: '#0d9488', text: 'Mobile first', icon: '🏆' },
     delay: '0.45s',
     shapes: [
       { w: 44, h: 44, top: '8%', left: '20%', r: 8, bg: 'rgba(45,212,191,0.12)' },
@@ -574,7 +574,7 @@ function Slide3() {
                 style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981', border: '1px solid rgba(16,185,129,0.25)' }}
               >
                 <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#10b981' }} />
-                Live
+                Exemple
               </div>
             </div>
 
@@ -700,11 +700,12 @@ function Slide4() {
   )
 }
 // Slide 5 — Agences
-const FAKE_CLIENTS = [
-  { name: 'Boutique Alpha', cvr: '5.1%', color: '#5B47F5', progress: 82 },
-  { name: 'TechStore Pro',  cvr: '3.8%', color: '#10b981', progress: 65 },
-  { name: 'FashionHub',     cvr: '6.2%', color: '#f97316', progress: 91 },
-  { name: 'SportZone',      cvr: '4.5%', color: '#0d9488', progress: 74 },
+// Aperçu d'interface : noms de boutiques fictifs, aucune donnée réelle.
+const AGENCY_DEMO_CLIENTS = [
+  { name: 'Boutique Alpha', status: 'Page prête',       color: '#5B47F5', progress: 100 },
+  { name: 'TechStore Pro',  status: 'En génération',    color: '#10b981', progress: 65 },
+  { name: 'FashionHub',     status: 'Page prête',       color: '#f97316', progress: 100 },
+  { name: 'SportZone',      status: 'En relecture',     color: '#0d9488', progress: 80 },
 ]
 
 function Slide5() {
@@ -736,7 +737,8 @@ function Slide5() {
           </Link>
         </div>
         <div className="flex flex-col gap-3 mt-4 lg:mt-0">
-          {FAKE_CLIENTS.map((c) => (
+          <p className="text-white/50 text-xs font-medium uppercase tracking-wide">Aperçu de l&apos;espace Agence</p>
+          {AGENCY_DEMO_CLIENTS.map((c) => (
             <div
               key={c.name}
               className="flex items-center gap-4 px-4 py-3.5 rounded-2xl"
@@ -751,7 +753,7 @@ function Slide5() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-white text-sm font-semibold truncate">{c.name}</span>
-                  <span className="text-white/60 text-xs ml-2 flex-shrink-0">CVR {c.cvr}</span>
+                  <span className="text-white/60 text-xs ml-2 flex-shrink-0">{c.status}</span>
                 </div>
                 <div className="w-full h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.1)' }}>
                   <div

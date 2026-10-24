@@ -140,7 +140,7 @@ export default function ExitIntentPopup() {
               </h2>
               <p className="text-gray-500 mb-6 text-sm leading-relaxed">
                 Génère ta première page produit <strong>gratuitement</strong> — sans carte bancaire.
-                Des centaines de e-commerçants ont déjà boosté leur CVR avec Konvert.
+                Tu vois le résultat avant de payer.
               </p>
 
               {/* Trust */}

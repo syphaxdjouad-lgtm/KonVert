@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Users, BarChart3, Zap, Shield, Globe, FileText, Building2, Star } from 'lucide-react'
+import { ArrowRight, Users, BarChart3, Zap, Shield, Globe, FileText, Building2 } from 'lucide-react'
 
 const FEATURES_AGENCE = [
   {
@@ -46,29 +46,6 @@ const FEATURES_AGENCE = [
   },
 ]
 
-const TESTIMONIALS = [
-  {
-    name: 'Sarah K.',
-    role: 'Directrice, Agence Boost Digital',
-    clients: '23 clients',
-    quote: "On a réduit notre temps de production de pages de 80%. KONVERT nous permet de gérer 23 clients avec une équipe de 4 personnes. Le white-label est parfait.",
-    stars: 5,
-    metric: '-80% temps production',
-    avatar: 'SK',
-    bg: 'bg-[#5B47F5]',
-  },
-  {
-    name: 'Marc T.',
-    role: 'Fondateur, SMMA eCom Pro',
-    clients: '15 clients',
-    quote: "Les rapports PDF automatiques ont changé notre relation client. Ils reçoivent leurs stats chaque mois et ça renforce la confiance. On a réduit le churn de 60%.",
-    stars: 5,
-    metric: '-60% churn client',
-    avatar: 'MT',
-    bg: 'bg-emerald-500',
-  },
-]
-
 const PRICING_AGENCE = [
   { label: 'Clients inclus',       value: 'Illimité' },
   { label: 'Pages / mois',         value: 'Illimitées' },
@@ -94,8 +71,8 @@ export default function AgencePage() {
                 Plan Agence & SMMA
               </div>
               <h1 className="text-4xl sm:text-5xl font-black text-white mb-5 leading-tight">
-                Gérez 50 clients.<br />
-                <span style={{ color: '#8b77ff' }}>Avec une équipe de 4.</span>
+                Gérez plus de clients.<br />
+                <span style={{ color: '#8b77ff' }}>Sans agrandir l&apos;équipe.</span>
               </h1>
               <p className="text-lg leading-relaxed mb-8" style={{ color: '#8b8baa' }}>
                 Dashboard multi-clients, white-label, rapports automatiques. KONVERT Agence vous permet de livrer plus de résultats en moins de temps.
@@ -125,16 +102,16 @@ export default function AgencePage() {
                 {/* Fausse top bar */}
                 <div className="flex items-center justify-between px-5 py-3.5 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
                   <span className="text-xs font-bold text-white/80">🏢 Dashboard Agence</span>
-                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(91,71,245,0.3)', color: '#a78bfa' }}>23 clients actifs</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(91,71,245,0.3)', color: '#a78bfa' }}>Aperçu de l&apos;interface</span>
                 </div>
                 {/* Clients list */}
                 <div className="p-4 space-y-3">
                   {[
-                    { name: 'Boutique Mode Paris',  cvr: '5.2%', pages: 24, color: '#5B47F5' },
-                    { name: 'TechGadgets FR',        cvr: '4.8%', pages: 18, color: '#10b981' },
-                    { name: 'BeautyShop Lyon',       cvr: '6.1%', pages: 31, color: '#ec4899' },
-                    { name: 'Sport & Équipement',    cvr: '3.9%', pages: 12, color: '#f97316' },
-                  ].map(({ name, cvr, pages, color }) => (
+                    { name: 'Boutique Mode Paris',  status: 'Page prête',    color: '#5B47F5' },
+                    { name: 'TechGadgets FR',        status: 'En génération', color: '#10b981' },
+                    { name: 'BeautyShop Lyon',       status: 'Page prête',    color: '#ec4899' },
+                    { name: 'Sport & Équipement',    status: 'En relecture',  color: '#f97316' },
+                  ].map(({ name, status, color }) => (
                     <div key={name} className="flex items-center gap-3 p-3 rounded-xl" style={{ background: 'rgba(255,255,255,0.05)' }}>
                       <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-black"
                            style={{ background: color }}>
@@ -142,10 +119,10 @@ export default function AgencePage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-white text-xs font-semibold truncate">{name}</p>
-                        <p className="text-xs" style={{ color: '#6b6b8a' }}>{pages} pages publiées</p>
+                        <p className="text-xs" style={{ color: '#6b6b8a' }}>Client exemple</p>
                       </div>
                       <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'rgba(16,185,129,0.15)', color: '#34d399' }}>
-                        CVR {cvr}
+                        {status}
                       </span>
                     </div>
                   ))}
@@ -205,40 +182,6 @@ export default function AgencePage() {
               <ArrowRight className="w-4 h-4" />
             </Link>
             <p className="text-xs text-gray-400 mt-3">Sans CB · Annulation en 1 clic · Onboarding offert</p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
-      <section className="py-20" style={{ background: '#0a0a1a' }}>
-        <div className="max-w-5xl mx-auto px-5 sm:px-8">
-          <div className="text-center mb-12">
-            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: '#5B47F5' }}>Témoignages agences</p>
-            <h2 className="text-3xl font-black text-white">Ils ont transformé leur agence.</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 gap-8">
-            {TESTIMONIALS.map(({ name, role, clients, quote, stars, metric, avatar, bg }) => (
-              <div key={name} className="p-8 rounded-3xl border" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)' }}>
-                <div className="flex items-center gap-0.5 mb-2">
-                  {Array.from({ length: stars }).map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <span className="text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full inline-block mb-5">
-                  {metric}
-                </span>
-                <p className="text-sm leading-relaxed mb-6 italic" style={{ color: '#c0c0d8' }}>&quot;{quote}&quot;</p>
-                <div className="flex items-center gap-3">
-                  <div className={`w-9 h-9 rounded-full ${bg} flex items-center justify-center text-white text-xs font-bold`}>
-                    {avatar}
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-white">{name}</p>
-                    <p className="text-xs" style={{ color: '#6b6b8a' }}>{role} · {clients}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>

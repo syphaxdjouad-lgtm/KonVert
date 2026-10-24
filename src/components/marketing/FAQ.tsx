@@ -13,17 +13,12 @@ const FAQ_ITEMS = [
   {
     question: 'Combien de temps pour créer ma première page ?',
     answer:
-      "Moins de 30 secondes. Tu colles l'URL de ton produit AliExpress, Amazon ou Alibaba — l'IA génère le titre accrocheur, la description optimisée, les arguments de vente et le design. Ta page est prête avant la fin de ton café.",
+      "Moins de 30 secondes. Tu colles l'URL de ton produit — Shopify, Amazon, ton fournisseur — l'IA génère le titre accrocheur, la description optimisée, les arguments de vente et le design. Ta page est prête avant la fin de ton café.",
   },
   {
     question: 'Est-ce que je peux essayer avant de payer ?',
     answer:
       'Absolument. KONVERT te permet de générer 1 page produit gratuitement, sans carte bancaire. Tu vois le résultat immédiatement avant de décider si tu passes à un plan payant.',
-  },
-  {
-    question: 'KONVERT est-il adapté aux débutants ?',
-    answer:
-      "Oui, c'est exactement pour ça qu'on l'a conçu. Aucune compétence en design, copywriting ou code n'est nécessaire. Si tu sais coller une URL, tu sais utiliser KONVERT. L'interface est pensée pour être intuitive dès la première utilisation.",
   },
   {
     question: 'Quelle est la différence avec un freelance ou Fiverr ?',
@@ -34,6 +29,15 @@ const FAQ_ITEMS = [
     question: 'Puis-je annuler à tout moment ?',
     answer:
       "Oui, sans condition. Tu peux annuler ton abonnement en 1 clic depuis ton dashboard, à tout moment. Aucune période d'engagement, aucun frais de résiliation. Tu gardes accès jusqu'à la fin de ta période déjà payée.",
+  },
+  {
+    // Volontairement en dernière position — cf. `06-ZARA-reecriture-hero-pricing.md`
+    // Section 3.4 note finale : cette question reste utile pour le trafic
+    // débutant résiduel, mais ne doit jamais occuper une position de vente
+    // principale sur un site repositionné pro/DTC.
+    question: 'KONVERT est-il adapté aux débutants ?',
+    answer:
+      "Oui. Aucune compétence en design, copywriting ou code n'est nécessaire pour générer une page. Si tu sais coller une URL, tu sais utiliser KONVERT.",
   },
 ]
 

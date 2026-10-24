@@ -70,16 +70,16 @@ function Slide1() {
             className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5"
             style={{ animation: 'slideUp .7s cubic-bezier(.16,1,.3,1) both' }}
           >
-            Colle ton lien AliExpress.{' '}
+            Votre page produit ne devrait{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-              Ta page est prête en 30 secondes.
+              jamais freiner un lancement.
             </span>
           </h1>
           <p
             className="text-base sm:text-lg text-white/70 leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0"
             style={{ animation: 'slideUp .7s .1s cubic-bezier(.16,1,.3,1) both' }}
           >
-            L&apos;IA génère ton titre, tes bénéfices, ta FAQ et ton CTA — optimisés SEO et mobile. Prêt à coller sur Shopify.
+            KONVERT publie une page produit optimisée conversion en 30 secondes, à partir d&apos;une simple URL. Pas de ticket design. Pas d&apos;attente agence.
           </p>
           <div
             className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
@@ -90,7 +90,7 @@ function Slide1() {
               className="btn-shimmer btn-ripple inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-white font-bold text-sm shadow-lg"
               onClick={addRipple}
             >
-              Génère ma première page — gratuit <ArrowRight className="w-4 h-4" />
+              Génère ta première page (30s, sans compte) <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/demo"
@@ -98,7 +98,7 @@ function Slide1() {
               style={{ border: '1.5px solid rgba(255,255,255,0.25)' }}
               onClick={addRipple}
             >
-              Voir la démo
+              Vois un exemple avant de coller ton URL
             </Link>
           </div>
 
@@ -111,7 +111,7 @@ function Slide1() {
               {[
                 { dot: '#96BF48', label: 'Shopify Partner' },
                 { dot: '#635BFF', label: 'Stripe sécurisé' },
-                { dot: '#16a34a', label: '1 page gratuite · Aucune CB' },
+                { dot: '#16a34a', label: 'Gratuit à tester · Aucune carte bancaire requise' },
               ].map(({ dot, label }) => (
                 <div key={label} className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: dot }} />
@@ -720,7 +720,7 @@ function Slide5() {
             Pour les agences SMMA
           </div>
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white mb-5">
-            Livre 10x plus de pages.{' '}
+            Livre plus de pages.{' '}
             <span style={{ background: 'linear-gradient(135deg,#7c6af7,#a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               Sans recruter.
             </span>

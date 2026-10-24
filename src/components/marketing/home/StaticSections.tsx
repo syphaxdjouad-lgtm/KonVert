@@ -369,7 +369,7 @@ export function ABTestingSection() {
                 width: '155px',
               }}
             >
-              <p className="text-white/50 text-xs font-bold tracking-widest mb-1">A/B TEST</p>
+              <p className="text-white/50 text-xs font-bold tracking-widest mb-1">A/B TEST · EXEMPLE</p>
               <p className="text-white font-black text-4xl mb-3">+45%</p>
               <svg viewBox="0 0 120 44" className="w-full">
                 <defs>
@@ -861,7 +861,7 @@ export function AIBuilderDemoSection() {
                   ✓ Variante B — 91% confiance
                 </p>
                 <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                  +124% de conversions — Smart Traffic redirige automatiquement
+                  Smart Traffic redirige automatiquement vers la variante gagnante
                 </p>
               </div>
 
@@ -1141,7 +1141,7 @@ export function AnalyticsShowcase() {
                   className="text-xs font-bold px-3 py-1 rounded-full"
                   style={{ background: 'rgba(91,71,245,0.25)', color: '#a78bfa' }}
                 >
-                  Temps réel
+                  Exemple de données
                 </span>
               </div>
 

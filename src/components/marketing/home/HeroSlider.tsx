@@ -298,7 +298,7 @@ const TEMPLATE_CARDS = [
     cta: 'Acheter maintenant',
     Icon: Handbag,
     BadgeIcon: TrendUpBadge,
-    badge: { color: '#7c6af7', text: '+38% CVR', icon: '↑' },
+    badge: { color: '#7c6af7', text: 'Copy optimisée', icon: '↑' },
     delay: '0s',
     shapes: [
       { w: 48, h: 64, top: '10%', left: '10%', r: 8, bg: 'rgba(255,255,255,0.08)' },
@@ -317,7 +317,7 @@ const TEMPLATE_CARDS = [
     cta: 'Commander',
     Icon: Headphones,
     BadgeIcon: Lightning,
-    badge: { color: '#0ea5e9', text: 'ROAS ×4.2', icon: '⚡' },
+    badge: { color: '#0ea5e9', text: 'Prête pour tes pubs', icon: '⚡' },
     delay: '0.15s',
     shapes: [
       { w: 52, h: 40, top: '8%', left: '50%', r: 6, bg: 'rgba(14,165,233,0.15)' },
@@ -336,7 +336,7 @@ const TEMPLATE_CARDS = [
     cta: 'J\'en profite',
     Icon: Flower,
     BadgeIcon: ShoppingCart,
-    badge: { color: '#f97316', text: '+52% Add to cart', icon: '🛒' },
+    badge: { color: '#f97316', text: 'CTA optimisé', icon: '🛒' },
     delay: '0.3s',
     shapes: [
       { w: 36, h: 56, top: '5%', right: '10%', r: 999, bg: 'rgba(249,115,22,0.2)' },
@@ -355,7 +355,7 @@ const TEMPLATE_CARDS = [
     cta: 'Découvrir',
     Icon: Barbell,
     BadgeIcon: Trophy,
-    badge: { color: '#0d9488', text: '×3.8 ROAS', icon: '🏆' },
+    badge: { color: '#0d9488', text: 'Mobile first', icon: '🏆' },
     delay: '0.45s',
     shapes: [
       { w: 44, h: 44, top: '8%', left: '20%', r: 8, bg: 'rgba(45,212,191,0.12)' },
@@ -574,7 +574,7 @@ function Slide3() {
                 style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981', border: '1px solid rgba(16,185,129,0.25)' }}
               >
                 <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#10b981' }} />
-                Live
+                Exemple
               </div>
             </div>
 

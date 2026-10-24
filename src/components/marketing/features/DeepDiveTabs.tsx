@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { ALLOWED_LANGS } from '@/lib/i18n/languages'
 
 type DeepDiveTab = {
   id: string
@@ -18,7 +19,7 @@ const DEEP_DIVE_TABS: DeepDiveTab[] = [
     label: 'Génération IA',
     icon: null,
     title: 'Comment fonctionne la génération IA ?',
-    desc: "KONVERT utilise un moteur IA entraîné sur des millions de pages e-commerce performantes. En analysant ton URL produit, il extrait les informations clés et génère un copy optimisé pour la conversion.",
+    desc: "KONVERT utilise un moteur IA spécialisé dans le copywriting e-commerce. En analysant ton URL produit, il extrait les informations clés et génère un copy optimisé pour la conversion.",
     steps: [
       { num: '1', title: 'Tu colles l\'URL produit', detail: 'KONVERT scrape automatiquement le titre, les images, le prix, la description et les avis.' },
       { num: '2', title: 'L\'IA analyse et génère', detail: 'Le moteur IA identifie les arguments de vente clés, les objections possibles et rédige une page complète en 30 secondes.' },
@@ -26,8 +27,8 @@ const DEEP_DIVE_TABS: DeepDiveTab[] = [
     ],
     metrics: [
       { value: '30s', label: 'Temps moyen de génération' },
-      { value: '+62%', label: 'Meilleur copy vs rédaction manuelle' },
-      { value: '8', label: 'Langues supportées' },
+      { value: '1 clic', label: 'Publication sur ta boutique' },
+      { value: String(ALLOWED_LANGS.size), label: 'Langues supportées' },
     ],
   },
   {
@@ -44,7 +45,7 @@ const DEEP_DIVE_TABS: DeepDiveTab[] = [
     metrics: [
       { value: '95%', label: 'Seuil de confiance statistique' },
       { value: '1000', label: 'Visiteurs pour déclaration auto' },
-      { value: '+23%', label: 'Gain moyen après optimisation' },
+      { value: '50/50', label: 'Répartition du trafic par défaut' },
     ],
   },
   {
@@ -60,7 +61,7 @@ const DEEP_DIVE_TABS: DeepDiveTab[] = [
     ],
     metrics: [
       { value: '12+', label: 'Métriques trackées par page' },
-      { value: '100%', label: 'Temps réel, 0 délai' },
+      { value: 'Live', label: 'Tableau de bord en temps réel' },
       { value: 'Auto', label: 'Rapports PDF hebdomadaires' },
     ],
   },

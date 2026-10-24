@@ -4,12 +4,14 @@ import { useEffect, useRef, useState } from 'react'
 
 type StatDatum = { raw: number; display: string; label: string; prefix?: string; suffix?: string }
 
-const STATS_DATA: StatDatum[] = [
-  { raw: 50000, display: '50 000+', label: 'pages générées', suffix: '+' },
-  { raw: 2800, display: '2 800+', label: 'boutiques connectées', suffix: '+' },
-  { raw: 40, display: '+40%', label: 'de conversion en moyenne', prefix: '+', suffix: '%' },
-  { raw: 8, display: '8', label: 'langues supportées', suffix: '' },
-]
+function buildStats(templateCount: number, languageCount: number): StatDatum[] {
+  return [
+    { raw: templateCount, display: String(templateCount), label: 'templates de pages produit' },
+    { raw: languageCount, display: String(languageCount), label: 'langues supportées' },
+    { raw: 30, display: '30 s', label: 'pour générer une page', suffix: ' s' },
+    { raw: 30, display: '30 j', label: 'satisfait ou remboursé', suffix: ' j' },
+  ]
+}
 
 // Animated counter hook
 function useCounter(target: number, started: boolean, duration = 1500) {
@@ -63,10 +65,10 @@ function StatCard({ raw, display, label, prefix, suffix }: StatDatum) {
   )
 }
 
-export default function StatsRow() {
+export default function StatsRow({ templateCount, languageCount }: { templateCount: number; languageCount: number }) {
   return (
     <>
-      {STATS_DATA.map((s) => (
+      {buildStats(templateCount, languageCount).map((s) => (
         <StatCard key={s.label} {...s} />
       ))}
     </>

@@ -101,31 +101,9 @@ function KonvertCard() {
       className="rounded-2xl border border-[#5B47F5]/20 bg-[#5B47F5]/5 p-6 flex flex-col gap-5"
     >
       <div>
-        <div className="flex items-start justify-between gap-4 mb-3">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-1">KONVERT — Avis clients</p>
-            <div className="flex items-baseline gap-2">
-              <span className="text-4xl font-black text-[#5B47F5]">4.7</span>
-              <span className="text-lg text-[#5B47F5]/50 font-semibold">/ 5</span>
-            </div>
-          </div>
-          <div className="flex flex-col items-end gap-1">
-            <div className="flex items-center gap-0.5" aria-label="4.7 sur 5 étoiles">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-4 h-4"
-                  style={{
-                    fill: i < 4 ? '#5B47F5' : i === 4 ? '#5B47F580' : '#e5e7eb',
-                    color: 'transparent',
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        <p className="text-xs font-bold uppercase tracking-widest text-[#5B47F5] mb-1">KONVERT — Nos engagements</p>
         <p className="text-xs text-[#5B47F5]/70">
-          Objectif 4.5+ — en cours d&apos;évaluation par nos premiers clients.
+          Pas encore d&apos;avis publics : nous préférons ne pas afficher de note avant d&apos;avoir de vrais retours clients.
         </p>
       </div>
 

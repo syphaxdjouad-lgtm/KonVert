@@ -169,9 +169,9 @@ const FEATURES = [
     Icon: Globe,
     color: '#f59e0b',
     bg: 'rgba(245,158,11,0.08)',
-    title: 'Vends dans 8 langues',
+    title: 'Vends dans 9 langues',
     desc: 'Français, anglais, espagnol, allemand, portugais et plus. Chaque marché, une page optimisée dans sa langue.',
-    tooltip: 'FR, EN, ES, DE, IT, PT, AR, ZH — copy natif',
+    tooltip: 'FR, EN, ES, DE, IT, PT, NL, AR, ZH — copy natif',
   },
 ]
 

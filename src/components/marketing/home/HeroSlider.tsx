@@ -700,11 +700,12 @@ function Slide4() {
   )
 }
 // Slide 5 — Agences
-const FAKE_CLIENTS = [
-  { name: 'Boutique Alpha', cvr: '5.1%', color: '#5B47F5', progress: 82 },
-  { name: 'TechStore Pro',  cvr: '3.8%', color: '#10b981', progress: 65 },
-  { name: 'FashionHub',     cvr: '6.2%', color: '#f97316', progress: 91 },
-  { name: 'SportZone',      cvr: '4.5%', color: '#0d9488', progress: 74 },
+// Aperçu d'interface : noms de boutiques fictifs, aucune donnée réelle.
+const AGENCY_DEMO_CLIENTS = [
+  { name: 'Boutique Alpha', status: 'Page prête',       color: '#5B47F5', progress: 100 },
+  { name: 'TechStore Pro',  status: 'En génération',    color: '#10b981', progress: 65 },
+  { name: 'FashionHub',     status: 'Page prête',       color: '#f97316', progress: 100 },
+  { name: 'SportZone',      status: 'En relecture',     color: '#0d9488', progress: 80 },
 ]
 
 function Slide5() {
@@ -736,7 +737,8 @@ function Slide5() {
           </Link>
         </div>
         <div className="flex flex-col gap-3 mt-4 lg:mt-0">
-          {FAKE_CLIENTS.map((c) => (
+          <p className="text-white/50 text-xs font-medium uppercase tracking-wide">Aperçu de l&apos;espace Agence</p>
+          {AGENCY_DEMO_CLIENTS.map((c) => (
             <div
               key={c.name}
               className="flex items-center gap-4 px-4 py-3.5 rounded-2xl"
@@ -751,7 +753,7 @@ function Slide5() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-white text-sm font-semibold truncate">{c.name}</span>
-                  <span className="text-white/60 text-xs ml-2 flex-shrink-0">CVR {c.cvr}</span>
+                  <span className="text-white/60 text-xs ml-2 flex-shrink-0">{c.status}</span>
                 </div>
                 <div className="w-full h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.1)' }}>
                   <div

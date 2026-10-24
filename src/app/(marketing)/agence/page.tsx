@@ -251,7 +251,7 @@ export default function AgencePage() {
             Prêt à scaler votre agence ?
           </h2>
           <p className="text-gray-500 text-sm mb-8">
-            Rejoignez les agences qui gèrent 20+ clients sans recruter. Première page gratuite, sans carte bancaire.
+            Livrez plus de pages client sans recruter. Première page gratuite, sans carte bancaire.
           </p>
           <Link
             href="/essai"

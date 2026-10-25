@@ -232,3 +232,78 @@ export function emailDay14(name: string) {
     `),
   }
 }
+
+// ─── Store Builder for Shopify — Re-audit CRO J+7/J+30 (Sprint 8) ─────────
+// cf. spec KAKASHI §B.5 : score + bande couleur, TOP 3 recos uniquement
+// (jamais les 18 critères — trop dense pour un marchand non-tech), trend
+// J+7→J+30 au 2e checkpoint seulement, ton "niveau collège" (jamais de
+// jargon non défini, ex: jamais "LCP" seul, toujours accompagné de
+// "temps de chargement mobile").
+
+export interface StoreBuilderAuditEmailRecommendation {
+  label: string
+  recommendation: string
+}
+
+function bandColor(band: 'red' | 'orange' | 'green'): string {
+  return band === 'green' ? '#4ade80' : band === 'orange' ? '#facc15' : '#f87171'
+}
+
+export function emailStoreBuilderAudit(params: {
+  name: string
+  shopDomain: string
+  checkpoint: 'j7' | 'j30'
+  score: number
+  band: 'red' | 'orange' | 'green'
+  topRecommendations: StoreBuilderAuditEmailRecommendation[]
+  /** Fourni uniquement au checkpoint J+30 — score du checkpoint J+7 précédent. */
+  previousScore?: number
+}) {
+  const { name, shopDomain, checkpoint, score, band, topRecommendations, previousScore } = params
+  const checkpointLabel = checkpoint === 'j7' ? 'J+7' : 'J+30'
+
+  const recosList = topRecommendations.length
+    ? topRecommendations
+        .map(
+          (r) => `
+        <tr>
+          <td style="padding:10px 0;border-bottom:1px solid rgba(139,92,246,0.1);font-size:14px;color:rgba(196,181,253,0.9);">
+            <strong style="color:#fff;">${r.label}</strong><br/>${r.recommendation}
+          </td>
+        </tr>`
+        )
+        .join('')
+    : `<tr><td style="padding:10px 0;font-size:14px;color:rgba(196,181,253,0.9);">Rien à signaler — ta boutique est complètement personnalisée. 🎉</td></tr>`
+
+  const trendBlock =
+    checkpoint === 'j30' && typeof previousScore === 'number'
+      ? p(
+          `Score J+7&nbsp;: <strong style="color:#fff;">${previousScore}/100</strong> → Score J+30&nbsp;: <strong style="color:#fff;">${score}/100</strong> (${
+            score >= previousScore ? '+' : ''
+          }${Math.round((score - previousScore) * 100) / 100} points)`
+        )
+      : ''
+
+  return {
+    subject: `${name}, ton audit boutique — Score ${score}/100 [${checkpointLabel}]`,
+    html: layout(`
+      ${h1(`Bilan de ta boutique ${checkpointLabel} après l'installation`)}
+      ${p(`Salut ${name}, voici où en est <strong style="color:#a78bfa;">${shopDomain}</strong> :`)}
+
+      <div style="text-align:center;margin:20px 0;">
+        <span style="display:inline-block;font-size:40px;font-weight:900;color:${bandColor(band)};">${score}</span>
+        <span style="font-size:16px;color:rgba(196,181,253,0.6);">/100</span>
+      </div>
+
+      ${trendBlock}
+
+      <table style="width:100%;margin:16px 0;">
+        ${recosList}
+      </table>
+
+      <div style="text-align:center;margin-top:28px;">
+        ${btn('Voir mon audit complet →', 'https://konvertpilot.com/dashboard/stores')}
+      </div>
+    `),
+  }
+}

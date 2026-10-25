@@ -14,6 +14,14 @@
     {
       "path": "/api/cron/preview-emails",
       "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/store-builder-ab-close",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/store-builder-audit",
+      "schedule": "0 10 * * *"
     }
   ]
 }

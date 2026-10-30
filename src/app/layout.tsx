@@ -48,13 +48,17 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', type: 'image/x-icon', sizes: '32x32' },
+      { url: '/favicon.ico', type: 'image/x-icon', sizes: '16x16 32x32 48x48' },
       { url: '/icon.svg', type: 'image/svg+xml' },
+      // Google Search affiche le favicon en multiple de 48 px : on lui donne du net.
+      { url: '/favicon.png', type: 'image/png', sizes: '48x48' },
+      { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
     ],
     apple: [
       { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
+  manifest: '/site.webmanifest',
   alternates: {
     canonical: APP_URL,
   },

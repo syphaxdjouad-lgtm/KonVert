@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Check, Mail, RefreshCw, Copy, Lock } from 'lucide-react'
+import { readJson } from '@/lib/http/read-json'
 
 type WaitlistEntry = {
   id: string
@@ -45,7 +46,7 @@ export default function AdminWaitlist() {
       setLoading(false)
       return
     }
-    const data = await res.json()
+    const data = await readJson(res)
     setWaitlist(data.waitlist || [])
     setInvitations(data.invitations || [])
     setAuthenticated(true)
@@ -57,7 +58,7 @@ export default function AdminWaitlist() {
     const res = await fetch('/api/admin/waitlist', {
       headers: { 'x-admin-secret': secret },
     })
-    const data = await res.json()
+    const data = await readJson(res)
     setWaitlist(data.waitlist || [])
     setInvitations(data.invitations || [])
     setLoading(false)
@@ -72,7 +73,7 @@ export default function AdminWaitlist() {
       headers: { 'Content-Type': 'application/json', 'x-admin-secret': secret },
       body: JSON.stringify({ email: entry.email, waitlist_id: entry.id }),
     })
-    const data = await res.json()
+    const data = await readJson(res)
     if (data.url) {
       await navigator.clipboard.writeText(data.url)
       setCopied(entry.id)

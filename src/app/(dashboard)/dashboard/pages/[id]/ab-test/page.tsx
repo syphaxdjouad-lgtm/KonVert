@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import ABTestStats from '@/components/dashboard/ABTestStats'
 import type { ABTest, ABVariantRow, ABVariantLetter } from '@/types'
 import { ArrowLeft, FlaskConical, Play } from 'lucide-react'
+import { readJson } from '@/lib/http/read-json'
 
 interface PageData {
   id: string
@@ -111,7 +112,7 @@ export default function ABTestPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'create', page_id: pageId }),
     })
-    const json = await res.json()
+    const json = await readJson(res)
     if (!res.ok) {
       setError(json.error ?? 'Erreur lors de la création')
     } else {

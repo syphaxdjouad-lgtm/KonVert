@@ -9,6 +9,7 @@ import {
   AlertCircle,
   Info,
 } from 'lucide-react'
+import { readJson } from '@/lib/http/read-json'
 
 interface Notification {
   id: string
@@ -88,7 +89,7 @@ export default function NotificationBell() {
     try {
       const res = await fetch('/api/notifications', { signal, cache: 'no-store' })
       if (!res.ok) return
-      const data = await res.json()
+      const data = await readJson(res)
       setNotifications(data.notifications ?? [])
     } catch {
       // ignore (abort, réseau, etc.)

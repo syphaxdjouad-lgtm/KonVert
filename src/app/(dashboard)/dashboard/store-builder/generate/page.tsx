@@ -14,6 +14,7 @@ import type {
   Vertical, GenerateResponseData, ApiResult, InstallStep, DawnSection,
 } from '../_lib/types'
 import { VERTICAL_LABELS } from '../_lib/types'
+import { readJson } from '@/lib/http/read-json'
 
 const GUARANTEE_ICON_LABELS: Record<string, string> = {
   none: '—', truck: 'Livraison', return: 'Retour', lock: 'Sécurité', chat_bubble: 'Support',
@@ -307,7 +308,7 @@ function InstallPanel({
           theme: { name: 'Konvert CRO - V1' },
         }),
       })
-      const json = await res.json()
+      const json = await readJson(res)
 
       if (json.success) {
         setSteps({ upload_theme: 'done', create_product: 'done', activate_theme: 'done' })
@@ -518,7 +519,7 @@ export default function StoreBuilderGeneratePage() {
           merchant_facts: Object.keys(merchant_facts).length > 0 ? merchant_facts : undefined,
         }),
       })
-      const json: ApiResult<GenerateResponseData> = await res.json()
+      const json: ApiResult<GenerateResponseData> = await readJson(res)
       if (!json.ok) {
         setError(json.error.message)
         return

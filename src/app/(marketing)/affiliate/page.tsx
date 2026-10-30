@@ -13,6 +13,7 @@ import {
   ChevronDown,
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { readJson } from '@/lib/http/read-json'
 
 /* ─────────────────────────────────────────────────────────────────────────
    PAGE AFFILIÉS — Pré-inscription waitlist (programme officiel J+14)
@@ -133,7 +134,7 @@ function SignupForm() {
           context: `affiliate${audience ? ' · ' + audience : ''}`,
         }),
       })
-      const data = await res.json()
+      const data = await readJson(res)
       setStatus(data.message === 'already_registered' ? 'exists' : 'success')
     } catch {
       toast.error('Erreur réseau, réessaie')

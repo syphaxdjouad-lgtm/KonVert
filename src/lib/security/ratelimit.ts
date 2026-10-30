@@ -94,7 +94,17 @@ export async function rateLimitAsync(key: string, limit: number, windowMs: numbe
       // faire tomber les routes en 500 — on bascule sur le compteur mémoire.
       if (!upstashFailureLogged) {
         upstashFailureLogged = true
-        console.error('[ratelimit] Upstash indisponible, fallback mémoire :', err instanceof Error ? err.message : err)
+        const reason = err instanceof Error ? err.message : String(err)
+        console.error('[ratelimit] Upstash indisponible, fallback mémoire :', reason)
+        // Alerte Sentry : sans ça la panne passe inaperçue (le fallback masque tout).
+        try {
+          const Sentry = await import('@sentry/nextjs').catch(() => null)
+          Sentry?.captureMessage?.('Upstash indisponible — rate limit en fallback mémoire', {
+            level: 'error',
+            tags: { phase: 'ratelimit_upstash_down' },
+            extra: { reason },
+          })
+        } catch { /* monitoring best-effort */ }
       }
     }
   }

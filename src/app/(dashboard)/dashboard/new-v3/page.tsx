@@ -21,6 +21,7 @@ import { DataValidationStep, needsValidation } from '../new/components/DataValid
 import { ImageManager } from '../new/components/ImageManager'
 import type { V3PageData, CopyTone } from '@/types/v3'
 import type { StyleId } from '@/lib/styles/types'
+import { readJson } from '@/lib/http/read-json'
 
 type Step = 'url' | 'product' | 'style' | 'generating' | 'validate' | 'preview'
 
@@ -64,7 +65,7 @@ export default function NewV3Page() {
         body: JSON.stringify({ url }),
       })
       if (!res.ok) throw new Error(`Scraping failed (${res.status})`)
-      const data = await res.json()
+      const data = await readJson(res)
       const scraped: ScrapedProduct = {
         title: data.title ?? data.name ?? 'Produit',
         description: data.description ?? '',
@@ -99,7 +100,7 @@ export default function NewV3Page() {
         }),
       })
       if (!res.ok) throw new Error(`Generation failed (${res.status})`)
-      const json = await res.json()
+      const json = await readJson(res)
       setGeneratedData(json.data as V3PageData)
       setRenderedHtml(json.html as string)
       setStep(needsValidation(json.data as V3PageData) ? 'validate' : 'preview')
@@ -127,7 +128,7 @@ export default function NewV3Page() {
         }),
       })
       if (res.ok) {
-        const json = await res.json()
+        const json = await readJson(res)
         setRenderedHtml(json.html as string)
       }
     } catch {

@@ -6,6 +6,7 @@ import { ArrowRight, Link2, Pencil, Sparkles } from 'lucide-react'
 import { Turnstile } from '@/components/Turnstile'
 import { track } from '@/lib/analytics'
 import { pixels } from '@/lib/tracking/pixels'
+import { readJson } from '@/lib/http/read-json'
 
 type Step = 'email' | 'product' | 'generating'
 type InputMode = 'url' | 'manual'
@@ -295,7 +296,7 @@ function EssaiContent() {
         body: JSON.stringify(body),
       })
 
-      const data = await res.json()
+      const data = await readJson(res)
       clearInterval(interval)
 
       if (!res.ok) {

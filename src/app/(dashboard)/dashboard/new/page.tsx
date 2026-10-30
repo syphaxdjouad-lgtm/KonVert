@@ -21,6 +21,7 @@ import type { LandingPageData, Store } from '@/types'
 type StoreOption = Pick<Store, 'id' | 'name' | 'platform' | 'store_url'>
 import { track } from '@/lib/analytics'
 import { PlatformLogo } from '@/components/ui/platform-logo'
+import { readJson } from '@/lib/http/read-json'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _Palette = Palette
@@ -643,7 +644,7 @@ function NewPageInner() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ store_id: store.id, page_id: pageId }),
       })
-      const json = await res.json()
+      const json = await readJson(res)
       if (!res.ok) throw new Error(json.error)
       // L'API push renvoie data.url (Shopify/Woo/YouCan) — on l'expose dans
       // le toast pour que l'user puisse cliquer "Voir la page publiée".
@@ -669,7 +670,7 @@ function NewPageInner() {
     fd.append('file', file)
     fd.append('kind', kind)
     const res = await fetch('/api/upload', { method: 'POST', body: fd })
-    const json = await res.json().catch(() => ({}))
+    const json = await readJson(res)
     if (!res.ok) throw new Error(json.error || 'Upload échoué')
     return json.url ?? null
   }
@@ -759,7 +760,7 @@ function NewPageInner() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url }),
         })
-        const scrapeJson = await scrapeRes.json()
+        const scrapeJson = await readJson(scrapeRes)
 
         if (!scrapeRes.ok) {
           // Erreur scrape (401, 403, 500…) → bascule manuel avec message clair
@@ -882,7 +883,7 @@ function NewPageInner() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       })
-      const json = await res.json()
+      const json = await readJson(res)
 
       // Scraping insuffisant (titre vide, 0 image) : on bascule l'user en
       // saisie manuelle pré-remplie au lieu de lui balancer une erreur sèche.

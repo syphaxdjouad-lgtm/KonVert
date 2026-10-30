@@ -10,6 +10,7 @@ import { pixels } from '@/lib/tracking/pixels'
 import { Check, Lock, CreditCard, ShieldCheck } from 'lucide-react'
 import TrustBadges from '@/components/marketing/TrustBadges'
 import { TEMPLATE_COUNT } from '@/lib/templates'
+import { readJson } from '@/lib/http/read-json'
 
 function addRipple(e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) {
   const el = e.currentTarget
@@ -157,7 +158,7 @@ function PricingHeroAndPlansContent() {
           ...(couponFromUrl && { coupon: couponFromUrl }),
         }),
       })
-      const json = await res.json()
+      const json = await readJson(res)
       if (!res.ok) {
         if (res.status === 401) {
           // Pas de session : on envoie sur /signup avec le plan/interval pré-sélectionné.

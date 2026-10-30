@@ -9,6 +9,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 const upstash = vi.hoisted(() => ({
   counts: new Map<string, number>(),
+  // 'ok' | 'throw' (DNS/réseau KO) | 'hang' (Redis qui ne répond jamais)
+  mode: 'ok' as 'ok' | 'throw' | 'hang',
   // configs vues par `new Redis(...)` — sert à vérifier qu'on ne l'instancie pas pour rien
   redisConfigs: [] as Array<{ url: string; token: string }>,
 }))
@@ -37,6 +39,8 @@ vi.mock('@upstash/ratelimit', () => {
 
     // Compteur en mémoire partagé entre instances, comme le ferait Redis.
     async limit(key: string) {
+      if (upstash.mode === 'throw') throw new TypeError('fetch failed')
+      if (upstash.mode === 'hang') return new Promise(() => {})
       const bucket = `${this.prefix}:${this.limit_}:${key}`
       const used = (upstash.counts.get(bucket) ?? 0) + 1
       upstash.counts.set(bucket, used)
@@ -68,6 +72,7 @@ async function loadRatelimit(mode: 'upstash' | 'memory'): Promise<RateLimitModul
 }
 
 beforeEach(() => {
+  upstash.mode = 'ok'
   upstash.counts.clear()
   upstash.redisConfigs.length = 0
 })
@@ -159,6 +164,35 @@ describe('rateLimitAsync — chemin Upstash', () => {
     expect(b.allowed).toBe(true)
     // Un seul client Redis pour tout le module, pas un par appel.
     expect(upstash.redisConfigs).toHaveLength(1)
+  })
+})
+
+// ── Panne Upstash → fail-open sur le fallback mémoire ────────────────────────
+
+describe('rateLimitAsync — Upstash en panne', () => {
+  it("ne jette pas si Upstash plante (ENOTFOUND) et applique la limite en mémoire", async () => {
+    const { rateLimitAsync } = await loadRatelimit('upstash')
+    upstash.mode = 'throw'
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const key = `down:${Math.random()}`
+    const r1 = await rateLimitAsync(key, 1, 60_000)
+    const r2 = await rateLimitAsync(key, 1, 60_000)
+    expect(r1.allowed).toBe(true)
+    expect(r2.allowed).toBe(false)
+  })
+
+  it('bascule en mémoire si Upstash ne répond pas dans le délai', async () => {
+    vi.useFakeTimers()
+    try {
+      const { rateLimitAsync } = await loadRatelimit('upstash')
+      upstash.mode = 'hang'
+      vi.spyOn(console, 'error').mockImplementation(() => {})
+      const pending = rateLimitAsync(`hang:${Math.random()}`, 3, 60_000)
+      await vi.advanceTimersByTimeAsync(2000)
+      await expect(pending).resolves.toMatchObject({ allowed: true, remaining: 2 })
+    } finally {
+      vi.useRealTimers()
+    }
   })
 })
 

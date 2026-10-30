@@ -8,6 +8,7 @@ import { track } from '@/lib/analytics'
 import { launchEventSchema, jsonLd } from '@/lib/schema'
 import { getLaunchDate } from '@/lib/launch'
 import { TEMPLATE_COUNT } from '@/lib/templates'
+import { readJson } from '@/lib/http/read-json'
 
 // Page de pré-launch — countdown vers J-Day puis bascule "We're live!" une
 // fois le launch passé. Date paramétrable via NEXT_PUBLIC_LAUNCH_DATE (ISO
@@ -85,7 +86,7 @@ function LaunchDayContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name: '', context: 'launch-day-notify' }),
       })
-      const data = await res.json()
+      const data = await readJson(res)
       if (!res.ok && data.message !== 'already_registered') throw new Error(data.error || 'fail')
       setDone(true)
       toast.success(data.message === 'already_registered' ? 'Tu es déjà sur la liste !' : 'On te ping le jour J 🚀')

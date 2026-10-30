@@ -9,6 +9,7 @@ import { Check, Lock, Sparkles, ArrowRight, Loader2 } from 'lucide-react'
 import { track } from '@/lib/analytics'
 import { readUtmCookie } from '@/lib/analytics/utm'
 import { pixels } from '@/lib/tracking/pixels'
+import { readJson } from '@/lib/http/read-json'
 
 function SignupContent() {
   const router = useRouter()
@@ -139,7 +140,7 @@ function SignupContent() {
               ...(couponParam && { coupon: couponParam }),
             }),
           })
-          const checkoutJson = await checkoutRes.json()
+          const checkoutJson = await readJson(checkoutRes)
           if (checkoutRes.ok && checkoutJson.url) {
             window.location.href = checkoutJson.url
             return
@@ -600,7 +601,7 @@ function WaitlistMiniForm() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, name, context }),
     })
-    const data = await res.json()
+    const data = await readJson(res)
     setStatus(data.message === 'already_registered' ? 'exists' : 'success')
   }
 

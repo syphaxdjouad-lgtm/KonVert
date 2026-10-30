@@ -69,14 +69,43 @@ function memoryRateLimit(key: string, limit: number, windowMs: number): RateLimi
 
 // ── API publique ─────────────────────────────────────────────────────────────
 
+// Au-delà, on considère Upstash KO : mieux vaut un rate limit local qu'une requête bloquée.
+const UPSTASH_TIMEOUT_MS = 2000
+
+// Un seul log par instance : sinon chaque requête spamme les logs pendant une panne.
+let upstashFailureLogged = false
+
 export async function rateLimitAsync(key: string, limit: number, windowMs: number): Promise<RateLimitResult> {
   if (isUpstashConfigured && redis) {
-    const limiter = getUpstashLimiter(limit, windowMs)
-    const { success, remaining, reset } = await limiter.limit(key)
-    return {
-      allowed: success,
-      remaining,
-      retryAfterMs: success ? 0 : Math.max(0, reset - Date.now()),
+    try {
+      const limiter = getUpstashLimiter(limit, windowMs)
+      let timer: ReturnType<typeof setTimeout> | undefined
+      const timeout = new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(`Upstash timeout (${UPSTASH_TIMEOUT_MS}ms)`)), UPSTASH_TIMEOUT_MS)
+      })
+      const { success, remaining, reset } = await Promise.race([limiter.limit(key), timeout]).finally(() => clearTimeout(timer))
+      return {
+        allowed: success,
+        remaining,
+        retryAfterMs: success ? 0 : Math.max(0, reset - Date.now()),
+      }
+    } catch (err) {
+      // Fail-open : une panne Redis (base supprimée, DNS, réseau) ne doit jamais
+      // faire tomber les routes en 500 — on bascule sur le compteur mémoire.
+      if (!upstashFailureLogged) {
+        upstashFailureLogged = true
+        const reason = err instanceof Error ? err.message : String(err)
+        console.error('[ratelimit] Upstash indisponible, fallback mémoire :', reason)
+        // Alerte Sentry : sans ça la panne passe inaperçue (le fallback masque tout).
+        try {
+          const Sentry = await import('@sentry/nextjs').catch(() => null)
+          Sentry?.captureMessage?.('Upstash indisponible — rate limit en fallback mémoire', {
+            level: 'error',
+            tags: { phase: 'ratelimit_upstash_down' },
+            extra: { reason },
+          })
+        } catch { /* monitoring best-effort */ }
+      }
     }
   }
   return memoryRateLimit(key, limit, windowMs)

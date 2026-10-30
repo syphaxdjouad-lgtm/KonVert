@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Loader2, ExternalLink } from 'lucide-react'
+import { readJson } from '@/lib/http/read-json'
 
 export default function ManageBillingButton() {
   const [loading, setLoading] = useState(false)
@@ -12,7 +13,7 @@ export default function ManageBillingButton() {
     setError(null)
     try {
       const res = await fetch('/api/stripe/portal', { method: 'POST' })
-      const json = await res.json()
+      const json = await readJson(res)
       if (!res.ok || !json.url) throw new Error(json.error || 'Erreur portail')
       window.location.href = json.url
     } catch (err) {

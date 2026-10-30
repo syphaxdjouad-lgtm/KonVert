@@ -6,6 +6,7 @@ import { Plus, Trash2, CheckCircle, AlertCircle, Zap, ExternalLink, Link2, X } f
 import { useSearchParams } from 'next/navigation'
 import { PlatformLogo } from '@/components/ui/platform-logo'
 import type { Store } from '@/types'
+import { readJson } from '@/lib/http/read-json'
 
 /* ── Modale de confirmation ─────────────────────────────────────────────── */
 function ConfirmModal({
@@ -114,7 +115,7 @@ function StoresContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ api_token: youcanToken }),
       })
-      const json = await res.json()
+      const json = await readJson(res)
       if (!res.ok) throw new Error(json.error)
       setYoucanForm(false)
       setYoucanToken('')
@@ -154,7 +155,7 @@ function StoresContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(wooData),
       })
-      const json = await res.json()
+      const json = await readJson(res)
       if (!res.ok) throw new Error(json.error)
       setWooForm(false)
       setWooData({ store_url: '', consumer_key: '', consumer_secret: '' })

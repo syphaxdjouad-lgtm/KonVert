@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Plus, Users, FileText, Store, ExternalLink, Palette, Mail, Zap, ChevronDown, ChevronUp, Lock } from 'lucide-react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { readJson } from '@/lib/http/read-json'
 
 type Workspace = {
   id: string
@@ -33,7 +34,7 @@ export default function AgencyPage() {
   // par le moteur JS. loadWorkspaces() est aussi rappelée après création.
   const loadWorkspaces = useCallback(async () => {
     const res  = await fetch('/api/workspaces')
-    const json = await res.json()
+    const json = await readJson(res)
     if (json.error === 'Non authentifié') { window.location.href = '/login'; return }
     setWorkspaces(json.data || [])
     setLoading(false)
@@ -64,7 +65,7 @@ export default function AgencyPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form),
     })
-    const json = await res.json()
+    const json = await readJson(res)
     if (!res.ok) { setError(json.error); setCreating(false); return }
     setShowForm(false)
     setForm({ name: '', client_name: '', client_email: '', brand_name: '', brand_color: '#7c3aed' })

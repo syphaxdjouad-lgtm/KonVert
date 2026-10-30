@@ -16,6 +16,7 @@ import type { AbField, AbTest, ApiResult } from '../_lib/types'
 import {
   AB_MIN_VISITORS_PER_VARIANT, AB_MIN_DAYS_ELAPSED, AB_MIN_PURCHASES_PER_VARIANT, AB_MAX_DURATION_DAYS,
 } from '../_lib/types'
+import { readJson } from '@/lib/http/read-json'
 
 const FIELD_LABELS: Record<AbField, string> = { h1_title: 'Titre H1', description: 'Description' }
 
@@ -80,7 +81,7 @@ function TestCard({ test, onAction }: { test: AbTest; onAction: () => void }) {
     setActionError(null)
     try {
       const res = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
-      const json = await res.json()
+      const json = await readJson(res)
       if (!json.ok) {
         setActionError(json.error?.message ?? "L'action a échoué.")
         return
@@ -217,7 +218,7 @@ function CreateTestForm({ connectionId, onCreated, onCancel }: { connectionId: s
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ connection_id: connectionId, field, variant_b_text: variantB.trim() }),
       })
-      const json = await res.json()
+      const json = await readJson(res)
       if (!json.ok) {
         setError(json.error?.message ?? 'Impossible de créer le test.')
         return
@@ -307,7 +308,7 @@ export default function StoreBuilderAbTestsPage() {
     setFetchError(null)
     try {
       const res = await fetch(`/api/shopify/ab-tests?connection_id=${encodeURIComponent(connectionId)}`)
-      const json: ApiResult<AbTest[]> = await res.json()
+      const json: ApiResult<AbTest[]> = await readJson(res)
       if (!json.ok) {
         setFetchError(json.error.message)
         setTests([])

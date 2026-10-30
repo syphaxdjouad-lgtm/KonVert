@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { CheckCircle2, AlertCircle, Loader2, Mail } from 'lucide-react'
 import Link from 'next/link'
+import { readJson } from '@/lib/http/read-json'
 
 function UnsubscribeContent() {
   const searchParams = useSearchParams()
@@ -31,7 +32,7 @@ function UnsubscribeContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, token: tokenParam }),
       })
-      const json = await res.json()
+      const json = await readJson(res)
       if (!res.ok) throw new Error(json.error || 'Erreur')
       setStatus('success')
     } catch (err) {
